@@ -848,7 +848,6 @@ void daNpc_Ob1_c::ob_setPthPos() {
 
 /* 00001BB0-00001C50       .text get_attPos__11daNpc_Ob1_cFv */
 cXyz daNpc_Ob1_c::get_attPos() {
-/* Nonmatching */
     cXyz ret;
     dPath* path = mPathRun.nextPath(current.roomNo);
     if (path != NULL) {
@@ -858,8 +857,7 @@ cXyz daNpc_Ob1_c::get_attPos() {
         }
         idx--;
         dPnt* pnt = &path->m_points[idx];
-        cXyz pos = pnt->m_position;
-        ret = pos;
+        ret.set(pnt->m_position.x, pnt->m_position.y, pnt->m_position.z);
     }
     return ret;
 }
