@@ -263,16 +263,15 @@ void daNpc_Gk1_c::play_btp_anm() {
 
 /* 00000B18-00000BB4       .text setAnm_anm__11daNpc_Gk1_cFPQ211daNpc_Gk1_c9anm_prm_c */
 void daNpc_Gk1_c::setAnm_anm(daNpc_Gk1_c::anm_prm_c* i_anmPrmP) {
-    if (i_anmPrmP->mAnmNum >= 0) {
-        if (mActNo == i_anmPrmP->mAnmNum) {
-            return;
-        }
-        dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed, bckResID(i_anmPrmP->mAnmNum), -1, m_arcname);
-        mActNo = i_anmPrmP->mAnmNum;
-        m79C = 0;
-        m79D = 0;
-        mPrevMorfFrame = 0.0f;
+    s8 temp = i_anmPrmP->mAnmNum;
+    if (temp < 0 || mActNo == temp) {
+        return;
     }
+    dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed, bckResID(temp), -1, m_arcname);
+    mActNo = i_anmPrmP->mAnmNum;
+    m79C = 0;
+    m79D = 0;
+    mPrevMorfFrame = 0.0f;
 }
 
 /* 00000BB4-00000C20       .text setAnm__11daNpc_Gk1_cFv */
