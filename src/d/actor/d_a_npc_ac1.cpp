@@ -448,7 +448,7 @@ void daNpc_Ac1_c::lookBack() {
     src_pos.x = current.pos.x;
     src_pos.y = current.pos.y;
     src_pos.z = current.pos.z;
-    src_pos.y = mEyePos.y;
+    src_pos.y = eyePos.y;
     dstPos.set(0.0f, 0.0f, 0.0f);
     dstPos_p = NULL;
     desiredYrot = current.angle.y;
@@ -461,7 +461,7 @@ void daNpc_Ac1_c::lookBack() {
             src_pos.x = current.pos.x;
             src_pos.y = current.pos.y;
             src_pos.z = current.pos.z;
-            src_pos.y = mEyePos.y;
+            src_pos.y = eyePos.y;
             break;
         case 2:
             dstPos = m814;
@@ -469,7 +469,7 @@ void daNpc_Ac1_c::lookBack() {
             src_pos.x = current.pos.x;
             src_pos.y = current.pos.y;
             src_pos.z = current.pos.z;
-            src_pos.y = mEyePos.y;
+            src_pos.y = eyePos.y;
             break;
         case 3:
             desiredYrot = m854;
@@ -477,10 +477,10 @@ void daNpc_Ac1_c::lookBack() {
     }
 
     cLib_addCalcAngleS2(&m852, l_HIO.hio_prm.mMaxHeadTurnVel, 4, 0x800);
-    if (m_jnt.trnChk()) {
+    if (!m_jnt.trnChk()) {
         m852 = 0;
     }
-    m_jnt.lookAtTarget(&shape_angle.y, dstPos_p, src_pos, desiredYrot, m852, headOnlyFollow);
+    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYrot, m852, headOnlyFollow);
 }
 
 /* 0000121C-0000128C       .text next_msgStatus__11daNpc_Ac1_cFPUl */

@@ -136,7 +136,7 @@ private:
     /* 0x864 */ s32 m864;
     /* 0x868 */ u8 m868;
     /* 0x869 */ u8 m869;
-    /* 0x86A */ u8 m86A;
+    /* 0x86A */ bool m86A;
     /* 0x86B */ u8 mbInDemo;
     /* 0x86C */ u8 m86C;
     /* 0x86D */ u8 m86D;
