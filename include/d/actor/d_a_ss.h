@@ -31,7 +31,7 @@ struct ss_s {
     /* 0x36 */ s16 m36;
     /* 0x38 */ s16 m38;
     /* 0x3A */ u8 m3A;
-    /* 0x3B */ u8 m3B;
+    /* 0x3B */ s8 m3B;
     /* 0x3C */ dCcD_Sph mSph[4];
     /* 0x4EC */ ss_s_s mSss[20];
 };  // size = 0x62C

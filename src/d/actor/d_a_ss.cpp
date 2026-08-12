@@ -262,14 +262,15 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
     if (hand->m36 != 0) {
         hand->m36--;
         hand->mSss[0].mPos = i_this->home.pos;
+        ss_s_s* cur = &hand->mSss[1];
         for (int i = 1; i < 20; i++) {
-            ss_s_s* cur = &hand->mSss[i];
             sp4C = cur->mPos - (cur - 1)->mPos;
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp4C.x, sp4C.z));
             f32 dist = std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp4C.y, dist));
             MtxPosition(&sp58, &sp4C);
             cur->mPos = (cur - 1)->mPos + sp4C;
+            cur++;
         }
     } else {
         cLib_addCalc2(&hand->m28, 10.0f + REG8_F(15), 1.0f, 1.0f + REG8_F(16));
@@ -289,18 +290,18 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 
     do {
         gndChk.m_pos.set(cur->mPos.x, cur->mPos.y + 50.0f, cur->mPos.z);
-        f32 groundY = 5.0f + dComIfG_Bgsp()->GroundCross(&gndChk) + hand->m2C;
+        f32 groundY = 5.0f + dComIfG_Bgsp()->GroundCross(&gndChk);
         f32 curY = cur->mPos.y + hand->m24;
-        if (curY < groundY) {
-            curY = groundY;
+        if (curY < groundY + hand->m2C) {
+            curY = groundY + hand->m2C;
         }
         sp34v.z = -2.0f + REG8_F(17);
         sp34v.x = hand->m28 * cM_ssin(hand->m30 + idx * hand->m32);
         mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
         MtxPosition(&sp34v, &sp40);
-        sp4C.x = sp40.x + (cur->mPos.x - (cur - 1)->mPos.x);
-        sp4C.y = curY - (cur - 1)->mPos.y;
-        sp4C.z = sp40.z + (cur->mPos.z - (cur - 1)->mPos.z);
+        sp4C.x = sp40.x + (cur->mPos.x - (cur + 1)->mPos.x);
+        sp4C.y = curY - (cur + 1)->mPos.y;
+        sp4C.z = sp40.z + (cur->mPos.z - (cur + 1)->mPos.z);
         mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp4C.x, sp4C.z));
         f32 dist = std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z);
         mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp4C.y, dist));
@@ -308,7 +309,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         if (hand->m36 != 0 && idx == 0) {
             cur->mPos = i_this->home.pos;
         } else {
-            cur->mPos = (cur - 1)->mPos + sp4C;
+            cur->mPos = (cur + 1)->mPos + sp4C;
         }
         if (!(idx & 3) && hand->m3B != 0) {
             dComIfGp_particle_setSimple(1, &cur->mPos, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -342,7 +343,8 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
             hand->m3B = 0;
             hand->m3A = 0;
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_S_RECOVER, &i_this->eyePos, 0,
-                                            fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f, -1.0f,
+                                            -1.0f, 0);
         }
     }
 
