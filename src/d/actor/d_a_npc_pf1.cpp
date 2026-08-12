@@ -479,7 +479,8 @@ u32 daNpc_Pf1_c::getMsg_PF1_0() {
 /* 00000EC0-00000EFC       .text getMsg__11daNpc_Pf1_cFv */
 u32 daNpc_Pf1_c::getMsg() {
     u32 ret = 0;
-    if (m7BC == 0) {
+    if ((s32)m7BC != 0) {
+    } else {
         ret = getMsg_PF1_0();
     }
     return ret;
@@ -1327,6 +1328,13 @@ static BOOL daNpc_Pf1_Draw(daNpc_Pf1_c* i_this) {
 /* 0000389C-000038A4       .text daNpc_Pf1_IsDelete__FP11daNpc_Pf1_c */
 static BOOL daNpc_Pf1_IsDelete(daNpc_Pf1_c*) {
     return TRUE;
+}
+
+static void dummy() {
+    const GXColor dummy1 = { 0xFF, 0x00, 0x00, 0x80 };
+    const GXColor dummy2 = { 0x00, 0x00, 0xFF, 0x80 };
+    const GXColor dummy3 = { 0xFF, 0xFF, 0x00, 0x80 };
+    const GXColor dummy4 = { 0xFF, 0xFF, 0x00, 0x80 };
 }
 
 static actor_method_class l_daNpc_Pf1_Method = {

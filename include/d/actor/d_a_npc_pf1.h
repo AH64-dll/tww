@@ -149,7 +149,7 @@ public:
     /* 0x7B9 */ u8 m7B9;
     /* 0x7BA */ u8 m7BA;
     /* 0x7BB */ s8 mType;
-    /* 0x7BC */ s8 m7BC;
+    /* 0x7BC */ u8 m7BC;
     /* 0x7BD */ u8 m7BD;
     /* 0x7BE */ u8 m7BE;
 };  // Size: 0x7C0
