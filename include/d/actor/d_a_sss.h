@@ -48,7 +48,7 @@ public:
     /* 0xA0C */ s16 mA0C;
     /* 0xA10 */ JPABaseEmitter* mpEmitterA10;
     /* 0xA14 */ JPABaseEmitter* mpEmitterA14;
-    /* 0xA18 */ u8 mA18;
+    /* 0xA18 */ s8 mA18;
 }; // Size: 0xA1C
 
 #endif /* D_A_SSS_H */

@@ -212,14 +212,14 @@ void cut_control1(sss_class* i_this) {
         mDoMtx_XrotM(*calc_mtx, angle_y);
         MtxPosition(&pos, &pos3);
         MtxPull();
-        hand_i->mPos = pos3 + hand_i[-1].mPos;
+        hand_i->mPos = (cXyz&)hand_i[-1].mPos + pos3;
     }
     if (i_this->mpEmitterA10 == NULL && i_this->mA18 != 0) {
         i_this->mpEmitterA10 = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, (cXyz*)&i_this->m490[4].mPos, NULL, NULL, 0xFF);
         i_this->m2C2[1] = 0x3C;
     }
     if (i_this->mpEmitterA10 != NULL) {
-        pos4 = cXyz(i_this->m490[4].mPos) - i_this->m490[3].mPos;
+        pos4 = (cXyz&)i_this->m490[4].mPos - i_this->m490[3].mPos;
         pos.x = pos4.x;
         pos.y = pos4.y;
         pos.z = pos4.z;
@@ -314,7 +314,7 @@ void cut_control2(sss_class* i_this) {
         i_this->mpEmitterA14 = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, (cXyz*)&i_this->m33C[0].mPos, NULL, NULL, 0xFF);
     }
     if (i_this->mpEmitterA14 != NULL) {
-        pos4 = cXyz(i_this->m33C[0].mPos) - i_this->m33C[1].mPos;
+        pos4 = (cXyz&)i_this->m33C[0].mPos - i_this->m33C[1].mPos;
         pos.x = pos4.x;
         pos.y = pos4.y;
         pos.z = pos4.z;
