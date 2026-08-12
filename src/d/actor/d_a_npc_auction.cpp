@@ -956,7 +956,7 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
         *i_msg_no = 0x27DF;
         break;
     case 0x27DF:
-        if (AUC->m834 == 0) {
+        if (mpCurrMsg->mSelectNum == 0) {
             *i_msg_no = 0x27E1;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_1408);
         } else {
@@ -967,7 +967,7 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
         *i_msg_no = 0x27E2;
         break;
     case 0x27E2:
-        if (AUC->m834 == 0) {
+        if (mpCurrMsg->mSelectNum == 0) {
             *i_msg_no = 0x27E3;
         } else {
             *i_msg_no = 0x27E4;
@@ -986,7 +986,7 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
         *i_msg_no = 0x27E7;
         break;
     case 0x27E7:
-        if (AUC->m834 == 0) {
+        if (mpCurrMsg->mSelectNum == 0) {
             *i_msg_no = 0x27E9;
         } else {
             *i_msg_no = 0x27E8;
@@ -1003,7 +1003,7 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
         status = 0x10;
         break;
     case 0x27EC:
-        if (AUC->m834 == 0) {
+        if (mpCurrMsg->mSelectNum == 0) {
             *i_msg_no = 0x27EE;
             dComIfGs_setReserveItemEmpty();
         } else {
