@@ -464,7 +464,7 @@ void daNpc_Uk_c::eventOrder() {
 
 /* 000013BC-00001420       .text checkOrder__10daNpc_Uk_cFv */
 void daNpc_Uk_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(3)) {
+    if (eventInfo.mCommand != dEvtCmd_INDEMO_e && eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(3)) {
         setFlag(0x1);
         talkInit();
     }
