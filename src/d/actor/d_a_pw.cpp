@@ -731,8 +731,84 @@ void action_itai(pw_class*) {
 }
 
 /* 00004C50-00004FFC       .text action_demo__FP8pw_class */
-void action_demo(pw_class*) {
-    /* Nonmatching */
+void action_demo(pw_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    cXyz local = player->current.pos;
+
+    switch (i_this->mMode) {
+    case 0x46:
+        i_this->actor_status |= fopAcStts_UNK4000_e;
+        i_this->mMode += 1;
+        // Fall-through
+    case 0x47:
+        if (i_this->eventInfo.mCommand != dEvtCmd_INDEMO_e) {
+            g_dComIfG_gameInfo.play.getEvent()->onEventFlag(1);
+            fopAcM_orderPotentialEvent(i_this, 2, 0xFFFF, 0);
+            i_this->eventInfo.onCondition(dEvtCnd_UNK2_e);
+        } else {
+            player->mDemo.setDemoType(daPy_demo_c::TYPE_ORIGINAL_e);
+            player->mDemo.setParam0(0);
+            player->mDemo.setDemoMode(1);
+            camera->mCamera.Stop();
+            camera->mCamera.SetTrimSize(2);
+            i_this->m38C = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_PW_CURSE_IN, 0);
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_CURSE_START, &i_this->eyePos, 0,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+            anm_init(i_this, dRes_INDEX_PW_BCK_TORITUKI3_e, 4.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mMode += 1;
+        }
+        break;
+    case 0x48:
+        cLib_addCalc2(&i_this->current.pos.x, player->current.pos.x, 1.0f, 5.0f);
+        cLib_addCalc2(&i_this->current.pos.z, player->current.pos.z, 1.0f, 5.0f);
+        if (i_this->mpMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_PW_BCK_TORITUKI_WAIT1_e, 4.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            local.y += 7.0f;
+            i_this->m340 = 1;
+            i_this->current.pos.x = local.x;
+            i_this->current.pos.y = local.y;
+            i_this->current.pos.z = local.z;
+            i_this->attention_info.flags = 0;
+            i_this->shape_angle.x = 0;
+            i_this->shape_angle.y = 0;
+            i_this->shape_angle.z = 0;
+            i_this->shape_angle.y = player->shape_angle.y;
+            i_this->m378 = 0x1E;
+            i_this->mMode += 1;
+        }
+        break;
+    case 0x49:
+        if (i_this->m378 == 0) {
+            fopAc_ac_c* linkPlayer = dComIfGp_getLinkPlayer();
+            dComIfGp_getVibration().StopQuake(0x20);
+            camera->mCamera.Start();
+            camera->mCamera.SetTrimSize(0);
+            player->mDemo.setDemoType(daPy_demo_c::TYPE_SYSTEM_e);
+            player->mDemo.setDemoMode(1);
+            g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
+            i_this->actor_status &= ~fopAcStts_UNK4000_e;
+            i_this->mAction = 4;
+            i_this->mMode = 0x50;
+            if (player != linkPlayer) {
+                if (i_this->m343) {
+                    i_this->m343 = 0;
+                    TORITUKI_ON = false;
+                    JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_CURSE_END, &i_this->eyePos, 0,
+                                                    dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f,
+                                                    1.0f, -1.0f, -1.0f, 0);
+                }
+                i_this->m384[3] = 1;
+                i_this->m38E = 0;
+                i_this->m39A = 0xFF;
+                i_this->mAction = 2;
+                i_this->mMode = 0x3C;
+            }
+        }
+        break;
+    }
 }
 
 /* 00004FFC-000052B8       .text action_torituku__FP8pw_class */
