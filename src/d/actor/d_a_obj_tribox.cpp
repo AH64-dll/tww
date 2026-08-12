@@ -421,14 +421,16 @@ namespace daObjTribox {
             idx1 = m354 + 2;
             idx2 = m354 + 1;
         }
+        idx1 %= 3;
+        idx2 %= 3;
         mDoMtx_stack_c::YrotS(shape_angle.y);
         cXyz pos1, pos2;
-        PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx1 % 3], &pos1);
-        PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx2 % 3], &pos2);
+        PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx1], &pos1);
+        PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx2], &pos2);
         cXyz dir = pos2 - pos1;
         dir.normalizeZP();
         PSVECScale(&dir, &dir, 10.0f);
-        mSmokePos = pos1 + dir;
+        mSmokePos = pos1 + dir + current.pos;
         mSmokeAngle.x = 0;
         mSmokeAngle.y = cLib_targetAngleY(&pos1, &pos2);
         mSmokeAngle.z = 0;
