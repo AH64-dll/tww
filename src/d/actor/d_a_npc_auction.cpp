@@ -622,7 +622,7 @@ BOOL daNpcAuction_c::createHeap() {
             l_arcname_tbl[mDataNo], (u16)l_bck_ix_tbl[mDataNo][mAnmNo]),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, l_diff_flag_tbl[mDataNo]);
     mpMorf = morf;
-    if (morf == NULL || morf->getModel() == NULL) {
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
     if (l_head_bmd_ix_tbl[mDataNo] >= 0) {
@@ -634,23 +634,21 @@ BOOL daNpcAuction_c::createHeap() {
             return FALSE;
         }
     }
-    m_jnt.setHeadJntNum(morf->getModel()->getModelData()->getJointName()->getIndex("head"));
+    m_jnt.setHeadJntNum(bmd->getJointName()->getIndex("head"));
     JUT_ASSERT(1116, m_jnt.getHeadJntNum() >= 0);
-    m_jnt.setBackboneJntNum(morf->getModel()->getModelData()->getJointName()->getIndex("backbone"));
+    m_jnt.setBackboneJntNum(bmd->getJointName()->getIndex("backbone"));
     JUT_ASSERT(1120, m_jnt.getBackboneJntNum() >= 0);
     if (!initTexPatternAnm(false)) {
         return FALSE;
     }
-    u16 jntNum = morf->getModel()->getModelData()->getJointNum();
-    for (u16 i = 0; i < jntNum; i++) {
+    for (u16 i = 0; i < bmd->getJointNum(); i++) {
         if (i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
-            morf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(
-                l_node_call_back_tbl[mNpcNo]);
+            bmd->getJointNodePointer(i)->setCallBack(l_node_call_back_tbl[mNpcNo]);
         }
     }
-    morf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &old.angle, &shape_angle);
     return TRUE;
 }
 
