@@ -1408,9 +1408,10 @@ void daNpcMn_c::setMtx() {
 void daNpcMn_c::chkAttention() {
     m7C0 = 0;
     if (mEventCut.getAttnFlag()) {
-        mLookAtX = mEventCut.getAttnPos().x;
-        mLookAtY = mEventCut.getAttnPos().y;
-        mLookAtZ = mEventCut.getAttnPos().z;
+        cXyz attnPos = mEventCut.getAttnPos();
+        mLookAtX = attnPos.x;
+        mLookAtY = attnPos.y;
+        mLookAtZ = attnPos.z;
         mLookMode = 1;
         if (m794 != 0) {
             m794 = 0;
