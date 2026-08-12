@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bms1.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_vibration.h"
 
@@ -145,7 +146,16 @@ BOOL daNpc_Bms1_c::chkAttention(cXyz, s16) {
 
 /* 000011D8-00001278       .text eventOrder__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::eventOrder() {
-    /* Nonmatching */
+    if (m89B == 0x4) {
+        fopAcM_orderOtherEvent2(this, "BMS_LAND_DEMO", 1, 0xFFFF);
+    } else if (m89B == 0x3) {
+        fopAcM_orderOtherEvent2(this, "BMS_GET_DEMO", 1, 0xFFFF);
+    } else if (m89B == 0x1 || m89B == 0x2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (m89B == 0x1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    }
 }
 
 /* 00001278-000014AC       .text checkOrder__12daNpc_Bms1_cFv */
@@ -160,7 +170,16 @@ u16 daNpc_Bms1_c::next_msgStatus(u32*) {
 
 /* 000017FC-00001860       .text getMsg__12daNpc_Bms1_cFv */
 u32 daNpc_Bms1_c::getMsg() {
-    /* Nonmatching */
+    u32 msgNo;
+    if (mLastMsgNo) {
+        msgNo = mLastMsgNo;
+        mLastMsgNo = 0;
+    } else if (!dComIfGs_isEventBit(0xA02)) {
+        msgNo = 0x2775;
+    } else {
+        msgNo = 0x2782;
+    }
+    return msgNo;
 }
 
 /* 00001860-0000191C       .text setCollision__12daNpc_Bms1_cFv */
@@ -195,15 +214,24 @@ BOOL daNpc_Bms1_c::CreateInit() {
 
 /* 00002104-00002144       .text setAttention__12daNpc_Bms1_cFb */
 void daNpc_Bms1_c::setAttention(bool i_attn) {
-    if (i_attn || m7CB[0] < 2) {
-        m2B4 = mAttnBasePos;
-        m2B4.y += l_HIO.mChild[0].mNpc.mAttnYOffset;
+    if (i_attn || m7CB < 2) {
+        attention_info.position = mAttnBasePos;
+        attention_info.position.y += l_HIO.mChild[0].mNpc.mAttnYOffset;
     }
 }
 
 /* 00002144-000021F4       .text checkPlayerLanding__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::checkPlayerLanding() {
-    /* Nonmatching */
+BOOL daNpc_Bms1_c::checkPlayerLanding() {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    f32 playerY = player->current.pos.y;
+    BOOL landed = FALSE;
+    if (m7D4 - playerY > 200.0f && !player->checkPlayerFly()) {
+        landed = TRUE;
+    }
+    if (!player->checkPlayerFly()) {
+        m7D4 = playerY;
+    }
+    return landed;
 }
 
 /* 000021F4-00002424       .text lookBack__12daNpc_Bms1_cFv */
@@ -213,12 +241,35 @@ void daNpc_Bms1_c::lookBack() {
 
 /* 00002424-0000249C       .text wait01__12daNpc_Bms1_cFv */
 bool daNpc_Bms1_c::wait01() {
-    /* Nonmatching */
+    if (m7CD != 0) {
+        m89D = m89C;
+        m89C = 2;
+    } else if (m7CC != 0) {
+        if (mShopIdx == 1) {
+            m89B = 0;
+        } else {
+            m89B = 2;
+        }
+    }
+    return mpMorf->isMorf();
 }
 
 /* 0000249C-00002590       .text talk01__12daNpc_Bms1_cFv */
 bool daNpc_Bms1_c::talk01() {
-    /* Nonmatching */
+    u16 status = talk();
+    if (status == 0x12) {
+        daPy_py_c* player = daPy_getPlayerActorClass();
+        m89C = m89D;
+        dComIfGp_event_reset();
+        mShopCam.Reset();
+        player->offPlayerNoDraw();
+        m7CD = 0;
+    } else if (daNpc_Bms1_shopMsgCheck(mMsgNo) && status == 8 &&
+               mMsgNo == mShopItems.getSelectItemBuyMsg()) {
+        dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+        dComIfGp_setAStatusForce(dActStts_CANCEL_e);
+    }
+    return mpMorf->isMorf();
 }
 
 /* 00002590-00002764       .text getdemo_action__12daNpc_Bms1_cFPv */

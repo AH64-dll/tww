@@ -52,7 +52,7 @@ public:
     u16 talk();
     BOOL CreateInit();
     void setAttention(bool);
-    void checkPlayerLanding();
+    BOOL checkPlayerLanding();
     void lookBack();
     bool wait01();
     bool talk01();
@@ -77,7 +77,6 @@ public:
 
 public:
     /* 0x290 */ dNpc_HeadAnm_c mHeadAnm;
-    /* 0x2B2 */ u8 m2B2[0x2B4 - 0x2B2];
     /* 0x2B4 */ cXyz m2B4;
     /* 0x2C0 */ cXyz m2C0;
     /* 0x2CC */ f32 m2CC;
@@ -119,11 +118,17 @@ public:
     /* 0x7C6 */ s16 m7C6;
     /* 0x7C8 */ u8 m7C8[0x7CA - 0x7C8];
     /* 0x7CA */ u8 mMorfIsStop;
-    /* 0x7CB */ u8 m7CB[0x7D0 - 0x7CB];
+    /* 0x7CB */ u8 m7CB;
+    /* 0x7CC */ u8 m7CC;
+    /* 0x7CD */ u8 m7CD;
+    /* 0x7CE */ u8 m7CE;
+    /* 0x7CF */ u8 m7CF;
     /* 0x7D0 */ f32 mMorfPrevFrame;
     /* 0x7D4 */ f32 m7D4;
-    /* 0x7D8 */ u8 m7D8[0x7E4 - 0x7D8];
-    /* 0x7E4 */ s32 m7E4;
+    /* 0x7D8 */ u32 mMsgNo;
+    /* 0x7DC */ u32 mMsgNo2;
+    /* 0x7E0 */ u32 m7E0;
+    /* 0x7E4 */ u32 mLastMsgNo;
     /* 0x7E8 */ u8 m7E8;
     /* 0x7E9 */ u8 m7E9;
     /* 0x7EA */ u8 m7EA[0x7EC - 0x7EA];
@@ -134,7 +139,9 @@ public:
     /* 0x898 */ u8 mBtpIdx;
     /* 0x899 */ u8 m899;
     /* 0x89A */ u8 m89A;
-    /* 0x89B */ u8 m89B[0x89E - 0x89B];
+    /* 0x89B */ u8 m89B;
+    /* 0x89C */ u8 m89C;
+    /* 0x89D */ u8 m89D;
     /* 0x89E */ u8 mShopIdx;
     /* 0x89F */ u8 m89F[0x8A0 - 0x89F];
     /* 0x8A0 */ s8 mActionStatus;
