@@ -75,3 +75,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 - **Quota recovery**: full 30-agent wave died to provider 429 (weekly/monthly/5h limits); lesser-scale Pro wave + Main-as-Pro surgical lane carried the flip/gate work; roster trimmed; orgctl queue absorbed mass death with zero loss.
 
 See .org/log.md + .org/lessons.md for details.
+
+---
+
+## 2026-08-12T19:56Z — M6: 17 Equivalent flips all locally gated (416-OK x each); flip pool exhausted (0 free candidates — every near-100 actor has a real fix in flight); 1.3.2r family fully characterized (mozo only override; pw/kg2/bj1/9 others disproven as stub-tier); quota recovered post-429; 87 NonMatching rows remaining, punch list active (ac1 review, kg1 onEventFlag, kddoor drawSet, ss frames, gp1 _draw, mozo stubs, ftree, mn pool)
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
