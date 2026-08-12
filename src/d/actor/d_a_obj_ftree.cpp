@@ -334,15 +334,17 @@ BOOL daObjFtree::is_broughtID(int i_id) {
 BOOL daObjFtree::Act_c::is_brought() {
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
-        return is_broughtID(ret_tree_no[tree_no]);
+        tree_no = ret_tree_no[tree_no];
+    } else {
+        tree_no = 0xF;
     }
-    return is_broughtID(0xF);
+    return is_broughtID(tree_no);
 }
 
 /* 00001138-000011FC       .text set_broughtID__Q210daObjFtree5Act_cFi */
 void daObjFtree::Act_c::set_broughtID(int i_id) {
-    u8 bit = 1 << (i_id & 7);
     u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
+    u8 bit = 1 << (i_id & 7);
     dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg | bit);
     reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9AFF);
     dComIfGs_setEventReg(dSv_event_flag_c::UNK_9AFF, reg | bit);
@@ -358,17 +360,18 @@ void daObjFtree::Act_c::set_broughtID(int i_id) {
 void daObjFtree::Act_c::set_brought() {
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
-        set_broughtID(ret_tree_no[tree_no]);
+        tree_no = ret_tree_no[tree_no];
     } else {
-        set_broughtID(0xF);
+        tree_no = 0xF;
     }
+    set_broughtID(tree_no);
     m638 = 1;
 }
 
 /* 00001260-000012D0       .text unset_broughtID__Q210daObjFtree5Act_cFi */
 void daObjFtree::Act_c::unset_broughtID(int i_id) {
-    u8 bit = 1 << (i_id & 7);
     u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
+    u8 bit = 1 << (i_id & 7);
     dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg & ~bit);
 }
 
@@ -376,10 +379,11 @@ void daObjFtree::Act_c::unset_broughtID(int i_id) {
 void daObjFtree::Act_c::unset_brought() {
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
-        unset_broughtID(ret_tree_no[tree_no]);
+        tree_no = ret_tree_no[tree_no];
     } else {
-        unset_broughtID(0xF);
+        tree_no = 0xF;
     }
+    unset_broughtID(tree_no);
     m638 = 0;
 }
 
