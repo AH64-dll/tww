@@ -15,36 +15,6 @@
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
-static const int l_bck_ix_tbl[] = {
-    dRes_INDEX_UK_BCK_UK_WAIT_e,
-    dRes_INDEX_UK_BCK_UK_TALK01_e,
-    dRes_INDEX_UK_BCK_UK_TALK02_e,
-    dRes_INDEX_UK_BCK_UK_WALK_e,
-    dRes_INDEX_UK_BCK_UK_RUN_e,
-    dRes_INDEX_UK_BCK_UK_KEIKAI_e,
-    dRes_INDEX_UK_BCK_UK_JIDA01_e,
-    dRes_INDEX_UK_BCK_UK_JIDA02_e,
-    dRes_INDEX_UK_BCK_UK_DA_e,
-    dRes_INDEX_UK_BCK_UK_JUMP_e,
-    dRes_INDEX_UK_BCK_UK_LAND_e,
-};
-
-static const int l_btp_ix_tbl[] = {
-    dRes_INDEX_UK_BTP_UK_MABA_C_e,
-};
-
-static const int head_bdl_table[] = {
-    dRes_INDEX_UK_BDL_UKHEAD_B_e,
-    dRes_INDEX_UK_BDL_UKHEAD_C_e,
-    dRes_INDEX_UK_BDL_UKHEAD_D_e,
-};
-
-static const int table_bmt[] = {
-    -1,
-    dRes_INDEX_UK_BMT_UK_C_e,
-    dRes_INDEX_UK_BMT_UK_D_e,
-};
-
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
 u8 daNpc_Uk_c::getType() {
     return fopAcM_GetParam(this) & 0xFF;
@@ -252,7 +222,7 @@ BOOL daNpc_Uk_c::surrender() {
     if (pActor != NULL && pActor->speedF > 1.0f) {
         cXyz dist = pActor->current.pos - current.pos;
         cXyz distXZ(dist.x, 0.0f, dist.z);
-        if (PSVECSquareMag(&distXZ) <= 7200.0f) {
+        if (PSVECSquareMag(&distXZ) <= 7225.0f) {
             s16 angle = fopAcM_searchActorAngleY(pActor, this) - pActor->shape_angle.y;
             if (angle <= 0x2AAA && angle >= -0x2AAA) {
                 s16 dir = (s16)(pActor->shape_angle.y + ((angle < 0) ? -0x4000 : 0x4000));
@@ -347,6 +317,24 @@ static BOOL nodeCallBack_Uk(J3DNode* node, int calcTiming) {
     }
     return TRUE;
 }
+
+static const int l_bck_ix_tbl[] = {
+    dRes_INDEX_UK_BCK_UK_WAIT_e,
+    dRes_INDEX_UK_BCK_UK_TALK01_e,
+    dRes_INDEX_UK_BCK_UK_TALK02_e,
+    dRes_INDEX_UK_BCK_UK_WALK_e,
+    dRes_INDEX_UK_BCK_UK_RUN_e,
+    dRes_INDEX_UK_BCK_UK_KEIKAI_e,
+    dRes_INDEX_UK_BCK_UK_JIDA01_e,
+    dRes_INDEX_UK_BCK_UK_JIDA02_e,
+    dRes_INDEX_UK_BCK_UK_DA_e,
+    dRes_INDEX_UK_BCK_UK_JUMP_e,
+    dRes_INDEX_UK_BCK_UK_LAND_e,
+};
+
+static const int l_btp_ix_tbl[] = {
+    dRes_INDEX_UK_BTP_UK_MABA_C_e,
+};
 
 /* 00000F48-00001070       .text initTexPatternAnm__10daNpc_Uk_cFb */
 BOOL daNpc_Uk_c::initTexPatternAnm(bool i_modify) {
@@ -1657,6 +1645,11 @@ BOOL daNpc_Uk_c::_draw() {
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     if (getShapeType() != 0) {
+        static int table_bmt[] = {
+            -1,
+            dRes_INDEX_UK_BMT_UK_C_e,
+            dRes_INDEX_UK_BMT_UK_D_e,
+        };
         J3DMaterialTable& matTable = pModelData->getMaterialTable();
         J3DTexture* matTex = matTable.getTexture();
         JUTNameTab* matTexName = matTable.getTextureName();
@@ -1872,6 +1865,11 @@ BOOL daNpc_Uk_c::CreateHeap() {
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(2775, m_jnt.getBackboneJntNum() >= 0);
 
+    static int head_bdl_table[] = {
+        dRes_INDEX_UK_BDL_UKHEAD_B_e,
+        dRes_INDEX_UK_BDL_UKHEAD_C_e,
+        dRes_INDEX_UK_BDL_UKHEAD_D_e,
+    };
     mpModel = mDoExt_J3DModel__create(
         (J3DModelData*)dComIfG_getObjectRes("Uk", head_bdl_table[getShapeType()]),
         0x80000,
