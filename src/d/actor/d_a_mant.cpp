@@ -241,7 +241,7 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
     s32 base = i_idx * 0x2710;
     dCcS* ccS = dComIfG_Ccsp();
 
-    for (i = 0; i < 9; i++, phase += 0x2710, p_pos++, p_speed++, dp_idx += 4) {
+    for (i = 0; i < 9; i++, phase += 0x2710, dp_idx += 4, p_pos++, p_speed++) {
         if (i > 0) {
             cXyz local_90 = local_9C * d_p[i - 1];
 
