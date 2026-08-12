@@ -47,3 +47,9 @@ milestone (never merged into main or PR branches). Append + push via
 **Candidate family**: mant (n_calc/v_calc/joint_control — its entire remaining delta family shows the signature), bms1 (bs1-family, to test), flame (pool-layout differences), mozo (primary). Review gate now checks for the 1.3.2r signature before rejecting pooling-symptom functions. The org's pooled-actor blockers may be a compiler-version family, not 30 independent regalloc cases.
 
 **Pipeline**: PRs #1152/#1153/#1154 still open+mergeable (CI green x4) awaiting maintainers; co1 (109/109, Equivalent) + magma adoption (#969, noskap release) in Integrator's PR queue; ~15 actors in active decompile; 105 D.map sheets + 53-actor crib map = full tooling coverage; ~225 lessons; 4+ patterns added today (weak-bss verification, 1.3.2r signature, base-class evidence rules).
+
+---
+
+## 2026-08-12T13:25Z — M4: three PRs green this session — #1155 d_a_magma kiosk adoption (upstream/main + single-commit rebuild), #1157 d_a_npc_co1 100% Matching (Equivalent weak-data, 109/109), #1158 d_a_ship OK (Equivalent regalloc, 189/189 ≥99.9%). All six org PRs (#1152/#1153/#1154/#1155/#1157/#1158) open+mergeable+CI-green x4. Open-claim pool corrected: ship was flip-only; buoyflag enqueued; 1.3.2r family fully characterized (mozo only positive, aj1 negative-definitive).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
