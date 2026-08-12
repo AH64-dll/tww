@@ -778,9 +778,9 @@ void daNpcBmcon_c::executeSetMode(u8 param_1) {
 s32 daNpcBmcon_c::executeWaitInit() {
     speedF = 0.0f;
     if (mNpcNo != 0) {
-        setAnmTbl(l_npc_anm_tbl[1]);
+        setAnmTbl(l_npc_anm_wait2);
     } else {
-        setAnmTbl(l_npc_anm_tbl[0]);
+        setAnmTbl(l_npc_anm_wait);
     }
     m_jnt.setParam(
         l_npc_dat[mNpcNo].mMax_backbone_x,
@@ -876,11 +876,10 @@ void daNpcBmcon_c::executeWalk() {
 s32 daNpcBmcon_c::executeTurnInit() {
     cXyz point = mPathRun.getPoint(mPathRun.getIdx());
     s16 angle;
-    f32 dist;
-    dNpc_calc_DisXZ_AngY(current.pos, point, &dist, &angle);
+    dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
     if (angle == current.angle.y) {
         setAnmTbl(l_npc_anm_walk);
-        m796 = l_npc_dat[mNpcNo].field_0x44 + (s16)cM_rndF(l_npc_dat[mNpcNo].field_0x46 - l_npc_dat[mNpcNo].field_0x44);
+        m796 = (s16)(l_npc_dat[mNpcNo].field_0x44 + cM_rndF(l_npc_dat[mNpcNo].field_0x46 - l_npc_dat[mNpcNo].field_0x44));
         return 2;
     }
     return 3;
@@ -1289,11 +1288,13 @@ u32 daNpcBmcon_c::getMsg() {
 
 /* 0000301C-00003098       .text chkMsg__12daNpcBmcon_cFv */
 void daNpcBmcon_c::chkMsg() {
-    if (mCurrMsgNo == 0x2AB2) {
+    switch ((s32)mCurrMsgNo) {
+    case 0x2AB2:
         JAIZelBasic::zel_basic->bgmStart(0x80000051, 0, 0);
-    }
-    else if (mCurrMsgNo == 0x2AB3) {
+        break;
+    case 0x2AB3:
         JAIZelBasic::zel_basic->bgmStart(0x80000052, 0, 0);
+        break;
     }
 }
 

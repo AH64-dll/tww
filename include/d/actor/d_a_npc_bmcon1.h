@@ -129,6 +129,7 @@ private:
     /* 0x72C */ request_of_phase_process_class mPhase;
     /* 0x734 */ mDoExt_McaMorf* mpArmMorf;
     /* 0x738 */ J3DModel* mpHeadModel;
+    /* 0x73C */ u32 field_0x73C;
     /* 0x740 */ mDoExt_btpAnm mBtpAnm;
     /* 0x754 */ u32 mShadowID;
     /* 0x758 */ dNpc_PathRun_c mPathRun;
