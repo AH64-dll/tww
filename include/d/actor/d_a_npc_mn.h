@@ -159,7 +159,6 @@ public:
     /* 0x780 */ f32 m780;
     /* 0x784 */ f32 mAttnDist;
     /* 0x788 */ f32 m788;
-    /* 0x78C */ u32 mItemNo;
     /* 0x78C */ u32 mItemId;
     /* 0x790 */ u32 m790;
     /* 0x794 */ u8 m794;
