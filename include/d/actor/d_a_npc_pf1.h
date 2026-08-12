@@ -72,7 +72,7 @@ public:
     BOOL wait_3();
     BOOL talk_1();
     BOOL wait_action1(void*);
-    BOOL demo();
+    u8 demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -114,7 +114,7 @@ public:
     /* 0x780 */ s16 m780;
     /* 0x782 */ u8 field_0x782[0x784 - 0x782];
     /* 0x784 */ s32 mActionResult;
-    /* 0x788 */ s16 mEventIdx;
+    /* 0x788 */ s16 mEventIdTable[1];
     /* 0x78A */ s16 m78A;
     /* 0x78C */ u8 field_0x78C[0x796 - 0x78C];
     /* 0x796 */ s16 m796;

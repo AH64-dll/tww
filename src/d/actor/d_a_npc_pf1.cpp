@@ -158,7 +158,7 @@ BOOL daNpc_Pf1_c::init_PF1_0() {
 
 /* 000004CC-000006B8       .text createInit__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::createInit() {
-    mEventIdx = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
+    mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
     mEventCut.setActorInfo2("Pf1", this);
     u8 path_idx = (u8)(fopAcM_GetParam(this) >> 0x10);
     s32 stts_param = 0xFF;
@@ -495,21 +495,23 @@ void daNpc_Pf1_c::eventOrder() {
         }
     } else if (cond >= 3) {
         m78A = cond - 3;
-        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdTable[m78A], 0xFF, 0xFFFF, 0, 1);
     }
 }
 
 /* 00000F88-00001044       .text checkOrder__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::checkOrder() {
     switch (eventInfo.getCommand()) {
-        case dEvtCmd_INDEMO_e:
-            if (dComIfGp_evmng_startCheck(mEventIdx) && m7B7 >= 3) {
+        case 2:
+            if (dComIfGp_evmng_startCheck(mEventIdTable[m78A]) && m7B7 >= 3) {
+                if (m78A == 0) {
+                }
                 m7B7 = 0;
                 m7B3 = 0xFF;
                 m7B4 = 0xFF;
             }
             break;
-        case dEvtCmd_INTALK_e:
+        case 1:
             if (m7B7 == 1 || m7B7 == 2) {
                 m7B7 = 0;
                 m7AE = 1;
@@ -672,7 +674,7 @@ int daNpc_Pf1_c::isEventEntry() {
 
 /* 00001590-0000161C       .text event_proc__11daNpc_Pf1_cFi */
 void daNpc_Pf1_c::event_proc(int i_staff_idx) {
-    if (dComIfGp_evmng_endCheck(mEventIdx)) {
+    if (dComIfGp_evmng_endCheck(mEventIdTable[m78A])) {
         endEvent();
         return;
     }
@@ -748,7 +750,7 @@ void daNpc_Pf1_c::createTama(f32 i_param_1) {
 
 /* 00001958-00001A80       .text chk_areaIN__11daNpc_Pf1_cFf4cXyz */
 BOOL daNpc_Pf1_c::chk_areaIN(f32 i_param_1, cXyz i_param_2) {
-    cXyz diff = dComIfGp_getPlayer(0)->current.pos - i_param_2;
+    cXyz diff = dComIfGp_getLinkPlayer()->current.pos - i_param_2;
     f32 mag = std::sqrtf(diff.abs2XZ());
     BOOL ret = mag < i_param_1;
     if (ret && (g_Counter.mTimer % 3) == 0) {
@@ -770,7 +772,7 @@ BOOL daNpc_Pf1_c::startEvent_check() {
     cXyz pos = mHomePos;
     pos.y += 100.0f;
     if (chk_areaIN(l_HIO.mPrmTbl.m38, pos)) {
-        f32 dist = std::sqrtf((dComIfGp_getPlayer(0)->current.pos - current.pos).abs2XZ());
+        f32 dist = std::sqrtf((dComIfGp_getLinkPlayer()->current.pos - current.pos).abs2XZ());
         if (dist < 200.0f || field_0x6ba != 0) {
             return TRUE;
         }
@@ -792,10 +794,10 @@ void daNpc_Pf1_c::set_pthPoint(u8 i_param_1) {
 
 /* 00001C94-00001EAC       .text chk_attn__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::chk_attn() {
-    cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
+    cXyz diff = current.pos - dComIfGp_getLinkPlayer()->current.pos;
     f32 dist = std::sqrtf(diff.abs2XZ());
-    f32 height_diff = current.pos.y - dComIfGp_getPlayer(0)->current.pos.y;
-    s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    f32 height_diff = current.pos.y - dComIfGp_getLinkPlayer()->current.pos.y;
+    s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
     s32 angle_diff = abs(target_angle - current.angle.y);
     if (m7BA == 1) {
         if (dist < 200.0f && (f32)angle_diff / 182.04f < 90.0f && std::fabsf(height_diff) < 300.0f) {
@@ -855,7 +857,7 @@ BOOL daNpc_Pf1_c::regret() {
 
 /* 00002030-00002350       .text attk_1__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::attk_1() {
-    cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
+    cXyz diff = current.pos - dComIfGp_getLinkPlayer()->current.pos;
     f32 dist = std::sqrtf(diff.abs2XZ());
     if (m7AE) {
         if (chk_talk()) {
@@ -868,11 +870,11 @@ BOOL daNpc_Pf1_c::attk_1() {
     mHeadOnlyFollow = 1;
     if (m7B6 == 0) {
         if (m798 == 0) {
-            s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+            s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
             cLib_addCalcAngleS(&current.angle.y, target_angle, 4, 0x1000, 0x80);
             if (abs((s16)(current.angle.y - target_angle)) < 0x800) {
-                cXyz bikon(0.0f, 0.0f, 0.0f);
-                mDoAud_seStart(0x58BD, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                cXyz bikon(0.0f, -40.0f, 60.0f);
+                JAIZelBasic::zel_basic->seStart(0x58BD, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 setBikon(bikon);
                 m798 = 0x14;
             }
@@ -891,7 +893,7 @@ BOOL daNpc_Pf1_c::attk_1() {
             return TRUE;
         }
     }
-    cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos), l_HIO.mPrmTbl.m1A, l_HIO.mPrmTbl.m1C, 0x80);
+    cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos), l_HIO.mPrmTbl.m1A, l_HIO.mPrmTbl.m1C, 0x80);
     cLib_chaseF(&speedF, l_HIO.mPrmTbl.m30, l_HIO.mPrmTbl.m34);
     f32 play_speed = speedF * l_HIO.mPrmTbl.m2C;
     if (play_speed < 0.5f) {
@@ -976,7 +978,7 @@ BOOL daNpc_Pf1_c::wait_2() {
 
 /* 000026E4-00002874       .text wait_3__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::wait_3() {
-    cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
+    cXyz diff = current.pos - dComIfGp_getLinkPlayer()->current.pos;
     f32 dist = std::sqrtf(diff.abs2XZ());
     if (m7AE) {
         if (chk_talk()) {
@@ -1005,7 +1007,7 @@ BOOL daNpc_Pf1_c::wait_3() {
 /* 00002874-00002980       .text talk_1__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::talk_1() {
     u8 ret = chk_parts_notMov();
-    cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos), 4, l_HIO.mPrmTbl.mCalcAngleTarget, 0x80);
+    cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos), 4, l_HIO.mPrmTbl.mCalcAngleTarget, 0x80);
     u16 talk_status = talk(1);
     if (mpCurrMsg == NULL) {
         return TRUE;
@@ -1070,7 +1072,7 @@ BOOL daNpc_Pf1_c::wait_action1(void*) {
 }
 
 /* 00002A8C-00002BCC       .text demo__11daNpc_Pf1_cFv */
-BOOL daNpc_Pf1_c::demo() {
+u8 daNpc_Pf1_c::demo() {
     if (demoActorID == 0) {
         if (m7B1 != 0) {
             m7B1 = 0;
