@@ -30,7 +30,7 @@ namespace daObjTribox {
         f32 L_r_in = 41.666668f * std::sqrtf(3.0f);
         f32 L_r_out = 2.0f * L_r_in;
 
-        static const Attr_c l_attr = {
+        static const Attr_c L_attr = {
             -0.8f,
             0.82f,
             0.5f,
@@ -694,14 +694,14 @@ namespace daObjTribox {
             eff_sink_smoke_start();
             vib_sink_start();
             f32 sinkY = home.pos.y + -245.0f;
-            m390 += l_attr.m00;
+            m390 += L_attr.m00;
             s16 frame = m30C;
-            if ((frame >= l_attr.m0C) && (frame < l_attr.m0E)) {
-                m390 *= l_attr.m08;
-            } else if ((frame >= l_attr.m14) && (frame < l_attr.m16)) {
-                m390 *= l_attr.m10;
+            if ((frame >= L_attr.m0C) && (frame < L_attr.m0E)) {
+                m390 *= L_attr.m08;
+            } else if ((frame >= L_attr.m14) && (frame < L_attr.m16)) {
+                m390 *= L_attr.m10;
             } else {
-                m390 *= l_attr.m04;
+                m390 *= L_attr.m04;
             }
             current.pos.y += m390;
             if (current.pos.y < sinkY) {
@@ -724,7 +724,7 @@ namespace daObjTribox {
     void Act_c::mode_block_lower_init() {
         fopAcM_OffStatus(this, 0x80);
         m308 = 3;
-        m30C = l_attr.m18;
+        m30C = L_attr.m18;
         m3FA = 0x5E;
     }
 
