@@ -40,7 +40,7 @@ void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     cLib_addCalcAngleS2(&pActor->mAngleX, cM_atan2s(local_44.x, local_44.z), 2, 0x2000);
     if ((std::abs(g_mDoCPd_cpadInfo[0].mMainStickPosY) + std::abs(g_mDoCPd_cpadInfo[0].mMainStickPosX) > 0.1f) ||
         (std::abs(pActor->field_3C4) > 0.0001f)) {
-        f32 fVar1 = (REG0_F(4) + 100.0f) * std::abs(local_50.z - local_44.z);
+        f32 fVar1 = (REG0_F(4) + 100.0f) * std::abs(local_44.z - local_50.z);
         if (fVar1 > (REG0_F(6) + 200.0f)) {
             pActor->field_2E8.x = fVar1;
         }
