@@ -151,11 +151,14 @@ u8 daNpc_Gk1_c::init_GK1_0() {
 
 /* 0000058C-00000720       .text createInit__11daNpc_Gk1_cFv */
 u8 daNpc_Gk1_c::createInit() {
-    /* Nonmatching */
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
     mEventCut.setActorInfo2("Gk1", this);
     attention_info.flags = 0xA;
     cullSizeFar = 12000.0f / mDoLib_clipper::mSystemFar;
+    switch (mType) {
+        case 0:
+            break;
+    }
     attention_info.distances[1] = 0xA9;
     attention_info.distances[3] = 0xA9;
     gravity = -4.5f;
