@@ -1421,7 +1421,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bflower"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bita"),
     ActorRel(Matching,    "d_a_branch"),
-    ActorRel(NonMatching, "d_a_bridge"),
+    ActorRel(Equivalent, "d_a_bridge"), # regalloc: bridge_move 99.78 / daBridge_Execute 99.90
     ActorRel(Matching,    "d_a_coming2"),
     ActorRel(Matching,    "d_a_coming3"),
     ActorRel(Matching,    "d_a_demo_dk"),
@@ -1557,7 +1557,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kn"),
     ActorRel(Matching,    "d_a_kokiie"),
     ActorRel(Matching,    "d_a_ks"),
-    ActorRel(NonMatching, "d_a_kt"), # regalloc
+    ActorRel(Equivalent, "d_a_kt"), # regalloc: kotori_move 99.64
     ActorRel(Matching,    "d_a_mflft"),
     ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_npc_cb1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_md"),
@@ -1581,7 +1581,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_saku"),
     ActorRel(Matching,    "d_a_seatag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shand"),
-    ActorRel(NonMatching, "d_a_ship"),
+    ActorRel(Equivalent, "d_a_ship"), # regalloc: execute 99.94
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_shop_item"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_sie_flag"),
     ActorRel(NonMatching, "d_a_sitem"),
@@ -1607,7 +1607,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bk"),
     ActorRel(NonMatching, "d_a_bl"),
     ActorRel(Matching,    "d_a_bmd"),
-    ActorRel(NonMatching, "d_a_bmdfoot"),
+    ActorRel(Equivalent, "d_a_bmdfoot"), # regalloc: attack_1 98.26
     ActorRel(Matching,    "d_a_bmdhand"),
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
@@ -1633,7 +1633,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_goal_flag"),
     ActorRel(NonMatching, "d_a_gy"),
     ActorRel(NonMatching, "d_a_icelift"),
-    ActorRel(NonMatching, "d_a_kb"),
+    ActorRel(Equivalent, "d_a_kb"), # regalloc: useHeapInit 99.80 / esa_demo_move 99.94
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(Matching,    "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
@@ -1663,7 +1663,7 @@ config.libs = [
     ActorRel(MatchingFor("D44J01"), "d_a_npc_bs1"), # regalloc
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_btsw"),
     ActorRel(Matching,    "d_a_npc_btsw2"),
-    ActorRel(NonMatching, "d_a_npc_co1"),
+    ActorRel(Equivalent, "d_a_npc_co1"), # weak data (PR #1157 shape)
     ActorRel(NonMatching, "d_a_npc_de1"),
     ActorRel(NonMatching, "d_a_npc_ds1"),
     ActorRel(NonMatching, "d_a_npc_gk1"),
