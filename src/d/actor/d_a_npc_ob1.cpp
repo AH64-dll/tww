@@ -986,11 +986,38 @@ void daNpc_Ob1_c::clrSpd() {
 
 /* 00002288-00002488       .text setStt__11daNpc_Ob1_cFSc */
 void daNpc_Ob1_c::setStt(s8 i_status) {
-    s8 oldStatus = mStatus;
     searchByID(mPartnerProcID);
+    s8 oldStatus = mStatus;
     mTimer = 0;
     mStatus = i_status;
     switch (mStatus) {
+        case 0:
+            break;
+        case 4:
+            m7DA = cLib_getRndValue<int>(0x5A, 0xB4);
+        case 1:
+        case 5:
+            if (oldStatus != 2) {
+                switch (mStatus) {
+                    case 1:
+                        mLookBackState = 3;
+                        mTargetYRot = mInitialAngle.y;
+                        break;
+                    case 4:
+                        mLookBackState = 2;
+                        m79C.set(get_attPos());
+                        break;
+                    case 5:
+                        mLookBackState = 1;
+                        break;
+                }
+                m_jnt.setTrn();
+                mHeadOnlyFollow = 0;
+            }
+            mOrderIdx = 0;
+            m7FC = 0;
+            clrSpd();
+            break;
         case 2:
             mLookBackState = 1;
             m_jnt.setTrn();
@@ -1020,31 +1047,6 @@ void daNpc_Ob1_c::setStt(s8 i_status) {
             mAttr = 0xFF;
             mPrevStatus = oldStatus;
             return;
-        default:
-            if (mStatus == 4) {
-                m7DA = cLib_getRndValue<int>(0x5A, 0xB4);
-            }
-            if (oldStatus != 2) {
-                switch (mStatus) {
-                    case 1:
-                        mLookBackState = 3;
-                        mTargetYRot = mInitialAngle.y;
-                        break;
-                    case 4:
-                        mLookBackState = 2;
-                        m79C.set(get_attPos());
-                        break;
-                    default:
-                        mLookBackState = 1;
-                        break;
-                }
-            }
-            m_jnt.setTrn();
-            mHeadOnlyFollow = 0;
-            mOrderIdx = 0;
-            m7FC = 0;
-            clrSpd();
-            break;
     }
     setAnm();
 }
