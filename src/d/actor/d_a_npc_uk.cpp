@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_uk.h"
+#include "d/actor/d_a_npc_mk.h"
 #include "m_Do/m_Do_ext.h"
 #include "res/Object/Uk.h"
 #include "d/actor/d_a_player_main.h"
@@ -104,14 +105,15 @@ BOOL daNpc_Uk_c::chkPositioning(f32 param_0, f32 param_1, f32 param_2, s16 param
 
 /* 0000045C-000008B0       .text nextVisitMode__10daNpc_Uk_cFv */
 u8 daNpc_Uk_c::nextVisitMode() {
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+    u32 procId = mLookActorId;
+    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
-    u8 lookMode = 0;
 
+    u8 lookMode;
     if (pActor == NULL) {
         mVisitMode = VISIT_START;
     } else {
-        lookMode = ((daNpc_Uk_c*)pActor)->mAnmIdx;
+        lookMode = ((daNpc_Mk_c*)pActor)->mVisitMode;
     }
 
     if (mVisitMode == VISIT_WAIT_3) {
@@ -123,67 +125,81 @@ u8 daNpc_Uk_c::nextVisitMode() {
 
     if (mVisitMode == VISIT_START) {
         pActor = fopAcM_searchFromName("Mk", 0xFF, 1);
-        if (pActor == NULL) {
+        if (pActor != NULL) {
+            mLookActorId = fopAcM_GetID(pActor);
+            lookMode = ((daNpc_Mk_c*)pActor)->mVisitMode;
+        } else {
             return VISIT_START;
         }
-        mLookActorId = pActor->base.base.mBsPcId;
-        lookMode = ((daNpc_Uk_c*)pActor)->mAnmIdx;
     }
 
-    if (lookMode == 2 || lookMode == 8 || lookMode == 9) {
-        cXyz dist = pActor->current.pos - current.pos;
+    cXyz dist;
+
+    if (lookMode == 2 || lookMode == 9 || lookMode == 8) {
+        dist = pActor->current.pos - current.pos;
         switch (mVisitMode) {
-        case VISIT_REACHED_LINK:
-            if (dist.absXZ() > 6400.0f) {
+        case VISIT_NOTICE_LINK:
+            if (dist.abs2XZ() > 10000.0f) {
                 return VISIT_RUN_LINK;
-            }
-            return VISIT_WALK_AROUND_LINK;
-        case VISIT_RUN_LINK:
-            if (dist.absXZ() > 22500.0f) {
+            } else {
                 return VISIT_NOTICE_LINK;
             }
-            return VISIT_REACHED_LINK;
-        default:
-            if (dist.absXZ() < 160000.0f) {
+        case VISIT_RUN_LINK:
+            if (dist.abs2XZ() > 40000.0f) {
+                return VISIT_WALK_PATH;
+            } else if (dist.abs2XZ() < 6400.0f) {
+                return VISIT_NOTICE_LINK;
+            } else {
                 return VISIT_RUN_LINK;
             }
-            return VISIT_WALK_PATH;
+        default:
+            if (dist.abs2XZ() < 22500.0f) {
+                return VISIT_RUN_LINK;
+            } else {
+                return VISIT_WALK_PATH;
+            }
         }
     } else if (mVisitMode == VISIT_WAIT_2) {
         if (mWaitTimer != 0) {
             mWaitTimer--;
             return VISIT_WAIT_2;
         }
-        cXyz dist = pLink->current.pos - current.pos;
-        if (dist.absXZ() < 22500.0f) {
+        dist = pLink->current.pos - current.pos;
+        if (dist.abs2XZ() < 22500.0f) {
             return VISIT_LEFT_PATH;
         }
         if (lookMode == 4 || lookMode == 5) {
             return VISIT_REACHED_LINK;
         }
-        s16 angle = fopAcM_searchActorAngleY(pLink, this) - current.angle.y;
+        s16 angle = fopAcM_searchActorAngleY(this, pActor) - shape_angle.y;
         if (angle < 0) {
             angle = -angle;
         }
         if (angle < 0x3800) {
             return VISIT_WALK_PATH;
+        } else {
+            return VISIT_WAIT_2;
         }
-        return VISIT_WAIT_2;
-    } else if (mVisitMode == VISIT_WALK_AROUND_LINK) {
-        if (mVisitMode == 8) {
+    } else if (lookMode == 6) {
+        switch (mVisitMode) {
+        case VISIT_WAIT:
             if (mWaitTimer != 0) {
                 mWaitTimer--;
                 return VISIT_WAIT;
+            } else {
+                return VISIT_WAIT_2;
             }
-            return VISIT_WAIT_2;
+        default:
+            return VISIT_WAIT;
         }
-        return VISIT_WAIT;
-    } else if (mVisitMode == VISIT_LEFT_PATH) {
+    } else if (lookMode == 7) {
         return VISIT_WAIT_3;
     } else {
-        cXyz dist = pLink->current.pos - current.pos;
-        if (mVisitMode >= 5 && mVisitMode < 8) {
-            if (dist.absXZ() > 32400.0f) {
+        dist = pLink->current.pos - current.pos;
+        switch (mVisitMode) {
+        case VISIT_WALK_AROUND_LINK:
+        case VISIT_LEFT_PATH:
+            if (dist.abs2XZ() > 32400.0f) {
                 return VISIT_REACHED_LINK;
             }
             if (mVisitMode == VISIT_LEFT_PATH) {
@@ -194,11 +210,19 @@ u8 daNpc_Uk_c::nextVisitMode() {
                 }
             }
             return mVisitMode;
+        case VISIT_REACHED_LINK:
+            if (dist.abs2XZ() < 22500.0f) {
+                return VISIT_LEFT_PATH;
+            } else {
+                return VISIT_REACHED_LINK;
+            }
+        default:
+            if (dist.abs2XZ() < 22500.0f) {
+                return VISIT_LEFT_PATH;
+            } else {
+                return VISIT_WALK_PATH;
+            }
         }
-        if (dist.absXZ() < 22500.0f) {
-            return VISIT_LEFT_PATH;
-        }
-        return VISIT_WALK_PATH;
     }
 }
 
