@@ -237,7 +237,7 @@ BOOL daNpc_Kg1_c::CreateHeap() {
         return FALSE;
     }
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
-        if (i == (u8)m_jnt.getHeadJntNum() || i == (u8)m_jnt.getBackboneJntNum() || i == 8) {
+        if (i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum() || i == 8) {
             modelData->getJointNodePointer(i)->setCallBack(daNpc_Kg1_nodeCallBack);
         }
     }
