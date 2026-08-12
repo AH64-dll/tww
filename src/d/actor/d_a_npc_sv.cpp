@@ -771,15 +771,13 @@ void daNpcSv_c::playAnm() {
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
 void daNpcSv_c::setAnm(u8 anmNo, int mode, f32 speed) {
-    f32 curFrame = m70C;
-    f32 morf = speed;
-    if (curFrame >= 0.0f) {
-        morf = curFrame;
+    if (m70C >= 0.0f) {
+        speed = m70C;
         m70C = -1.0f;
     }
     mpMorf->setAnm(
         (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][anmNo]),
-        mode, morf, 1.0f, 0.0f, -1.0f, NULL
+        mode, speed, 1.0f, 0.0f, -1.0f, NULL
     );
     m73D = anmNo;
 }
