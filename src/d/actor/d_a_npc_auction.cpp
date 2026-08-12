@@ -22,11 +22,28 @@ struct daAuction_Access_c {
     /* 0x814 */ u8 mAucMdlNo[8];
     /* 0x81C */ u8 mPrevNpcNo;
     /* 0x81D */ u8 mPrevNpcNo2;
+    /* 0x81E */ u8 m81E;
+    /* 0x81F */ u8 m81F;
     /* 0x820 */ u8 mNpcFlag;
     /* 0x821 */ u8 m821;
+    /* 0x822 */ u8 m822;
     /* 0x823 */ u8 mCurrAuctionItemIndex;
     /* 0x824 */ u8 m824;
-    /* 0x829 */ u8 mCurNpcNo;
+    /* 0x825 */ u8 m825;
+    /* 0x826 */ u8 m826;
+    /* 0x827 */ u8 m827;
+    /* 0x828 */ u8 m828;
+    /* 0x829 */ u8 m829;
+    /* 0x82A */ u8 m82A;
+    /* 0x82B */ u8 m82B;
+    /* 0x82C */ u8 m82C;
+    /* 0x82D */ u8 mCurLinkAnm;
+    /* 0x82E */ u8 m82E;
+    /* 0x82F */ u8 m82F;
+    /* 0x830 */ u8 m830;
+    /* 0x831 */ u8 m831;
+    /* 0x832 */ u8 m832;
+    /* 0x833 */ u8 mFace;
     /* 0x834 */ u8 m834;
 };
 
@@ -837,7 +854,7 @@ int daNpcAuction_c::eventMain() {
             setAnm2(3, 2, 8.0f);
             m747 |= 8;
         }
-    } else if (mNpcNo == AUC->mCurNpcNo) {
+    } else if (mNpcNo == AUC->m829) {
         if (flags & 1) {
             if (!(m747 & 4)) {
                 setAnm2(2, 2, 8.0f);
