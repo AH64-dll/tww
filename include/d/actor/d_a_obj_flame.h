@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
 #include "SSystem/SComponent/c_phase.h"
 
 class JPABaseEmitter;
@@ -10,25 +11,80 @@ class mDoExt_btkAnm;
 class mDoExt_brkAnm;
 
 namespace daObjFlame {
+    struct attr_base_s {
+        /* 0x00 */ s32 mKiMax;
+        /* 0x04 */ s16 mRotAdd[2];
+        /* 0x08 */ s16 mF08;
+        /* 0x0A */ s16 mF0A;
+        /* 0x0C */ s16 mF0C;
+        /* 0x0E */ s16 mF0E;
+        /* 0x10 */ s16 mF10;
+        /* 0x12 */ s16 mF12;
+    };  // Size: 0x14
+
+    struct attr_scl_s {
+        /* 0x00 */ f32 mScale;
+        /* 0x04 */ f32 mF04;
+        /* 0x08 */ f32 mF08;
+        /* 0x0C */ f32 mF0C;
+        /* 0x10 */ s32 mBdlResID;
+        /* 0x14 */ s32 mBtkResID;
+        /* 0x18 */ s32 mBrkResID;
+        /* 0x1C */ u32 mHeapSize;
+        /* 0x20 */ f32 mRate;
+        /* 0x24 */ f32 mF24;
+        /* 0x28 */ u32 mEmID;
+        /* 0x2C */ u8 mF2C;
+        /* 0x2D */ u8 mF2D;
+        /* 0x2E */ u8 mF2E;
+        /* 0x2F */ u8 mF2F;
+        /* 0x30 */ f32 mEm0SclX;
+        /* 0x34 */ f32 mEm0SclY;
+        /* 0x38 */ f32 mEm1SclX;
+        /* 0x3C */ f32 mEm1SclY;
+        /* 0x40 */ f32 mEm2Scl;
+        /* 0x44 */ s16 mF44[2];
+        /* 0x48 */ s16 mCull[6];
+        /* 0x54 */ f32 mF54;
+    };  // Size: 0x58
+
     class Act_c : public fopAc_ac_c {
     public:
-        inline cPhs_State _create();
-        inline bool _delete();
-        inline bool _draw();
-        inline bool _execute();
-        void _is_delete() {}
-        void attr_base() const {}
-        void attr_scl() const {}
-        void prm_get_haze() const {}
-        void prm_get_kiCycle() const {}
-        void prm_get_kiNum() const {}
-        void prm_get_sch() const {}
-        void prm_get_scl() const {}
-        void prm_get_swSave() const {}
-    
+        static char M_arcname[9];
+        static const attr_base_s M_attr_base;
+        static const dCcD_SrcCps M_cps_src;
+        static const attr_scl_s M_attr_scl[4];
+
+        enum Prm_e {
+            PRM_SCH_W = 8,
+            PRM_SCH_S = 0,
+
+            PRM_KINUM_W = 5,
+            PRM_KINUM_S = 8,
+
+            PRM_PRM_W = 2,
+            PRM_PRM_S = 13,
+
+            PRM_TYPE_W = 2,
+            PRM_TYPE_S = 28,
+
+            PRM_HAZE_W = 1,
+            PRM_HAZE_S = 31,
+
+            PRM_SWSAVE_W = 8,
+            PRM_SWSAVE_S = 16,
+        };
+
+        s32 prm_get_sch() const { return daObj::PrmAbstract(this, PRM_SCH_W, PRM_SCH_S); }
+        s32 prm_get_kiNum() const { return daObj::PrmAbstract(this, PRM_KINUM_W, PRM_KINUM_S); }
+        s32 prm_get_prm() const { return daObj::PrmAbstract(this, PRM_PRM_W, PRM_PRM_S); }
+        s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        s32 prm_get_haze() const { return daObj::PrmAbstract(this, PRM_HAZE_W, PRM_HAZE_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+
         void set_switch();
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        static int solidHeapCB(fopAc_ac_c*);
+        int create_heap();
         void create_mode_init();
         void set_mtx();
         void init_mtx();
@@ -41,8 +97,8 @@ namespace daObjFlame {
         void ki_make();
         void eff_hase();
         void se_fireblast_omen();
-        void liftup_magmarock(void*, void*);
-        void liftup_mflft(void*, void*);
+        static void* liftup_magmarock(void*, void*);
+        static void* liftup_mflft(void*, void*);
         void mode_wait();
         void mode_wait2();
         void mode_l_before();
@@ -51,7 +107,8 @@ namespace daObjFlame {
         void mode_u_l();
         void mode_l_after();
         void mode_proc_call();
-    
+        cPhs_State _create();
+
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
@@ -62,7 +119,7 @@ namespace daObjFlame {
         /* 0x418 */ cXyz mCpsP0;
         /* 0x424 */ cXyz mCpsP1;
         /* 0x430 */ f32 mCpsRad;
-        /* 0x434 */ bool m434;
+        /* 0x434 */ bool mbCol;
         /* 0x435 */ u8 m435[0x438 - 0x435];
         /* 0x438 */ int mType;
         /* 0x43C */ int mModeProc;
@@ -74,22 +131,21 @@ namespace daObjFlame {
         /* 0x454 */ u8 mEm0State;
         /* 0x455 */ u8 mEm1State;
         /* 0x456 */ u8 mEm2State;
-        /* 0x457 */ u8 m457;
-        /* 0x458 */ u8 m458;
-        /* 0x459 */ u8 m459;
-        /* 0x45A */ u8 m45A;
-        /* 0x45B */ u8 m45B[0x45C - 0x45B];
-        /* 0x45C */ int m45C;
-        /* 0x460 */ int m460;
-        /* 0x464 */ int m464;
+        /* 0x457 */ u8 mbEmPosition;
+        /* 0x458 */ u8 mReverb;
+        /* 0x459 */ u8 mbLiftup;
+        /* 0x45A */ u8 mbKi;
+        /* 0x45B */ u8 m45B;
+        /* 0x45C */ int mKiTimer;
+        /* 0x460 */ int mKiCount;
+        /* 0x464 */ int mKiIdx;
         /* 0x468 */ s16 mRotY;
         /* 0x46A */ u8 m46A[0x46C - 0x46A];
-        /* 0x46C */ f32 m46C;
-        /* 0x470 */ f32 mExtraScaleY;
+        /* 0x46C */ f32 mScaleX;
+        /* 0x470 */ f32 mScaleY;
         /* 0x474 */ cXyz mOrigScale;
-        /* 0x480 */ u8 m480[0x500 - 0x480];
     };
-    
+
     namespace Method {
         cPhs_State Create(void*);
         BOOL Delete(void*);
