@@ -700,7 +700,7 @@ void daNpcAuction_c::wait_action() {
         m73E = 0;
     }
     if (m73C == 1) {
-        if (talk(1) == fopMsgStts_MSG_ENDS_e) {
+        if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
             m73C = 0;
             setAnm2(7, 2, 8.0f);
             if (m745 == 0) {
@@ -911,7 +911,7 @@ void daNpcAuction_c::eventMesSetInit(int staffId) {
 
 /* 000018FC-00001930       .text eventMesSet__14daNpcAuction_cFv */
 int daNpcAuction_c::eventMesSet() {
-    return talk(0) == fopMsgStts_MSG_ENDS_e;
+    return talk(0) == fopMsgStts_BOX_CLOSED_e ? 1 : 0;
 }
 
 /* 00001930-00001938       .text XyCheckCB__14daNpcAuction_cFi */
