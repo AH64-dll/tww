@@ -86,6 +86,7 @@ void anm_init(pw_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed
 
 /* 00000600-000006F4       .text kantera_break__FP8pw_class */
 void kantera_break(pw_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     i_this->m346 = 0;
 
@@ -129,6 +130,7 @@ BOOL Big_pow_gattai_check(pw_class* i_this) {
 
 /* 000007CC-000008B0       .text Big_pow_down_check__FP8pw_class */
 BOOL Big_pow_down_check(pw_class* i_this) {
+    /* Nonmatching */
     if (i_this->health > 0) {
         return FALSE;
     }
@@ -168,6 +170,7 @@ void kantera_atari_check(pw_class*) {
 
 /* 000016FC-000018FC       .text kantera_calc__FP8pw_class */
 void kantera_calc(pw_class* i_this) {
+    /* Nonmatching */
     if (i_this->m346 > 0 && i_this->m382 == 0 && i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* kantera;
         if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
@@ -237,6 +240,7 @@ BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
 void alpha_anime(pw_class* i_this) {
+    /* Nonmatching */
     if (i_this->m33E) {
         return;
     }
@@ -247,6 +251,7 @@ void alpha_anime(pw_class* i_this) {
 
 /* 00002254-00002400       .text fuwafuwa_calc__FP8pw_class */
 void fuwafuwa_calc(pw_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 targetY = i_this->m2F0.y;
     i_this->m390 += 0x2BC;
@@ -279,6 +284,7 @@ void fuwafuwa_calc(pw_class* i_this) {
 
 /* 00002400-00002560       .text kougen_hani_check__FP8pw_classUc */
 BOOL kougen_hani_check(pw_class* i_this, u8 flag) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz pos = i_this->current.pos;
     if (!flag) {
@@ -302,6 +308,7 @@ BOOL kougen_hani_check(pw_class* i_this, u8 flag) {
 
 /* 00002560-00002714       .text kyori_sub__FP8pw_class */
 void kyori_sub(pw_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (fopAcM_searchActorDistance(i_this, player) <= 300.0f) {
         s16 angle = fopAcM_searchActorAngleY(i_this, player);
@@ -332,6 +339,7 @@ void kyori_sub(pw_class* i_this) {
 
 /* 00002714-0000289C       .text hani_check__FP8pw_class */
 BOOL hani_check(pw_class* i_this) {
+    /* Nonmatching */
     if (i_this->mJalhallaID != fpcM_ERROR_PROCESS_ID_e) {
         return FALSE;
     }
@@ -363,6 +371,7 @@ BOOL hani_check(pw_class* i_this) {
 
 /* 0000289C-000029C8       .text next_dousa_check__FP8pw_class */
 void next_dousa_check(pw_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     i_this->mCyl.SetTgType(AT_TYPE_LIGHT | AT_TYPE_LIGHT_ARROW);
     i_this->mCyl.OffTgNoConHit();
@@ -385,6 +394,7 @@ void next_dousa_check(pw_class* i_this) {
 
 /* 000029C8-00002A54       .text move_sound__FP8pw_class */
 void move_sound(pw_class* i_this) {
+    /* Nonmatching */
     u32 volume = (u32)(4.0f * i_this->speedF);
     mDoAud_seStart(JA_SE_CHR_PW_MOVE, &i_this->eyePos, volume,
                    dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
