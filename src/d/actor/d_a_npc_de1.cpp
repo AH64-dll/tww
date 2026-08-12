@@ -295,7 +295,7 @@ void daNpc_De1_c::setStt(s8 i_status) {
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
 u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
-    u16 o_retval = fopMsgStts_MSG_ENDS_e;
+    u16 o_retval = fopMsgStts_MSG_CONTINUES_e;
     switch (*i_msg_no) {
         case 0x139D:
             *i_msg_no = 0x139E;
@@ -318,8 +318,11 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
         case 0x13A8:
             *i_msg_no = 0x13A9;
             break;
+        case 0x13AC:
+            *i_msg_no = 0x13A9;
+            break;
         case 0x13A9:
-        case 0x13C6:
+        case 0x13C5:
             if (dComIfGs_isEventBit(0x1D40)) {
                 *i_msg_no = 0x13AA;
             } else {
@@ -327,93 +330,30 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
             }
             break;
         case 0x13AA:
-            switch (mpCurrMsg->mStatus) {
-                case fopMsgStts_MSG_TYPING_e:
+            switch (mpCurrMsg->mSelectNum) {
+                case 0:
                     *i_msg_no = 0x13AD;
                     break;
-                case fopMsgStts_BOX_OPENING_e:
+                case 1:
                     *i_msg_no = 0x13C7;
                     break;
                 default:
-                    o_retval = 0x10;
+                    *i_msg_no = 0x13C6;
                     break;
             }
             break;
         case 0x13AB:
-            switch (mpCurrMsg->mStatus) {
-                case fopMsgStts_MSG_TYPING_e:
+            switch (mpCurrMsg->mSelectNum) {
+                case 0:
                     *i_msg_no = 0x13AD;
                     break;
-                case fopMsgStts_BOX_OPENING_e:
+                case 1:
                     *i_msg_no = 0x13CC;
                     break;
                 default:
-                    o_retval = 0x10;
+                    *i_msg_no = 0x13C6;
                     break;
             }
-            break;
-        case 0x13AC:
-            *i_msg_no = 0x13A9;
-            break;
-        case 0x13AD:
-            switch (mpCurrMsg->mStatus) {
-                case fopMsgStts_MSG_TYPING_e:
-                    if (dComIfGs_isEventBit(0x102)) {
-                        *i_msg_no = 0x13B0;
-                    } else if (dComIfGs_isEventBit(0x3940)) {
-                        *i_msg_no = 0x13AF;
-                    } else {
-                        dComIfGs_onEventBit(0x3940);
-                        *i_msg_no = 0x13AE;
-                    }
-                    break;
-                case fopMsgStts_BOX_OPENING_e:
-                    *i_msg_no = 0x13B6;
-                    break;
-                default:
-                    o_retval = 0x10;
-                    break;
-            }
-            break;
-        case 0x13AE:
-        case 0x13AF:
-        case 0x13B0:
-            *i_msg_no = 0x13C5;
-            break;
-        case 0x13B6:
-            if (dComIfGs_isEventBit(0x1820)) {
-                if (dComIfGs_isStageBossEnemy(6)) {
-                    *i_msg_no = 0x13C2;
-                } else {
-                    *i_msg_no = 0x13C4;
-                }
-            } else {
-                *i_msg_no = 0x13C0;
-            }
-            break;
-        case 0x13C0:
-            *i_msg_no = 0x13C1;
-            break;
-        case 0x13C1:
-        case 0x13C3:
-        case 0x13C4:
-        case 0x13C5:
-            *i_msg_no = 0x13C5;
-            break;
-        case 0x13C2:
-            *i_msg_no = 0x13C3;
-            break;
-        case 0x13C8:
-            *i_msg_no = 0x13C8;
-            break;
-        case 0x13C9:
-            *i_msg_no = 0x13C9;
-            break;
-        case 0x13CA:
-            *i_msg_no = 0x13CA;
-            break;
-        case 0x13CB:
-            *i_msg_no = 0x13CB;
             break;
         case 0x13CC:
             *i_msg_no = 0x13CD;
@@ -430,8 +370,65 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
         case 0x13D0:
             *i_msg_no = 0x13D1;
             break;
+        case 0x13C7:
+            *i_msg_no = 0x13C8;
+            break;
+        case 0x13C8:
+            *i_msg_no = 0x13C9;
+            break;
+        case 0x13C9:
+            *i_msg_no = 0x13CA;
+            break;
+        case 0x13CA:
+            *i_msg_no = 0x13CB;
+            break;
+        case 0x13AD:
+            switch (mpCurrMsg->mSelectNum) {
+                case 0:
+                    if (dComIfGs_isEventBit(0x102)) {
+                        *i_msg_no = 0x13B0;
+                    } else if (dComIfGs_isEventBit(0x3940)) {
+                        *i_msg_no = 0x13AF;
+                    } else {
+                        dComIfGs_onEventBit(0x3940);
+                        *i_msg_no = 0x13AE;
+                    }
+                    break;
+                case 1:
+                    *i_msg_no = 0x13B6;
+                    break;
+                default:
+                    *i_msg_no = 0x13C6;
+                    break;
+            }
+            break;
+        case 0x13B6:
+            if (dComIfGs_isEventBit(0x1820)) {
+                if (dComIfGs_isStageBossEnemy(6)) {
+                    *i_msg_no = 0x13C2;
+                } else {
+                    *i_msg_no = 0x13C4;
+                }
+            } else {
+                *i_msg_no = 0x13C0;
+            }
+            break;
+        case 0x13C0:
+            *i_msg_no = 0x13C1;
+            break;
+        case 0x13C2:
+            *i_msg_no = 0x13C3;
+            break;
+        case 0x13AE:
+        case 0x13AF:
+        case 0x13B0:
+        case 0x13C1:
+        case 0x13C3:
+        case 0x13C4:
+            *i_msg_no = 0x13C5;
+            break;
         default:
-            o_retval = 0x10;
+            o_retval = fopMsgStts_MSG_ENDS_e;
             break;
     }
     return o_retval;
@@ -879,6 +876,9 @@ BOOL daNpc_De1_c::talk02() {
     talk(1);
     if (mpCurrMsg != NULL) {
         switch (mpCurrMsg->mStatus) {
+            case fopMsgStts_BOX_OPENING_e:
+            case fopMsgStts_MSG_TYPING_e:
+                break;
             case fopMsgStts_MSG_DESTROYED_e:
                 m7A6 = 0xFF;
                 setStt(mPrevStatus);
@@ -886,10 +886,6 @@ BOOL daNpc_De1_c::talk02() {
                 m7B5 = 0;
                 endEvent();
                 break;
-            case fopMsgStts_MSG_TYPING_e:
-            case fopMsgStts_BOX_OPENING_e:
-            case fopMsgStts_MSG_ENDS_e:
-            case fopMsgStts_BOX_CLOSING_e:
             default:
                 break;
         }
