@@ -132,11 +132,11 @@ void anm_init(ss_class* i_this, int bckIdx, f32 morf, u8 loopMode, f32 playSpeed
 /* 00000438-000008D0       .text hand_1_set__FP8ss_classP4ss_s */
 void hand_1_set(ss_class* i_this, ss_s* hand) {
     dBgS_LinChk linChk;
-    cXyz start;
-    cXyz end;
-    cXyz pos;
-    cXyz sp18;
     cXyz sp48;
+    cXyz pos;
+    cXyz end;
+    cXyz start;
+    cXyz sp18;
     s16 angle = 0;
 
     mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
@@ -173,11 +173,11 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
 /* 00000D08-000011BC       .text hand_1_set_2__FP8ss_classP4ss_s */
 void hand_1_set_2(ss_class* i_this, ss_s* hand) {
     dBgS_LinChk linChk;
-    cXyz start;
-    cXyz end;
-    cXyz pos;
-    cXyz sp18;
     cXyz sp3C;
+    cXyz pos;
+    cXyz end;
+    cXyz start;
+    cXyz sp18;
     s16 angle = 0;
 
     mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
