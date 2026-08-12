@@ -17,6 +17,17 @@ public:
         /* 0x0C */ int mLoopMode;
     };  // Size: 0x10
 
+    enum Animation {
+        /* 0x0 */ ANM_0,
+        /* 0x1 */ ANM_1,
+        /* 0x2 */ ANM_2,
+        /* 0x3 */ ANM_3,
+        /* 0x4 */ ANM_4,
+        /* 0x5 */ ANM_5,
+        /* 0x6 */ ANM_6,
+        /* 0x7 */ ANM_END,
+    };
+
     BOOL createInit();
     void setMtx();
     void anmResID(int, int*, int*);
@@ -69,8 +80,8 @@ public:
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
-    /* 0x6CC */ s8 m_branchL_jnt_num;
-    /* 0x6CD */ s8 m_head_jnt_num;
+    /* 0x6CC */ s8 m_head_jnt_num;
+    /* 0x6CD */ s8 m_branchL_jnt_num;
     /* 0x6CE */ u8 field_0x6CE[2];
     /* 0x6D0 */ dBgWDeform* mpDeform;
     /* 0x6D4 */ ProcFunc mCurrProcFunc;

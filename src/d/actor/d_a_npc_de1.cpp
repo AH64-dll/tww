@@ -135,7 +135,7 @@ void daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
         {3, -1},
         {4, -1},
     };
-    JUT_ASSERT(0x11c, 0 <= i_num && i_num < 7);
+    JUT_ASSERT(0x11c, 0 <= i_num && i_num < ANM_END);
     JUT_ASSERT(0x11d, o_bck_num && o_bas_num);
     *o_bck_num = a_anm_idx_tbl[i_num][0];
     *o_bas_num = a_anm_idx_tbl[i_num][1];
@@ -526,7 +526,7 @@ bool daNpc_De1_c::chkAttention() {
 
 /* 000010B8-00001194       .text setAttention__11daNpc_De1_cFv */
 void daNpc_De1_c::setAttention() {
-    cXyz offset(0.0f, 100.0f, 0.0f);
+    cXyz offset(0.0f, 1100.0f, 700.0f);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&offset, &m76C);
@@ -575,8 +575,8 @@ void daNpc_De1_c::ccCreate() {
     u32 prm_tbl[10];
     memcpy(prm_tbl, a_cc_prm_tbl, sizeof(prm_tbl));
     for (int i = 0; i < 10; i++) {
-        m_cc_ID[i] = fopAcM_create(fpcNm_CC_e, prm_tbl[i], &current.pos, 0, NULL, NULL, -1, NULL);
-        JUT_ASSERT(0x373, m_cc_ID[i] != fpcM_ERROR_PROCESS_ID_e);
+        m_cc_ID[i] = fopAcM_create(fpcNm_CC_e, prm_tbl[i], &current.pos, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
+        JUT_ASSERT(0x373, m_cc_ID[ i] != fpcM_ERROR_PROCESS_ID_e);
     }
 }
 
@@ -756,7 +756,7 @@ void daNpc_De1_c::event_proc() {
         return;
     }
     if (dComIfGp_evmng_endCheck("DE_CHUCHU")) {
-        dComIfGs_onEventBit(0x308);
+        dComIfGs_onTmpBit(0x308);
         endEvent();
         setStt(7);
         return;
@@ -1084,17 +1084,17 @@ BOOL daNpc_De1_c::CreateHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    m_head_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(0x6d0, m_head_jnt_num >= 0);
     m_branchL_jnt_num = a_mdl_dat->getJointName()->getIndex("branchL");
-    JUT_ASSERT(0x6d2, m_branchL_jnt_num >= 0);
+    JUT_ASSERT(0x6d0, m_branchL_jnt_num >= 0);
+    m_head_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+    JUT_ASSERT(0x6d2, m_head_jnt_num >= 0);
     {
         static char* a_jnt_name_tbl[] = {
             "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
         };
         for (int i = 0; i < 10; i++) {
             m_c0_jnt_num[i] = a_mdl_dat->getJointName()->getIndex(a_jnt_name_tbl[i]);
-            JUT_ASSERT(0x6d5, m_c0_jnt_num[i] >= 0);
+            JUT_ASSERT(0x6d5, m_c0_jnt_num[ i] >= 0);
         }
     }
     mpMorf->getModel()->setUserArea(0);
