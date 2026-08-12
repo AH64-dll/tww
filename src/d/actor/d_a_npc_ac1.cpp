@@ -529,8 +529,12 @@ u32 daNpc_Ac1_c::getMsg_AC1_0() {
 /* 00001380-000013BC       .text getMsg__11daNpc_Ac1_cFv */
 u32 daNpc_Ac1_c::getMsg() {
     u32 retval = 0;
-    if (m879 == 0) {
-        retval = getMsg_AC1_0();
+    switch (m879) {
+        case 0:
+            retval = getMsg_AC1_0();
+            break;
+        default:
+            break;
     }
     return retval;
 }
@@ -548,7 +552,7 @@ bool daNpc_Ac1_c::chkAttention() {
 void daNpc_Ac1_c::setAttention(bool i_param_1) {
     attention_info.position.set(current.pos.x, current.pos.y + l_HIO.hio_prm.mAttnYOffset, current.pos.z);
     if (m864 != 0 || i_param_1) {
-        eyePos = mEyePos;
+        eyePos.set(mEyePos.x, mEyePos.y, mEyePos.z);
     }
 }
 
@@ -608,7 +612,7 @@ void daNpc_Ac1_c::endEvent() {
 
 /* 00001634-0000166C       .text isEventEntry__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::isEventEntry() {
-    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), this, 0);
+    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
 }
 
 /* 0000166C-000016C4       .text event_proc__11daNpc_Ac1_cFi */
