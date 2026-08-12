@@ -94,7 +94,7 @@ void daNpc_Kg1_c::playTexPatternAnm() {
     if (cLib_calcTimer(&m72C) == 0) {
         s16 frameMax = m6F4->getFrameMax();
         if (m720 >= frameMax) {
-            m720 = (u8)((s16)m720 - frameMax);
+            m720 = m720 - frameMax;
             m72C = 0x78;
         } else {
             m720++;

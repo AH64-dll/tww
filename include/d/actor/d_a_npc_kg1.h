@@ -22,7 +22,7 @@ public:
     void playTexPatternAnm();
     void set_mtx();
     BOOL CreateHeap();
-    void CreateInit();
+    cPhs_State CreateInit();
     void eventOrder();
     void checkOrder();
     void kg1_talk_camera();
@@ -35,13 +35,17 @@ public:
     void setAnm();
 
     static const u8 m_highscore;
+    static const char m_arcname[];
+    static cXyz m_camera_ctr;
+    static cXyz m_camera_eye;
 
 public:
     /* 0x6C4 */ J3DModel* m6C4;
     /* 0x6C8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6DC */ request_of_phase_process_class mPhs;
     /* 0x6E4 */ void (daNpc_Kg1_c::*mAction)();
-    /* 0x6F0 */ u8 m6F0[0x6F8 - 0x6F0];
+    /* 0x6F0 */ u8 m6F0[0x6F4 - 0x6F0];
+    /* 0x6F4 */ J3DAnmTexPattern* m6F4;
     /* 0x6F8 */ mDoExt_btpAnm m6F8;
     /* 0x70C */ mDoExt_btpAnm m70C;
     /* 0x720 */ u8 m720;
@@ -78,9 +82,17 @@ public:
 class daNpc_Kg1_HIO_c {
 public:
     daNpc_Kg1_HIO_c();
+    virtual ~daNpc_Kg1_HIO_c() {}
 
 public:
-    /* Place member variables here */
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x5[3];
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ u8 field_0xC;
+    /* 0x0D */ u8 field_0xD[3];
+    /* 0x10 */ dNpc_HIO_c mHio[1];
+    /* 0x38 */ u8 field_0x38;
+    /* 0x39 */ u8 field_0x39;
 };
 
 #endif /* D_A_NPC_KG1_H */
