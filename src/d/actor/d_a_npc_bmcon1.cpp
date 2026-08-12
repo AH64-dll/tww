@@ -344,17 +344,17 @@ static BOOL daNpc_Bmcon_nodeCallBack(J3DNode* node, int calcTiming) {
             cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
 
-        else if(jntNo == i_this->m_jnt.mBackboneJntNum) {
+        if(jntNo == i_this->m_jnt.mBackboneJntNum) {
             cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
             cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 
-        else if(jntNo == i_this->get_arm_L_jnt_num()) {
-            MTXCopy(i_this->mLeftArmMtx, *calc_mtx);
+        if(jntNo == i_this->get_arm_L_jnt_num()) {
+            MTXCopy(*calc_mtx, i_this->mLeftArmMtx);
         }
 
-        else if(jntNo == i_this->get_arm_R_jnt_num()) {
-            MTXCopy(i_this->mRightArmMtx, *calc_mtx);
+        if(jntNo == i_this->get_arm_R_jnt_num()) {
+            MTXCopy(*calc_mtx, i_this->mRightArmMtx);
         }
 
         model->setAnmMtx(jntNo, *calc_mtx);
