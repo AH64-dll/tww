@@ -301,8 +301,8 @@ void kantera_move(kantera_class* i_this) {
                     mDoMtx_YrotS(*calc_mtx,
                                  cM_atan2s(player->current.pos.x - i_this->actor.current.pos.x,
                                            player->current.pos.z - i_this->actor.current.pos.z));
-                    cXyz sp34_2(0.0f, 0.0f, 20.0f + REG6_F(9));
-                    MtxPosition(&sp34_2, &i_this->actor.speed);
+                    sp34.set(0.0f, 0.0f, 20.0f + REG6_F(9));
+                    MtxPosition(&sp34, &i_this->actor.speed);
                     i_this->actor.speed.y = 10.0f + REG6_F(8);
                 }
             case 5:
@@ -325,9 +325,8 @@ void kantera_move(kantera_class* i_this) {
 
                 if (i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mSph.ChkAtHit()) {
                     dBgS_GndChk gnd_chk;
-                    gnd_chk.m_pos.y = i_this->actor.current.pos.y + 50.0f;
-                    gnd_chk.m_pos.x = i_this->actor.current.pos.x;
-                    gnd_chk.m_pos.z = i_this->actor.current.pos.z;
+                    gnd_chk.m_pos.set(i_this->actor.current.pos.x, i_this->actor.current.pos.y + 50.0f,
+                                      i_this->actor.current.pos.z);
                     f32 ground = dComIfG_Bgsp()->GroundCross(&gnd_chk);
                     f32 ground_check = 2.5f + ground;
                     if (ground_check != -G_CM3D_F_INF) {
