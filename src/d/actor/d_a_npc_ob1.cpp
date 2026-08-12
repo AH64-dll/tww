@@ -337,28 +337,37 @@ void daNpc_Ob1_c::control_anmTag() {
 /* 00000D08-00000E00       .text chg_anmAtr__11daNpc_Ob1_cFUc */
 void daNpc_Ob1_c::chg_anmAtr(u8 i_param_1) {
     s32 msgNo = m7CC;
-    if ((u32)(msgNo + 0x10000) != 0xFFFFFFFF) {
+    if ((u32)(msgNo + 0x10000) != 0xFFFF) {
         switch (msgNo) {
             case 0xAFE:
                 break;
-            default:
-            case 0xB09:
-            case 0xB61:
-            case 0xB5D:
+            case 0xAFC:
+            case 0xAFD:
+            case 0xAFF:
             case 0xB02:
+            case 0xB05:
+            case 0xB06:
+            case 0xB09:
+            case 0xB0C:
+            case 0xB0D:
+            case 0xB5D:
+            case 0xB61:
+            case 0xB64:
+            case 0xB65:
                 mLookBackState = 1;
                 mHeadOnlyFollow = 0;
                 m_jnt.setTrn();
                 break;
         }
     }
-    if (i_param_1 < 7) {
-        if (i_param_1 == mAttr) {
-            return;
-        }
-        mAttr = i_param_1;
-        setAnm_ATR(true);
+    if (i_param_1 >= 7) {
+        return;
     }
+    if (i_param_1 == mAttr) {
+        return;
+    }
+    mAttr = i_param_1;
+    setAnm_ATR(true);
 }
 
 /* 00000E00-00000E8C       .text control_anmAtr__11daNpc_Ob1_cFv */
