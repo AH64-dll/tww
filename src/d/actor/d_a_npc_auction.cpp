@@ -453,16 +453,6 @@ static daNpc_Auction2_HIO_c l_npc_dat[] = {
                          -0x1770, 0x1000, 0x0800, 140.0f, 0x7FFF, 0, 0.0f, 80.0f, 0.0f, 120.0f),
 };
 
-/* 000029DC-00002A0C       .text create__14daNpcAuction_cFv */
-cPhs_State daNpcAuction_c::create() {
-    static cPhs__Handler l_method[] = {
-        (cPhs__Handler)&phase_1,
-        (cPhs__Handler)&phase_2,
-        NULL,
-    };
-    return dComLbG_PhaseHandler(&mPhs, l_method, this);
-}
-
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
 daNpcAuction_c::daNpcAuction_c() {
     m745 = 0;
@@ -1382,6 +1372,15 @@ void daNpcAuction_c::clrEmitter() {
         }
         mEmitter = NULL;
     }
+}
+
+inline cPhs_State daNpcAuction_c::create() {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)&phase_1,
+        (cPhs__Handler)&phase_2,
+        NULL,
+    };
+    return dComLbG_PhaseHandler(&mPhs, l_method, this);
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
