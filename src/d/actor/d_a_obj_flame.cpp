@@ -422,9 +422,10 @@ void daObjFlame::Act_c::em_manual_set() {
 
 /* 00000F04-00001010       .text em_manual_inv__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::em_manual_inv() {
-    u8 flag = 1;
-    if (M_attr_scl[mType].mF2D == 0 || mbLiftup == 0) {
-        flag = 0;
+    const attr_scl_s* attr = &M_attr_scl[mType];
+    u8 flag = 0;
+    if (attr->mF2D != 0 && mbLiftup != 0) {
+        flag = 1;
     }
 
     if (mEm0State == 2 && flag) {
@@ -436,25 +437,28 @@ void daObjFlame::Act_c::em_manual_inv() {
     }
 
     if (mEm0State == 3) {
-        if (mpEmitter0 != NULL) {
-            mpEmitter0->mMaxFrame = -1;
-            mpEmitter0->setStatus(1);
+        JPABaseEmitter* emitter = mpEmitter0;
+        if (emitter != NULL) {
+            emitter->mMaxFrame = -1;
+            emitter->setStatus(1);
             mpEmitter0 = NULL;
         }
     }
 
     if (mEm1State == 3) {
-        if (mpEmitter1 != NULL) {
-            mpEmitter1->mMaxFrame = -1;
-            mpEmitter1->setStatus(1);
+        JPABaseEmitter* emitter = mpEmitter1;
+        if (emitter != NULL) {
+            emitter->mMaxFrame = -1;
+            emitter->setStatus(1);
             mpEmitter1 = NULL;
         }
     }
 
     if (mEm2State == 3) {
-        if (mpEmitter2 != NULL) {
-            mpEmitter2->mMaxFrame = -1;
-            mpEmitter2->setStatus(1);
+        JPABaseEmitter* emitter = mpEmitter2;
+        if (emitter != NULL) {
+            emitter->mMaxFrame = -1;
+            emitter->setStatus(1);
             mpEmitter2 = NULL;
         }
     }
