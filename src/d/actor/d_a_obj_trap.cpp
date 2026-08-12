@@ -249,18 +249,18 @@ cXyz daObjTrap_c::check_wall() {
         if (dComIfG_Bgsp()->LineCross(&l_wall_work)) {
             cXyz sp94 = l_wall_work.GetCross();
             PSVECSubtract(&sp94, &spAC, &sp94);
-            cXyz t1(ret.x, 0.0f, ret.z);
-            f32 retDist = PSVECSquareMag((Vec*)&t1);
-            if (retDist > 0.0f) {
-                retDist = std::sqrtf(retDist);
-            }
-            cXyz t2(sp94.x, 0.0f, sp94.z);
-            f32 sp94Dist = PSVECSquareMag((Vec*)&t2);
-            if (sp94Dist > 0.0f) {
-                sp94Dist = std::sqrtf(sp94Dist);
-            }
-            if (ret == cXyz::Zero || retDist > sp94Dist) {
+            if (ret == cXyz::Zero) {
                 ret = sp94 + current.pos - spB8;
+            } else {
+                cXyz t1(ret.x, 0.0f, ret.z);
+                f32 retDist = PSVECSquareMag((Vec*)&t1);
+                retDist = std::sqrtf(retDist);
+                cXyz t2(sp94.x, 0.0f, sp94.z);
+                f32 sp94Dist = PSVECSquareMag((Vec*)&t2);
+                sp94Dist = std::sqrtf(sp94Dist);
+                if (retDist > sp94Dist) {
+                    ret = sp94 + current.pos - spB8;
+                }
             }
         }
     }
