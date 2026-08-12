@@ -971,7 +971,7 @@ BOOL daNpc_De1_c::wait_action2(void*) {
 }
 
 /* 000021AC-00002248       .text demo__11daNpc_De1_cFv */
-bool daNpc_De1_c::demo() {
+u8 daNpc_De1_c::demo() {
     if (demoActorID == 0) {
         if (mbInDemo != 0) {
             mbInDemo = 0;

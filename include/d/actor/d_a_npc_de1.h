@@ -71,7 +71,7 @@ public:
     BOOL talk02();
     BOOL wait_action1(void*);
     BOOL wait_action2(void*);
-    bool demo();
+    u8 demo();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
