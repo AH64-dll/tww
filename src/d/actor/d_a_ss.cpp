@@ -754,6 +754,9 @@ static cPhs_State daSs_Create(fopAc_ac_c* a_this) {
     }
 
     cPhs_State phase = dComIfG_resLoad(&i_this->mPhase, "Ss");
+    if (phase == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
     if (phase == cPhs_COMPLEATE_e) {
         i_this->mFlag = (u8)fopAcM_GetParam(a_this);
         i_this->m2BD = (u8)(fopAcM_GetParam(a_this) >> 8);
@@ -764,17 +767,12 @@ static cPhs_State daSs_Create(fopAc_ac_c* a_this) {
         if (i_this->m2BE != 0 && dComIfGs_isSwitch(i_this->m2BE, fopAcM_GetRoomNo(i_this))) {
             return cPhs_ERROR_e;
         }
-        switch (i_this->m2BD) {
-        case 1:
+        if (i_this->m2BD == 1) {
             i_this->m2C4 = 0xA;
-            break;
-        case 2:
-        case 3:
+        } else if (i_this->m2BD == 2 || i_this->m2BD == 3) {
             i_this->m2C4 = 0x14;
-            break;
-        default:
+        } else {
             i_this->m2C4 = 0;
-            break;
         }
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x7240)) {
             return cPhs_ERROR_e;
