@@ -175,13 +175,13 @@ BOOL daNpc_De1_c::setAnm_anm(daNpc_De1_c::anm_prm_c* i_anmPrmP) {
 /* 00000744-00000774       .text setAnm_NUM__11daNpc_De1_cFi */
 void daNpc_De1_c::setAnm_NUM(int i_num) {
     static anm_prm_c a_anm_prm_tbl[] = {
-        {1, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {1, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {2, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
-        {3, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {4, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {5, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {6, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {2, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {3, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {4, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {5, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {6, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
     };
     setAnm_anm(&a_anm_prm_tbl[i_num]);
 }
@@ -189,13 +189,14 @@ void daNpc_De1_c::setAnm_NUM(int i_num) {
 /* 00000774-000007AC       .text setAnm__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::setAnm() {
     static anm_prm_c a_anm_prm_tbl[] = {
-        {0xFF, 0, 0, 0.0f, 0.0f, -1},
-        {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {0xFF, 0, 0, 0.0f, 0.0f, -1},
-        {0xFF, 0, 0, 0.0f, 0.0f, -1},
-        {1, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {0xFF, 0, 0, 0.0f, 0.0f, -1},
-        {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0xFF, 0, 0, 0, 0.0f, 0.0f, -1},
+        {0, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0xFF, 0, 0, 0, 0.0f, 0.0f, -1},
+        {0, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0xFF, 0, 0, 0, 0.0f, 0.0f, -1},
+        {0, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0xFF, 0, 0, 0, 0.0f, 0.0f, -1},
     };
     return setAnm_anm(&a_anm_prm_tbl[mStatus]);
 }
@@ -245,12 +246,11 @@ void daNpc_De1_c::ctrlAnmAtr() {
 
 /* 00000848-0000087C       .text setAnm_ATR__11daNpc_De1_cFv */
 void daNpc_De1_c::setAnm_ATR() {
-    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[] = {
-        {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {4, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {5, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {6, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {0, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {4, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {5, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {6, 0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
     };
     setAnm_anm(&a_anm_prm_tbl[mAnmAtr]);
 }
@@ -304,7 +304,6 @@ void daNpc_De1_c::setStt(s8 i_status) {
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
 u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
-    /* Nonmatching */
     u16 o_retval = fopMsgStts_MSG_CONTINUES_e;
     switch (*i_msg_no) {
         case 0x139D:
@@ -475,7 +474,6 @@ u32 daNpc_De1_c::getMsg() {
 
 /* 00000D6C-00000E14       .text eventOrder__11daNpc_De1_cFv */
 void daNpc_De1_c::eventOrder() {
-    /* Nonmatching */
     s8 order = mOrder;
     if (order == 1 || order == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -729,33 +727,35 @@ bool daNpc_De1_c::event_action() {
 
 /* 00001938-00001A40       .text privateCut__11daNpc_De1_cFv */
 void daNpc_De1_c::privateCut() {
-    /* Nonmatching */
-    static char* a_cut_tbl[] = {
+    static char* cut_name_tbl[] = {
         "ACTION",
     };
     int staff_idx = dComIfGp_evmng_getMyStaffId("De1", NULL, 0);
-    if (staff_idx == -1) {
-        return;
-    }
-    mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
-    if ((s8)mActIdx == -1) {
-        dComIfGp_evmng_cutEnd(staff_idx);
-        return;
-    }
-    if (dComIfGp_evmng_getIsAddvance(staff_idx)) {
-        if ((s32)mActIdx != 0) {
+    if (staff_idx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if ((s8)mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staff_idx);
         } else {
-            event_actionInit(staff_idx);
+            if (dComIfGp_evmng_getIsAddvance(staff_idx)) {
+                switch (mActIdx) {
+                    case 0:
+                        event_actionInit(staff_idx);
+                        break;
+                }
+            }
+            bool end;
+            switch (mActIdx) {
+                case 0:
+                    end = event_action();
+                    break;
+                default:
+                    end = TRUE;
+                    break;
+            }
+            if (end) {
+                dComIfGp_evmng_cutEnd(staff_idx);
+            }
         }
-    }
-    bool end_cut;
-    if ((s32)mActIdx == 0) {
-        end_cut = event_action();
-    } else {
-        end_cut = true;
-    }
-    if (end_cut) {
-        dComIfGp_evmng_cutEnd(staff_idx);
     }
 }
 
@@ -767,7 +767,6 @@ void daNpc_De1_c::endEvent() {
 
 /* 00001A60-00001B90       .text event_proc__11daNpc_De1_cFv */
 void daNpc_De1_c::event_proc() {
-    /* Nonmatching */
     if (dComIfGp_evmng_endCheck("LIFT_UP")) {
         endEvent();
         mOrder = 1;
