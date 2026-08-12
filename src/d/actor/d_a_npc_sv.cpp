@@ -310,11 +310,17 @@ static u32* l_msg_sv_talk_tbl[] = {
 
 static u16 l_msg_sv_flag_tbl[] = {
     0x0001,
+    0x0001,
+    0x0002,
     0x0002,
     0x0000,
+    0x0000,
     0x0004,
+    0x0000,
     0x0008,
+    0x0000,
     0x0010,
+    0x0000,
 };
 
 static u32 l_event_id_tbl[] = {
