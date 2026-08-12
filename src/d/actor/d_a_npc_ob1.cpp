@@ -904,7 +904,8 @@ void daNpc_Ob1_c::event_actionInit(int i_staff_idx) {
 
 /* 00001FD0-00001FE0       .text event_action__11daNpc_Ob1_cFv */
 BOOL daNpc_Ob1_c::event_action() {
-    if (m7FF == 0) {
+    if ((s32)m7FF != 0) {
+        return TRUE;
     }
     return TRUE;
 }
