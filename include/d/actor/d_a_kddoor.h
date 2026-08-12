@@ -12,9 +12,9 @@ public:
     void init();
     void end();
     void openInit();
-    void openProc(dDoor_info_c*);
+    BOOL openProc(dDoor_info_c*);
     void closeInit();
-    void closeProc(dDoor_info_c*);
+    BOOL closeProc(dDoor_info_c*);
     dDoor_ssk_sub_c();
     ~dDoor_ssk_sub_c();
     BOOL drawSet();
@@ -48,9 +48,9 @@ public:
     void execute(dDoor_info_c*);
     void draw(dDoor_info_c*);
     void closeInit();
-    void closeProc(dDoor_info_c*);
+    BOOL closeProc(dDoor_info_c*);
     void openInit();
-    void openProc(dDoor_info_c*);
+    BOOL openProc(dDoor_info_c*);
 
 public:
     /* 0x000 */ dDoor_ssk_sub_c mSub[3];
