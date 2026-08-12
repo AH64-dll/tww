@@ -1052,22 +1052,20 @@ u32 daNpcAuction_c::getMsg() {
     if (mNpcNo == 0) {
         u8 state = dComIfGp_event_getTalkXYBtn();
         if (state == 1 || state == 2 || state == 3) {
-            switch (dComIfGp_event_getPreItemNo()) {
-            case 0x96:
+            if (dComIfGp_event_getPreItemNo() == 0x96) {
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1008)) {
                     m743 = 0;
                     return 0x27EB;
                 }
                 return 0x27F7;
-            case 0x97:
+            } else if (dComIfGp_event_getPreItemNo() == 0x97) {
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1004)) {
                     m743 = 1;
                     return 0x27EB;
                 }
                 return 0x27F7;
-            default:
-                return 0x27EA;
             }
+            return 0x27EA;
         } else {
             if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_checkGetItem(0x69)) {
                 return 0x27F8;
