@@ -52,7 +52,7 @@ void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         if (fVar1 > 10.0f && pActor->field_2D0 < fVar1) {
             pActor->field_2DC.x = fVar1;
         }
-        fVar1 = (REG0_F(8) + 2.0f) * std::abs(local_50.z - local_44.z);
+        fVar1 = (REG0_F(8) + 2.0f) * std::abs(local_44.z - local_50.z);
         if (fVar1 > 10.0f && pActor->field_2D8 < fVar1) {
             pActor->field_2DC.z = fVar1;
         }
@@ -246,7 +246,7 @@ void klft_move(klft_class* i_this) {
     i_this->shape_angle = i_this->current.angle + i_this->field_300;
     i_this->home.pos = i_this->mPath0[0] + (i_this->field_394 * i_this->field_3C0) * 0.01f;
     i_this->home.pos.y += (-100.0f + REG0_F(2)) + sinAngle * (-100.0f + i_this->field_3B8 + REG0_F(0));
-    cLib_addCalc2(&i_this->field_3B8, i_this->field_3BC, 0.1f, 25.0f);
+    cLib_addCalc2(&i_this->field_3B8, i_this->field_3BC, 0.1f, 5.0f);
     i_this->field_3BC = 0.0f;
     i_this->current.pos = i_this->home.pos + i_this->mSwingPos;
 }
