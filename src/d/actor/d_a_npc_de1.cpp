@@ -250,27 +250,22 @@ void daNpc_De1_c::setAnm_ATR() {
 
 /* 0000087C-00000938       .text anmAtr__11daNpc_De1_cFUs */
 void daNpc_De1_c::anmAtr(u16 i_msgStatus) {
-    switch (i_msgStatus) {
-        case 6:
-            if (mTagInitCounter == 0) {
-                mAnmTag = 0xFF;
-                chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
-                mTagInitCounter++;
+    if (i_msgStatus == 6) {
+        if (mTagInitCounter == 0) {
+            mAnmTag = 0xFF;
+            chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
+            mTagInitCounter++;
+        }
+        {
+            u8 mesgAnimeTagInfo = dComIfGp_getMesgAnimeTagInfo();
+            if (mesgAnimeTagInfo != 0xFF && mesgAnimeTagInfo != mAnmTag) {
+                dComIfGp_clearMesgAnimeTagInfo();
+                mAnmTag = mesgAnimeTagInfo;
+                chngAnmTag();
             }
-            {
-                u8 mesgAnimeTagInfo = dComIfGp_getMesgAnimeTagInfo();
-                if (mesgAnimeTagInfo != 0xFF && mAnmTag != mesgAnimeTagInfo) {
-                    dComIfGp_clearMesgAnimeTagInfo();
-                    mAnmTag = mesgAnimeTagInfo;
-                    chngAnmTag();
-                }
-            }
-            break;
-        case 0xE:
-            mTagInitCounter = 0;
-            break;
-        default:
-            break;
+        }
+    } else if (i_msgStatus == 0xE) {
+        mTagInitCounter = 0;
     }
     ctrlAnmAtr();
     ctrlAnmTag();

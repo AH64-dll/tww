@@ -131,7 +131,7 @@ public:
     /* 0x81C */ s8 mType;
     /* 0x81D */ s8 mSpecificType;
     /* 0x81E */ s8 mStep;
-    /* 0x81F */ u8 mTagInitCounter;
+    /* 0x81F */ s8 mTagInitCounter;
 };  // Size: 0x820
 
 #endif /* D_A_NPC_DE1_H */
