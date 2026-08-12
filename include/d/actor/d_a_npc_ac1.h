@@ -45,14 +45,14 @@ public:
     bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(u32*);
-    s8 getBitMask();
+    s32 getBitMask();
     u32 getMsg_AC1_0();
     u32 getMsg();
     bool chkAttention();
     void setAttention(bool);
     bool charDecide(int);
     void event_actionInit(int);
-    u8 event_action();
+    BOOL event_action();
     void privateCut(int);
     void endEvent();
     BOOL isEventEntry();
@@ -60,7 +60,7 @@ public:
     BOOL set_action(ActionFunc, void*);
     void setStt(s8);
     BOOL wait_1();
-    u8 talk_1();
+    BOOL talk_1();
     BOOL wait_action1(void*);
     u8 demo();
     void shadowDraw();
@@ -103,6 +103,7 @@ private:
     /* 0x74C */ Mtx mRightArmMtx;
     /* 0x77C */ dNpc_PathRun_c mPathRun;
     /* 0x784 */ dNpc_EventCut_c mEventCut;
+    /* 0x7F0 */ u8 pad7F0[0x7F4 - 0x7F0];
     /* 0x7F4 */ cXyz mInitPos;
     /* 0x800 */ csXyz mInitAngle;
     /* 0x806 */ u8 pad806[0x808 - 0x806];

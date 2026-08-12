@@ -329,7 +329,9 @@ void daNpc_Ac1_c::chg_anmAtr(u8 i_param_1) {
 
 /* 00000DD8-00000DE4       .text control_anmAtr__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::control_anmAtr() {
-    if (mAnmAtr == 6) {
+    switch (mAnmAtr) {
+        case 6:
+            break;
     }
 }
 
@@ -493,7 +495,7 @@ u16 daNpc_Ac1_c::next_msgStatus(u32* i_msg_no) {
 }
 
 /* 0000128C-000012AC       .text getBitMask__11daNpc_Ac1_cFv */
-s8 daNpc_Ac1_c::getBitMask() {
+s32 daNpc_Ac1_c::getBitMask() {
     return m879 != 0 ? 0 : 0x10;
 }
 
@@ -558,7 +560,7 @@ void daNpc_Ac1_c::event_actionInit(int i_param_1) {
 }
 
 /* 00001508-00001528       .text event_action__11daNpc_Ac1_cFv */
-u8 daNpc_Ac1_c::event_action() {
+BOOL daNpc_Ac1_c::event_action() {
     if (m86D != 0) {
         return TRUE;
     }
@@ -661,7 +663,7 @@ BOOL daNpc_Ac1_c::wait_1() {
 }
 
 /* 0000189C-00001978       .text talk_1__11daNpc_Ac1_cFv */
-u8 daNpc_Ac1_c::talk_1() {
+BOOL daNpc_Ac1_c::talk_1() {
     u8 o_retval = chk_partsNotMove();
     if (mpCurrMsg != NULL) {
         m856 = mpCurrMsg->mStatus;
