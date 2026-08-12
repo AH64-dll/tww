@@ -876,7 +876,7 @@ BOOL daNpc_Ac1_c::_execute() {
 /* 00001F80-00001FFC       .text _delete__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::_delete() {
     dComIfG_resDelete(&mPhs, "Ac");
-    if (fopAcM_GetID(this) != 0) {
+    if (heap != NULL) {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
