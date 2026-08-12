@@ -7,7 +7,9 @@
 #include "d/actor/d_a_obj_try.h"
 
 #include "d/d_bg_w.h"
+#include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -348,7 +350,14 @@ s32 Act_c::create_heap() {
 
 /* 0000026C-0000038C       .text init_cc__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::init_cc() {
-    /* Nonmatching */
+    mStts.Init(attr().m0C, 0xFF, this);
+    mCyl.Set(M_cyl_src);
+    mCyl.SetStts(&mStts);
+    mCyl.SetR((f32)attr().m4B);
+    mCyl.SetH((f32)attr().m4C);
+    mCyl.SetAtVec((cXyz&)cXyz::Zero);
+    mCyl.SetTgVec((cXyz&)cXyz::Zero);
+    mCyl.OnTgShield();
 }
 
 /* 0000038C-00000428       .text search_sameType__Q28daObjTry5Act_cFPvPv */
@@ -383,7 +392,18 @@ void daObjTry::Act_c::mode_restart() {
 
 /* 00000FFC-00001074       .text mode_wait_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_wait_init() {
-    /* Nonmatching */
+    mCyl.OffAtSetBit();
+    mCyl.OnTgSetBit();
+    mCyl.OnCoSetBit();
+
+    mAcch.ClrRoofNone();
+    mAcch.ClrWallNone();
+    mAcch.ClrGrndNone();
+    mAcch.ClrWaterNone();
+    mAcch.OffLineCheck();
+
+    speedF = 0.0f;
+    mMode = 1;
 }
 
 /* 00001074-000012C4       .text mode_wait__Q28daObjTry5Act_cFv */
@@ -429,16 +449,18 @@ void daObjTry::Act_c::mode_proc_call() {
 /* 00001B58-00001B90       .text cull_set_draw__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_draw() {
     /* Nonmatching */
+    fopAcM_setCullSizeSphere(this, 25.0f, 1.0f, 25.0f, 1.0f);
 }
 
 /* 00001B90-00001BC8       .text cull_set_move__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_move() {
     /* Nonmatching */
+    fopAcM_setCullSizeSphere(this, 25.0f, 1.0f, 25.0f, 1.0f);
 }
 
 /* 00001BC8-00001BE8       .text damaged__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::damaged() {
-    /* Nonmatching */
+    fopAcM_cancelCarryNow(this);
 }
 
 /* 00001BE8-00001CD8       .text damage_cc_proc__Q28daObjTry5Act_cFv */
@@ -482,23 +504,26 @@ void daObjTry::Act_c::se_fall_water() {
 }
 
 /* 0000240C-00002460       .text set_senv__Q28daObjTry5Act_cCFii */
-void daObjTry::Act_c::set_senv(int, int) const {
-    /* Nonmatching */
+void daObjTry::Act_c::set_senv(int i_a, int i_b) const {
+    dKy_Sound_set(current.pos, i_a, fopAcM_GetID((void*)this), i_b);
 }
 
 /* 00002460-00002498       .text cam_lockoff__Q28daObjTry5Act_cCFv */
 void daObjTry::Act_c::cam_lockoff() const {
-    /* Nonmatching */
+    dComIfGp_getCamera(0)->mCamera.ForceLockOff(base.base.mBsPcId);
 }
 
 /* 00002498-00002504       .text set_mtx__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00002504-00002540       .text init_mtx__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    set_mtx();
 }
 
 /* 00002540-00002718       .text eff_set_bingo__Q28daObjTry5Act_cFbb */
