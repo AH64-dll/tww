@@ -24,13 +24,21 @@
 namespace daObjMagmarock {
     class Act_c : public fopAc_ac_c {
     public:
-        virtual ~Act_c() {}
         virtual void LiftUpRequest(cXyz&);
         virtual void BeforeLiftRequest(cXyz&);
     };
 }
 
 namespace daObjFlame {
+    // Per-access table lookup: keeps the scaled index in a register so mwcc
+    // emits indexed loads (lfsx/lbzx) exactly like the original.
+    static inline const attr_scl_s* flameAttr(const Act_c* a) {
+        return &Act_c::M_attr_scl[a->mType];
+    }
+    static inline const attr_scl_s* flameAttrIdx(s32 type) {
+        return &Act_c::M_attr_scl[type];
+    }
+
     const attr_base_s Act_c::M_attr_base = {
         /* mKiMax */ 6,
         /* mRotAdd */ {400, 400},
@@ -201,29 +209,29 @@ int daObjFlame::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     /* Nonmatching */
 int daObjFlame::Act_c::create_heap() {
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBdlResID);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, flameAttr(this)->mBdlResID);
     JUT_ASSERT(499, mdl_data != 0);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
 
-    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBtkResID);
+    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, flameAttr(this)->mBtkResID);
     mpBtkAnm = new mDoExt_btkAnm();
     BOOL btkOk = FALSE;
     JUT_ASSERT(508, btk != 0);
 
     if (mpBtkAnm != NULL) {
-        btkOk = mpBtkAnm->init(mdl_data, btk, 1, 2, M_attr_scl[mType].mRate, 0, -1, 0, 0);
+        btkOk = mpBtkAnm->init(mdl_data, btk, 1, 2, flameAttr(this)->mRate, 0, -1, 0, 0);
     }
 
     BOOL brkOk = FALSE;
-    s32 brkResID = M_attr_scl[mType].mBrkResID;
+    s32 brkResID = flameAttr(this)->mBrkResID;
     if (brkResID >= 0) {
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, brkResID);
         mpBrkAnm = new mDoExt_brkAnm();
         JUT_ASSERT(530, brk != 0);
 
         if (mpBrkAnm != NULL) {
-            brkOk = mpBrkAnm->init(mdl_data, brk, 1, 2, M_attr_scl[mType].mRate, 0, -1, 0, 0);
+            brkOk = mpBrkAnm->init(mdl_data, brk, 1, 2, flameAttr(this)->mRate, 0, -1, 0, 0);
         }
     } else {
         brkOk = TRUE;
@@ -250,7 +258,7 @@ void daObjFlame::Act_c::create_mode_init() {
             bit <<= 1;
             idx++;
         }
-        f32 f3 = (f32)(timer + cycle * idx) * M_attr_scl[mType].mF24;
+        f32 f3 = (f32)(timer + cycle * idx) * flameAttr(this)->mF24;
         if (mType != 1) {
             f3 -= 127.0f;
         }
@@ -315,7 +323,7 @@ void daObjFlame::Act_c::create_mode_init() {
             mEm2State = 1;
             break;
         }
-        if (M_attr_scl[mType].mF2C == 0) {
+        if (flameAttr(this)->mF2C == 0) {
             em_manual_set();
         }
         mbEmPosition = 1;
@@ -348,15 +356,14 @@ void daObjFlame::Act_c::init_mtx() {
 }
 
 /* 00000950-00000B3C       .text em_position__Q210daObjFlame5Act_cFv */
-    /* Nonmatching */
 void daObjFlame::Act_c::em_position() {
     if (mbEmPosition != 0) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-        if (M_attr_scl[mType].mF2C == 0) {
+        if (flameAttr(this)->mF2C == 0) {
             if (mpEmitter0 != NULL) {
                 mDoMtx_stack_c::push();
-                mDoMtx_stack_c::transM(0.0f, mScaleY * (1500.0f * mHeight * M_attr_scl[mType].mF0C) + mScaleY * (-300.0f * M_attr_scl[mType].mF0C), 0.0f);
+                mDoMtx_stack_c::transM(0.0f, mScaleY * (1500.0f * mHeight * flameAttr(this)->mF0C) + mScaleY * (-300.0f * flameAttr(this)->mF0C), 0.0f);
                 mpEmitter0->setGlobalRTMatrix(mDoMtx_stack_c::get());
                 mDoMtx_stack_c::pop();
             }
@@ -364,12 +371,12 @@ void daObjFlame::Act_c::em_position() {
                 mpEmitter1->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
         }
-        mDoMtx_stack_c::transM(0.0f, mScaleX * (1500.0f * mHeight * M_attr_scl[mType].mF04), 0.0f);
+        mDoMtx_stack_c::transM(0.0f, mScaleX * (1500.0f * mHeight * flameAttr(this)->mF04), 0.0f);
         PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &eyePos);
 
         mbCol = 1500.0f * mHeight - 300.0f > 0.0f;
         if (mbCol) {
-            mDoMtx_stack_c::transM(0.0f, mScaleX * (-300.0f * M_attr_scl[mType].mF04), 0.0f);
+            mDoMtx_stack_c::transM(0.0f, mScaleX * (-300.0f * flameAttr(this)->mF04), 0.0f);
             PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &mCpsP1);
         }
     }
@@ -379,14 +386,14 @@ void daObjFlame::Act_c::em_position() {
     /* Nonmatching */
 void daObjFlame::Act_c::em_simple_set() {
     u8 flag = 0;
-    if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
+    if (flameAttr(this)->mF2D != 0 && mbLiftup == 0) {
         flag = 1;
     }
 
     if (mEm0State == 1 && flag) {
         Vec pos;
         pos.x = eyePos.x;
-        pos.y = eyePos.y + mScaleY * (-300.0f * M_attr_scl[mType].mF04);
+        pos.y = eyePos.y + mScaleY * (-300.0f * flameAttr(this)->mF04);
         pos.z = eyePos.z;
         dComIfGp_particle_setSimple(0x805A, (cXyz*)&pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
@@ -396,7 +403,7 @@ void daObjFlame::Act_c::em_simple_set() {
     }
 
     if (mEm2State == 1 && flag) {
-        dComIfGp_particle_setSimple(M_attr_scl[mType].mEmID & 0xFFFF, &home.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(flameAttr(this)->mEmID & 0xFFFF, &home.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 }
 
@@ -417,25 +424,26 @@ void daObjFlame::Act_c::em_simple_inv() {
     /* Nonmatching */
 void daObjFlame::Act_c::em_manual_set() {
     u8 flag = 0;
-    if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
+    const attr_scl_s* attr = &M_attr_scl[mType];
+    if (attr->mF2D != 0 && mbLiftup == 0) {
         flag = 1;
     }
 
     if (mEm0State == 1 && flag && mType != 1) {
-        cXyz scale(M_attr_scl[mType].mEm0SclX, mScaleY * M_attr_scl[mType].mEm0SclY, M_attr_scl[mType].mEm0SclX);
+        cXyz scale(attr->mEm0SclX, mScaleY * attr->mEm0SclY, attr->mEm0SclX);
         mpEmitter0 = dComIfGp_particle_set(0x805A, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm0State = 2;
     }
 
     if (mEm1State == 1) {
-        cXyz scale(M_attr_scl[mType].mEm1SclX, mScaleY * M_attr_scl[mType].mEm1SclY, M_attr_scl[mType].mEm1SclX);
+        cXyz scale(flameAttr(this)->mEm1SclX, mScaleY * flameAttr(this)->mEm1SclY, flameAttr(this)->mEm1SclX);
         mpEmitter1 = dComIfGp_particle_set(0x805B, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm1State = 2;
     }
 
     if (mEm2State == 1 && flag) {
-        cXyz scale(M_attr_scl[mType].mEm2Scl, M_attr_scl[mType].mEm2Scl, M_attr_scl[mType].mEm2Scl);
-        mpEmitter2 = dComIfGp_particle_set(M_attr_scl[mType].mEmID & 0xFFFF, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        cXyz scale(flameAttr(this)->mEm2Scl, flameAttr(this)->mEm2Scl, flameAttr(this)->mEm2Scl);
+        mpEmitter2 = dComIfGp_particle_set(flameAttr(this)->mEmID & 0xFFFF, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm2State = 2;
     }
 }
@@ -538,7 +546,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
     daObjMagmarock::Act_c* rock = (daObjMagmarock::Act_c*)i_actor;
     Act_c* flame = (Act_c*)i_this;
     if (fopAc_IsActor(rock) && fopAcM_GetName(rock) == 0x2C && !fpcM_IsCreating(fopAcM_GetID(rock))) {
-        f32 f31 = 145.0f * M_attr_scl[flame->mType].mScale + M_attr_base.mF08;
+        f32 f31 = 145.0f * flameAttr(flame)->mScale + M_attr_base.mF08;
         f32 y1 = flame->current.pos.y;
         f32 y2 = flame->eyePos.y;
         f32 maxY = y1 > y2 ? y1 : y2;
@@ -564,7 +572,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
                 f3 = M_attr_base.mF10;
             }
 
-            f32 f0 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
+            f32 f0 = flame->mScaleX * flameAttr(flame)->mF04;
             cXyz pos(flame->current.pos.x, flame->current.pos.y + f4 * f0 + f3 * f0, flame->current.pos.z);
             if (flame->mModeProc == 1 || flame->mModeProc == 2) {
                 rock->BeforeLiftRequest(pos);
@@ -589,7 +597,7 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
         if (mflft->m29A == 0) {
             f30 = 1.0004418f;
         } else {
-            f30 = 1.0f;
+            f30 = f31;
         }
 
         f32 f4 = flame->mHeight;
@@ -607,7 +615,7 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
             f3 = M_attr_base.mF10;
         }
 
-        f32 f1 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
+        f32 f1 = flame->mScaleX * flameAttr(flame)->mF04;
         cXyz pos(flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z);
         f32 clampY = flame->current.pos.y + f0;
         if (pos.y > clampY) {
@@ -744,13 +752,13 @@ void daObjFlame::Act_c::mode_proc_call() {
         if (mModeProc == 0 || mModeProc == 1) {
             mTimer -= 1.0f;
         } else {
-            mTimer -= M_attr_scl[mType].mF24;
+            mTimer -= flameAttr(this)->mF24;
         }
     }
 
     (this->*mode_proc[mModeProc])();
 
-    if (M_attr_scl[mType].mF2C != 0) {
+    if (flameAttr(this)->mF2C != 0) {
         em_position();
         em_simple_set();
         em_simple_inv();
@@ -769,7 +777,7 @@ void daObjFlame::Act_c::mode_proc_call() {
     }
 
     if (mbCol) {
-        if (mModeProc == 5 && !(mHeight > M_attr_scl[mType].mF54)) {
+        if (mModeProc == 5 && !(mHeight > flameAttr(this)->mF54)) {
             return;
         }
         mCps.SetStartEnd(mCpsP0, mCpsP1);
@@ -791,7 +799,7 @@ cPhs_State daObjFlame::Act_c::_create() {
     cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
-        if (fopAcM_entrySolidHeap(this, solidHeapCB, M_attr_scl[mType].mHeapSize)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, flameAttr(this)->mHeapSize)) {
             mOrigScale = scale;
             if (mType == 1) {
                 mScaleX = 1.0f;
@@ -800,9 +808,9 @@ cPhs_State daObjFlame::Act_c::_create() {
                 mScaleX = 1.0f;
                 mScaleY = 1.0f;
             }
-            scale.x *= M_attr_scl[mType].mF08;
-            scale.y *= mScaleY * M_attr_scl[mType].mF0C;
-            scale.z *= M_attr_scl[mType].mF08;
+            scale.x *= flameAttr(this)->mF08;
+            scale.y *= mScaleY * flameAttr(this)->mF0C;
+            scale.z *= flameAttr(this)->mF08;
             mEm0State = 0;
             mEm1State = 0;
             mEm2State = 0;
@@ -815,7 +823,7 @@ cPhs_State daObjFlame::Act_c::_create() {
             mCps.SetStts(&mStts);
             mCpsP0 = current.pos;
             mCpsP1 = current.pos;
-            mCpsRad = 145.0f * M_attr_scl[mType].mScale;
+            mCpsRad = 145.0f * flameAttr(this)->mScale;
             mbCol = FALSE;
             em_position();
             mReverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
@@ -842,9 +850,9 @@ BOOL daObjFlame::Method::Delete(void* i_this) {
     /* Nonmatching */
 BOOL daObjFlame::Method::Execute(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
-    a_this->scale.x = a_this->mOrigScale.x * Act_c::M_attr_scl[a_this->mType].mF08;
-    a_this->scale.y = a_this->mScaleY * a_this->mOrigScale.y * Act_c::M_attr_scl[a_this->mType].mF0C;
-    a_this->scale.z = a_this->mOrigScale.z * Act_c::M_attr_scl[a_this->mType].mF08;
+    a_this->scale.x = a_this->mOrigScale.x * flameAttr(a_this)->mF08;
+    a_this->scale.y = a_this->mScaleY * a_this->mOrigScale.y * flameAttr(a_this)->mF0C;
+    a_this->scale.z = a_this->mOrigScale.z * flameAttr(a_this)->mF08;
     a_this->mode_proc_call();
     a_this->ki_make();
     if (a_this->prm_get_haze() == 0) {
