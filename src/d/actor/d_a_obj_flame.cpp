@@ -295,12 +295,25 @@ void daObjFlame::Act_c::create_mode_init() {
             }
         }
 
-        if (mModeProc >= 1 && mModeProc <= 4) {
+        switch (mModeProc) {
+        case 0:
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
             mEm0State = 1;
+            break;
         }
-        if (mModeProc >= 1 && mModeProc <= 5) {
+        switch (mModeProc) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
             mEm1State = 1;
             mEm2State = 1;
+            break;
         }
         if (M_attr_scl[mType].mF2C == 0) {
             em_manual_set();
