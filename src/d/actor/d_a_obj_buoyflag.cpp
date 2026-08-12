@@ -655,7 +655,7 @@ void daObjBuoyflag::Packet_c::hasi_nrm_init() {
 void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
     DrawVtx_c* vtx = &mDrawVtx[mB8C];
     dKy_tevstr_c* tevStr = &i_actor->tevStr;
-    u8* texData = &Khata::l_k_hata01TEX[(u32)i_actor->prm_get_texture() * 0x800];
+    const u8* texData = &Khata::l_k_hata01TEX[(u32)i_actor->prm_get_texture() * 0x800];
 
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -668,12 +668,12 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetArray(GX_VA_POS, vtx->mPos, sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, vtx->mNrm, sizeof(cXyz));
-    GXSetArray(GX_VA_TEX0, Khata::l_texCoord, 8);
+    GXSetArray(GX_VA_POS, (void*)vtx->mPos, sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, (void*)vtx->mNrm, sizeof(cXyz));
+    GXSetArray(GX_VA_TEX0, (void*)Khata::l_texCoord, 8);
 
     GXTexObj texObj;
-    GXInitTexObj(&texObj, texData, 0x40, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&texObj, (void*)texData, 0x40, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
@@ -730,10 +730,10 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
     GXLoadPosMtxImm(mC20, 0);
     GXLoadNrmMtxImm(mC20, 0);
     GXSetCullMode(GX_CULL_FRONT);
-    GXCallDisplayList(Khata::l_Khata_00DL, 0xE0);
+    GXCallDisplayList(&Khata::l_Khata_00DL[0x2C0], 0xE0);
     GXSetCullMode(GX_CULL_BACK);
-    GXSetArray(GX_VA_NRM, vtx->mNrm2, sizeof(cXyz));
-    GXCallDisplayList(Khata::l_Khata_00DL, 0xE0);
+    GXSetArray(GX_VA_NRM, (void*)vtx->mNrm2, sizeof(cXyz));
+    GXCallDisplayList(&Khata::l_Khata_00DL[0x2C0], 0xE0);
 }
 
 /* 00000744-00000C4C       .text draw_hasi__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
@@ -751,9 +751,9 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetArray(GX_VA_POS, Khasi::l_pos, sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, M_hasi_nrm, sizeof(cXyz));
-    GXSetArray(GX_VA_TEX0, Khasi::l_texCoord, 8);
+    GXSetArray(GX_VA_POS, (void*)Khasi::l_pos, sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, (void*)M_hasi_nrm, sizeof(cXyz));
+    GXSetArray(GX_VA_TEX0, (void*)Khasi::l_texCoord, 8);
 
     GXTexObj texObj;
     GXInitTexObj(&texObj, Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
