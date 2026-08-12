@@ -750,7 +750,7 @@ BOOL daNpc_Gk1_c::wait_action1(void*) {
 }
 
 /* 00001D30-00001E70       .text demo__11daNpc_Gk1_cFv */
-BOOL daNpc_Gk1_c::demo() {
+u8 daNpc_Gk1_c::demo() {
     if (demoActorID == 0) {
         if (m7A8 != 0) {
             m7A8 = 0;

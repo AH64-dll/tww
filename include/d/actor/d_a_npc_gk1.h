@@ -60,7 +60,7 @@ public:
     BOOL wait_1();
     BOOL talk_1();
     BOOL wait_action1(void*);
-    BOOL demo();
+    u8 demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
