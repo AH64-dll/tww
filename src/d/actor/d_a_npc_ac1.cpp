@@ -181,7 +181,6 @@ bool daNpc_Ac1_c::createInit() {
 }
 
 /* 000007C8-00000988       .text setMtx__11daNpc_Ac1_cFb */
-/* Nonmatching: 1 addi scheduling slot (item mtx dst offset deferred in retail) */
 void daNpc_Ac1_c::setMtx(bool i_param_1) {
     if (!mbInDemo) {
         plyTexPttrnAnm();
@@ -209,8 +208,8 @@ void daNpc_Ac1_c::setMtx(bool i_param_1) {
         mpArmMorf->calc();
     }
     if (mpItemModel != NULL && mbHasArms) {
-        MtxP itm_mtx = mpItemModel->getBaseTRMtx();
-        cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num), itm_mtx);
+        MtxP arm_mtx = mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num);
+        cMtx_copy(arm_mtx, mpItemModel->getBaseTRMtx());
         mpItemModel->calc();
     }
     setAttention(i_param_1);
