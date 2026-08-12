@@ -71,6 +71,7 @@ void hand_mtx_set(sss_class* i_this) {
 
 /* 00000444-000004CC       .text control3__FP9sss_class */
 void control3(sss_class* i_this) {
+    /* Nonmatching */
     sss_s* p = i_this->m33C;
     for (int i = 0; i < 10; i++, p++) {
         p->mSize = l_size_d[i] * (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64));
@@ -143,7 +144,7 @@ void control2(sss_class* i_this) {
         f32 fVar1 = hand_i->mPos.x - hand_i[1].mPos.x;
         f32 dVar9 = hand_i->mPos.y - hand_i[1].mPos.y;
         f32 fVar2 = hand_i->mPos.z - hand_i[1].mPos.z;
-        s16 angle_x = cM_atan2s(fVar1, fVar2);
+        int angle_x = cM_atan2s(fVar1, fVar2);
         f32 fVar3 = (fVar1 * fVar1) + (fVar2 * fVar2);
         if (fVar3 > 0.0f) {
             fVar3 = std::sqrtf(fVar3);
@@ -164,7 +165,7 @@ void control2(sss_class* i_this) {
         hand_i->mPos = pos2 + hand_i[1].mPos;
     }
     i_this->m2D4 = i_this->m33C[9].mPos;
-    pos3 = cXyz(i_this->m33C[8].mPos) - i_this->m33C[9].mPos;
+    pos3 = (cXyz&)i_this->m33C[8].mPos - i_this->m33C[9].mPos;
     i_this->m2E0 = -cM_atan2s(pos3.y, pos3.z);
     i_this->m2E2 = cM_atan2s(pos3.x, std::sqrtf(pos3.y * pos3.y + pos3.z * pos3.z));
     hand_mtx_set(i_this);
