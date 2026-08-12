@@ -648,17 +648,22 @@ BOOL daNpc_Gk1_c::chk_attn() {
     f32 dist = std::sqrtf(diff.abs2XZ());
     f32 height_diff = current.pos.y - dComIfGp_getPlayer(0)->current.pos.y;
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
-    s32 angle_diff = abs(target_angle - current.angle.y);
+    s16 angle_diff = target_angle - current.angle.y;
+    BOOL ret = FALSE;
     if (m7B1 == 1) {
-        if (dist < 200.0f && (f32)angle_diff / 182.04f < 90.0f && std::fabsf(height_diff) < 300.0f) {
-            return TRUE;
+        if (dist < 200.0f && (f32)abs(angle_diff) / 182.04f < 90.0f) {
+            if (std::fabsf(height_diff) < 300.0f) {
+                ret = TRUE;
+            }
         }
-        return FALSE;
+    } else {
+        if (dist < 200.0f && (f32)abs(angle_diff) / 182.04f < 60.0f) {
+            if (std::fabsf(height_diff) < 300.0f) {
+                ret = TRUE;
+            }
+        }
     }
-    if (dist < 200.0f && (f32)angle_diff / 182.04f < 60.0f && std::fabsf(height_diff) < 300.0f) {
-        return TRUE;
-    }
-    return FALSE;
+    return ret;
 }
 
 /* 000019E0-00001B74       .text wait_1__11daNpc_Gk1_cFv */
