@@ -10,9 +10,9 @@
 
 static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
 static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
-static u16 bmd_data[3] = { 4, 5, 6 };
 static f32 hr_d[4] = { 10.0f, 25.0f, 40.0f, 65.0f };
 static f32 max_d[4] = { 100.0f, 250.0f, 400.0f, 600.0f };
+static u16 bmd_data[3] = { 4, 5, 6 };
 static cXyz non_pos;
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
