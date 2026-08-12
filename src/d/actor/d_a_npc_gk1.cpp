@@ -251,11 +251,12 @@ s32 daNpc_Gk1_c::init_texPttrnAnm(s8 i_btp_num, bool i_param_2) {
 
 /* 00000A7C-00000B18       .text play_btp_anm__11daNpc_Gk1_cFv */
 void daNpc_Gk1_c::play_btp_anm() {
+    u8 frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
     if (mBtpNum != 0 || !cLib_calcTimer(&mBlinkTimer)) {
         mBlinkFrame += 1;
-        if (mBlinkFrame >= mBtpAnm.getBtpAnm()->getFrameMax()) {
+        if (mBlinkFrame >= frame_max) {
             if (mBtpNum != 0) {
-                mBlinkFrame = mBtpAnm.getBtpAnm()->getFrameMax();
+                mBlinkFrame = frame_max;
             } else {
                 mBlinkTimer = cLib_getRndValue(60, 90);
                 mBlinkFrame = 0;
