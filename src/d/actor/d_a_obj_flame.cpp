@@ -180,11 +180,14 @@ namespace daObjFlame {
 
 /* 00000078-00000110       .text set_switch__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::set_switch() {
-    if (mType == 1) {
-        if (mModeProc == 3 || mModeProc == 4) {
-            dComIfGs_onSwitch(prm_get_swSave(), home.roomNo);
+    Act_c* a_this = this;
+    if (a_this->mType == 1) {
+        if (a_this->mModeProc == 3 || a_this->mModeProc == 4) {
+            s32 sw = a_this->prm_get_swSave();
+            dComIfGs_onSwitch(sw, a_this->home.roomNo);
         } else {
-            dComIfGs_offSwitch(prm_get_swSave(), home.roomNo);
+            s32 sw = a_this->prm_get_swSave();
+            dComIfGs_offSwitch(sw, a_this->home.roomNo);
         }
     }
 }
