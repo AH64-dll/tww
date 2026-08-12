@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kg1.h"
+#include "f_op/f_op_camera.h"
 #include "d/d_lib.h"
 #include "d/d_cc_d.h"
 
@@ -41,8 +42,32 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-000001E0       .text __ct__15daNpc_Kg1_HIO_cFv */
 daNpc_Kg1_HIO_c::daNpc_Kg1_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    field_0x8 = -1;
+    mHio[0].m04 = 0.0f;
+    mHio[0].mMaxHeadX = 0x9C4;
+    mHio[0].mMaxHeadY = 0x1B58;
+    mHio[0].mMaxBackboneX = 0x7D0;
+    mHio[0].mMaxBackboneY = 0x1F40;
+    mHio[0].mMinHeadX = -0x9C4;
+    mHio[0].mMinHeadY = -0x1B58;
+    mHio[0].mMinBackboneX = -0x7D0;
+    mHio[0].mMinBackboneY = -0x1F40;
+    mHio[0].mMaxTurnStep = 0x3E8;
+    mHio[0].mMaxHeadTurnVel = 0x7D0;
+    mHio[0].mAttnYOffset = 35.0f;
+    mHio[0].mMaxAttnAngleY = 0x4000;
+    mHio[0].m22 = 0;
+    mHio[0].mMaxAttnDistXZ = 400.0f;
+    field_0xC = 0;
+    field_0x38 = 0;
+    field_0x39 = 0;
 }
+
+static daNpc_Kg1_HIO_c l_HIO;
+const char daNpc_Kg1_c::m_arcname[] = "Kg";
+cXyz daNpc_Kg1_c::m_camera_ctr(-200.0f, 140.0f, 85.0f);
+cXyz daNpc_Kg1_c::m_camera_eye(-117.0f, 92.0f, 344.0f);
 
 /* 000001E0-00000428       .text daNpc_Kg1_nodeCallBack__FP7J3DNodei */
 static BOOL daNpc_Kg1_nodeCallBack(J3DNode*, int) {
@@ -66,12 +91,24 @@ void daNpc_Kg1_c::initTexPatternAnm(int, bool) {
 
 /* 000008D8-00000944       .text playTexPatternAnm__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::playTexPatternAnm() {
-    /* Nonmatching */
+    if (cLib_calcTimer(&m72C) == 0) {
+        s16 frameMax = m6F4->getFrameMax();
+        if (m720 >= frameMax) {
+            m720 = (u8)((s16)m720 - frameMax);
+            m72C = 0x78;
+        } else {
+            m720++;
+        }
+    }
 }
 
 /* 00000944-000009E8       .text set_mtx__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::set_mtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    m6C4->setBaseScale(scale);
 }
 
 /* 000009E8-00000A08       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -85,7 +122,7 @@ BOOL daNpc_Kg1_c::CreateHeap() {
 }
 
 /* 00000D34-00000EF0       .text CreateInit__11daNpc_Kg1_cFv */
-void daNpc_Kg1_c::CreateInit() {
+cPhs_State daNpc_Kg1_c::CreateInit() {
     /* Nonmatching */
 }
 
@@ -101,7 +138,13 @@ void daNpc_Kg1_c::checkOrder() {
 
 /* 000010C4-00001188       .text kg1_talk_camera__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::kg1_talk_camera() {
-    /* Nonmatching */
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    if (m751 && camera != NULL) {
+        camera->mCamera.Stay();
+        camera->mCamera.Set(m_camera_ctr, m_camera_eye, 40.0f, 0);
+        camera->mCamera.Reset();
+        camera->mCamera.SetTrimSize(1);
+    }
 }
 
 /* 00001188-000011D4       .text wait_action_init__11daNpc_Kg1_cFv */
@@ -165,12 +208,31 @@ static cPhs_State daNpc_Kg1Create(void* i_this) {
 
 /* 00001FAC-0000203C       .text _create__11daNpc_Kg1_cFv */
 cPhs_State daNpc_Kg1_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daNpc_Kg1_c);
+    cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
+    if (state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000) != 0) {
+            return CreateInit();
+        }
+        state = cPhs_ERROR_e;
+    }
+    return state;
 }
 
 /* 00002480-0000250C       .text daNpc_Kg1Delete__FPv */
-static BOOL daNpc_Kg1Delete(void*) {
-    /* Nonmatching */
+static BOOL daNpc_Kg1Delete(void* i_this) {
+    daNpc_Kg1_c* self = static_cast<daNpc_Kg1_c*>(i_this);
+    dComIfG_resDelete(&self->mPhs, daNpc_Kg1_c::m_arcname);
+    if (self->heap != NULL && self->mpMorf != NULL) {
+        self->mpMorf->stopZelAnime();
+    }
+    if (l_HIO.field_0x8 >= 0) {
+        l_HIO.field_0x8--;
+        if (l_HIO.field_0x8 < 0) {
+            mDoHIO_deleteChild(l_HIO.mNo);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000250C-00002648       .text daNpc_Kg1Execute__FPv */
