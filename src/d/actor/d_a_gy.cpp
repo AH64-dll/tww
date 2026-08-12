@@ -7,6 +7,8 @@
 #include "d/actor/d_a_gy.h"
 #include "d/actor/d_a_gy_ctrl.h"
 #include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
@@ -26,6 +28,9 @@
 #include "d/d_camera.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "d/actor/d_a_player.h"
+#include "dolphin/mtx/quat.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 
 static dCcD_SrcSph l_sph_head_src = {
     // dCcD_SrcGObjInf
@@ -154,7 +159,7 @@ static __jnt_hit_data_c search_data[] = {
 static daGy_HIO_c l_HIO;
 
 const u32 daGy_c::m_heapsize = 0x3FA0;
-static const char m_arc_name[] = "Gy";
+const char daGy_c::m_arc_name[] = "Gy";
 
 static void (daGy_c::*mode_proc[])() = {
     &daGy_c::modeDive,
@@ -295,8 +300,78 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 0000049C-00000888       .text _nodeControl__6daGy_cFP7J3DNodeP8J3DModel */
-void daGy_c::_nodeControl(J3DNode* param_0, J3DModel* param_1) {
-    /* Nonmatching */
+void daGy_c::_nodeControl(J3DNode* node, J3DModel* model) {
+    s32 jntNo = ((J3DJoint*)node)->getJntNo();
+    Mtx sp94;
+    cXyz sp88;
+    cXyz sp7C;
+    cXyz sp70;
+    cXyz sp64;
+    Quaternion sp54;
+    cXyz sp48;
+    cXyz sp3C;
+    cXyz sp30;
+    cXyz sp24;
+    cXyz sp18;
+    Vec spC;
+    f32 sp8;
+
+    if (jntNo == 2) {
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+        sp88.set(0.0f, 0.0f, 0.0f);
+        sp88.set(l_HIO.mD4, l_HIO.mD8, l_HIO.mDC);
+        PSMTXMultVec(mDoMtx_stack_c::now, &sp88, &mD08);
+    }
+
+    PSMTXCopy(model->getAnmMtx(jntNo), sp94);
+    sp7C.set(sp94[0][3], sp94[1][3], sp94[2][3]);
+    sp94[0][3] = 0.0f;
+    sp94[1][3] = 0.0f;
+    sp94[2][3] = 0.0f;
+    mDoMtx_stack_c::transS(sp7C);
+
+    if (jntNo == 2) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        sp30 = current.pos - player->current.pos;
+        spC.x = sp30.x;
+        spC.y = 0.0f;
+        spC.z = sp30.z;
+        f32 f1 = PSVECSquareMag(&spC);
+        f32 f31 = std::sqrtf(f1);
+        s16 angle = fopAcM_searchActorAngleY(this, player);
+        if (cLib_distanceAngleS(shape_angle.y, angle) < l_HIO.m180 && f31 < l_HIO.m184 && (s8)mD15 != 8 && (s8)mD15 != 9 && (s8)mD15 != 6 && (s8)mD15 != 0xB && (s8)mD15 != 3) {
+            mCEC = player->current.pos;
+            if (m2B0 == 2) {
+                mCEC.y = daSea_calcWave(mCEC.x, mCEC.z) + l_HIO.mA8;
+            }
+            if (m2B0 == 3 && m928 == 1) {
+                mCEC.y += l_HIO.mA4;
+            }
+            sp70 = mCEC - mD08;
+            sp64 = mD08 - mD08;
+            daObj::quat_rotVec(&sp54, sp64, sp70);
+            C_QUATSlerp(&mCF8, &sp54, &mCF8, l_HIO.m188);
+        } else {
+            C_QUATSlerp(&mCF8, &ZeroQuat, &mCF8, l_HIO.m188);
+        }
+        mDoMtx_stack_c::quatM(&mCF8);
+    }
+
+    mDoMtx_stack_c::concat(sp94);
+
+    if (jntNo == 2) {
+        sp48.set(0.0f, 0.0f, 0.0f);
+        sp48.set(l_HIO.mD4, l_HIO.mD8, l_HIO.mDC);
+        PSMTXMultVec(mDoMtx_stack_c::now, &sp48, &mD08);
+    }
+
+    if (jntNo == 5) {
+        sp3C.set(100.0f, -100.0f, 0.0f);
+        PSMTXMultVec(mDoMtx_stack_c::now, &sp3C, &m89C);
+    }
+
+    PSMTXCopy(mDoMtx_stack_c::now, J3DSys::mCurrentMtx);
+    PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
 }
 
 /* 00000888-000008A8       .text createHeap_CB__FP10fopAc_ac_c */

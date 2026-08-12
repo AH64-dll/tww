@@ -80,7 +80,9 @@ public:
     /* 0x50C */ dCcD_GObjInf m50C;
     /* 0x604 */ u8 m604[0x624 - 0x604];
     /* 0x624 */ cM3dGSph m624;
-    /* 0x638 */ u8 m638[0x8C4 - 0x638];
+    /* 0x638 */ u8 m638[0x89C - 0x638];
+    /* 0x89C */ Vec m89C;
+    /* 0x8A8 */ u8 m8A8[0x8C4 - 0x8A8];
     /* 0x8C4 */ dCcD_GStts mGStts;
     /* 0x8E4 */ u32 m8E4;
     /* 0x8E8 */ u8 m8E8[0x8F8 - 0x8E8];
@@ -99,7 +101,9 @@ public:
     /* 0xA90 */ u8 mA90[0xAE0 - 0xA90];
     /* 0xAE0 */ dBgS_AcchCir mAE0;
     /* 0xB20 */ dBgS_Acch mB20;
-    /* 0xCE4 */ u8 mCE4[0xD08 - 0xCE4];
+    /* 0xCE4 */ u8 mCE4[0xCEC - 0xCE4];
+    /* 0xCEC */ cXyz mCEC;
+    /* 0xCF8 */ Quaternion mCF8;
     /* 0xD08 */ cXyz mD08;
     /* 0xD14 */ u8 mD14[0xD15 - 0xD14];
     /* 0xD15 */ u8 mD15;
