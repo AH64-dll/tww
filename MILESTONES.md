@@ -53,3 +53,9 @@ milestone (never merged into main or PR branches). Append + push via
 ## 2026-08-12T13:25Z — M4: three PRs green this session — #1155 d_a_magma kiosk adoption (upstream/main + single-commit rebuild), #1157 d_a_npc_co1 100% Matching (Equivalent weak-data, 109/109), #1158 d_a_ship OK (Equivalent regalloc, 189/189 ≥99.9%). All six org PRs (#1152/#1153/#1154/#1155/#1157/#1158) open+mergeable+CI-green x4. Open-claim pool corrected: ship was flip-only; buoyflag enqueued; 1.3.2r family fully characterized (mozo only positive, aj1 negative-definitive).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-12T13:54Z — M5: flip batch complete — #1161 d_a_kb, #1162 d_a_bridge, #1163 d_a_bmdfoot all Equivalent regalloc flips CI-green x4 (single configure.py each from upstream/main). Eleven org PRs open+mergeable (#1152/#1153/#1154/#1155/#1157/#1158/#1159/#1160/#1161/#1162/#1163). Flip-pool exhausted (exactly 6 flips, all in-flight). Free-flip pattern proven: kb/bridge/bmdfoot/kt/ship were all hidden flips found by the outside-queue sweep.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
