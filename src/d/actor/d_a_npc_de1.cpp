@@ -716,33 +716,29 @@ void daNpc_De1_c::privateCut() {
     static char* a_cut_tbl[] = {
         "ACTION",
     };
-    int staff_idx = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
+    int staff_idx = dComIfGp_evmng_getMyStaffId("De1", NULL, 0);
     if (staff_idx == -1) {
         return;
     }
     mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
-    if (mActIdx == -1) {
+    if ((s8)mActIdx == -1) {
         dComIfGp_evmng_cutEnd(staff_idx);
+        return;
+    }
+    if (dComIfGp_evmng_getIsAddvance(staff_idx)) {
+        if ((s32)mActIdx != 0) {
+        } else {
+            event_actionInit(staff_idx);
+        }
+    }
+    BOOL end_cut;
+    if ((s32)mActIdx != 0) {
+        end_cut = true;
     } else {
-        if (dComIfGp_evmng_getIsAddvance(staff_idx)) {
-            switch (mActIdx) {
-                case 0:
-                    event_actionInit(staff_idx);
-                    break;
-            }
-        }
-        BOOL end_cut;
-        switch (mActIdx) {
-            case 0:
-                end_cut = event_action();
-                break;
-            default:
-                end_cut = true;
-                break;
-        }
-        if (end_cut) {
-            dComIfGp_evmng_cutEnd(staff_idx);
-        }
+        end_cut = event_action();
+    }
+    if (end_cut) {
+        dComIfGp_evmng_cutEnd(staff_idx);
     }
 }
 

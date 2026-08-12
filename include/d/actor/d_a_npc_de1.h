@@ -120,7 +120,7 @@ public:
     /* 0x80E */ u8 m80E;
     /* 0x80F */ u8 m80F;
     /* 0x810 */ u32 mPartnerProcID;
-    /* 0x814 */ s8 mActIdx;
+    /* 0x814 */ u8 mActIdx;
     /* 0x815 */ s8 mActNo;
     /* 0x816 */ u8 mAnmAtr;
     /* 0x817 */ u8 mAnmTag;
