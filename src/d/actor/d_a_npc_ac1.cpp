@@ -912,20 +912,18 @@ cPhs_State daNpc_Ac1_c::_create() {
         0x272E0,
     };
     cPhs_State state = dComIfG_resLoad(&mPhs, "Ac");
-    if (state == cPhs_COMPLEATE_e) {
-        if (!charDecide(fopAcM_GetParam(this))) {
-            return cPhs_ERROR_e;
-        }
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[m878])) {
-            return cPhs_ERROR_e;
-        }
-        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
-        fopAcM_setCullSizeBox(this, -200.0f, -20.0f, -200.0f, 50.0f, 140.0f, 50.0f);
-        if (!createInit()) {
-            return cPhs_ERROR_e;
-        }
+    if (state != cPhs_COMPLEATE_e) {
+        return state;
     }
-    return state;
+    if (!charDecide(fopAcM_GetParam(this) & 0xFF)) {
+        return cPhs_ERROR_e;
+    }
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[m878])) {
+        return cPhs_ERROR_e;
+    }
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -200.0f, -20.0f, -200.0f, 50.0f, 140.0f, 50.0f);
+    return createInit() ? state : cPhs_ERROR_e;
 }
 
 /* 0000256C-00002838       .text create_Anm__11daNpc_Ac1_cFv */

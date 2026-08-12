@@ -149,7 +149,7 @@ private:
     /* 0x875 */ s8 mStatus;
     /* 0x876 */ s8 mPrevStatus;
     /* 0x877 */ s8 mLookBackState;
-    /* 0x878 */ u8 m878;
+    /* 0x878 */ s8 m878;
     /* 0x879 */ u8 m879;
     /* 0x87A */ s8 mActionIndex;
     /* 0x87B */ s8 m87B;
