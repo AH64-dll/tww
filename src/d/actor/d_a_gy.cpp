@@ -517,7 +517,46 @@ void daGy_c::modeDiveInit() {
 
 /* 00000FDC-000012DC       .text modeDive__6daGy_cFv */
 void daGy_c::modeDive() {
-    /* Nonmatching */
+    if (mD15 != 5) {
+        mD15 = 1;
+        if (mpCtrl->m324 == 3 || mE80 != 0) {
+            cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &m2BC), 8, 0x400);
+            m4F0 = 0.0f;
+            m4E8 = 2.0f * l_HIO.mA0;
+            m4EC = l_HIO.mC8;
+            actor_status &= ~0x20;
+            attention_info.flags &= ~0x4;
+            return;
+        }
+        actor_status |= 0x20;
+        attention_info.flags |= 0x4;
+        m4E8 = l_HIO.mA0;
+        m4EC = l_HIO.mC8;
+        f32 player_dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
+        if (mpCtrl->m312[m2AC] == 1 && m4E4 < 10.0f + l_HIO.mA0 && player_dist > l_HIO.m148) {
+            modeCircleInit();
+            return;
+        }
+        fopAc_ac_c* cb1_player = dComIfGp_getCb1Player();
+        cXyz diff = m2BC - current.pos;
+        diff.y = 0.0f;
+        f32 dist = diff.abs();
+        if (cb1_player != NULL) {
+            if (dist > l_HIO.m144 || cb1_player->speedF > l_HIO.m6C) {
+                setAimSpeedF();
+                cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &m2BC), 8, 0x400);
+                m508 = 0.0f;
+            } else {
+                m4F0 = 0.0f;
+                cXyz diff2 = m2BC - current.pos;
+                cLib_addCalc2(&m508, 1.0f, 0.01f, 0.05f);
+                cXyz sp24 = diff2 * m508;
+                cXyz sp18 = current.pos + sp24;
+                current.pos = sp18;
+                cLib_addCalcAngleS2(&current.angle.y, (s16)(mpCtrl->m308[m2AC] + 0x8000), 4, 0x400);
+            }
+        }
+    }
 }
 
 /* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
