@@ -258,15 +258,14 @@ BOOL daMozo_c::checkRange(int i_param) {
         return 0;
     }
 
-    daMozo_childHIO_c* child =
-        field_0x376 == 0 ? static_cast<daMozo_childHIO_c*>(l_HIO.mpBeamChild)
-                         : static_cast<daMozo_childHIO_c*>(l_HIO.mpFireChild);
     f32 range;
     s16 angle;
     if (i_param == 0) {
+        daMozo_childHIO_c* child = (&l_HIO.mpBeamChild)[field_0x376];
         range = child->m04;
         angle = child->m0C;
     } else {
+        daMozo_childHIO_c* child = (&l_HIO.mpBeamChild)[field_0x376];
         range = child->m08;
         angle = child->m0E;
     }
@@ -283,24 +282,43 @@ BOOL daMozo_c::checkRange(int i_param) {
 /* 00001D8C-00001F70       .text setAnm__8daMozo_cFif */
 void daMozo_c::setAnm(int i_idx, float i_morf) {
     mAnmIdx = i_idx;
-    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+    J3DAnmTransform* res;
+    f32 speed, start, end;
     switch (i_idx) {
     case 0:
-        mAnimMorf->setAnm(bck, 0, i_morf, 0.0f, 0.0f, -1.0f, NULL);
+        res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        start = 0.0f;
+        end = -1.0f;
+        speed = start;
         break;
     case 1:
-        mAnimMorf->setAnm(bck, 0, i_morf, 1.0f, 0.0f, -1.0f, NULL);
+        res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        start = 0.0f;
+        end = -1.0f;
+        speed = 1.0f;
         break;
     case 2:
-        mAnimMorf->setAnm(bck, 0, i_morf, -0.25f, 24.0f, 36.0f, NULL);
+        res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        start = 24.0f;
+        end = 36.0f;
+        speed = -0.25f;
         break;
     case 3:
-        mAnimMorf->setAnm(bck, 0, i_morf, 1.0f, 25.0f, -1.0f, NULL);
+        res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        start = 25.0f;
+        end = -1.0f;
+        speed = 1.0f;
         break;
     case 4:
-        mAnimMorf->setAnm(bck, 0, i_morf, -0.25f, 32.0f, 36.0f, NULL);
+        res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        start = 32.0f;
+        end = 36.0f;
+        speed = -0.25f;
         break;
+    default:
+        return;
     }
+    mAnimMorf->setAnm(res, 0, i_morf, speed, start, end, NULL);
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
