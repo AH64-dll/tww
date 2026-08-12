@@ -247,6 +247,7 @@ void kantera_calc(pw_class* i_this) {
 
 /* 000018FC-00001990       .text BG_check__FP8pw_class */
 void BG_check(pw_class* i_this) {
+    /* Nonmatching */
     i_this->mAcchCir.SetWall(70.0f, 140.0f);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
