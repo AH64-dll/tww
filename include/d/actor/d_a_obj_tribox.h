@@ -78,7 +78,7 @@ namespace daObjTribox {
         static BOOL solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void block_init();
-        bool chk_light() const;
+        u8 chk_light() const;
         void correct_before_init();
         void correct_after_init();
         void controll_set();

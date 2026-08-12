@@ -62,14 +62,6 @@ namespace daObjTribox {
         BOOL Mthd_IsDelete(void* i_this) {
             return true;
         }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
     };  // namespace
 
     const char Act_c::M_arcname[] = "MtryB";
@@ -109,25 +101,25 @@ namespace daObjTribox {
 
     /* 000001C8-000004B0       .text create_heap__Q211daObjTribox5Act_cFv */
     void Act_c::create_heap() {
-        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_MTRYB_e);
-        JUT_ASSERT(0x140, modelData != 0);
-        mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_MTRYB_e);
+        JUT_ASSERT(0x140, model_data != 0);
+        mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
 
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_DZB_MTRYB_e);
-        JUT_ASSERT(0x149, dzb != 0);
-        mpBgW = mpModel ? dBgW_NewSet(dzb, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) : 0;
+        cBgD_t* bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_DZB_MTRYB_e);
+        JUT_ASSERT(0x149, bgw_data != 0);
+        mpBgW = mpModel ? dBgW_NewSet(bgw_data, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) : 0;
 
-        J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_YTFBL00_e);
-        JUT_ASSERT(0x159, modelData2 != 0);
-        mpModel2 = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11000022);
+        J3DModelData* model_ytfbl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_YTFBL00_e);
+        JUT_ASSERT(0x159, model_ytfbl_data != 0);
+        mpModel2 = mDoExt_J3DModel__create(model_ytfbl_data, 0x80000, 0x11000022);
 
-        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_APP_e);
-        JUT_ASSERT(0x163, brk != 0);
-        bool brkOk = mBrkAnm.init(modelData2, brk, 1, 0, 1.0f, 0, -1, 0);
+        J3DAnmTevRegKey* brk_app_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_APP_e);
+        JUT_ASSERT(0x163, brk_app_data != 0);
+        bool brkOk = mBrkAnm.init(model_ytfbl_data, brk_app_data, 1, 0, 1.0f, 0, -1, 0);
 
-        J3DAnmTevRegKey* brk2 = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_CMN_e);
-        JUT_ASSERT(0x16D, brk2 != 0);
-        bool brk2Ok = mBrkAnm2.init(modelData2, brk2, 1, 2, 1.0f, 0, -1, 0);
+        J3DAnmTevRegKey* brk_cmn_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_CMN_e);
+        JUT_ASSERT(0x16D, brk_cmn_data != 0);
+        bool brk2Ok = mBrkAnm2.init(model_ytfbl_data, brk_cmn_data, 1, 2, 1.0f, 0, -1, 0);
 
         bool success = (mpModel != 0 && mpBgW != 0 && mpModel2 != 0 && brkOk && brk2Ok);
         if (!success) {
@@ -167,15 +159,15 @@ namespace daObjTribox {
     }
 
     /* 000005C0-00000604       .text chk_light__Q211daObjTribox5Act_cCFv */
-    bool Act_c::chk_light() const {
-        return dComIfGs_isEventBit(0x3820) ? true : false;
+    u8 Act_c::chk_light() const {
+        return dComIfGs_isEventBit(0x3820) ? 2 : 0;
     }
 
     /* 00000604-0000068C       .text correct_before_init__Q211daObjTribox5Act_cFv */
     void Act_c::correct_before_init() {
         fopAcM_setCullSizeSphere(this, 0.0f, 125.0f, 0.0f, 200.0f);
         if (m38E) {
-            m396 = dComIfGp_evmng_getEventIdx("TBox", 0xFF);
+            m396 = dComIfGp_evmng_getEventIdx("MtryB_sink", 0xFF);
         } else {
             m396 = -1;
         }
@@ -325,10 +317,11 @@ namespace daObjTribox {
     fopAc_ac_c* Act_c::push_pullCB(fopAc_ac_c* i_actor, fopAc_ac_c*, s16 i_angle, dBgW::PushPullLabel i_pp_label) {
         static const s16 face_ang_offset[3] = {0, 0x5555, 0xAAAB};
         Act_c* self = static_cast<Act_c*>(i_actor);
-        int label = i_pp_label & 3;
-        if (label != 0) {
-            JUT_ASSERT(0x2B0, label != 3);
-            self->mPP[0].mZ = (label & 1) ? 0 : 1;
+        dBgW::PushPullLabel pp_label = (dBgW::PushPullLabel)(i_pp_label & 3);
+        if (pp_label != 0) {
+            const int pp_field = dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL;
+            JUT_ASSERT(0x2B0, pp_label != pp_field);
+            self->mPP[0].mZ = (pp_label & 1) ? 0 : 1;
             s16 angleDiff = (i_angle - 0x8000) - self->shape_angle.y;
             if (angleDiff >= -0x2AAA && angleDiff < 0x2AAA) {
                 self->mPP[0].mX = 0;
@@ -356,8 +349,8 @@ namespace daObjTribox {
     }
 
     /* 00000FF4-000012A0       .text chk_wall__Q211daObjTribox5Act_cCFi */
-    bool Act_c::chk_wall(int i_type) const {
-        JUT_ASSERT(0x30C, i_type == 1 || i_type == 2);
+    bool Act_c::chk_wall(int num) const {
+        JUT_ASSERT(0x30C, (num == 1) || (num == 2));
         int idx = (m358 >= 0) ? (m354 + 1) % 3 : (m354 + 2) % 3;
         mDoMtx_stack_c::YrotS(shape_angle.y);
         cXyz postPos;
@@ -369,7 +362,7 @@ namespace daObjTribox {
         if (line_cross(&startPos, &endPos)) {
             return true;
         }
-        if (i_type == 2) {
+        if (num == 2) {
             cXyz startPos2 = startPos;
             s16 rot = (m358 >= 0) ? 0x2AAA : -0x2AAA;
             mDoMtx_stack_c::YrotM(rot);
@@ -515,7 +508,10 @@ namespace daObjTribox {
     /* 0000197C-00001A08       .text search_block__Q211daObjTribox5Act_cFPvPv */
     fopAc_ac_c* Act_c::search_block(void* i_actor, void* i_self) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
-        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Tribox_e && ((Act_c*)actor)->prm_get_type() == 0) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Tribox_e &&
+            ((Act_c*)actor)->prm_get_type() == 0 &&
+            fopAcM_searchActorDistance2((fopAc_ac_c*)i_self, actor) < 225.0f)
+        {
             return actor;
         }
         return NULL;
@@ -628,10 +624,10 @@ namespace daObjTribox {
     void Act_c::mode_block_walk() {
         m30C--;
         bool finished = (m30C <= 0);
-        f32 cosVal = cosf(0.15625f * m30C);
-        f32 angleY = (1.0472f * m350) + (0.0002684f * home.angle.z);
+        f32 cosVal = cosf(0.15707963f * m30C);
+        f32 angleY = (9.5873802e-05f * home.angle.z) + (1.0471976f * m350);
         f32 dir = m358;
-        f32 rot = 1.0472f * (dir * (0.5f * (1.0f + cosVal)));
+        f32 rot = 1.0471976f * (dir * (0.5f * (1.0f + cosVal)));
         PSMTXRotRad(mDoMtx_stack_c::get(), 0x59, angleY);
         cXyz postPos;
         PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[m354], &postPos);
@@ -641,7 +637,7 @@ namespace daObjTribox {
         cXyz newPos = m344 + postPos2;
         cXyz diff = newPos - m344;
         current.pos = diff;
-        shape_angle.y = (s16)(0.5f + (10474.9f * (angleY + rot)));
+        shape_angle.y = (s16)(0.5f + (10430.378f * (angleY + rot)));
 
         if (finished) {
             eff_smoke_end();
@@ -927,6 +923,18 @@ namespace daObjTribox {
         }
         return true;
     }
+};  // namespace daObjTribox
+
+namespace daObjTribox {
+    namespace {
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    };  // namespace
 };  // namespace daObjTribox
 
 actor_process_profile_definition g_profile_Obj_Tribox = {
