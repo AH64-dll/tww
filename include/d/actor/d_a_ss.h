@@ -36,7 +36,7 @@ struct ss_s {
     /* 0x4EC */ ss_s_s mSss[20];
 };  // size = 0x62C
 
-struct ss_class : public fopAc_ac_c {
+struct ss_class : public fopEn_enemy_c {
     /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ s8 m2B4;
     /* 0x2B5 */ u8 m2B5;
