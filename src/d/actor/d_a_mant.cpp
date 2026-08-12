@@ -351,30 +351,34 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
 
 /* 0000137C-000015F0       .text mant_v_calc__FP10mant_class */
 void mant_v_calc(mant_class* i_this) {
-    csXyz local_8(0, 0, 0);
+    csXyz angle(0, 0, 0);
+    cXyz offset;
+    cXyz mtx_pos;
     cXyz diff = i_this->m1BE0 - i_this->m1BEC;
-    local_8.y = cM_atan2s(diff.x, diff.z) + 0x4000;
+    angle.y = cM_atan2s(diff.x, diff.z) + 0x4000;
 
-    f32 f0 = diff.x * 0.125f;
-    f32 f1 = diff.y * 0.125f;
-    f32 f2 = diff.z * 0.125f;
-    f32 f26 = 0.3926991f;
-    f32 f27 = -10.0f;
-    f32 f28 = -20.0f;
+    mant_j_s* joint = i_this->mJoint;
+    offset.x = 0.0f;
 
-    for (s32 i = 0; i < 9; i++) {
-        mant_j_s* joint = &i_this->mJoint[i];
-        joint->mPos[0].x = i_this->m1BEC.x + f0 * i;
-        joint->mPos[0].y = i_this->m1BEC.y + f1 * i;
-        joint->mPos[0].z = i_this->m1BEC.z + f2 * i;
-        mDoMtx_YrotS(*calc_mtx, local_8.y);
-        f32 sin = cM_fsin(f26 * i);
-        cXyz local_34(0.0f, f27 * sin, f28 * sin);
-        cXyz local_28;
-        MtxPosition(&local_34, &local_28);
-        joint->mPos[0] += local_28;
-        joint->mRot = local_8;
-        joint->mRot.y += (s16)((i - 4) * 0xBB8);
+    for (s32 i = 0; i < 9; i++, joint++) {
+        i_this->mJoint[i].mPos[0].x = i_this->m1BEC.x + (diff.x / 8.0f) * (f32)i;
+        i_this->mJoint[i].mPos[0].y = i_this->m1BEC.y + (diff.y / 8.0f) * (f32)i;
+        i_this->mJoint[i].mPos[0].z = i_this->m1BEC.z + (diff.z / 8.0f) * (f32)i;
+
+        mDoMtx_YrotS(*calc_mtx, angle.y);
+
+        s16 sin_angle = cM_rad2s(0.3926991f * (f32)i);
+        f32 sin_val = jmaSinTable[(u16)sin_angle >> jmaSinShift];
+
+        offset.y = -10.0f * sin_val;
+        offset.z = -20.0f * sin_val;
+
+        MtxPosition(&offset, &mtx_pos);
+        i_this->mJoint[i].mPos[0] += mtx_pos;
+
+        i_this->mJoint[i].mRot = angle;
+        i_this->mJoint[i].mRot.y += (s16)((i - 4) * 0xBB8);
+
         joint_control(i_this, joint, i);
     }
 }
