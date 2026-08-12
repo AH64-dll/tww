@@ -10,6 +10,7 @@
 
 static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
 static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
+static u16 bmd_data[3] = { 4, 5, 6 };
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
 void hand_draw(sitem_class* i_this) {
@@ -173,7 +174,7 @@ void cut_control1(sitem_class* i_this) {
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
 void my_break(sitem_class* i_this) {
-    i_this->m2C2 = 0x32;
+    i_this->m2C2[0] = 0x32;
     i_this->m2C0 = 6;
     csXyz angle(0, i_this->current.angle.y, 0);
     fopAcM_createItemFromTable(&i_this->mHomePos, i_this->m2BB, i_this->m2BA & 0x7F,
@@ -260,8 +261,18 @@ void hand_move(sitem_class*) {
 }
 
 /* 00002684-000026F4       .text daSitem_Execute__FP11sitem_class */
-static BOOL daSitem_Execute(sitem_class*) {
-    /* Nonmatching */
+static BOOL daSitem_Execute(sitem_class* i_this) {
+    i_this->m2BC += 1;
+    for (int i = 0; i < 2; i++) {
+        if (i_this->m2C2[i] != 0) {
+            i_this->m2C2[i]--;
+        }
+    }
+    if (i_this->m2C6 != 0) {
+        i_this->m2C6--;
+    }
+    hand_move(i_this);
+    return TRUE;
 }
 
 /* 000026F4-000026FC       .text daSitem_IsDelete__FP11sitem_class */
@@ -270,18 +281,29 @@ static BOOL daSitem_IsDelete(sitem_class*) {
 }
 
 /* 000026FC-00002760       .text daSitem_Delete__FP11sitem_class */
-static BOOL daSitem_Delete(sitem_class*) {
-    /* Nonmatching */
+static BOOL daSitem_Delete(sitem_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "Sitem");
+    i_this->mFollow[0].end();
+    i_this->mFollow[1].end();
+    return TRUE;
 }
 
 /* 00002760-00002824       .text useHeapInit__FP11sitem_class */
-void useHeapInit(sitem_class*) {
-    /* Nonmatching */
+static BOOL useHeapInit(sitem_class* i_this) {
+    i_this->mpModel = mDoExt_J3DModel__create(
+        (J3DModelData*)dComIfG_getObjectRes("Sitem", bmd_data[i_this->mType]), 0, 0x11020203);
+    if (i_this->mpModel == NULL) {
+        return FALSE;
+    }
+    if (i_this->mLineMat1.init(1, 0xA, 1) == 0) {
+        return FALSE;
+    }
+    return i_this->mLineMat2.init(1, 5, 1) != 0;
 }
 
 /* 00002824-00002844       .text daSitem_solidHeapCB__FP10fopAc_ac_c */
-static BOOL daSitem_solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daSitem_solidHeapCB(fopAc_ac_c* a_this) {
+    return useHeapInit((sitem_class*)a_this);
 }
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */

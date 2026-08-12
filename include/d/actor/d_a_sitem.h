@@ -28,8 +28,7 @@ public:
     /* 0x2BC */ s16 m2BC;
     /* 0x2BE */ u8 field_0x2BE[2];
     /* 0x2C0 */ s16 m2C0;
-    /* 0x2C2 */ s16 m2C2;
-    /* 0x2C4 */ u8 field_0x2C4[2];
+    /* 0x2C2 */ s16 m2C2[2];
     /* 0x2C6 */ s16 m2C6;
     /* 0x2C8 */ cXyz mHomePos;
     /* 0x2D4 */ cXyz mSpeed;
