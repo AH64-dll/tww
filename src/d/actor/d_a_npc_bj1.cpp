@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bj1.h"
+#include "d/actor/d_a_jbo.h"
 #include "d/d_npc.h"
 #include "d/d_com_inf_game.h"
 #include "res/Object/Bj.h"
@@ -25,8 +26,8 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
 
 /* 00000268-000002EC       .text searchActor_Jb__FPvPv */
 static void* searchActor_Jb(void* i_actor, void*) {
-    if (l_check_wrk < 20 && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_BJ1_e &&
-        fopAcM_GetParam(i_actor) & 0x100) {
+    if (l_check_wrk < 20 && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_JBO_e &&
+        ((jbo_class*)i_actor)->mType != 0) {
         l_check_inf[l_check_wrk] = static_cast<fopAc_ac_c*>(i_actor);
         l_check_wrk++;
     }
@@ -65,9 +66,9 @@ void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
 
 /* 00000664-00000710       .text init_BJ4_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ4_0() {
-    bool ret = !dComIfGs_isSymbol(2);
+    bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
-        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
         if (ret) {
             set_action(&daNpc_Bj1_c::wait_action2, NULL);
         }
@@ -77,12 +78,12 @@ bool daNpc_Bj1_c::init_BJ4_0() {
 
 /* 00000710-000007D4       .text init_BJ6_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ6_0() {
-    bool ret = !dComIfGs_isSymbol(2);
+    bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
-        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
         if (ret) {
-            mPathNo &= ~0x80;
-            mPathNo |= 0x40;
+            actor_status &= ~fopAcStts_NOCULLEXEC_e;
+            actor_status |= fopAcStts_UNK4000_e;
             set_action(&daNpc_Bj1_c::wait_action4, NULL);
         }
     }
@@ -91,7 +92,7 @@ bool daNpc_Bj1_c::init_BJ6_0() {
 
 /* 000007D4-00000864       .text init_BJ7_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ7_0() {
-    bool ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+    bool ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
     if (ret) {
         setPrtcl_drugPot_1();
         set_action(&daNpc_Bj1_c::wait_action3, NULL);
@@ -101,9 +102,9 @@ bool daNpc_Bj1_c::init_BJ7_0() {
 
 /* 00000864-00000910       .text init_BJX_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_0() {
-    bool ret = !dComIfGs_isSymbol(2);
+    bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
-        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
         if (ret) {
             set_action(&daNpc_Bj1_c::wait_action1, NULL);
         }
@@ -113,7 +114,7 @@ bool daNpc_Bj1_c::init_BJX_0() {
 
 /* 00000910-00000998       .text init_BJX_1__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_1() {
-    bool ret = dComIfGs_isSymbol(2);
+    bool ret = dComIfGs_isSymbol(2) != 0;
     if (ret) {
         set_action(&daNpc_Bj1_c::wait_action1, NULL);
     }
