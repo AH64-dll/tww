@@ -330,18 +330,24 @@ u32 daNpc_Yw1_c::getMsg_YW1_3() {
 
 /* 000016F0-00001770       .text getMsg__11daNpc_Yw1_cFv */
 u32 daNpc_Yw1_c::getMsg() {
+    u32 msg = 0;
     switch (m7C6) {
         case 0:
-            return getMsg_YW1_0();
+            msg = getMsg_YW1_0();
+            break;
         case 1:
-            return getMsg_YW1_1();
+            msg = getMsg_YW1_1();
+            break;
         case 2:
-            return getMsg_YW1_2();
+            msg = getMsg_YW1_2();
+            break;
         case 3:
-            return getMsg_YW1_3();
+            msg = getMsg_YW1_3();
+            break;
         default:
-            return 0;
+            break;
     }
+    return msg;
 }
 
 /* 00001770-000017C0       .text eventOrder__11daNpc_Yw1_cFv */
