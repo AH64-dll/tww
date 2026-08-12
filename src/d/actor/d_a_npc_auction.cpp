@@ -1446,9 +1446,7 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
 /* 00002C70-00002EB8       .text daNpc_AuctionDraw__FPv */
 static BOOL daNpc_AuctionDraw(void* i_this) {
     daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
-    if (!actor->isExecute()) {
-        return TRUE;
-    }
+    if (actor->isExecute()) {
     J3DModel* model = actor->mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     if (actor->mHeadModel != NULL) {
@@ -1485,6 +1483,7 @@ static BOOL daNpc_AuctionDraw(void* i_this) {
         dComIfGd_addRealShadow(actor->mShadowID, actor->mHeadModel);
     }
     dSnap_RegistFig(l_photo_no[actor->mDataNo], actor, 1.0f, 1.0f, 1.0f);
+    }
     return TRUE;
 }
 
