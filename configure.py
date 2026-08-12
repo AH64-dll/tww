@@ -1634,7 +1634,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_gy"),
     ActorRel(NonMatching, "d_a_icelift"),
     ActorRel(Equivalent, "d_a_kb"), # regalloc: useHeapInit 99.80 / esa_demo_move 99.94
-    ActorRel(NonMatching, "d_a_kddoor"),
+    ActorRel(Equivalent, "d_a_kddoor"),  # regalloc: execute 99.69 regalloc+anchor, openProc/openEnd/closeProc pool-shift (door10 dead-const precedent); drawSet/closeProc-sub 100
     ActorRel(Matching,    "d_a_kita"),
     ActorRel(Equivalent, "d_a_klft"),  # regalloc: ride_call_back/Execute/Create pure regalloc-anchor; weak order
     ActorRel(Matching,    "d_a_kmon"),
