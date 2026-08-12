@@ -81,3 +81,7 @@ See .org/log.md + .org/lessons.md for details.
 ## 2026-08-12T19:56Z — M6: 17 Equivalent flips all locally gated (416-OK x each); flip pool exhausted (0 free candidates — every near-100 actor has a real fix in flight); 1.3.2r family fully characterized (mozo only override; pw/kg2/bj1/9 others disproven as stub-tier); quota recovered post-429; 87 NonMatching rows remaining, punch list active (ac1 review, kg1 onEventFlag, kddoor drawSet, ss frames, gp1 _draw, mozo stubs, ftree, mn pool)
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T00:59Z — M6b: FLIP #20 — d_a_mozo → Equivalent with `mw_version="GC/1.3.2r"` — the FIRST 1.3.2r-override flip in the tree (commit 2e95469a6, gated 416-OK fresh stamp 00:59:23; setAnm per-case loopMode local was the key — shared call + per-case li r5,0x0). 84 NonMatching rows remain. Confirms the M3 mwcc-version discovery end-to-end: mozo was the one real 1.3.2r family member (10/10 'primes' disproven as stub-tier by .o-swap), and its flip proves the per-actor compiler override path works. R-team marker audit + QA sweep enqueued.
