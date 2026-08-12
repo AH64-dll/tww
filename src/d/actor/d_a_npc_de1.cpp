@@ -1102,35 +1102,32 @@ BOOL daNpc_De1_c::CreateHeap() {
         0x80000,
         0x11000002
     );
-    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
-        return FALSE;
-    }
-    m_branchL_jnt_num = a_mdl_dat->getJointName()->getIndex("branchL");
-    JUT_ASSERT(0x6d0, m_branchL_jnt_num >= 0);
-    m_head_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(0x6d2, m_head_jnt_num >= 0);
-    {
-        static char* a_jnt_name_tbl[] = {
-            "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
-        };
-        for (int i = 0; i < 10; i++) {
-            m_c0_jnt_num[i] = a_mdl_dat->getJointName()->getIndex(a_jnt_name_tbl[i]);
-            JUT_ASSERT(0x6d5, m_c0_jnt_num[ i] >= 0);
+    if (mpMorf != NULL && mpMorf->getModel() != NULL) {
+        m_branchL_jnt_num = a_mdl_dat->getJointName()->getIndex("branchL");
+        JUT_ASSERT(0x6d0, m_branchL_jnt_num >= 0);
+        m_head_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+        JUT_ASSERT(0x6d2, m_head_jnt_num >= 0);
+        {
+            static char* a_jnt_name_tbl[] = {
+                "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
+            };
+            for (int i = 0; i < 10; i++) {
+                m_c0_jnt_num[i] = a_mdl_dat->getJointName()->getIndex(a_jnt_name_tbl[i]);
+                JUT_ASSERT(0x6d5, m_c0_jnt_num[ i] >= 0);
+            }
+        }
+        mpMorf->getModel()->setUserArea(0);
+        mpDeform = new dBgWDeform();
+        if (mpDeform != NULL && !mpDeform->Set((cBgD_t*)dComIfG_getObjectIDRes("De", dRes_ID_DE_DZB_DE_e), mpMorf->getModel(), 0)) {
+            mAcchCir.SetWall(0.0f, 0.0f);
+            mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+            mObjAcch.SetWaterNone();
+            mObjAcch.SetWallNone();
+            mObjAcch.SetRoofNone();
+            return TRUE;
         }
     }
-    mpMorf->getModel()->setUserArea(0);
-    mpDeform = new dBgWDeform();
-    if (mpDeform != NULL) {
-        if (mpDeform->Set((cBgD_t*)dComIfG_getObjectIDRes("De", dRes_ID_DE_DZB_DE_e), mpMorf->getModel(), 0)) {
-            return FALSE;
-        }
-        mAcchCir.SetWall(0.0f, 0.0f);
-        mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
-        mObjAcch.SetWaterNone();
-        mObjAcch.SetWallNone();
-        mObjAcch.SetRoofNone();
-        return TRUE;
-    }
+    mpMorf = NULL;
     return FALSE;
 }
 
