@@ -167,6 +167,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
 }
 
 /* 000011BC-0000152C       .text hand_1_move__FP8ss_classP4ss_s */
+/* Nonmatching */
 void hand_1_move(ss_class* i_this, ss_s* hand) {
     ss_s_s* pos = hand->mSss;
     u8 count = hand->m3A;
@@ -255,7 +256,6 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
     cXyz sp58(0.0f, 0.0f, 15.0f + REG8_F(11));
     cXyz sp4C;
     cXyz sp40;
-    cXyz sp28;
     cXyz sp1C;
     cXyz sp10;
 
@@ -264,8 +264,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         hand->mSss[0].mPos = i_this->home.pos;
         for (int i = 1; i < 20; i++) {
             ss_s_s* cur = &hand->mSss[i];
-            sp28 = cur->mPos - (cur - 1)->mPos;
-            sp4C = sp28;
+            sp4C = cur->mPos - (cur - 1)->mPos;
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp4C.x, sp4C.z));
             f32 dist = std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp4C.y, dist));
@@ -289,8 +288,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
     sp34v.y = 0.0f;
 
     do {
-        cXyz gndPos(cur->mPos.x, cur->mPos.y + 50.0f, cur->mPos.z);
-        gndChk.SetPos(&gndPos);
+        gndChk.m_pos.set(cur->mPos.x, cur->mPos.y + 50.0f, cur->mPos.z);
         f32 groundY = 5.0f + dComIfG_Bgsp()->GroundCross(&gndChk) + hand->m2C;
         f32 curY = cur->mPos.y + hand->m24;
         if (curY < groundY) {
@@ -310,8 +308,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         if (hand->m36 != 0 && idx == 0) {
             cur->mPos = i_this->home.pos;
         } else {
-            sp10 = (cur - 1)->mPos + sp4C;
-            cur->mPos = sp10;
+            cur->mPos = (cur - 1)->mPos + sp4C;
         }
         if (!(idx & 3) && hand->m3B != 0) {
             dComIfGp_particle_setSimple(1, &cur->mPos, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -323,8 +320,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
     PSVECAdd(&hand->mPos, &hand->mVel, &hand->mPos);
     hand->mVel.y -= 3.0f + REG8_F(14);
 
-    cXyz gndPos(hand->mPos.x, hand->mPos.y + 50.0f, hand->mPos.z);
-    gndChk.SetPos(&gndPos);
+    gndChk.m_pos.set(hand->mPos.x, hand->mPos.y + 50.0f, hand->mPos.z);
     f32 groundY = 5.0f + dComIfG_Bgsp()->GroundCross(&gndChk);
 
     if (hand->m38 == 0) {
@@ -703,6 +699,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 }
 
 /* 000030D4-0000339C       .text daSs_Create__FP10fopAc_ac_c */
+/* Nonmatching */
 static cPhs_State daSs_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcSph tg_sph_src = {
         // dCcD_SrcGObjInf
