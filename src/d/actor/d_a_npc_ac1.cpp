@@ -496,7 +496,12 @@ u16 daNpc_Ac1_c::next_msgStatus(u32* i_msg_no) {
 
 /* 0000128C-000012AC       .text getBitMask__11daNpc_Ac1_cFv */
 s32 daNpc_Ac1_c::getBitMask() {
-    return m879 != 0 ? 0 : 0x10;
+    s32 result = 0;
+    if ((s32)m879 != 0) {
+    } else {
+        result = 0x10;
+    }
+    return result;
 }
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
@@ -561,10 +566,12 @@ void daNpc_Ac1_c::event_actionInit(int i_param_1) {
 
 /* 00001508-00001528       .text event_action__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::event_action() {
-    if (m86D != 0) {
-        return TRUE;
+    switch (m86D) {
+        case 0:
+            return TRUE;
+        default:
+            return TRUE;
     }
-    return TRUE;
 }
 
 /* 00001528-00001614       .text privateCut__11daNpc_Ac1_cFi */
