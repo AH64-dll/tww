@@ -189,8 +189,12 @@ BOOL daKddoor_c::chkStopClose() {
     }
 
     if (mFrontCheck == 0) {
-        if (type >= 3 && type < 5) {
-            return FALSE;
+        switch (type) {
+            case 3:
+            case 4:
+                return FALSE;
+            default:
+                break;
         }
         swbit = getSwbit();
         roomNo = getFRoomNo();
@@ -202,7 +206,7 @@ BOOL daKddoor_c::chkStopClose() {
     if (swbit == 0xFF) {
         return FALSE;
     }
-    return !dComIfGs_isSwitch(swbit, roomNo);
+    return dComIfGs_isSwitch(swbit, roomNo) ? 0 : 1;
 }
 
 /* 00000670-000006D0       .text init__11dDoor_ssk_cFP12dDoor_info_c */
