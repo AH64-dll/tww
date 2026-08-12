@@ -118,7 +118,7 @@ void control1(sss_class* i_this) {
         mDoMtx_XrotM(*calc_mtx, angle_y);
         MtxPosition(&pos, &pos4);
         MtxPull();
-        hand_i->mPos = pos4 + hand_i[-1].mPos;
+        hand_i->mPos = (cXyz&)hand_i[-1].mPos + pos4;
     }
 }
 
@@ -129,8 +129,6 @@ void control2(sss_class* i_this) {
     cXyz pos;
     cXyz pos2;
     cXyz pos3;
-    cXyz pos4;
-    cXyz pos5;
     f32 f1;
     f32 f2;
 
@@ -162,7 +160,7 @@ void control2(sss_class* i_this) {
             pos.z = i_this->m2E8;
         }
         MtxPosition(&pos, &pos2);
-        hand_i->mPos = pos2 + hand_i[1].mPos;
+        hand_i->mPos = (cXyz&)hand_i[1].mPos + pos2;
     }
     i_this->m2D4 = i_this->m33C[9].mPos;
     pos3 = (cXyz&)i_this->m33C[8].mPos - i_this->m33C[9].mPos;
@@ -305,10 +303,10 @@ void cut_control2(sss_class* i_this) {
             pos.z = i_this->m2E8;
         }
         MtxPosition(&pos, &pos2);
-        hand_i->mPos = pos2 + hand_i[1].mPos;
+        hand_i->mPos = (cXyz&)hand_i[1].mPos + pos2;
     }
     i_this->m2D4 = i_this->m33C[9].mPos;
-    pos3 = cXyz(i_this->m33C[8].mPos) - i_this->m33C[9].mPos;
+    pos3 = (cXyz&)i_this->m33C[8].mPos - i_this->m33C[9].mPos;
     i_this->m2E0 = -cM_atan2s(pos3.y, pos3.z);
     i_this->m2E2 = cM_atan2s(pos3.x, std::sqrtf(pos3.y * pos3.y + pos3.z * pos3.z));
     hand_mtx_set(i_this);
