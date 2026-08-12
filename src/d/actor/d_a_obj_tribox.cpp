@@ -812,7 +812,8 @@ namespace daObjTribox {
         if (m30C > 0) {
             m30C--;
             if (m30C == 0) {
-                dComIfGs_onSwitch(prm_get_swSave(), home.roomNo);
+                int swSave = prm_get_swSave();
+                dComIfGs_onSwitch(swSave, home.roomNo);
                 M_sink_start = 1;
             }
         } else {
