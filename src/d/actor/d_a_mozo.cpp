@@ -77,7 +77,6 @@ daMozo_HIO_c::daMozo_HIO_c() {
 
 /* 000002D0-00000568       .text daMozo_nodeCallBackBeam__FP8daMozo_cP8J3DModelP7J3DNodei */
 static BOOL daMozo_nodeCallBackBeam(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
-    /* Nonmatching */
     s32 jntNo = ((J3DJoint*)node)->getJntNo();
 
     if (calcTiming == 0) {
@@ -114,7 +113,6 @@ static BOOL daMozo_nodeCallBackBeam(daMozo_c* i_this, J3DModel* model, J3DNode* 
 
 /* 00000568-00000728       .text daMozo_nodeCallBackFire__FP8daMozo_cP8J3DModelP7J3DNodei */
 static BOOL daMozo_nodeCallBackFire(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
-    /* Nonmatching */
     s32 jntNo = ((J3DJoint*)node)->getJntNo();
 
     if (calcTiming == 0) {
@@ -212,7 +210,6 @@ void daMozo_c::set_mtx() {
 
 /* 00000AAC-00000C38       .text anime_proc__8daMozo_cFv */
 void daMozo_c::anime_proc() {
-    /* Nonmatching */
     mAnimMorf->play(NULL, 0, 0);
     mBrkAnm.play();
     mBtkAnm.play();
@@ -233,7 +230,6 @@ void daMozo_c::anime_proc() {
 
 /* 00000C38-00000C90       .text wait_proc_init__8daMozo_cFv */
 void daMozo_c::wait_proc_init() {
-    /* Nonmatching */
     setAnm(0, 0.0f);
     setProcess(&daMozo_c::wait_proc);
 }
@@ -261,7 +257,6 @@ void daMozo_c::wait_proc() {
 
 /* 00000D58-00000DE0       .text search_beam_proc_init__8daMozo_cFv */
 void daMozo_c::search_beam_proc_init() {
-    /* Nonmatching */
     setAnm(1, 0.0f);
     setProcess(&daMozo_c::search_beam_proc);
 
@@ -274,87 +269,10 @@ void daMozo_c::search_beam_proc_init() {
 /* 00000DE0-00001230       .text search_beam_proc__8daMozo_cFv */
 void daMozo_c::search_beam_proc() {
     /* Nonmatching */
-    daPy_py_c* player = daPy_getPlayerActorClass();
-
-    if (mAnimMorf->getFrame() > 30.0f) {
-        cXyz sp48 = player->current.pos - m30C;
-        cXyz sp3C = m318 - m30C;
-        Quaternion sp60;
-        daObj::quat_rotVec(&sp60, sp3C, sp48);
-        C_QUATSlerp(&mQuatRotation, &sp60, &mQuatRotation, 0.2f);
-    }
-
-    anime_proc();
-
-    if (mAnimMorf->getFrame() > mAnimMorf->getEndFrame() - 1.0f) {
-        daBeam_c* beam1 = (daBeam_c*)getBeamActor(mBeam1ID);
-        daBeam_c* beam2 = (daBeam_c*)getBeamActor(mBeam2ID);
-
-        if (beam1 != NULL && beam2 != NULL) {
-            cXyz sp30 = m2E8 - m2DC;
-            f32 sp54 = sp30.x;
-            f32 sp58 = sp30.y;
-            f32 sp5C = sp30.z;
-            csXyz sp1C = csXyz::Zero;
-            sp1C.y = cM_atan2s(sp30.x, sp30.z);
-
-            Vec sp24 = {sp54, 0.0f, sp5C};
-            f32 mag = PSVECSquareMag(&sp24);
-            f32 dist = std::sqrtf(mag);
-            sp1C.x = cM_atan2s(-sp58, dist);
-
-            if (beam1->m690 == NULL) {
-                beam1->m690 = dComIfGp_particle_set(dPa_name::ID_AK_SN_LASERROOT00, &beam1->current.pos);
-            }
-            if (beam1->m5F4 == 0) {
-                beam1->m5A8 = 0.0f;
-                if (beam1->m588 < 5.0f) {
-                    beam1->m588 += 1.0f;
-                } else {
-                    beam1->m5A8 = 0.0f;
-                    beam1->m588 = 5.0f;
-                    beam1->m5F4 = 1;
-                }
-            } else {
-                beam1->m5A8 = 0.0f;
-                beam1->m588 = 5.0f;
-            }
-
-            beam1->current.pos = m2F4;
-            beam1->current.angle = sp1C;
-            beam1->m694 = 15.0f;
-
-            if (beam2->m690 == NULL) {
-                beam2->m690 = dComIfGp_particle_set(dPa_name::ID_AK_SN_LASERROOT00, &beam2->current.pos);
-            }
-            if (beam2->m5F4 == 0) {
-                beam2->m5A8 = 0.0f;
-                if (beam2->m588 < 5.0f) {
-                    beam2->m588 += 1.0f;
-                } else {
-                    beam2->m5A8 = 0.0f;
-                    beam2->m588 = 5.0f;
-                    beam2->m5F4 = 1;
-                }
-            } else {
-                beam2->m5A8 = 0.0f;
-                beam2->m588 = 5.0f;
-            }
-
-            beam2->current.pos = m300;
-            beam2->current.angle = sp1C;
-            beam2->m694 = 15.0f;
-        }
-    }
-
-    if (checkRange(1) == 0) {
-        towait_proc_init();
-    }
 }
 
 /* 00001230-000012C0       .text search_fire_proc_init__8daMozo_cFv */
 void daMozo_c::search_fire_proc_init() {
-    /* Nonmatching */
     setAnm(1, 0.0f);
     setProcess(&daMozo_c::search_fire_proc);
 
@@ -369,89 +287,10 @@ void daMozo_c::search_fire_proc_init() {
 /* 000012C0-000017F4       .text search_fire_proc__8daMozo_cFv */
 void daMozo_c::search_fire_proc() {
     /* Nonmatching */
-    if (mAnimMorf->getFrame() > 30.0f || mAnmIdx == 4 || mAnmIdx == 3) {
-        mDoMtx_stack_c::YrotS(current.angle.y);
-
-        cXyz sp64;
-        PSMTXMultVec(mDoMtx_stack_c::now, (Vec*)&l_HIO.m3C, &sp64);
-        PSVECAdd(&sp64, &current.pos, &sp64);
-        PSVECSubtract(&sp64, &m30C, &sp64);
-
-        cXyz sp58 = m318 - m30C;
-        Quaternion sp48;
-        daObj::quat_rotVec(&sp48, sp58, sp64);
-        C_QUATSlerp(&mQuatRotation, &sp48, &mQuatRotation, 0.2f);
-    }
-
-    anime_proc();
-
-    switch (mAnmIdx) {
-    case 1:
-    case 3:
-        if (mAnimMorf->getFrame() > mAnimMorf->getEndFrame() - 50.0f) {
-            if (mPtcl0 == NULL) {
-                mPtcl0 = dComIfGp_particle_set(dPa_name::ID_AK_SN_MOZFIRE00, &current.pos);
-            }
-            if (mPtcl1 == NULL) {
-                mPtcl1 = dComIfGp_particle_setToon(dPa_name::ID_AK_SN_MOZFIRE01, &current.pos);
-            }
-
-            mDoMtx_stack_c::copy(mAnimMorf->getModel()->getAnmMtx(MOZ_JNT_ATAMA_J_e));
-            mDoMtx_stack_c::XYZrotM(0x640, 0x4000, 0);
-            mDoMtx_stack_c::transM(0.0f, 50.0f, 52.0f);
-
-            if (mPtcl0 != NULL) {
-                mPtcl0->setGlobalRTMatrix(mDoMtx_stack_c::get());
-            }
-            if (mPtcl1 != NULL) {
-                mPtcl1->setGlobalRTMatrix(mDoMtx_stack_c::get());
-            }
-
-            cXyz sp3C = m33C - m330;
-            if (sp3C.normalizeRS() == 0) {
-                sp3C = cXyz::Zero;
-            }
-
-            cXyz sp30 = sp3C;
-            PSVECScale(&sp30, &sp30, std::min(45.0f * m370, 600.0f));
-            PSVECAdd(&sp30, &m330, &sp30);
-
-            mCps.SetStartEnd(m330, sp30);
-            mCps.SetR(std::min(3.0f * m370, 80.0f));
-            mCps.SetVec(sp3C);
-            dComIfG_Ccsp()->Set(&mCps);
-
-            mSoundPos = sp30;
-            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_MO_STATUE_FIRE, &mSoundPos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-            m370++;
-            if (m370 > 60) {
-                setAnm(4, 0.0f);
-                if (mPtcl0 != NULL) {
-                    mPtcl0->setRate(0.0f);
-                    mPtcl0->becomeInvalidEmitter();
-                    mPtcl0 = NULL;
-                }
-                if (mPtcl1 != NULL) {
-                    mPtcl1->setRate(0.0f);
-                    mPtcl1->becomeInvalidEmitter();
-                    mPtcl1 = NULL;
-                }
-                towait_proc_init();
-            }
-        }
-        break;
-    case 4:
-        if (mAnimMorf->getFrame() < 30.0f) {
-            setAnm(3, 8.0f);
-            m370 = 0;
-        }
-        break;
-    }
 }
 
 /* 000017F4-00001874       .text towait_proc_init__8daMozo_cFv */
 void daMozo_c::towait_proc_init() {
-    /* Nonmatching */
     setAnm(2, 0.0f);
     mAnimMorf->setPlaySpeed(-0.5f);
     setProcess(&daMozo_c::towait_proc);
@@ -462,7 +301,6 @@ void daMozo_c::towait_proc_init() {
 
 /* 00001874-00001B3C       .text towait_proc__8daMozo_cFv */
 void daMozo_c::towait_proc() {
-    /* Nonmatching */
     daBeam_c* beam1 = (daBeam_c*)getBeamActor(mBeam1ID);
     daBeam_c* beam2 = (daBeam_c*)getBeamActor(mBeam2ID);
 
@@ -534,7 +372,6 @@ void daMozo_c::towait_proc() {
 
 /* 00001B3C-00001D8C       .text checkRange__8daMozo_cFi */
 BOOL daMozo_c::checkRange(int i_param) {
-    /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (i_param == 0 && player->checkGrabWear()) {
         return 0;
@@ -569,7 +406,6 @@ BOOL daMozo_c::checkRange(int i_param) {
 
 /* 00001D8C-00001F70       .text setAnm__8daMozo_cFif */
 void daMozo_c::setAnm(int i_idx, float i_morf) {
-    /* Nonmatching */
     mAnmIdx = i_idx;
     J3DAnmTransform* res;
     f32 speed, start, end;
