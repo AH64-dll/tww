@@ -1332,9 +1332,8 @@ void daNpcAuction_c::setAnmTbl(sAnmDat* i_anm) {
     if ((s8)m748 > 0) {
         attr = 0;
     }
-    sAnmDat* anm = mpAnmDat;
-    if (mAnmNo != anm->mAnmNo || attr == 0) {
-        setAnm(anm->mAnmNo, attr, (f32)anm->mMorf);
+    if (mAnmNo != mpAnmDat->mAnmNo || attr == 0) {
+        setAnm(mpAnmDat->mAnmNo, attr, (f32)mpAnmDat->mMorf);
     }
 }
 
