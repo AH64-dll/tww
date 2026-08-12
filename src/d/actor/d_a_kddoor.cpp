@@ -237,14 +237,14 @@ void dDoor_ssk_c::calcMtx(dDoor_info_c* i_this) {
 static BOOL nodeCB(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        u16 jntNo = joint->getJntNo();
+        int jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         dDoor_ssk_sub_c* i_this = (dDoor_ssk_sub_c*)model->getUserArea();
         if (i_this != NULL && jntNo > 0 && jntNo <= 3) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            mDoMtx_YrotM(*calc_mtx, (s16)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->mAngle * i_this->m19E * 2)));
-            mDoMtx_XrotM(*calc_mtx, (s16)(2000.0f * JMASSin(i_this->mAngle * 0x28A + jntNo * 0x2EE0)));
-            mDoMtx_ZrotM(*calc_mtx, (s16)(4000.0f * JMASSin(jntNo * 0x3A98 + i_this->mAngle * i_this->m19E)));
+            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->mAngle * i_this->m19E * 2)));
+            mDoMtx_XrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(i_this->mAngle * 0x28A + jntNo * 0x2EE0)));
+            mDoMtx_ZrotM(*calc_mtx, (s16)(int)(4000.0f * JMASSin(jntNo * 0x3A98 + i_this->mAngle * i_this->m19E)));
             model->setAnmMtx(jntNo, *calc_mtx);
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
         }
