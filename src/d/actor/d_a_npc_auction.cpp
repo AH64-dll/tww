@@ -654,6 +654,7 @@ static s16 daNpcAuction_XyEventCB(void* i_this, int i_itemBtn) {
 }
 
 /* 00000EB4-00001038       .text createInit__14daNpcAuction_cFv */
+/* Nonmatching */
 cPhs_State daNpcAuction_c::createInit() {
     gravity = -9.0f;
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
@@ -685,6 +686,7 @@ cPhs_State daNpcAuction_c::createInit() {
 }
 
 /* 00001038-0000105C       .text wait_action_init__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::wait_action_init() {
     setAction(&daNpcAuction_c::wait_action);
 }
@@ -940,6 +942,7 @@ s16 daNpcAuction_c::XyEventCB(int i_itemBtn) {
 }
 
 /* 000019F8-00001CD4       .text next_msgStatus__14daNpcAuction_cFPUl */
+/* Nonmatching */
 u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
     daAuction_c* auction = (daAuction_c*)fopAcM_SearchByName(fpcNm_AUCTION_e);
     u16 status = 0xF;
@@ -1045,16 +1048,7 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
 /* Nonmatching */
 u32 daNpcAuction_c::getMsg() {
     if (mNpcNo == 0) {
-        u8 state = dComIfGp_event_getTalkXYBtn();
-        u8 is_xy_btn = 0;
-        switch (state) {
-        case 1:
-        case 2:
-        case 3:
-            is_xy_btn = 1;
-            break;
-        }
-        if (is_xy_btn) {
+        if (dComIfGp_event_chkTalkXY()) {
             if (dComIfGp_event_getPreItemNo() == 0x96) {
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1008)) {
                     m743 = 0;
@@ -1321,6 +1315,7 @@ void daNpcAuction_c::playAnm() {
 }
 
 /* 000026CC-0000278C       .text setAnm__14daNpcAuction_cFUcif */
+/* Nonmatching */
 void daNpcAuction_c::setAnm(u8 i_anm_no, int i_attr, f32 i_morf) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(
                        l_arcname_tbl[mDataNo], (u16)l_bck_ix_tbl[mDataNo][i_anm_no]),
@@ -1400,6 +1395,7 @@ inline cPhs_State daNpcAuction_c::create() {
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
+/* Nonmatching */
 static cPhs_State daNpc_AuctionCreate(void* i_this) {
     return ((daNpcAuction_c*)i_this)->create();
 }
