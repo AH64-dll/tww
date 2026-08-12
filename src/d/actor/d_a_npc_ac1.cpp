@@ -865,7 +865,7 @@ BOOL daNpc_Ac1_c::_execute() {
         }
         if (staff_id >= 0) {
             event_proc(staff_id);
-        } else if (mCurrActionFunc) {
+        } else {
             (this->*mCurrActionFunc)(NULL);
         }
         if (m860 == 0) {
