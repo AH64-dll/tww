@@ -484,6 +484,35 @@ s32 daNpcSv_c::_draw() {
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
 s32 daNpcSv_c::_execute() {
+    fopAc_ac_c* i_target;
+    fopAcM_SearchByID(parentActorID, &i_target);
+
+    chkAttention();
+    checkOrder();
+    if(!dComIfGp_event_runCheck()) {
+        (this->*moveProc[m739])();
+    } else {
+        eventMove();
+    }
+
+    eventOrder();
+    if(mNpcNo == 0 && m73D == 5) {
+        mpMorf->setFrame((f32)m718);
+    } else {
+        playAnm();
+    }
+
+    if(i_target != NULL) {
+        m718 = ((daObj_Ikada_c*)i_target)->m1154;
+    }
+
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].m38, l_npc_dat[mNpcNo].m3C);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].m24, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].m28, current.pos.z);
+    lookBack();
+    setMtx();
+
     return 0;
 }
 
@@ -765,7 +794,46 @@ void daNpcSv_c::setCollision(dCcD_Cyl* pCyl, cXyz pos, f32 radius, f32 height) {
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */
 u8 daNpcSv_c::getTalkNo() {
-    /* Nonmatching */
+    m746 = 0;
+    s32 bHook = dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e) != 0;
+    u16 flags = m734;
+
+    if (!(flags & 0x20)) {
+        if (!(flags & 1)) {
+            if (bHook) {
+                m746 = 1;
+            } else {
+                m746 = 0;
+            }
+        } else if (!(flags & 2)) {
+            if (bHook) {
+                m746 = 3;
+            } else {
+                m746 = 2;
+            }
+        } else if (bHook) {
+            m746 = 5;
+        } else {
+            m746 = 4;
+        }
+    } else if (!bHook) {
+        if (flags & 4) {
+            m746 = 7;
+        } else {
+            m746 = 6;
+        }
+    } else if (!dComIfGs_isCollect(0, 1)) {
+        if (m734 & 8) {
+            m746 = 9;
+        } else {
+            m746 = 8;
+        }
+    } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F80)) {
+        m746 = 0xA;
+    } else {
+        m746 = 0xB;
+    }
+    return m746;
 }
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
