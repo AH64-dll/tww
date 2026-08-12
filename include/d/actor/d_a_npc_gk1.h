@@ -133,7 +133,7 @@ public:
     /* 0x7B1 */ s8 m7B1;
     /* 0x7B2 */ s8 mTypeInit;
     /* 0x7B3 */ s8 mType;
-    /* 0x7B4 */ u8 m7B4;
+    /* 0x7B4 */ s8 m7B4;
     /* 0x7B5 */ s8 m7B5;
 };  // Size: 0x7B8
 

@@ -731,14 +731,14 @@ BOOL daNpc_Gk1_c::talk_1() {
 /* 00001C74-00001D30       .text wait_action1__11daNpc_Gk1_cFPv */
 BOOL daNpc_Gk1_c::wait_action1(void*) {
     switch (m7B4) {
-        case 9:
-            break;
         case 0:
             setStt(1);
             m7A7 = 1;
             m7B4++;
             break;
-        default:
+        case 1:
+        case 2:
+        case 3:
             m7A4 = chkAttention();
             switch (mAnmNum) {
                 case 1:
@@ -748,6 +748,10 @@ BOOL daNpc_Gk1_c::wait_action1(void*) {
                     mActionResult = talk_1();
                     break;
             }
+            break;
+        case 9:
+            break;
+        default:
             break;
     }
     return TRUE;
