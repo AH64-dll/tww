@@ -129,7 +129,7 @@ public:
     /* 0x7AD */ s8 mActNo;
     /* 0x7AE */ s8 mStatus;
     /* 0x7AF */ s8 mAnmNum;
-    /* 0x7B0 */ u8 m7B0;
+    /* 0x7B0 */ s8 m7B0;
     /* 0x7B1 */ s8 m7B1;
     /* 0x7B2 */ s8 mTypeInit;
     /* 0x7B3 */ s8 mType;

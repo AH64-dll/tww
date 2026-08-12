@@ -644,32 +644,36 @@ void daNpc_Gk1_c::setStt(s8 i_status) {
 
 /* 000017C8-000019E0       .text chk_attn__11daNpc_Gk1_cFv */
 u8 daNpc_Gk1_c::chk_attn() {
-    cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
-    f32 dist = std::sqrtf(diff.abs2XZ());
+    f32 dist = std::sqrtf((current.pos - dComIfGp_getPlayer(0)->current.pos).abs2XZ());
     f32 height_diff = current.pos.y - dComIfGp_getPlayer(0)->current.pos.y;
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     s16 angle_diff = target_angle - current.angle.y;
-    u8 ret = FALSE;
     if (m7B1 == 1) {
-        if (dist < 200.0f && (f32)abs(angle_diff) / 182.04f < 90.0f) {
-            if (std::fabsf(height_diff) < 300.0f) {
-                ret = TRUE;
-            }
+        u8 ret = FALSE;
+        BOOL flag = FALSE;
+        if (dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 90.0f) {
+            flag = TRUE;
         }
+        if (flag && std::fabsf(height_diff) < 300.0f) {
+            ret = TRUE;
+        }
+        return ret;
     } else {
-        if (dist < 200.0f && (f32)abs(angle_diff) / 182.04f < 60.0f) {
-            if (std::fabsf(height_diff) < 300.0f) {
-                ret = TRUE;
-            }
+        u8 ret = FALSE;
+        BOOL flag = FALSE;
+        if (dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 60.0f) {
+            flag = TRUE;
         }
+        if (flag && std::fabsf(height_diff) < 300.0f) {
+            ret = TRUE;
+        }
+        return ret;
     }
-    return ret;
 }
 
 /* 000019E0-00001B74       .text wait_1__11daNpc_Gk1_cFv */
 BOOL daNpc_Gk1_c::wait_1() {
-    cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
-    f32 dist = std::sqrtf(diff.abs2XZ());
+    f32 dist = std::sqrtf((current.pos - dComIfGp_getPlayer(0)->current.pos).abs2XZ());
     m7A7 = dist > 300.0f;
     if (m7A7) {
         cLib_addCalcAngleS(&current.angle.y, mPrevAngle.y, 4, 0x800, 0x80);
