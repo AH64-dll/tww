@@ -307,7 +307,11 @@ void daNpc_Gk1_c::chngAnmAtr(u8 i_anmAtr) {
 }
 
 /* 00000C68-00000C74       .text ctrlAnmAtr__11daNpc_Gk1_cFv */
-void daNpc_Gk1_c::ctrlAnmAtr() {}
+void daNpc_Gk1_c::ctrlAnmAtr() {
+    if (mAnmAtr == (s8)5) {
+        return;
+    }
+}
 
 /* 00000C74-00000CD8       .text setAnm_ATR__11daNpc_Gk1_cFv */
 void daNpc_Gk1_c::setAnm_ATR() {
@@ -536,10 +540,13 @@ BOOL daNpc_Gk1_c::chkAttention() {
 
 /* 0000143C-00001494       .text setAttention__11daNpc_Gk1_cFb */
 void daNpc_Gk1_c::setAttention(bool i_setEyePos) {
-    attention_info.position = current.pos;
-    attention_info.position.y = current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY;
+    attention_info.position.set(
+        current.pos.x,
+        current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY,
+        current.pos.z
+    );
     if (mActionResult != 0 || i_setEyePos) {
-        eyePos = mTargetPos;
+        eyePos.set(mTargetPos.x, mTargetPos.y, mTargetPos.z);
     }
 }
 
