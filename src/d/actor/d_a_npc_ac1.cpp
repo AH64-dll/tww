@@ -599,7 +599,7 @@ BOOL daNpc_Ac1_c::event_action() {
 void daNpc_Ac1_c::privateCut(int i_param_1) {
     if (i_param_1 != -1) {
         static char* a_cut_tbl[] = {
-            "ActNo",
+            "ACTION",
         };
         m86C = dComIfGp_evmng_getMyActIdx(i_param_1, a_cut_tbl, 1, TRUE, 0);
         if ((s8)m86C == -1) {
