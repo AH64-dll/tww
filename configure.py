@@ -1450,7 +1450,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kytag06"),
     ActorRel(Matching,    "d_a_kytag07"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp"),
-    ActorRel(NonMatching, "d_a_lod_bg"),
+    ActorRel(Equivalent, "d_a_lod_bg"),  # regalloc: loadModelData 99.944 pure regalloc (norm diff 0); weak order
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lwood"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_magma"),
     ActorRel(Matching,    "d_a_majuu_flag"),
@@ -1636,7 +1636,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_kb"), # regalloc: useHeapInit 99.80 / esa_demo_move 99.94
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(Matching,    "d_a_kita"),
-    ActorRel(NonMatching, "d_a_klft"),
+    ActorRel(Equivalent, "d_a_klft"),  # regalloc: ride_call_back/Execute/Create pure regalloc-anchor; weak order
     ActorRel(Matching,    "d_a_kmon"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_komore"),
     ActorRel(Matching,    "d_a_lbridge"),
