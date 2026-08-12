@@ -417,11 +417,12 @@ BOOL daGy_c::_createHeap() {
     }
 
     mCE4 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
-    if (mCE4 == NULL) {
+    if (mCE4 != NULL) {
+        jntHit = mCE4;
+        return TRUE;
+    } else {
         return FALSE;
     }
-    jntHit = mCE4;
-    return TRUE;
 }
 
 /* 00000AAC-00000C30       .text setMtx__6daGy_cFv */
