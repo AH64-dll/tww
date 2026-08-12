@@ -182,22 +182,22 @@ bool daNpc_Ac1_c::createInit() {
 void daNpc_Ac1_c::setMtx(bool i_param_1) {
     if (!mbInDemo) {
         plyTexPttrnAnm();
-        mbMorfAnimStopped = mpMorf->play(&mEyePos, 0, 0);
+        mbMorfAnimStopped = mpMorf->play(&eyePos, 0, 0);
         if (mpMorf->getFrame() < mFrame) {
             mbMorfAnimStopped = true;
         }
         mFrame = mpMorf->getFrame();
         if (mbHasArms) {
-            mpArmMorf->play(&mEyePos, 0, 0);
+            mpArmMorf->play(&eyePos, 0, 0);
         } else {
-            mpWingMorf->play(&mEyePos, 0, 0);
+            mpWingMorf->play(&eyePos, 0, 0);
         }
         mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
     cMtx_copy(mDoMtx_stack_c::get(), mpMorf->getModel()->getBaseTRMtx());
     mpMorf->calc();
     if (mbHasArms) {
@@ -205,7 +205,7 @@ void daNpc_Ac1_c::setMtx(bool i_param_1) {
     } else {
         mpWingMorf->calc();
     }
-    if (mbHasArms && mpItemModel != NULL) {
+    if (mpItemModel != NULL && mbHasArms) {
         cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num), mpItemModel->getBaseTRMtx());
         mpItemModel->calc();
     }
