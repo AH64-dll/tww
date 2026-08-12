@@ -45,7 +45,7 @@ public:
     bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(u32*);
-    s32 getBitMask();
+    s8 getBitMask();
     u32 getMsg_AC1_0();
     u32 getMsg();
     bool chkAttention();
@@ -133,8 +133,7 @@ private:
     /* 0x861 */ u8 m861;
     /* 0x862 */ u8 pad862[0x863 - 0x862];
     /* 0x863 */ u8 m863;
-    /* 0x864 */ u8 m864;
-    /* 0x865 */ u8 pad865[0x868 - 0x865];
+    /* 0x864 */ s32 m864;
     /* 0x868 */ u8 m868;
     /* 0x869 */ u8 m869;
     /* 0x86A */ u8 m86A;
@@ -143,17 +142,17 @@ private:
     /* 0x86D */ u8 m86D;
     /* 0x86E */ u8 mAnmAtr;
     /* 0x86F */ u8 mAnmTag;
-    /* 0x870 */ u8 mBtpNum;
-    /* 0x871 */ u8 mAnmNum;
+    /* 0x870 */ s8 mBtpNum;
+    /* 0x871 */ s8 mAnmNum;
     /* 0x872 */ u8 pad872[0x874 - 0x872];
-    /* 0x874 */ u8 m874;
-    /* 0x875 */ u8 mStatus;
+    /* 0x874 */ s8 m874;
+    /* 0x875 */ s8 mStatus;
     /* 0x876 */ u8 mPrevStatus;
-    /* 0x877 */ u8 mLookBackState;
+    /* 0x877 */ s8 mLookBackState;
     /* 0x878 */ u8 m878;
     /* 0x879 */ u8 m879;
-    /* 0x87A */ u8 mActionIndex;
-    /* 0x87B */ u8 m87B;
+    /* 0x87A */ s8 mActionIndex;
+    /* 0x87B */ s8 m87B;
 };  // Size: 0x87C
 
 class daNpc_Ac1_HIO_c : public mDoHIO_entry_c {

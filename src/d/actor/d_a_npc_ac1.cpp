@@ -123,12 +123,12 @@ void daNpc_Ac1_c::nodeAc1Control(J3DNode* i_node, J3DModel* i_model) {
 
 /* 000005A8-00000640       .text init_AC1_0__11daNpc_Ac1_cFv */
 u8 daNpc_Ac1_c::init_AC1_0() {
-    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04)) {
+    u8 ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) != 0;
+    if (ret != 0) {
         dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580);
         set_action(&daNpc_Ac1_c::wait_action1, NULL);
-        return TRUE;
     }
-    return FALSE;
+    return ret;
 }
 
 /* 00000640-000007C8       .text createInit__11daNpc_Ac1_cFv */
@@ -389,15 +389,15 @@ void daNpc_Ac1_c::eventOrder() {
 /* 00000F60-00000FA0       .text checkOrder__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::checkOrder() {
     u16 command = eventInfo.getCommand();
-    switch (command) {
-        case 1:
-            if (m874 == 1 || m874 == 2) {
-                m874 = 0;
-                m869 = 1;
-                return;
-            }
-        case 2:
-            return;
+    if (command == 2) {
+        return;
+    }
+    if (command != 1) {
+        return;
+    }
+    if ((s8)m874 == 1 || (s8)m874 == 2) {
+        m874 = 0;
+        m869 = 1;
     }
 }
 
@@ -495,7 +495,7 @@ u16 daNpc_Ac1_c::next_msgStatus(u32* i_msg_no) {
 }
 
 /* 0000128C-000012AC       .text getBitMask__11daNpc_Ac1_cFv */
-s32 daNpc_Ac1_c::getBitMask() {
+s8 daNpc_Ac1_c::getBitMask() {
     s32 result = 0;
     if ((s32)m879 != 0) {
     } else {
@@ -506,7 +506,7 @@ s32 daNpc_Ac1_c::getBitMask() {
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
 u32 daNpc_Ac1_c::getMsg_AC1_0() {
-    u8 event_reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_B8FF);
+    s8 event_reg = (s8)dComIfGs_getEventReg(dSv_event_flag_c::UNK_B8FF);
     s8 bit_mask = getBitMask();
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580)) {
         if (bit_mask & event_reg) {
@@ -631,16 +631,20 @@ BOOL daNpc_Ac1_c::set_action(ActionFunc i_action, void* i_param_2) {
 
 /* 00001770-000017D4       .text setStt__11daNpc_Ac1_cFSc */
 void daNpc_Ac1_c::setStt(s8 i_status) {
-    s8 previous_status = mStatus;
+    u8 previous_status = mStatus;
     m84C = 0;
     mStatus = i_status;
-    if (mStatus == 2) {
-        mAnmAtr = 0xFF;
-        mLookBackState = 1;
-        mPrevStatus = previous_status;
-        m_jnt.setTrn();
-    } else {
-        setAnm();
+    switch (mStatus) {
+        case 2:
+            mAnmAtr = 0xFF;
+            mLookBackState = 1;
+            mPrevStatus = previous_status;
+            m_jnt.setTrn();
+            break;
+        case 3:
+        default:
+            setAnm();
+            break;
     }
 }
 
