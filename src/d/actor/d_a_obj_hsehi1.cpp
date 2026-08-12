@@ -27,8 +27,8 @@ s16 daObj_hsh_c::XyCheckCB(int i_itemBtn) {
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
-static s16 daObj_hsh_XyEventCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyEventCB(void* i_this, int i_itemBtn) {
+    return ((daObj_hsh_c*)i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
