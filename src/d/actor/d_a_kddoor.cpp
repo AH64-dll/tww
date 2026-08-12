@@ -580,7 +580,7 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_this, f32 x, f32 z, u8 arg3) {
             mDoMtx_stack_c::YrotM(0x7FFF);
         }
         mDoMtx_stack_c::transM(x, 0.0f, z);
-        mDoMtx_stack_c::YrotM(mAngle);
+        mDoMtx_stack_c::YrotM(m19A);
         mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         mpMorf2->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 
