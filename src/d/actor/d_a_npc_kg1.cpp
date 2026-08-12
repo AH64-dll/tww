@@ -811,19 +811,23 @@ static BOOL daNpc_Kg1Draw(void* i_this) {
     dSnap_RegistFig(0x81, (fopAc_ac_c*)i_this, 1.0f, 1.0f, 1.0f);
     J3DModelData* modelData = self->mpMorf->getModel()->getModelData();
     g_env_light.settingTevStruct(0, &self->current.pos, &self->tevStr);
-    g_env_light.setLightTevColorType(self->mpMorf->getModel(), &self->tevStr);
-    g_env_light.setLightTevColorType(self->m6C4, &self->tevStr);
+    cXyz* pos = &self->current.pos;
+    dKy_tevstr_c* tevStr = &self->tevStr;
+    g_env_light.setLightTevColorType(self->mpMorf->getModel(), tevStr);
+    g_env_light.setLightTevColorType(self->m6C4, tevStr);
     self->m6F8.entry(modelData, self->m720);
     self->mpMorf->updateDL();
     self->m6F8.remove(modelData);
     if (self->m74F) {
-        self->mBtpAnm.entry(self->m6C4->getModelData(), (s16)self->mBtpAnm.getFrame());
+        J3DModelData* btpData = self->m6C4->getModelData();
+        s16 btpFrame = (s16)self->mBtpAnm.getFrame();
+        self->mBtpAnm.entry(btpData, btpFrame);
         mDoExt_modelUpdateDL(self->m6C4);
     }
-    cXyz shadow_pos(self->current.pos.x, self->current.pos.y + 150.0f, self->current.pos.z);
+    cXyz shadow_pos(pos->x, self->current.pos.y + 150.0f, self->current.pos.z);
     self->m724 = dComIfGd_setShadow(self->m724, 1, self->mpMorf->getModel(), &shadow_pos, 800.0f, 20.0f,
                                     self->current.pos.y, self->mObjAcch.GetGroundH(), self->mObjAcch.m_gnd,
-                                    &self->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+                                    tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     if (self->m779) {
         dComIfGp_setDoStatusForce(0x19);
     }
