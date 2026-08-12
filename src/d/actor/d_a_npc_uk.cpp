@@ -6,6 +6,40 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_uk.h"
 #include "m_Do/m_Do_ext.h"
+#include "res/Object/Uk.h"
+
+static fpc_ProcID l_msgId;
+static msg_class* l_msg;
+
+static const int l_bck_ix_tbl[] = {
+    dRes_INDEX_UK_BCK_UK_WAIT_e,
+    dRes_INDEX_UK_BCK_UK_TALK01_e,
+    dRes_INDEX_UK_BCK_UK_TALK02_e,
+    dRes_INDEX_UK_BCK_UK_WALK_e,
+    dRes_INDEX_UK_BCK_UK_RUN_e,
+    dRes_INDEX_UK_BCK_UK_KEIKAI_e,
+    dRes_INDEX_UK_BCK_UK_JIDA01_e,
+    dRes_INDEX_UK_BCK_UK_JIDA02_e,
+    dRes_INDEX_UK_BCK_UK_DA_e,
+    dRes_INDEX_UK_BCK_UK_JUMP_e,
+    dRes_INDEX_UK_BCK_UK_LAND_e,
+};
+
+static const int l_btp_ix_tbl[] = {
+    dRes_INDEX_UK_BTP_UK_MABA_C_e,
+};
+
+static const int head_bdl_table[] = {
+    dRes_INDEX_UK_BDL_UKHEAD_B_e,
+    dRes_INDEX_UK_BDL_UKHEAD_C_e,
+    dRes_INDEX_UK_BDL_UKHEAD_D_e,
+};
+
+static const int table_bmt[] = {
+    -1,
+    dRes_INDEX_UK_BMT_UK_C_e,
+    dRes_INDEX_UK_BMT_UK_D_e,
+};
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
 u8 daNpc_Uk_c::getType() {
@@ -112,8 +146,23 @@ void daNpc_Uk_c::playTexPatternAnm() {
 }
 
 /* 00001108-000011C0       .text setAnm__10daNpc_Uk_cFScUc */
-void daNpc_Uk_c::setAnm(signed char, unsigned char) {
-    /* Nonmatching */
+void daNpc_Uk_c::setAnm(s8 newAnmIdx, u8 i_flag) {
+    f32 morf = 8.0f;
+
+    if (newAnmIdx == 4 && mAnmIdx == 0xa) {
+        morf = 0.0f;
+    }
+
+    if (i_flag & 1) {
+        morf = 0.0f;
+        mAnmIdx = 0xb;
+    }
+
+    if (newAnmIdx != mAnmIdx && newAnmIdx != -1) {
+        mAnmIdx = newAnmIdx;
+        mAnmTimer = 0.0f;
+        dNpc_setAnm(mpMorf, J3DFrameCtrl::EMode_NULL, morf, 1.0f, l_bck_ix_tbl[mAnmIdx], -1, "Uk");
+    }
 }
 
 /* 000011C0-00001274       .text chkAttentionLocal__10daNpc_Uk_cFv */
@@ -157,13 +206,45 @@ void daNpc_Uk_c::setCollision() {
 }
 
 /* 00001660-00001730       .text msgAnm__10daNpc_Uk_cFUc */
-void daNpc_Uk_c::msgAnm(unsigned char) {
-    /* Nonmatching */
+void daNpc_Uk_c::msgAnm(u8 i_msgAnmIdx) {
+    if (mMsgAnmIdx == i_msgAnmIdx) {
+        return;
+    }
+
+    mMsgAnmIdx = i_msgAnmIdx;
+
+    switch (mMsgAnmIdx) {
+    case 0:
+        setAnm(0, 0);
+        break;
+    case 1:
+        setAnm(1, 0);
+        break;
+    case 2:
+        setAnm(2, 0);
+        break;
+    case 3:
+        setAnm(3, 0);
+        break;
+    case 4:
+        setAnm(4, 0);
+        break;
+    case 5:
+        setAnm(6, 0);
+        break;
+    case 6:
+        setAnm(5, 0);
+        break;
+    case 7:
+        setAnm(8, 0);
+        break;
+    }
 }
 
 /* 00001730-00001744       .text talkInit__10daNpc_Uk_cFv */
 void daNpc_Uk_c::talkInit() {
-    /* Nonmatching */
+    mTalkState = TALK_INIT;
+    mMsgAnmIdx = 0xFF;
 }
 
 /* 00001744-000018F0       .text talk__10daNpc_Uk_cFv */
