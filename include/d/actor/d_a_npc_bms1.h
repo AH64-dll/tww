@@ -101,11 +101,11 @@ public:
     /* 0x528 */ dBgS_AcchCir mAcchCir;
     /* 0x568 */ dCcD_Stts mStts;
     /* 0x5A4 */ dCcD_Cyl mCyl;
-    /* 0x6D4 */ s8 m_hairL_jnt_num;
-    /* 0x6D5 */ s8 m_hairR_jnt_num;
-    /* 0x6D6 */ s8 m6D6;
-    /* 0x6D7 */ s8 m6D7;
-    /* 0x6D8 */ s8 m6D8;
+    /* 0x6D4 */ s8 m_head_jnt_num;
+    /* 0x6D5 */ s8 m_backbone_jnt_num;
+    /* 0x6D6 */ s8 m_hairL_jnt_num;
+    /* 0x6D7 */ s8 m_hairR_jnt_num;
+    /* 0x6D8 */ s8 m_leg_jnt_num;
     /* 0x6D9 */ u8 m6D9[0x6DC - 0x6D9];
     /* 0x6DC */ dNpc_JntCtrl_c mJntCtrl;
     /* 0x710 */ dNpc_EventCut_c mEventCut;

@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bms1.h"
 #include "d/d_cc_d.h"
+#include "d/d_vibration.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -37,6 +38,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+
+static daNpc_Bms1_HIO_c l_HIO;
 
 /* 000000EC-00000108       .text __ct__21daNpc_Bms1_childHIO_cFv */
 daNpc_Bms1_childHIO_c::daNpc_Bms1_childHIO_c() {
@@ -122,8 +125,12 @@ void daNpc_Bms1_c::setAnm(s8, f32) {
 }
 
 /* 00000E78-00000EBC       .text setTexAnm__12daNpc_Bms1_cFSc */
-void daNpc_Bms1_c::setTexAnm(s8) {
-    /* Nonmatching */
+void daNpc_Bms1_c::setTexAnm(s8 i_texNo) {
+    u8 texNo = mBtpIdx;
+    if ((s8)texNo != i_texNo || (s8)texNo == -1) {
+        mBtpIdx = i_texNo;
+        initTexPatternAnm(TRUE);
+    }
 }
 
 /* 00000EBC-00001100       .text setAnmFromMsgTag__12daNpc_Bms1_cFv */
@@ -163,7 +170,7 @@ void daNpc_Bms1_c::setCollision() {
 
 /* 0000191C-00001928       .text talkInit__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::talkInit() {
-    /* Nonmatching */
+    m8A1[0] = 0;
 }
 
 /* 00001928-00001A34       .text normal_talk__12daNpc_Bms1_cFv */
@@ -187,8 +194,11 @@ BOOL daNpc_Bms1_c::CreateInit() {
 }
 
 /* 00002104-00002144       .text setAttention__12daNpc_Bms1_cFb */
-void daNpc_Bms1_c::setAttention(bool) {
-    /* Nonmatching */
+void daNpc_Bms1_c::setAttention(bool i_attn) {
+    if (i_attn || m7CB[0] < 2) {
+        m2B4 = mAttnBasePos;
+        m2B4.y += l_HIO.mChild[0].mNpc.mAttnYOffset;
+    }
 }
 
 /* 00002144-000021F4       .text checkPlayerLanding__12daNpc_Bms1_cFv */
@@ -243,12 +253,14 @@ BOOL daNpc_Bms1_c::evn_talk() {
 
 /* 00002DD8-00002E30       .text evn_viblation_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_viblation_init(int) {
-    /* Nonmatching */
+    dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+    return TRUE;
 }
 
 /* 00002E30-00002E68       .text evn_head_swing_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_head_swing_init(int) {
-    /* Nonmatching */
+    mHeadAnm.swing_vertical_init(1, 0x1800, 0x1000, 1);
+    return TRUE;
 }
 
 /* 00002E68-00002FBC       .text privateCut__12daNpc_Bms1_cFv */
@@ -263,7 +275,7 @@ BOOL daNpc_Bms1_c::demo_move() {
 
 /* 000030A4-000030B0       .text demo_end_init__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::demo_end_init() {
-    /* Nonmatching */
+    m7E9 = 0;
 }
 
 /* 000030B0-00003314       .text _draw__12daNpc_Bms1_cFv */
