@@ -511,7 +511,24 @@ s32 daObjFtree::Act_c::action_waitL_init(s16) {
 
 /* 000018AC-000019BC       .text action_waitL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitL_main() {
-    /* Nonmatching */
+    if (mMode == 3) {
+        if (dKy_rain_check() != 0) {
+            process_init(0xC, -1);
+            return;
+        }
+        if ((s32)cM_rndF(30.0f) == 0) {
+            process_init(0xC, 100.0f + 80.0f * cM_rndF(1.0f));
+            return;
+        }
+        if (m356 != -1) {
+            process_init(0xC, -1);
+            return;
+        }
+    } else if (mMode == 0xC) {
+        if (dKy_rain_check() == 0 && m69A == -1 && m356 == -1) {
+            process_init(3, 0);
+        }
+    }
 }
 
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
