@@ -564,8 +564,11 @@ void daNpc_De1_c::ccCreate() {
         0x00000002, 0x00000102, 0x00000002, 0x00000102, 0x00000002,
         0x00000102, 0x00000002, 0x00000102, 0x00000002, 0x00000102,
     };
+    struct cc_prm_tbl_c {
+        u64 pairs[5];
+    };
     u32 prm_tbl[10];
-    memcpy(prm_tbl, a_cc_prm_tbl, sizeof(prm_tbl));
+    *(cc_prm_tbl_c*)prm_tbl = *(const cc_prm_tbl_c*)a_cc_prm_tbl;
     for (int i = 0; i < 10; i++) {
         m_cc_ID[i] = fopAcM_create(fpcNm_CC_e, prm_tbl[i], &current.pos, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
         JUT_ASSERT(0x373, m_cc_ID[ i] != fpcM_ERROR_PROCESS_ID_e);
