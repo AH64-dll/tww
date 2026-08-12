@@ -282,11 +282,12 @@ BOOL daNpc_Ac1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
     }
     mAnmNum = i_anmPrmP->anmNum;
     dNpc_setAnmIDRes(mpMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, anmNum_toResID(mAnmNum), -1, "Ac");
+    int wing_res_id = wingAnmNum_toResID(mAnmNum);
     mbHasArms = i_anmPrmP->hasArms == 1;
     if (mbHasArms) {
-        dNpc_setAnmIDRes(mpArmMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum_toResID(mAnmNum), -1, "Ac");
+        dNpc_setAnmIDRes(mpArmMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wing_res_id, -1, "Ac");
     } else {
-        dNpc_setAnmIDRes(mpWingMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum_toResID(mAnmNum), -1, "Ac");
+        dNpc_setAnmIDRes(mpWingMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wing_res_id, -1, "Ac");
     }
     mFrame = 0.0f;
     m859 = 0;
@@ -495,11 +496,14 @@ u16 daNpc_Ac1_c::next_msgStatus(u32* i_msg_no) {
 }
 
 /* 0000128C-000012AC       .text getBitMask__11daNpc_Ac1_cFv */
-s8 daNpc_Ac1_c::getBitMask() {
+s32 daNpc_Ac1_c::getBitMask() {
     s32 result = 0;
-    if ((s32)m879 != 0) {
-    } else {
-        result = 0x10;
+    switch (m879) {
+        case 0:
+            result = 0x10;
+            break;
+        default:
+            break;
     }
     return result;
 }

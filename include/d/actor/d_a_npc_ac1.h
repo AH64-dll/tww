@@ -45,7 +45,7 @@ public:
     bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(u32*);
-    s8 getBitMask();
+    s32 getBitMask();
     u32 getMsg_AC1_0();
     u32 getMsg();
     bool chkAttention();
@@ -127,7 +127,7 @@ private:
     /* 0x85B */ u8 m85B;
     /* 0x85C */ u8 pad85C[0x85D - 0x85C];
     /* 0x85D */ u8 m85D;
-    /* 0x85E */ u8 mbHasArms;
+    /* 0x85E */ bool mbHasArms;
     /* 0x85F */ u8 m85F;
     /* 0x860 */ u8 m860;
     /* 0x861 */ u8 m861;
