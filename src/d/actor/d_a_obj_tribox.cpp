@@ -511,9 +511,10 @@ namespace daObjTribox {
     /* 0000197C-00001A08       .text search_block__Q211daObjTribox5Act_cFPvPv */
     fopAc_ac_c* Act_c::search_block(void* i_actor, void* i_self) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+        fopAc_ac_c* self = (fopAc_ac_c*)i_self;
         if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Tribox_e &&
             ((Act_c*)actor)->prm_get_type() == 0 &&
-            fopAcM_searchActorDistance2((fopAc_ac_c*)i_self, actor) < 225.0f)
+            fopAcM_searchActorDistance2(self, actor) < 225.0f)
         {
             return actor;
         }
