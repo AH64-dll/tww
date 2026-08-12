@@ -736,8 +736,63 @@ void action_demo(pw_class*) {
 }
 
 /* 00004FFC-000052B8       .text action_torituku__FP8pw_class */
-void action_torituku(pw_class*) {
-    /* Nonmatching */
+void action_torituku(pw_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* playerPtr = dComIfGp_getLinkPlayer();
+    cXyz local = player->current.pos;
+    u8 flag = 0;
+
+    switch (i_this->mMode) {
+    case 0x50:
+        for (int i = 0; i < 4; i++) {
+            i_this->m384[i] = 0;
+        }
+        i_this->m378 = 0x12C;
+        i_this->m33E = 1;
+        i_this->actor_status |= fopAcStts_UNK4000_e;
+        player->onConfuse();
+        i_this->mMode += 1;
+        // Fall-through
+    case 0x51:
+        JAIZelBasic::zel_basic->seStart(JA_SE_LK_NOW_CURSE_PW, &i_this->eyePos, 0,
+                                        dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                        -1.0f, -1.0f, 0);
+        i_this->m384[0] += 0x2BC;
+        local.y = 7.0f + player->current.pos.y + 10.0f * cM_ssin(i_this->m384[0]);
+        i_this->current.pos.x = local.x;
+        i_this->current.pos.y = local.y;
+        i_this->current.pos.z = local.z;
+        i_this->shape_angle.y += 0x3E8;
+        if (i_this->m378 == 0 || dComIfGp_getDetect().chk_light(&i_this->current.pos) ||
+            dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e) || player->getDamageWaitTimer() != 0 ||
+            player != playerPtr || player->checkFairyUse())
+        {
+            flag = 1;
+        }
+        break;
+    }
+    if (i_this->mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = i_this->mCyl.GetTgHitObj();
+        if (hitObj != NULL && (hitObj->GetAtType() & AT_TYPE_LIGHT)) {
+            flag = 1;
+        }
+    }
+    if (flag) {
+        if (i_this->m343) {
+            i_this->m343 = 0;
+            TORITUKI_ON = false;
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_CURSE_END, &i_this->eyePos, 0,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+        }
+        i_this->m384[3] = 1;
+        i_this->m38E = 0;
+        i_this->m39A = 0xFF;
+        player->offConfuse();
+        i_this->mAction = 2;
+        i_this->mMode = 0x3C;
+    }
+    cLib_addCalcAngleS2(&i_this->m39A, 0xFF, 1, 0xA);
 }
 
 /* 000052B8-00005CA4       .text action_big_demo__FP8pw_class */
