@@ -496,7 +496,17 @@ void daGy_c::setCollision() {
 
 /* 00000F3C-00000FC4       .text setAimSpeedF__6daGy_cFv */
 void daGy_c::setAimSpeedF() {
-    /* Nonmatching */
+    if (mpCtrl->m320 == 0) {
+        m4F0 = l_HIO.m48;
+        if (mpMorf->getFrame() > l_HIO.mCC && mpMorf->getFrame() < l_HIO.mD0) {
+            m4F0 = l_HIO.m4C;
+        }
+    } else {
+        m4F0 = l_HIO.m50;
+        if (mpMorf->getFrame() > l_HIO.mCC && mpMorf->getFrame() < l_HIO.mD0) {
+            m4F0 = l_HIO.m54;
+        }
+    }
 }
 
 /* 00000FC4-00000FDC       .text modeDiveInit__6daGy_cFv */
