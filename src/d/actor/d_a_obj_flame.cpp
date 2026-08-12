@@ -851,9 +851,9 @@ BOOL daObjFlame::Method::Draw(void* i_this) {
     g_env_light.settingTevStruct(0, &a_this->current.pos, tevStr);
     g_env_light.setLightTevColorType(a_this->mpModel, tevStr);
 
-    a_this->mpBtkAnm->entry(a_this->mpModel->getModelData(), a_this->mpBtkAnm->getFrameCtrl()->getFrame());
+    a_this->mpBtkAnm->entry(a_this->mpModel->getModelData());
     if (a_this->mpBrkAnm != NULL) {
-        a_this->mpBrkAnm->entry(a_this->mpModel->getModelData(), a_this->mpBrkAnm->getFrameCtrl()->getFrame());
+        a_this->mpBrkAnm->entry(a_this->mpModel->getModelData());
     }
 
     j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListFilter, 0);
