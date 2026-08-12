@@ -67,7 +67,7 @@ static void* searchActor_leafLift(void* i_actor, void*) {
 }
 
 /* 000001BC-0000033C       .text createInit__11daNpc_De1_cFv */
-BOOL daNpc_De1_c::createInit() {
+bool daNpc_De1_c::createInit() {
     mEventCut.setActorInfo2("De1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x15;
@@ -1057,7 +1057,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002520-000027A4       .text _create__11daNpc_De1_cFv */
 cPhs_State daNpc_De1_c::_create() {
-    /* Nonmatching */
     fopAcM_ct_Retail(this, daNpc_De1_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "De");
     if (state != cPhs_COMPLEATE_e) {
@@ -1072,14 +1071,15 @@ cPhs_State daNpc_De1_c::_create() {
     l_HIO.mRefCount++;
     {
         static int a_heap_size_tbl[] = {0x272E0};
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl[mType])) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl[mType])) {
+            fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+            dComIfG_Bgsp()->Regist(mpDeform, this);
+        } else {
             return cPhs_ERROR_e;
         }
     }
-    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
-    dComIfG_Bgsp()->Regist(mpDeform, this);
     if (!createInit()) {
-        return cPhs_ERROR_e;
+        state = cPhs_ERROR_e;
     }
     return state;
 }

@@ -28,7 +28,7 @@ public:
         /* 0x7 */ ANM_END,
     };
 
-    BOOL createInit();
+    bool createInit();
     void setMtx();
     BOOL anmResID(int, int*, int*);
     BOOL setAnm_anm(anm_prm_c*);
