@@ -355,7 +355,8 @@ void daObjTrap_c::set_vib_mode() {
     mVibPos = cXyz::Zero;
     mVibMode = 2;
 
-    cXyz pos = mDir * 150.0f + current.pos;
+    cXyz pos = mDir * 150.0f;
+    PSVECAdd(&pos, &current.pos, &pos);
     cXyz dir = mDir * -1.0f;
     pos.y += 50.0f;
     daObj::HitEff_hibana(&pos, &dir);
