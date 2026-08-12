@@ -3,22 +3,69 @@
 
 #include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
+#include "m_Do/m_Do_ext.h"
 
 namespace daObjTry {
-    enum Type_e {
-        UNK_2 = 2,
-        UNK_3 = 3,
-        UNK_4 = 4,
-        UNK_5 = 5,
-        UNK_6 = 6,
-        UNK_7 = 7,
-        UNK_8 = 8,
-        UNK_9 = 9,
-        UNK_10 = 10,
-        UNK_11 = 11,
-        UNK_12 = 12,
-    };
-    
+    class Act_c;
+
+    struct Attr_c {
+        /* 0x00 */ f32 mGravity;
+        /* 0x04 */ f32 m04;
+        /* 0x08 */ f32 m08;
+        /* 0x0C */ u8 m0C;
+        /* 0x0D */ u8 m0D;
+        /* 0x0E */ u8 m0E;
+        /* 0x0F */ u8 m0F;
+        /* 0x10 */ f32 m10;
+        /* 0x14 */ f32 m14;
+        /* 0x18 */ f32 m18;
+        /* 0x1C */ f32 m1C;
+        /* 0x20 */ f32 m20;
+        /* 0x24 */ f32 m24;
+        /* 0x28 */ f32 m28;
+        /* 0x2C */ f32 m2C;
+        /* 0x30 */ f32 m30;
+        /* 0x34 */ u16 m34;
+        /* 0x36 */ u16 m36;
+        /* 0x38 */ f32 m38;
+        /* 0x3C */ f32 m3C;
+        /* 0x40 */ u8 m40;
+        /* 0x41 */ u8 m41;
+        /* 0x42 */ u8 m42;
+        /* 0x43 */ u8 m43;
+        /* 0x44 */ u8 m44;
+        /* 0x45 */ u8 m45;
+        /* 0x46 */ s16 m46;
+        /* 0x48 */ s16 m48;
+        /* 0x4A */ u8 m4A;
+        /* 0x4B */ u8 m4B;
+        /* 0x4C */ u8 m4C;
+        /* 0x4D */ u8 m4D;
+        /* 0x4E */ u8 m4E;
+        /* 0x4F */ u8 m4F;
+        /* 0x50 */ u32 m50;
+        /* 0x54 */ u32 m54;
+        /* 0x58 */ u32 m58;
+        /* 0x5C */ u32 m5C;
+        /* 0x60 */ u32 m60;
+        /* 0x64 */ f32 m64;
+        /* 0x68 */ f32 m68;
+        /* 0x6C */ f32 m6C;
+        /* 0x70 */ u8 m70;
+        /* 0x71 */ u8 m71;
+        /* 0x72 */ u8 m72;
+        /* 0x73 */ u8 m73;
+        /* 0x74 */ u8 m74;
+        /* 0x75 */ u8 m75;
+        /* 0x76 */ u8 m76;
+        /* 0x77 */ u8 m77;
+    };  // Size: 0x78
+
+    STATIC_ASSERT(sizeof(Attr_c) == 0x78);
+
     class Act_c : public fopAc_ac_c {
     public:
         enum Prm_e {
@@ -29,25 +76,23 @@ namespace daObjTry {
             PRM_TYPE_W = 4,
         };
 
-        void attr() const {}
-        void prm_chk_type_tryStatue() const {}
-        void prm_get_dummy() const {}
         int prm_get_swSave() const {
             return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
         }
         int prm_get_type() const {
             return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
         }
-        void to_correct_pos(const cXyz* param_1, short param_2, bool param_3, bool param_4) {
-            field_0x63C.set(*param_1);
-            field_0x648 = param_2;
-            field_0x64C = param_3;
-            field_0x64D = param_4;
-        }
-    
+        const Attr_c& attr() const { return M_attr[mType]; }
+
+        static const char M_arcname[];
+        static const dCcD_SrcCyl M_cyl_src;
+        static const Attr_c M_attr[13];
+        static u8 M_bingo;
+        static u8 M_restart;
+
         void prm_set_swSave(int);
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        s32 solidHeapCB(fopAc_ac_c*);
+        s32 create_heap();
         void init_cc();
         void search_sameType(void*, void*);
         void chk_appear() const;
@@ -88,16 +133,40 @@ namespace daObjTry {
         void get_water_h();
         bool _execute();
         bool _draw();
-    
+
     public:
-        /* 0x290 */ u8 field_0x290[0x63C - 0x290];
-        /* 0x63C */ cXyz field_0x63C;
-        /* 0x648 */ s16 field_0x648;
-        /* 0x64A */ u8 field_0x64A[0x64C - 0x64A];
-        /* 0x64C */ s8 field_0x64C;
-        /* 0x64D */ s8 field_0x64D;
-        /* 0x64E */ u8 field_0x64E[0x66C - 0x64E];
+        /* 0x290 */ request_of_phase_process_class mPhase;
+        /* 0x298 */ J3DModel* mpModel;
+        /* 0x29C */ mDoExt_brkAnm mBrkAnm;
+        /* 0x2B4 */ dBgS_Acch mAcch;
+        /* 0x478 */ dBgS_AcchCir mAcchCir;
+        /* 0x4B8 */ dCcD_Stts mStts;
+        /* 0x4F4 */ dCcD_Cyl mCyl;
+        /* 0x624 */ int mType;
+        /* 0x628 */ int mMode;
+        /* 0x62C */ u32 m62C;
+        /* 0x630 */ s16 m630;
+        /* 0x632 */ s16 m632;
+        /* 0x634 */ u8 m634;
+        /* 0x635 */ u8 m635;
+        /* 0x636 */ u8 m636;
+        /* 0x638 */ f32 m638;
+        /* 0x63C */ cXyz m63C;
+        /* 0x648 */ s16 m648;
+        /* 0x64A */ s16 m64A;
+        /* 0x64C */ s8 m64C;
+        /* 0x64D */ s8 m64D;
+        /* 0x64E */ u8 m64E;
+        /* 0x64F */ u8 m64F;
+        /* 0x650 */ u8 m650;
+        /* 0x651 */ u8 m651;
+        /* 0x652 */ u8 m652;
+        /* 0x653 */ u8 m653;
+        /* 0x654 */ dPa_followEcallBack mFollowCb;
+        /* 0x668 */ u32 m668;
     };  // Size: 0x66C
+
+    STATIC_ASSERT(sizeof(Act_c) == 0x66C);
 };
 
 #endif /* D_A_OBJ_TRY_H */
