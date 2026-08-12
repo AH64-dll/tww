@@ -98,8 +98,9 @@ int daObjTrap_c::create_heap() {
             JUT_ASSERT(0x16c, btk_data != NULL);
             if (btk_data) {
                 if (mBtk.init(mdl_data, btk_data, TRUE, 0)) {
+                    Mtx* baseMtx = &mpModel->getBaseTRMtx();
                     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRAP_DZB_HTORA1_e);
-                    mpBgW = dBgW_NewSet(bgd, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+                    mpBgW = dBgW_NewSet(bgd, cBgW::MOVE_BG_e, baseMtx);
                     if (mpBgW) {
                         ret = 1;
                     }
@@ -520,7 +521,8 @@ bool daObjTrap_c::_execute() {
 bool daObjTrap_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    mBtk.entry(mpModel->getModelData(), mBtk.getFrame());
+    J3DModelData* modelData = mpModel->getModelData();
+    mBtk.entry(modelData, mBtk.getFrame());
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setSimpleShadow2(&current.pos, mGroundY, 150.0f, mGndChk, 0, 1.0f,
                               &dDlst_shadowControl_c::mSimpleTexObj);
