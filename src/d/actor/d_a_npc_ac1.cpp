@@ -527,15 +527,13 @@ u32 daNpc_Ac1_c::getMsg_AC1_0() {
         if ((s8)bit_mask & event_reg) {
             return 0x1853;
         }
-        u8 new_reg = event_reg | (s8)bit_mask;
-        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, new_reg);
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, event_reg | (s8)bit_mask);
         return 0x1850;
     }
     if ((s8)bit_mask & event_reg) {
         return 0x184F;
     }
-    u8 new_reg = event_reg | (s8)bit_mask;
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, new_reg);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, event_reg | (s8)bit_mask);
     return 0x184C;
 }
 
@@ -607,16 +605,26 @@ void daNpc_Ac1_c::privateCut(int i_param_1) {
             return;
         }
         if (dComIfGp_evmng_getIsAddvance(i_param_1)) {
-            if (m86C == 0) {
-                event_actionInit(i_param_1);
+            switch (m86C) {
+                case 0:
+                    event_actionInit(i_param_1);
+                    break;
             }
         }
-        if (m86C != 0 ? TRUE : event_action()) {
+        int result;
+        switch (m86C) {
+            case 0:
+                result = event_action();
+                break;
+            default:
+                result = TRUE;
+                break;
+        }
+        if ((u8)result) {
             dComIfGp_evmng_cutEnd(i_param_1);
         }
     }
 }
-
 /* 00001614-00001634       .text endEvent__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::endEvent() {
     dComIfGp_event_reset();
