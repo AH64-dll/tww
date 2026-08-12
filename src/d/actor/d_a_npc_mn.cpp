@@ -1148,7 +1148,7 @@ void daNpcMn_c::eventLookInit() {
 
 /* 00002964-00002988       .text eventLook__9daNpcMn_cFv */
 s32 daNpcMn_c::eventLook() {
-    return shape_angle.y == m7A0;
+    return mpMorf->getFrame() >= 72.0f;
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
