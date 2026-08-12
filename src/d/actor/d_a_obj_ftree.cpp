@@ -322,9 +322,10 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
 BOOL daObjFtree::is_broughtID(int i_id) {
-    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
-    BOOL ret = TRUE;
-    if (((reg >> (i_id & 7)) & 1) == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == 0) {
+    u8 ret = TRUE;
+    dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
+    u8 reg = event->getEventReg(dSv_event_flag_c::UNK_9EFF);
+    if (((reg >> (i_id & 7)) & 1) == 0 && event->isEventBit(dSv_event_flag_c::UNK_0102) == 0) {
         ret = FALSE;
     }
     return ret;
