@@ -511,18 +511,20 @@ s32 daNpc_Ac1_c::getBitMask() {
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
 u32 daNpc_Ac1_c::getMsg_AC1_0() {
     s8 event_reg = (s8)dComIfGs_getEventReg(dSv_event_flag_c::UNK_B8FF);
-    s8 bit_mask = getBitMask();
+    s32 bit_mask = getBitMask();
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580)) {
-        if (bit_mask & event_reg) {
+        if ((s8)bit_mask & event_reg) {
             return 0x1853;
         }
-        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, event_reg | bit_mask);
+        u8 new_reg = event_reg | (s8)bit_mask;
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, new_reg);
         return 0x1850;
     }
-    if (bit_mask & event_reg) {
+    if ((s8)bit_mask & event_reg) {
         return 0x184F;
     }
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, event_reg | bit_mask);
+    u8 new_reg = event_reg | (s8)bit_mask;
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, new_reg);
     return 0x184C;
 }
 
