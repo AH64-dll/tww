@@ -4,6 +4,7 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "JAZelAudio/JAIZelBasic.h"
 #include "d/actor/d_a_mozo.h"
 #include "res/Object/Mozo.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,6 +16,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_cc_d.h"
+#include "d/actor/d_a_player.h"
 
 static dCcD_SrcCps cps_src = {
     // dCcD_SrcGObjInf
@@ -48,6 +50,7 @@ static dCcD_SrcCps cps_src = {
 
 
 static daMozo_HIO_c l_HIO;
+u8 daMozo_c::m_event_flag;
 
 /* 000000EC-000001D0       .text __ct__12daMozo_HIO_cFv */
 daMozo_HIO_c::daMozo_HIO_c() {
@@ -158,7 +161,23 @@ void daMozo_c::wait_proc_init() {
 
 /* 00000C90-00000D58       .text wait_proc__8daMozo_cFv */
 void daMozo_c::wait_proc() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (checkRange(0) && !player->checkPlayerFly()) {
+        switch (field_0x376) {
+        case 0:
+            search_beam_proc_init();
+            break;
+        case 1:
+            search_fire_proc_init();
+            break;
+        case 2:
+            search_beam_proc_init();
+            break;
+        }
+        if (m_event_flag == 0) {
+            field_0x377 = 1;
+        }
+    }
 }
 
 /* 00000D58-00000DE0       .text search_beam_proc_init__8daMozo_cFv */
@@ -192,7 +211,7 @@ void daMozo_c::towait_proc() {
 }
 
 /* 00001B3C-00001D8C       .text checkRange__8daMozo_cFi */
-void daMozo_c::checkRange(int) {
+BOOL daMozo_c::checkRange(int) {
     /* Nonmatching */
 }
 
@@ -257,7 +276,13 @@ cPhs_State daMozo_c::_create() {
 
 /* 000023B0-0000242C       .text _delete__8daMozo_cFv */
 bool daMozo_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Mozo");
+    JAIZelBasic::zel_basic->seDeleteObject((Vec*)&mSoundPos);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_root.deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    return true;
 }
 
 /* 0000242C-00002498       .text getBeamActor__8daMozo_cFUi */
@@ -272,7 +297,22 @@ fopAc_ac_c* daMozo_c::getBeamActor(fpc_ProcID apid) {
 
 /* 00002498-00002588       .text event_move__8daMozo_cFv */
 void daMozo_c::event_move() {
-    /* Nonmatching */
+    if (m_event_flag != 2) {
+        if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
+            field_0x377 = 0;
+            m_event_flag = 1;
+        }
+        if (m_event_flag == 1) {
+            if (dComIfGp_getPEvtManager()->endCheckOld("MOZO_CAM")) {
+                dComIfGp_event_onEventFlag(8);
+                m_event_flag = 2;
+            }
+        }
+        if (m_event_flag == 0 && field_0x377 == 1) {
+            fopAcM_orderOtherEvent2(this, "MOZO_CAM", dEvtFlag_NOPARTNER_e, 0xFFFF);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+    }
 }
 
 /* 00002588-000025DC       .text _execute__8daMozo_cFv */
