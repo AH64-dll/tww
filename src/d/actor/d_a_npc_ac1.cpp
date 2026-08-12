@@ -141,38 +141,41 @@ bool daNpc_Ac1_c::createInit() {
     u8 path_no = (fopAcM_GetParam(this) >> 16) & 0xFF;
     if (path_no != 0xFF) {
         mPathRun.setInf(path_no, fopAcM_GetRoomNo(this), true);
-        if (!mPathRun.isPath()) {
+        if (mPathRun.isPath()) {
+            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+        } else {
             return false;
         }
-        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
     }
 
     mEventCut.setActorInfo2("Ac1", this);
     mAnmNum = 4;
 
-    u8 init_success = 0;
+    u8 init_success;
     switch (m879) {
         case 0:
             init_success = init_AC1_0();
             break;
         default:
+            init_success = 0;
             break;
     }
     if (init_success) {
         shape_angle = current.angle;
-        mStts.Init(0xFF, 0xFF, this);
-        mCyl.SetStts(&mStts);
-        mCyl.Set(dNpc_cyl_src);
-        mpMorf->setMorf(0.0f);
-        if (mbHasArms) {
-            mpArmMorf->setMorf(0.0f);
-        } else {
-            mpWingMorf->setMorf(0.0f);
-        }
-        setMtx(true);
-        return true;
+    } else {
+        return false;
     }
-    return false;
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.SetStts(&mStts);
+    mCyl.Set(dNpc_cyl_src);
+    mpMorf->setMorf(0.0f);
+    if (mbHasArms) {
+        mpArmMorf->setMorf(0.0f);
+    } else {
+        mpWingMorf->setMorf(0.0f);
+    }
+    setMtx(true);
+    return true;
 }
 
 /* 000007C8-00000988       .text setMtx__11daNpc_Ac1_cFb */
