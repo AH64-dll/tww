@@ -571,7 +571,7 @@ void core_move(ss_class* i_this) {
                         if (cM_rndF(1.0f) < 25.0f + REG0_F(15)) {
                             dComIfGp_particle_setSimple(1, p, 0xFF, g_whiteColor, g_whiteColor, 0);
                         }
-                        p += (REG0_S(7) + 2) * 3;
+                        p += REG0_S(7) + 2;
                     }
                     i_this->mHand[i].mState = 1;
                     if (!(i_this->m2C0 & 1)) {
@@ -593,28 +593,26 @@ void core_move(ss_class* i_this) {
 
     if (i_this->mSph.ChkTgHit() && i_this->m2D0 == 0) {
         i_this->m2D0 = 0xA;
-        cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
         CcAtInfo atInfo;
-        atInfo.mpObj = hitObj;
-        at_power_check(&atInfo);
-        if (hitObj == NULL || !(hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK)) {
+        atInfo.mpObj = i_this->mSph.GetTgHitObj();
+        atInfo.mpActor = at_power_check(&atInfo);
+        if (atInfo.mpObj == NULL || !(atInfo.mpObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK)) {
             i_this->m2C6 = i_this->m2C4;
             i_this->m2C4 = 0x28;
             if (i_this->m2B4 == 0 || atInfo.mResultingAttackType == 5) {
-                cCcD_Obj* hitObj2 = i_this->mSph.GetTgHitObj();
-                CcAtInfo atInfo2;
-                atInfo2.mpObj = hitObj2;
-                at_power_check(&atInfo2);
-                if (atInfo2.mResultingAttackType == 0xA || atInfo2.mResultingAttackType == 3) {
+                atInfo.mpObj = i_this->mSph.GetTgHitObj();
+                atInfo.pParticlePos = i_this->mSph.GetTgHitPosP();
+                at_power_check(&atInfo);
+                if (atInfo.mResultingAttackType == 0xA || atInfo.mResultingAttackType == 3) {
                     i_this->health = 0;
                 }
-                if (atInfo2.mResultingAttackType == 5) {
+                if (atInfo.mResultingAttackType == 5) {
                     i_this->health = 0;
                     i_this->m2CA = 0x32;
                     JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_S_BURN, &i_this->eyePos, 0,
                                                     fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 } else {
-                    cc_at_check(i_this, &atInfo2);
+                    cc_at_check(i_this, &atInfo);
                 }
                 if (i_this->health <= 0) {
                     i_this->m2D0 = 0x64;
@@ -625,20 +623,22 @@ void core_move(ss_class* i_this) {
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SVINE_REBOUND, &i_this->eyePos, 0,
                                                 fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
-        }
-    } else {
-        if (i_this->m2C4 >= 0x32) {
-            i_this->eyePos.set(-10000.0f, -10000.0f, -10000.0f);
-        }
-        i_this->mSph.SetC(i_this->eyePos);
-        i_this->mSph.SetR(35.0f + REG0_F(3));
-        if (i_this->m2B4 == 0) {
-            i_this->mSph.OffTgShield();
         } else {
-            i_this->mSph.OnTgShield();
+            return;
         }
-        dComIfG_Ccsp()->Set(&i_this->mSph);
     }
+
+    if (i_this->m2C4 >= 0x32) {
+        i_this->eyePos.set(-10000.0f, -10000.0f, -10000.0f);
+    }
+    i_this->mSph.SetC(i_this->eyePos);
+    i_this->mSph.SetR(35.0f + REG0_F(3));
+    if (i_this->m2B4 == 0) {
+        i_this->mSph.OffTgShield();
+    } else {
+        i_this->mSph.OnTgShield();
+    }
+    dComIfG_Ccsp()->Set(&i_this->mSph);
 }
 
 /* 00002B84-00002F1C       .text daSs_Execute__FP8ss_class */
