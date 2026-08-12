@@ -314,8 +314,28 @@ static BOOL daNpc_Kg1Delete(void* i_this) {
 }
 
 /* 0000250C-00002648       .text daNpc_Kg1Execute__FPv */
-static BOOL daNpc_Kg1Execute(void*) {
-    /* Nonmatching */
+static BOOL daNpc_Kg1Execute(void* i_this) {
+    daNpc_Kg1_c* self = static_cast<daNpc_Kg1_c*>(i_this);
+    self->m_jnt.setParam(l_HIO.mHio[0].mMaxBackboneX, l_HIO.mHio[0].mMaxBackboneY,
+                         l_HIO.mHio[0].mMinBackboneX, l_HIO.mHio[0].mMinBackboneY,
+                         l_HIO.mHio[0].mMaxHeadX, l_HIO.mHio[0].mMaxHeadY,
+                         l_HIO.mHio[0].mMinHeadX, l_HIO.mHio[0].mMinHeadY,
+                         l_HIO.mHio[0].mMaxTurnStep);
+    self->checkOrder();
+    (self->*self->mAction)();
+    self->eventOrder();
+    self->playTexPatternAnm();
+    self->setAnm();
+    if (self->m750) {
+        self->mpMorf->play(NULL, 0, 0);
+    }
+    self->mObjAcch.CrrPos(*dComIfG_Bgsp());
+    self->setCollision(60.0f, 150.0f);
+    self->attention_info.position.set(self->current.pos.x, self->current.pos.y + 190.0f, self->current.pos.z);
+    self->eyePos.set(self->current.pos.x, self->current.pos.y + 150.0f, self->current.pos.z);
+    self->lookBack();
+    self->set_mtx();
+    return 0;
 }
 
 /* 00002648-000027CC       .text daNpc_Kg1Draw__FPv */
