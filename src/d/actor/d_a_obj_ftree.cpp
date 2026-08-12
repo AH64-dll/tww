@@ -258,12 +258,12 @@ BOOL daObjFtree::Act_c::SetJointAnimation(int, float, float, int) {
 
 /* 000008D8-00000910       .text PlayStopJointAnimation__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::PlayStopJointAnimation() {
-    /* Nonmatching */
+    return mpMorf->play(NULL, 0, 0) ? TRUE : FALSE;
 }
 
 /* 00000910-0000093C       .text PlayStopColorAnimation__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::PlayStopColorAnimation() {
-    /* Nonmatching */
+    return mBrkAnm.play() ? TRUE : FALSE;
 }
 
 /* 0000093C-00000A1C       .text set_first_stat__Q210daObjFtree5Act_cFv */
@@ -484,7 +484,9 @@ s32 daObjFtree::Act_c::action_changeSL_init(s16) {
 
 /* 00001EAC-00001F0C       .text action_changeSL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSL_main() {
-    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+    BOOL joint = PlayStopJointAnimation();
+    BOOL color = PlayStopColorAnimation();
+    if (joint == 1 && color == 1) {
         process_init(5, 0);
     }
 }
@@ -545,7 +547,9 @@ s32 daObjFtree::Act_c::action_changeLS2_init(s16) {
 
 /* 000026AC-0000270C       .text action_changeLS2_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeLS2_main() {
-    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+    BOOL joint = PlayStopJointAnimation();
+    BOOL color = PlayStopColorAnimation();
+    if (joint == 1 && color == 1) {
         process_init(1, 0);
     }
 }
@@ -562,7 +566,9 @@ s32 daObjFtree::Act_c::action_changeSM_init(s16) {
 
 /* 00002794-000027F4       .text action_changeSM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSM_main() {
-    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+    BOOL joint = PlayStopJointAnimation();
+    BOOL color = PlayStopColorAnimation();
+    if (joint == 1 && color == 1) {
         process_init(2, 0);
     }
 }
@@ -593,7 +599,7 @@ void daObjFtree::Act_c::process_main() {
 
 /* 00002BF0-00002C14       .text solidHeapCB__Q210daObjFtree5Act_cFP10fopAc_ac_c */
 BOOL daObjFtree::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+    return create_heap();
 }
 
 /* 00002C14-00002D94       .text NodeCallBack_Effect__Q210daObjFtree5Act_cFP7J3DNodei */
