@@ -71,7 +71,6 @@ void hand_mtx_set(sss_class* i_this) {
 
 /* 00000444-000004CC       .text control3__FP9sss_class */
 void control3(sss_class* i_this) {
-    /* Nonmatching */
     sss_s* p = i_this->m33C;
     for (int i = 0; i < 10; i++, p++) {
         p->mSize = l_size_d[i] * (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64));
@@ -86,8 +85,6 @@ void control1(sss_class* i_this) {
     cXyz pos2;
     cXyz pos3;
     cXyz pos4;
-    f32 f4;
-    f32 f3;
 
     i_this->m33C[0].mPos = actor->current.pos;
     sss_s* hand_i = &i_this->m33C[1];
@@ -97,16 +94,14 @@ void control1(sss_class* i_this) {
     pos.y = 0.0f;
     pos.z = i_this->m2F0;
     MtxPosition(&pos, &pos2);
+    pos.z = i_this->m2E8;
     f32 dVar9 = i_this->m2F4;
-    int i = 1;
     f32 fVar1 = 1.0f;
-    f32 fVar2 = 0.0f;
-    for (i = 1; i < 9; i++, ++hand_i) {
+    for (int i = 1; i < 9; i++, ++hand_i) {
         cXyz local_c4;
         local_c4.x = dVar9 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x44C) + i * (REG0_S(6) + 0xFA0));
-        local_c4.y = dVar9 * cM_ssin(i_this->m2BC * (REG0_S(7) + 0x320) + i * (REG0_S(8) + 0xFA0));
-        fVar2 = l_g_d[i];
-        fVar1 = local_c4.y;
+        local_c4.y = l_g_d[i];
+        local_c4.z = dVar9 * cM_scos(i_this->m2BC * (REG0_S(7) + 0x320) + i * (REG0_S(8) + 0xFA0));
         MtxPosition(&local_c4, &pos3);
         f32 fVar4 = hand_i->mPos.x - hand_i[-1].mPos.x + (pos2.x * fVar1) + (pos3.x * fVar1);
         f32 fVar5 = hand_i->mPos.y - hand_i[-1].mPos.y + (pos2.y * fVar1) + (pos3.y * fVar1);
