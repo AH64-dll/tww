@@ -45,7 +45,7 @@ daNpc_De1_HIO_c::daNpc_De1_HIO_c() {
         /* mPlayerDist         */ 800.0f,
         /* mDemoCenterX        */ 44.0f,
         /* mDemoCenterY        */ 100.0f,
-        /* mDemoCenterZ        */ 980.0f,
+        /* mDemoCenterZ        */ 976.0f,
         /* mDebug              */ 0,
     };
     memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
