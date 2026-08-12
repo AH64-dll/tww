@@ -830,8 +830,7 @@ cXyz daNpc_Ob1_c::get_attPos() {
 s32 daNpc_Ob1_c::ob_movPass() {
     s32 ret = 0;
     if (mPathRun.getPath() != NULL && dPath_ChkClose(mPathRun.getPath())) {
-        cXyz pos(current.pos);
-        if (mPathRun.chkPointPass(pos, mPathRun.getDir() == 0)) {
+        if (mPathRun.chkPointPass(current.pos, mPathRun.getDir())) {
             mPathRun.nextIdxAuto();
             ret = 1;
         }
