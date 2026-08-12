@@ -43,7 +43,7 @@ namespace daObjFlame {
         /* 0x38 */ f32 mEm1SclX;
         /* 0x3C */ f32 mEm1SclY;
         /* 0x40 */ f32 mEm2Scl;
-        /* 0x44 */ s16 mF44[2];
+        /* 0x44 */ f32 mF44;
         /* 0x48 */ s16 mCull[6];
         /* 0x54 */ f32 mF54;
     };  // Size: 0x58
@@ -128,10 +128,10 @@ namespace daObjFlame {
         /* 0x448 */ JPABaseEmitter* mpEmitter0;
         /* 0x44C */ JPABaseEmitter* mpEmitter1;
         /* 0x450 */ JPABaseEmitter* mpEmitter2;
-        /* 0x454 */ u8 mEm0State;
-        /* 0x455 */ u8 mEm1State;
-        /* 0x456 */ u8 mEm2State;
-        /* 0x457 */ u8 mbEmPosition;
+        /* 0x454 */ s8 mEm0State;
+        /* 0x455 */ s8 mEm1State;
+        /* 0x456 */ s8 mEm2State;
+        /* 0x457 */ s8 mbEmPosition;
         /* 0x458 */ u8 mReverb;
         /* 0x459 */ u8 mbLiftup;
         /* 0x45A */ u8 mbKi;

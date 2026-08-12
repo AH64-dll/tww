@@ -48,15 +48,15 @@ namespace daObjFlame {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_FIRE,
             /* SrcObjAt  Atp     */ 1,
-            /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ 0x5,
-            /* SrcObjTg  SPrm    */ 0,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e,
-            /* SrcGObjAt Se      */ 0,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0x100,
             /* SrcGObjAt HitMark */ 0,
             /* SrcGObjAt Spl     */ 0,
             /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ 0x100,
+            /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ 0,
             /* SrcGObjTg Spl     */ 0,
@@ -93,16 +93,16 @@ namespace daObjFlame {
             /* mEm0SclY */ 1.0f,
             /* mEm1SclX */ 1.0f,
             /* mEm1SclY */ 1.0f,
-            /* mEm2Scl */ -2.8357e38f,
-            /* mF44 */ {-150, 150},
-            /* mCull */ {1500, 150, 1500, 150, 0x3F33, 0x3333},
-            /* mF54 */ 4.3333335f,
+            /* mEm2Scl */ 1.0f,
+            /* mF44 */ 1.0f,
+            /* mCull */ {-150, -1, -150, 150, 1500, 150},
+            /* mF54 */ 0.7f,
         },
         {
-            /* mScale */ 1.0f,
-            /* mF04 */ 1.0f,
+            /* mScale */ 4.3333335f,
+            /* mF04 */ 3.3333335f,
             /* mF08 */ 1.0f,
-            /* mF0C */ 1.0f,
+            /* mF0C */ 0.815f,
             /* mBdlResID */ 5,
             /* mBtkResID */ 12,
             /* mBrkResID */ -1,
@@ -115,17 +115,17 @@ namespace daObjFlame {
             /* mF2E */ 0,
             /* mF2F */ 0,
             /* mEm0SclX */ 4.3333335f,
-            /* mEm0SclY */ 2.7222223f,
+            /* mEm0SclY */ 2.7166667f,
             /* mEm1SclX */ 4.3333335f,
-            /* mEm1SclY */ 2.7222223f,
-            /* mEm2Scl */ 0.9166667f,
-            /* mF44 */ {-700, -1},
-            /* mCull */ {7500, 700, 7500, 700, 0x3F33, 0x3333},
-            /* mF54 */ 4.3333335f,
+            /* mEm1SclY */ 2.7166667f,
+            /* mEm2Scl */ 0.8666667f,
+            /* mF44 */ 0.54333335f,
+            /* mCull */ {-700, -1, -700, 700, 7500, 700},
+            /* mF54 */ 0.0f,
         },
         {
-            /* mScale */ 1.0f,
-            /* mF04 */ 1.0f,
+            /* mScale */ 7.5f,
+            /* mF04 */ 7.5f,
             /* mF08 */ 1.0f,
             /* mF0C */ 1.0f,
             /* mBdlResID */ 5,
@@ -139,14 +139,14 @@ namespace daObjFlame {
             /* mF2D */ 0,
             /* mF2E */ 0,
             /* mF2F */ 0,
-            /* mEm0SclX */ 15.0f,
-            /* mEm0SclY */ 15.0f,
-            /* mEm1SclX */ 15.0f,
-            /* mEm1SclY */ 15.0f,
-            /* mEm2Scl */ 0.5f,
-            /* mF44 */ {-150, -1},
-            /* mCull */ {1500, 150, 1500, 150, 0x3F33, 0x3333},
-            /* mF54 */ 0.5f,
+            /* mEm0SclX */ 7.5f,
+            /* mEm0SclY */ 7.5f,
+            /* mEm1SclX */ 7.5f,
+            /* mEm1SclY */ 7.5f,
+            /* mEm2Scl */ 1.0f,
+            /* mF44 */ 1.0f,
+            /* mCull */ {-150, -1, -150, 150, 1500, 150},
+            /* mF54 */ 0.0f,
         },
         {
             /* mScale */ 0.5f,
@@ -160,17 +160,17 @@ namespace daObjFlame {
             /* mRate */ 1.0f,
             /* mF24 */ 1.0f,
             /* mEmID */ 0x805C,
-            /* mF2C */ 1,
-            /* mF2D */ 0,
+            /* mF2C */ 0,
+            /* mF2D */ 1,
             /* mF2E */ 0,
             /* mF2F */ 0,
             /* mEm0SclX */ 0.5f,
             /* mEm0SclY */ 0.5f,
             /* mEm1SclX */ 0.5f,
             /* mEm1SclY */ 0.5f,
-            /* mEm2Scl */ -1.8866e-38f,
-            /* mF44 */ {-75, -1},
-            /* mCull */ {750, 75, 750, 75, 0x3F33, 0x3333},
+            /* mEm2Scl */ 0.5f,
+            /* mF44 */ 0.5f,
+            /* mCull */ {-75, -1, -75, 75, 750, 75},
             /* mF54 */ 0.7f,
         },
     };
@@ -281,10 +281,10 @@ void daObjFlame::Act_c::create_mode_init() {
         f32 f2 = 0.0055555557f * f3;
         if (mModeProc != 0 && mModeProc != 1) {
             if (mpBtkAnm != NULL) {
-                mpBtkAnm->getFrameCtrl()->setFrame(1.0f + f2 * mpBtkAnm->getFrameCtrl()->getFrame());
+                mpBtkAnm->getFrameCtrl()->setFrame(1.0f + f2 * mpBtkAnm->getFrameCtrl()->getEnd());
             }
             if (mpBrkAnm != NULL) {
-                mpBrkAnm->getFrameCtrl()->setFrame(1.0f + f2 * mpBrkAnm->getFrameCtrl()->getFrame());
+                mpBrkAnm->getFrameCtrl()->setFrame(1.0f + f2 * mpBrkAnm->getFrameCtrl()->getEnd());
             }
         }
 
@@ -314,7 +314,7 @@ void daObjFlame::Act_c::create_mode_init() {
 void daObjFlame::Act_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::YrotM(mRotY);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     fopAcM_setCullSizeBox(this, (f32)M_attr_scl[mType].mCull[0], (f32)M_attr_scl[mType].mCull[1],
@@ -331,11 +331,11 @@ void daObjFlame::Act_c::init_mtx() {
 void daObjFlame::Act_c::em_position() {
     if (mbEmPosition != 0) {
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
         if (M_attr_scl[mType].mF2C == 0) {
             if (mpEmitter0 != NULL) {
                 mDoMtx_stack_c::push();
-                mDoMtx_stack_c::transM(1.0f, mScaleY * (1500.0f * mHeight * M_attr_scl[mType].mF0C + 300.0f * M_attr_scl[mType].mF0C), 1.0f);
+                mDoMtx_stack_c::transM(0.0f, mScaleY * (1500.0f * mHeight * M_attr_scl[mType].mF0C) + mScaleY * (-300.0f * M_attr_scl[mType].mF0C), 0.0f);
                 mpEmitter0->setGlobalRTMatrix(mDoMtx_stack_c::get());
                 mDoMtx_stack_c::pop();
             }
@@ -343,12 +343,12 @@ void daObjFlame::Act_c::em_position() {
                 mpEmitter1->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
         }
-        mDoMtx_stack_c::transM(1.0f, mScaleX * (1500.0f * mHeight * M_attr_scl[mType].mF04), 1.0f);
+        mDoMtx_stack_c::transM(0.0f, mScaleX * (1500.0f * mHeight * M_attr_scl[mType].mF04), 0.0f);
         mDoMtx_stack_c::multVecZero(&eyePos);
 
-        mbCol = 1500.0f * mHeight - 300.0f > 1.0f;
+        mbCol = 1500.0f * mHeight - 300.0f > 0.0f;
         if (mbCol) {
-            mDoMtx_stack_c::transM(1.0f, mScaleX * (300.0f * M_attr_scl[mType].mF04), 1.0f);
+            mDoMtx_stack_c::transM(0.0f, mScaleX * (-300.0f * M_attr_scl[mType].mF04), 0.0f);
             mDoMtx_stack_c::multVecZero(&mCpsP1);
         }
     }
@@ -356,23 +356,25 @@ void daObjFlame::Act_c::em_position() {
 
 /* 00000B3C-00000CAC       .text em_simple_set__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::em_simple_set() {
-    u8 flag = 1;
-    if (M_attr_scl[mType].mF2D != 0 && mbLiftup != 0) {
-        flag = 0;
+    u8 flag = 0;
+    if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
+        flag = 1;
     }
 
     if (mEm0State == 1 && flag) {
-        cXyz pos = current.pos;
-        pos.y = current.pos.y + mScaleY * (-300.0f * M_attr_scl[mType].mF04);
-        dComIfGp_particle_setSimple(0x805A, &pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        Vec pos;
+        pos.x = eyePos.x;
+        pos.y = eyePos.y + mScaleY * (-300.0f * M_attr_scl[mType].mF04);
+        pos.z = eyePos.z;
+        dComIfGp_particle_setSimple(0x805A, (cXyz*)&pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 
     if (mEm1State == 1) {
-        dComIfGp_particle_setSimple(0x805B, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(0x805B, &eyePos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 
     if (mEm2State == 1 && flag) {
-        dComIfGp_particle_setSimple(M_attr_scl[mType].mEmID & 0xFFFF, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(M_attr_scl[mType].mEmID & 0xFFFF, &home.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 }
 
@@ -391,26 +393,26 @@ void daObjFlame::Act_c::em_simple_inv() {
 
 /* 00000CEC-00000F04       .text em_manual_set__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::em_manual_set() {
-    u8 flag = 1;
-    if (M_attr_scl[mType].mF2D != 0 && mbLiftup != 0) {
-        flag = 0;
+    u8 flag = 0;
+    if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
+        flag = 1;
     }
 
     if (mEm0State == 1 && flag && mType != 1) {
         cXyz scale(M_attr_scl[mType].mEm0SclX, mScaleY * M_attr_scl[mType].mEm0SclY, M_attr_scl[mType].mEm0SclX);
-        mpEmitter0 = dComIfGp_particle_set(0x805A, &current.pos, &current.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mpEmitter0 = dComIfGp_particle_set(0x805A, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm0State = 2;
     }
 
     if (mEm1State == 1) {
         cXyz scale(M_attr_scl[mType].mEm1SclX, mScaleY * M_attr_scl[mType].mEm1SclY, M_attr_scl[mType].mEm1SclX);
-        mpEmitter1 = dComIfGp_particle_set(0x805B, &current.pos, &current.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mpEmitter1 = dComIfGp_particle_set(0x805B, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm1State = 2;
     }
 
     if (mEm2State == 1 && flag) {
         cXyz scale(M_attr_scl[mType].mEm2Scl, M_attr_scl[mType].mEm2Scl, M_attr_scl[mType].mEm2Scl);
-        mpEmitter2 = dComIfGp_particle_set(M_attr_scl[mType].mEmID & 0xFFFF, &current.pos, &current.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mpEmitter2 = dComIfGp_particle_set(M_attr_scl[mType].mEmID & 0xFFFF, &home.pos, &home.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
         mEm2State = 2;
     }
 }
@@ -483,8 +485,8 @@ void daObjFlame::Act_c::ki_make() {
         } else if (--mKiCount <= 0) {
             mKiCount = M_attr_base.mKiMax - 1;
             mKiIdx++;
-            csXyz angle(0, (s16)cM_rndFX(32768.0f), 0);
-            fopAcM_create(0xD8, 0x8002, &current.pos, fopAcM_GetRoomNo(this), &angle, NULL, -1);
+            SVec angle = {0, (s16)cM_rndFX(32768.0f), 0};
+            fopAcM_create(0xD8, 0x8002, &current.pos, fopAcM_GetRoomNo(this), (csXyz*)&angle, NULL, -1);
         }
     }
 }
@@ -512,8 +514,8 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         f32 f30 = maxY + M_attr_base.mF0A;
         f32 f29 = maxY + M_attr_base.mF0C;
 
-        cXyz a(rock->current.pos.x, 1.0f, rock->current.pos.z);
-        cXyz b(flame->eyePos.x, 1.0f, flame->eyePos.z);
+        Vec a = {rock->current.pos.x, 0.0f, rock->current.pos.z};
+        Vec b = {flame->eyePos.x, 0.0f, flame->eyePos.z};
         f32 dist = std::sqrtf(PSVECSquareDistance(&a, &b));
 
         if (dist < f31 && rock->current.pos.y > f30 && rock->current.pos.y < f29 && flame->mType != 1) {
@@ -532,11 +534,11 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
             }
 
             f32 f0 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
-            cXyz pos(flame->current.pos.x, flame->current.pos.y + f4 * f0 + f3 * f0, flame->current.pos.z);
+            Vec pos = {flame->current.pos.x, flame->current.pos.y + f4 * f0 + f3 * f0, flame->current.pos.z};
             if (flame->mModeProc == 1 || flame->mModeProc == 2) {
-                rock->BeforeLiftRequest(pos);
+                rock->BeforeLiftRequest((cXyz&)pos);
             } else {
-                rock->LiftUpRequest(pos);
+                rock->LiftUpRequest((cXyz&)pos);
             }
             flame->mbLiftup = 1;
         }
@@ -574,14 +576,14 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
         }
 
         f32 f1 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
-        cXyz pos(flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z);
+        Vec pos = {flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z};
         f32 clampY = flame->current.pos.y + f0;
         if (pos.y > clampY) {
             pos.y = clampY;
         }
 
         if (flame->mModeProc != 1 && flame->mModeProc != 2) {
-            mflft->setLiftUp(pos);
+            mflft->setLiftUp((cXyz)pos);
         }
         flame->mbLiftup = 1;
         cLib_addCalc(&flame->mScaleX, f31, 0.3f, 0.1f, 0.01f);
@@ -642,7 +644,7 @@ void daObjFlame::Act_c::mode_l_before() {
     if (mTimer <= 0.0f) {
         mModeProc = 3;
         mTimer = 22.0f;
-        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_BLOW, &eyePos, 0, mReverb, 1.0f, 1.0f, 0.7f, 0.7f, 0);
+        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_BLOW, &eyePos, 0, mReverb, 0.04f, 0.04f, -1.0f, -1.0f, 0);
         return;
     }
     se_fireblast_omen();
@@ -683,7 +685,7 @@ void daObjFlame::Act_c::mode_u_l() {
 void daObjFlame::Act_c::mode_l_after() {
     if (mTimer <= 0.0f) {
         mModeProc = 0;
-        if (prm_get_sch() != 0) {
+        if ((u8)prm_get_sch() != 0) {
             mTimer = 0.0f;
         } else {
             mTimer = 120.0f;
@@ -729,7 +731,7 @@ void daObjFlame::Act_c::mode_proc_call() {
         if (mpBrkAnm != NULL) {
             mpBrkAnm->play();
         }
-        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_NOISE, &eyePos, 0, mReverb, 1.0f, 1.0f, 0.7f, 0.7f, 0);
+        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_NOISE, &eyePos, 0, mReverb, 0.04f, 0.04f, -1.0f, -1.0f, 0);
     }
 
     if (mbCol) {
