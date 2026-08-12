@@ -485,7 +485,10 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_this) {
             dPa_name::ID_IT_SN_TGSYOKU_ROCK00, &mPos, NULL, NULL, 0xff, NULL, -1, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0
         );
 
-        csXyz angle(i_this->shape_angle.x, i_this->shape_angle.y, i_this->shape_angle.z);
+        csXyz angle;
+        angle.x = i_this->shape_angle.x;
+        angle.y = i_this->shape_angle.y;
+        angle.z = i_this->shape_angle.z;
         if (i_this->mFrontCheck == 1) {
             angle.y += 0x7FFF;
         }
