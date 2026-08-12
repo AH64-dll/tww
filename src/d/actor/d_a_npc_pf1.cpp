@@ -432,31 +432,25 @@ u16 daNpc_Pf1_c::next_msgStatus(u32* i_msg_no) {
         case 0x1B5A:
             *i_msg_no = 0x1B61;
             break;
+        case 0x1B61:
+            *i_msg_no = 0x1B5B;
+            break;
         case 0x1B5B:
             *i_msg_no = 0x1B62;
             break;
-        case 0x1B5C:
-            *i_msg_no = 0x1B5F;
-            break;
-        case 0x1B5D:
-            msg_status = fopMsgStts_MSG_ENDS_e;
-            break;
-        case 0x1B5E:
-            *i_msg_no = 0x1B60;
-            break;
-        case 0x1B5F:
+        case 0x1B62:
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B04);
             msg_status = fopMsgStts_MSG_ENDS_e;
             break;
         case 0x1B60:
             m7A4 = 1;
             msg_status = fopMsgStts_MSG_ENDS_e;
             break;
-        case 0x1B61:
-            *i_msg_no = 0x1B5B;
+        case 0x1B5C:
+            *i_msg_no = 0x1B5F;
             break;
-        case 0x1B62:
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B04);
-            msg_status = fopMsgStts_MSG_ENDS_e;
+        case 0x1B5E:
+            *i_msg_no = 0x1B60;
             break;
         default:
             msg_status = fopMsgStts_MSG_ENDS_e;
@@ -773,7 +767,7 @@ BOOL daNpc_Pf1_c::startEvent_check() {
     pos.y += 100.0f;
     if (chk_areaIN(l_HIO.mPrmTbl.m38, pos)) {
         f32 dist = std::sqrtf((dComIfGp_getLinkPlayer()->current.pos - current.pos).abs2XZ());
-        if (dist < 200.0f || field_0x6ba != 0) {
+        if (dist < 210.0f || field_0x6ba != 0) {
             return TRUE;
         }
     }
@@ -818,9 +812,8 @@ void daNpc_Pf1_c::setBikon(cXyz i_param_1) {
     mDoMtx_stack_c::YrotM(current.angle.y);
     cXyz bikon_pos;
     mDoMtx_stack_c::multVec(&i_param_1, &bikon_pos);
-    cXyz scale(0.0f, 0.0f, 0.0f);
-    cXyz rot(0.0f, 0.0f, 0.0f);
-    dComIfGp_particle_set(0x8152, &bikon_pos, NULL, NULL, 0xFF, NULL, NULL, NULL);
+    cXyz zero(0.0f, 0.0f, 0.0f);
+    dComIfGp_particle_set(0x8152, &bikon_pos, NULL, NULL, 0xFF, NULL, 0);
 }
 
 /* 00001F68-00001F6C       .text delBikon__11daNpc_Pf1_cFv */
