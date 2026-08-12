@@ -385,10 +385,11 @@ namespace daObjTribox {
 
     /* 000012A0-000012E8       .text chk_space__Q211daObjTribox5Act_cCFv */
     bool Act_c::chk_space() const {
-        if (chk_wall((mPP[2].mZ == 1) + 1)) {
+        if (chk_wall((mPP[2].mZ == 1) ? 2 : 1)) {
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
 
     /* 000012E8-00001378       .text eff_flash__Q211daObjTribox5Act_cFv */
