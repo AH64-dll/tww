@@ -842,6 +842,7 @@ void next_status_clear(bpw_class* i_this, u8 param_2) {
 
 /* 00002114-0000242C       .text light_on_off__FP9bpw_class */
 void light_on_off(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     static s16 light_on_dt[] = {0x0000, 0x0001, 0x0002, 0x0001, 0x0002, 0x0000, 0x0002, 0x0000, 0x0001};
     fopAc_ac_c* actor = &i_this->actor;
     s16 sVar1;
@@ -1061,6 +1062,7 @@ s32 kantera_pos_search(bpw_class* i_this) {
 
 /* 00002BA8-000035F8       .text action_dousa__FP9bpw_class */
 void action_dousa(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_c0;
@@ -1272,6 +1274,7 @@ void action_dousa(bpw_class* i_this) {
 
 /* 00003A30-00004870       .text action_kougeki__FP9bpw_class */
 void action_kougeki(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -1584,6 +1587,7 @@ void action_kougeki(bpw_class* i_this) {
 
 /* 00004870-000051E0       .text action_karada_taore__FP9bpw_class */
 void action_karada_taore(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     fopAc_ac_c* actor = &i_this->actor;
     JPABaseEmitter* emitter;
     GXColor local_24;
@@ -1758,6 +1762,7 @@ void action_karada_taore(bpw_class* i_this) {
 
 /* 000051E0-000062D8       .text action_damage__FP9bpw_class */
 void action_damage(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     fopAc_ac_c* actor = &i_this->actor;
     J3DAnmTevRegKey* pBrk;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -2966,6 +2971,7 @@ void action_bunri_dousa(bpw_class* i_this) {
 
 /* 00008D3C-0000A064       .text action_start_demo__FP9bpw_class */
 void action_start_demo(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar1;
 
@@ -3430,6 +3436,7 @@ void kantera_calc(bpw_class* i_this) {
 
 /* 0000A494-0000A8C8       .text body_execute__FP9bpw_class */
 void body_execute(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_28 = i_this->m358;
 
@@ -4320,6 +4327,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
 
 /* 0000CC88-0000CDF0       .text body_create_init__FP9bpw_class */
 void body_create_init(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     static dCcD_SrcSph body_co_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -4432,6 +4440,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
 
 /* 0000CFCC-0000D0B8       .text kantera_create_init__FP9bpw_class */
 void kantera_create_init(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     static dCcD_SrcSph kantera_co_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -4493,6 +4502,7 @@ static BOOL fire_useHeapInit(fopAc_ac_c* a_this) {
 
 /* 0000D1A0-0000D254       .text damage_ball_create_init__FP9bpw_class */
 void damage_ball_create_init(bpw_class* i_this) {
+    /* Nonmatching - rodata anchor/regalloc holdout */
     static dCcD_SrcSph damage_ball_co_sph_src = {
         // dCcD_SrcGObjInf
         {
