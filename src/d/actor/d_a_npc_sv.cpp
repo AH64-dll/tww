@@ -423,6 +423,7 @@ static cPhs_State phase_2(daNpcSv_c* i_this) {
 
 /* 00000738-00000768       .text _create__9daNpcSv_cFv */
 cPhs_State daNpcSv_c::_create() {
+    /* Nonmatching */
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -434,6 +435,7 @@ cPhs_State daNpcSv_c::_create() {
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
 s32 daNpcSv_c::createHeap() {
+    /* Nonmatching */
     J3DModelData* bodyModelData = (J3DModelData*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bmd_ix_tbl[mNpcNo]));
     mpMorf = new mDoExt_McaMorf(
         bodyModelData,
@@ -469,11 +471,13 @@ s32 daNpcSv_c::createHeap() {
 
 /* 00000A04-00000C74       .text createInit__9daNpcSv_cFv */
 s32 daNpcSv_c::createInit() {
+    /* Nonmatching */
     return 1;
 }
 
 /* 00000C74-00000CD8       .text _delete__9daNpcSv_cFv */
 bool daNpcSv_c::_delete() {
+    /* Nonmatching */
     dComIfG_resDelete(&mPhase, l_arcname_tbl[mNpcNo]);
     if(fopAcM_CheckCondition(this, 0x2000)) {
         if(mpMorf != NULL) {
@@ -485,6 +489,7 @@ bool daNpcSv_c::_delete() {
 
 /* 00000CD8-00000DAC       .text _draw__9daNpcSv_cFv */
 bool daNpcSv_c::_draw() {
+    /* Nonmatching */
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
     mpMorf->updateDL();
@@ -500,6 +505,7 @@ bool daNpcSv_c::_draw() {
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
 bool daNpcSv_c::_execute() {
+    /* Nonmatching */
     fopAc_ac_c* i_target;
     fopAcM_SearchByID(parentActorID, &i_target);
 
@@ -549,6 +555,7 @@ void daNpcSv_c::executeSetMode(u8 proc) {
 
 /* 00001000-00001080       .text executeWaitInit__9daNpcSv_cFv */
 s32 daNpcSv_c::executeWaitInit() {
+    /* Nonmatching */
     setAnmTbl(&l_npc_anm_wait);
     sSvNpcDat* npcDat = &l_npc_dat[mNpcNo];
     m_jnt.setParam(npcDat->mMaxHeadX, npcDat->mMaxHeadY, npcDat->mMaxBackboneX, npcDat->mMaxBackboneY, npcDat->mMinHeadX, npcDat->mMinHeadY, npcDat->mMinBackboneX, npcDat->mMinBackboneY, npcDat->mMaxTurnStep);
@@ -557,6 +564,7 @@ s32 daNpcSv_c::executeWaitInit() {
 
 /* 00001080-0000131C       .text executeWait__9daNpcSv_cFv */
 void daNpcSv_c::executeWait() {
+    /* Nonmatching */
     fopAc_ac_c* i_target;
     fopAcM_SearchByID(parentActorID, &i_target);
     if(i_target != NULL) {
@@ -647,6 +655,7 @@ s32 daNpcSv_c::executeTalkInit() {
 
 /* 00001338-000013B8       .text executeTalk__9daNpcSv_cFv */
 void daNpcSv_c::executeTalk() {
+    /* Nonmatching */
     executeCommon();
     if(talk2(1, this) == 0x12) {
         m736 = 0;
@@ -660,6 +669,7 @@ void daNpcSv_c::executeTalk() {
 
 /* 000013B8-000013EC       .text checkOrder__9daNpcSv_cFv */
 void daNpcSv_c::checkOrder() {
+    /* Nonmatching */
     switch(m734) {
         case 1:
             if(m738 == 2 || m738 == 1) {
@@ -673,6 +683,7 @@ void daNpcSv_c::checkOrder() {
 
 /* 000013EC-00001458       .text eventOrder__9daNpcSv_cFv */
 void daNpcSv_c::eventOrder() {
+    /* Nonmatching */
     if((m738 == 2 || m738 == 1) && isTalkOK()) {
         m734 |= 1;
         if(m738 == 2) {
@@ -693,6 +704,7 @@ void daNpcSv_c::privateCut() {
 
 /* 00001744-00001814       .text eventMesSetInit__9daNpcSv_cFi */
 void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
+    /* Nonmatching */
     int* substance = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
     if(substance != NULL) {
         mMsgTbl = NULL;
@@ -711,11 +723,13 @@ void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
 s32 daNpcSv_c::eventMesSet() {
+    /* Nonmatching */
     return talk2(0, this) == 0x12;
 }
 
 /* 0000184C-000018F0       .text eventGetItemInit__9daNpcSv_cFi */
 void daNpcSv_c::eventGetItemInit(int i_staffIdx) {
+    /* Nonmatching */
     int* substance = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "ItemNo");
     int itemNo;
     if(substance != NULL) {
@@ -757,6 +771,7 @@ void daNpcSv_c::eventSetAngleInit() {
 
 /* 000019E0-00001A74       .text eventAttentionInit__9daNpcSv_cFi */
 void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
+    /* Nonmatching */
     int* substance = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
     if(substance != NULL) {
         m72A = *substance;
@@ -771,6 +786,7 @@ void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
 
 /* 00001A74-00001BC8       .text eventAttention__9daNpcSv_cFv */
 s32 daNpcSv_c::eventAttention() {
+    /* Nonmatching */
     if(m72A != 0) {
         m72A--;
         if(m72A == 0) {
@@ -841,6 +857,7 @@ void daNpcSv_c::setAnmFromMsgTag() {
 
 /* 00001F74-00001F94       .text getPrmNpcNo__9daNpcSv_cFv */
 u8 daNpcSv_c::getPrmNpcNo() {
+    /* Nonmatching */
     u8 ret = argument;
     if(ret >= 4) {
         ret = 0;
@@ -865,6 +882,7 @@ void daNpcSv_c::lookBack() {
 
 /* 00002520-000025E8       .text playAnm__9daNpcSv_cFv */
 void daNpcSv_c::playAnm() {
+    /* Nonmatching */
     m73E &= 0xFE;
     if(mpMorf->play(NULL, 0, 0) != 0 && mAnmDat != NULL && (s8)m73F > 0) {
         m73F--;
@@ -881,6 +899,7 @@ void daNpcSv_c::playAnm() {
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
 void daNpcSv_c::setAnm(u8 anmNo, int mode, f32 speed) {
+    /* Nonmatching */
     if (m70C >= 0.0f) {
         speed = m70C;
         m70C = -1.0f;
@@ -894,6 +913,7 @@ void daNpcSv_c::setAnm(u8 anmNo, int mode, f32 speed) {
 
 /* 000026C8-00002768       .text setAnmTbl__9daNpcSv_cFP9sSvAnmDat */
 u8 daNpcSv_c::setAnmTbl(sSvAnmDat* anmDat) {
+    /* Nonmatching */
     if(anmDat->mAnmNo == 0xFF) {
         mAnmDat = NULL;
         return true;
@@ -922,6 +942,7 @@ void daNpcSv_c::setCollision(dCcD_Cyl* pCyl, cXyz pos, f32 radius, f32 height) {
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */
 u8 daNpcSv_c::getTalkNo() {
+    /* Nonmatching */
     int bHook = dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e) != 0;
     m746 = 0;
     u16 flags = m734;
@@ -966,6 +987,7 @@ u8 daNpcSv_c::getTalkNo() {
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
 s32 daNpcSv_c::isTalkOK() {
+    /* Nonmatching */
     return (dComIfGp_checkPlayerStatus0(0, 0x100000)) == 0;
 }
 
