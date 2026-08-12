@@ -437,7 +437,7 @@ void daObjFlame::Act_c::em_manual_inv() {
 
     if (mEm0State == 3) {
         if (mpEmitter0 != NULL) {
-            mpEmitter0->setStatus(0);
+            mpEmitter0->mMaxFrame = -1;
             mpEmitter0->setStatus(1);
             mpEmitter0 = NULL;
         }
@@ -445,7 +445,7 @@ void daObjFlame::Act_c::em_manual_inv() {
 
     if (mEm1State == 3) {
         if (mpEmitter1 != NULL) {
-            mpEmitter1->setStatus(0);
+            mpEmitter1->mMaxFrame = -1;
             mpEmitter1->setStatus(1);
             mpEmitter1 = NULL;
         }
@@ -453,7 +453,7 @@ void daObjFlame::Act_c::em_manual_inv() {
 
     if (mEm2State == 3) {
         if (mpEmitter2 != NULL) {
-            mpEmitter2->setStatus(0);
+            mpEmitter2->mMaxFrame = -1;
             mpEmitter2->setStatus(1);
             mpEmitter2 = NULL;
         }
@@ -863,20 +863,24 @@ BOOL daObjFlame::Method::Draw(void* i_this) {
 /* 00002710-000027B0       .text IsDelete__Q210daObjFlame6MethodFPv */
 BOOL daObjFlame::Method::IsDelete(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
-    if (Act_c::M_attr_scl[a_this->mType].mF2C == 0) {
-        if (a_this->mpEmitter0 != NULL) {
-            a_this->mpEmitter0->setStatus(0);
-            a_this->mpEmitter0->setStatus(1);
+    const attr_scl_s* attr = &Act_c::M_attr_scl[a_this->mType];
+    if (attr->mF2C == 0) {
+        JPABaseEmitter* emitter0 = a_this->mpEmitter0;
+        if (emitter0 != NULL) {
+            emitter0->mMaxFrame = -1;
+            emitter0->setStatus(1);
             a_this->mpEmitter0 = NULL;
         }
-        if (a_this->mpEmitter1 != NULL) {
-            a_this->mpEmitter1->setStatus(0);
-            a_this->mpEmitter1->setStatus(1);
+        JPABaseEmitter* emitter1 = a_this->mpEmitter1;
+        if (emitter1 != NULL) {
+            emitter1->mMaxFrame = -1;
+            emitter1->setStatus(1);
             a_this->mpEmitter1 = NULL;
         }
-        if (a_this->mpEmitter2 != NULL) {
-            a_this->mpEmitter2->setStatus(0);
-            a_this->mpEmitter2->setStatus(1);
+        JPABaseEmitter* emitter2 = a_this->mpEmitter2;
+        if (emitter2 != NULL) {
+            emitter2->mMaxFrame = -1;
+            emitter2->setStatus(1);
             a_this->mpEmitter2 = NULL;
         }
     }
