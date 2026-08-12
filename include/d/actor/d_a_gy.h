@@ -107,9 +107,11 @@ public:
     /* 0xD18 */ dPa_waveEcallBack mD18;
     /* 0xD7C */ dPa_waveEcallBack mD7C;
     /* 0xDE0 */ dPa_splashEcallBack mDE0;
-    /* 0xDFC */ u8 mDFC[0xE14 - 0xDFC];
+    /* 0xDFC */ cXyz mDFC;
+    /* 0xE08 */ u8 mE08[0xE14 - 0xE08];
     /* 0xE14 */ cBgS_LinChk mE14;
-    /* 0xE6C */ u8 mE6C[0xE90 - 0xE6C];
+    /* 0xE6C */ u8 mE6C[0xE84 - 0xE6C];
+    /* 0xE84 */ Vec mE84;
 };
 
 class daGy_HIO_c : public mDoHIO_entry_c {

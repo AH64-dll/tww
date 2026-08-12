@@ -311,7 +311,32 @@ BOOL daGy_c::_createHeap() {
 
 /* 00000AAC-00000C30       .text setMtx__6daGy_cFv */
 void daGy_c::setMtx() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    model->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    cXyz sp14(0.0f, 0.0f, 500.0f);
+    mDoMtx_stack_c::multVec(&sp14, &mE84);
+
+    if (l_HIO.m94 != 0) {
+        mDoMtx_stack_c::transM(l_HIO.mB8, l_HIO.mBC, l_HIO.mC0);
+    }
+    mDoMtx_stack_c::transM(0.0f, m4E4, 0.0f);
+    PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+    cXyz sp8;
+    if (m4E4 <= 10.0f + l_HIO.mAC) {
+        sp8.set(l_HIO.mEC, l_HIO.mF0, l_HIO.mF4);
+    } else if (m4E4 > 10.0f + l_HIO.mAC) {
+        sp8.set(l_HIO.mF8, l_HIO.mFC, l_HIO.m100);
+    }
+    mDoMtx_stack_c::transM(sp8);
+
+    mDFC.x = mDoMtx_stack_c::now[0][3];
+    mDFC.y = mDoMtx_stack_c::now[1][3];
+    mDFC.z = mDoMtx_stack_c::now[2][3];
 }
 
 /* 00000C30-00000C7C       .text setAnm__6daGy_cFv */
