@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_func.h"
+#include "d/d_lib.h"
 #include "d/d_particle.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
@@ -153,7 +154,7 @@ static __jnt_hit_data_c search_data[] = {
 static daGy_HIO_c l_HIO;
 
 const u32 daGy_c::m_heapsize = 0x3FA0;
-static const char m_arc_name[] = "Gy";
+const char daGy_c::m_arc_name[] = "Gy";
 
 static void (daGy_c::*mode_proc[])() = {
     &daGy_c::modeDive,
@@ -368,7 +369,34 @@ void daGy_c::modeWithCircleInit() {
 
 /* 00000C30-00000C7C       .text setAnm__6daGy_cFv */
 void daGy_c::setAnm() {
-    /* Nonmatching */
+    static const dLib_anm_idx_c a_anm_idx_tbl[] = {
+        {0xB, -1},
+        {0xC, -1},
+        {0x6, -1},
+        {0xA, -1},
+        {0x7, -1},
+        {0x8, -1},
+        {0x9, -1},
+        {0x4, -1},
+        {0x5, -1},
+    };
+
+    static const dLib_anm_prm_c a_anm_prm_tbl[] = {
+        {0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {0, -1, 0, 8.0f, 2.0f, J3DFrameCtrl::EMode_LOOP},
+        {1, -1, 0, 8.0f, 2.0f, J3DFrameCtrl::EMode_LOOP},
+        {0, -1, 0, 8.0f, 2.5f, J3DFrameCtrl::EMode_LOOP},
+        {2, 1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {3, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {4, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {4, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {5, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {6, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {7, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+        {8, -1, 0, 2.0f, 1.0f, J3DFrameCtrl::EMode_NONE},
+    };
+
+    dLib_setAnm(m_arc_name, mpMorf, (s8*)&mD14, (s8*)&mD15, (s8*)&mD16, a_anm_idx_tbl, a_anm_prm_tbl, false);
 }
 
 /* 00000F3C-00000FC4       .text setAimSpeedF__6daGy_cFv */
