@@ -189,9 +189,9 @@ void daObjTrap_c::get_ground() {
 
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
 bool daObjTrap_c::circle_search() {
-    cXyz diff = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    cXyz tmp(diff.x, 0.0f, diff.z);
-    f32 dist = PSVECSquareMag((Vec*)&tmp);
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz diff = player->current.pos - current.pos;
+    f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
     dist = std::sqrtf(dist);
     return dist <= 400.0f && mDirValid == 1 && mDir.x * diff.x + mDir.z * diff.z >= 0.0f;
 }
@@ -212,11 +212,9 @@ void daObjTrap_c::set_move_info() {
 bool daObjTrap_c::check_arrival() {
     cXyz d1 = mCurPos - mPathPosB;
     cXyz d2 = mPathPosA - mPathPosB;
-    cXyz t1(d1.x, 0.0f, d1.z);
-    f32 mag1 = PSVECSquareMag((Vec*)&t1);
+    f32 mag1 = PSVECSquareMag((Vec*)&cXyz(d1.x, 0.0f, d1.z));
     mag1 = std::sqrtf(mag1);
-    cXyz t2(d2.x, 0.0f, d2.z);
-    f32 mag2 = PSVECSquareMag((Vec*)&t2);
+    f32 mag2 = PSVECSquareMag((Vec*)&cXyz(d2.x, 0.0f, d2.z));
     mag2 = std::sqrtf(mag2);
     return mag1 >= mag2;
 }
