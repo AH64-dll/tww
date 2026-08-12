@@ -123,8 +123,52 @@ void control2(sitem_class* i_this) {
 }
 
 /* 000009E8-00000E2C       .text cut_control1__FP11sitem_class */
-void cut_control1(sitem_class*) {
-    /* Nonmatching */
+void cut_control1(sitem_class* i_this) {
+    i_this->mSitem2[0].mPos = i_this->current.pos;
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cXyz sp50(0.0f, 0.0f, i_this->mHandPos.z);
+    f32 f28 = 50.0f + REG0_F(18);
+
+    sitem_s* cur = &i_this->mSitem2[1];
+    for (int i = 1; i < 5; i++) {
+        cXyz sp44;
+        sp44.x = f28 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x1004) + i * (REG0_S(6) + 0x2710));
+        sp44.y = 50.0f + REG0_F(17);
+        sp44.z = f28 * cM_scos(i_this->m2BC * (REG0_S(7) + 0x1130) + i * (REG0_S(8) + 0x2710));
+        cXyz sp38;
+        MtxPosition(&sp44, &sp38);
+        f32 x = sp38.x + (cur->mPos.x - (cur - 1)->mPos.x);
+        f32 y = sp38.y + (cur->mPos.y - (cur - 1)->mPos.y);
+        f32 z = sp38.z + (cur->mPos.z - (cur - 1)->mPos.z);
+        s16 yrot = cM_atan2s(x, z);
+        f32 dist = std::sqrtf(x * x + z * z);
+        s16 xrot = (s16)-cM_atan2s(y, dist);
+        MtxPush();
+        mDoMtx_YrotS(*calc_mtx, yrot);
+        mDoMtx_XrotM(*calc_mtx, xrot);
+        MtxPosition(&sp50, &sp44);
+        MtxPull();
+        cXyz sp2C = (cur - 1)->mPos + sp44;
+        cur->mPos = sp2C;
+        cur++;
+    }
+
+    if (i_this->mFollow[0].getEmitter() == NULL && i_this->mD4C != 0) {
+        i_this->mFollow[0].end();
+        dComIfGp_particle_set(0x8184, &i_this->mSitem2[4].mPos, &i_this->mCSxyz[0], NULL, 0xFF, &i_this->mFollow[0],
+                              fopAcM_GetRoomNo(i_this));
+        i_this->m2C6 = 0x3C;
+        return;
+    }
+
+    cXyz sp20 = i_this->mSitem2[4].mPos - i_this->mSitem2[3].mPos;
+    i_this->mCSxyz[0].y = cM_atan2s(sp20.x, sp20.z);
+    f32 dist = std::sqrtf(sp20.x * sp20.x + sp20.z * sp20.z);
+    i_this->mCSxyz[0].x = (s16)-cM_atan2s(sp20.y, dist);
+    if (i_this->m2C6 == 1 && i_this->mFollow[0].getEmitter() != NULL) {
+        i_this->mFollow[0].end();
+    }
 }
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
