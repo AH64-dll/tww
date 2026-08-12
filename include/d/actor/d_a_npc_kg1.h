@@ -13,12 +13,12 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void getAttentionBasePos() {}
-    void getEyePos() {}
+    cXyz& getAttentionBasePos() { return mAttentionBasePos; }
+    cXyz& getEyePos() { return mEyePos; }
     void setAction(void (daNpc_Kg1_c::*)()) {}
 
     void lookBack();
-    void chkAttention();
+    s32 chkAttention();
     BOOL initTexPatternAnm(int, bool);
     void playTexPatternAnm();
     void set_mtx();
@@ -51,15 +51,21 @@ public:
     /* 0x6F8 */ mDoExt_btpAnm m6F8;
     /* 0x70C */ mDoExt_btpAnm m70C;
     /* 0x720 */ u8 m720;
-    /* 0x721 */ u8 m721[0x72C - 0x721];
+    /* 0x721 */ u8 m721[0x724 - 0x721];
+    /* 0x724 */ u32 m724;
+    /* 0x728 */ u8 m728[0x72C - 0x728];
     /* 0x72C */ s16 m72C;
     /* 0x72E */ s16 m72E;
     /* 0x730 */ u8 m730;
     /* 0x731 */ u8 m731;
     /* 0x732 */ u8 m732;
-    /* 0x733 */ u8 m733[0x74D - 0x733];
-    /* 0x74D */ u8 m74D;
-    /* 0x74E */ u8 m74E[0x750 - 0x74E];
+    /* 0x733 */ u8 m733;
+    /* 0x734 */ cXyz mEyePos;
+    /* 0x740 */ cXyz mAttentionBasePos;
+    /* 0x74C */ s8 m74C;
+    /* 0x74D */ s8 m74D;
+    /* 0x74E */ s8 m74E;
+    /* 0x74F */ u8 m74F;
     /* 0x750 */ u8 m750;
     /* 0x751 */ u8 m751;
     /* 0x752 */ u8 m752[0x770 - 0x752];
@@ -75,7 +81,7 @@ public:
     /* 0x779 */ u8 m779;
     /* 0x77A */ u8 mGameBoardScore;
     /* 0x77B */ u8 mEndGameTimer;
-    /* 0x77C */ u8 m77C[0x780 - 0x77C];
+    /* 0x77C */ int m77C;
     /* 0x780 */ int mWaitMode;
     /* 0x784 */ s16 m784;
     /* 0x786 */ s16 m786;
