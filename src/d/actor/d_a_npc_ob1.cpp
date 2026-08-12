@@ -844,10 +844,10 @@ s32 daNpc_Ob1_c::ob_movPass() {
 /* 00001DC0-00001E50       .text ob_clcMovSpd__11daNpc_Ob1_cFv */
 void daNpc_Ob1_c::ob_clcMovSpd() {
     cXyz diff = m7A8 - current.pos;
-    f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
-    current.angle.y = cLib_chaseAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &m7A8),
-                                       l_HIO.mPrmTbl.field_0x28);
-    speedF = cLib_chaseF(&speedF, m7B8, m7BC);
+    PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
+    cLib_chaseAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &m7A8),
+                     l_HIO.mPrmTbl.field_0x28);
+    cLib_chaseF(&speedF, m7B8, m7BC);
 }
 
 /* 00001E50-00001F28       .text ob_nMove__11daNpc_Ob1_cFv */
@@ -1330,7 +1330,11 @@ BOOL daNpc_Ob1_c::demo() {
             mBtpNum = 2;
             mBlinkFrame = 0;
         }
+#if VERSION > VERSION_DEMO
         dDemo_setDemoData(this, 0x6A, mpMorf, "Ob", 0, NULL, 0, 0);
+#else
+        dDemo_setDemoData(this, 0x6A, mpMorf, "Ob", 0, NULL);
+#endif
     }
     return mbInDemo;
 }
