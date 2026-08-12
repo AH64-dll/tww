@@ -60,8 +60,8 @@ public:
     void setMdlNo(unsigned char i_mdl_no) { mBtpNo = i_mdl_no; }
     void setNpcNo(unsigned char i_npc_no) { mNpcNo = i_npc_no; }
 
-    void createHeap();
-    void createInit();
+    BOOL createHeap();
+    cPhs_State createInit();
     void wait_action_init();
     void wait_action();
     void checkOrder();
@@ -69,9 +69,9 @@ public:
     void eventMove();
     void privateCut();
     void eventMainInit();
-    void eventMain();
+    int eventMain();
     void eventMesSetInit(int);
-    void eventMesSet();
+    int eventMesSet();
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
     u16 next_msgStatus(u32*);

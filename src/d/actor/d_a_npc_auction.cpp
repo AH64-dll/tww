@@ -38,7 +38,7 @@ void phase_2(daNpcAuction_c*) {
 }
 
 /* 00000B4C-00000E74       .text createHeap__14daNpcAuction_cFv */
-void daNpcAuction_c::createHeap() {
+BOOL daNpcAuction_c::createHeap() {
     /* Nonmatching */
 }
 
@@ -53,7 +53,7 @@ static s16 daNpcAuction_XyEventCB(void*, int) {
 }
 
 /* 00000EB4-00001038       .text createInit__14daNpcAuction_cFv */
-void daNpcAuction_c::createInit() {
+cPhs_State daNpcAuction_c::createInit() {
     /* Nonmatching */
 }
 
@@ -93,7 +93,7 @@ void daNpcAuction_c::eventMainInit() {
 }
 
 /* 00001554-00001888       .text eventMain__14daNpcAuction_cFv */
-void daNpcAuction_c::eventMain() {
+int daNpcAuction_c::eventMain() {
     /* Nonmatching */
 }
 
@@ -103,17 +103,17 @@ void daNpcAuction_c::eventMesSetInit(int) {
 }
 
 /* 000018FC-00001930       .text eventMesSet__14daNpcAuction_cFv */
-void daNpcAuction_c::eventMesSet() {
+int daNpcAuction_c::eventMesSet() {
     /* Nonmatching */
 }
 
 /* 00001930-00001938       .text XyCheckCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyCheckCB(int) {
+s16 daNpcAuction_c::XyCheckCB(int) {
     /* Nonmatching */
 }
 
 /* 00001938-000019F8       .text XyEventCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyEventCB(int) {
+s16 daNpcAuction_c::XyEventCB(int) {
     /* Nonmatching */
 }
 
@@ -133,7 +133,7 @@ void daNpcAuction_c::setAnmFromMsgTag() {
 }
 
 /* 00002070-00002090       .text getPrmNpcNo__14daNpcAuction_cFv */
-void daNpcAuction_c::getPrmNpcNo() {
+u8 daNpcAuction_c::getPrmNpcNo() {
     /* Nonmatching */
 }
 
@@ -148,7 +148,7 @@ void daNpcAuction_c::lookBack() {
 }
 
 /* 00002488-000025AC       .text initTexPatternAnm__14daNpcAuction_cFb */
-void daNpcAuction_c::initTexPatternAnm(bool) {
+BOOL daNpcAuction_c::initTexPatternAnm(bool) {
     /* Nonmatching */
 }
 
@@ -178,12 +178,12 @@ void daNpcAuction_c::setAnmTbl(sAnmDat*) {
 }
 
 /* 00002874-00002928       .text isExecute__14daNpcAuction_cFv */
-void daNpcAuction_c::isExecute() {
+BOOL daNpcAuction_c::isExecute() {
     /* Nonmatching */
 }
 
 /* 00002928-0000298C       .text getRand__14daNpcAuction_cFi */
-void daNpcAuction_c::getRand(int) {
+int daNpcAuction_c::getRand(int) {
     /* Nonmatching */
 }
 
