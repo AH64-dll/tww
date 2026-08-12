@@ -98,6 +98,7 @@ static BOOL nodeCallBack_Ac1(J3DNode* i_param_1, int i_param_2) {
 }
 
 /* 000003DC-0000056C       .text nodeAc1Control__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
+/* Nonmatching: anchor naming only (bss.0/rodata.0 vs @N) */
 void daNpc_Ac1_c::nodeAc1Control(J3DNode* i_node, J3DModel* i_model) {
     static cXyz a_eye_pos_off(20.0f, 18.0f, 0.0f);
     s32 uVar1 = ((J3DJoint*)i_node)->getJntNo();
@@ -122,6 +123,7 @@ void daNpc_Ac1_c::nodeAc1Control(J3DNode* i_node, J3DModel* i_model) {
 }
 
 /* 000005A8-00000640       .text init_AC1_0__11daNpc_Ac1_cFv */
+/* Nonmatching: symbol/reloc naming only */
 u8 daNpc_Ac1_c::init_AC1_0() {
     u8 ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) != 0;
     if (ret != 0) {
@@ -179,6 +181,7 @@ bool daNpc_Ac1_c::createInit() {
 }
 
 /* 000007C8-00000988       .text setMtx__11daNpc_Ac1_cFb */
+/* Nonmatching: 1 addi scheduling slot (item mtx dst offset deferred in retail) */
 void daNpc_Ac1_c::setMtx(bool i_param_1) {
     if (!mbInDemo) {
         plyTexPttrnAnm();
@@ -198,7 +201,7 @@ void daNpc_Ac1_c::setMtx(bool i_param_1) {
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    cMtx_copy(mDoMtx_stack_c::get(), mpMorf->getModel()->getBaseTRMtx());
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (!mbHasArms) {
         mpWingMorf->calc();
@@ -206,7 +209,8 @@ void daNpc_Ac1_c::setMtx(bool i_param_1) {
         mpArmMorf->calc();
     }
     if (mpItemModel != NULL && mbHasArms) {
-        cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num), mpItemModel->getBaseTRMtx());
+        MtxP itm_mtx = mpItemModel->getBaseTRMtx();
+        cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num), itm_mtx);
         mpItemModel->calc();
     }
     setAttention(i_param_1);
@@ -522,6 +526,7 @@ s32 daNpc_Ac1_c::getBitMask() {
 }
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
+/* Nonmatching: cast-temp regalloc r3-vs-r5 (global alloc direction, 9 variants) */
 u32 daNpc_Ac1_c::getMsg_AC1_0() {
     s8 event_reg = (s8)dComIfGs_getEventReg(dSv_event_flag_c::UNK_B8FF);
     s32 bit_mask = getBitMask();
@@ -787,6 +792,7 @@ u8 daNpc_Ac1_c::demo() {
 }
 
 /* 00001B74-00001C70       .text shadowDraw__11daNpc_Ac1_cFv */
+/* Nonmatching: rodata anchor naming only */
 void daNpc_Ac1_c::shadowDraw() {
     cXyz local_18(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowID = dComIfGd_setShadow(
@@ -817,6 +823,7 @@ void daNpc_Ac1_c::shadowDraw() {
 }
 
 /* 00001C70-00001DC4       .text _draw__11daNpc_Ac1_cFv */
+/* Nonmatching: reloc naming only */
 BOOL daNpc_Ac1_c::_draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
@@ -908,6 +915,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000201C-0000213C       .text _create__11daNpc_Ac1_cFv */
+/* Nonmatching: pool anchor naming only */
 cPhs_State daNpc_Ac1_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Ac1_c);
     static u32 a_size_tbl[] = {
