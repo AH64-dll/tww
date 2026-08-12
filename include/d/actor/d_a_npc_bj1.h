@@ -233,7 +233,7 @@ public:
     /* 0x8AA */ u8 m8AA;
     /* 0x8AB */ u8 m8AB;
     /* 0x8AC */ u8 m8AC;
-    /* 0x8AD */ s8 m8AD;
+    /* 0x8AD */ u8 m8AD;
     /* 0x8AE */ s8 m8AE;
     /* 0x8AF */ u8 m8AF;
     /* 0x8B0 */ u8 mStatus;
