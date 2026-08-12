@@ -393,16 +393,14 @@ void mant_n_calc(mant_class* i_this) {
         } else if (i >= 0x48) {
             nrm[i] = nrm[i - 9];
         } else {
-            cXyz local_C = v_pos[i + 9] - v_pos[i];
-            f32 dx = local_C.x;
-            f32 dy = local_C.y;
-            f32 dz = local_C.z;
+            cXyz local_C = v_pos[i + 10] - v_pos[i];
+            cXyz local_18 = local_C;
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(local_C.x, local_C.z));
-            f32 dist = dx * dx + dz * dz;
+            f32 dist = local_18.x * local_18.x + local_18.z * local_18.z;
             if (dist > 0.0f) {
                 dist = std::sqrtf(dist);
             }
-            mDoMtx_XrotM(*calc_mtx, -cM_atan2s(dy, dist));
+            mDoMtx_XrotM(*calc_mtx, -cM_atan2s(local_18.y, dist));
             MtxPosition(&local_24, &nrm[i]);
         }
     }
