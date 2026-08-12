@@ -356,6 +356,7 @@ BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_this) {
 
 /* 00000D84-00000DE8       .text init__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::init() {
+    /* Nonmatching */
     static dCcD_SrcCyl body_co_cyl = {
         // dCcD_SrcGObjInf
         {
@@ -658,6 +659,7 @@ BOOL daKddoor_c::CreateHeap() {
 
 /* 00001B74-00001CD0       .text setEventPrm__10daKddoor_cFv */
 void daKddoor_c::setEventPrm() {
+    /* Nonmatching */
     if (mFrontCheck == 0) {
         m2C6 = 2;
         if (mSsk.m55A == 0xFF) {
@@ -760,6 +762,7 @@ void daKddoor_c::calcMtx() {
 
 /* 00002108-0000220C       .text CreateInit__10daKddoor_cFv */
 BOOL daKddoor_c::CreateInit() {
+    /* Nonmatching */
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
         JUT_ASSERT(0x43E, NULL);
     }
@@ -807,6 +810,7 @@ cPhs_State daKddoor_c::create() {
 
 /* 000023CC-00002678       .text demoProc__10daKddoor_cFv */
 void daKddoor_c::demoProc() {
+    /* Nonmatching */
     s32 iVar1 = getDemoAction();
     if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
         switch(iVar1) {
