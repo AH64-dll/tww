@@ -732,13 +732,13 @@ BOOL daNpc_Ac1_c::talk_1() {
 /* 00001978-00001A34       .text wait_action1__11daNpc_Ac1_cFPv */
 BOOL daNpc_Ac1_c::wait_action1(void*) {
     switch (mActionIndex) {
-        case 9:
-            break;
         case 0:
             setStt(1);
             mActionIndex += 1;
             break;
-        default:
+        case 1:
+        case 2:
+        case 3:
             m868 = chkAttention();
             switch (mStatus) {
                 case 1:
@@ -749,6 +749,8 @@ BOOL daNpc_Ac1_c::wait_action1(void*) {
                     break;
             }
             lookBack();
+            break;
+        case 9:
             break;
     }
     return TRUE;
