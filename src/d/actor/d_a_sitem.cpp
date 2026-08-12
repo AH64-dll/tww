@@ -9,6 +9,7 @@
 #include "d/d_s_play.h"
 
 static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
+static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
 void hand_draw(sitem_class* i_this) {
@@ -55,8 +56,39 @@ void control3(sitem_class* i_this) {
 }
 
 /* 00000410-00000748       .text control1__FP11sitem_class */
-void control1(sitem_class*) {
-    /* Nonmatching */
+void control1(sitem_class* i_this) {
+    i_this->mSitem1[0].mPos = i_this->current.pos;
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cXyz sp3C(0.0f, 0.0f, i_this->m2FC);
+    cXyz sp24;
+    MtxPosition(&sp3C, &sp24);
+    sp3C.z = i_this->m2F4;
+    f32 f27 = i_this->mHandPos.x;
+
+    sitem_s* cur = &i_this->mSitem1[1];
+    for (int i = 1; i < 9; i++) {
+        cXyz sp30;
+        sp30.x = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x44C) + i * (REG0_S(6) + 0xFA0));
+        sp30.y = g_d[i];
+        sp30.z = f27 * cM_scos(i_this->m2BC * (REG0_S(7) + 0x320) + i * (REG0_S(8) + 0xFA0));
+        cXyz sp18;
+        MtxPosition(&sp30, &sp18);
+        f32 f29 = sp18.x * 1.0f + ((cur->mPos.x - (cur - 1)->mPos.x) + sp24.x * 1.0f);
+        f32 f28 = sp18.y * 1.0f + ((cur->mPos.y - (cur - 1)->mPos.y) + sp24.y * 1.0f);
+        f32 f26 = sp18.z * 1.0f + ((cur->mPos.z - (cur - 1)->mPos.z) + sp24.z * 1.0f);
+        s16 yrot = cM_atan2s(f29, f26);
+        f32 dist = std::sqrtf(f29 * f29 + f26 * f26);
+        s16 xrot = (s16)-cM_atan2s(f28, dist);
+        MtxPush();
+        mDoMtx_YrotS(*calc_mtx, yrot);
+        mDoMtx_XrotM(*calc_mtx, xrot);
+        MtxPosition(&sp3C, &sp30);
+        MtxPull();
+        cXyz spC = (cur - 1)->mPos + sp30;
+        cur->mPos = spC;
+        cur++;
+    }
 }
 
 /* 00000748-000009E8       .text control2__FP11sitem_class */
