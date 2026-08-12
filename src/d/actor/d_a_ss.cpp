@@ -24,7 +24,7 @@
 static _GXColor col;
 static cXyz non_pos;
 
-static const dCcD_SrcSph tg_sph_src = {
+static dCcD_SrcSph tg_sph_src = {
     // dCcD_SrcGObjInf
     {
         // cCcD_SrcObj
