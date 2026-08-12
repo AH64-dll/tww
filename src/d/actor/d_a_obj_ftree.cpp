@@ -297,43 +297,87 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData*, unsigned long, short, short
 }
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
-BOOL daObjFtree::is_broughtID(int) {
-    /* Nonmatching */
+BOOL daObjFtree::is_broughtID(int i_id) {
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
+    BOOL ret = TRUE;
+    if (((reg >> (i_id & 7)) & 1) == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == 0) {
+        ret = FALSE;
+    }
+    return ret;
 }
 
 /* 000010F0-00001138       .text is_brought__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::is_brought() {
-    /* Nonmatching */
+    s32 tree_no = daObj::PrmAbstract(this, 4, 0);
+    if (tree_no < 0xA) {
+        return is_broughtID(ret_tree_no[tree_no]);
+    }
+    return is_broughtID(0xF);
 }
 
 /* 00001138-000011FC       .text set_broughtID__Q210daObjFtree5Act_cFi */
-void daObjFtree::Act_c::set_broughtID(int) {
-    /* Nonmatching */
+void daObjFtree::Act_c::set_broughtID(int i_id) {
+    u8 bit = 1 << (i_id & 7);
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg | bit);
+    reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9AFF);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9AFF, reg | bit);
+
+    _ftree_seach_info_ info;
+    get_ftree_info(&info);
+    if (info.mCount == info.mBroughtCount) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0102);
+    }
 }
 
 /* 000011FC-00001260       .text set_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_brought() {
-    /* Nonmatching */
+    s32 tree_no = daObj::PrmAbstract(this, 4, 0);
+    if (tree_no < 0xA) {
+        set_broughtID(ret_tree_no[tree_no]);
+    } else {
+        set_broughtID(0xF);
+    }
+    m638 = 1;
 }
 
 /* 00001260-000012D0       .text unset_broughtID__Q210daObjFtree5Act_cFi */
-void daObjFtree::Act_c::unset_broughtID(int) {
-    /* Nonmatching */
+void daObjFtree::Act_c::unset_broughtID(int i_id) {
+    u8 bit = 1 << (i_id & 7);
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg & ~bit);
 }
 
 /* 000012D0-00001334       .text unset_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::unset_brought() {
-    /* Nonmatching */
+    s32 tree_no = daObj::PrmAbstract(this, 4, 0);
+    if (tree_no < 0xA) {
+        unset_broughtID(ret_tree_no[tree_no]);
+    } else {
+        unset_broughtID(0xF);
+    }
+    m638 = 0;
 }
 
 /* 00001334-000013A0       .text get_ftree_info__Q210daObjFtree5Act_cFPQ210daObjFtree18_ftree_seach_info_ */
-void daObjFtree::Act_c::get_ftree_info(daObjFtree::_ftree_seach_info_*) {
-    /* Nonmatching */
+void daObjFtree::Act_c::get_ftree_info(daObjFtree::_ftree_seach_info_* info) {
+    info->mCount = 8;
+    info->mBroughtCount = 0;
+    for (int i = 0; i < 8; i++) {
+        if (is_broughtID(i)) {
+            info->mBroughtCount++;
+        }
+    }
 }
 
 /* 000013A0-00001400       .text iam_last__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::iam_last() {
-    /* Nonmatching */
+    _ftree_seach_info_ info;
+    get_ftree_info(&info);
+    if (is_brought() == 0 && info.mBroughtCount >= info.mCount - 1) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001400-00001414       .text action_none_init__Q210daObjFtree5Act_cFs */
@@ -378,7 +422,10 @@ void daObjFtree::Act_c::action_waitM_main() {
 
 /* 00001878-000018AC       .text action_waitL_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_waitL_init(s16) {
-    /* Nonmatching */
+    m2A7 = 1;
+    m2A6 = 0;
+    set_brought();
+    return 1;
 }
 
 /* 000018AC-000019BC       .text action_waitL_main__Q210daObjFtree5Act_cFv */
@@ -634,7 +681,11 @@ cPhs_State daObjFtree::Act_c::_create() {
 
 /* 00003FB8-00004004       .text _delete__Q210daObjFtree5Act_cFv */
 bool daObjFtree::Act_c::_delete() {
-    /* Nonmatching */
+    if (m638 != 0) {
+        set_brought();
+    }
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00004004-00004144       .text set_mtx__Q210daObjFtree5Act_cFv */
