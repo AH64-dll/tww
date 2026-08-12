@@ -824,6 +824,9 @@ static BOOL daNpc_Kg1Draw(void* i_this) {
     self->m724 = dComIfGd_setShadow(self->m724, 1, self->mpMorf->getModel(), &shadow_pos, 800.0f, 20.0f,
                                     self->current.pos.y, self->mObjAcch.GetGroundH(), self->mObjAcch.m_gnd,
                                     &self->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    if (self->m779) {
+        dComIfGp_setDoStatusForce(0x19);
+    }
     return 1;
 }
 
