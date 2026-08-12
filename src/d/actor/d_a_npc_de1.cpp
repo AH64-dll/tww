@@ -791,19 +791,19 @@ BOOL daNpc_De1_c::wait01() {
 BOOL daNpc_De1_c::wait02() {
     if (m7B5 != 0) {
         setStt(4);
-        return TRUE;
-    }
-    daLlift_c* lift = (daLlift_c*)searchByID(mPartnerProcID);
-    if (lift != NULL) {
-        if (lift->current.pos.y < lift->old.pos.y + daLlift_c::m_height) {
-            setStt(5);
-            return TRUE;
-        }
-    }
-    if (mbAttention != 0) {
-        mOrder = 2;
     } else {
-        mOrder = 0;
+        daLlift_c* lift = (daLlift_c*)searchByID(mPartnerProcID);
+        if (lift != NULL) {
+            if (lift->current.pos.y < lift->home.pos.y + daLlift_c::m_height) {
+                setStt(5);
+                return TRUE;
+            }
+        }
+        if (mbAttention != 0) {
+            mOrder = 2;
+        } else {
+            mOrder = 0;
+        }
     }
     return TRUE;
 }
