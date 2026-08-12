@@ -151,12 +151,28 @@ void daMozo_c::set_mtx() {
 
 /* 00000AAC-00000C38       .text anime_proc__8daMozo_cFv */
 void daMozo_c::anime_proc() {
-    /* Nonmatching */
+    mAnimMorf->play(NULL, 0, 0);
+    mBrkAnm.play();
+    mBtkAnm.play();
+
+    if (mAnimMorf->getFrame() < 24.0f) {
+        fopAcM_seStart(this, 0x6179, 0);
+    }
+
+    if (mAnimMorf->checkFrame(35.0f)) {
+        if (mAnimMorf->getPlaySpeed() > 0.0f) {
+            fopAcM_seStart(this, 0x697A, 0);
+        } else {
+            mDoAud_seStopActor(&eyePos, 0x697A);
+            fopAcM_seStart(this, 0x697B, 0);
+        }
+    }
 }
 
 /* 00000C38-00000C90       .text wait_proc_init__8daMozo_cFv */
 void daMozo_c::wait_proc_init() {
-    /* Nonmatching */
+    setAnm(0, 0.0f);
+    setProcess(&daMozo_c::wait_proc);
 }
 
 /* 00000C90-00000D58       .text wait_proc__8daMozo_cFv */
@@ -182,7 +198,13 @@ void daMozo_c::wait_proc() {
 
 /* 00000D58-00000DE0       .text search_beam_proc_init__8daMozo_cFv */
 void daMozo_c::search_beam_proc_init() {
-    /* Nonmatching */
+    setAnm(1, 0.0f);
+    setProcess(&daMozo_c::search_beam_proc);
+
+    mBrkAnm.setFrame(0.0f);
+    mBtkAnm.setFrame(0.0f);
+    mBrkAnm.setPlaySpeed(1.0f);
+    mBtkAnm.setPlaySpeed(1.0f);
 }
 
 /* 00000DE0-00001230       .text search_beam_proc__8daMozo_cFv */
@@ -192,7 +214,15 @@ void daMozo_c::search_beam_proc() {
 
 /* 00001230-000012C0       .text search_fire_proc_init__8daMozo_cFv */
 void daMozo_c::search_fire_proc_init() {
-    /* Nonmatching */
+    setAnm(1, 0.0f);
+    setProcess(&daMozo_c::search_fire_proc);
+
+    mBrkAnm.setFrame(0.0f);
+    mBtkAnm.setFrame(0.0f);
+    mBrkAnm.setPlaySpeed(1.0f);
+    mBtkAnm.setPlaySpeed(1.0f);
+
+    m370 = 0;
 }
 
 /* 000012C0-000017F4       .text search_fire_proc__8daMozo_cFv */
@@ -202,7 +232,12 @@ void daMozo_c::search_fire_proc() {
 
 /* 000017F4-00001874       .text towait_proc_init__8daMozo_cFv */
 void daMozo_c::towait_proc_init() {
-    /* Nonmatching */
+    setAnm(2, 0.0f);
+    mAnimMorf->setPlaySpeed(-0.5f);
+    setProcess(&daMozo_c::towait_proc);
+
+    mBrkAnm.setPlaySpeed(-1.0f);
+    mBtkAnm.setPlaySpeed(-1.0f);
 }
 
 /* 00001874-00001B3C       .text towait_proc__8daMozo_cFv */
@@ -211,13 +246,61 @@ void daMozo_c::towait_proc() {
 }
 
 /* 00001B3C-00001D8C       .text checkRange__8daMozo_cFi */
-BOOL daMozo_c::checkRange(int) {
-    /* Nonmatching */
+BOOL daMozo_c::checkRange(int i_param) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (i_param == 0 && player->checkGrabWear()) {
+        return 0;
+    }
+
+    cXyz diff = player->current.pos - current.pos;
+    f32 dist = diff.absXZ();
+    if (diff.y > -280.0f) {
+        return 0;
+    }
+
+    daMozo_childHIO_c* child =
+        field_0x376 == 0 ? static_cast<daMozo_childHIO_c*>(l_HIO.mpBeamChild)
+                         : static_cast<daMozo_childHIO_c*>(l_HIO.mpFireChild);
+    f32 range;
+    s16 angle;
+    if (i_param == 0) {
+        range = child->m04;
+        angle = child->m0C;
+    } else {
+        range = child->m08;
+        angle = child->m0E;
+    }
+
+    cXyz dir(cM_ssin(current.angle.y), 0.0f, cM_scos(current.angle.y));
+    f32 dot = diff.inprod(dir);
+    if (cLib_distanceAngleS(fopAcM_searchPlayerAngleY(this), current.angle.y) < angle && dist < range &&
+        dot > 200.0f) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001D8C-00001F70       .text setAnm__8daMozo_cFif */
-void daMozo_c::setAnm(int, float) {
-    /* Nonmatching */
+void daMozo_c::setAnm(int i_idx, float i_morf) {
+    mAnmIdx = i_idx;
+    J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+    switch (i_idx) {
+    case 0:
+        mAnimMorf->setAnm(bck, 0, i_morf, 0.0f, 0.0f, -1.0f, NULL);
+        break;
+    case 1:
+        mAnimMorf->setAnm(bck, 0, i_morf, 1.0f, 0.0f, -1.0f, NULL);
+        break;
+    case 2:
+        mAnimMorf->setAnm(bck, 0, i_morf, -0.25f, 24.0f, 36.0f, NULL);
+        break;
+    case 3:
+        mAnimMorf->setAnm(bck, 0, i_morf, 1.0f, 25.0f, -1.0f, NULL);
+        break;
+    case 4:
+        mAnimMorf->setAnm(bck, 0, i_morf, -0.25f, 32.0f, 36.0f, NULL);
+        break;
+    }
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
