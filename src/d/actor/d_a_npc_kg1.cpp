@@ -139,12 +139,40 @@ cPhs_State daNpc_Kg1_c::CreateInit() {
 
 /* 00000EF0-00000FE8       .text eventOrder__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::eventOrder() {
-    /* Nonmatching */
+    if (m732 == 2 || m732 == 1) {
+        eventInfo.onCondition(1);
+        if (m732 == 2) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (m732 == 3) {
+        fopAcM_orderOtherEventId(this, m784, 0xFF, 0xFFFF, 0, 1);
+        eventInfo.onCondition(2);
+    } else if (m732 == 4) {
+        fopAcM_orderOtherEventId(this, m786, 0xFF, 0xFFFF, 0, 1);
+        eventInfo.onCondition(2);
+    } else if (m732 == 5) {
+        fopAcM_orderOtherEventId(this, m788, 0xFF, 0xFFFF, 0, 1);
+        eventInfo.onCondition(2);
+    }
 }
 
 /* 00000FE8-000010C4       .text checkOrder__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck(m784) && m732 == 3) {
+            m732 = 0;
+        }
+        if (dComIfGp_evmng_endCheck(m784)) {
+            m732 = 0;
+        }
+        if (dComIfGp_evmng_startCheck(m788) && m732 == 5) {
+            m732 = 0;
+        }
+    } else if (eventInfo.checkCommandTalk()) {
+        if (m732 == 2 || m732 == 1) {
+            m730 = 1;
+        }
+    }
 }
 
 /* 000010C4-00001188       .text kg1_talk_camera__11daNpc_Kg1_cFv */
@@ -181,7 +209,46 @@ void daNpc_Kg1_c::clr_seq_flag() {
 
 /* 00001878-000019B4       .text getMsg__11daNpc_Kg1_cFv */
 u32 daNpc_Kg1_c::getMsg() {
-    /* Nonmatching */
+    u32 msgNo;
+    if (m774) {
+        if (m773) {
+            if (m775) {
+                if (!m776) {
+                    if (dComIfGs_getEventReg(0xBEFF) > mGameBoardScore) {
+                        dComIfGs_onEventBit(0xE04);
+                        dComIfGs_setEventReg(0xBEFF, mGameBoardScore);
+                        u8 reg = dComIfGs_getEventReg(0xFF07);
+                        if (reg < 3) {
+                            reg++;
+                            dComIfGs_setEventReg(0xFF07, reg);
+                        }
+                        m777 = 1;
+                        msgNo = 0x1D63;
+                        goto out;
+                    }
+                    msgNo = 0x1D64;
+                    goto out;
+                }
+            }
+            if (m775 && m776) {
+                msgNo = 0x1D64;
+                goto out;
+            }
+            msgNo = 0x1D5F;
+            goto out;
+        }
+        msgNo = 0x1D5D;
+        goto out;
+    }
+    if (m770 == 0) {
+        msgNo = 0x1D4D;
+        goto out;
+    } else {
+        msgNo = 0x1D4E;
+        goto out;
+    }
+out:
+    return msgNo;
 }
 
 /* 000019B4-00001C7C       .text next_msgStatus__11daNpc_Kg1_cFPUl */
