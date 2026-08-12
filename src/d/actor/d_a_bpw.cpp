@@ -599,7 +599,7 @@ void fuwafuwa_calc(bpw_class* i_this) {
 
 /* 000018EC-00001A50       .text kankyou_hendou__FP9bpw_class */
 void kankyou_hendou(bpw_class* i_this) {
-    /* Nonmatching - missing "b" instruction for case 0; equivalent */
+    /* Nonmatching - rodata anchor labels only (@4186/@4991 jump table) */
     f32 fVar1;
     u8 bVar2;
 
@@ -608,6 +608,7 @@ void kankyou_hendou(bpw_class* i_this) {
 
     switch (i_this->mKankyouHendouState) {
     case 0:
+        fVar1 = 0.0f;
         break;
     case 1:
         fVar1 = 1.0f;
