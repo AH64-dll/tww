@@ -8,6 +8,7 @@
 
 class daNpc_Kg1_c : public fopNpc_npc_c {
 public:
+    daNpc_Kg1_c();
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();

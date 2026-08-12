@@ -64,6 +64,9 @@ daNpc_Kg1_HIO_c::daNpc_Kg1_HIO_c() {
     field_0x39 = 0;
 }
 
+/* 0000203C-000021B4       .text __ct__11daNpc_Kg1_cFv */
+daNpc_Kg1_c::daNpc_Kg1_c() {}
+
 static daNpc_Kg1_HIO_c l_HIO;
 const char daNpc_Kg1_c::m_arcname[] = "Kg";
 cXyz daNpc_Kg1_c::m_camera_ctr(-200.0f, 140.0f, 85.0f);
