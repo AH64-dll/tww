@@ -14,6 +14,30 @@ static daNpc_Bj1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
 static int l_check_wrk;
 
+static int a_bck_resID_tbl[] = {0xA, 0x2, 0x7, 0x8, 0x3, 0x6, 0x0, 0x1, 0xB, 0x9, 0x2A};
+
+static const char* l_evn_tbl[3] = {
+    "Mak_Drg", "Get_Blu_Btl", "Calling",
+};
+
+struct bj1_prm_tbl_t {
+    /* 0x00 */ Vec mScaleHead;
+    /* 0x0C */ Vec mScaleArm;
+    /* 0x18 */ Vec mScaleBack;
+};  // Size: 0x24
+
+static const bj1_prm_tbl_t l_bj1_prm_tbl[9] = {
+    { {1.0f, 1.0f, 1.0f}, {1.1f, 1.0f, 1.0f}, {40.0f, 10.0f, 0.0f} },
+    { {0.9f, 1.0f, 1.0f}, {0.9f, 1.0f, 1.0f}, {30.0f, 10.0f, 0.0f} },
+    { {1.1f, 1.0f, 1.0f}, {1.25f, 1.1f, 1.1f}, {40.0f, 10.0f, 0.0f} },
+    { {0.8f, 1.0f, 1.0f}, {0.9f, 1.0f, 1.0f}, {30.0f, 10.0f, 0.0f} },
+    { {0.8f, 1.0f, 1.0f}, {0.8f, 1.0f, 1.0f}, {30.0f, 10.0f, 0.0f} },
+    { {1.0f, 1.0f, 1.0f}, {1.15f, 1.0f, 1.05f}, {40.0f, 10.0f, 0.0f} },
+    { {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {40.0f, 10.0f, 0.0f} },
+    { {1.0f, 1.0f, 1.0f}, {1.1f, 1.2f, 1.05f}, {40.0f, 10.0f, 0.0f} },
+    { {1.1f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {40.0f, 10.0f, 0.0f} },
+};
+
 /* 000000EC-00000108       .text __ct__20daNpc_Bj1_childHIO_cFv */
 daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
     /* Nonmatching */
@@ -123,7 +147,103 @@ bool daNpc_Bj1_c::init_BJX_1() {
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::createInit() {
-    /* Nonmatching */
+    int i = 0;
+    for (; i < 3; i++) {
+        mEventIdTable[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
+    }
+
+    attention_info.flags = 10;
+    switch (mType) {
+    case 4:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA7;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
+        break;
+    case 0:
+    case 1:
+    case 7:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
+        break;
+    case 2:
+    case 3:
+    case 5:
+    case 8:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
+        break;
+    case 6:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x5A;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x5A;
+        break;
+    }
+
+    mScaleHead = l_bj1_prm_tbl[mType].mScaleHead;
+    mScaleArm = l_bj1_prm_tbl[mType].mScaleArm;
+    mScaleBack = l_bj1_prm_tbl[mType].mScaleBack;
+
+    gravity = -4.5f;
+    mHomePos = current.pos;
+
+    mPathNo = (fopAcM_GetParam(this) >> 16) & 0xFF;
+    if (mPathNo != 0xFF) {
+        mPathRun.setInf(mPathNo, current.roomNo, 1);
+        if (!mPathRun.isPath()) {
+            return FALSE;
+        }
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+    }
+
+    static char* a_staff_tbl[0x11] = {"Bj1", "Bj1", "Bj2", "Bj2", "Bj3", "Bj3", "Bj4", "Bj4", "Bj5", "Bj5", "Bj6", "Bj6", "Bj7", "Bj8", "Bj8", "Bj9", "Bj9"};
+    mEventCut.setActorInfo2(a_staff_tbl[mSpecificType], this);
+    m8AF = 0xB;
+
+    BOOL result;
+    switch (mSpecificType) {
+    case 6:
+        result = init_BJ4_0();
+        break;
+    case 10:
+        result = init_BJ6_0();
+        break;
+    case 0:
+    case 2:
+    case 4:
+    case 8:
+    case 13:
+    case 15:
+        result = init_BJX_0();
+        break;
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 9:
+    case 11:
+    case 14:
+    case 16:
+        result = init_BJX_1();
+        break;
+    case 12:
+        result = init_BJ7_0();
+        break;
+    default:
+        result = FALSE;
+        break;
+    }
+    if (result) {
+        shape_angle.x = current.angle.x;
+        shape_angle.y = current.angle.y;
+        shape_angle.z = current.angle.z;
+        goto success;
+    }
+    return FALSE;
+success:
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.SetStts(&mStts);
+    mCyl.Set(dNpc_cyl_src);
+    mpMorf->setMorf(0.0f);
+    setMtx(TRUE);
+    return TRUE;
 }
 
 /* 00000C90-00000E00       .text setMtx_anmProc__11daNpc_Bj1_cFv */
@@ -137,8 +257,8 @@ void daNpc_Bj1_c::setMtx(bool) {
 }
 
 /* 00001098-000010AC       .text anmNum_toResID__11daNpc_Bj1_cFi */
-int daNpc_Bj1_c::anmNum_toResID(int) {
-    /* Nonmatching */
+int daNpc_Bj1_c::anmNum_toResID(int i_anmNum) {
+    return a_bck_resID_tbl[i_anmNum];
 }
 
 /* 000010AC-00001188       .text setAnm_anm__11daNpc_Bj1_cFPQ211daNpc_Bj1_c9anm_prm_c */
@@ -417,8 +537,11 @@ void daNpc_Bj1_c::eInit_setShapeAngleY(int*, short) {
 }
 
 /* 00003A14-00003A30       .text eInit_setEvTimer__11daNpc_Bj1_cFPi */
-void daNpc_Bj1_c::eInit_setEvTimer(int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setEvTimer(int* i_evTimer) {
+    m830 = 0;
+    if (i_evTimer != NULL) {
+        m830 = *i_evTimer;
+    }
 }
 
 /* 00003A30-00003B10       .text eInit_calcRelativPos__11daNpc_Bj1_cFP4cXyzPi */
@@ -427,8 +550,11 @@ void daNpc_Bj1_c::eInit_calcRelativPos(cXyz*, int*) {
 }
 
 /* 00003B10-00003B20       .text eInit_prmFloat__11daNpc_Bj1_cFPff */
-f32 daNpc_Bj1_c::eInit_prmFloat(float*, float) {
-    /* Nonmatching */
+f32 daNpc_Bj1_c::eInit_prmFloat(float* i_prm, float i_default) {
+    if (i_prm != NULL) {
+        return *i_prm;
+    }
+    return i_default;
 }
 
 /* 00003B20-00003D3C       .text eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi */
@@ -492,8 +618,8 @@ void daNpc_Bj1_c::eMove_MOV_() {
 }
 
 /* 00004580-00004594       .text eMove_JMP___11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::eMove_JMP_() {
-    /* Nonmatching */
+BOOL daNpc_Bj1_c::eMove_JMP_() {
+    return m8A9 == 0 ? 1 : 0;
 }
 
 /* 00004594-000045F0       .text eMove_SET_TNE___11daNpc_Bj1_cFv */

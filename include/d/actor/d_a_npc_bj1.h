@@ -99,7 +99,7 @@ public:
     void event_actionInit(int);
     void eMove_ATTENTION_();
     void eMove_MOV_();
-    void eMove_JMP_();
+    BOOL eMove_JMP_();
     void eMove_SET_TNE_();
     void eMove_PTH_MOV_();
     void event_action();
@@ -238,8 +238,8 @@ public:
     /* 0x8B1 */ u8 mPrevStatus;
     /* 0x8B2 */ s8 m8B2;
     /* 0x8B3 */ s8 m8B3;
-    /* 0x8B4 */ u8 mType;
-    /* 0x8B5 */ u8 mSpecificType;
+    /* 0x8B4 */ s8 mType;
+    /* 0x8B5 */ s8 mSpecificType;
     /* 0x8B6 */ s8 mActionIndex;
     /* 0x8B7 */ u8 m8B7;
 };  // Size: 0x8B8
