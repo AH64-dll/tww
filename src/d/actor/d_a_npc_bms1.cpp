@@ -215,8 +215,8 @@ BOOL daNpc_Bms1_c::CreateInit() {
 /* 00002104-00002144       .text setAttention__12daNpc_Bms1_cFb */
 void daNpc_Bms1_c::setAttention(bool i_attn) {
     if (i_attn || m7CB < 2) {
-        attention_info.position = mAttnBasePos;
-        attention_info.position.y += l_HIO.mChild[0].mNpc.mAttnYOffset;
+        attention_info.position.set(mAttnBasePos.x, mAttnBasePos.y + l_HIO.mChild[0].mNpc.mAttnYOffset,
+                                    mAttnBasePos.z);
     }
 }
 

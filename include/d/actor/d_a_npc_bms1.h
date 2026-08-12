@@ -139,10 +139,10 @@ public:
     /* 0x898 */ u8 mBtpIdx;
     /* 0x899 */ u8 m899;
     /* 0x89A */ u8 m89A;
-    /* 0x89B */ u8 m89B;
+    /* 0x89B */ s8 m89B;
     /* 0x89C */ u8 m89C;
     /* 0x89D */ u8 m89D;
-    /* 0x89E */ u8 mShopIdx;
+    /* 0x89E */ s8 mShopIdx;
     /* 0x89F */ u8 m89F[0x8A0 - 0x89F];
     /* 0x8A0 */ s8 mActionStatus;
     /* 0x8A1 */ u8 m8A1[0x8A2 - 0x8A1];
