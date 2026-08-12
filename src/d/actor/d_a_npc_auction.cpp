@@ -1277,3 +1277,251 @@ void daNpcAuction_c::lookBack() {
     shape_angle = old.angle;
 }
 
+/* 00002488-000025AC       .text initTexPatternAnm__14daNpcAuction_cFb */
+BOOL daNpcAuction_c::initTexPatternAnm(bool i_anm_play) {
+    J3DModelData* modelData;
+    if (mHeadModel != NULL) {
+        modelData = mHeadModel->getModelData();
+    } else {
+        modelData = mpMorf->getModel()->getModelData();
+    }
+    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[mDataNo], (u16)mBtpNo);
+    JUT_ASSERT(2203, m_head_tex_pattern != 0);
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, false, i_anm_play)) {
+        return FALSE;
+    }
+    m73F = 0;
+    m734 = 0;
+    return TRUE;
+}
+
+/* 000025AC-00002624       .text playTexPatternAnm__14daNpcAuction_cFv */
+void daNpcAuction_c::playTexPatternAnm() {
+    if (cLib_calcTimer<s16>(&m734) == 0) {
+        s16 frameMax = m_head_tex_pattern->getFrameMax();
+        if (m73F >= frameMax) {
+            m73F = m73F - frameMax;
+            m734 = getRand(0x3C) + 0x3C;
+            return;
+        }
+        m73F = m73F + 1;
+    }
+}
+
+/* 00002624-000026CC       .text playAnm__14daNpcAuction_cFv */
+void daNpcAuction_c::playAnm() {
+    if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && (s8)m748 > 0) {
+        m748 = m748 - 1;
+        if ((s8)m748 == 0) {
+            mpAnmDat = &mpAnmDat[1];
+            setAnmTbl(mpAnmDat);
+            return;
+        }
+        setAnm(mpAnmDat->mAnmNo, 0, 0.0f);
+    }
+}
+
+/* 000026CC-0000278C       .text setAnm__14daNpcAuction_cFUcif */
+void daNpcAuction_c::setAnm(u8 i_anm_no, int i_attr, f32 i_morf) {
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(
+                       l_arcname_tbl[mDataNo], (u16)l_bck_ix_tbl[mDataNo][i_anm_no]),
+                   i_attr, i_morf, 1.0f, -1.0f, 0.0f, NULL);
+    mAnmNo = i_anm_no;
+}
+
+/* 0000278C-000027DC       .text setAnm2__14daNpcAuction_cFUcif */
+void daNpcAuction_c::setAnm2(u8 i_anm_no, int i_attr, f32 i_morf) {
+    if (mAnmNo != i_anm_no || i_attr == 0) {
+        setAnm(i_anm_no, i_attr, i_morf);
+        mpAnmDat = NULL;
+    }
+}
+
+/* 000027DC-00002874       .text setAnmTbl__14daNpcAuction_cFP7sAnmDat */
+void daNpcAuction_c::setAnmTbl(sAnmDat* i_anm) {
+    if (i_anm->mAnmNo == 0xFF) {
+        mpAnmDat = NULL;
+        return;
+    }
+    mpAnmDat = i_anm;
+    m748 = mpAnmDat->mCount;
+    int attr = 2;
+    if ((s8)m748 > 0) {
+        attr = 0;
+    }
+    sAnmDat* anm = mpAnmDat;
+    if (mAnmNo != anm->mAnmNo || attr == 0) {
+        setAnm(anm->mAnmNo, attr, (f32)anm->mMorf);
+    }
+}
+
+/* 00002874-00002928       .text isExecute__14daNpcAuction_cFv */
+BOOL daNpcAuction_c::isExecute() {
+    actor_status = actor_status & ~l_mdl_status[mDataNo];
+    daAuction_c* auction = (daAuction_c*)fopAcM_SearchByName(fpcNm_AUCTION_e);
+    if (auction == NULL) {
+        return FALSE;
+    }
+    if (!(AUC->mNpcFlag & (1 << mNpcNo))) {
+        return FALSE;
+    }
+    actor_status |= l_mdl_status[mDataNo];
+    return TRUE;
+}
+
+/* 00002928-0000298C       .text getRand__14daNpcAuction_cFi */
+int daNpcAuction_c::getRand(int i_max) {
+    int rnd = (int)cM_rndF((f32)i_max);
+    if (rnd == i_max) {
+        rnd = 0;
+    }
+    return rnd;
+}
+
+/* 0000298C-000029DC       .text clrEmitter__14daNpcAuction_cFv */
+void daNpcAuction_c::clrEmitter() {
+    if (mEmitter != NULL) {
+        mEmitter->mMaxFrame = -1;
+        mEmitter->setStatus(1);
+        for (JSULink<JPABaseParticle>* link = mEmitter->mActiveParticles.getFirst(); link != NULL;
+             link = link->getNext()) {
+            link->getObject()->setStatus(JPAPtclStts_Delete);
+        }
+        mEmitter = NULL;
+    }
+}
+
+/* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
+static cPhs_State daNpc_AuctionCreate(void* i_this) {
+    return ((daNpcAuction_c*)i_this)->create();
+}
+
+/* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */
+static BOOL daNpc_AuctionDelete(void* i_this) {
+    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
+    dComIfG_resDelete(&actor->mPhsArcname, l_arcname_tbl[actor->mDataNo]);
+    if (actor->heap != NULL && actor->mpMorf != NULL) {
+        actor->mpMorf->stopZelAnime();
+    }
+    return TRUE;
+}
+
+/* 00002A70-00002C70       .text daNpc_AuctionExecute__FPv */
+static BOOL daNpc_AuctionExecute(void* i_this) {
+    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
+    dBgS* bgsp = dComIfG_Bgsp();
+    if (actor->isExecute()) {
+        actor->m_jnt.setParam(l_npc_dat[actor->mDataNo].mMaxBackboneX,
+                              l_npc_dat[actor->mDataNo].mMaxBackboneY,
+                              l_npc_dat[actor->mDataNo].mMinBackboneX,
+                              l_npc_dat[actor->mDataNo].mMinBackboneY,
+                              l_npc_dat[actor->mDataNo].mMaxHeadX,
+                              l_npc_dat[actor->mDataNo].mMaxHeadY,
+                              l_npc_dat[actor->mDataNo].mMinHeadX,
+                              l_npc_dat[actor->mDataNo].mMinHeadY,
+                              l_npc_dat[actor->mDataNo].mMaxTurnStep);
+        actor->checkOrder();
+        if (dComIfGp_event_runCheck() == 0 || (actor->eventInfo.checkCommandTalk() && actor->m744 != 0)) {
+            actor->m749 = 0;
+            (actor->*actor->mAction)();
+        } else {
+            actor->eventMove();
+        }
+        actor->eventOrder();
+        actor->playTexPatternAnm();
+        actor->playAnm();
+        actor->mObjAcch.CrrPos(*bgsp);
+        actor->setCollision(60.0f, 150.0f);
+        actor->attention_info.position.set(actor->current.pos.x,
+                                           actor->current.pos.y + l_npc_dat[actor->mDataNo].mAttnYOffset,
+                                           actor->current.pos.z);
+        actor->eyePos.set(actor->current.pos.x, actor->current.pos.y + l_npc_dat[actor->mDataNo].m28,
+                          actor->current.pos.z);
+        actor->lookBack();
+        actor->setMtx();
+        if (actor->mSoundTimer != 0) {
+            actor->mSoundTimer--;
+            if (actor->mSoundTimer == 0) {
+                JAIZelBasic::getInterface()->seStart(actor->m728, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                                     -1.0f, 0);
+            }
+        }
+        actor->mPiconOfsY = l_npc_dat[actor->mDataNo].m30;
+    }
+    return FALSE;
+}
+
+/* 00002C70-00002EB8       .text daNpc_AuctionDraw__FPv */
+static BOOL daNpc_AuctionDraw(void* i_this) {
+    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
+    if (!actor->isExecute()) {
+        return TRUE;
+    }
+    J3DModel* model = actor->mpMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+    if (actor->mHeadModel != NULL) {
+        J3DModelData* headModelData = actor->mHeadModel->getModelData();
+        dKy_tevstr_c* tevStr = &actor->tevStr;
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, tevStr);
+        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), tevStr);
+        g_env_light.setLightTevColorType(actor->mHeadModel, tevStr);
+        actor->mBtpAnm.entry(headModelData, actor->m73F);
+        if (actor->mBmtNo >= 0) {
+            actor->mpMorf->updateDL((J3DMaterialTable*)dComIfG_getObjectIDRes(
+                l_arcname_tbl[actor->mDataNo], (u16)actor->mBmtNo));
+        } else {
+            actor->mpMorf->updateDL();
+        }
+        MTXCopy(model->getAnmMtx(actor->m_jnt.getHeadJntNum()), actor->mHeadModel->getBaseTRMtx());
+        mDoExt_modelUpdateDL(actor->mHeadModel);
+        headModelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
+    } else {
+        dKy_tevstr_c* tevStr = &actor->tevStr;
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, tevStr);
+        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), tevStr);
+        actor->mBtpAnm.entry(modelData, actor->m73F);
+        actor->mpMorf->updateDL();
+        modelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
+    }
+    cXyz pos(actor->current.pos.x, actor->current.pos.y + 150.0f, actor->current.pos.z);
+    actor->mShadowID = dComIfGd_setShadow(actor->mShadowID, 1, actor->mpMorf->getModel(), &pos,
+                                          800.0f, 20.0f, actor->current.pos.y,
+                                          actor->mObjAcch.GetGroundH(), actor->mObjAcch.m_gnd,
+                                          &actor->tevStr, 0, 1.0f,
+                                          dDlst_shadowControl_c::getSimpleTex());
+    if (actor->mShadowID != 0 && actor->mHeadModel != NULL) {
+        dComIfGd_addRealShadow(actor->mShadowID, actor->mHeadModel);
+    }
+    dSnap_RegistFig(l_photo_no[actor->mDataNo], actor, 1.0f, 1.0f, 1.0f);
+    return TRUE;
+}
+
+/* 00002EB8-00002EC0       .text daNpc_AuctionIsDelete__FPv */
+static BOOL daNpc_AuctionIsDelete(void*) {
+    return TRUE;
+}
+
+static actor_method_class daNpc_AuctionMethodTable = {
+    (process_method_func)daNpc_AuctionCreate,
+    (process_method_func)daNpc_AuctionDelete,
+    (process_method_func)daNpc_AuctionExecute,
+    (process_method_func)daNpc_AuctionIsDelete,
+    (process_method_func)daNpc_AuctionDraw,
+};
+
+actor_process_profile_definition g_profile_NPC_AUCTION = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_AUCTION_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcAuction_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_AUCTION_e,
+    /* Actor SubMtd */ &daNpc_AuctionMethodTable,
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+};
