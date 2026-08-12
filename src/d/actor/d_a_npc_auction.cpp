@@ -607,11 +607,11 @@ static cPhs_State phase_2(daNpcAuction_c* i_this) {
 /* 00000B4C-00000E74       .text createHeap__14daNpcAuction_cFv */
 BOOL daNpcAuction_c::createHeap() {
     J3DModelData* bmd = (J3DModelData*)dComIfG_getObjectIDRes(
-        l_arcname_tbl[mDataNo], l_bmd_ix_tbl[mDataNo]);
+        l_arcname_tbl[mDataNo], (u16)l_bmd_ix_tbl[mDataNo]);
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
         bmd, NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectIDRes(
-            l_arcname_tbl[mDataNo], l_bck_ix_tbl[mDataNo][mAnmNo]),
+            l_arcname_tbl[mDataNo], (u16)l_bck_ix_tbl[mDataNo][mAnmNo]),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, l_diff_flag_tbl[mDataNo]);
     mpMorf = morf;
     if (morf == NULL || morf->getModel() == NULL) {
@@ -620,7 +620,7 @@ BOOL daNpcAuction_c::createHeap() {
     if (l_head_bmd_ix_tbl[mDataNo] >= 0) {
         mHeadModel = mDoExt_J3DModel__create(
             (J3DModelData*)dComIfG_getObjectIDRes(
-                l_arcname_tbl[mDataNo], l_head_bmd_ix_tbl[mDataNo]),
+                l_arcname_tbl[mDataNo], (u16)l_head_bmd_ix_tbl[mDataNo]),
             0x80000, 0x15020022);
         if (mHeadModel == NULL) {
             return FALSE;
@@ -1305,7 +1305,7 @@ void daNpcAuction_c::playAnm() {
 /* 000026CC-0000278C       .text setAnm__14daNpcAuction_cFUcif */
 void daNpcAuction_c::setAnm(u8 i_anm_no, int i_attr, f32 i_morf) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(
-                       l_arcname_tbl[mDataNo], l_bck_ix_tbl[mDataNo][i_anm_no]),
+                       l_arcname_tbl[mDataNo], (u16)l_bck_ix_tbl[mDataNo][i_anm_no]),
                    i_attr, i_morf, 1.0f, -1.0f, 0.0f, NULL);
     mAnmNo = i_anm_no;
 }
@@ -1411,10 +1411,10 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
         actor->eventOrder();
         actor->playTexPatternAnm();
         actor->playAnm();
-        actor->mObjAcch.CrrPos(dComIfG_Bgsp());
+        actor->mObjAcch.CrrPos(*dComIfG_Bgsp());
         actor->setCollision(60.0f, 150.0f);
         actor->attention_info.position.x = actor->current.pos.x;
-        actor->attention_info.position.y = actor->current.pos.y + dat->m1C;
+        actor->attention_info.position.y = actor->current.pos.y + dat->mAttnYOffset;
         actor->attention_info.position.z = actor->current.pos.z;
         actor->eyePos.x = actor->current.pos.x;
         actor->eyePos.y = actor->current.pos.y + dat->m28;
@@ -1424,7 +1424,8 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
         if (actor->mSoundTimer != 0) {
             actor->mSoundTimer--;
             if (actor->mSoundTimer == 0) {
-                seStart(actor->m728, NULL, 0, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                JAIZelBasic::getInterface()->seStart(actor->m728, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                                     -1.0f, 0);
             }
         }
         actor->mPiconOfsY = dat->m30;
@@ -1449,25 +1450,26 @@ static BOOL daNpc_AuctionDraw(void* i_this) {
         actor->mBtpAnm.entry(headModelData, actor->m73F);
         if (actor->mBmtNo >= 0) {
             actor->mpMorf->updateDL((J3DMaterialTable*)dComIfG_getObjectIDRes(
-                l_arcname_tbl[actor->mDataNo], actor->mBmtNo));
+                l_arcname_tbl[actor->mDataNo], (u16)actor->mBmtNo));
         } else {
             actor->mpMorf->updateDL();
         }
-        MTXCopy(model->getAnmMtx(actor->m_jnt.getHeadJntNum()), actor->mHeadModel->mBaseTRMtx);
+        MTXCopy(model->getAnmMtx(actor->m_jnt.getHeadJntNum()), actor->mHeadModel->getBaseTRMtx());
         mDoExt_modelUpdateDL(actor->mHeadModel);
-        headModelData->getMaterialTable()->removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
+        headModelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
     } else {
         dKy_tevstr_c* tevStr = &actor->tevStr;
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, tevStr);
         g_env_light.setLightTevColorType(actor->mpMorf->getModel(), tevStr);
         actor->mBtpAnm.entry(modelData, actor->m73F);
         actor->mpMorf->updateDL();
-        modelData->getMaterialTable()->removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
+        modelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
     }
     cXyz pos(actor->current.pos.x, actor->current.pos.y + 150.0f, actor->current.pos.z);
     actor->mShadowID = dComIfGd_setShadow(actor->mShadowID, 1, actor->mpMorf->getModel(), &pos,
                                           800.0f, 20.0f, actor->current.pos.y,
-                                          actor->mObjAcch.m_gnd, &actor->tevStr, 0, 1.0f,
+                                          actor->mObjAcch.GetGroundH(), actor->mObjAcch.m_gnd,
+                                          &actor->tevStr, 0, 1.0f,
                                           dDlst_shadowControl_c::getSimpleTex());
     if (actor->mShadowID != 0 && actor->mHeadModel != NULL) {
         dComIfGd_addRealShadow(actor->mShadowID, actor->mHeadModel);
