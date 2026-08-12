@@ -223,10 +223,13 @@ void kantera_move(kantera_class* i_this) {
     i_this->mBonRot += 0x100;
 
     switch (i_this->mState) {
-    case 0x64:
     case 0x2:
+        break;
     case 0x3:
+        break;
     case 0x4:
+        break;
+    case 0x64:
         break;
     case 0:
         if (i_this->mParam0 == 0x23) {
