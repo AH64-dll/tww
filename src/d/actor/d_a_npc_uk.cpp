@@ -1690,7 +1690,7 @@ BOOL daNpc_Uk_c::_draw() {
     }
 
     mpMorf->entryDL();
-    PSMTXCopy(pModel->getAnmMtx(m_jnt.getBackboneJntNum()), mpModel->getBaseTRMtx());
+    PSMTXCopy(pModel->getAnmMtx(m_jnt.getHeadJntNum()), mpModel->getBaseTRMtx());
     mDoExt_modelUpdateDL(mpModel);
 
     if (getShapeType() == 1) {
@@ -1712,7 +1712,17 @@ BOOL daNpc_Uk_c::_draw() {
         );
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_NPC_MK, this, 1.0f, 1.0f, 1.0f);
+    switch (getShapeType()) {
+    case 0:
+        dSnap_RegistFig(DSNAP_TYPE_NPC_MK, this, 1.0f, 1.0f, 1.0f);
+        break;
+    case 1:
+        dSnap_RegistFig(DSNAP_TYPE_NPC_MK, this, 1.0f, 1.0f, 1.0f);
+        break;
+    case 2:
+        dSnap_RegistFig(DSNAP_TYPE_NPC_MK, this, 1.0f, 1.0f, 1.0f);
+        break;
+    }
     return TRUE;
 }
 
