@@ -1581,8 +1581,8 @@ s16 daNpcBmcon_c::getFlyDistMax() {
 
 /* 00003AE8-00003B6C       .text setFlyDistMax__12daNpcBmcon_cFs */
 void daNpcBmcon_c::setFlyDistMax(s16 dist) {
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_A7FF, (u8)dist);
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_A8FF, (u8)(dist >> 8));
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_A7FF, dist % 256);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_A8FF, (u8)(dist / 256));
 }
 
 /* 00003B6C-00003BD8       .text getFlyDistNow__12daNpcBmcon_cFv */
@@ -1592,8 +1592,8 @@ s16 daNpcBmcon_c::getFlyDistNow() {
 
 /* 00003BD8-00003C5C       .text setFlyDistNow__12daNpcBmcon_cFs */
 void daNpcBmcon_c::setFlyDistNow(s16 dist) {
-    dComIfGs_setTmpReg(dSv_event_tmp_flag_c::UNK_FBFF, (u8)dist);
-    dComIfGs_setTmpReg(dSv_event_tmp_flag_c::UNK_FAFF, (u8)(dist >> 8));
+    dComIfGs_setTmpReg(dSv_event_tmp_flag_c::UNK_FBFF, dist % 256);
+    dComIfGs_setTmpReg(dSv_event_tmp_flag_c::UNK_FAFF, (u8)(dist / 256));
 }
 
 /* 00003C5C-00003DC4       .text chkEndEvent__12daNpcBmcon_cFv */
