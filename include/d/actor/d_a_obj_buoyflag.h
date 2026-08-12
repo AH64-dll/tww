@@ -106,8 +106,8 @@ namespace daObjBuoyflag {
             return true;
         }
         inline bool _execute() {
-            typedef int (Act_c::*mode_proc)();
-            static mode_proc mode_proc[] = {
+            typedef int (Act_c::*procFunc)();
+            static procFunc mode_proc[] = {
                 &Act_c::mode_afl,
                 &Act_c::mode_jumpToSea,
             };
@@ -150,7 +150,7 @@ namespace daObjBuoyflag {
         /* 0x10C0 */ Mtx m10C0;
         /* 0x10F0 */ Mtx m10F0;
         /* 0x1120 */ s32 mAttr;
-        /* 0x1124 */ s32 mMode;
+        /* 0x1124 */ s32 m1124;
         /* 0x1128 */ u8 m1128;
         /* 0x112A */ s16 m112A;
         /* 0x112C */ f32 m112C;
