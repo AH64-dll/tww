@@ -94,6 +94,10 @@ daNpc_Pf1_HIO_c::daNpc_Pf1_HIO_c() {
 }
 
 static daNpc_Pf1_HIO_c l_HIO;
+static fopAc_ac_c* l_check_inf[20];
+static int l_check_wrk;
+
+
 
 static char* l_evn_tbl[] = {
     "dummy",
@@ -259,7 +263,7 @@ bool daNpc_Pf1_c::setBtp(s8 i_btp_num, bool i_param_1) {
         return false;
     }
     J3DAnmTexPattern* a_btp = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(m_arcname, btpResID(i_btp_num)));
-    JUT_ASSERT(0x1CE, a_btp != NULL);
+    JUT_ASSERT(0x1CE, a_btp != 0);
     m7B5 = i_btp_num;
     if (m7B5 == 1) {
         mBtpFrame = 2;
@@ -334,9 +338,9 @@ void daNpc_Pf1_c::setAnm_NUM(int i_param_1, int i_param_2) {
 /* 00000B28-00000B94       .text setAnm__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::setAnm() {
     static anm_prm_c a_anm_prm_tbl[8] = {
-        {0xFF, 0, 0, 0, 0, -1},
+        {0xFF, 0xFF, 0, 0, 0, -1},
         {0, 0, 0, 8, 1, 2},
-        {0xFF, 0, 0, 0, 0, -1},
+        {0xFF, 0xFF, 0, 0, 0, -1},
         {1, 0, 0, 8, 1, 2},
         {4, 0, 0, 8, 1, 0},
         {0, 0, 0, 4, 0, 2},
@@ -801,12 +805,12 @@ BOOL daNpc_Pf1_c::chk_attn() {
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
     s32 angle_diff = abs(target_angle - current.angle.y);
     if (m7BA == 1) {
-        if (dist < 200.0f && (f32)angle_diff / 182.04f < 90.0f && std::fabsf(height_diff) < 300.0f) {
+        if (dist < 200.0f && (f32)angle_diff / 182.04444f < 90.0f && std::fabsf(height_diff) < 300.0f) {
             return TRUE;
         }
         return FALSE;
     }
-    if (dist < 200.0f && (f32)angle_diff / 182.04f < 60.0f && std::fabsf(height_diff) < 300.0f) {
+    if (dist < 200.0f && (f32)angle_diff / 182.04444f < 60.0f && std::fabsf(height_diff) < 300.0f) {
         return TRUE;
     }
     return FALSE;
@@ -1251,7 +1255,7 @@ cPhs_State daNpc_Pf1_c::_create() {
 /* 00003524-00003798       .text bodyCreateHeap__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::bodyCreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_PF_BDL_PF_e);
-    JUT_ASSERT(0x803, a_mdl_dat != NULL);
+    JUT_ASSERT(0x803, a_mdl_dat != 0);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
@@ -1332,10 +1336,10 @@ static BOOL daNpc_Pf1_IsDelete(daNpc_Pf1_c*) {
 }
 
 static void dummy() {
-    const GXColor dummy1 = { 0xFF, 0x00, 0x00, 0x80 };
-    const GXColor dummy2 = { 0x00, 0x00, 0xFF, 0x80 };
-    const GXColor dummy3 = { 0xFF, 0xFF, 0x00, 0x80 };
-    const GXColor dummy4 = { 0xFF, 0xFF, 0x00, 0x80 };
+    const GXColor dummy1 = { 0x00, 0xFF, 0x00, 0x80 };
+    const GXColor dummy2 = { 0xFF, 0xFF, 0x00, 0x80 };
+    const GXColor dummy3 = { 0xFF, 0x00, 0x00, 0x80 };
+    const GXColor dummy4 = { 0x00, 0x00, 0xFF, 0x80 };
 }
 
 static actor_method_class l_daNpc_Pf1_Method = {
