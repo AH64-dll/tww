@@ -4,6 +4,7 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include <math.h>
 #include "d/actor/d_a_obj_tribox.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -26,12 +27,8 @@
 
 namespace daObjTribox {
     namespace {
-        const char* const M_arcname = "MtryB";
-
-        f32 L_r_in;
-        f32 L_r_out;
-
-        static const s16 face_ang_offset[2] = {0x5555, 0xAAAB};
+        f32 L_r_in = 41.666668f * std::sqrtf(3.0f);
+        f32 L_r_out = 2.0f * L_r_in;
 
         static const Attr_c l_attr = {
             -0.8f,
@@ -75,9 +72,13 @@ namespace daObjTribox {
         };
     };  // namespace
 
-    const char* const Act_c::M_arcname = "MtryB";
+    const char Act_c::M_arcname[] = "MtryB";
 
-                            cXyz Act_c::M_post[3];
+    cXyz Act_c::M_post[3] = {
+        cXyz(0.0f, 0.0f, -L_r_out),
+        cXyz(-125.0f, 0.0f, L_r_in),
+        cXyz(125.0f, 0.0f, L_r_in),
+    };
     dBgS_ObjLinChk Act_c::M_lin;
 
     /* 000000EC-000001A4       .text set_state__Q211daObjTribox5Act_cFv */
@@ -322,6 +323,7 @@ namespace daObjTribox {
 
     /* 00000E54-00000F8C       .text push_pullCB__Q211daObjTribox5Act_cFP10fopAc_ac_cP10fopAc_ac_csQ24dBgW13PushPullLabel */
     fopAc_ac_c* Act_c::push_pullCB(fopAc_ac_c* i_actor, fopAc_ac_c*, s16 i_angle, dBgW::PushPullLabel i_pp_label) {
+        static const s16 face_ang_offset[3] = {0, 0x5555, 0xAAAB};
         Act_c* self = static_cast<Act_c*>(i_actor);
         int label = i_pp_label & 3;
         if (label != 0) {
@@ -460,8 +462,11 @@ namespace daObjTribox {
             m3F8 = 1;
             dPa_smokeEcallBack* cbs[3] = {&mSinkSmokeCB, &mSinkSmokeCB2, &mSinkSmokeCB3};
             for (int i = 0; i < 3; i++) {
-                csXyz a(shape_angle.x, shape_angle.z + i * 0x5555, 0);
-                dComIfGp_particle_set(0xA320, &current.pos, &a, NULL, 0xA0, cbs[i]);
+                SVec a;
+                a.x = shape_angle.x;
+                a.y = shape_angle.y + i * 0x5555;
+                a.z = shape_angle.z;
+                dComIfGp_particle_set(0xA320, &current.pos, (const csXyz*)&a, NULL, 0xA0, cbs[i]);
             }
         }
     }
@@ -519,10 +524,9 @@ namespace daObjTribox {
     /* 00001A08-00001A90       .text sound_pos_init__Q211daObjTribox5Act_cFv */
     void Act_c::sound_pos_init() {
         if (m38E) {
-            cXyz pos = current.pos * 0.33333334f;
-            M_sound_pos = pos;
+            M_sound_pos = home.pos * 0.33333334f;
         } else {
-            cXyz pos = current.pos * 0.33333334f;
+            cXyz pos = home.pos * 0.33333334f;
             PSVECAdd(&M_sound_pos, &pos, &M_sound_pos);
         }
     }

@@ -173,9 +173,9 @@ namespace daObjTribox {
         /* 0x3D8 */ dPa_smokeEcallBack mSinkSmokeCB3;
         /* 0x3F8 */ u8 m3F8;
         /* 0x3F9 */ u8 m3F9;
-        /* 0x3FA */ u8 m3FA;
+        /* 0x3FA */ s16 m3FA;
 
-        static const char* const M_arcname;
+        static const char M_arcname[];
         static cXyz M_sound_pos;
         static int M_correct_cnt;
         static bool M_correct_flag;
