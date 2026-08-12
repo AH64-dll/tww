@@ -70,7 +70,6 @@ void daObj_Search::Act_c::_nodeControl(J3DNode*, J3DModel*) {
 
 /* 800FE10C-800FE110       .text modeSearchRndInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchRndInit() {
-    /* Nonmatching */
 }
 
 /* 800FE110-800FE200       .text modeSearchRnd__Q212daObj_Search5Act_cFv */
@@ -95,12 +94,10 @@ void daObj_Search::Act_c::modeStopInit() {
 
 /* 800FEA80-800FEA84       .text modeStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeStop() {
-    /* Nonmatching */
 }
 
 /* 800FEA84-800FEA88       .text modeToSearchInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToSearchInit() {
-    /* Nonmatching */
 }
 
 /* 800FEA88-800FEB30       .text modeToSearch__Q212daObj_Search5Act_cFv */
@@ -140,7 +137,6 @@ void daObj_Search::Act_c::modeFind2nd() {
 
 /* 800FF7A4-800FF7A8       .text modeSearchBdkInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchBdkInit() {
-    /* Nonmatching */
 }
 
 /* 800FF7A8-800FFE78       .text modeSearchBdk__Q212daObj_Search5Act_cFv */
