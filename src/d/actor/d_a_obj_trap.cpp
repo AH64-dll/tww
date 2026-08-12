@@ -437,18 +437,21 @@ bool daObjTrap_c::_execute() {
             mCurPos = block;
             set_vib_mode();
             set_shine();
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else if (chase == 1) {
             set_vib_mode();
             set_shine();
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else if (circle_search()) {
             mVibMode = 1;
         } else {
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
         break;
     }
@@ -461,17 +464,20 @@ bool daObjTrap_c::_execute() {
             mCurPos = block;
             set_vib_mode();
             set_shine();
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else if (check_arrival()) {
             mCurPos = mPathPosA;
             set_vib_mode();
             set_shine();
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else {
-            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0,
-                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0, reverb,
+                                                 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
         break;
     }
