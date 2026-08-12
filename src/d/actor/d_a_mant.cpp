@@ -189,7 +189,7 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
     dBgS_GndChk gndChk;
     cXyz pos(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z);
     gndChk.SetPos(&pos);
-    f32 f30 = -5.0f + dComIfG_Bgsp()->GroundCross(&gndChk);
+    f32 f30 = 1.5f + dComIfG_Bgsp()->GroundCross(&gndChk);
     if (f30 - i_joint->mPos[0].y > 50.0f) {
         f30 = i_joint->mPos[0].y;
     }
@@ -415,12 +415,17 @@ void mant_move(mant_class* i_this) {
     l_mesh_cc_ct = 0;
     mant_v_calc(i_this);
     mant_n_calc(i_this);
-    DCStoreRangeNoSync(l_v_pos, 0x3CC);
+    {
+        u8* base = (u8*)i_this;
+        base += i_this->mPacket.mType * 0x3CC;
+        DCStoreRangeNoSync(base + 0x310, 0x3CC);
+    }
 
-    s16 timer = i_this->m2838;
-    if (timer != 0) {
-        i_this->m2838 = timer - 1;
-        cXyz* pos = l_v_pos;
+    if (i_this->m2838 != 0) {
+        i_this->m2838--;
+        u8* base = (u8*)i_this;
+        base += i_this->mPacket.mType * 0x3CC;
+        cXyz* pos = (cXyz*)(base + 0x310);
         for (s32 i = 0; i < 0x51; i++) {
             if ((i & 3) == 0) {
                 dComIfGp_particle_setSimple(0x8069, pos, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -434,7 +439,7 @@ void mant_move(mant_class* i_this) {
     }
 
     cLib_addCalc2(&i_this->m1BF8, 30.0f, 0.1f, 1.0f);
-    cLib_addCalc2(&i_this->m1BFC, 0.7f, 0.1f, 0.5f);
+    cLib_addCalc2(&i_this->m1BFC, 0.7f, 0.1f, 0.05f);
     if (i_this->mWindSph.ChkTgHit()) {
         i_this->m1C0E = 0xA;
         i_this->m1C0C = dComIfGp_getPlayer(0)->shape_angle.y;
