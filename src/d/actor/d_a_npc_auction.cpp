@@ -1185,11 +1185,10 @@ u8 daNpcAuction_c::getPrmNpcNo() {
 
 /* 00002090-00002118       .text setMtx__14daNpcAuction_cFv */
 void daNpcAuction_c::setMtx() {
-    J3DModel* model = mpMorf->getModel();
-    model->setBaseScale(scale);
+    mpMorf->getModel()->setBaseScale(scale);
     PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
-    model->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
 }
 
 /* 00002118-00002488       .text lookBack__14daNpcAuction_cFv */
