@@ -232,16 +232,16 @@ int daNpc_Gk1_c::btpResID(int i_btp_num) {
 
 /* 00000958-00000A5C       .text setBtp__11daNpc_Gk1_cFScb */
 s32 daNpc_Gk1_c::setBtp(s8 i_btp_num, bool i_param_2) {
+    J3DModel* model = mpMorf->getModel();
     if (i_btp_num < 0) {
         return FALSE;
     }
-    J3DModelData* model_data = mpMorf->getModel()->getModelData();
-    J3DAnmTexPattern* tex_pattern = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(m_arcname, btpResID(i_btp_num)));
-    JUT_ASSERT(VERSION_SELECT(451, 451, 453, 453), tex_pattern != NULL);
+    J3DAnmTexPattern* a_btp = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(m_arcname, btpResID(i_btp_num)));
+    JUT_ASSERT(VERSION_SELECT(451, 451, 451, 453), a_btp != NULL);
     mBtpNum = i_btp_num;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(model_data, tex_pattern, 1, 0, 1.0f, 0, -1, i_param_2, FALSE) != 0;
+    return mBtpAnm.init(model->getModelData(), a_btp, 1, 0, 1.0f, 0, -1, i_param_2, FALSE) != 0 ? 1 : 0;
 }
 
 /* 00000A5C-00000A7C       .text init_texPttrnAnm__11daNpc_Gk1_cFScb */
