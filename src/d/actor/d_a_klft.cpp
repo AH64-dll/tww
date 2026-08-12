@@ -22,9 +22,11 @@ static f32* wp;
 
 /* 00000078-00000374       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
-    klft_class* pActor = static_cast<klft_class*>(i_ac);
-
+    f32 stickY;
+    f32 stickX;
+    klft_class* pActor = (klft_class*)i_ac;
     cXyz delta_pos, local_44, local_50;
+
     cMtx_YrotS(*calc_mtx, -pActor->current.angle.y);
     delta_pos = i_pt->current.pos - pActor->mPos;
     MtxPosition(&delta_pos, &local_44);
@@ -38,7 +40,9 @@ void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     s16 zAngle_target = f4 * ((REG0_F(0) + 30.0f) / pActor->scale.z);
     cLib_addCalcAngleS2(&pActor->mAngleZ, zAngle_target, 10, 0x800);
     cLib_addCalcAngleS2(&pActor->mAngleX, cM_atan2s(local_44.x, local_44.z), 2, 0x2000);
-    if ((std::abs(g_mDoCPd_cpadInfo[0].mMainStickPosY) + std::abs(g_mDoCPd_cpadInfo[0].mMainStickPosX) > 0.1f) ||
+    stickX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    stickY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    if ((std::abs(stickX) + std::abs(stickY) > 0.1f) ||
         (std::abs(pActor->field_3C4) > 0.0001f)) {
         f32 fVar1 = (REG0_F(4) + 100.0f) * std::abs(local_44.z - local_50.z);
         if (fVar1 > (REG0_F(6) + 200.0f)) {
