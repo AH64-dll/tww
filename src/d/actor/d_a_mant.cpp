@@ -411,7 +411,7 @@ void mant_n_calc(mant_class* i_this) {
 /* 000017EC-000019C0       .text mant_move__FP10mant_class */
 void mant_move(mant_class* i_this) {
     l_v_count = 0;
-    l_v_pos = &i_this->mPacket.mPosArr[i_this->mPacket.mType * (0x3CC / 0xC)];
+    l_v_pos = (cXyz*)(&((cXyz*)((u8*)i_this + 0x310))[i_this->mPacket.mType * 81]);
     l_mesh_cc_ct = 0;
     mant_v_calc(i_this);
     mant_n_calc(i_this);
@@ -444,9 +444,8 @@ void mant_move(mant_class* i_this) {
         i_this->m1C0E = 0xA;
         i_this->m1C0C = dComIfGp_getPlayer(0)->shape_angle.y;
     }
-    s16 t = i_this->m1C0E;
-    if (t != 0) {
-        i_this->m1C0E = t - 1;
+    if (i_this->m1C0E != 0) {
+        i_this->m1C0E--;
         cLib_addCalc2(&i_this->m1C00, 50.0f, 0.2f, 1.5f);
     } else {
         cLib_addCalc0(&i_this->m1C00, 0.1f, 1.0f);
