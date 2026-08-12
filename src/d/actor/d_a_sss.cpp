@@ -21,6 +21,7 @@ static cXyz non_pos(0.0f, 30000.0f, -20000.0f);
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */
 void hand_draw(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &actor->tevStr);
     i_this->mpMorf->updateDL();
@@ -60,6 +61,7 @@ void hand_open(sss_class* i_this) {
 
 /* 00000348-00000444       .text hand_mtx_set__FP9sss_class */
 void hand_mtx_set(sss_class* i_this) {
+    /* Nonmatching */
     MtxTrans(i_this->m2D4.x, i_this->m2D4.y, i_this->m2D4.z, 0);
     mDoMtx_XrotM(*calc_mtx, i_this->m2E0);
     mDoMtx_YrotM(*calc_mtx, i_this->m2E2);
@@ -71,6 +73,7 @@ void hand_mtx_set(sss_class* i_this) {
 
 /* 00000444-000004CC       .text control3__FP9sss_class */
 void control3(sss_class* i_this) {
+    /* Nonmatching */
     int i = 0;
     for (i = 0; i < 10; i++) {
         i_this->m33C[i].mSize = (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64)) * l_size_d[i];
@@ -79,6 +82,7 @@ void control3(sss_class* i_this) {
 
 /* 000004CC-00000804       .text control1__FP9sss_class */
 void control1(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     cXyz pos;
     cXyz pos2;
@@ -126,6 +130,7 @@ void control1(sss_class* i_this) {
 
 /* 00000840-00000B0C       .text control2__FP9sss_class */
 void control2(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     cXyz pos;
     cXyz pos2;
@@ -174,6 +179,7 @@ void control2(sss_class* i_this) {
 
 /* 00000B0C-00000F78       .text cut_control1__FP9sss_class */
 void cut_control1(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     cXyz pos;
     cXyz pos2;
@@ -246,6 +252,7 @@ void cut_control1(sss_class* i_this) {
 
 /* 00000F78-000014F4       .text cut_control2__FP9sss_class */
 void cut_control2(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     cXyz pos;
     cXyz pos2;
@@ -341,6 +348,7 @@ void cut_control2(sss_class* i_this) {
 
 /* 000014F4-00002614       .text hand_move__FP9sss_class */
 void hand_move(sss_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* link_player = dComIfGp_getLinkPlayer();
@@ -679,6 +687,7 @@ static BOOL daSss_IsDelete(sss_class*) {
 
 /* 000026A4-00002720       .text daSss_Delete__FP9sss_class */
 static BOOL daSss_Delete(sss_class* i_this) {
+    /* Nonmatching */
     dComIfG_resDelete(&i_this->mPhase, "Sss");
     if (i_this->mpEmitterA10 != NULL) {
         i_this->mpEmitterA10->becomeInvalidEmitter();
@@ -691,6 +700,7 @@ static BOOL daSss_Delete(sss_class* i_this) {
 
 /* 00002720-000028A0       .text useHeapInit__FP9sss_class */
 void useHeapInit(sss_class* i_this) {
+    /* Nonmatching */
     i_this->mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Sss", dRes_INDEX_SSS_BMD_SSS_HAND_e),
         NULL, NULL,
@@ -712,6 +722,7 @@ void useHeapInit(sss_class* i_this) {
 
 /* 000028A0-000028C0       .text daSss_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daSss_solidHeapCB(fopAc_ac_c* a_this) {
+    /* Nonmatching */
     sss_class* i_this = (sss_class*)a_this;
     useHeapInit(i_this);
     return TRUE;
@@ -719,6 +730,7 @@ static BOOL daSss_solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 000028C0-00002BB4       .text daSss_Create__FP10fopAc_ac_c */
 static cPhs_State daSss_Create(fopAc_ac_c* a_this) {
+    /* Nonmatching */
     static dCcD_SrcSph tg_sph_src = {
         // dCcD_SrcGObjInf
         {

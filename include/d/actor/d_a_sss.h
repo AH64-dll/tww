@@ -30,6 +30,7 @@ public:
     /* 0x2D4 */ cXyz m2D4;
     /* 0x2E0 */ s16 m2E0;
     /* 0x2E2 */ s16 m2E2;
+    /* 0x2E4 */ f32 m2E4;
     /* 0x2E8 */ f32 m2E8;
     /* 0x2F0 */ f32 m2F0;
     /* 0x2F4 */ f32 m2F4;
