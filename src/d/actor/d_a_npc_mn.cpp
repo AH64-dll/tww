@@ -689,7 +689,7 @@ void daNpcMn_c::executeWait() {
             return;
         }
         mTimer--;
-        fopAc_ac_c* actor = fopAcM_searchFromName("figureE", 0xFF, m790);
+        fopAc_ac_c* actor = fopAcM_searchFromName("Figure", 0xFF, m790);
         if (actor != NULL && *((u8*)actor + 0x73E) != 0) {
             mLookAtX = actor->eyePos.x;
             mLookAtY = actor->eyePos.y;
@@ -771,7 +771,7 @@ void daNpcMn_c::executeWalk() {
     if (mPathRun.chkPointPass(myPos, mPathRun.getDir() != 0)) {
         m790 = mPathRun.pointArg(mPathRun.getIdx());
         if (m790 != 0xFF) {
-            fopAc_ac_c* actor = fopAcM_searchFromName("figureE", 0xFF, m790);
+            fopAc_ac_c* actor = fopAcM_searchFromName("Figure", 0xFF, m790);
             if (actor != NULL && *((u8*)actor + 0x73E) != 0) {
                 m7C5 = getRand(5);
                 m7C4 = 1;
@@ -1129,15 +1129,18 @@ s32 daNpcMn_c::eventTurn(int staffIdx) {
         mode = *pData;
     }
     cXyz point;
-    if (mode == 1) {
-        fopAc_ac_c* actor = fopAcM_searchFromName("Ohatch", 0, 0);
-        if (actor != NULL) {
-            point = actor->current.pos;
-        } else {
-            point = mPathRun.getPoint(mPathRun.getIdx());
+    switch (mode) {
+        case 1: {
+            fopAc_ac_c* actor = fopAcM_searchFromName("Ohatch", 0, 0);
+            if (actor != NULL) {
+                point = actor->current.pos;
+                break;
+            }
         }
-    } else {
-        point = mPathRun.getPoint(mPathRun.getIdx());
+            // fall through
+        default:
+            point = mPathRun.getPoint(mPathRun.getIdx());
+            break;
     }
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
