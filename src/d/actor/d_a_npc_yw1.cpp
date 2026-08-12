@@ -254,16 +254,19 @@ void daNpc_Yw1_c::anmAtr(unsigned short i_param) {
 /* 000013F4-0000148C       .text next_msgStatus__11daNpc_Yw1_cFPUl */
 u16 daNpc_Yw1_c::next_msgStatus(u32* pMsgNo) {
     u16 status = fopMsgStts_MSG_CONTINUES_e;
-    if (*pMsgNo == 0x8A3) {
-        if (!dComIfGs_isEventBit(0x2A20)) {
-            *pMsgNo = 0x8A4;
-        } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
-            *pMsgNo = 0x8A6;
-        } else {
-            *pMsgNo = 0x8A5;
-        }
-    } else {
-        status = fopMsgStts_MSG_ENDS_e;
+    switch ((s32)*pMsgNo) {
+        case 0x8A3:
+            if (!dComIfGs_isEventBit(0x2A20)) {
+                *pMsgNo = 0x8A4;
+            } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
+                *pMsgNo = 0x8A6;
+            } else {
+                *pMsgNo = 0x8A5;
+            }
+            break;
+        default:
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
     }
     return status;
 }
