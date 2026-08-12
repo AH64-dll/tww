@@ -285,10 +285,14 @@ u32 daNpc_Yw1_c::getMsg_YW1_0() {
     if (m70C != 0 && m776 == 1) {
         return m712 == 1 ? 0x8A2 : 0x8A1;
     }
-    if (dComIfGs_isEventBit(0x180)) {
-        return 0x89A;
+    if (dComIfGs_isEventBit(0x180) == false) {
+        u32 msg = 0x899;
+        if (dComIfGs_isEventBit(0x2A80)) {
+            return 0x8AA;
+        }
+        return msg;
     }
-    return dComIfGs_isEventBit(0x2A80) ? 0x8AA : 0x899;
+    return 0x89A;
 }
 
 /* 00001588-00001600       .text getMsg_YW1_1__11daNpc_Yw1_cFv */
