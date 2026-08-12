@@ -3,6 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_door.h"
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
+#include "d/d_kankyo.h"
 
 class dDoor_ssk_sub_c {
 public:
@@ -13,12 +16,29 @@ public:
     void closeInit();
     void closeProc(dDoor_info_c*);
     dDoor_ssk_sub_c();
-    void drawSet();
+    ~dDoor_ssk_sub_c();
+    BOOL drawSet();
     void calcMtx(dDoor_info_c*, float, float, unsigned char);
 
 public:
-    /* Place member variables here */
-};
+    /* 0x000 */ mDoExt_McaMorf* mpMorf;
+    /* 0x004 */ mDoExt_McaMorf* mpMorf2;
+    /* 0x008 */ dPa_smokeEcallBack mSmokeCb;
+    /* 0x028 */ dCcD_Stts mStts;
+    /* 0x064 */ dCcD_Cyl mCyl;
+    /* 0x194 */ u8 m194;
+    /* 0x195 */ u8 m195[0x196 - 0x195];
+    /* 0x196 */ s16 mAngle;
+    /* 0x198 */ s16 mAngleVel;
+    /* 0x19A */ s16 m19A;
+    /* 0x19C */ s16 mTimer;
+    /* 0x19E */ s16 m19E;
+    /* 0x1A0 */ f32 mScale[3];
+    /* 0x1AC */ f32 mScale2[3];
+    /* 0x1B8 */ cXyz mPos;
+    /* 0x1C4 */ u8 m1C4;
+    /* 0x1C5 */ u8 mSoundTimer;
+};  // Size: 0x1C8
 
 class dDoor_ssk_c {
 public:
@@ -33,47 +53,63 @@ public:
     void openProc(dDoor_info_c*);
 
 public:
-    /* Place member variables here */
-};
+    /* 0x000 */ dDoor_ssk_sub_c mSub[3];
+    /* 0x558 */ u8 m558;
+    /* 0x559 */ u8 m559;
+    /* 0x55A */ u8 m55A;
+    /* 0x55B */ u8 m55B;
+    /* 0x55C */ dKy_tevstr_c mTevstr;
+};  // Size: 0x60C
 
 class daKddoor_c : public dDoor_info_c {
 public:
-    void checkFlag(unsigned short) {}
+    bool checkFlag(unsigned short flag) { return mFlags & flag; }
     inline BOOL execute();
-    void offFlag(unsigned short) {}
-    void onFlag(unsigned short) {}
-    void setAction(unsigned char) {}
+    void offFlag(unsigned short flag) { mFlags &= ~flag; }
+    void onFlag(unsigned short flag) { mFlags |= flag; }
+    void setAction(u8 action) { mAction = action; }
 
-    void chkMakeKey();
+    s32 chkMakeKey();
     void setKey();
-    void chkMakeStop();
-    void chkStopF();
-    void chkStopB();
+    BOOL chkMakeStop();
+    s32 chkStopF();
+    s32 chkStopB();
     void setStop();
-    void chkGenocideCase();
-    void chkFeelerCase();
-    void chkStopOpen();
+    BOOL chkGenocideCase();
+    BOOL chkFeelerCase();
+    BOOL chkStopOpen();
     void setStopDemo();
-    void chkStopClose();
-    void getBmdName();
-    void getBmdName2();
-    void getDzbName();
-    void CreateHeap();
+    BOOL chkStopClose();
+    const char* getBmdName();
+    const char* getBmdName2();
+    const char* getDzbName();
+    BOOL CreateHeap();
     void setEventPrm();
     void openInit();
-    void openProc();
+    BOOL openProc();
     void openEnd();
     void closeInit();
-    void closeProc();
+    BOOL closeProc();
     void closeEnd();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void demoProc();
     BOOL draw();
 
+    static const char M_arcname[];
+
 public:
-    /* Place member variables here */
-};
+    /* 0x2D0 */ request_of_phase_process_class mPhs;
+    /* 0x2D8 */ dDoor_smoke_c mSmoke;
+    /* 0x310 */ dDoor_key2_c mKey;
+    /* 0x334 */ dDoor_ssk_c mSsk;
+    /* 0x940 */ J3DModel* mpModel;
+    /* 0x944 */ dBgW* mpBgW;
+    /* 0x948 */ u8 mAction;
+    /* 0x949 */ u8 m949[0x94A - 0x949];
+    /* 0x94A */ u16 mFlags;
+    /* 0x94C */ f32 m94C;
+};  // Size: 0x950
 
 #endif /* D_A_KDDOOR_H */
