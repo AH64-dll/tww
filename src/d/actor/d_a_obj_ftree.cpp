@@ -293,6 +293,7 @@ void daObjFtree::Act_c::set_collision() {
 
 /* 00000C1C-00000D50       .text talk_ct__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_ct() {
+    /* Nonmatching */
     m6A4 = -1;
     m6A8 = NULL;
     cXyz pos = current.pos;
@@ -322,6 +323,7 @@ void daObjFtree::Act_c::talk_ct() {
 
 /* 00000D50-00000F14       .text talk_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_main() {
+    /* Nonmatching */
     if (m356 == -1 && eventInfo.mCommand == dEvtCmd_INTALK_e) {
         if (m6A4 == fpcM_ERROR_PROCESS_ID_e) {
             m6A4 = fopMsgM_messageSet(message_table[mMode], this);
@@ -741,6 +743,7 @@ void daObjFtree::Act_c::action_changeLS_main() {
 
 /* 000025DC-000026AC       .text action_changeLS2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeLS2_init(s16) {
+    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
 
@@ -806,18 +809,42 @@ void daObjFtree::Act_c::process_main() {
 }
 
 /* 00002BF0-00002C14       .text solidHeapCB__Q210daObjFtree5Act_cFP10fopAc_ac_c */
-BOOL daObjFtree::Act_c::solidHeapCB(fopAc_ac_c*) {
-    return create_heap();
+BOOL daObjFtree::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 00002C14-00002D94       .text NodeCallBack_Effect__Q210daObjFtree5Act_cFP7J3DNodei */
-BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode*, int) {
+BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode* i_node, int i_param) {
     /* Nonmatching */
+    if (m2A4 == 1 && i_param == 0) {
+        J3DJoint* joint = (J3DJoint*)i_node;
+        J3DModel* model = j3dSys.getModel();
+        Mtx mtx;
+        cXyz pos(0.0f, 0.0f, 0.0f);
+        cXyz out;
+        mDoMtx_stack_c::copy(model->getAnmMtx(joint->getJntNo()));
+        PSMTXCopy(mDoMtx_stack_c::now, mtx);
+        PSMTXMultVec(mtx, &pos, &out);
+
+        JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_GROW_UP, &current.pos, 0, 0, 1.0f, 1.0f,
+                                        -1.0f, -1.0f, 0);
+        JPABaseEmitter* emitter1 = dComIfGp_particle_set(dPa_name::ID_AK_SN_HANASAKAFLASH00, &out);
+        JPABaseEmitter* emitter2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_HANASAKAFLASH01, &out);
+        if (emitter1 != NULL && emitter2 != NULL) {
+            m2A4 = 0;
+        }
+    }
+    return TRUE;
 }
 
 /* 00002D94-00002DDC       .text Ftree_NodeCallBack_Effect__10daObjFtreeFP7J3DNodei */
-BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
     /* Nonmatching */
+    if (i_param == 0) {
+        J3DModel* model = j3dSys.getModel();
+        return ((daObjFtree::Act_c*)model->getUserArea())->NodeCallBack_Effect(i_node, 0);
+    }
+    return TRUE;
 }
 
 /* 00002DDC-00002E9C       .text Ftree_NodeCallBack_M__10daObjFtreeFP7J3DNodei */
@@ -832,12 +859,114 @@ BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode*, int) {
 
 /* 00002F5C-00003354       .text create_heap__Q210daObjFtree5Act_cFv */
 bool daObjFtree::Act_c::create_heap() {
-    /* Nonmatching */
+    J3DAnmTransform* tmp_bck_data = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BCK_VMRTY_e);
+    JUT_ASSERT(0x836, tmp_bck_data != 0);
+
+    J3DModelData* mdl_dataS = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BDL_VMRTY_e);
+    JUT_ASSERT(0x83C, mdl_dataS != 0);
+    if (mdl_dataS == NULL) {
+        return false;
+    }
+
+    mpMorf = new mDoExt_McaMorf(
+        mdl_dataS, NULL, NULL,
+        tmp_bck_data,
+        J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1,
+        NULL,
+        0,
+        0x11020203
+    );
+    if (mpMorf == NULL) {
+        return false;
+    }
+    mpMorf->getModel()->setUserArea((u32)this);
+
+    mdl_dataS->getJointNodePointer(2)->setCallBack(Ftree_NodeCallBack_Effect);
+    mdl_dataS->getJointNodePointer(3)->setCallBack(Ftree_NodeCallBack_M);
+    mdl_dataS->getJointNodePointer(4)->setCallBack(Ftree_NodeCallBack_M);
+    mdl_dataS->getJointNodePointer(5)->setCallBack(Ftree_NodeCallBack_M);
+
+    J3DModelData* mdl_dataL = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BDL_VMRTO_e);
+    JUT_ASSERT(0x85B, mdl_dataL != 0);
+    if (mdl_dataL == NULL) {
+        return false;
+    }
+    mpModel = mDoExt_J3DModel__create(mdl_dataL, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return false;
+    }
+    mpModel->setUserArea((u32)this);
+    mdl_dataL->getJointNodePointer(1)->setCallBack(Ftree_NodeCallBack_L);
+
+    J3DAnmTevRegKey* brk_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e);
+    JUT_ASSERT(0x86B, brk_data != 0);
+    if (brk_data == NULL) {
+        return false;
+    }
+    int brkOk = mBrkAnm.init(mdl_dataS, brk_data, 1, 0, 1.0f, 0, -1, 0);
+
+    get_tev_material0_color(mpMorf->getModel()->getModelData(), 2, &m654.r, &m654.g, &m654.b);
+    m66C = m654.r;
+    m66E = m654.g;
+    m670 = m654.b;
+    m672 = m654.a;
+
+    get_tev_material0_color(mpModel->getModelData(), 2, &m664.r, &m664.g, &m664.b);
+    m674.r = m664.r;
+    m674.g = m664.g;
+    m674.b = m664.b;
+    m674.a = m664.a;
+
+    return mdl_dataS != 0 && mpMorf != 0 && mpMorf->getModel() != 0 && mdl_dataL != 0 && brk_data != 0 && brkOk != 0;
 }
 
 /* 00003354-000035F4       .text _create__Q210daObjFtree5Act_cFv */
 cPhs_State daObjFtree::Act_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daObjFtree::Act_c);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            s32 tree_no = daObj::PrmAbstract(this, 4, 0);
+            m644 = tree_no < 10 ? ret_tree_no[tree_no] : 0xF;
+            m648 = 0;
+            mSpawnedHeartPieceProcessId = fpcM_ERROR_PROCESS_ID_e;
+            set_first_stat();
+            talk_ct();
+
+            cXyz pos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
+            mGndChk.SetPos(&pos);
+            mGndChk.SetActorPid(fopAcM_GetID(this));
+            m34C = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            set_mtx();
+            cullMtx = mpMorf->getModel()->getBaseTRMtx();
+            fopAcM_setCullSizeBox(this, -300.0f, 0.0f, -300.0f, 300.0f, 1000.0f, 300.0f);
+
+            m35C.Init(0xFF, 0xFF, this);
+            m398.Set(M_cyl_srcW);
+            m398.SetStts(&m35C);
+            m398.SetTgVec((cXyz&)cXyz::Zero);
+            m398.OnTgNoHitMark();
+
+            m4CC.Init(0xFF, 0xFF, this);
+            m508.Set(M_cyl_src);
+            m508.SetStts(&m4CC);
+            m508.SetTgVec((cXyz&)cXyz::Zero);
+            m508.OnTgNoHitMark();
+
+            XyEvent_init();
+            eventInfo.setXyCheckCB(Ftree_checkXyEventCallBack);
+            eventInfo.setXyEventCB(Ftree_XyEventCallBack);
+
+            mEventCam0Idx = dComIfGp_evmng_getEventIdx("morinoki_camera0", 0xFF);
+            mEventCam1Idx = dComIfGp_evmng_getEventIdx("morinoki_camera1", 0xFF);
+            mEventCam2Idx = dComIfGp_evmng_getEventIdx("morinoki_camera2", 0xFF);
+        } else {
+            phase_state = cPhs_ERROR_e;
+        }
+    }
+    return phase_state;
 }
 
 /* 00003FB8-00004004       .text _delete__Q210daObjFtree5Act_cFv */
@@ -852,16 +981,111 @@ bool daObjFtree::Act_c::_delete() {
 /* 00004004-00004144       .text set_mtx__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_mtx() {
     /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    model->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    PSMTXCopy(mDoMtx_stack_c::now, m2A8);
+
+    cXyz sp = scale * m63C;
+    mpModel->setBaseScale(sp);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    PSMTXCopy(mDoMtx_stack_c::now, mpModel->getBaseTRMtx());
+    PSMTXCopy(mDoMtx_stack_c::now, m2A8);
+
+    mpModel->calc();
 }
 
 /* 00004144-000042C4       .text _execute__Q210daObjFtree5Act_cFv */
 bool daObjFtree::Act_c::_execute() {
-    /* Nonmatching */
+    if (mMode == 0) {
+        return true;
+    }
+
+    search_heart_part();
+    talk_main();
+    set_mtx();
+    process_main();
+    set_collision();
+    fopAcM_rollPlayerCrash(this, m4C8, 7);
+
+    s16 spd = mMode == 0xB ? 1 : 0x1E;
+    cLib_addCalcAngleS2(&m294, m696, spd, 0x1000);
+    cLib_addCalcAngleS2(&m296, m698, spd, 0x1000);
+
+    s16 spd2 = (mMode == 0xC || mMode == 0x5) ? 1 : 0xA;
+    cLib_addCalcAngleS2(&m298, m6A0, spd2, 0x1000);
+    cLib_addCalcAngleS2(&m29A, m6A2, spd2, 0x1000);
+
+    XyEvent_exe();
+    if (m648 == 0) {
+        m648 = place_heart_part();
+    }
+    if (m650 == 1) {
+        if (launch_heart_part() != 0) {
+            m650 = 0;
+        }
+    }
+    if (m652 > 1) {
+        m652--;
+    }
+    if (m650 > 1) {
+        m650--;
+    }
+    return true;
 }
 
 /* 000042C4-0000455C       .text _draw__Q210daObjFtree5Act_cFv */
 bool daObjFtree::Act_c::_draw() {
     /* Nonmatching */
+    if (mMode == 0) {
+        return true;
+    }
+
+    if (m2A6 == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+        dComIfGd_setListBG();
+
+        if (mMode == 5 || mMode == 6) {
+            mpMorf->getModel()->getModelData()->removeTevRegAnimator(mBrkAnm.getBrkAnm());
+            set_tev_color(mpMorf->getModel()->getModelData(), 2, m66C, m66E, m670);
+        } else {
+            mBrkAnm.entry(mpMorf->getModel()->getModelData(), mBrkAnm.getFrame());
+        }
+        mpMorf->updateDL();
+        dComIfGd_setList();
+
+        cXyz pos = current.pos;
+        dComIfGd_setSimpleShadow2(&pos, m34C, 74.0f, mGndChk, shape_angle.y, 1.0f,
+                                  &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+
+    if (m2A7 == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        dComIfGd_setListBG();
+
+        set_tev_color(mpModel->getModelData(), 2, m674.r, m674.g, m674.b);
+        mDoExt_modelUpdateDL(mpModel);
+        dComIfGd_setList();
+
+        f32 ratio;
+        if (m63C <= 0.2f) {
+            ratio = 0.0f;
+        } else if (m63C >= 1.0f) {
+            ratio = 1.0f;
+        } else {
+            ratio = (m63C - 0.2f) / 0.8f;
+        }
+        cXyz pos = current.pos;
+        dComIfGd_setSimpleShadow2(&pos, m34C, 74.0f * (1.0f + 2.5f * ratio), mGndChk,
+                                  shape_angle.y, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return true;
 }
 
 namespace daObjFtree {

@@ -80,7 +80,7 @@ namespace daObjFtree {
         void action_changeMS_main();
         s32 process_init(int, short);
         void process_main();
-        BOOL solidHeapCB(fopAc_ac_c*);
+        static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL NodeCallBack_Effect(J3DNode*, int);
         bool create_heap();
         cPhs_State _create();
