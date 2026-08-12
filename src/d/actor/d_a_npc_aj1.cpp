@@ -377,28 +377,29 @@ void daNpc_Aj1_c::play_texPttrnAnm() {
 
 /* 00000CF4-00000DFC       .text setAnm_anm__11daNpc_Aj1_cFPQ211daNpc_Aj1_c9anm_prm_c */
 void daNpc_Aj1_c::setAnm_anm(daNpc_Aj1_c::anm_prm_c* i_prm) {
-    if (i_prm->mAnmNum >= 0) {
-        if (mAnmNum == i_prm->mAnmNum) {
-            return;
-        }
-        dNpc_setAnmIDRes(mpMorf, i_prm->mLoopMode, i_prm->mMorf, i_prm->mSpeed,
-                         bckResID(i_prm->mAnmNum), -1, "Aj");
-        mAnmNum = i_prm->mAnmNum;
-        mbMorfAnimStopped = 0;
-        m759 = 0;
-        mPrevMorfFrame = 0.0f;
-        if (mAnmNum != 2) {
+    if (i_prm->mAnmNum < 0 || mAnmNum == i_prm->mAnmNum) {
+        return;
+    }
+    dNpc_setAnmIDRes(mpMorf, i_prm->mLoopMode, i_prm->mMorf, i_prm->mSpeed,
+                     bckResID(i_prm->mAnmNum), -1, "Aj");
+    mAnmNum = i_prm->mAnmNum;
+    mbMorfAnimStopped = 0;
+    m759 = 0;
+    mPrevMorfFrame = 0.0f;
+    switch (mAnmNum) {
+        case 2:
+            set_pa_pun();
+            set_pa_aka();
+            set_pa_don();
+            break;
+        default:
             if (mAkaEmitter != NULL) {
                 mAkaEmitter->setStatus(1);
                 m7B4 = 1;
             }
             del_pa(&mPunEmitter);
             del_pa(&mDonEmitter);
-        } else {
-            set_pa_pun();
-            set_pa_aka();
-            set_pa_don();
-        }
+            break;
     }
 }
 
@@ -494,70 +495,52 @@ u16 daNpc_Aj1_c::next_msgStatus(u32* i_pMsgNo) {
         case 0x9C7:
             *i_pMsgNo = 0x9C8;
             break;
+        case 0x9C9:
+            *i_pMsgNo = 0x9CA;
+            break;
         case 0x9C8:
+        case 0x9CA:
             if (dComIfGs_isEventBit(0x1) && !dComIfGs_isEventBit(0x3704)) {
                 *i_pMsgNo = 0x9DA;
                 break;
             }
             status = 0x10;
             break;
-        case 0x9C9:
-            *i_pMsgNo = 0x9CA;
+        case 0x9DB:
+            if (!dComIfGs_isEventBit(0x504)) {
+                if (dComIfGs_isEventBit(0x2A80)) {
+                    *i_pMsgNo = 0x9DC;
+                } else {
+                    *i_pMsgNo = 0x9CB;
+                }
+            } else {
+                *i_pMsgNo = 0x9CF;
+            }
             break;
-        case 0x9CA:
+        case 0x9CB:
+        case 0x9DC:
+            *i_pMsgNo = 0x9CC;
+            break;
+        case 0x9CD:
+            *i_pMsgNo = 0x9CE;
+            break;
+        case 0x9CF:
             if (dComIfGs_isEventBit(0x1) && !dComIfGs_isEventBit(0x3704)) {
                 *i_pMsgNo = 0x9DD;
                 break;
             }
             status = 0x10;
             break;
-        case 0x9CB:
-            *i_pMsgNo = 0x9CC;
-            break;
-        case 0x9CC:
-            status = 0x10;
-            break;
-        case 0x9CD:
-            *i_pMsgNo = 0x9CE;
-            break;
-        case 0x9CE:
-            status = 0x10;
-            break;
-        case 0x9CF:
-            if (dComIfGs_isEventBit(0x504)) {
-                *i_pMsgNo = 0x9CF;
-                break;
-            }
-            if (dComIfGs_isEventBit(0x2A80)) {
-                *i_pMsgNo = 0x9DC;
-                break;
-            }
-            *i_pMsgNo = 0x9CB;
-            break;
         case 0x9D0:
-            if (dComIfGs_isEventBit(0x2A20)) {
-                if (dKy_daynight_check()) {
-                    *i_pMsgNo = 0x9D3;
-                } else {
-                    *i_pMsgNo = 0x9D2;
-                }
-            } else {
+            if (!dComIfGs_isEventBit(0x2A20)) {
                 *i_pMsgNo = 0x9D1;
+            } else {
+                if (!dKy_daynight_check()) {
+                    *i_pMsgNo = 0x9D2;
+                } else {
+                    *i_pMsgNo = 0x9D3;
+                }
             }
-            break;
-        case 0x9DA:
-            if (dComIfGs_isEventBit(0x504)) {
-                *i_pMsgNo = 0x9CF;
-                break;
-            }
-            if (dComIfGs_isEventBit(0x2A80)) {
-                *i_pMsgNo = 0x9DC;
-                break;
-            }
-            *i_pMsgNo = 0x9CB;
-            break;
-        case 0x9DB:
-            *i_pMsgNo = 0x9CC;
             break;
         default:
             status = 0x10;
@@ -676,11 +659,12 @@ u8 daNpc_Aj1_c::chk_talk() {
 
 /* 000016B8-000016D8       .text chk_parts_notMov__11daNpc_Aj1_cFv */
 s32 daNpc_Aj1_c::chk_parts_notMov() {
+    s32 result = 0;
     if (mJointHeadY == m_jnt.getHead_y() && mJointBackboneY == m_jnt.getBackbone_y() &&
         mActorAngleY == current.angle.y) {
-        return 1;
+        result = 1;
     }
-    return 0;
+    return result;
 }
 
 /* 000016D8-0000184C       .text lookBack__11daNpc_Aj1_cFv */
@@ -773,6 +757,8 @@ s32 daNpc_Aj1_c::cut_move_AJ1_TLK() {
 
 /* 000019A8-000019C8       .text cut_init_INI_ANGRY__11daNpc_Aj1_cFv */
 void daNpc_Aj1_c::cut_init_INI_ANGRY() {
+    setAnm_NUM(0, 1);
+    mpMorf->setMorf(8.0f);
 }
 
 /* 000019C8-000019E8       .text cut_move_INI_ANGRY__11daNpc_Aj1_cFv */
