@@ -138,12 +138,10 @@ void daNpc_Ym1_c::setAnm() {
 
 /* 000010D0-000010D4       .text chngAnmTag__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::chngAnmTag() {
-    /* Nonmatching */
 }
 
 /* 000010D4-000010D8       .text ctrlAnmTag__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::ctrlAnmTag() {
-    /* Nonmatching */
 }
 
 /* 000010D8-00001118       .text chngAnmAtr__11daNpc_Ym1_cFUc */
@@ -153,7 +151,6 @@ void daNpc_Ym1_c::chngAnmAtr(unsigned char) {
 
 /* 00001118-0000111C       .text ctrlAnmAtr__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::ctrlAnmAtr() {
-    /* Nonmatching */
 }
 
 /* 0000111C-00001180       .text setAnm_ATR__11daNpc_Ym1_cFv */
