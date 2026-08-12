@@ -1368,8 +1368,8 @@ void daNpcMn_c::setAnmFromMsgTag() {
 }
 
 /* 0000302C-0000303C       .text getPrmNpcNo__9daNpcMn_cFv */
-s8 daNpcMn_c::getPrmNpcNo() {
-    return mPosNo != 0;
+int daNpcMn_c::getPrmNpcNo() {
+    return mPosNo != 0 ? 1 : 0;
 }
 
 /* 0000303C-00003068       .text getPrmRailID__9daNpcMn_cFv */
@@ -1604,10 +1604,10 @@ s32 daNpcMn_c::XyCheckCB(int) {
 }
 
 /* 0000397C-000039E0       .text getRand__9daNpcMn_cFi */
-u8 daNpcMn_c::getRand(int i_max) {
+int daNpcMn_c::getRand(int i_max) {
     int rand = cM_rndF(i_max);
     if (rand == i_max) {
-        return 0;
+        rand = 0;
     }
     return rand;
 }
@@ -1649,25 +1649,24 @@ u8 daNpcMn_c::getPosNo() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
         return 1;
     }
-    u8 count[8] = {1, 0, 0, 0, 0, 0, 0, 0};
-    for (u16 i = 0; i < 0x86; i++) {
-        u8 idx = i / 8;
-        if (idx < 0x11) {
-            if (dComIfGs_getEventReg(l_figure_comp[i]) & (1 << (i & 7))) {
-                s8 roomId = dSnap_GetFigRoomId(i);
+    u32 count[8] = {1};
+    for (int i = 0; i < 0x86; i++) {
+        if (i / 8 < 0x11) {
+            if (dComIfGs_getEventReg(l_figure_comp[i / 8]) & (1 << (i & 7))) {
+                int roomId = dSnap_GetFigRoomId(i);
                 if (roomId != 0xFF && roomId < 8) {
                     count[roomId]++;
                 }
             }
         }
     }
-    u8 num = 0;
+    int num = 0;
     for (int i = 0; i < 8; i++) {
         if (count[i] != 0) {
             num++;
         }
     }
-    u8 rand = getRand(num);
+    int rand = getRand(num);
     for (int i = 0; i < 8; i++) {
         if (count[i] != 0) {
             if (rand != 0) {

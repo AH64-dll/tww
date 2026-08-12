@@ -120,7 +120,7 @@ public:
     void chkMsg();
     void setMessage(unsigned long);
     void setAnmFromMsgTag();
-    s8 getPrmNpcNo();
+    int getPrmNpcNo();
     u8 getPrmRailID();
     u8 getPrmSwitchBit();
     u8 getPrmSwitchBit2();
@@ -133,7 +133,7 @@ public:
     void setAnm(unsigned char, int, float);
     s32 setAnmTbl(sMnAnmDat*);
     s32 XyCheckCB(int);
-    u8 getRand(int);
+    int getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, float, float);
     s32 chkEndEvent();
     u8 chkPosNo();
