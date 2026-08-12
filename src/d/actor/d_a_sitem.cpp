@@ -16,6 +16,7 @@ static f32 max_d[4] = { 100.0f, 250.0f, 400.0f, 600.0f };
 static cXyz non_pos;
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
+/* Nonmatching */
 void hand_draw(sitem_class* i_this) {
     J3DModel* model = i_this->mpModel;
     if (i_this->m2C0 < 6) {
@@ -38,6 +39,7 @@ static BOOL daSitem_Draw(sitem_class* i_this) {
 }
 
 /* 00000248-0000034C       .text hand_mtx_set__FP11sitem_class */
+/* Nonmatching */
 void hand_mtx_set(sitem_class* i_this) {
     MtxTrans(i_this->m2E0.x, i_this->m2E0.y, i_this->m2E0.z, 0);
     mDoMtx_XrotM(*calc_mtx, i_this->m2EC.x);
@@ -50,6 +52,7 @@ void hand_mtx_set(sitem_class* i_this) {
 }
 
 /* 00000388-00000410       .text control3__FP11sitem_class */
+/* Nonmatching */
 void control3(sitem_class* i_this) {
     sitem_s* item = i_this->mSitem1;
     for (int i = 0; i < 10; i++) {
@@ -60,6 +63,7 @@ void control3(sitem_class* i_this) {
 }
 
 /* 00000410-00000748       .text control1__FP11sitem_class */
+/* Nonmatching */
 void control1(sitem_class* i_this) {
     i_this->mSitem1[0].mPos = i_this->current.pos;
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
@@ -96,6 +100,7 @@ void control1(sitem_class* i_this) {
 }
 
 /* 00000748-000009E8       .text control2__FP11sitem_class */
+/* Nonmatching */
 void control2(sitem_class* i_this) {
     cXyz sp34(0.0f, 0.0f, i_this->m2F4);
     i_this->mSitem1[9].mPos = i_this->mHomePos;
@@ -127,6 +132,7 @@ void control2(sitem_class* i_this) {
 }
 
 /* 000009E8-00000E2C       .text cut_control1__FP11sitem_class */
+/* Nonmatching */
 void cut_control1(sitem_class* i_this) {
     i_this->mSitem2[0].mPos = i_this->current.pos;
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
@@ -176,6 +182,7 @@ void cut_control1(sitem_class* i_this) {
 }
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
+/* Nonmatching */
 void my_break(sitem_class* i_this) {
     i_this->m2C2[0] = 0x32;
     i_this->m2C0 = 6;
@@ -203,6 +210,7 @@ void my_break(sitem_class* i_this) {
 }
 
 /* 00001094-000015C0       .text cut_control2__FP11sitem_class */
+/* Nonmatching */
 void cut_control2(sitem_class* i_this) {
     cXyz sp60(0.0f, 0.0f, i_this->m2F4);
     i_this->mSitem1[9].mPos = i_this->mHomePos;
@@ -259,6 +267,7 @@ void cut_control2(sitem_class* i_this) {
 }
 
 /* 000015C0-00002304       .text hand_move__FP11sitem_class */
+/* Nonmatching */
 void hand_move(sitem_class* i_this) {
     dBgS_GndChk gndChk;
     s32 isCut = 0;
@@ -499,6 +508,7 @@ static BOOL daSitem_Delete(sitem_class* i_this) {
 }
 
 /* 00002760-00002824       .text useHeapInit__FP11sitem_class */
+/* Nonmatching */
 static BOOL useHeapInit(sitem_class* i_this) {
     i_this->mpModel = mDoExt_J3DModel__create(
         (J3DModelData*)dComIfG_getObjectRes("Sitem", bmd_data[i_this->mType]), 0, 0x11020203);
@@ -573,6 +583,7 @@ static dCcD_SrcSph bm_sph_src = {
 };
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */
+/* Nonmatching */
 static cPhs_State daSitem_Create(fopAc_ac_c* a_this) {
     sitem_class* i_this = (sitem_class*)a_this;
 
