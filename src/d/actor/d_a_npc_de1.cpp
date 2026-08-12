@@ -639,9 +639,12 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
     int* timer_p = dComIfGp_evmng_getMyIntegerP(i_staff_idx, "Timer");
     int* num_p = dComIfGp_evmng_getMyIntegerP(i_staff_idx, "Num");
     if (act_no_p != NULL) {
+        daPy_py_c* player = daPy_getPlayerActorClass();
         mActNo = *act_no_p;
         switch (mActNo) {
             case 0:
+                break;
+            case 1:
                 if (num_p != NULL) {
                     fopAc_ac_c* actor = searchByID(m_cc_ID[*num_p]);
                     if (actor != NULL) {
@@ -649,11 +652,17 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
                     }
                 }
                 break;
-            case 1:
-                break;
             case 2:
-                mTimer1 = (timer_p != NULL) ? *timer_p : 0;
-                mTimer2 = (num_p != NULL) ? *num_p : 0;
+                if (timer_p != NULL) {
+                    mTimer1 = *timer_p;
+                } else {
+                    mTimer1 = 0;
+                }
+                if (num_p != NULL) {
+                    mTimer2 = *num_p;
+                } else {
+                    mTimer2 = 0;
+                }
                 break;
             case 3:
                 if (num_p != NULL) {
@@ -665,7 +674,6 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
                 mTimer0 = 0x54;
                 break;
             case 5:
-                daPy_py_c* player = daPy_getPlayerActorClass();
                 player->mDemo.setDemoType(daPy_demo_c::TYPE_ORIGINAL_e);
                 player->mDemo.setParam0(0);
                 player->mDemo.setDemoMode(0x18);
