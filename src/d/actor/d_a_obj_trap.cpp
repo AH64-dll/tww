@@ -226,36 +226,43 @@ cXyz daObjTrap_c::check_wall() {
     static const f32 transA[] = {0.0f, 145.0f, 145.0f};
 
     cXyz spB8 = mDir * 150.0f;
+    cXyz spAC;
+    cXyz spA0;
+    cXyz sp94;
+    cXyz sp88;
     cXyz sp7C = cXyz::BaseY * 75.0f;
     cXyz ret = cXyz::Zero;
 
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::YrotS(angleY[i]);
-        cXyz sp88;
         mDoMtx_stack_c::multVec(&mDir, &sp88);
         sp88 *= transA[i];
         sp88 += sp7C;
-        cXyz spAC = current.pos + sp88;
-        cXyz spA0 = spAC + mSpeedVec;
+        spAC = current.pos + sp88;
+        spA0 = spAC + mSpeedVec;
         spA0 += spB8;
         l_wall_work.Set(&spAC, &spA0, this);
         l_wall_work.SetActorPid(fopAcM_GetID(this));
         if (dComIfG_Bgsp()->LineCross(&l_wall_work)) {
-            cXyz sp94 = l_wall_work.GetCross();
+            sp94 = l_wall_work.GetCross();
             PSVECSubtract(&sp94, &spAC, &sp94);
             if (ret == cXyz::Zero) {
-                ret = sp94 + current.pos - spB8;
-            } else {
-                cXyz t1(ret.x, 0.0f, ret.z);
-                f32 retDist = PSVECSquareMag((Vec*)&t1);
+                goto update_ret;
+            }
+            {
+                f32 retDist = PSVECSquareMag((Vec*)&cXyz(ret.x, 0.0f, ret.z));
                 retDist = std::sqrtf(retDist);
-                cXyz t2(sp94.x, 0.0f, sp94.z);
-                f32 sp94Dist = PSVECSquareMag((Vec*)&t2);
+                f32 sp94Dist = PSVECSquareMag((Vec*)&cXyz(sp94.x, 0.0f, sp94.z));
                 sp94Dist = std::sqrtf(sp94Dist);
                 if (retDist > sp94Dist) {
-                    ret = sp94 + current.pos - spB8;
+                    goto update_ret;
                 }
             }
+            goto done_update;
+        update_ret:
+            ret = sp94 + current.pos - spB8;
+        done_update:
+            ;
         }
     }
     return ret;
@@ -263,9 +270,9 @@ cXyz daObjTrap_c::check_wall() {
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
 BOOL daObjTrap_c::check_block_target_pos(cXyz* i_targetPos) {
-    BOOL ret = FALSE;
     cXyz diff = *i_targetPos - current.pos;
     f32 dot = mDir.x * diff.x + mDir.z * diff.z;
+    BOOL ret = FALSE;
     if (dot >= 0.0f && dot < 150.0f + mDist) {
         mDoMtx_stack_c::YrotS(0x4000);
         cXyz rot;
@@ -330,11 +337,9 @@ cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
                             goto update_ret;
                         }
                         {
-                            cXyz t1(ret.x, 0.0f, ret.z);
-                            f32 retDist = PSVECSquareMag((Vec*)&t1);
+                            f32 retDist = PSVECSquareMag((Vec*)&cXyz(ret.x, 0.0f, ret.z));
                             retDist = std::sqrtf(retDist);
-                            cXyz t2(spDC.x, 0.0f, spDC.z);
-                            f32 spDC2Dist = PSVECSquareMag((Vec*)&t2);
+                            f32 spDC2Dist = PSVECSquareMag((Vec*)&cXyz(spDC.x, 0.0f, spDC.z));
                             spDC2Dist = std::sqrtf(spDC2Dist);
                             if (retDist > spDC2Dist) {
                                 goto update_ret;
