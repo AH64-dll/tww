@@ -135,7 +135,7 @@ namespace daObjFtree {
         /* 0x672 */ s16 m672;
         /* 0x674 */ GXColorS10 m674;
         /* 0x67C */ s32 m67C;
-        /* 0x680 */ u32 mMode;
+        /* 0x680 */ s32 mMode;
         /* 0x684 */ s16 m684;
         /* 0x686 */ s16 m686;
         /* 0x688 */ s32 m688;

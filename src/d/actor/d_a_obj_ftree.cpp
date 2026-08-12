@@ -439,12 +439,43 @@ s32 daObjFtree::Act_c::action_waitS_init(s16) {
 
 /* 000014E8-00001608       .text action_waitS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitS_main() {
-    /* Nonmatching */
+    if (m652 == 1) {
+        s32 ret;
+        if (m356 == mEventCam2Idx) {
+            ret = process_init(4, 0);
+        } else {
+            ret = process_init(8, 0);
+        }
+        if (ret != 0) {
+            m652 = 0;
+            return;
+        }
+    }
+    s32 hit = m508.ChkCoHit();
+    if (m67C == 0 && hit == 1 && process_init(10, 1)) {
+        hit = 0;
+    } else if ((s32)cM_rndF(100.0f) == 0 && mMode == 1) {
+        process_init(10, 1.0f + 4.0f * cM_rndF(1.0f));
+    }
+    m67C = hit;
 }
 
 /* 00001608-0000173C       .text action_waitM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_waitM_init(s16) {
-    /* Nonmatching */
+    set_brought();
+    m2A6 = 1;
+    m2A7 = 0;
+
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
+    if (brk != NULL) {
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, -1.0f, 0, -1, 1, FALSE) != 0) {
+            if (SetJointAnimation(5, -1.0f, 0.0f, 0) != 0) {
+                mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
 /* 0000173C-00001878       .text action_waitM_main__Q210daObjFtree5Act_cFv */
