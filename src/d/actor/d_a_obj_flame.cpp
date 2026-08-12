@@ -182,16 +182,16 @@ namespace daObjFlame {
 void daObjFlame::Act_c::set_switch() {
     if (mType == 1) {
         if (mModeProc == 3 || mModeProc == 4) {
-            dComIfGs_onSwitch(prm_get_swSave(), fopAcM_GetRoomNo(this));
+            dComIfGs_onSwitch(prm_get_swSave(), home.roomNo);
         } else {
-            dComIfGs_offSwitch(prm_get_swSave(), fopAcM_GetRoomNo(this));
+            dComIfGs_offSwitch(prm_get_swSave(), home.roomNo);
         }
     }
 }
 
 /* 00000110-00000134       .text solidHeapCB__Q210daObjFlame5Act_cFP10fopAc_ac_c */
 int daObjFlame::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-    return ((Act_c*)i_this)->create_heap();
+    return (u8)((Act_c*)i_this)->create_heap();
 }
 
 /* 00000134-00000414       .text create_heap__Q210daObjFlame5Act_cFv */
@@ -461,7 +461,7 @@ void daObjFlame::Act_c::em_manual_inv() {
 void daObjFlame::Act_c::ki_init() {
     s32 count = prm_get_kiNum() + 1;
     s32 temp = count - 32 - 1;
-    s32 mask = temp - temp - (count >= 33);
+    s32 mask = temp - temp - (count < 33);
     if ((count & ~mask) > 0) {
         mKiCount = 0;
         mKiIdx = 0;
@@ -478,7 +478,7 @@ void daObjFlame::Act_c::ki_make() {
         }
         s32 count = prm_get_kiNum() + 1;
         s32 temp = count - 32 - 1;
-        s32 clamped = count & ~(temp - temp - (count >= 33));
+        s32 clamped = count & ~(temp - temp - (count < 33));
         if (mKiIdx >= clamped) {
             mbKi = 0;
             mKiTimer = prm_get_prm();
@@ -493,7 +493,7 @@ void daObjFlame::Act_c::ki_make() {
 
 /* 00001194-000011E4       .text eff_hase__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::eff_hase() {
-    dComIfGp_particle_setSimple(0x406B, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+    dComIfGp_particle_setSimple(0xC06B, &home.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
 }
 
 /* 000011E4-00001254       .text se_fireblast_omen__Q210daObjFlame5Act_cFv */
