@@ -10,6 +10,7 @@
 
 /* 000000EC-00000150       .text __ct__15daNpc_Ob1_HIO_cFv */
 daNpc_Ob1_HIO_c::daNpc_Ob1_HIO_c() {
+/* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX         */ 0x2000,
         /* mMaxHeadY         */ 0x1388,
@@ -90,6 +91,7 @@ static char* l_evn_tbl[] = {
 
 /* 00000400-00000480       .text init_OB1_0__11daNpc_Ob1_cFv */
 bool daNpc_Ob1_c::init_OB1_0() {
+/* Nonmatching */
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
         set_action(&daNpc_Ob1_c::wait_action1, NULL);
         return true;
@@ -112,6 +114,7 @@ bool daNpc_Ob1_c::init_OB1_1() {
 
 /* 00000518-000005A4       .text init_OB1_2__11daNpc_Ob1_cFv */
 bool daNpc_Ob1_c::init_OB1_2() {
+/* Nonmatching */
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520) && dKy_daynight_check() == 1) {
         set_action(&daNpc_Ob1_c::wait_action2, NULL);
         return true;
@@ -297,6 +300,7 @@ static daNpc_Ob1_c::anm_prm_c a_anm_prm_tbl[] = {
 
 /* 00000C04-00000C70       .text setAnm_NUM__11daNpc_Ob1_cFii */
 void daNpc_Ob1_c::setAnm_NUM(int i_anmNum, int i_tex) {
+/* Nonmatching */
     if (i_tex != 0) {
         setAnm_tex(a_anm_prm_tbl[i_anmNum].mBtpNum);
     }
@@ -408,6 +412,7 @@ static daNpc_Ob1_c::anm_prm_c a_anm_prm_tbl3[] = {
 
 /* 00000E8C-00000EF4       .text setAnm_ATR__11daNpc_Ob1_cFi */
 void daNpc_Ob1_c::setAnm_ATR(int i_tex) {
+/* Nonmatching */
     if (i_tex != 0) {
         setAnm_tex(a_anm_prm_tbl3[mAttr].mBtpNum);
     }
@@ -416,6 +421,7 @@ void daNpc_Ob1_c::setAnm_ATR(int i_tex) {
 
 /* 00000EF4-00000FFC       .text anmAtr__11daNpc_Ob1_cFUs */
 void daNpc_Ob1_c::anmAtr(u16 i_msgNo) {
+/* Nonmatching */
     if (field_0x6bc[0] == 2) {
         if (g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[g_dComIfG_gameInfo.play.mMesgCamInfo.mBasicID - 1] !=
             this) {
@@ -557,6 +563,7 @@ void daNpc_Ob1_c::lookBack() {
 
 /* 000013A0-000014CC       .text next_msgStatus__11daNpc_Ob1_cFPUl */
 u16 daNpc_Ob1_c::next_msgStatus(u32* i_msg_no) {
+/* Nonmatching */
     u16 ret = 0xF;
     switch (*i_msg_no) {
         case 0xA8D:
@@ -849,7 +856,10 @@ cXyz daNpc_Ob1_c::get_attPos() {
         if (idx == 0) {
             idx = mPathRun.maxPoint();
         }
-        ret = path->m_points[idx - 1].m_position;
+        idx--;
+        dPnt* pnt = &path->m_points[idx];
+        cXyz pos = pnt->m_position;
+        ret = pos;
     }
     return ret;
 }
@@ -1031,6 +1041,7 @@ void daNpc_Ob1_c::clrSpd() {
 
 /* 00002288-00002488       .text setStt__11daNpc_Ob1_cFSc */
 void daNpc_Ob1_c::setStt(s8 i_status) {
+/* Nonmatching */
     searchByID(mPartnerProcID);
     s8 oldStatus = mStatus;
     mTimer = 0;
