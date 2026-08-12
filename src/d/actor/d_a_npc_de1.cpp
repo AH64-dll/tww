@@ -147,29 +147,27 @@ BOOL daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
 
 /* 00000658-00000744       .text setAnm_anm__11daNpc_De1_cFPQ211daNpc_De1_c9anm_prm_c */
 BOOL daNpc_De1_c::setAnm_anm(daNpc_De1_c::anm_prm_c* i_anmPrmP) {
-    /* Nonmatching */
     BOOL o_retval = FALSE;
     if (i_anmPrmP->mAnmNum >= 0) {
-        if (mAnmNum == i_anmPrmP->mAnmNum) {
-            return FALSE;
-        }
-        mAnmNum = i_anmPrmP->mAnmNum;
-        if (mpMorf != NULL) {
-            int bck_num, bas_num;
-            anmResID(mAnmNum, &bck_num, &bas_num);
-            if (bck_num >= 0) {
-                dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed, bck_num, bas_num, "De");
+        if (mAnmNum != i_anmPrmP->mAnmNum) {
+            mAnmNum = i_anmPrmP->mAnmNum;
+            if (mpMorf != NULL) {
+                int bck_num, bas_num;
+                anmResID(mAnmNum, &bck_num, &bas_num);
+                if (bck_num >= 0) {
+                    dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed, bck_num, bas_num, "De");
+                }
+                if (mAnmNum == 3) {
+                    set_pa_happa();
+                } else {
+                    del_pa_happa();
+                }
+                o_retval = TRUE;
             }
-            if (mAnmNum == 3) {
-                set_pa_happa();
-            } else {
-                del_pa_happa();
-            }
-            o_retval = TRUE;
+            mPrevMorfFrame = 0.0f;
+            m7A5 = 0;
+            mbMorfAnimStopped = 0;
         }
-        mPrevMorfFrame = 0.0f;
-        m7A5 = 0;
-        mbMorfAnimStopped = 0;
     }
     return o_retval;
 }
