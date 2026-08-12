@@ -311,7 +311,6 @@ void daGy_c::_nodeControl(J3DNode* node, J3DModel* model) {
     Quaternion sp54;
     cXyz sp48;
     cXyz sp3C;
-    cXyz sp30;
     cXyz sp24;
     cXyz sp18;
     Vec spC;
@@ -333,7 +332,7 @@ void daGy_c::_nodeControl(J3DNode* node, J3DModel* model) {
 
     if (jntNo == 2) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
-        sp30 = current.pos - player->current.pos;
+        cXyz sp30 = current.pos - player->current.pos;
         spC.x = sp30.x;
         spC.y = 0.0f;
         spC.z = sp30.z;
@@ -419,10 +418,10 @@ BOOL daGy_c::_createHeap() {
     mCE4 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mCE4 != NULL) {
         jntHit = mCE4;
-        return TRUE;
     } else {
         return FALSE;
     }
+    return TRUE;
 }
 
 /* 00000AAC-00000C30       .text setMtx__6daGy_cFv */
