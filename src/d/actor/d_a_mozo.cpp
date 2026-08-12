@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_cc_d.h"
+#include "d/actor/d_a_beam.h"
 #include "d/actor/d_a_player.h"
 
 static dCcD_SrcCps cps_src = {
@@ -242,7 +243,73 @@ void daMozo_c::towait_proc_init() {
 
 /* 00001874-00001B3C       .text towait_proc__8daMozo_cFv */
 void daMozo_c::towait_proc() {
-    /* Nonmatching */
+    daBeam_c* beam1 = (daBeam_c*)getBeamActor(mBeam1ID);
+    daBeam_c* beam2 = (daBeam_c*)getBeamActor(mBeam2ID);
+
+    mDoMtx_quatSlerp(&mQuatRotation, &ZeroQuat, &mQuatRotation, 0.05f);
+    anime_proc();
+
+    if (field_0x376 == 0) {
+        if (beam1 != NULL && beam2 != NULL) {
+            int beam1Done;
+            int beam2Done;
+
+            if (beam1->m690 != NULL) {
+                beam1->beamOff();
+            }
+            if (beam1->m5F4 == 1) {
+                if (beam1->m588 < 5.0f) {
+                    beam1->m588 += 1.0f;
+                }
+                if (beam1->m5A8 < 4.0f) {
+                    beam1->m5A8 += 1.0f;
+                    beam1Done = 0;
+                } else {
+                    beam1->m5A8 = 0.0f;
+                    beam1->m588 = 0.0f;
+                    beam1->m5F4 = 0;
+                    beam1Done = 1;
+                }
+            } else {
+                beam1->m588 = 0.0f;
+                beam1->m5A8 = 0.0f;
+                beam1Done = 1;
+            }
+
+            if (beam2->m690 != NULL) {
+                beam2->beamOff();
+            }
+            if (beam2->m5F4 == 1) {
+                if (beam2->m588 < 5.0f) {
+                    beam2->m588 += 1.0f;
+                }
+                if (beam2->m5A8 < 4.0f) {
+                    beam2->m5A8 += 1.0f;
+                    beam2Done = 0;
+                } else {
+                    beam2->m5A8 = 0.0f;
+                    beam2->m588 = 0.0f;
+                    beam2->m5F4 = 0;
+                    beam2Done = 1;
+                }
+            } else {
+                beam2->m588 = 0.0f;
+                beam2->m5A8 = 0.0f;
+                beam2Done = 1;
+            }
+
+            if (beam1Done != 0 && beam2Done != 0 && mQuatRotation.w > 0.99f &&
+                mAnimMorf->getFrame() < 25.0f && mBrkAnm.getFrame() < 1.0f &&
+                mBtkAnm.getFrame() < 1.0f) {
+                wait_proc_init();
+            }
+        }
+    } else if (field_0x376 == 1) {
+        if (mQuatRotation.w > 0.99f && mAnimMorf->getFrame() < 25.0f &&
+            mBrkAnm.getFrame() < 1.0f && mBtkAnm.getFrame() < 1.0f) {
+            wait_proc_init();
+        }
+    }
 }
 
 /* 00001B3C-00001D8C       .text checkRange__8daMozo_cFi */
