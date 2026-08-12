@@ -125,7 +125,7 @@ void daNpc_De1_c::setMtx() {
 }
 
 /* 00000550-00000658       .text anmResID__11daNpc_De1_cFiPiPi */
-void daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
+BOOL daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
     static const int a_anm_idx_tbl[][2] = {
         {5, -1},
         {0, -1},
@@ -139,6 +139,7 @@ void daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
     JUT_ASSERT(0x11d, o_bck_num && o_bas_num);
     *o_bck_num = a_anm_idx_tbl[i_num][0];
     *o_bas_num = a_anm_idx_tbl[i_num][1];
+    return TRUE;
 }
 
 /* 00000658-00000744       .text setAnm_anm__11daNpc_De1_cFPQ211daNpc_De1_c9anm_prm_c */
@@ -466,7 +467,7 @@ void daNpc_De1_c::eventOrder() {
     s8 order = mOrder;
     if (order == 1 || order == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if (order == 1) {
+        if (mOrder == 1) {
             fopAcM_orderSpeakEvent(this);
         }
     } else if (order >= 3) {

@@ -30,7 +30,7 @@ public:
 
     BOOL createInit();
     void setMtx();
-    void anmResID(int, int*, int*);
+    BOOL anmResID(int, int*, int*);
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     BOOL setAnm();
