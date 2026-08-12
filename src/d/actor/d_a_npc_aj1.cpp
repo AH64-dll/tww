@@ -465,12 +465,20 @@ void daNpc_Aj1_c::anmAtr(u16 i_msgStatus) {
     switch (i_msgStatus) {
         case 6:
             if (m7C1 == 0) {
-                chngAnmAtr(dComIfGp_getSelectItem(0));
+                chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
+            }
+            m7C1++;
+            u8 tagInfo = dComIfGp_getMesgAnimeTagInfo();
+            if (tagInfo != 0xFF && tagInfo != mMesgAnimeTagInfo) {
+                dComIfGp_clearMesgAnimeTagInfo();
+                mMesgAnimeTagInfo = tagInfo;
+                chngAnmTag();
             }
             break;
         case 0xE:
-            mAnmAtr = 0;
-            setAnm_NUM(0, 1);
+            m7C1 = 0;
+            ctrlAnmAtr();
+            ctrlAnmTag();
             break;
     }
 }

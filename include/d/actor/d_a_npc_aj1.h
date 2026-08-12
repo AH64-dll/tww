@@ -128,6 +128,7 @@ public:
     /* 0x738 */ s16 mActorAngleY;
     /* 0x73A */ s16 mJointHeadY;
     /* 0x73C */ s16 mJointBackboneY;
+    /* 0x73E */ u8 field_0x73e[2];
     /* 0x740 */ f32 mPrevMorfFrame;
     /* 0x744 */ s16 mEventIdTable[1];
     /* 0x746 */ s16 mEventIdx;
@@ -136,6 +137,7 @@ public:
     /* 0x74C */ s16 mCutTimer;
     /* 0x74E */ s16 mTalkTimer;
     /* 0x750 */ s16 mFARwaiTimer;
+    /* 0x752 */ u8 field_0x752[2];
     /* 0x754 */ s16 mLookAtMaxVel;
     /* 0x756 */ s16 mTargetYRot;
     /* 0x758 */ u8 mbMorfAnimStopped;
@@ -143,6 +145,7 @@ public:
     /* 0x75A */ u8 mItemNo;
     /* 0x75B */ u8 m75B;
     /* 0x75C */ u8 m75C;
+    /* 0x75D */ u8 field_0x75d;
     /* 0x75E */ u8 m75E;
     /* 0x75F */ u8 m75F;
     /* 0x760 */ u8 m760;
