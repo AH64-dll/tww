@@ -271,7 +271,11 @@ static f32 l_d_p2[] = {
             s16 x_angle = -cM_atan2s(f28, f27);
             f32 dist = f28 * f28 + f27 * f27;
             if (dist > 0.0f) {
-                dist = std::sqrtf(dist);
+                double guess = __frsqrte(dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                dist = (f32)(dist * guess);
             }
             s16 y_angle = cM_atan2s(f31, dist);
             mDoMtx_XrotS(*calc_mtx, x_angle);
