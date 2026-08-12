@@ -1101,7 +1101,7 @@ u32 daNpcAuction_c::getMsg() {
 
 /* 00001F04-00002070       .text setAnmFromMsgTag__14daNpcAuction_cFv */
 void daNpcAuction_c::setAnmFromMsgTag() {
-    u8 itemBtn = dComIfGp_getSelectItem(0);
+    u8 itemBtn = dComIfGp_getMesgAnimeAttrInfo();
     if (mNpcNo == 0 || mNpcNo == 7) {
         if (itemBtn <= 7) {
             switch (itemBtn) {
@@ -1109,27 +1109,26 @@ void daNpcAuction_c::setAnmFromMsgTag() {
                 setAnmTbl(l_npc_anm_0);
                 break;
             case 1:
-                setAnmTbl(l_npc_anm_0);
-                break;
-            case 2:
                 setAnmTbl(l_npc_anm_2);
                 break;
-            case 3:
+            case 2:
                 setAnmTbl(l_npc_anm_3);
                 break;
-            case 4:
+            case 3:
                 setAnmTbl(l_npc_anm_4);
                 break;
-            case 5:
+            case 4:
                 setAnmTbl(l_npc_anm_5);
                 break;
-            case 6:
+            case 5:
                 setAnmTbl(l_npc_anm_6);
                 m728 = 0x8DD;
                 mSoundTimer = 0x64;
                 break;
-            case 7:
+            case 6:
                 setAnmTbl(l_npc_anm_7);
+                break;
+            case 7:
                 break;
             }
         }
@@ -1151,17 +1150,14 @@ void daNpcAuction_c::setAnmFromMsgTag() {
             setAnmTbl(l_npc_anm_talk2);
             break;
         case 5:
-            setAnmTbl(l_npc_anm_happy);
+            setAnmTbl(l_npc_anm_talk2);
             break;
         case 6:
-            setAnmTbl(l_npc_anm_talk2);
-            break;
         case 7:
-            setAnmTbl(l_npc_anm_talk2);
             break;
         }
     }
-    dComIfGp_setSelectItem(0);
+    dComIfGp_clearMesgAnimeAttrInfo();
 }
 
 /* 000001D4-00000204       .data l_mdl_status */
