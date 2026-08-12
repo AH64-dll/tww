@@ -70,8 +70,8 @@ static dCcD_SrcCyl l_daObjTrap_cyl_data = {
     },
     // cCcD_SrcCylAttr
     {{
-        /* Center */ {-40.0f, 0.0f, 155.0f},
-        /* Radius */ 100.0f,
+        /* Center */ {0.0f, -40.0f, 0.0f},
+        /* Radius */ 155.0f,
         /* Height */ 100.0f,
     }},
 };
@@ -90,18 +90,14 @@ int daObjTrap_c::create_heap() {
     int ret = 0;
 
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRAP_BDL_HTORA1_e);
-    if (mdl_data == NULL) {
-        JUT_ASSERT(0x163, mdl_data != 0);
-    }
+    JUT_ASSERT(0x163, mdl_data != NULL);
     if (mdl_data) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
         if (mpModel) {
             J3DAnmTextureSRTKey* btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRAP_BTK_HTORA1_e);
-            if (btk_data == NULL) {
-                JUT_ASSERT(0x16c, btk_data != 0);
-            }
+            JUT_ASSERT(0x16c, btk_data != NULL);
             if (btk_data) {
-                if (mBtk.init(mpModel->getModelData(), btk_data, TRUE, 0)) {
+                if (mBtk.init(mdl_data, btk_data, TRUE, 0)) {
                     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRAP_DZB_HTORA1_e);
                     mpBgW = dBgW_NewSet(bgd, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
                     if (mpBgW) {
@@ -289,26 +285,31 @@ cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
     static dBgS_ObjLinChk l_block_work;
     static s16 angleY[] = {0x4000, 0xC000};
 
-    cXyz ret = i_blockPos;
     cXyz sp100 = mDir * 150.0f;
+    cXyz spF4;
+    cXyz spE8;
+    cXyz spDC;
+    cXyz spD0;
+    cXyz ret = i_blockPos;
+    cXyz sp58;
     cXyz spAC = cXyz::BaseY * 75.0f;
 
     for (int i = 0; i < 2; i++) {
         mDoMtx_stack_c::YrotS(angleY[i]);
-        cXyz spD0;
         mDoMtx_stack_c::multVec(&mDir, &spD0);
         spD0 *= 153.0f;
         spD0 += spAC;
-        cXyz spF4 = current.pos + spD0;
-        cXyz spE8 = spF4 + mSpeedVec;
+        spF4 = current.pos + spD0;
+        spE8 = spF4 + mSpeedVec;
         spE8 += sp100;
         l_block_work.Set(&spF4, &spE8, this);
         l_block_work.SetActorPid(fopAcM_GetID(this));
         if (dComIfG_Bgsp()->LineCross(&l_block_work)) {
             fopAc_ac_c* hitActor = dComIfG_Bgsp()->GetActorPointer(l_block_work);
             if (hitActor && fopAc_IsActor(hitActor) && fopAcM_GetName(hitActor) == fpcNm_Obj_Movebox_e) {
-                bool isBlocked = false;
+                bool isBlocked;
                 daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*)hitActor;
+                cXyz sp58;
                 if (movebox->mMode == 1) {
                     mDoMtx_stack_c::push();
                     mDoMtx_stack_c::YrotS(movebox->home.angle.y);
@@ -318,26 +319,34 @@ cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
                     cXyz sp34;
                     mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &sp34);
                     mDoMtx_stack_c::pop();
-                    cXyz sp40 = sp28 + sp34;
-                    cXyz sp4C = sp40 * 75.0f;
-                    cXyz sp58 = sp4C + movebox->home.pos;
+                    sp58 = ((sp28 + sp34) * 75.0f) + movebox->home.pos;
                     isBlocked = true;
+                } else {
+                    isBlocked = false;
+                }
+                if (isBlocked) {
                     if (check_block_target_pos(&sp58)) {
-                        cXyz spDC = l_block_work.GetCross();
+                        spDC = l_block_work.GetCross();
                         PSVECSubtract(&spDC, &spF4, &spDC);
-                        cXyz t1(ret.x, 0.0f, ret.z);
-                        f32 retDist = PSVECSquareMag((Vec*)&t1);
-                        if (retDist > 0.0f) {
+                        if (ret == cXyz::Zero) {
+                            goto update_ret;
+                        }
+                        {
+                            cXyz t1(ret.x, 0.0f, ret.z);
+                            f32 retDist = PSVECSquareMag((Vec*)&t1);
                             retDist = std::sqrtf(retDist);
-                        }
-                        cXyz t2(spDC.x, 0.0f, spDC.z);
-                        f32 spDC2Dist = PSVECSquareMag((Vec*)&t2);
-                        if (spDC2Dist > 0.0f) {
+                            cXyz t2(spDC.x, 0.0f, spDC.z);
+                            f32 spDC2Dist = PSVECSquareMag((Vec*)&t2);
                             spDC2Dist = std::sqrtf(spDC2Dist);
+                            if (retDist > spDC2Dist) {
+                                goto update_ret;
+                            }
                         }
-                        if (ret == cXyz::Zero || retDist > spDC2Dist) {
-                            ret = spDC + current.pos - sp100;
-                        }
+                        goto done_update;
+                    update_ret:
+                        ret = spDC + current.pos - sp100;
+                    done_update:
+                        ;
                     }
                 }
             }
