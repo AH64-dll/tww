@@ -17,6 +17,7 @@
 struct daAuction_Access_c {
     /* 0x000 */ u8 mPad[0x738];
     /* 0x738 */ fpc_ProcID mNpcID[8];
+    /* 0x758 */ u8 mPad2[0x80C - 0x758];
     /* 0x80C */ u8 mNpcNoTbl[8];
     /* 0x814 */ u8 mAucMdlNo[8];
     /* 0x81C */ u8 mPrevNpcNo;
@@ -523,24 +524,27 @@ static cPhs_State phase_1(daNpcAuction_c* i_this) {
         i_this->actor_condition |= 8;
     }
     if (fopAcM_SearchByName(fpcNm_AUCTION_e, &auction) == 0) {
-        return cPhs_NEXT_e;
+        return cPhs_INIT_e;
     }
     if (auction == NULL) {
-        return cPhs_NEXT_e;
+        return cPhs_INIT_e;
     }
     npc_no = AUC->mNpcNoTbl[i_this->getPrmNpcNo()];
     i_this->mNpcNo = npc_no;
     s32 procID = fopAcM_GetID(i_this);
-    if (npc_no > 7 || AUC->mNpcID[npc_no] == -1) {
+    BOOL id_free;
+    if (AUC->mNpcID[npc_no] == -1) {
         AUC->mNpcID[npc_no] = procID;
+        id_free = TRUE;
     } else {
-        return cPhs_NEXT_e;
+        id_free = FALSE;
+    }
+    if (!id_free) {
+        return cPhs_INIT_e;
     }
     kind = l_kind_max[npc_no][0];
     s32 max = l_kind_max[npc_no][1];
-    switch (npc_no) {
-    case 2:
-    case 3:
+    if (npc_no == 2 || npc_no == 3) {
         if (AUC->mPrevNpcNo == 0xFF) {
             kind = kind + i_this->getRand((max - kind) + 1);
             AUC->mPrevNpcNo = kind;
@@ -554,9 +558,7 @@ static cPhs_State phase_1(daNpcAuction_c* i_this) {
                 }
             }
         }
-        break;
-    case 4:
-    case 5:
+    } else if (npc_no == 4 || npc_no == 5) {
         if (AUC->mPrevNpcNo2 == 0xFF) {
             kind = kind + i_this->getRand((max - kind) + 1);
             AUC->mPrevNpcNo2 = kind;
@@ -570,16 +572,14 @@ static cPhs_State phase_1(daNpcAuction_c* i_this) {
                 }
             }
         }
-        break;
-    default:
+    } else {
         kind = kind + i_this->getRand((max - kind) + 1);
-        break;
     }
     i_this->mDataNo = kind;
     AUC->mAucMdlNo[npc_no] = kind;
     i_this->mBtpNo = l_btp_ix_tbl[kind];
     i_this->mBmtNo = l_bmt_ix_tbl[kind];
-    return cPhs_COMPLEATE_e;
+    return cPhs_NEXT_e;
 }
 
 /* 00000ACC-00000B4C       .text phase_2__FP14daNpcAuction_c */
