@@ -3319,8 +3319,7 @@ void daNpc_Ji1_c::battleSubActionNockBackInit(int param_1) {
 /* 0000A5FC-0000A744       .text battleSubActionNockBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionNockBack() {
     /* Nonmatching - retail-only load order */
-    fopAc_ac_c* player = dComIfGp_getPlayer(0); // doing this in the targetAngleY call fixes load order but breaks regalloc
-    s16 temp = cLib_targetAngleY(&current.pos, &player->current.pos);
+    s16 temp = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     if(mpOrcaMorf->checkFrame(1.0f)) {
         setAnm(5, 4.0f, 0);
         field_0xC9C = 0.0f;
