@@ -905,8 +905,76 @@ static BOOL daPW_Delete(pw_class* i_this) {
 }
 
 /* 000062B0-000066D8       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* a_this) {
+    pw_class* i_this = (pw_class*)a_this;
+    J3DModel* model;
+
+    i_this->mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BDL_PW_e),
+        NULL,
+        NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BCK_WAIT1_e),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        1,
+        NULL,
+        0x80000,
+        0x37441422
+    );
+    if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
+        return FALSE;
+    }
+    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    }
+    model = i_this->mpMorf->getModel();
+    i_this->m2BC = new mDoExt_btpAnm();
+    if (i_this->m2BC == NULL) {
+        return FALSE;
+    }
+    if (!i_this->m2BC->init(i_this->mpMorf->getModel()->getModelData(),
+                            (J3DAnmTexPattern*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BTP_IROGAE1_e),
+                            true, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, false, 0))
+    {
+        return FALSE;
+    }
+    i_this->m2C0 = new mDoExt_brkAnm();
+    if (i_this->m2C0 == NULL) {
+        return FALSE;
+    }
+    if (!i_this->m2C0->init(model->getModelData(),
+                            (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_JITTAIKA1_e),
+                            true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
+    {
+        return FALSE;
+    }
+    i_this->m2C4 = new mDoExt_brkAnm();
+    if (i_this->m2C4 == NULL) {
+        return FALSE;
+    }
+    if (!i_this->m2C4->init(model->getModelData(),
+                            (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_HIT_e),
+                            true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    {
+        return FALSE;
+    }
+    i_this->m2C8 = new mDoExt_brkAnm();
+    if (i_this->m2C8 == NULL) {
+        return FALSE;
+    }
+    if (!i_this->m2C8->init(model->getModelData(),
+                            (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_DEFAULT_e),
+                            true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
+    {
+        return FALSE;
+    }
+    if (!i_this->mInvisibleModel.create(i_this->mpMorf->getModel())) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00006720-00006BDC       .text daPW_Create__FP10fopAc_ac_c */
