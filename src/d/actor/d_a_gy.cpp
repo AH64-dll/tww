@@ -154,7 +154,7 @@ static __jnt_hit_data_c search_data[] = {
 static daGy_HIO_c l_HIO;
 
 const u32 daGy_c::m_heapsize = 0x3FA0;
-const char daGy_c::m_arc_name[] = "Gy";
+static const char m_arc_name[] = "Gy";
 
 static void (daGy_c::*mode_proc[])() = {
     &daGy_c::modeDive,
