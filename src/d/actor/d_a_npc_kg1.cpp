@@ -68,7 +68,7 @@ static daNpc_Kg1_HIO_c l_HIO;
 const char daNpc_Kg1_c::m_arcname[] = "Kg";
 cXyz daNpc_Kg1_c::m_camera_ctr(-200.0f, 140.0f, 85.0f);
 cXyz daNpc_Kg1_c::m_camera_eye(-117.0f, 92.0f, 344.0f);
-f32 daNpc_Kg1_c::m_camera_fovy = 40.0f;
+const f32 daNpc_Kg1_c::m_camera_fovy = 40.0f;
 
 /* 000001E0-00000428       .text daNpc_Kg1_nodeCallBack__FP7J3DNodei */
 static BOOL daNpc_Kg1_nodeCallBack(J3DNode*, int) {
@@ -90,7 +90,7 @@ static const int l_btp_ix_tbl[] = {9, 11, 13, 12};
 /* 000007D8-000008D8       .text initTexPatternAnm__11daNpc_Kg1_cFib */
 BOOL daNpc_Kg1_c::initTexPatternAnm(int param_2, bool param_3) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    m_eye_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(m_arcname, l_btp_ix_tbl[param_2]);
+    m_eye_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[param_2]);
     JUT_ASSERT(0x1CC, m_eye_tex_pattern != 0);
     BOOL ret = m6F8.init(modelData, m_eye_tex_pattern, 1, 2, 1.0f, 0, -1, param_3, FALSE);
     if (ret == FALSE) {

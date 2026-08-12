@@ -38,7 +38,7 @@ public:
     static const char m_arcname[];
     static cXyz m_camera_ctr;
     static cXyz m_camera_eye;
-    static f32 m_camera_fovy;
+    static const f32 m_camera_fovy;
 
 public:
     /* 0x6C4 */ J3DModel* m6C4;
