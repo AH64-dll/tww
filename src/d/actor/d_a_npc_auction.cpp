@@ -1418,11 +1418,17 @@ static BOOL daNpc_AuctionDelete(void* i_this) {
 /* 00002A70-00002C70       .text daNpc_AuctionExecute__FPv */
 static BOOL daNpc_AuctionExecute(void* i_this) {
     daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
+    dBgS* bgsp = dComIfG_Bgsp();
     if (actor->isExecute()) {
-        daNpc_Auction2_HIO_c* dat = &l_npc_dat[actor->mDataNo];
-        actor->m_jnt.setParam(dat->mMaxBackboneX, dat->mMaxBackboneY, dat->mMinBackboneX,
-                              dat->mMinBackboneY, dat->mMaxHeadX, dat->mMaxHeadY, dat->mMinHeadX,
-                              dat->mMinHeadY, dat->mMaxTurnStep);
+        actor->m_jnt.setParam(l_npc_dat[actor->mDataNo].mMaxBackboneX,
+                              l_npc_dat[actor->mDataNo].mMaxBackboneY,
+                              l_npc_dat[actor->mDataNo].mMinBackboneX,
+                              l_npc_dat[actor->mDataNo].mMinBackboneY,
+                              l_npc_dat[actor->mDataNo].mMaxHeadX,
+                              l_npc_dat[actor->mDataNo].mMaxHeadY,
+                              l_npc_dat[actor->mDataNo].mMinHeadX,
+                              l_npc_dat[actor->mDataNo].mMinHeadY,
+                              l_npc_dat[actor->mDataNo].mMaxTurnStep);
         actor->checkOrder();
         if (dComIfGp_event_runCheck() == 0 || (actor->eventInfo.checkCommandTalk() && actor->m744 != 0)) {
             actor->m749 = 0;
@@ -1433,14 +1439,13 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
         actor->eventOrder();
         actor->playTexPatternAnm();
         actor->playAnm();
-        actor->mObjAcch.CrrPos(*dComIfG_Bgsp());
+        actor->mObjAcch.CrrPos(*bgsp);
         actor->setCollision(60.0f, 150.0f);
-        actor->attention_info.position.x = actor->current.pos.x;
-        actor->attention_info.position.y = actor->current.pos.y + dat->mAttnYOffset;
-        actor->attention_info.position.z = actor->current.pos.z;
-        actor->eyePos.x = actor->current.pos.x;
-        actor->eyePos.y = actor->current.pos.y + dat->m28;
-        actor->eyePos.z = actor->current.pos.z;
+        actor->attention_info.position.set(actor->current.pos.x,
+                                           actor->current.pos.y + l_npc_dat[actor->mDataNo].mAttnYOffset,
+                                           actor->current.pos.z);
+        actor->eyePos.set(actor->current.pos.x, actor->current.pos.y + l_npc_dat[actor->mDataNo].m28,
+                          actor->current.pos.z);
         actor->lookBack();
         actor->setMtx();
         if (actor->mSoundTimer != 0) {
@@ -1450,9 +1455,9 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
                                                      -1.0f, 0);
             }
         }
-        actor->mPiconOfsY = dat->m30;
+        actor->mPiconOfsY = l_npc_dat[actor->mDataNo].m30;
     }
-    return TRUE;
+    return FALSE;
 }
 
 /* 00002C70-00002EB8       .text daNpc_AuctionDraw__FPv */
