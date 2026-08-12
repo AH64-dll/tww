@@ -465,8 +465,18 @@ void daNpc_Ob1_c::checkOrder() {
 /* 00001120-000011C0       .text chk_talk__11daNpc_Ob1_cFv */
 u8 daNpc_Ob1_c::chk_talk() {
     BOOL ret = FALSE;
+    u8 present = 0;
     u8 talkBtn = dComIfGp_event_getTalkXYBtn();
-    if (talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e) {
+    if (talkBtn == dTalkBtn_X_e) {
+        present = 1;
+    }
+    if (talkBtn == dTalkBtn_Y_e) {
+        present = 1;
+    }
+    if (talkBtn == dTalkBtn_Z_e) {
+        present = 1;
+    }
+    if (present) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
             m7EB = dComIfGp_event_getPreItemNo();
             ret = TRUE;
