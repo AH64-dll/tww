@@ -1363,10 +1363,11 @@ int daNpcAuction_c::getRand(int i_max) {
 
 /* 0000298C-000029DC       .text clrEmitter__14daNpcAuction_cFv */
 void daNpcAuction_c::clrEmitter() {
-    if (mEmitter != NULL) {
-        mEmitter->mMaxFrame = -1;
-        mEmitter->setStatus(1);
-        for (JSULink<JPABaseParticle>* link = mEmitter->mActiveParticles.getFirst(); link != NULL;
+    JPABaseEmitter* emitter = mEmitter;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link != NULL;
              link = link->getNext()) {
             link->getObject()->setStatus(JPAPtclStts_Delete);
         }
