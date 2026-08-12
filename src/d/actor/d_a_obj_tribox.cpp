@@ -409,7 +409,7 @@ namespace daObjTribox {
     void Act_c::eff_smoke_start() {
         static cXyz scl(0.6f, 0.6f, 0.6f);
         eff_smoke_pos();
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &mSmokePos, &mSmokeAngle, &scl, 0xB9, &mSmokeCB);
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &mSmokePos, &mSmokeAngle, &scl, 0xB9, &mSmokeCB, current.roomNo);
         if (emitter) {
             emitter->setRate(1.0f);
             emitter->setDirectionalSpeed(15.0f);
@@ -465,10 +465,8 @@ namespace daObjTribox {
             m3F8 = 1;
             dPa_smokeEcallBack* cbs[3] = {&mSinkSmokeCB, &mSinkSmokeCB2, &mSinkSmokeCB3};
             for (int i = 0; i < 3; i++) {
-                SVec a;
-                a.x = shape_angle.x;
-                a.y = shape_angle.y + i * 0x5555;
-                a.z = shape_angle.z;
+                SVec a = shape_angle;
+                a.y += i * 0x5555;
                 dComIfGp_particle_set(0xA320, &current.pos, (const csXyz*)&a, NULL, 0xA0, cbs[i]);
             }
         }
@@ -497,13 +495,13 @@ namespace daObjTribox {
     }
 
     /* 00001828-000018FC       .text vib_sink_start__Q211daObjTribox5Act_cFv */
-        /* Nonmatching */
     void Act_c::vib_sink_start() {
         if (m3F9 == 0) {
             m3F9 = 1;
-            dComIfGp_getVibration().StartShock(2, 1, cXyz(0.0f, 1.0f, 0.0f));
-            dComIfGp_getVibration().StartShock(1, 6, cXyz(0.0f, 1.0f, 0.0f));
-            dComIfGp_getVibration().StartQuake(3, 0xF, cXyz(0.0f, 1.0f, 0.0f));
+            dVibration_c& vibration = dComIfGp_getVibration();
+            vibration.StartShock(2, 1, cXyz(0.0f, 1.0f, 0.0f));
+            vibration.StartShock(1, 6, cXyz(0.0f, 1.0f, 0.0f));
+            vibration.StartQuake(3, 0xF, cXyz(0.0f, 1.0f, 0.0f));
         }
     }
 
@@ -547,11 +545,12 @@ namespace daObjTribox {
         /* Nonmatching */
     int Act_c::sound_get_mapinfo(const cXyz& i_pos) {
         dBgS_ObjGndChk gndChk;
-        gndChk.SetObj();
-        cXyz pos(i_pos.x, i_pos.y + 50.0f, i_pos.z);
+        cXyz pos = i_pos;
+        pos.y += 50.0f;
         gndChk.SetPos(&pos);
+        dComIfG_Bgsp()->GroundCross(&gndChk);
         int mtrlSndId = 0xD;
-        if (dComIfG_Bgsp()->GroundCross(&gndChk)) {
+        if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
         }
         return mtrlSndId;
@@ -635,9 +634,9 @@ namespace daObjTribox {
     /* 0000262C-00002B34       .text mode_block_walk__Q211daObjTribox5Act_cFv */
         /* Nonmatching */
     void Act_c::mode_block_walk() {
-        m30C--;
-        bool finished = (m30C <= 0);
-        f32 cosVal = cosf(0.15707963f * m30C);
+        s16 frame = --m30C;
+        bool finished = (frame <= 0);
+        f32 cosVal = (f32)cos((f64)(0.15707963f * m30C));
         f32 angleY = (9.5873802e-05f * home.angle.z) + (1.0471976f * m350);
         f32 dir = m358;
         f32 rot = 1.0471976f * (dir * (0.5f * (1.0f + cosVal)));
@@ -647,9 +646,7 @@ namespace daObjTribox {
         mDoMtx_stack_c::rYrotM(rot);
         cXyz postPos2;
         PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[m354], &postPos2);
-        cXyz newPos = m344 + postPos2;
-        cXyz diff = newPos - m344;
-        current.pos = diff;
+        current.pos = (m344 + postPos) - postPos2;
         shape_angle.y = (s16)(0.5f + (10430.378f * (angleY + rot)));
 
         if (finished) {
@@ -658,7 +655,7 @@ namespace daObjTribox {
             eff_smoke_pos();
         }
         if (finished) {
-            dComIfGp_event_offEventFlag(0x800);
+            daPy_getPlayerActorClass()->offPushPullKeep();
             m350 = (m350 + m358) % 6;
             if (chk_wall(1)) {
                 int mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(M_lin);
@@ -668,11 +665,11 @@ namespace daObjTribox {
             return;
         }
         dBgS_ObjGndChk gndChk;
-        gndChk.SetObj();
         cXyz pos2(current.pos.x, current.pos.y + 50.0f, current.pos.z);
         gndChk.SetPos(&pos2);
+        dComIfG_Bgsp()->GroundCross(&gndChk);
         int mtrlSndId = 0;
-        if (dComIfG_Bgsp()->GroundCross(&gndChk)) {
+        if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
         }
         mDoAud_seStart(0x2022, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo));
