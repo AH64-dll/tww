@@ -141,6 +141,7 @@ void daNpc_Yw1_c::play_texPttrnAnm() {
 
 /* 00001108-000011AC       .text setAnm_anm__11daNpc_Yw1_cFPQ211daNpc_Yw1_c9anm_prm_c */
 void daNpc_Yw1_c::setAnm_anm(daNpc_Yw1_c::anm_prm_c* i_anmPrmP) {
+    /* Nonmatching */
     if (i_anmPrmP->mAnmNum < 0) {
         return;
     }
@@ -188,12 +189,10 @@ void daNpc_Yw1_c::setAnm() {
 
 /* 00001288-0000128C       .text chngAnmTag__11daNpc_Yw1_cFv */
 void daNpc_Yw1_c::chngAnmTag() {
-    /* Nonmatching */
 }
 
 /* 0000128C-00001290       .text ctrlAnmTag__11daNpc_Yw1_cFv */
 void daNpc_Yw1_c::ctrlAnmTag() {
-    /* Nonmatching */
 }
 
 /* 00001290-000012D0       .text chngAnmAtr__11daNpc_Yw1_cFUc */
@@ -207,7 +206,6 @@ void daNpc_Yw1_c::chngAnmAtr(unsigned char i_param) {
 
 /* 000012D0-000012D4       .text ctrlAnmAtr__11daNpc_Yw1_cFv */
 void daNpc_Yw1_c::ctrlAnmAtr() {
-    /* Nonmatching */
 }
 
 /* 000012D4-00001338       .text setAnm_ATR__11daNpc_Yw1_cFv */
