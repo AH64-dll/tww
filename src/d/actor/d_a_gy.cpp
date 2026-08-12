@@ -741,7 +741,11 @@ daGy_c::daGy_c() {}
 
 /* 00005A80-00005AD4       .text _delete__6daGy_cFv */
 bool daGy_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    mD7C.remove();
+    mD18.remove();
+    mDE0.remove();
+    return true;
 }
 
 static cPhs_State daGyCreate(void* i_this) {
