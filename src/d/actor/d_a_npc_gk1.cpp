@@ -139,7 +139,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000050C-0000058C       .text init_GK1_0__11daNpc_Gk1_cFv */
-s32 daNpc_Gk1_c::init_GK1_0() {
+u8 daNpc_Gk1_c::init_GK1_0() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         set_action(&daNpc_Gk1_c::wait_action1, NULL);
         return TRUE;
@@ -149,6 +149,7 @@ s32 daNpc_Gk1_c::init_GK1_0() {
 
 /* 0000058C-00000720       .text createInit__11daNpc_Gk1_cFv */
 u8 daNpc_Gk1_c::createInit() {
+    /* Nonmatching */
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
     mEventCut.setActorInfo2("Gk1", this);
     attention_info.flags = 0xA;
@@ -157,7 +158,16 @@ u8 daNpc_Gk1_c::createInit() {
     attention_info.distances[3] = 0xA9;
     gravity = -4.5f;
     mActNo = 5;
-    if (mType != 0 || !init_GK1_0()) {
+    u8 init_result;
+    switch (mType) {
+        case 0:
+            init_result = init_GK1_0();
+            break;
+        default:
+            init_result = 0;
+            break;
+    }
+    if (init_result == 0) {
         return FALSE;
     }
     mAngle = current.angle;
@@ -644,6 +654,7 @@ void daNpc_Gk1_c::setStt(s8 i_status) {
 
 /* 000017C8-000019E0       .text chk_attn__11daNpc_Gk1_cFv */
 u8 daNpc_Gk1_c::chk_attn() {
+    /* Nonmatching */
     f32 dist = std::sqrtf((current.pos - dComIfGp_getPlayer(0)->current.pos).abs2XZ());
     f32 height_diff = current.pos.y - dComIfGp_getPlayer(0)->current.pos.y;
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
@@ -909,6 +920,7 @@ BOOL daNpc_Gk1_c::_delete() {
 
 /* 000022D4-00002520       .text _create__11daNpc_Gk1_cFv */
 cPhs_State daNpc_Gk1_c::_create() {
+    /* Nonmatching */
     static int a_siz_tbl[] = {
         0x00000000
     };
@@ -939,6 +951,7 @@ cPhs_State daNpc_Gk1_c::_create() {
 
 /* 000027EC-00002AE8       .text bodyCreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::bodyCreateHeap() {
+    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_e);
     JUT_ASSERT(VERSION_SELECT(1551, 1551, 1553, 1553), a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
@@ -981,6 +994,7 @@ s32 daNpc_Gk1_c::bodyCreateHeap() {
 
 /* 00002AE8-00002BA8       .text itemCreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::itemCreateHeap() {
+    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAIR_e);
     JUT_ASSERT(VERSION_SELECT(1596, 1596, 1598, 1598), a_mdl_dat != NULL);
     mpItemModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
@@ -992,6 +1006,7 @@ s32 daNpc_Gk1_c::itemCreateHeap() {
 
 /* 00002BA8-00002C68       .text hat_CreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::hat_CreateHeap() {
+    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAT_e);
     JUT_ASSERT(VERSION_SELECT(1612, 1612, 1614, 1614), a_mdl_dat != NULL);
     mpHatModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
