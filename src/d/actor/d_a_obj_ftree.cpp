@@ -10,8 +10,6 @@
 #include "d/d_a_obj.h"
 
 namespace daObjFtree {
-char Act_c::M_arcname[] = "Vmr";
-
 u32 message_table[] = {0, 0x149F, 0x14A0, 0x14A1, 0, 0, 0, 0, 0, 0, 0x149F, 0x14A0, 0x14A1};
 
 static const u32 L_attr[] = {
@@ -79,7 +77,7 @@ static const dCcD_SrcCyl M_cyl_srcW = {
         /* Height */ 200.0f,
     }},
 };
-static u8 ret_tree_no[] = {0x0F, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0F, 0x06, 0x07};
+static const u8 ret_tree_no[] = {0x0F, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0F, 0x06, 0x07};
 }
 
 
@@ -256,8 +254,18 @@ s32 daObjFtree::Act_c::param_get_tree_idx() const {
 }
 
 /* 000007A8-000008D8       .text SetJointAnimation__Q210daObjFtree5Act_cFiffi */
-BOOL daObjFtree::Act_c::SetJointAnimation(int, float, float, int) {
-    /* Nonmatching */
+BOOL daObjFtree::Act_c::SetJointAnimation(int i_anm, float i_f1, float i_f2, int i_arg) {
+    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, i_anm);
+    s32 v = cLib_maxLimit(i_arg, 0);
+    if (anm != NULL) {
+        if (v == 0) {
+            mpMorf->setAnm(anm, 0, i_f2, i_f1, 0.0f, -1.0f, NULL);
+        } else {
+            mpMorf->setAnm(anm, 0, i_f2, i_f1, 0.0f, (float)i_arg + (float)anm->getFrameMax(), NULL);
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 000008D8-00000910       .text PlayStopJointAnimation__Q210daObjFtree5Act_cFv */
@@ -817,13 +825,55 @@ void daObjFtree::Act_c::action_changeMS_main() {
 }
 
 /* 00002860-00002A4C       .text process_init__Q210daObjFtree5Act_cFis */
-s32 daObjFtree::Act_c::process_init(int, s16) {
-    /* Nonmatching */
+s32 daObjFtree::Act_c::process_init(int i_state, s16 i_arg) {
+    static ProcInitFunc init_table[] = {
+        &Act_c::action_none_init,
+        &Act_c::action_waitS_init,
+        &Act_c::action_waitM_init,
+        &Act_c::action_waitL_init,
+        &Act_c::action_changeSL_init,
+        &Act_c::action_changeSL2_init,
+        &Act_c::action_changeLS_init,
+        &Act_c::action_changeLS2_init,
+        &Act_c::action_changeSM_init,
+        &Act_c::action_changeMS_init,
+        &Act_c::action_pikupikuS_init,
+        &Act_c::action_pikupikuM_init,
+        &Act_c::action_pikupikuL_init,
+    };
+    if (i_state >= 0 && i_state < 0xD) {
+        if ((this->*init_table[i_state])(i_arg)) {
+            m696 = 0;
+            m698 = 0;
+            m6A0 = 0;
+            m6A2 = 0;
+            mMode = i_state;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00002A4C-00002BF0       .text process_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::process_main() {
-    /* Nonmatching */
+    static ProcMainFunc main_table[] = {
+        &Act_c::action_none_main,
+        &Act_c::action_waitS_main,
+        &Act_c::action_waitM_main,
+        &Act_c::action_waitL_main,
+        &Act_c::action_changeSL_main,
+        &Act_c::action_changeSL2_main,
+        &Act_c::action_changeLS_main,
+        &Act_c::action_changeLS2_main,
+        &Act_c::action_changeSM_main,
+        &Act_c::action_changeMS_main,
+        &Act_c::action_pikupikuS_main,
+        &Act_c::action_pikupikuM_main,
+        &Act_c::action_pikupikuL_main,
+    };
+    if (mMode >= 0 && mMode < 0xD) {
+        (this->*main_table[mMode])();
+    }
 }
 
 /* 00002BF0-00002C14       .text solidHeapCB__Q210daObjFtree5Act_cFP10fopAc_ac_c */
@@ -1134,6 +1184,8 @@ bool daObjFtree::Act_c::_draw() {
 
 namespace daObjFtree {
 namespace {
+char Act_c::M_arcname[] = "Vmr";
+
 /* 0000455C-0000457C       .text Mthd_Create__Q210daObjFtree27@unnamed@d_a_obj_ftree_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {
     return ((daObjFtree::Act_c*)i_this)->_create();
