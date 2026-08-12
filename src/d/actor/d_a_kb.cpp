@@ -1751,6 +1751,7 @@ void money_drop(kb_class* i_this) {
     cXyz temp4;
 
     u8 count = 0;
+    u32 temp2;
 
     i_this->m407 = 0;
 
@@ -1759,7 +1760,7 @@ void money_drop(kb_class* i_this) {
         if(REG8_S(4) == 0) {
             if(rnd < 0.9f) {
                 rnd *= 10.0f;
-                u32 temp2 = gold_rate_dt[(int)(0.3f * rnd)];
+                temp2 = gold_rate_dt[(int)(0.3f * rnd)];
                 i_this->m407 = 1;
                 cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
                 temp3.set(0.0f, 0.0f, 20.0f);
@@ -1780,7 +1781,7 @@ void money_drop(kb_class* i_this) {
         f32 rnd = cM_rnd();
         if(rnd < 0.9f) {
             rnd *= 10.0f;
-            u32 temp2 = item_rate_dt[(int)(0.3f * rnd)];
+            temp2 = item_rate_dt[(int)(0.3f * rnd)];
             i_this->m407 = 1;
             cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
             temp3.set(0.0f, 0.0f, 20.0f);
