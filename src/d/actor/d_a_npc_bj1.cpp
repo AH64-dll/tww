@@ -5,6 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bj1.h"
+#include "d/d_npc.h"
+#include "d/d_com_inf_game.h"
+#include "res/Object/Bj.h"
+
+static daNpc_Bj1_HIO_c l_HIO;
+static fopAc_ac_c* l_check_inf[20];
+static int l_check_wrk;
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bj1_childHIO_cFv */
 daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
@@ -17,53 +24,100 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
 }
 
 /* 00000268-000002EC       .text searchActor_Jb__FPvPv */
-void searchActor_Jb(void*, void*) {
-    /* Nonmatching */
+static void* searchActor_Jb(void* i_actor, void*) {
+    if (l_check_wrk < 20 && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_BJ1_e &&
+        fopAcM_GetParam(i_actor) & 0x100) {
+        l_check_inf[l_check_wrk] = static_cast<fopAc_ac_c*>(i_actor);
+        l_check_wrk++;
+    }
+    return NULL;
 }
 
 /* 000002EC-00000338       .text nodeCallBack_Bj1__FP7J3DNodei */
-static BOOL nodeCallBack_Bj1(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Bj1(J3DNode* i_node, int i_param) {
+    if (i_param == 0) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Bj1_c*>(j3dSys.getModel()->getUserArea())->nodeBj1Control(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 00000338-000004C4       .text nodeBj1Control__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
-void daNpc_Bj1_c::nodeBj1Control(J3DNode*, J3DModel*) {
+void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
     /* Nonmatching */
 }
 
 /* 00000500-0000054C       .text nodeCallBack_Prp__FP7J3DNodei */
-static BOOL nodeCallBack_Prp(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Prp(J3DNode* i_node, int i_param) {
+    if (i_param == 0) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Bj1_c*>(j3dSys.getModel()->getUserArea())->nodePrpControl(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 0000054C-00000664       .text nodePrpControl__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
-void daNpc_Bj1_c::nodePrpControl(J3DNode*, J3DModel*) {
+void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
     /* Nonmatching */
 }
 
 /* 00000664-00000710       .text init_BJ4_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ4_0() {
-    /* Nonmatching */
+    bool ret = !dComIfGs_isSymbol(2);
+    if (ret) {
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        if (ret) {
+            set_action(&daNpc_Bj1_c::wait_action2, NULL);
+        }
+    }
+    return ret;
 }
 
 /* 00000710-000007D4       .text init_BJ6_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ6_0() {
-    /* Nonmatching */
+    bool ret = !dComIfGs_isSymbol(2);
+    if (ret) {
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        if (ret) {
+            mPathNo &= ~0x80;
+            mPathNo |= 0x40;
+            set_action(&daNpc_Bj1_c::wait_action4, NULL);
+        }
+    }
+    return ret;
 }
 
 /* 000007D4-00000864       .text init_BJ7_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ7_0() {
-    /* Nonmatching */
+    bool ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+    if (ret) {
+        setPrtcl_drugPot_1();
+        set_action(&daNpc_Bj1_c::wait_action3, NULL);
+    }
+    return ret;
 }
 
 /* 00000864-00000910       .text init_BJX_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_0() {
-    /* Nonmatching */
+    bool ret = !dComIfGs_isSymbol(2);
+    if (ret) {
+        ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801);
+        if (ret) {
+            set_action(&daNpc_Bj1_c::wait_action1, NULL);
+        }
+    }
+    return ret;
 }
 
 /* 00000910-00000998       .text init_BJX_1__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_1() {
-    /* Nonmatching */
+    bool ret = dComIfGs_isSymbol(2);
+    if (ret) {
+        set_action(&daNpc_Bj1_c::wait_action1, NULL);
+    }
+    return ret;
 }
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
