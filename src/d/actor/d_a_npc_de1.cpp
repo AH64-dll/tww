@@ -13,7 +13,7 @@
 #include "d/d_snap.h"
 #include "res/Object/De.h"
 
-class daNpc_De1_HIO_c : public mDoHIO_entry_c {
+class daNpc_De1_HIO_c : public JORReflexible {
 public:
     struct hio_prm_c {
         /* 0x00 */ f32 mAttPosOffsetY;
