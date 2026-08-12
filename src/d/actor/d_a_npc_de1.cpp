@@ -688,8 +688,8 @@ bool daNpc_De1_c::event_action() {
     bool o_retval = false;
     switch (mActNo) {
         case 0:
-            if (searchByID(mPartnerProcID) != NULL) {
-                daLlift_c* lift = (daLlift_c*)searchByID(mPartnerProcID);
+            daLlift_c* lift = (daLlift_c*)searchByID(mPartnerProcID);
+            if (lift != NULL) {
                 if (lift->MoveUpLift()) {
                     o_retval = true;
                 }
