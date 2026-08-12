@@ -1666,7 +1666,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_npc_co1"), # weak data (PR #1157 shape)
     ActorRel(Equivalent, "d_a_npc_de1"),  # 3 anchor-only holdouts (CreateHeap 99.98/_draw 99.85/setMtx 99.83); .data/.rodata 100; weak order
     ActorRel(NonMatching, "d_a_npc_ds1"),
-    ActorRel(NonMatching, "d_a_npc_gk1"),
+    ActorRel(Equivalent, "d_a_npc_gk1"),  # 7 anchor-only holdouts (chk_attn 100, _create 99.78); 12B dead GXColor rodata (kddoor precedent); weak order
     ActorRel(NonMatching, "d_a_npc_gp1"),
     ActorRel(Matching,    "d_a_npc_hi1"),
     ActorRel(Matching,    "d_a_npc_ho"),
