@@ -158,10 +158,12 @@ bool daNpc_Gp1_c::createInit() {
     mEventCut.setActorInfo2("Gp1", this);
     m812 = 8;
     bool ret;
-    if(m818 == 0) {
-        ret = init_GP1_0();
-    } else {
-        ret = false;
+    switch(m818) {
+        case 0:
+            ret = init_GP1_0();
+            break;
+        default:
+            ret = false;
     }
     if(ret) {
         m78A = current.angle;
@@ -398,15 +400,22 @@ void daNpc_Gp1_c::setAnm_ATR(int i_param_1) {
 void daNpc_Gp1_c::anmAtr(u16 i_param_1) {
     switch(i_param_1) {
         case 6:
-            if(m819 == 0) {
+            if(m81A == 0) {
                 m80F = 0xFF;
                 chg_anmAtr(dComIfGp_getMesgAnimeAttrInfo());
-                m819++;
+                m81A++;
             }
-            chg_anmTag();
+            {
+                u8 tag = dComIfGp_getMesgAnimeTagInfo();
+                dComIfGp_setMesgAnimeTagInfo(0xFF);
+                if(tag != 0xFF && (u8)mBtpNum != tag) {
+                    mBtpNum = (s8)tag;
+                    chg_anmTag();
+                }
+            }
             break;
         case 0xE:
-            m819 = 0;
+            m81A = 0;
             break;
         default:
             break;
@@ -636,10 +645,13 @@ u32 daNpc_Gp1_c::getMsg_GP1_0() {
 
 /* 0000166C-000016A8       .text getMsg__11daNpc_Gp1_cFv */
 u32 daNpc_Gp1_c::getMsg() {
-    if(m818 == 0) {
-        return getMsg_GP1_0();
+    u32 ret = 0;
+    switch(m818) {
+        case 0:
+            ret = getMsg_GP1_0();
+            break;
     }
-    return 0;
+    return ret;
 }
 
 /* 000016A8-00001728       .text chkAttention__11daNpc_Gp1_cFv */
