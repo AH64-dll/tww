@@ -104,7 +104,7 @@ void daNpc_De1_c::setMtx() {
         mPrevMorfFrame = mpMorf->getFrame();
         mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
-    if (cLib_calcTimer(&mTimer0) == 0 && mbMorfAnimStopped && mStatus == 3) {
+    if (cLib_calcTimer(&mTimer0) == 0 && mbMorfAnimStopped && mAnmNum == 3) {
         mDoAud_seStart(JA_SE_CV_DEKU_AGONY, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     }
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
@@ -1095,7 +1095,7 @@ BOOL daNpc_De1_c::CreateHeap() {
         1.0f,
         0,
         -1,
-        2,
+        1,
         NULL,
         0x80000,
         0x11000002
