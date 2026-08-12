@@ -254,6 +254,7 @@ static BOOL nodeCB(J3DNode* node, int calcTiming) {
 
 /* 00000978-00000AF8       .text execute__11dDoor_ssk_cFP12dDoor_info_c */
 void dDoor_ssk_c::execute(dDoor_info_c* i_this) {
+    /* Nonmatching */
     for (int i = 0; i < 3; i++) {
         dDoor_ssk_sub_c* sub = &mSub[i];
         if (sub->mpMorf != NULL) {
@@ -355,6 +356,7 @@ BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_this) {
 
 /* 00000D84-00000DE8       .text init__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::init() {
+    /* Nonmatching */
     static dCcD_SrcCyl body_co_cyl = {
         // dCcD_SrcGObjInf
         {
@@ -460,6 +462,7 @@ void dDoor_ssk_sub_c::closeInit() {
 
 /* 00001024-0000121C       .text closeProc__15dDoor_ssk_sub_cFP12dDoor_info_c */
 BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_this) {
+    /* Nonmatching */
     if (mTimer > 0) {
         mTimer--;
         return FALSE;
@@ -532,6 +535,7 @@ dDoor_ssk_sub_c::~dDoor_ssk_sub_c() {}
 
 /* 000015A4-00001778       .text drawSet__15dDoor_ssk_sub_cFv */
 BOOL dDoor_ssk_sub_c::drawSet() {
+    /* Nonmatching */
     mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e),
         NULL, NULL, NULL,
@@ -565,6 +569,7 @@ BOOL dDoor_ssk_sub_c::drawSet() {
 
 /* 00001778-00001904       .text calcMtx__15dDoor_ssk_sub_cFP12dDoor_info_cffUc */
 void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_this, f32 x, f32 z, u8 arg3) {
+    /* Nonmatching */
     if (mpMorf != NULL) {
         mpMorf->getModel()->setBaseScale(*(Vec*)mScale);
         mpMorf2->getModel()->setBaseScale(*(Vec*)mScale2);
@@ -610,6 +615,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00001954-00001B74       .text CreateHeap__10daKddoor_cFv */
 BOOL daKddoor_c::CreateHeap() {
+    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", getBmdName());
     if (modelData == NULL) {
         modelData = (J3DModelData*)dComIfG_getStageRes("Stage", getBmdName2());
@@ -657,6 +663,7 @@ BOOL daKddoor_c::CreateHeap() {
 
 /* 00001B74-00001CD0       .text setEventPrm__10daKddoor_cFv */
 void daKddoor_c::setEventPrm() {
+    /* Nonmatching */
     if (mFrontCheck == 0) {
         m2C6 = 2;
         if (mSsk.m55A == 0xFF) {
@@ -701,6 +708,7 @@ void daKddoor_c::openInit() {
 
 /* 00001D7C-00001DF0       .text openProc__10daKddoor_cFv */
 BOOL daKddoor_c::openProc() {
+    /* Nonmatching */
     BOOL ret = FALSE;
     cLib_chaseF(&speedF, 30.0f, 4.0f);
     if (cLib_chaseF(&m94C, 300.0f, speedF) != 0) {
@@ -712,6 +720,7 @@ BOOL daKddoor_c::openProc() {
 
 /* 00001DF0-00001E84       .text openEnd__10daKddoor_cFv */
 void daKddoor_c::openEnd() {
+    /* Nonmatching */
     fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_STOP_U, 0);
     offFlag(1);
     m94C = 300.0f;
@@ -729,6 +738,7 @@ void daKddoor_c::closeInit() {
 
 /* 00001F64-00001FD8       .text closeProc__10daKddoor_cFv */
 BOOL daKddoor_c::closeProc() {
+    /* Nonmatching */
     BOOL ret = FALSE;
     cLib_chaseF(&speedF, 60.0f, 6.0f);
     if (cLib_chaseF(&m94C, 0.0f, speedF) != 0) {
@@ -756,6 +766,7 @@ void daKddoor_c::calcMtx() {
 
 /* 00002108-0000220C       .text CreateInit__10daKddoor_cFv */
 BOOL daKddoor_c::CreateInit() {
+    /* Nonmatching */
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
         JUT_ASSERT(0x43E, NULL);
     }
@@ -803,6 +814,7 @@ cPhs_State daKddoor_c::create() {
 
 /* 000023CC-00002678       .text demoProc__10daKddoor_cFv */
 void daKddoor_c::demoProc() {
+    /* Nonmatching */
     s32 iVar1 = getDemoAction();
     if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
         switch(iVar1) {
