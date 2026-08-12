@@ -364,28 +364,24 @@ namespace daObjTribox {
         mDoMtx_stack_c::YrotS(shape_angle.y);
         cXyz postPos;
         PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx], &postPos);
-
         cXyz startPos(current.pos.x, current.pos.y + 5.0f, current.pos.z);
-        cXyz dir = postPos * 0.99f;
-        cXyz endPos = startPos - dir;
+        cXyz endPos;
+        endPos = startPos - (postPos * 0.99f);
         if (line_cross(&startPos, &endPos)) {
             return true;
         }
         if (num == 2) {
-            cXyz startPos2 = startPos;
+            startPos = startPos - postPos;
             s16 rot = (m358 >= 0) ? 0x2AAA : -0x2AAA;
             mDoMtx_stack_c::YrotM(rot);
-            cXyz postPos2;
-            PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx], &postPos2);
-            cXyz dir2 = postPos2 * 0.49f;
-            cXyz endPos2 = startPos2 - dir2;
-            if (line_cross(&startPos2, &endPos2)) {
+            PSMTXMultVecSR(mDoMtx_stack_c::get(), &M_post[idx], &postPos);
+            endPos = startPos - (postPos * 0.49f);
+            if (line_cross(&startPos, &endPos)) {
                 return true;
             }
-            startPos2.y += 30.0f;
-            cXyz dir3 = postPos2 * 0.99f;
-            cXyz endPos3 = startPos2 - dir3;
-            if (line_cross(&startPos2, &endPos3)) {
+            startPos.y += 30.0f;
+            endPos = startPos - (postPos * 0.99f);
+            if (line_cross(&startPos, &endPos)) {
                 return true;
             }
         }
