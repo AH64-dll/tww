@@ -242,7 +242,7 @@ static BOOL nodeCB(J3DNode* node, int calcTiming) {
         dDoor_ssk_sub_c* i_this = (dDoor_ssk_sub_c*)model->getUserArea();
         if (i_this != NULL && jntNo > 0 && jntNo <= 3) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->mAngle * i_this->m19E * 2)));
+            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->m19A * i_this->m19E * 2)));
             mDoMtx_XrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(i_this->mAngle * 0x28A + jntNo * 0x2EE0)));
             mDoMtx_ZrotM(*calc_mtx, (s16)(int)(4000.0f * JMASSin(jntNo * 0x3A98 + i_this->mAngle * i_this->m19E)));
             model->setAnmMtx(jntNo, *calc_mtx);
