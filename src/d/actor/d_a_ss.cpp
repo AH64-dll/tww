@@ -197,7 +197,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp18.x, sp18.z));
             f32 dist = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp18.y, dist));
-            sp18.set(0.0f, 0.0f, 5.0f + REG8_F(8));
+            sp18.set(0.0f, 0.0f, -5.0f + REG8_F(8));
             MtxPosition(&sp18, &pos);
             hand->mSss[i].mPos += pos;
             MtxPull();
