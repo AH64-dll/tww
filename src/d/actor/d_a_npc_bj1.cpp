@@ -318,7 +318,21 @@ void daNpc_Bj1_c::chg_anmAtr(unsigned char i_attr) {
 
 /* 000013C0-0000143C       .text control_anmAtr__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::control_anmAtr() {
-    /* Nonmatching */
+    switch (m8AD) {
+    case 10:
+        if (m83C != 0) {
+            m8AD = 2;
+            setAnm_NUM(3);
+        }
+        break;
+    case 6:
+    case 7:
+        if (m83C != 0) {
+            m8AD = 0;
+            setAnm_NUM(0);
+        }
+        break;
+    }
 }
 
 /* 0000143C-00001470       .text setAnm_ATR__11daNpc_Bj1_cFv */
