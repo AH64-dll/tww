@@ -822,7 +822,6 @@ void daNpc_Ac1_c::shadowDraw() {
 }
 
 /* 00001C70-00001DC4       .text _draw__11daNpc_Ac1_cFv */
-/* Nonmatching: reloc naming only */
 BOOL daNpc_Ac1_c::_draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
