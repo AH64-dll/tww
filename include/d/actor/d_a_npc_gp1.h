@@ -84,9 +84,9 @@ public:
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
-    /* 0x6C5 */ s8 m_bbone_jnt_num;
-    /* 0x6C6 */ s8 m_hnd_L_jnt_num;
-    /* 0x6C8 */ u8 field_0x6C8[0x6D0 - 0x6C8];
+    /* 0x6CD */ s8 m_bbone_jnt_num;
+    /* 0x6CE */ s8 m_hnd_L_jnt_num;
+    /* 0x6CF */ u8 field_0x6CF[0x6D0 - 0x6CF];
     /* 0x6D0 */ u32 mShadowID;
     /* 0x6D4 */ J3DModel* mpShadowModel;
     /* 0x6D8 */ J3DAnmTexPattern* m_hed_tex_pttrn;
@@ -103,6 +103,7 @@ public:
     /* 0x790 */ cXyz mTransformedEyePos;
     /* 0x79C */ cXyz m79C;
     /* 0x7A8 */ cXyz m7A8;
+    /* 0x7B4 */ u8 field_0x7B4[0x7C0 - 0x7B4];
     /* 0x7C0 */ f32 mPrevMorfFrame;
     /* 0x7C4 */ f32 m7C4;
     /* 0x7C8 */ f32 m7C8;
@@ -114,6 +115,7 @@ public:
     /* 0x7DC */ s16 mActorAngleY;
     /* 0x7DE */ s16 mEventIdTable[3];
     /* 0x7E4 */ s16 mEventIdx;
+    /* 0x7E6 */ u8 field_0x7E6[0x7E8 - 0x7E6];
     /* 0x7E8 */ s16 m7E8;
     /* 0x7EA */ s16 m7EA;
     /* 0x7EC */ s16 m7EC;
@@ -125,7 +127,7 @@ public:
     /* 0x7F8 */ bool mbMorfAnimStopped;
     /* 0x7F9 */ bool m7F9;
     /* 0x7FA */ bool m7FA;
-    /* 0x7FB */ bool m7FB;
+    /* 0x7FB */ u8 m7FB;
     /* 0x7FC */ bool m7FC;
     /* 0x7FD */ bool m7FD;
     /* 0x7FE */ bool m7FE;

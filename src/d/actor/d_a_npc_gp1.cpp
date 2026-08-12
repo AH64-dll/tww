@@ -1025,24 +1025,6 @@ BOOL daNpc_Gp1_c::talk_1() {
     talk(1);
     if(mpCurrMsg != NULL) {
         switch(mpCurrMsg->mStatus) {
-            case fopMsgStts_MSG_TYPING_e:
-            case fopMsgStts_BOX_OPENING_e:
-                if(m801) {
-                    dComIfGp_evmng_CancelPresent();
-                    if(m7F2 != 0) {
-                        u8 reg = dComIfGs_getEventReg(0xC5FF);
-                        s16 beast = dComIfGp_getItemBeastNumCount(0);
-                        beast -= m7F2;
-                        dComIfGp_setItemBeastNumCount(0, -m7F2);
-                        u8 new_reg = reg + m7F2;
-                        if(new_reg > 0x7F) {
-                            new_reg = 0x7F;
-                        }
-                        dComIfGs_setEventReg(0xC5FF, new_reg);
-                        m801 = 0;
-                    }
-                }
-                break;
             case fopMsgStts_MSG_DESTROYED_e:
                 switch(mCurrMsgNo) {
                     case 0x1E18:
@@ -1063,26 +1045,23 @@ BOOL daNpc_Gp1_c::talk_1() {
                         mStatus = 5;
                         break;
                 }
+                m7FB = 0xFF;
+                m809 = false;
+                setStt(mLookBackState);
+                m7E8 = 60;
+                endEvent();
+                break;
+            case fopMsgStts_MSG_TYPING_e:
+            case fopMsgStts_BOX_OPENING_e:
                 if(m801) {
                     dComIfGp_evmng_CancelPresent();
                     if(m7F2 != 0) {
                         u8 reg = dComIfGs_getEventReg(0xC5FF);
-                        s16 beast = dComIfGp_getItemBeastNumCount(0);
-                        beast -= m7F2;
                         dComIfGp_setItemBeastNumCount(0, -m7F2);
-                        u8 new_reg = reg + m7F2;
-                        if(new_reg > 0x7F) {
-                            new_reg = 0x7F;
-                        }
-                        dComIfGs_setEventReg(0xC5FF, new_reg);
+                        dComIfGs_setEventReg(0xC5FF, (u8)cLib_maxLimit<s32>(reg + m7F2, 0x7F));
                         m801 = 0;
                     }
                 }
-                m7FB = 0xFF;
-                m809 = false;
-                setStt(mPrevStatus);
-                m7E8 = 60;
-                endEvent();
                 break;
         }
     }
