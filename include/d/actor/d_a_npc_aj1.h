@@ -1,41 +1,31 @@
 #ifndef D_A_NPC_AJ1_H
 #define D_A_NPC_AJ1_H
 
-#include "d/d_npc.h"
-#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
-class J3DModel;
 class JPABaseEmitter;
 
-class daNpc_Aj1_c : public fopNpc_npc_c {
+class daNpc_Aj1_c : public fopAc_ac_c {
 public:
-    typedef int (daNpc_Aj1_c::*ProcFunc)(void*);
     struct anm_prm_c {
-        /* 0x00 */ s8 mAnmNum;
-        /* 0x01 */ s8 mBtpNum;
-        /* 0x02 */ s8 field_0x02;
-        /* 0x03 */ s8 field_0x03;
-        /* 0x04 */ f32 mMorf;
-        /* 0x08 */ f32 mSpeed;
-        /* 0x0C */ int mLoopMode;
+        
     };
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
-    u8 _XyCheckCB(int);
-    u8 init_AJ1_0();
-    u8 init_AJ1_1();
-    u8 init_AJ1_2();
-    s32 createInit();
+    void _XyCheckCB(int);
+    void init_AJ1_0();
+    void init_AJ1_1();
+    void init_AJ1_2();
+    void createInit();
     void play_animation();
     void ctrl_WAITanm();
     void ctrl_TIREanm();
     void setMtx(bool);
-    int bckResID(int);
-    int btpResID(int);
-    s32 init_texPttrnAnm(signed char, bool);
+    void bckResID(int);
+    void btpResID(int);
+    void init_texPttrnAnm(signed char, bool);
     void play_texPttrnAnm();
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
@@ -46,38 +36,38 @@ public:
     void ctrlAnmAtr();
     void setAnm_ATR();
     void anmAtr(unsigned short);
-    u16 next_msgStatus(unsigned long*);
-    u32 getMsg_AJ1_0();
-    u32 getMsg_AJ1_1();
-    u32 getMsg_AJ1_2();
-    u32 getMsg();
+    void next_msgStatus(unsigned long*);
+    void getMsg_AJ1_0();
+    void getMsg_AJ1_1();
+    void getMsg_AJ1_2();
+    void getMsg();
     void eventOrder();
     void checkOrder();
-    u8 chk_talk();
-    s32 chk_parts_notMov();
+    void chk_talk();
+    void chk_parts_notMov();
     void lookBack();
-    s32 chkAttention();
+    void chkAttention();
     void setAttention(bool);
-    s32 decideType(int);
+    void decideType(int);
     void cut_init_AJ1_TLK();
-    s32 cut_move_AJ1_TLK();
+    void cut_move_AJ1_TLK();
     void cut_init_INI_ANGRY();
-    s32 cut_move_INI_ANGRY();
+    void cut_move_INI_ANGRY();
     void cut_init_VIVRATE();
-    s32 cut_move_VIVRATE();
+    void cut_move_VIVRATE();
     void cut_init_JMP();
-    s32 cut_move_JMP();
+    void cut_move_JMP();
     void cut_init_SPPRISE();
-    s32 cut_move_SPPRISE();
+    void cut_move_SPPRISE();
     void cut_init_LOK();
-    s32 cut_move_LOK();
+    void cut_move_LOK();
     void cut_init_DAN();
-    s32 cut_move_DAN();
+    void cut_move_DAN();
     void cut_init_INVIT();
-    s32 cut_move_INVIT();
+    void cut_move_INVIT();
     void privateCut(int);
     void endEvent();
-    s32 isEventEntry();
+    void isEventEntry();
     void event_proc(int);
     void set_pa_pun();
     void set_pa_aka();
@@ -88,91 +78,35 @@ public:
     void del_pa_aka();
     void del_pa(JPABaseEmitter**);
     void setSmoke();
-    int set_action(int (daNpc_Aj1_c::*)(void*), void*);
+    void set_action(int (daNpc_Aj1_c::*)(void*), void*);
     void setStt(signed char);
-    s32 chk_areaIN(float, short, cXyz);
-    s32 FARwai();
-    s32 call_1();
-    s32 wait_1();
-    u8 talk_1();
-    int wait_action1(void*);
-    int wait_action2(void*);
-    u8 demo();
+    void chk_areaIN(float, short, cXyz);
+    void FARwai();
+    void call_1();
+    void wait_1();
+    void talk_1();
+    void wait_action1(void*);
+    void wait_action2(void*);
+    void demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    s32 bodyCreateHeap();
-    s32 itemCreateHeap();
-    s32 CreateHeap();
+    void bodyCreateHeap();
+    void itemCreateHeap();
+    void CreateHeap();
 
 public:
-    /* 0x6C4 */ request_of_phase_process_class mPhs;
-    /* 0x6CC */ s8 m_hed_jnt_num;
-    /* 0x6CD */ s8 m_bbone_jnt_num;
-    /* 0x6CE */ s8 m_hnd_L_jnt_num;
-    /* 0x6CF */ s8 m_fot_L_jnt_num;
-    /* 0x6D0 */ J3DModel* mpItemModel;
-    /* 0x6D4 */ u32 mShadowID;
-    /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6EC */ u8 mBlinkFrame;
-    /* 0x6EE */ s16 mBlinkTimer;
-    /* 0x6F0 */ ProcFunc mCurrProcFunc;
-    /* 0x6FC */ cXyz m6FC;
-    /* 0x708 */ csXyz m708;
-    /* 0x70E */ csXyz m70E;
-    /* 0x714 */ cXyz mHeadPos;
-    /* 0x720 */ cXyz m720;
-    /* 0x72C */ cXyz m72C;
-    /* 0x738 */ s16 mActorAngleY;
-    /* 0x73A */ s16 mJointHeadY;
-    /* 0x73C */ s16 mJointBackboneY;
-    /* 0x740 */ f32 mPrevMorfFrame;
-    /* 0x744 */ s16 mEventIdTable[1];
-    /* 0x746 */ s16 mEventIdx;
-    /* 0x748 */ s16 mWaitTimer;
-    /* 0x74A */ s16 mPunTimer;
-    /* 0x74C */ s16 mCutTimer;
-    /* 0x74E */ s16 mTalkTimer;
-    /* 0x750 */ s16 mFARwaiTimer;
-    /* 0x754 */ s16 mLookAtMaxVel;
-    /* 0x756 */ s16 mTargetYRot;
-    /* 0x758 */ u8 mbMorfAnimStopped;
-    /* 0x759 */ u8 m759;
-    /* 0x75A */ u8 mItemNo;
-    /* 0x75B */ u8 m75B;
-    /* 0x75C */ u8 m75C;
-    /* 0x75E */ u8 m75E;
-    /* 0x75F */ u8 m75F;
-    /* 0x760 */ u8 m760;
-    /* 0x761 */ u8 m761;
-    /* 0x764 */ int mActionResult;
-    /* 0x768 */ u8 m768;
-    /* 0x769 */ u8 m769;
-    /* 0x76A */ u8 mHeadOnlyFollow;
-    /* 0x76B */ u8 mInDemo;
-    /* 0x76C */ dPa_smokeEcallBack mSmokeEcallBack;
-    /* 0x78C */ JPABaseEmitter* mSmokeEmitter;
-    /* 0x790 */ JPABaseEmitter* mPunEmitter;
-    /* 0x794 */ JPABaseEmitter* mAkaEmitter;
-    /* 0x798 */ JPABaseEmitter* mDonEmitter;
-    /* 0x79C */ cXyz m79C;
-    /* 0x7A8 */ cXyz m7A8;
-    /* 0x7B4 */ u8 m7B4;
-    /* 0x7B5 */ s8 m7B5;
-    /* 0x7B6 */ u8 mAnmAtr;
-    /* 0x7B7 */ u8 mMesgAnimeTagInfo;
-    /* 0x7B8 */ s8 mBtpNum;
-    /* 0x7B9 */ s8 mAnmNum;
-    /* 0x7BA */ s8 m812;
-    /* 0x7BB */ s8 mStatus;
-    /* 0x7BC */ s8 mPrevStatus;
-    /* 0x7BD */ s8 mLookBackState;
-    /* 0x7BE */ s8 mType;
-    /* 0x7BF */ s8 mSpecificType;
-    /* 0x7C0 */ s8 mActionIndex;
-    /* 0x7C1 */ s8 m7C1;
-};  // Size: 0x7C4
+    /* Place member variables here */
+};
+
+class daNpc_Aj1_HIO_c {
+public:
+    daNpc_Aj1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
 
 #endif /* D_A_NPC_AJ1_H */
