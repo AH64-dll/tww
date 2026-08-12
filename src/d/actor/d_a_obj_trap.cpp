@@ -5,6 +5,68 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_trap.h"
+#include "d/d_bg_s.h"
+#include "d/d_path.h"
+#include "res/Object/Trap.h"
+
+static dCcD_SrcCyl l_daObjTrap_cyl_data = {
+    // dCcD_SrcGObjInf
+    {
+        // cCcD_SrcObj
+        {
+            /* Flags             */ 0,
+            // cCcD_SrcObjHitInf
+            {
+                // cCcD_SrcObjAt
+                {
+                    /* Type */ AT_TYPE_SPIKE,
+                    /* Atp  */ 0x01,
+                    /* SPrm */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+                },
+                // cCcD_SrcObjTg
+                {
+                    /* Type */ 0,
+                    /* SPrm */ 0,
+                },
+                // cCcD_SrcObjCo
+                {
+                    /* SPrm */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e |
+                               cCcD_CoSPrm_VsGrpAll_e,
+                },
+            },
+        },
+        // dCcD_SrcGObjAt
+        {
+            /* Se      */ dCcG_SE_NONE,
+            /* HitMark */ dCcG_AtHitMark_None_e,
+            /* Spl     */ dCcG_At_Spl_UNK1,
+            /* Mtrl    */ 0,
+            /* SPrm    */ 0,
+        },
+        // dCcD_SrcGObjTg
+        {
+            /* Se      */ dCcG_SE_NONE,
+            /* HitMark */ dCcG_TgHitMark_None_e,
+            /* Spl     */ dCcG_Tg_Spl_UNK0,
+            /* Mtrl    */ 0,
+            /* SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        },
+        // dCcD_SrcGObjCo
+        {
+            /* SPrm */ 0,
+        },
+    },
+    // cCcD_SrcCylAttr
+    {{
+        /* Center */ {-40.0f, 0.0f, 155.0f},
+        /* Radius */ 100.0f,
+        /* Height */ 100.0f,
+    }},
+};
+
+const f32 daObjTrap_c::M_speed_table[] = {50.0f, 80.0f, 100.0f};
+const s16 daObjTrap_c::M_wait_f_table[] = {30, 10, 0};
+const char daObjTrap_c::M_arcname[] = "Trap";
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */
 void daObjTrap_c::solidHeapCB(fopAc_ac_c*) {
@@ -57,17 +119,17 @@ void daObjTrap_c::check_arrival() {
 }
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
-void daObjTrap_c::check_wall() {
+cXyz daObjTrap_c::check_wall() {
     /* Nonmatching */
 }
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
-void daObjTrap_c::check_block_target_pos(cXyz*) {
+BOOL daObjTrap_c::check_block_target_pos(cXyz*) {
     /* Nonmatching */
 }
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
-void daObjTrap_c::check_block(cXyz) {
+cXyz daObjTrap_c::check_block(cXyz) {
     /* Nonmatching */
 }
 
