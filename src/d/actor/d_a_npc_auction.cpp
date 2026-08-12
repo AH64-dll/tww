@@ -651,26 +651,26 @@ static s16 daNpcAuction_XyEventCB(void* i_this, int i_itemBtn) {
 cPhs_State daNpcAuction_c::createInit() {
     gravity = -9.0f;
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
-    mActIdx = 0;
+    mAngleY = 0;
     m73C = 0;
     m73D = 0;
     cullMtx = mpMorf->getModel()->getBaseTRMtx();
     wait_action_init();
     if (mNpcNo == 0) {
-        eyePos.y = 173.0f;
-        attention_info.position.y = 173.0f;
+        attention_info.distances[1] = 173;
+        attention_info.distances[3] = 173;
     } else {
-        eyePos.y = 169.0f;
-        attention_info.position.y = 169.0f;
+        attention_info.distances[1] = 169;
+        attention_info.distances[3] = 169;
     }
-    max_health = 10;
+    attention_info.flags = 0xA;
     mEventIdx = dComIfGp_evmng_getEventIdx("AUCTION_TALK", 0xFF);
     eventInfo.setEventName("AUCTION_TALK_XY");
     eventInfo.setXyCheckCB(daNpcAuction_XyCheckCB);
     eventInfo.setXyEventCB(daNpcAuction_XyEventCB);
     m720 = l_npc_dat[mDataNo].mMaxAttnDistXZ;
     setMtx();
-    mpMorf->getModel()->setBaseTRMtx(mpMorf->getModel()->getBaseTRMtx());
+    mpMorf->getModel()->calc();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
