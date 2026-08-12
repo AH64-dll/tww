@@ -241,22 +241,22 @@ BOOL daNpc_Uk_c::aroundWalk(fopAc_ac_c* i_pTarget) {
 }
 
 /* 00000964-00000AD4       .text surrender__10daNpc_Uk_cFv */
-BOOL daNpc_Uk_c::surrender() {
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
-    if (pActor != NULL && pActor->speedF > 1.0f) {
+void daNpc_Uk_c::surrender() {
+    u32 procId = mLookActorId;
+    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
+    if (pActor != NULL && !(pActor->speedF <= 1.0f)) {
         cXyz dist = pActor->current.pos - current.pos;
-        cXyz distXZ(dist.x, 0.0f, dist.z);
-        if (PSVECSquareMag(&distXZ) <= 7225.0f) {
+        if (dist.abs2XZ() <= 7225.0f) {
             s16 angle = fopAcM_searchActorAngleY(pActor, this) - pActor->shape_angle.y;
             if (angle <= 0x2AAA && angle >= -0x2AAA) {
-                s16 dir = (s16)(pActor->shape_angle.y + ((angle < 0) ? -0x4000 : 0x4000));
+                s16 dir = angle < 0 ? (s16)(pActor->shape_angle.y - 0x4000)
+                                    : (s16)(pActor->shape_angle.y + 0x4000);
                 speed.x += 0.5f * cM_ssin(dir);
                 speed.z += 0.5f * cM_scos(dir);
                 setFlag(0x8);
             }
         }
     }
-    return TRUE;
 }
 
 /* 00000AD4-00000D88       .text runawayInit__10daNpc_Uk_cFv */

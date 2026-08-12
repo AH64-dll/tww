@@ -110,7 +110,7 @@ public:
     u8 nextVisitMode();
     BOOL approachRun(fopAc_ac_c*);
     BOOL aroundWalk(fopAc_ac_c*);
-    BOOL surrender();
+    void surrender();
     BOOL runawayInit();
     static BOOL nodeCallBack_Uk(J3DNode*, int);
     BOOL initTexPatternAnm(bool);
