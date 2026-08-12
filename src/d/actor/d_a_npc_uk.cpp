@@ -908,15 +908,13 @@ void daNpc_Uk_c::visitInit(u8 i_nextVisitMode) {
 
 /* 00002494-000025A4       .text visitProc__10daNpc_Uk_cFv */
 void daNpc_Uk_c::visitProc() {
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+    u32 procId = mLookActorId;
+    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
     switch (mVisitMode) {
     case VISIT_WALK_PATH:
         approachRun(pActor);
-        break;
-    case VISIT_RUN_LINK:
-        approachRun(pLink);
         break;
     case VISIT_REACHED_LINK:
         if (mTimerToReachLink < 0x2D) {
@@ -924,19 +922,28 @@ void daNpc_Uk_c::visitProc() {
         }
         approachRun(pLink);
         break;
+    case VISIT_RUN_LINK:
+        approachRun(pActor);
+        break;
     case VISIT_WALK_AROUND_LINK:
     case VISIT_LEFT_PATH:
         aroundWalk(pLink);
         break;
     case VISIT_NOTICE_LINK:
+        surrender();
+        break;
     case VISIT_WAIT:
+        surrender();
+        break;
     case VISIT_WAIT_2:
+        surrender();
+        break;
     case VISIT_WAIT_3:
         surrender();
         break;
     }
 
-    if (mVisitMode >= VISIT_WAIT && mVisitMode < VISIT_WAIT_3 + 1) {
+    if ((int)mVisitMode < 0xB && (int)mVisitMode >= 9) {
         setFlag(0x20);
     }
 }
