@@ -145,7 +145,7 @@ public:
     /* 0x7F1 */ u8 m7F1;
     /* 0x7F2 */ u8 m7F2;
     /* 0x7F3 */ u8 m7F3;
-    /* 0x7F4 */ u32 mCurrActionRet;
+    /* 0x7F4 */ s32 mCurrActionRet;
     /* 0x7F8 */ u8 m7F8;
     /* 0x7F9 */ u8 m7F9;
     /* 0x7FA */ u8 mHeadOnlyFollow;

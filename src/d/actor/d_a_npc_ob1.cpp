@@ -755,7 +755,7 @@ void daNpc_Ob1_c::setAttention(bool i_param_1) {
     attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY,
                                 current.pos.z);
     if (mCurrActionRet != 0 || i_param_1) {
-        eyePos = mTransformedEyePos;
+        eyePos.set(mTransformedEyePos.x, mTransformedEyePos.y, mTransformedEyePos.z);
     }
 }
 
