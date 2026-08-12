@@ -95,19 +95,22 @@ namespace daObjTribox {
 
     /* 000001A4-000001C8       .text solidHeapCB__Q211daObjTribox5Act_cFP10fopAc_ac_c */
     BOOL Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
-        static_cast<Act_c*>(i_actor)->create_heap();
-        return true;
+        return static_cast<Act_c*>(i_actor)->create_heap();
     }
 
     /* 000001C8-000004B0       .text create_heap__Q211daObjTribox5Act_cFv */
-    void Act_c::create_heap() {
+    u8 Act_c::create_heap() {
         J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_MTRYB_e);
         JUT_ASSERT(0x140, model_data != 0);
         mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
 
         cBgD_t* bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_DZB_MTRYB_e);
         JUT_ASSERT(0x149, bgw_data != 0);
-        mpBgW = mpModel ? dBgW_NewSet(bgw_data, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) : 0;
+        if (mpModel) {
+            mpBgW = dBgW_NewSet(bgw_data, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        } else {
+            mpBgW = 0;
+        }
 
         J3DModelData* model_ytfbl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BDL_YTFBL00_e);
         JUT_ASSERT(0x159, model_ytfbl_data != 0);
@@ -115,16 +118,17 @@ namespace daObjTribox {
 
         J3DAnmTevRegKey* brk_app_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_APP_e);
         JUT_ASSERT(0x163, brk_app_data != 0);
-        bool brkOk = mBrkAnm.init(model_ytfbl_data, brk_app_data, 1, 0, 1.0f, 0, -1, 0);
+        int brkOk = mBrkAnm.init(model_ytfbl_data, brk_app_data, 1, 0, 1.0f, 0, -1, 0);
 
         J3DAnmTevRegKey* brk_cmn_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MTRYB_BRK_YTFBL00_CMN_e);
         JUT_ASSERT(0x16D, brk_cmn_data != 0);
-        bool brk2Ok = mBrkAnm2.init(model_ytfbl_data, brk_cmn_data, 1, 2, 1.0f, 0, -1, 0);
+        int brk2Ok = mBrkAnm2.init(model_ytfbl_data, brk_cmn_data, 1, 2, 1.0f, 0, -1, 0);
 
         bool success = (mpModel != 0 && mpBgW != 0 && mpModel2 != 0 && brkOk && brk2Ok);
         if (!success) {
             mpBgW = 0;
         }
+        return success;
     }
 
     /* 000004B0-000005C0       .text block_init__Q211daObjTribox5Act_cFv */
@@ -401,7 +405,7 @@ namespace daObjTribox {
     void Act_c::eff_flash() {
         cXyz pos = current.pos;
         pos.y += 251.0f;
-        dComIfGp_particle_set(0x833A, &pos, &shape_angle, NULL, 0xFF, NULL);
+        dComIfGp_particle_setP1(0x833A, &pos, &shape_angle, NULL, 0xFF, NULL);
     }
 
     /* 00001378-00001464       .text eff_smoke_start__Q211daObjTribox5Act_cFv */
