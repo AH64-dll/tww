@@ -51,10 +51,7 @@ struct ss_class : public fopEn_enemy_c {
     /* 0x2C2 */ s16 m2C2;
     /* 0x2C4 */ s16 m2C4;
     /* 0x2C6 */ s16 m2C6;
-    /* 0x2C8 */ s16 m2C8;
-    /* 0x2CA */ s16 m2CA;
-    /* 0x2CC */ s16 m2CC;
-    /* 0x2CE */ s16 m2CE;
+    /* 0x2C8 */ s16 m2C8[4];
     /* 0x2D0 */ s16 m2D0;
     /* 0x2D2 */ s16 m2D2;
     /* 0x2D4 */ s16 m2D4;

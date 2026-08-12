@@ -504,14 +504,14 @@ void core_move(ss_class* i_this) {
             }
             break;
         case 50:
-            if (i_this->m2C8 == 0x45) {
+            if (i_this->m2C8[0] == 0x45) {
                 cXyz scale(0.5f, 0.5f, 0.5f);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->eyePos, NULL, &scale);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->eyePos, NULL, &scale);
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_ENM_VAPORIZE, &i_this->eyePos, 0,
                                                 fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
-            if (i_this->m2CA != 0) {
+            if (i_this->m2C8[1] != 0) {
                 dComIfGp_particle_setSimple(1, &i_this->eyePos, 0xFF, g_whiteColor, g_whiteColor, 0);
                 for (int i = 0; i < 10; i++) {
                     cXyz* p = i_this->mLine.getPos(i);
@@ -529,7 +529,7 @@ void core_move(ss_class* i_this) {
                     }
                 }
             }
-            if (i_this->m2C8 == 0) {
+            if (i_this->m2C8[0] == 0) {
                 if (i_this->m2BE != 0) {
                     dComIfGs_onSwitch(i_this->m2BE, fopAcM_GetRoomNo(i_this));
                 }
@@ -556,7 +556,7 @@ void core_move(ss_class* i_this) {
                 }
                 if (atInfo.mResultingAttackType == 5) {
                     i_this->health = 0;
-                    i_this->m2CA = 0x32;
+                    i_this->m2C8[1] = 0x32;
                     JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_S_BURN, &i_this->eyePos, 0,
                                                     fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 } else {
@@ -565,7 +565,7 @@ void core_move(ss_class* i_this) {
                 if (i_this->health <= 0) {
                     i_this->m2D0 = 0x64;
                     i_this->m2C4 = 0x32;
-                    i_this->m2C8 = 0x46;
+                    i_this->m2C8[0] = 0x46;
                 }
             } else {
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SVINE_REBOUND, &i_this->eyePos, 0,
@@ -599,10 +599,9 @@ static BOOL daSs_Execute(ss_class* i_this) {
     col.a = 0xFF;
 
     i_this->m2C0++;
-    s16* timer = &i_this->m2C8;
     for (int i = 0; i < 4; i++) {
-        if (timer[i] != 0) {
-            timer[i]--;
+        if (i_this->m2C8[i] != 0) {
+            i_this->m2C8[i]--;
         }
     }
     if (i_this->m2D0 != 0) {
@@ -643,10 +642,10 @@ static BOOL daSs_Execute(ss_class* i_this) {
     s32 sinTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_ssin((s16)(i_this->m2C0 * 0x2F00)));
     s32 cosTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_scos((s16)(i_this->m2C0 * 0x2C00)));
 
-    i_this->m2D4 = (s16)((REG0_S(0) + 1) * cM_atan2s(diff.x, diff.z) - i_this->current.angle.y + sinTerm);
+    i_this->m2D4 = (s16)(cM_atan2s(diff.x, diff.z) * (REG0_S(0) + 1) - i_this->current.angle.y + sinTerm);
 
     f32 distXZ = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
-    i_this->m2D2 = (s16)(-(cosTerm + (REG0_S(2) + 1) * cM_atan2s(diff.y, distXZ)));
+    i_this->m2D2 = (s16)(-(cosTerm + cM_atan2s(diff.y, distXZ) * (REG0_S(2) + 1)));
     if (i_this->m2D8 != 0) {
         i_this->m2D8--;
     }
@@ -757,7 +756,10 @@ static cPhs_State daSs_Create(fopAc_ac_c* a_this) {
     if (phase == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
     }
-    if (phase == cPhs_COMPLEATE_e) {
+    if (phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+    {
         i_this->mFlag = (u8)fopAcM_GetParam(a_this);
         i_this->m2BD = (u8)(fopAcM_GetParam(a_this) >> 8);
         i_this->m2BE = (u8)(fopAcM_GetParam(a_this) >> 24);
