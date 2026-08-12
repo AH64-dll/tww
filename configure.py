@@ -1648,7 +1648,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_mgameboard"),
     ActorRel(Matching,    "d_a_mmusic"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mo2"),
-    ActorRel(NonMatching, "d_a_mozo", mw_version="GC/1.3.2r"),
+    ActorRel(Equivalent, "d_a_mozo", mw_version="GC/1.3.2r"),  # 1.3.2r override; 8 sub-100 all regalloc/anchor (setAnm 100, search_beam struct-0); weak order
     ActorRel(NonMatching, "d_a_mt"),
     ActorRel(Equivalent, "d_a_npc_ac1"), # regalloc: getMsg 89.8 REGALLOC_ACCEPT + 3 anchor-only; weak order
     ActorRel(Matching,    "d_a_npc_ah"),
