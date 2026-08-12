@@ -99,27 +99,13 @@ static f32 l_d_p2[] = {
     5.0f, 2.0f, 1.0f, 0.5f, 0.0f, -0.3f, -0.3f, 0.0f,
 };
 
-static u8 l_unk_C;
-static u8 l_unk_10;
-static u8 l_unk_14;
-static u8 l_unk_18;
-static u8 l_unk_1C;
-static u8 l_unk_20;
-static u8 l_unk_24;
-static u8 l_unk_28;
-static u8 l_unk_2C;
-static u8 l_unk_30;
-static u8 l_unk_34;
-static u8 l_unk_38;
-static u8 l_unk_3C;
-static u8 l_unk_40;
-static u8 l_unk_44;
-static u8 l_unk_48;
+/* .bss:0x0  weak_bss_3569 (cXyz, via dolzel.pch) */
+/* .bss:0xC  16x weak_bss_936_to_1036 u8s 4-aligned (via dolzel.pch) */
 static cXyz* l_v_pos;
 static s32 l_v_count;
 static s32 l_mesh_cc_ct;
-static cXyz l_unk_50;
-static cXyz l_non_pos;
+/* .bss:0x58 DestructorChain regmem for l_non_pos (compiler-emitted) */
+static cXyz l_non_pos(-20000.0f, -200000.0f, -100000.0f);
 
 /* 000000EC-000003EC       .text draw__15daMant_packet_cFv */
 void daMant_packet_c::draw() {
