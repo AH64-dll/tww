@@ -74,7 +74,7 @@ void control3(sss_class* i_this) {
     /* Nonmatching */
     sss_s* p = i_this->m33C;
     for (int i = 0; i < 10; i++, p++) {
-        p->mSize = l_size_d[i] * (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64));
+        p->mSize = (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64)) * l_size_d[i];
     }
 }
 
@@ -390,7 +390,7 @@ void hand_move(sss_class* i_this) {
     mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
     s8 cut = 0;
-    s8 keep_3 = 0;
+    u8 keep_3 = 0;
     switch (i_this->m2C0) {
     case 0:
         pos.x = actor->current.pos.x;
@@ -423,10 +423,9 @@ void hand_move(sss_class* i_this) {
         }
         break;
     case 1:
-        f11 = 50.0f + REG0_F(13);
-        pos.x = f11 * cM_ssin(i_this->m2BC * 0x258);
+        pos.x = (50.0f + REG0_F(13)) * cM_ssin(i_this->m2BC * 0x258);
         pos.y = 250.0f;
-        pos.z = f11 * cM_ssin(i_this->m2BC * 0x2BC);
+        pos.z = (50.0f + REG0_F(13)) * cM_ssin(i_this->m2BC * 0x2BC);
         MtxPosition(&pos, &pos2);
         pos = pos2 + actor->current.pos;
         if (i_this->m2C2[0] == 0 && dist < 300.0f + REG0_F(14)) {
@@ -478,7 +477,7 @@ void hand_move(sss_class* i_this) {
             if (f14 > f15) {
                 f14 = f15;
             }
-            player->setOutPower(f14, (s16)(fopAcM_searchActorAngleY(actor, player) + 0x8000), 0);
+            player->setOutPower(f14, (s16)(fopAcM_searchPlayerAngleY(actor) + 0x8000), 0);
         }
         pos.x = player->current.pos.x;
         f11 = player->current.pos.y;
@@ -504,10 +503,12 @@ void hand_move(sss_class* i_this) {
         i_this->m2C8 += actor->speed;
         actor->speed.y -= 3.0f;
         i_this->m2C6 = 5;
-        pos.x = i_this->m2C8.x;
-        pos.y = i_this->m2C8.y + 200.0f;
-        pos.z = i_this->m2C8.z;
-        gndChk.SetPos(&pos);
+        Vec v;
+        v.y = i_this->m2C8.y;
+        v.z = i_this->m2C8.z;
+        v.y += 200.0f;
+        v.x = i_this->m2C8.x;
+        gndChk.SetPos(&v);
         i_this->m2F8 = dComIfG_Bgsp()->GroundCross(&gndChk);
         if (i_this->m2F8 == -1.0e9f || i_this->m2C8.y <= i_this->m2F8 + 10.0f) {
             i_this->m2C8.y = i_this->m2F8 + 10.0f;
@@ -558,29 +559,34 @@ void hand_move(sss_class* i_this) {
         cLib_addCalc2(&i_this->m2C8.y, pos.y, f3, actor->speedF);
         cLib_addCalc2(&i_this->m2C8.z, pos.z, f3, actor->speedF);
         cLib_addCalc2(&actor->current.pos.y, actor->home.pos.y + f9, 0.5f, 0.5f);
-        if (keep_3 == 1 && actor->current.angle.x == 0) {
-            cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchActorAngleY(actor, player), 0x10, 0x800);
+        if (keep_3 && actor->current.angle.x == 0) {
+            cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchPlayerAngleY(actor), 0x10, 0x800);
         }
         control1(i_this);
         control2(i_this);
     } else {
         cut_control1(i_this);
         cut_control2(i_this);
+        cXyz* posArr = i_this->m454.getPos(0);
+        u8* sizeArr = i_this->m454.getSize(0);
         for (int i = 0; i < 5; i++) {
-            i_this->m454.getPos(0)[i] = i_this->m490[i].mPos;
-            i_this->m454.getSize(0)[i] = (u8)i_this->m490[i].mSize;
+            posArr[i] = i_this->m490[i].mPos;
+            sizeArr[i] = (u8)i_this->m490[i].mSize;
         }
         cLib_addCalc0(&i_this->m2FC, 1.0f, 1.0f + REG0_F(1));
     }
     control3(i_this);
     i_this->mpMorf->play(NULL, 0, 0);
+    cXyz* posArr = i_this->m300.getPos(0);
+    u8* sizeArr = i_this->m300.getSize(0);
     for (int i = 0; i < 10; i++) {
-        i_this->m300.getPos(0)[i] = i_this->m33C[i].mPos;
-        i_this->m300.getSize(0)[i] = (u8)i_this->m33C[i].mSize;
+        posArr[i] = i_this->m33C[i].mPos;
+        sizeArr[i] = (u8)i_this->m33C[i].mSize;
     }
     actor->eyePos = i_this->m300.getPos(0)[5];
     actor->attention_info.position = actor->eyePos;
     i_this->mStts.Move();
+    u8 hit = 0;
     if (keep_3 == 0) {
         i_this->m8DC.SetC(actor->eyePos);
     } else {
@@ -602,7 +608,6 @@ void hand_move(sss_class* i_this) {
         }
         dComIfG_Ccsp()->Set(&i_this->mSph[i]);
     }
-    u8 hit = 0;
     for (int i = 0; i < 3; i++) {
         if (i_this->mSph[i].ChkTgHit()) {
             hit = i + 1;
@@ -614,15 +619,16 @@ void hand_move(sss_class* i_this) {
         i_this->m2C6 = 0x14;
         if (hit == 0) {
             atInfo.mpObj = i_this->m8DC.GetTgHitObj();
+            atInfo.pParticlePos = i_this->m8DC.GetTgHitPosP();
             at_power_check(&atInfo);
             if (atInfo.mResultingAttackType == 8) {
                 i_this->mA08 = 100.0f + REG6_F(6);
-                i_this->mA0C = fopAcM_searchActorAngleY(actor, player) + 0x8000;
+                i_this->mA0C = fopAcM_searchPlayerAngleY(actor) + 0x8000;
                 return;
             }
         } else {
             atInfo.mpObj = i_this->mSph[hit - 1].GetTgHitObj();
-            atInfo.mpActor = NULL;
+            atInfo.pParticlePos = i_this->mSph[hit - 1].GetTgHitPosP();
         }
         mDoAud_seStart(JA_SE_LK_LAST_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         mDoAud_seStart(JA_SE_OBJ_SVINE_CRASH, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -633,10 +639,13 @@ void hand_move(sss_class* i_this) {
         cXyz scale(0.3f, 0.3f, 0.3f);
         dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &actor->eyePos, NULL, &scale, 0xFF);
         i_this->mA18 = 1;
-        for (int i = 0; i < 5; i++) {
-            i_this->m490[i] = i_this->m33C[i];
+        sss_s* dst = i_this->m490;
+        sss_s* src = i_this->m33C;
+        for (int i = 0; i < 5; i++, dst++, src++) {
+            dst->mPos = src->mPos;
+            dst->mSize = src->mSize;
             if (i == 4) {
-                pos3 = cXyz(i_this->m490[4].mPos) - i_this->m490[3].mPos;
+                pos3 = cXyz(dst->mPos) - (dst - 1)->mPos;
                 f17 = PSVECSquareMag(&pos3);
                 if (f17 > 0.0f) {
                     f17 = std::sqrtf(f17);
