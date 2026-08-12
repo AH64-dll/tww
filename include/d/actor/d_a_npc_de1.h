@@ -122,7 +122,7 @@ public:
     /* 0x810 */ u32 mPartnerProcID;
     /* 0x814 */ s8 mActIdx;
     /* 0x815 */ s8 mActNo;
-    /* 0x816 */ s8 mAnmAtr;
+    /* 0x816 */ u8 mAnmAtr;
     /* 0x817 */ u8 mAnmTag;
     /* 0x818 */ s8 mAnmNum;
     /* 0x819 */ s8 mOrder;
