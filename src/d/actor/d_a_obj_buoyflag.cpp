@@ -690,15 +690,15 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
 
     GXSetNumChans(1);
     u8 numTevStages;
-    u8 colorChan;
-    if (tevStr->mFogEnable) {
+    u8 lightMask;
+    if (tevStr->mColorK1.a != 0) {
         numTevStages = 3;
-        colorChan = 3;
+        lightMask = GX_LIGHT0 | GX_LIGHT1;
     } else {
         numTevStages = 2;
-        colorChan = 1;
+        lightMask = GX_LIGHT0;
     }
-    GXSetChanCtrl(GX_COLOR0A0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, GXLightChannel(colorChan), GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_BUMP0, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
@@ -723,17 +723,17 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
         GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
         GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     }
-    GXSetTevColorS10(GX_TEVREG1, tevStr->mColorC0);
-    GXSetTevColor(GX_TEVREG2, tevStr->mColorK0);
-    GXSetTevColor(GX_TEVREG3, tevStr->mColorK1);
-    GXCallDisplayList(Khata::l_matDL, 0x20);
+    GXSetTevColorS10(GX_TEVREG0, tevStr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, tevStr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, tevStr->mColorK1);
+    GXCallDisplayList((void*)Khata::l_matDL, 0x20);
     GXLoadPosMtxImm(mC20, 0);
     GXLoadNrmMtxImm(mC20, 0);
     GXSetCullMode(GX_CULL_FRONT);
-    GXCallDisplayList(&Khata::l_Khata_00DL[0x2C0], 0xE0);
+    GXCallDisplayList((void*)&Khata::l_Khata_00DL[0x2C0], 0xE0);
     GXSetCullMode(GX_CULL_BACK);
     GXSetArray(GX_VA_NRM, (void*)vtx->mNrm2, sizeof(cXyz));
-    GXCallDisplayList(&Khata::l_Khata_00DL[0x2C0], 0xE0);
+    GXCallDisplayList((void*)&Khata::l_Khata_00DL[0x2C0], 0xE0);
 }
 
 /* 00000744-00000C4C       .text draw_hasi__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
@@ -756,7 +756,7 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
     GXSetArray(GX_VA_TEX0, (void*)Khasi::l_texCoord, 8);
 
     GXTexObj texObj;
-    GXInitTexObj(&texObj, Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&texObj, (void*)Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
@@ -773,15 +773,15 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
 
     GXSetNumChans(1);
     u8 numTevStages;
-    u8 colorChan;
-    if (tevStr->mFogEnable) {
+    u8 lightMask;
+    if (tevStr->mColorK1.a != 0) {
         numTevStages = 3;
-        colorChan = 3;
+        lightMask = GX_LIGHT0 | GX_LIGHT1;
     } else {
         numTevStages = 2;
-        colorChan = 1;
+        lightMask = GX_LIGHT0;
     }
-    GXSetChanCtrl(GX_COLOR0A0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, GXLightChannel(colorChan), GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_BUMP0, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
@@ -806,14 +806,14 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
         GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
         GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     }
-    GXSetTevColorS10(GX_TEVREG1, tevStr->mColorC0);
-    GXSetTevColor(GX_TEVREG2, tevStr->mColorK0);
-    GXSetTevColor(GX_TEVREG3, tevStr->mColorK1);
-    GXCallDisplayList(Khata::l_matDL, 0x20);
+    GXSetTevColorS10(GX_TEVREG0, tevStr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, tevStr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, tevStr->mColorK1);
+    GXCallDisplayList((void*)Khata::l_matDL, 0x20);
     GXLoadPosMtxImm(mBF0, 0);
     GXLoadNrmMtxImm(mBF0, 0);
     GXSetCullMode(GX_CULL_FRONT);
-    GXCallDisplayList(Khasi::l_Khasi_00DL, 0xA0);
+    GXCallDisplayList((void*)Khasi::l_Khasi_00DL, 0xA0);
 }
 
 /* 00000C4C-00000CB8       .text draw__Q213daObjBuoyflag8Packet_cFv */
@@ -904,14 +904,14 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
 
     mDoMtx_stack_c::copy(i_actor->m1090);
     mDoMtx_stack_c::inverse();
-    mDoMtx_stack_c::multVecSR(cXyz::BaseY, mC50);
+    mDoMtx_stack_c::multVecSR(&cXyz::BaseY, &mC50);
     mDoMtx_stack_c::ZXYrotM(angleX, angleY, angleZ);
-    mDoMtx_stack_c::multVecSR(wind, mC5C);
+    mDoMtx_stack_c::multVecSR(&wind, &mC5C);
 
     f32 mag = mC5C.abs2();
     if (mag < L_attr.m0C * L_attr.m0C) {
         if (mag < 0.001f) {
-            mDoMtx_stack_c::multVecSR(cXyz::BaseZ, mC5C);
+            mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &mC5C);
             mC5C *= L_attr.m0C;
             return;
         }
@@ -1043,11 +1043,11 @@ void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c* i_actor) {
     static cXyz hata_vec(0.0f, 60.0f, 0.0f);
 
     mDoMtx_stack_c::copy(i_actor->m1090);
-    mDoMtx_stack_c::scaleM(i_actor->mScale);
+    mDoMtx_stack_c::scaleM(i_actor->scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mB90);
     if (i_actor->attr_type()->m05 != 0) {
         mDoMtx_stack_c::copy(i_actor->m1090);
-        mDoMtx_stack_c::scaleM(i_actor->mScale);
+        mDoMtx_stack_c::scaleM(i_actor->scale);
         mDoMtx_stack_c::transM(hata_vec);
         mDoMtx_copy(mDoMtx_stack_c::get(), mBC0);
     }
@@ -1072,7 +1072,7 @@ daObjBuoyflag::Texture_e daObjBuoyflag::Act_c::prm_get_texture() const {
 
 /* 000022BC-000022D4       .text attr_type__Q213daObjBuoyflag5Act_cCFv */
 const daObjBuoyflag::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
-    return &M_attr_type[mAttr];
+    return &M_attr_type[m1120];
 }
 
 /* 000022D4-0000234C       .text mtx_init__Q213daObjBuoyflag5Act_cFv */
@@ -1089,18 +1089,18 @@ int daObjBuoyflag::Act_c::mode_afl() {
     current.pos.y = m1090[1][3];
     current.pos.z = m1090[2][3];
     mPacket.calc(this);
-    fopAcM_setCullSizeSphere(this, 0.0f, 50.0f * mScale.y, 0.0f, 90.0f * mScale.x);
+    fopAcM_setCullSizeSphere(this, 0.0f, 50.0f * scale.y, 0.0f, 90.0f * scale.x);
     if (attr_type()->m04 != 0) {
-        f32 cylR = mScale.x * M_cyl_src.mCylAttr.mCyl.mR;
-        f32 cylH = mScale.y * M_cyl_src.mCylAttr.mCyl.mH;
+        f32 cylR = scale.x * M_cyl_src.mCylAttr.mCyl.mRadius;
+        f32 cylH = scale.y * M_cyl_src.mCylAttr.mCyl.mHeight;
         cXyz center = M_cyl_src.mCylAttr.mCyl.mCenter;
-        center.x *= mScale.x;
-        center.y *= mScale.y;
-        center.z *= mScale.z;
+        center.x *= scale.x;
+        center.y *= scale.y;
+        center.z *= scale.z;
         PSVECAdd(&center, &current.pos, &center);
-        mCyl.mShape.SetC(center);
-        mCyl.mShape.SetR(cylR);
-        mCyl.mShape.SetH(cylH);
+        mCyl.SetC(center);
+        mCyl.SetR(cylR);
+        mCyl.SetH(cylH);
         dComIfG_Ccsp()->Set(&mCyl);
     }
     return 1;
@@ -1115,11 +1115,11 @@ int daObjBuoyflag::Act_c::mode_jumpToSea() {
         s16 angleY = (s16)cM_rndFX(32768.0f);
         s16 angleX = (s16)cM_rndFX(4000.0f);
         mDoMtx_stack_c::ZXYrotS(angleX, angleY, 0);
-        mDoMtx_stack_c::multVecSR(cXyz::BaseZ, m1130);
+        mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &m1130);
     }
     f32 waveY = daSea_calcWave(current.pos.x, current.pos.z);
     f32 posY = current.pos.y;
-    if (posY < waveY - 180.0f * mScale.y) {
+    if (posY < waveY - 180.0f * scale.y) {
         return 0;
     }
     if (posY > waveY) {
@@ -1152,15 +1152,15 @@ cPhs_State Mthd_Create(void* i_proc) {
 /* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
 inline cPhs_State daObjBuoyflag::Act_c::_create() {
     fopAcM_ct(this, Act_c);
-    mAttr = prm_get_type();
+    m1120 = prm_get_type();
     cPhs_State res = dComIfG_resLoad(&mPhase, L_arcname);
     if (res == cPhs_COMPLEATE_e) {
-        mScale.setall(M_attr_type[mAttr].mScale);
-        mMtx = m1090;
+        scale.setall(M_attr_type[m1120].mScale);
+        cullMtx = m1090;
         fopAcM_setCullSizeSphere(this, 0.0f, 50.0f, 0.0f, 2000.0f);
         mtx_init();
         if (daObj::PrmAbstract<Prm_e>(this, PRM_FLAG_W, PRM_FLAG_S) != 0) {
-            fopAcM_OffStatus(this, fopAcStts_NODRAW_e | fopAcStts_UNK800000_e);
+            fopAcM_OffStatus(this, fopAcStts_NODRAW_e | 0x00800000);
         }
         if (attr_type()->m04 != 0) {
             mStts.Init(0xFF, 0xFF, this);
@@ -1169,7 +1169,7 @@ inline cPhs_State daObjBuoyflag::Act_c::_create() {
         }
         mPacket.mpActor = this;
         mPacket.init(this);
-        mMode = 0;
+        m1124 = 0;
         m1128 = 1;
     }
     return res;
@@ -1203,7 +1203,6 @@ static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
 };
-}; // namespace
 }; // namespace daObjBuoyflag
 
 actor_process_profile_definition g_profile_Obj_Buoyflag = {
