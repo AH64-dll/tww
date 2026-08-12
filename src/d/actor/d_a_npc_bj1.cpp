@@ -16,6 +16,21 @@ static int l_check_wrk;
 
 static int a_bck_resID_tbl[] = {0xA, 0x2, 0x7, 0x8, 0x3, 0x6, 0x0, 0x1, 0xB, 0x9, 0x2A};
 
+static daNpc_Bj1_c::anm_prm_c a_anm_prm_tbl[] = {
+    {0, 0, 0, 8.0f, 1.0f, 2},
+    {1, 0, 0, 8.0f, 1.0f, 0},
+    {2, 0, 0, 8.0f, 1.0f, 2},
+    {3, 0, 0, 8.0f, 1.0f, 2},
+    {4, 0, 0, 8.0f, 1.0f, 2},
+    {5, 0, 0, 8.0f, 1.0f, 0},
+    {6, 0, 0, 8.0f, 1.0f, 0},
+    {7, 0, 0, 8.0f, 1.0f, 0},
+    {8, 0, 0, 8.0f, 1.0f, 2},
+    {9, 0, 0, 8.0f, 1.0f, 0},
+    {0xA, 0, 0, 8.0f, 1.0f, 2},
+    {0, 0, 0, 0.0f, 0.0f, 0},
+};
+
 static const char* l_evn_tbl[3] = {
     "Mak_Drg", "Get_Blu_Btl", "Calling",
 };
@@ -267,8 +282,8 @@ BOOL daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c*) {
 }
 
 /* 00001188-000011B8       .text setAnm_NUM__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::setAnm_NUM(int) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setAnm_NUM(int i_anmNum) {
+    setAnm_anm(&a_anm_prm_tbl[i_anmNum]);
 }
 
 /* 000011B8-000011F4       .text setAnm__11daNpc_Bj1_cFv */
@@ -333,7 +348,11 @@ bool daNpc_Bj1_c::chk_drct(float) {
 
 /* 000017C0-000017F0       .text chk_partsNotMove__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::chk_partsNotMove() {
-    /* Nonmatching */
+    bool ret = false;
+    if (m822 == m_jnt.getBackbone_y() && m820 != m_jnt.getHead_y()) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 000017F0-000019A0       .text lookBack__11daNpc_Bj1_cFv */
@@ -594,7 +613,7 @@ void daNpc_Bj1_c::eInit_SET_TNE_() {
 
 /* 000040F4-00004114       .text eInit_DEL_TNE___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_DEL_TNE_() {
-    /* Nonmatching */
+    deleteSeed();
 }
 
 /* 00004114-0000417C       .text eInit_SET_ANM___11daNpc_Bj1_cFPiPf */
@@ -644,7 +663,8 @@ void daNpc_Bj1_c::privateCut(int) {
 
 /* 000047D4-000047F4       .text endEvent__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::endEvent() {
-    /* Nonmatching */
+    g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+    m8AD = 0xFF;
 }
 
 /* 000047F4-0000482C       .text isEventEntry__11daNpc_Bj1_cFv */
@@ -753,8 +773,8 @@ BOOL daNpc_Bj1_c::_delete() {
 }
 
 /* 000061A4-000061C4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpc_Bj1_c*)i_this)->CreateHeap();
 }
 
 /* 000061C4-000062E4       .text _create__11daNpc_Bj1_cFv */
