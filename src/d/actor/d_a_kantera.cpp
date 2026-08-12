@@ -224,9 +224,9 @@ void kantera_move(kantera_class* i_this) {
 
     switch (i_this->mState) {
     case 0x64:
-    case 2:
-    case 3:
-    case 4:
+    case 0x2:
+    case 0x3:
+    case 0x4:
         break;
     case 0:
         if (i_this->mParam0 == 0x23) {
@@ -239,10 +239,7 @@ void kantera_move(kantera_class* i_this) {
         break;
 
     case 1:
-        if (target == NULL) {
-            break;
-        }
-        {
+        if (target != NULL) {
             i_this->actor.current.pos.x = target_pos->x;
             i_this->actor.current.pos.y = target_pos->y;
             i_this->actor.current.pos.z = target_pos->z;
@@ -305,12 +302,7 @@ void kantera_move(kantera_class* i_this) {
                     MtxPosition(&sp34_2, &i_this->actor.speed);
                     i_this->actor.speed.y = 10.0f + REG6_F(8);
                 }
-            } else {
-                break;
-            }
-        }
-
-    case 5:
+            case 5:
                 cLib_addCalc2(&i_this->mOffsY, 55.0f, 1.0f, 4.0f);
                 i_this->actor.current.angle.y += 0x1F4;
                 i_this->actor.current.angle.x += 0x514;
@@ -330,10 +322,11 @@ void kantera_move(kantera_class* i_this) {
 
                 if (i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mSph.ChkAtHit()) {
                     dBgS_GndChk gnd_chk;
-                    gnd_chk.m_pos.y = i_this->actor.current.pos.y + 50.0f;
                     gnd_chk.m_pos.x = i_this->actor.current.pos.x;
+                    gnd_chk.m_pos.y = i_this->actor.current.pos.y + 50.0f;
                     gnd_chk.m_pos.z = i_this->actor.current.pos.z;
-                    f32 ground_check = 2.5f + dComIfG_Bgsp()->GroundCross(&gnd_chk);
+                    f32 ground = dComIfG_Bgsp()->GroundCross(&gnd_chk);
+                    f32 ground_check = 2.5f + ground;
                     if (ground_check != -G_CM3D_F_INF) {
                         i_this->actor.current.pos.y = 2.0f + ground_check;
                     }
@@ -353,8 +346,8 @@ void kantera_move(kantera_class* i_this) {
                     i_this->mState = 10;
                     i_this->m35C = 0x82;
                 }
-    case 10:
-        if (i_this->mPtclCallBack0.getEmitter() != NULL && i_this->mPtclCallBack1.getEmitter() != NULL) {
+            case 10:
+                if (i_this->mPtclCallBack0.getEmitter() != NULL && i_this->mPtclCallBack1.getEmitter() != NULL) {
                     if (i_this->m35C > 0x28) {
                         i_this->mSph.SetR(30.0f * i_this->mParticleScale.x);
                         i_this->mSph.SetC(i_this->actor.current.pos);
@@ -390,6 +383,8 @@ void kantera_move(kantera_class* i_this) {
                         i_this->mSph.OffAtVsEnemyBit();
                     }
                 }
+            }
+        }
         break;
     }
 

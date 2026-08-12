@@ -118,11 +118,11 @@ static dCcD_SrcCps l_cps_src = {
 
 #include "d/d_jnt_hit.h"
 
-static const Vec atama_cyl_offset = {0.0f, 150.0f, 0.0f};
-static const Vec ago_cyl_offset = {0.0f, 90.0f, 0.0f};
-static const Vec body1_cyl_offset = {-10.0f, -20.0f, 0.0f};
-static const Vec body2_cyl_offset = {-10.0f, -10.0f, 0.0f};
-static const Vec sebire1_cyl_offset = {-10.0f, 60.0f, 0.0f};
+static Vec atama_cyl_offset = {0.0f, 150.0f, 0.0f};
+static Vec ago_cyl_offset = {0.0f, 90.0f, 0.0f};
+static Vec body1_cyl_offset = {-10.0f, -20.0f, 0.0f};
+static Vec body2_cyl_offset = {-10.0f, -10.0f, 0.0f};
+static Vec sebire1_cyl_offset = {-10.0f, 60.0f, 0.0f};
 
 static const __jnt_hit_data_c search_data[] = {
     {0, 2, 30.0f, (Vec*)&atama_cyl_offset},
@@ -206,7 +206,7 @@ daGy_HIO_c::daGy_HIO_c() {
     mC4 = 8.0f;
     m178 = 0.5f;
     mC8 = 30.0f;
-    mD4 = 15.0f;
+    mD4 = 80.0f;
     mD8 = 0.0f;
     mDC = 0.0f;
     mE0 = 0.0f;
@@ -249,9 +249,9 @@ daGy_HIO_c::daGy_HIO_c() {
     m17C = 0.1f;
     m184 = 4000.0f;
     m180 = 0x2000;
-    m18C = 0.0f;
+    m18C = 3000.0f;
     m190 = 200.0f;
-    m194 = 0.0f;
+    m194 = 3000.0f;
 }
 
 /* 000004C0-0000159C       .text genMessage__10daGy_HIO_cFP11JORMContext */
