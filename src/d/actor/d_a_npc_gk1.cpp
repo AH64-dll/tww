@@ -40,6 +40,7 @@ public:
 
 /* 000000EC-00000150       .text __ct__15daNpc_Gk1_HIO_cFv */
 daNpc_Gk1_HIO_c::daNpc_Gk1_HIO_c() {
+    /* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX         */ 0x2000,
         /* mMaxHeadY         */ 0x0FA0,
@@ -140,6 +141,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000050C-0000058C       .text init_GK1_0__11daNpc_Gk1_cFv */
 u8 daNpc_Gk1_c::init_GK1_0() {
+    /* Nonmatching */
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         set_action(&daNpc_Gk1_c::wait_action1, NULL);
         return TRUE;
@@ -288,6 +290,7 @@ void daNpc_Gk1_c::setAnm_anm(daNpc_Gk1_c::anm_prm_c* i_anmPrmP) {
 
 /* 00000BB4-00000C20       .text setAnm__11daNpc_Gk1_cFv */
 void daNpc_Gk1_c::setAnm() {
+    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[3] = {
         {-1, -1, 0, 0.0f, 0.0f, -1},
         {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
@@ -321,6 +324,7 @@ void daNpc_Gk1_c::ctrlAnmAtr() {
 
 /* 00000C74-00000CD8       .text setAnm_ATR__11daNpc_Gk1_cFv */
 void daNpc_Gk1_c::setAnm_ATR() {
+    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[5] = {
         {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
         {1, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
@@ -361,6 +365,7 @@ void daNpc_Gk1_c::anmAtr(u16 i_msgStatus) {
 
 /* 00000D94-00000EAC       .text next_msgStatus__11daNpc_Gk1_cFPUl */
 u16 daNpc_Gk1_c::next_msgStatus(u32* i_msg_no) {
+    /* Nonmatching */
     u16 ret = 0xF;
     switch (*i_msg_no) {
         case 0x28A1:
@@ -579,6 +584,7 @@ bool daNpc_Gk1_c::decideType(int i_type) {
 
 /* 0000151C-000015BC       .text privateCut__11daNpc_Gk1_cFi */
 void daNpc_Gk1_c::privateCut(int i_staff_idx) {
+    /* Nonmatching */
     static char* a_cut_tbl[] = {
         "dummy",
     };
