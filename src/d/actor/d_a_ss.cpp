@@ -167,11 +167,10 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
 }
 
 /* 000011BC-0000152C       .text hand_1_move__FP8ss_classP4ss_s */
-/* Nonmatching */
 void hand_1_move(ss_class* i_this, ss_s* hand) {
     ss_s_s* pos = hand->mSss;
     u8 count = hand->m3A;
-    s8 sCount = (s8)count;
+    s32 sCount = (s8)count;
 
     if (!(i_this->m2C0 & 3) && i_this->m2C4 < 0x32 && sCount < 0x14) {
         hand->m3A = count + 1;
@@ -201,17 +200,15 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
     }
 
     u8 hitState = 0;
-    cCcD_Obj* hitObj = NULL;
+    CcAtInfo atInfo;
     for (int k = 0; k < 4; k++) {
         if (hand->mSph[k].ChkTgHit()) {
-            hitObj = hand->mSph[k].GetTgHitObj();
-            if (hitObj != NULL) {
-                CcAtInfo atInfo;
-                atInfo.mpObj = hitObj;
+            atInfo.mpObj = hand->mSph[k].GetTgHitObj();
+            if (atInfo.mpObj != NULL) {
                 atInfo.mpActor = at_power_check(&atInfo);
                 if (atInfo.mResultingAttackType == 5) {
                     hitState = 2;
-                } else if (hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
+                } else if (atInfo.mpObj != NULL && atInfo.mpObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
                     hitState = 0;
                 } else {
                     hitState = 1;
@@ -224,10 +221,10 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
     if (hitState != 0 || i_this->m2C4 >= 0x32) {
         dComIfGs_onEventBit(0x2B20);
         hand->mState = 2;
-        hand->mPos = pos[19].mPos;
+        hand->mPos = pos[-1].mPos;
         hand->m2C = 0.0f;
         if (hitState != 0) {
-            def_se_set(i_this, hitObj, 0x21);
+            def_se_set(i_this, atInfo.mpObj, 0x21);
         }
         hand->m24 = 20.0f + REG8_F(3);
         hand->m28 = 0.0f;
@@ -679,7 +676,6 @@ static BOOL daSs_Delete(ss_class* i_this) {
 }
 
 /* 00002F58-000030D4       .text useHeapInit__FP10fopAc_ac_c */
-/* Nonmatching */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     ss_class* i_this = (ss_class*)a_this;
 
