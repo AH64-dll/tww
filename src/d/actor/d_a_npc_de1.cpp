@@ -520,17 +520,17 @@ void daNpc_De1_c::checkOrder() {
 
 /* 00000F8C-000010B8       .text chkAttention__11daNpc_De1_cFv */
 bool daNpc_De1_c::chkAttention() {
-    /* Nonmatching */
     fopAc_ac_c* partner = searchByID(mPartnerProcID);
+    bool o_retval = false;
     if (partner != NULL) {
         f32 radius = l_HIO.mPrmTbl.mChkAttentionRadius;
         if (mbAttention != 0) {
             radius += 50.0f;
         }
         f32 dist = std::sqrtf((dComIfGp_getPlayer(0)->current.pos - partner->current.pos).abs2XZ());
-        return radius >= dist;
+        o_retval = radius >= dist;
     }
-    return false;
+    return o_retval;
 }
 
 /* 000010B8-00001194       .text setAttention__11daNpc_De1_cFv */
