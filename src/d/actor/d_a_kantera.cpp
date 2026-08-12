@@ -325,8 +325,8 @@ void kantera_move(kantera_class* i_this) {
 
                 if (i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWallHit() || i_this->mSph.ChkAtHit()) {
                     dBgS_GndChk gnd_chk;
-                    gnd_chk.m_pos.x = i_this->actor.current.pos.x;
                     gnd_chk.m_pos.y = i_this->actor.current.pos.y + 50.0f;
+                    gnd_chk.m_pos.x = i_this->actor.current.pos.x;
                     gnd_chk.m_pos.z = i_this->actor.current.pos.z;
                     f32 ground = dComIfG_Bgsp()->GroundCross(&gnd_chk);
                     f32 ground_check = 2.5f + ground;
