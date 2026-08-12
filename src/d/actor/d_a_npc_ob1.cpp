@@ -775,12 +775,14 @@ void daNpc_Ob1_c::partner_srch() {
 
 /* 00001A04-00001A34       .text bitCount__11daNpc_Ob1_cFUc */
 s32 daNpc_Ob1_c::bitCount(u8 i_param_1) {
-    s32 count = 0;
-    for (s32 i = 0; i < 8; i++) {
+    s8 count = 0;
+    s32 i = 0;
+    while (i < 8) {
         if (i_param_1 & 1) {
-            count++;
+            count += 1;
         }
-        i_param_1 >>= 1;
+        i_param_1 = i_param_1 >> 1;
+        i++;
     }
     return count;
 }
