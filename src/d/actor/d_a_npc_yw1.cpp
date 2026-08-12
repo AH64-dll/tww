@@ -7,9 +7,7 @@
 #include "d/actor/d_a_npc_yw1.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Yw1_childHIO_cFv */
-daNpc_Yw1_childHIO_c::daNpc_Yw1_childHIO_c() {
-    /* Nonmatching */
-}
+daNpc_Yw1_childHIO_c::daNpc_Yw1_childHIO_c() {}
 
 /* 00000150-000001DC       .text __ct__15daNpc_Yw1_HIO_cFv */
 daNpc_Yw1_HIO_c::daNpc_Yw1_HIO_c() {

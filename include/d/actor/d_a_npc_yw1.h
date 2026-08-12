@@ -86,9 +86,10 @@ public:
     /* Place member variables here */
 };
 
-class daNpc_Yw1_childHIO_c {
+class daNpc_Yw1_childHIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Yw1_childHIO_c();
+    virtual ~daNpc_Yw1_childHIO_c() {}
 
 public:
     /* Place member variables here */
