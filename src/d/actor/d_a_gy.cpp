@@ -16,6 +16,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
+#include "f_pc/f_pc_draw_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_lib.h"
@@ -24,8 +25,9 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_camera.h"
-#include "JSystem/JAudio2/JAIZelBasic.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_bg_s_acch.h"
 
 static dCcD_SrcSph l_sph_head_src = {
     // dCcD_SrcGObjInf
@@ -509,17 +511,17 @@ static actor_method_class daGyMethodTable = {
 
 actor_process_profile_definition g_profile_GY = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GY_e,
-    /* ProcSubMtd   */ &g_fopLm_Method,
+    /* ProcName     */ fpcNm_GY_e,
+    /* ProcSubMtd   */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGy_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
-    /* LeafSubMtd   */ &g_fopAc_Method,
-    /* Priority     */ 0x017A,
+    /* LeafSubMtd   */ &g_fopAc_Method.base,
+    /* Priority     */ fpcDwPi_GY_e,
     /* ActorSubMtd  */ &daGyMethodTable,
-    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    /* Parameters2  */ 0,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_4_e,
 };
