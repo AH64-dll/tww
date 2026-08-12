@@ -1611,7 +1611,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_bmdhand"),
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
-    ActorRel(NonMatching, "d_a_bpw"),
+    ActorRel(Equivalent, "d_a_bpw"),  # 14 sub-100 all anchor-only (kankyou_hendou 99.83 + action_bunri_dousa 99.76 norm-diff-0, 12 more anchor); weak order
     ActorRel(MatchingFor("GZLE01"), "d_a_bst"),
     ActorRel(Matching,    "d_a_btd"),
     ActorRel(Matching,    "d_a_bwd"),
