@@ -282,11 +282,6 @@ daGy_HIO_c::daGy_HIO_c() {
     m194 = 3000.0f;
 }
 
-/* 000004C0-0000159C       .text genMessage__10daGy_HIO_cFP11JORMContext */
-void daGy_HIO_c::genMessage(JORMContext*) {
-    /* Nonmatching */
-}
-
 /* 00000450-0000049C       .text nodeControl_CB__FP7J3DNodei */
 static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
@@ -299,84 +294,24 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
     return TRUE;
 }
 
+/* 0000049C-00000888       .text _nodeControl__6daGy_cFP7J3DNodeP8J3DModel */
+void daGy_c::_nodeControl(J3DNode* param_0, J3DModel* param_1) {
+    /* Nonmatching */
+}
+
 /* 00000888-000008A8       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daGy_c*>(i_this)->_createHeap();
 }
 
-/* 00000FC4-00000FDC       .text modeDiveInit__6daGy_cFv */
-void daGy_c::modeDiveInit() {
-    m2B0 = 0;
-    m508 = 0.0f;
-}
-
-/* 00001F20-00001F40       .text modeAttackPlayerInit__6daGy_cFv */
-void daGy_c::modeAttackPlayerInit() {
-    m2B0 = 3;
-    mD15 = 2;
-    m928 = 0;
-    m924 = 0;
-}
-
-/* 000019AC-00001A14       .text modeAttackInit__6daGy_cFv */
-void daGy_c::modeAttackInit() {
-    m2B0 = 2;
-    mD15 = 3;
-    m8F8 = dComIfGp_getPlayer(0)->current.pos;
-    m914 = l_HIO.m10C;
-    m904 = m2BC;
-    m928 = 0;
-}
-
-/* 00001A14-00001A74       .text modeWithAttackInit__6daGy_cFv */
-void daGy_c::modeWithAttackInit() {
-    m2B0 = 5;
-    m8F8 = dComIfGp_getPlayer(0)->current.pos;
-    m914 = l_HIO.m10C;
-    m904 = m2BC;
-    m928 = 0;
-}
-
-/* 000022F8-00002400       .text modeAttackBackInit__6daGy_cFv */
-void daGy_c::modeAttackBackInit() {
+/* 000008A8-00000AAC       .text _createHeap__6daGy_cFv */
+BOOL daGy_c::_createHeap() {
     /* Nonmatching */
 }
 
-/* 00002560-000025F0       .text modeDamageInit__6daGy_cFv */
-void daGy_c::modeDamageInit() {
+/* 00000AAC-00000C30       .text setMtx__6daGy_cFv */
+void daGy_c::setMtx() {
     /* Nonmatching */
-}
-
-/* 00002754-000028B8       .text modeDeleteInit__6daGy_cFv */
-void daGy_c::modeDeleteInit() {
-    /* Nonmatching */
-}
-
-/* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
-void daGy_c::modeDeleteBombInit() {
-    /* Nonmatching */
-}
-
-/* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
-void daGy_c::modeCircleInit() {
-    m2B0 = 1;
-    s32 type = mpCtrl->m320;
-    if(type == 0) {
-        m914 = (s32)((f32)l_HIO.m116 + cM_rndF((f32)(l_HIO.m118 - l_HIO.m116)));
-    } else if(type == 1) {
-        m914 = (s32)((f32)l_HIO.m112 + cM_rndF((f32)(l_HIO.m114 - l_HIO.m112)));
-    }
-    m508 = 0.0f;
-}
-
-/* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
-void daGy_c::modeWithCircleInit() {
-    m2B0 = 6;
-    m4F8 = (s32)cM_rndF((f32)l_HIO.m132);
-    if(m4F8 <= l_HIO.m130) {
-        m4F8 = l_HIO.m130;
-    }
-    m914 = l_HIO.m110 + m4F8;
 }
 
 /* 00000C30-00000C7C       .text setAnm__6daGy_cFv */
@@ -411,9 +346,25 @@ void daGy_c::setAnm() {
     dLib_setAnm(m_arc_name, mpMorf, (s8*)&mD14, (s8*)&mD15, (s8*)&mD16, a_anm_idx_tbl, a_anm_prm_tbl, false);
 }
 
+/* 00000C7C-00000E74       .text setAtCollision__6daGy_cFv */
+void daGy_c::setAtCollision() {
+    /* Nonmatching */
+}
+
+/* 00000E74-00000F3C       .text setCollision__6daGy_cFv */
+void daGy_c::setCollision() {
+    /* Nonmatching */
+}
+
 /* 00000F3C-00000FC4       .text setAimSpeedF__6daGy_cFv */
 void daGy_c::setAimSpeedF() {
     /* Nonmatching */
+}
+
+/* 00000FC4-00000FDC       .text modeDiveInit__6daGy_cFv */
+void daGy_c::modeDiveInit() {
+    m2B0 = 0;
+    m508 = 0.0f;
 }
 
 /* 00000FDC-000012DC       .text modeDive__6daGy_cFv */
@@ -421,14 +372,55 @@ void daGy_c::modeDive() {
     /* Nonmatching */
 }
 
+/* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
+void daGy_c::modeCircleInit() {
+    m2B0 = 1;
+    s32 type = mpCtrl->m320;
+    if(type == 0) {
+        m914 = (s32)((f32)l_HIO.m116 + cM_rndF((f32)(l_HIO.m118 - l_HIO.m116)));
+    } else if(type == 1) {
+        m914 = (s32)((f32)l_HIO.m112 + cM_rndF((f32)(l_HIO.m114 - l_HIO.m112)));
+    }
+    m508 = 0.0f;
+}
+
 /* 0000141C-000016E4       .text modeCircle__6daGy_cFv */
 void daGy_c::modeCircle() {
     /* Nonmatching */
 }
 
+/* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
+void daGy_c::modeWithCircleInit() {
+    m2B0 = 6;
+    m4F8 = (s32)cM_rndF((f32)l_HIO.m132);
+    if(m4F8 <= l_HIO.m130) {
+        m4F8 = l_HIO.m130;
+    }
+    m914 = l_HIO.m110 + m4F8;
+}
+
 /* 00001788-000019AC       .text modeWithCircle__6daGy_cFv */
 void daGy_c::modeWithCircle() {
     /* Nonmatching */
+}
+
+/* 000019AC-00001A14       .text modeAttackInit__6daGy_cFv */
+void daGy_c::modeAttackInit() {
+    m2B0 = 2;
+    mD15 = 3;
+    m8F8 = dComIfGp_getPlayer(0)->current.pos;
+    m914 = l_HIO.m10C;
+    m904 = m2BC;
+    m928 = 0;
+}
+
+/* 00001A14-00001A74       .text modeWithAttackInit__6daGy_cFv */
+void daGy_c::modeWithAttackInit() {
+    m2B0 = 5;
+    m8F8 = dComIfGp_getPlayer(0)->current.pos;
+    m914 = l_HIO.m10C;
+    m904 = m2BC;
+    m928 = 0;
 }
 
 /* 00001A74-00001D60       .text modeWithAttack__6daGy_cFv */
@@ -441,8 +433,21 @@ void daGy_c::modeAttack() {
     /* Nonmatching */
 }
 
+/* 00001F20-00001F40       .text modeAttackPlayerInit__6daGy_cFv */
+void daGy_c::modeAttackPlayerInit() {
+    m2B0 = 3;
+    mD15 = 2;
+    m928 = 0;
+    m924 = 0;
+}
+
 /* 00001F40-000022F8       .text modeAttackPlayer__6daGy_cFv */
 void daGy_c::modeAttackPlayer() {
+    /* Nonmatching */
+}
+
+/* 000022F8-00002400       .text modeAttackBackInit__6daGy_cFv */
+void daGy_c::modeAttackBackInit() {
     /* Nonmatching */
 }
 
@@ -451,13 +456,28 @@ void daGy_c::modeAttackBack() {
     /* Nonmatching */
 }
 
+/* 00002560-000025F0       .text modeDamageInit__6daGy_cFv */
+void daGy_c::modeDamageInit() {
+    /* Nonmatching */
+}
+
 /* 000025F0-00002754       .text modeDamage__6daGy_cFv */
 void daGy_c::modeDamage() {
     /* Nonmatching */
 }
 
+/* 00002754-000028B8       .text modeDeleteInit__6daGy_cFv */
+void daGy_c::modeDeleteInit() {
+    /* Nonmatching */
+}
+
 /* 000028B8-00002998       .text modeDelete__6daGy_cFv */
 void daGy_c::modeDelete() {
+    /* Nonmatching */
+}
+
+/* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
+void daGy_c::modeDeleteBombInit() {
     /* Nonmatching */
 }
 
