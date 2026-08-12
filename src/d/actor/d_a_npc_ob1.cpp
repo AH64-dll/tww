@@ -1371,6 +1371,12 @@ BOOL daNpc_Ob1_c::_draw() {
     return TRUE;
 }
 
+static const u32 l_mask_block[] = { // to match rodata
+    0xFF000080,
+    0x0000FF80,
+    0x00FF0080,
+};
+
 /* 0000300C-000031F0       .text _execute__11daNpc_Ob1_cFv */
 BOOL daNpc_Ob1_c::_execute() {
     if (m7F3 == 0) {
@@ -1458,7 +1464,7 @@ cPhs_State daNpc_Ob1_c::_create() {
 /* 0000338C-000034F0       .text __ct__11daNpc_Ob1_cFv */
 daNpc_Ob1_c::daNpc_Ob1_c() {}
 
-static const u16 a_hed_mdl_resID_tbl[] = {
+static u32 a_hed_mdl_resID_tbl[] = {
     dRes_ID_OB_BDL_OBA_HEAD_e,
 };
 
@@ -1493,7 +1499,7 @@ J3DModelData* daNpc_Ob1_c::create_Anm() {
 
 /* 000039D0-00003A9C       .text create_hed_Mdl__11daNpc_Ob1_cFv */
 J3DModel* daNpc_Ob1_c::create_hed_Mdl() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ob", a_hed_mdl_resID_tbl[mType]);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ob", (u16)a_hed_mdl_resID_tbl[mType]);
     JUT_ASSERT(0x9A1, a_mdl_dat != NULL);
     mpClothModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x110222);
     return mpClothModel;
