@@ -242,7 +242,7 @@ static BOOL nodeCB(J3DNode* node, int calcTiming) {
         dDoor_ssk_sub_c* i_this = (dDoor_ssk_sub_c*)model->getUserArea();
         if (i_this != NULL && jntNo > 0 && jntNo <= 3) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->m19A * i_this->m19E * 2)));
+            mDoMtx_YrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(jntNo * 0x4E20 + i_this->mAngle * i_this->m19E * 2)));
             mDoMtx_XrotM(*calc_mtx, (s16)(int)(2000.0f * JMASSin(i_this->mAngle * 0x28A + jntNo * 0x2EE0)));
             mDoMtx_ZrotM(*calc_mtx, (s16)(int)(4000.0f * JMASSin(jntNo * 0x3A98 + i_this->mAngle * i_this->m19E)));
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -539,7 +539,7 @@ BOOL dDoor_ssk_sub_c::drawSet() {
     mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e),
         NULL, NULL, NULL,
-        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
         NULL,
         0x00000000,
         0x11020203
@@ -556,7 +556,7 @@ BOOL dDoor_ssk_sub_c::drawSet() {
     mpMorf2 = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_KTANA_00_e),
         NULL, NULL, NULL,
-        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
         NULL,
         0x00000000,
         0x11020203
@@ -635,7 +635,7 @@ BOOL daKddoor_c::CreateHeap() {
     }
 
     if (chkMakeStop()) {
-        for (int i = 0; i < 3; i++) {
+        for (u16 i = 0; i < 3; i++) {
             if (!mSsk.mSub[i].drawSet()) {
                 return FALSE;
             }
