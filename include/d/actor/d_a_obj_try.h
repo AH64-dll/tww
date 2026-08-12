@@ -149,7 +149,7 @@ namespace daObjTry {
         void eff_land_smoke();
         void eff_hit_water_splash();
         void make_vib();
-        void check_circle();
+        bool check_circle();
         void get_water_h();
         bool _execute();
         bool _draw();
