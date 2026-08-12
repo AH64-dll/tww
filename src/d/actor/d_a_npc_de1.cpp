@@ -852,18 +852,15 @@ BOOL daNpc_De1_c::wait05() {
     mOrder = 0;
     int found_count = 0;
     int i = 0;
-    while (true) {
+    do {
         if (searchByID(m_cc_ID[i]) != NULL) {
             break;
         }
         found_count++;
-        if (found_count == 10) {
-            break;
-        }
         i++;
-    }
-    if (found_count == 10) {
-        attention_info.flags &= ~fopAc_Attn_UNK1000000_e;
+    } while (found_count < 10);
+    if (found_count >= 10) {
+        attention_info.flags &= ~fopAc_Attn_ENEMYFLAG_NOLOCKON_e;
         mOrder = 5;
     }
     return TRUE;
