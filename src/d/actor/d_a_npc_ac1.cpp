@@ -641,7 +641,7 @@ void daNpc_Ac1_c::setStt(s8 i_status) {
             mPrevStatus = previous_status;
             m_jnt.setTrn();
             break;
-        case 3:
+        case 1:
         default:
             setAnm();
             break;
@@ -1106,3 +1106,13 @@ actor_process_profile_definition g_profile_NPC_AC1 = {
     /* Group        */ fopAc_NPC_e,
     /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
+
+
+
+
+
+
+
+
+
+
