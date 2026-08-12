@@ -198,6 +198,7 @@ int daObjFlame::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 }
 
 /* 00000134-00000414       .text create_heap__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 int daObjFlame::Act_c::create_heap() {
     BOOL btkOk = FALSE;
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBdlResID);
@@ -233,6 +234,7 @@ int daObjFlame::Act_c::create_heap() {
 }
 
 /* 0000045C-000007D8       .text create_mode_init__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::create_mode_init() {
     u8 sch = prm_get_sch();
     u8 schbit = dKy_get_schbit();
@@ -320,9 +322,9 @@ void daObjFlame::Act_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::YrotM(mRotY);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    fopAcM_setCullSizeBox(this, (f32)M_attr_scl[mType].mCull[0], (f32)M_attr_scl[mType].mCull[1],
-                          (f32)M_attr_scl[mType].mCull[2], (f32)M_attr_scl[mType].mCull[3],
-                          (f32)M_attr_scl[mType].mCull[4], (f32)M_attr_scl[mType].mCull[5]);
+    const attr_scl_s* attr = &M_attr_scl[mType];
+    fopAcM_setCullSizeBox(this, (f32)attr->mCull[0], (f32)attr->mCull[1], (f32)attr->mCull[2],
+                          (f32)attr->mCull[3], mHeight * (f32)attr->mCull[4], (f32)attr->mCull[5]);
 }
 
 /* 00000930-00000950       .text init_mtx__Q210daObjFlame5Act_cFv */
@@ -331,6 +333,7 @@ void daObjFlame::Act_c::init_mtx() {
 }
 
 /* 00000950-00000B3C       .text em_position__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::em_position() {
     if (mbEmPosition != 0) {
         mDoMtx_stack_c::transS(current.pos);
@@ -358,6 +361,7 @@ void daObjFlame::Act_c::em_position() {
 }
 
 /* 00000B3C-00000CAC       .text em_simple_set__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::em_simple_set() {
     u8 flag = 0;
     if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
@@ -395,6 +399,7 @@ void daObjFlame::Act_c::em_simple_inv() {
 }
 
 /* 00000CEC-00000F04       .text em_manual_set__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::em_manual_set() {
     u8 flag = 0;
     if (M_attr_scl[mType].mF2D != 0 && mbLiftup == 0) {
@@ -513,6 +518,7 @@ void daObjFlame::Act_c::se_fireblast_omen() {
 }
 
 /* 00001254-00001610       .text liftup_magmarock__Q210daObjFlame5Act_cFPvPv */
+    /* Nonmatching */
 void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
     daObjMagmarock::Act_c* rock = (daObjMagmarock::Act_c*)i_actor;
     Act_c* flame = (Act_c*)i_this;
@@ -557,6 +563,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
 }
 
 /* 00001610-00001884       .text liftup_mflft__Q210daObjFlame5Act_cFPvPv */
+    /* Nonmatching */
 void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
     mflft_class* mflft = (mflft_class*)i_actor;
     Act_c* flame = (Act_c*)i_this;
@@ -603,9 +610,10 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
 }
 
 /* 00001884-00001988       .text mode_wait__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::mode_wait() {
-    u8 flag = FALSE;
     u8 sch = prm_get_sch();
+    u8 flag = FALSE;
     if (sch != 0) {
         if ((sch & dKy_get_schbit()) && dKy_get_schbit_timer() == 0) {
             flag = TRUE;
@@ -704,6 +712,7 @@ void daObjFlame::Act_c::mode_l_after() {
 }
 
 /* 00001BEC-00001EAC       .text mode_proc_call__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 void daObjFlame::Act_c::mode_proc_call() {
     typedef void (daObjFlame::Act_c::*ModeFunc)();
     static const ModeFunc mode_proc[7] = {
@@ -760,6 +769,7 @@ cPhs_State daObjFlame::Method::Create(void* i_this) {
 }
 
 /* 00001ECC-00002200       .text _create__Q210daObjFlame5Act_cFv */
+    /* Nonmatching */
 cPhs_State daObjFlame::Act_c::_create() {
     fopAcM_SetupActor(this, daObjFlame::Act_c);
 
@@ -814,6 +824,7 @@ BOOL daObjFlame::Method::Delete(void* i_this) {
 }
 
 /* 000024B4-00002638       .text Execute__Q210daObjFlame6MethodFPv */
+    /* Nonmatching */
 BOOL daObjFlame::Method::Execute(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
     a_this->scale.x = a_this->mOrigScale.x * Act_c::M_attr_scl[a_this->mType].mF08;
@@ -847,6 +858,7 @@ BOOL daObjFlame::Method::Execute(void* i_this) {
 }
 
 /* 00002638-00002710       .text Draw__Q210daObjFlame6MethodFPv */
+    /* Nonmatching */
 BOOL daObjFlame::Method::Draw(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
     dKy_tevstr_c* tevStr = &a_this->tevStr;
