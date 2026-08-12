@@ -94,19 +94,20 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
     end = hand->mPos;
     end.y -= 300.0f + REG0_F(6);
 
+    ss_s_s* ptr = hand->mSss;
     for (int i = 0; i < 20; i++) {
-        hand->mSss[i].mSize = 0;
+        ptr->mSize = 0;
         linChk.Set(&start, &end, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            hand->mSss[i].mPos = linChk.GetCross();
-            sp18 = start - hand->mSss[i].mPos;
+            ptr->mPos = linChk.GetCross();
+            sp18 = start - ptr->mPos;
             MtxPush();
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp18.x, sp18.z));
             f32 dist = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp18.y, dist));
             sp18.set(0.0f, 0.0f, 5.0f + REG8_F(8));
             MtxPosition(&sp18, &pos);
-            hand->mSss[i].mPos += pos;
+            ptr->mPos += pos;
             MtxPull();
         }
         MtxPush();
@@ -116,6 +117,7 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
         MtxPull();
         start += pos;
         sp48.y += 2.0f + REG8_F(9);
+        ptr++;
     }
 }
 
@@ -137,19 +139,20 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
     mDoMtx_ZrotM(*calc_mtx, hand->mAngleZ);
     sp3C.set(0.0f, 30.0f + REG12_F(7) - 10.0f, 0.0f);
 
+    ss_s_s* ptr = hand->mSss;
     for (int i = 0; i < 20; i++) {
-        hand->mSss[i].mSize = 0;
+        ptr->mSize = 0;
         linChk.Set(&hand->mPos, &start, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            hand->mSss[i].mPos = linChk.GetCross();
-            sp18 = start - hand->mSss[i].mPos;
+            ptr->mPos = linChk.GetCross();
+            sp18 = start - ptr->mPos;
             MtxPush();
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp18.x, sp18.z));
             f32 dist = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp18.y, dist));
             sp18.set(0.0f, 0.0f, -5.0f + REG8_F(8));
             MtxPosition(&sp18, &pos);
-            hand->mSss[i].mPos += pos;
+            ptr->mPos += pos;
             MtxPull();
         }
         MtxPush();
@@ -159,6 +162,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
         MtxPull();
         start += pos;
         sp3C.y += 2.0f + REG8_F(9);
+        ptr++;
     }
 }
 
@@ -458,8 +462,9 @@ void core_move(ss_class* i_this) {
             i_this->m2B4 = 0;
             if (dist < maxDist) {
                 i_this->m2C4 = 0x1E;
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_CORE_CLOSE, &i_this->eyePos, 0,
-                                                fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
             break;
         case 29:
@@ -480,8 +485,9 @@ void core_move(ss_class* i_this) {
             i_this->m2B4 = 1;
             if (dist > 20.0f + maxDist) {
                 i_this->m2C4 = 0x14;
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_CORE_OPEN, &i_this->eyePos, 0,
-                                                fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
             break;
         case 40:
@@ -513,8 +519,9 @@ void core_move(ss_class* i_this) {
                 cXyz scale(0.5f, 0.5f, 0.5f);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUBAKUEN, &i_this->eyePos, NULL, &scale);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->eyePos, NULL, &scale);
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_ENM_VAPORIZE, &i_this->eyePos, 0,
-                                                fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
             if (i_this->m2C8[1] != 0) {
                 dComIfGp_particle_setSimple(1, &i_this->eyePos, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -561,8 +568,9 @@ void core_move(ss_class* i_this) {
                 if (atInfo.mResultingAttackType == 5) {
                     i_this->health = 0;
                     i_this->m2C8[1] = 0x32;
+                    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
                     JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_VINE_S_BURN, &i_this->eyePos, 0,
-                                                    fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                    reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 } else {
                     cc_at_check(i_this, &atInfo);
                 }
@@ -572,8 +580,9 @@ void core_move(ss_class* i_this) {
                     i_this->m2C8[0] = 0x46;
                 }
             } else {
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(i_this));
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SVINE_REBOUND, &i_this->eyePos, 0,
-                                                fopAcM_GetRoomNo(i_this), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
         } else {
             return;
@@ -680,7 +689,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
     i_this->mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ss", dRes_INDEX_SS_BDL_SW_e),
-        NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Ss", dRes_INDEX_SS_BCK_WAIT_OPEN_e), 2,
+        NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Ss", dRes_INDEX_SS_BCK_WAIT_CLOSE_e), 2,
         1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
     );
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
