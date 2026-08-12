@@ -9,6 +9,20 @@
 #include "m_Do/m_Do_ext.h"
 
 namespace daObjTry {
+    enum Type_e {
+        UNK_2 = 2,
+        UNK_3 = 3,
+        UNK_4 = 4,
+        UNK_5 = 5,
+        UNK_6 = 6,
+        UNK_7 = 7,
+        UNK_8 = 8,
+        UNK_9 = 9,
+        UNK_10 = 10,
+        UNK_11 = 11,
+        UNK_12 = 12,
+    };
+
     class Act_c;
 
     struct Attr_c {
@@ -81,6 +95,12 @@ namespace daObjTry {
         }
         int prm_get_type() const {
             return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
+        }
+        void to_correct_pos(const cXyz* param_1, short param_2, bool param_3, bool param_4) {
+            m63C.set(*param_1);
+            m648 = param_2;
+            m64C = param_3;
+            m64D = param_4;
         }
         const Attr_c& attr() const { return M_attr[mType]; }
 
