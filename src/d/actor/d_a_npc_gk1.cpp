@@ -298,13 +298,11 @@ void daNpc_Gk1_c::ctrlAnmTag() {}
 
 /* 00000C28-00000C68       .text chngAnmAtr__11daNpc_Gk1_cFUc */
 void daNpc_Gk1_c::chngAnmAtr(u8 i_anmAtr) {
-    if (i_anmAtr != mAnmAtr) {
-        if (i_anmAtr > 5) {
-            return;
-        }
-        mAnmAtr = i_anmAtr;
-        setAnm_ATR();
+    if (i_anmAtr == mAnmAtr || i_anmAtr > 5) {
+        return;
     }
+    mAnmAtr = i_anmAtr;
+    setAnm_ATR();
 }
 
 /* 00000C68-00000C74       .text ctrlAnmAtr__11daNpc_Gk1_cFv */
