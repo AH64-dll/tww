@@ -66,8 +66,8 @@ void hand_mtx_set(sss_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, i_this->m2E0);
     mDoMtx_YrotM(*calc_mtx, i_this->m2E2);
     mDoMtx_XrotM(*calc_mtx, REG12_S(1) - 0x4000);
-    MtxScale(0.5f, REG0_F(0) + 0.2f, 0.5f, 1);
-    MtxTrans(0.0f, REG12_F(3) - 200.0f, 0.0f, 1);
+    MtxScale(0.5f, 0.2f + REG0_F(0), 0.5f, 1);
+    MtxTrans(0.0f, -130.0f + REG12_F(3), 0.0f, 1);
     i_this->mpMorf->getModel()->setBaseTRMtx(*calc_mtx);
 }
 
