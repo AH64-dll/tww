@@ -1506,7 +1506,7 @@ BOOL daNpc_Uk_c::wait_action(void*) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING) {
         chkAttention();
-        clrFlag(0x200 | 0x20);
+        clrFlag(0x40 | 0x20);
 
         bool temp;
         switch (mState) {
@@ -1540,23 +1540,10 @@ BOOL daNpc_Uk_c::seek_action(void*) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING) {
         chkAttention();
-        clrFlag(0x200 | 0x20);
+        clrFlag(0x40 | 0x20);
 
         bool temp;
         switch (mState) {
-        case 1: // same numeric state as STATE_TALK01; dispatched to talk02 here
-            temp = talk02();
-            break;
-        case STATE_DEMO01:
-            temp = demo01();
-            break;
-        case STATE_DEMO02:
-            temp = demo02();
-            break;
-        case STATE_5:
-            temp = false;
-            setAction(&daNpc_Uk_c::hind_action, NULL);
-            break;
         case STATE_WARNING_B:
             temp = warningB();
             break;
@@ -1581,14 +1568,24 @@ BOOL daNpc_Uk_c::seek_action(void*) {
         case STATE_JITANDA02:
             temp = jitanda02();
             break;
+        case STATE_DEMO01:
+            temp = demo01();
+            break;
+        case STATE_DEMO02:
+            temp = demo02();
+            break;
+        case 1: // same numeric state as STATE_TALK01; dispatched to talk02 here
+            temp = talk02();
+            break;
+        case STATE_5:
+            temp = false;
+            setAction(&daNpc_Uk_c::hind_action, NULL);
+            break;
         default:
             temp = false;
             break;
         }
         lookBack();
-        if (chkFlag(0x40)) {
-            temp = true;
-        }
         setAttention(temp);
     }
     return TRUE;
@@ -1599,7 +1596,7 @@ BOOL daNpc_Uk_c::hind_action(void*) {
     if (mActionStatus == ACTION_STARTING) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING) {
-        clrFlag(0x200 | 0x20);
+        clrFlag(0x40 | 0x20);
         if (mType == TYPE_MINIGAME && chkGameStart()) {
             setAction(&daNpc_Uk_c::seek_action, NULL);
             clrFlag(0x10);
@@ -1631,7 +1628,7 @@ BOOL daNpc_Uk_c::visit_action(void*) {
     } else if (mActionStatus != ACTION_ENDING) {
         bool temp;
         chkAttention();
-        clrFlag(0x200 | 0x20);
+        clrFlag(0x40 | 0x20);
         switch (mState) {
         case STATE_TALK01:
             temp = talk01();
