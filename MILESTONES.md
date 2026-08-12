@@ -35,3 +35,15 @@ milestone (never merged into main or PR branches). Append + push via
 **Closed gates**: D44J01 build green locally (417 files OK) + debug_map_diff.py validated end-to-end; 100% D.map inline-sheet coverage (83/83 unmerged NonMatching actors, 93 sheets).
 
 **Org value delivered**: 13 upstream PRs pre-reviewed with verified convention findings + cross-PR coordination catches (dSnap enum conflict, Vds subsumption); 10+ actors classified done-as-upstream with register-normalized-diff == 0 proof (ikada, ji1, bridge, bmdfoot, bpw, ship, himo3, item, klft-prep); hard cases catalogued. Post-crash recovery complete (416 files OK, two real issues found+fixed: ikada-on-main flip, monsSeStart regression revert); 34-agent concurrency cap in force; 80+ lessons distilled into 6 skills + 16 patterns.
+
+---
+
+## 2026-08-12T14:30Z — M3: mwcc 1.3.2r compiler-version discovery (family-level unlock)
+
+**Discovery (D2W1-3, d_a_mozo)**: the recurring "constant-pooling blocker" (3+ distinct float constants pooled into a ...rodata.0 base register while the original emits per-constant lis/lfs) is a **mwcc compiler-VERSION mismatch**, not a source-structure problem. Some original TUs were built with GC/1.3.2r, not the project default 1.3.2. Verified: swapping a 1.3.2r-built .o into objdiff gives anime_proc 1.01%→100%, towait_proc_init 3.12%→100%, HIO ctor 86.4%→100%, all inits 100%.
+
+**Enabled**: `ActorRel` gained an `mw_version` passthrough (committed on main) — per-actor compiler override at flip time: `ActorRel(Matching, "d_a_mozo", mw_version="GC/1.3.2r")`.
+
+**Candidate family**: mant (n_calc/v_calc/joint_control — its entire remaining delta family shows the signature), bms1 (bs1-family, to test), flame (pool-layout differences), mozo (primary). Review gate now checks for the 1.3.2r signature before rejecting pooling-symptom functions. The org's pooled-actor blockers may be a compiler-version family, not 30 independent regalloc cases.
+
+**Pipeline**: PRs #1152/#1153/#1154 still open+mergeable (CI green x4) awaiting maintainers; co1 (109/109, Equivalent) + magma adoption (#969, noskap release) in Integrator's PR queue; ~15 actors in active decompile; 105 D.map sheets + 53-actor crib map = full tooling coverage; ~225 lessons; 4+ patterns added today (weak-bss verification, 1.3.2r signature, base-class evidence rules).
