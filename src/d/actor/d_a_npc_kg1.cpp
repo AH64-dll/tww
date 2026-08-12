@@ -349,7 +349,11 @@ void daNpc_Kg1_c::wait_action() {
             mgBoard->clrGInfoDraw();
         }
         clr_seq_flag();
-        m732 = (m731 != 0) ? 1 : 0;
+        if (m731 != 0) {
+            m732 = 1;
+        } else {
+            m732 = 0;
+        }
         if (m730 != 0) {
             mWaitMode = 1;
             mBtpAnm.setFrame(0.0f);

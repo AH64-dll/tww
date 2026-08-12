@@ -81,7 +81,7 @@ public:
     /* 0x779 */ u8 m779;
     /* 0x77A */ u8 mGameBoardScore;
     /* 0x77B */ u8 mEndGameTimer;
-    /* 0x77C */ int m77C;
+    /* 0x77C */ fpc_ProcID m77C;
     /* 0x780 */ int mWaitMode;
     /* 0x784 */ s16 m784;
     /* 0x786 */ s16 m786;
