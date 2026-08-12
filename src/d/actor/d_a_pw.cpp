@@ -167,8 +167,37 @@ void kantera_atari_check(pw_class*) {
 }
 
 /* 000016FC-000018FC       .text kantera_calc__FP8pw_class */
-void kantera_calc(pw_class*) {
-    /* Nonmatching */
+void kantera_calc(pw_class* i_this) {
+    if (i_this->m346 > 0 && i_this->m382 == 0 && i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* kantera;
+        if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
+            fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
+        {
+            kantera->current.pos = i_this->m2CC;
+            kantera->current.angle.y = i_this->shape_angle.y;
+            switch (i_this->m341) {
+            case 0:
+                cLib_addCalcAngleS2(&i_this->m396, 0xBB8, 0x1, 0x64);
+                cLib_addCalc2(&i_this->m3B0, 5000.0f, 1.0f, 3.0f);
+                cLib_addCalc2(&i_this->m3B8, -1000.0f, 1.0f, 3.0f);
+                break;
+            case 1:
+                cLib_addCalcAngleS2(&i_this->m396, 0xFA0, 0x1, 0x64);
+                cLib_addCalc2(&i_this->m3B0, 10000.0f, 1.0f, 3.0f);
+                cLib_addCalc2(&i_this->m3B8, -10000.0f, 1.0f, 3.0f);
+                break;
+            default:
+                break;
+            }
+            if (i_this->m341 != 2) {
+                i_this->m394 += i_this->m396;
+                ((kantera_class*)kantera)->mJointRot[1].x = (s16)(i_this->m3B0 * cM_ssin(i_this->m394));
+                ((kantera_class*)kantera)->mJointRot[1].z = (s16)(i_this->m3B8 * cM_scos(i_this->m394));
+                kantera->attention_info.flags = 0;
+            }
+            i_this->m2D8 = ((kantera_class*)kantera)->mBonPos;
+        }
+    }
 }
 
 /* 000018FC-00001990       .text BG_check__FP8pw_class */
@@ -249,18 +278,87 @@ void fuwafuwa_calc(pw_class* i_this) {
 }
 
 /* 00002400-00002560       .text kougen_hani_check__FP8pw_classUc */
-void kougen_hani_check(pw_class*, u8) {
-    /* Nonmatching */
+BOOL kougen_hani_check(pw_class* i_this, u8 flag) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz pos = i_this->current.pos;
+    if (!flag) {
+        f32 stepX = 0.33f * (i_this->current.pos.x - player->current.pos.x);
+        f32 stepZ = 0.33f * (i_this->current.pos.z - player->current.pos.z);
+        for (int i = 0; i < 3; i++) {
+            pos.x += stepX;
+            pos.z += stepZ;
+            if (dComIfGp_getDetect().chk_light(&pos)) {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cXyz offset(0.0f, 0.0f, 200.0f);
+    MtxPosition(&offset, &pos);
+    PSVECAdd(&pos, &i_this->current.pos, &pos);
+    return dComIfGp_getDetect().chk_light(&pos) != 0;
 }
 
 /* 00002560-00002714       .text kyori_sub__FP8pw_class */
-void kyori_sub(pw_class*) {
-    /* Nonmatching */
+void kyori_sub(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    if (fopAcM_searchActorDistance(i_this, player) <= 300.0f) {
+        s16 angle = fopAcM_searchActorAngleY(i_this, player);
+        mDoMtx_YrotS(*calc_mtx, angle);
+        cXyz offset(0.0f, 0.0f, -300.0f);
+        cXyz pos;
+        MtxPosition(&offset, &pos);
+        PSVECAdd(&pos, &player->current.pos, &pos);
+        if (dComIfGp_getDetect().chk_light(&pos) == 0) {
+            cXyz offset2(0.0f, 0.0f, -400.0f);
+            cXyz pos2;
+            MtxPosition(&offset2, &pos2);
+            PSVECAdd(&pos2, &player->current.pos, &pos2);
+            if (dComIfGp_getDetect().chk_light(&pos2) == 0) {
+                f32 speed = std::fabsf(player->speedF);
+                u32 volume = (u32)(4.0f * speed);
+                if (volume > 100) {
+                    volume = 100;
+                }
+                mDoAud_seStart(JA_SE_CHR_PW_MOVE, &i_this->eyePos, volume,
+                               dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                cLib_addCalc2(&i_this->current.pos.x, pos.x, 1.0f, speed * 1.5f);
+                cLib_addCalc2(&i_this->current.pos.z, pos.z, 1.0f, speed * 1.5f);
+            }
+        }
+    }
 }
 
 /* 00002714-0000289C       .text hani_check__FP8pw_class */
-BOOL hani_check(pw_class*) {
-    /* Nonmatching */
+BOOL hani_check(pw_class* i_this) {
+    if (i_this->mJalhallaID != fpcM_ERROR_PROCESS_ID_e) {
+        return FALSE;
+    }
+    f32 range;
+    f32 distX, distZ;
+    if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
+        range = 500.0f;
+        distX = i_this->m2FC.x - i_this->current.pos.x;
+        distZ = i_this->m2FC.z - i_this->current.pos.z;
+    } else {
+        range = 1000.0f;
+        distX = i_this->m2F0.x - i_this->current.pos.x;
+        distZ = i_this->m2F0.z - i_this->current.pos.z;
+    }
+    f32 dist = distX * distX + distZ * distZ;
+    if (dist > 0.0f) {
+        dist = std::sqrtf(dist);
+    }
+    if (dist > range) {
+        i_this->m38C = cM_atan2s(distX, distZ);
+        return TRUE;
+    }
+    if (i_this->mMode != 0x5B && kougen_hani_check(i_this, 1)) {
+        i_this->m38C = cM_atan2s(distX, distZ);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000289C-000029C8       .text next_dousa_check__FP8pw_class */
