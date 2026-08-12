@@ -151,7 +151,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
             MtxPull();
         }
         MtxPush();
-        mDoMtx_YrotM(*calc_mtx, angle);
+        mDoMtx_ZrotM(*calc_mtx, angle);
         angle += (s32)cM_rndFX(6000.0f);
         MtxPosition(&sp3C, &pos);
         MtxPull();
