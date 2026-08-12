@@ -91,29 +91,36 @@ void daKddoor_c::setStop() {
 BOOL daKddoor_c::chkGenocideCase() {
     u8 type = getType();
     if (mFrontCheck == 0) {
-        if (type != 1) {
-            return FALSE;
+        switch (type) {
+            case 1:
+                return TRUE;
+            default:
+                goto ret0;
         }
-        return TRUE;
     }
 
     switch (type) {
-        case 3:
-            return FALSE;
+        case 2:
         case 4:
             return TRUE;
+        case 3:
+        default:
+        ret0:
+            return FALSE;
     }
-    return FALSE;
 }
 
 /* 000003CC-00000428       .text chkFeelerCase__10daKddoor_cFv */
 BOOL daKddoor_c::chkFeelerCase() {
     u8 type = getType();
-    if (mFrontCheck == 0 && type < 5) {
-        if (type < 3) {
-            return FALSE;
+    if (mFrontCheck == 0) {
+        switch (type) {
+            case 3:
+            case 4:
+                return TRUE;
+            default:
+                return FALSE;
         }
-        return TRUE;
     }
     return FALSE;
 }
