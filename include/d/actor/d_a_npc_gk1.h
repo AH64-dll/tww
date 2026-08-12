@@ -43,8 +43,8 @@ public:
     u32 getMsg();
     void eventOrder();
     void checkOrder();
-    BOOL chk_talk();
-    BOOL chk_parts_notMov();
+    u8 chk_talk();
+    u8 chk_parts_notMov();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
     void lookBack();
     bool chkAttention();
@@ -56,7 +56,7 @@ public:
     void event_proc(int);
     BOOL set_action(int (daNpc_Gk1_c::*)(void*), void*);
     void setStt(s8);
-    BOOL chk_attn();
+    u8 chk_attn();
     BOOL wait_1();
     BOOL talk_1();
     BOOL wait_action1(void*);

@@ -455,7 +455,7 @@ void daNpc_Gk1_c::checkOrder() {
 }
 
 /* 000010CC-00001164       .text chk_talk__11daNpc_Gk1_cFv */
-BOOL daNpc_Gk1_c::chk_talk() {
+u8 daNpc_Gk1_c::chk_talk() {
     if (dComIfGp_event_chkTalkXY()) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
             mTalkStatus = dComIfGp_event_getPreItemNo();
@@ -468,8 +468,8 @@ BOOL daNpc_Gk1_c::chk_talk() {
 }
 
 /* 00001164-000011A4       .text chk_parts_notMov__11daNpc_Gk1_cFv */
-BOOL daNpc_Gk1_c::chk_parts_notMov() {
-    int ret = FALSE;
+u8 daNpc_Gk1_c::chk_parts_notMov() {
+    u8 ret = FALSE;
     if (mLookAtNckX != m_jnt.getHead_y() || mLookAtBoneX != m_jnt.getBackbone_y() || mLookAtY != current.angle.y) {
         ret = TRUE;
     }
@@ -643,13 +643,13 @@ void daNpc_Gk1_c::setStt(s8 i_status) {
 }
 
 /* 000017C8-000019E0       .text chk_attn__11daNpc_Gk1_cFv */
-BOOL daNpc_Gk1_c::chk_attn() {
+u8 daNpc_Gk1_c::chk_attn() {
     cXyz diff = current.pos - dComIfGp_getPlayer(0)->current.pos;
     f32 dist = std::sqrtf(diff.abs2XZ());
     f32 height_diff = current.pos.y - dComIfGp_getPlayer(0)->current.pos.y;
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     s16 angle_diff = target_angle - current.angle.y;
-    BOOL ret = FALSE;
+    u8 ret = FALSE;
     if (m7B1 == 1) {
         if (dist < 200.0f && (f32)abs(angle_diff) / 182.04f < 90.0f) {
             if (std::fabsf(height_diff) < 300.0f) {
