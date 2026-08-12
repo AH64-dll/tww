@@ -405,11 +405,10 @@ namespace daObjTribox {
     }
 
     /* 00001378-00001464       .text eff_smoke_start__Q211daObjTribox5Act_cFv */
-        /* Nonmatching */
     void Act_c::eff_smoke_start() {
         static cXyz scl(0.6f, 0.6f, 0.6f);
         eff_smoke_pos();
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &mSmokePos, &mSmokeAngle, &scl, 0xB9, &mSmokeCB, current.roomNo);
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &mSmokePos, &mSmokeAngle, &scl, 0xB9, &mSmokeCB, fopAcM_GetRoomNo(this));
         if (emitter) {
             emitter->setRate(1.0f);
             emitter->setDirectionalSpeed(15.0f);
@@ -459,15 +458,15 @@ namespace daObjTribox {
     }
 
     /* 0000162C-00001740       .text eff_sink_smoke_start__Q211daObjTribox5Act_cFv */
-        /* Nonmatching */
     void Act_c::eff_sink_smoke_start() {
         if (m3F8 == 0) {
             m3F8 = 1;
             dPa_smokeEcallBack* cbs[3] = {&mSinkSmokeCB, &mSinkSmokeCB2, &mSinkSmokeCB3};
+            csXyz a = shape_angle;
             for (int i = 0; i < 3; i++) {
-                SVec a = shape_angle;
-                a.y += i * 0x5555;
-                dComIfGp_particle_set(0xA320, &current.pos, (const csXyz*)&a, NULL, 0xA0, cbs[i]);
+                csXyz b = shape_angle;
+                b.y += i * 0x5555;
+                dComIfGp_particle_setToon(0xA320, &current.pos, (const csXyz*)&b, NULL, 0xA0, cbs[i]);
             }
         }
     }
@@ -542,15 +541,15 @@ namespace daObjTribox {
     }
 
     /* 00001AC4-00001D0C       .text sound_get_mapinfo__Q211daObjTribox5Act_cFRC4cXyz */
-        /* Nonmatching */
     int Act_c::sound_get_mapinfo(const cXyz& i_pos) {
         dBgS_ObjGndChk gndChk;
         cXyz pos = i_pos;
         pos.y += 50.0f;
         gndChk.SetPos(&pos);
         dComIfG_Bgsp()->GroundCross(&gndChk);
+        int bgIndex = gndChk.GetBgIndex();
         int mtrlSndId = 0xD;
-        if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
+        if (bgIndex >= 0 && bgIndex < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
         }
         return mtrlSndId;
@@ -637,7 +636,7 @@ namespace daObjTribox {
         s16 frame = --m30C;
         bool finished = (frame <= 0);
         f32 cosVal = (f32)cos((f64)(0.15707963f * m30C));
-        f32 angleY = (9.5873802e-05f * home.angle.z) + (1.0471976f * m350);
+        f32 angleY = (9.5873802e-05f * home.angle.y) + (1.0471976f * m350);
         f32 dir = m358;
         f32 rot = 1.0471976f * (dir * (0.5f * (1.0f + cosVal)));
         PSMTXRotRad(mDoMtx_stack_c::get(), 0x59, angleY);
@@ -668,8 +667,9 @@ namespace daObjTribox {
         cXyz pos2(current.pos.x, current.pos.y + 50.0f, current.pos.z);
         gndChk.SetPos(&pos2);
         dComIfG_Bgsp()->GroundCross(&gndChk);
+        int bgIndex = gndChk.GetBgIndex();
         int mtrlSndId = 0;
-        if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
+        if (bgIndex >= 0 && bgIndex < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
         }
         mDoAud_seStart(0x2022, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo));
@@ -966,7 +966,7 @@ actor_process_profile_definition g_profile_Obj_Tribox = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Draw Prio    */ fpcDwPi_Obj_Tribox_e,
     /* Actor SubMtd */ &daObjTribox::Mthd_Table,
-    /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };
