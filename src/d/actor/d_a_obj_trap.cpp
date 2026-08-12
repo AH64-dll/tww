@@ -172,13 +172,14 @@ void daObjTrap_c::init_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
 /* 00000F20-00000F70       .text set_co_pos__11daObjTrap_cFv */
 void daObjTrap_c::set_co_pos() {
-    cXyz pos(current.pos.x, current.pos.y - 40.0f, current.pos.z);
+    cXyz pos = current.pos;
+    pos.y -= 40.0f;
     mCyl.SetC(pos);
 }
 
@@ -193,7 +194,11 @@ void daObjTrap_c::get_ground() {
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
 bool daObjTrap_c::circle_search() {
     cXyz diff = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    f32 dist = cXyz(diff.x, 0.0f, diff.z).absXZ();
+    cXyz tmp(diff.x, 0.0f, diff.z);
+    f32 dist = PSVECSquareMag((Vec*)&tmp);
+    if (dist > 0.0f) {
+        dist = std::sqrtf(dist);
+    }
     return dist <= 400.0f && mDirValid == 1 && mDir.x * diff.x + mDir.z * diff.z >= 0.0f;
 }
 
@@ -213,7 +218,17 @@ void daObjTrap_c::set_move_info() {
 bool daObjTrap_c::check_arrival() {
     cXyz d1 = mCurPos - mPathPosB;
     cXyz d2 = mPathPosA - mPathPosB;
-    return d1.absXZ() >= d2.absXZ();
+    cXyz t1(d1.x, 0.0f, d1.z);
+    f32 mag1 = PSVECSquareMag((Vec*)&t1);
+    if (mag1 > 0.0f) {
+        mag1 = std::sqrtf(mag1);
+    }
+    cXyz t2(d2.x, 0.0f, d2.z);
+    f32 mag2 = PSVECSquareMag((Vec*)&t2);
+    if (mag2 > 0.0f) {
+        mag2 = std::sqrtf(mag2);
+    }
+    return mag1 >= mag2;
 }
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
@@ -240,7 +255,17 @@ cXyz daObjTrap_c::check_wall() {
         if (dComIfG_Bgsp()->LineCross(&l_wall_work)) {
             cXyz sp94 = l_wall_work.GetCross();
             PSVECSubtract(&sp94, &spAC, &sp94);
-            if (ret == cXyz::Zero || ret.absXZ() > sp94.absXZ()) {
+            cXyz t1(ret.x, 0.0f, ret.z);
+            f32 retDist = PSVECSquareMag((Vec*)&t1);
+            if (retDist > 0.0f) {
+                retDist = std::sqrtf(retDist);
+            }
+            cXyz t2(sp94.x, 0.0f, sp94.z);
+            f32 sp94Dist = PSVECSquareMag((Vec*)&t2);
+            if (sp94Dist > 0.0f) {
+                sp94Dist = std::sqrtf(sp94Dist);
+            }
+            if (ret == cXyz::Zero || retDist > sp94Dist) {
                 ret = sp94 + current.pos - spB8;
             }
         }
@@ -305,7 +330,17 @@ cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
                     if (check_block_target_pos(&sp58)) {
                         cXyz spDC = l_block_work.GetCross();
                         PSVECSubtract(&spDC, &spF4, &spDC);
-                        if (ret == cXyz::Zero || ret.absXZ() > spDC.absXZ()) {
+                        cXyz t1(ret.x, 0.0f, ret.z);
+                        f32 retDist = PSVECSquareMag((Vec*)&t1);
+                        if (retDist > 0.0f) {
+                            retDist = std::sqrtf(retDist);
+                        }
+                        cXyz t2(spDC.x, 0.0f, spDC.z);
+                        f32 spDC2Dist = PSVECSquareMag((Vec*)&t2);
+                        if (spDC2Dist > 0.0f) {
+                            spDC2Dist = std::sqrtf(spDC2Dist);
+                        }
+                        if (ret == cXyz::Zero || retDist > spDC2Dist) {
                             ret = spDC + current.pos - sp100;
                         }
                     }
@@ -318,7 +353,7 @@ cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
 
 /* 000023D4-0000250C       .text set_vib_mode__11daObjTrap_cFv */
 void daObjTrap_c::set_vib_mode() {
-    mAngleY = shape_angle.y;
+    mAngleY = shape_angle.x;
     mVibTimer = 6;
     mVibF = 35.0f;
     mBoundTimer = 0x10;
@@ -342,7 +377,8 @@ void daObjTrap_c::set_vib_mode() {
 
 /* 0000250C-0000255C       .text vibrate__11daObjTrap_cFv */
 void daObjTrap_c::vibrate() {
-    shape_angle.x = 288.0f * cM_ssin(mVibTimer * 0x5555);
+    f32 fVar = jmaSinTable[(u16)(mVibTimer * 0x5555) >> jmaSinShift];
+    shape_angle.x = (s16)(288.0f * fVar);
 }
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
@@ -353,7 +389,7 @@ void daObjTrap_c::bound() {
     PSVECScale(&sp14, &sp14, f);
     PSVECAdd(&mCurPos, &sp14, &mCurPos);
     mVibPos = sp14;
-    cLib_addCalc(&mVibF, 0.0f, 0.18f, 35.0f, 1.0f);
+    cLib_addCalc(&mVibF, 0.0f, 0.17f, 35.0f, 1.0f);
 }
 
 /* 00002678-0000270C       .text set_shine__11daObjTrap_cFv */
