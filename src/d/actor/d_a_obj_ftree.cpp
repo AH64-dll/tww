@@ -115,6 +115,7 @@ BOOL daObjFtree::Act_c::launch_heart_part() {
 
 /* 000001F0-00000394       .text place_heart_part__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::place_heart_part() {
+    /* Nonmatching */
     if (m356 == -1) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == TRUE) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E20)) {
@@ -245,6 +246,7 @@ void daObjFtree::Act_c::XyEvent_exe() {
 
 /* 00000764-000007A8       .text param_get_tree_idx__Q210daObjFtree5Act_cCFv */
 s32 daObjFtree::Act_c::param_get_tree_idx() const {
+    /* Nonmatching */
     static const u8 ret_num = 0xA;
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < ret_num) {
@@ -270,6 +272,7 @@ BOOL daObjFtree::Act_c::PlayStopColorAnimation() {
 
 /* 0000093C-00000A1C       .text set_first_stat__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_first_stat() {
+    /* Nonmatching */
     if (dComIfGs_isSymbol(2) != 0) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) != 0) {
             process_init(3, 0);
@@ -389,6 +392,7 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
 BOOL daObjFtree::is_broughtID(int i_id) {
+    /* Nonmatching */
     u8 ret = TRUE;
     dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
     u8 reg = event->getEventReg(dSv_event_flag_c::UNK_9EFF);
@@ -400,6 +404,7 @@ BOOL daObjFtree::is_broughtID(int i_id) {
 
 /* 000010F0-00001138       .text is_brought__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::is_brought() {
+    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -428,6 +433,7 @@ void daObjFtree::Act_c::set_broughtID(int i_id) {
 
 /* 000011FC-00001260       .text set_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_brought() {
+    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -449,6 +455,7 @@ void daObjFtree::Act_c::unset_broughtID(int i_id) {
 
 /* 000012D0-00001334       .text unset_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::unset_brought() {
+    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -507,6 +514,7 @@ s32 daObjFtree::Act_c::action_waitS_init(s16) {
 
 /* 000014E8-00001608       .text action_waitS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitS_main() {
+    /* Nonmatching */
     if (m652 == 1) {
         s32 ret;
         if (m356 == mEventCam2Idx) {
@@ -530,6 +538,7 @@ void daObjFtree::Act_c::action_waitS_main() {
 
 /* 00001608-0000173C       .text action_waitM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_waitM_init(s16) {
+    /* Nonmatching */
     set_brought();
     m2A6 = 1;
     m2A7 = 0;
@@ -548,6 +557,7 @@ s32 daObjFtree::Act_c::action_waitM_init(s16) {
 
 /* 0000173C-00001878       .text action_waitM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitM_main() {
+    /* Nonmatching */
     if (dComIfGs_getFwaterTimer() == 0) {
         _ftree_seach_info_ info;
         get_ftree_info(&info);
@@ -579,6 +589,7 @@ s32 daObjFtree::Act_c::action_waitL_init(s16) {
 
 /* 000018AC-000019BC       .text action_waitL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitL_main() {
+    /* Nonmatching */
     if (mMode == 3) {
         if (dKy_rain_check() != 0) {
             process_init(0xC, -1);
@@ -601,6 +612,7 @@ void daObjFtree::Act_c::action_waitL_main() {
 
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
+    /* Nonmatching */
     s16 cnt = 1;
     if (i_cnt > 0) {
         cnt = i_cnt;
@@ -615,6 +627,7 @@ s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
 
 /* 00001A4C-00001AF4       .text action_pikupikuS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuS_main() {
+    /* Nonmatching */
     if (PlayStopJointAnimation()) {
         if (m68C < m688) {
             SetJointAnimation(6, 0.7f + 0.3f * cM_rndF(1.0f), 10.0f, 0);
@@ -639,6 +652,7 @@ s32 daObjFtree::Act_c::action_pikupikuM_init(s16 i_cnt) {
 
 /* 00001B4C-00001C44       .text action_pikupikuM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuM_main() {
+    /* Nonmatching */
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
@@ -665,6 +679,7 @@ s32 daObjFtree::Act_c::action_pikupikuL_init(s16 i_cnt) {
 
 /* 00001C9C-00001D94       .text action_pikupikuL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuL_main() {
+    /* Nonmatching */
     s16 cnt = m69C;
     s16 max = m69A;
     if (cnt < max || max == -1) {
@@ -680,6 +695,7 @@ void daObjFtree::Act_c::action_pikupikuL_main() {
 
 /* 00001D94-00001EAC       .text action_changeSL_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL_init(s16) {
+    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
 
@@ -706,6 +722,7 @@ void daObjFtree::Act_c::action_changeSL_main() {
 
 /* 00001F0C-00001FB4       .text action_changeSL2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
+    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
     m2A4 = 1;
@@ -767,6 +784,7 @@ void daObjFtree::Act_c::action_changeLS2_main() {
 
 /* 0000270C-00002794       .text action_changeSM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSM_init(s16) {
+    /* Nonmatching */
     set_brought();
     if (action_changeSL_init(0) == 1) {
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -848,13 +866,39 @@ BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
 }
 
 /* 00002DDC-00002E9C       .text Ftree_NodeCallBack_M__10daObjFtreeFP7J3DNodei */
-BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode* i_node, int i_param) {
     /* Nonmatching */
+    if (i_param == 0) {
+        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        Act_c* area = (Act_c*)model->getUserArea();
+        if (area != NULL) {
+            csXyz rot(area->m294, area->m296, 0);
+            mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
+            mDoMtx_stack_c::ZXYrotM(rot.x, rot.y, rot.z);
+            PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jnt_no));
+            PSMTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00002E9C-00002F5C       .text Ftree_NodeCallBack_L__10daObjFtreeFP7J3DNodei */
-BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode*, int) {
+BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode* i_node, int i_param) {
     /* Nonmatching */
+    if (i_param == 0) {
+        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        Act_c* area = (Act_c*)model->getUserArea();
+        if (area != NULL) {
+            csXyz rot(0, area->m298, area->m29A);
+            mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
+            mDoMtx_stack_c::ZXYrotM(rot.x, rot.y, rot.z);
+            PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jnt_no));
+            PSMTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00002F5C-00003354       .text create_heap__Q210daObjFtree5Act_cFv */
