@@ -62,7 +62,7 @@ void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 /* 000003B0-0000046C       .text nodeCallBack_main__FP7J3DNodei */
 static BOOL nodeCallBack_main(J3DNode* i_node, int i_calcType) {
     if (i_calcType == 0) {
-        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        int jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         klft_class* pActor = (klft_class*)model->getUserArea();
         if (pActor != NULL && jnt_no == 1) {
@@ -78,7 +78,7 @@ static BOOL nodeCallBack_main(J3DNode* i_node, int i_calcType) {
 /* 0000046C-00000520       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* i_node, int i_calcType) {
     if (i_calcType == 0) {
-        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        int jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         klft_class* pActor = (klft_class*)model->getUserArea();
         if (pActor != NULL && jnt_no == 1) {
@@ -127,6 +127,7 @@ void klft_move(klft_class* i_this) {
         moveSpeed = 0.5f;
     }
     f32 f30 = 0.01f;
+    f32 sinAngle;
     if (i_this->mSph.ChkTgHit() != 0 || i_this->mSph2[0].ChkTgHit() != 0 || i_this->mSph2[1].ChkTgHit() != 0) {
         cXyz sp4C;
         cXyz sp40;
@@ -217,7 +218,7 @@ void klft_move(klft_class* i_this) {
         i_this->field_2E8.z = 0.0f;
         i_this->field_2E8.x = 0.0f;
     }
-    f32 sinAngle = cM_ssin(cM_rad2s(3.1415927f * (0.01f * i_this->field_3C0)));
+    sinAngle = cM_ssin(cM_rad2s(3.1415927f * (0.01f * i_this->field_3C0)));
     i_this->mSwingPos.x = sinAngle * (i_this->field_2D0 * cM_ssin(i_this->mMoveCounter * 0x2EE));
     i_this->mSwingPos.z = sinAngle * (i_this->field_2D8 * cM_ssin(i_this->mMoveCounter * 0x384));
     i_this->mSwingPos.y = sinAngle * ((1.0f + REG0_F(1)) * ((i_this->field_2D0 + i_this->field_2D8) *
