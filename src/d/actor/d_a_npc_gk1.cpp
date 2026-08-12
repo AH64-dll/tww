@@ -244,7 +244,7 @@ int daNpc_Gk1_c::btpResID(int i_btp_num) {
 }
 
 /* 00000958-00000A5C       .text setBtp__11daNpc_Gk1_cFScb */
-s32 daNpc_Gk1_c::setBtp(s8 i_btp_num, bool i_param_2) {
+bool daNpc_Gk1_c::setBtp(s8 i_btp_num, bool i_param_2) {
     J3DModel* model = mpMorf->getModel();
     if (i_btp_num < 0) {
         return FALSE;
@@ -254,11 +254,11 @@ s32 daNpc_Gk1_c::setBtp(s8 i_btp_num, bool i_param_2) {
     mBtpNum = i_btp_num;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(model->getModelData(), a_btp, 1, 0, 1.0f, 0, -1, i_param_2, FALSE) != 0 ? 1 : 0;
+    return mBtpAnm.init(model->getModelData(), a_btp, 1, 0, 1.0f, 0, -1, i_param_2, FALSE) != 0;
 }
 
 /* 00000A5C-00000A7C       .text init_texPttrnAnm__11daNpc_Gk1_cFScb */
-s32 daNpc_Gk1_c::init_texPttrnAnm(s8 i_btp_num, bool i_param_2) {
+bool daNpc_Gk1_c::init_texPttrnAnm(s8 i_btp_num, bool i_param_2) {
     return setBtp(i_btp_num, i_param_2);
 }
 
@@ -931,6 +931,7 @@ BOOL daNpc_Gk1_c::_delete() {
 cPhs_State daNpc_Gk1_c::_create() {
     /* Nonmatching */
     static int a_siz_tbl[] = {
+        0x00000000,
         0x00000000
     };
 
@@ -960,7 +961,6 @@ cPhs_State daNpc_Gk1_c::_create() {
 
 /* 000027EC-00002AE8       .text bodyCreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::bodyCreateHeap() {
-    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_e);
     JUT_ASSERT(VERSION_SELECT(1551, 1551, 1553, 1553), a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
@@ -1003,26 +1003,24 @@ s32 daNpc_Gk1_c::bodyCreateHeap() {
 
 /* 00002AE8-00002BA8       .text itemCreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::itemCreateHeap() {
-    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAIR_e);
     JUT_ASSERT(VERSION_SELECT(1596, 1596, 1598, 1598), a_mdl_dat != NULL);
     mpItemModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
-    if (mpItemModel != NULL) {
-        return TRUE;
+    if (mpItemModel == NULL) {
+        return FALSE;
     }
-    return FALSE;
+    return TRUE;
 }
 
 /* 00002BA8-00002C68       .text hat_CreateHeap__11daNpc_Gk1_cFv */
 s32 daNpc_Gk1_c::hat_CreateHeap() {
-    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAT_e);
     JUT_ASSERT(VERSION_SELECT(1612, 1612, 1614, 1614), a_mdl_dat != NULL);
     mpHatModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
-    if (mpHatModel != NULL) {
-        return TRUE;
+    if (mpHatModel == NULL) {
+        return FALSE;
     }
-    return FALSE;
+    return TRUE;
 }
 
 /* 00002C68-00002D2C       .text CreateHeap__11daNpc_Gk1_cFv */

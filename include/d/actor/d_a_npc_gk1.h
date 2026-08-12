@@ -27,8 +27,8 @@ public:
     void setMtx(bool);
     int bckResID(int);
     int btpResID(int);
-    s32 setBtp(s8, bool);
-    s32 init_texPttrnAnm(s8, bool);
+    bool setBtp(s8, bool);
+    bool init_texPttrnAnm(s8, bool);
     void play_btp_anm();
     void setAnm_anm(anm_prm_c*);
     void setAnm();
