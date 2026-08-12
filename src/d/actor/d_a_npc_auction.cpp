@@ -1156,11 +1156,11 @@ void daNpcAuction_c::setAnmFromMsgTag() {
 
 /* 00002070-00002090       .text getPrmNpcNo__14daNpcAuction_cFv */
 u8 daNpcAuction_c::getPrmNpcNo() {
-    u8 prm = (u8)argument;
-    if ((s8)prm < 0 || (s8)prm >= 8) {
+    s8 prm = argument;
+    if (prm < 0 || prm >= 8) {
         return 0;
     }
-    return prm;
+    return (u8)prm;
 }
 
 /* 00002090-00002118       .text setMtx__14daNpcAuction_cFv */
