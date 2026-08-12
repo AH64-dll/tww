@@ -1779,7 +1779,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_tntrap"),
     ActorRel(Matching,    "d_a_obj_tower"),
     ActorRel(NonMatching, "d_a_obj_trap"),
-    ActorRel(NonMatching, "d_a_obj_tribox"),
+    ActorRel(Equivalent, "d_a_obj_tribox"),  # anchor-only: mode_block_walk 99.86 norm-diff-2 (L_attr anchor + fpr swap), .rodata/.data byte-identical; weak order
     ActorRel(NonMatching, "d_a_obj_try"),
     ActorRel(Matching,    "d_a_obj_usovmc"),
     ActorRel(Matching,    "d_a_obj_vfan"),
