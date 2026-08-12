@@ -691,7 +691,6 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
 
 /* 00001858-00001938       .text event_action__11daNpc_De1_cFv */
 bool daNpc_De1_c::event_action() {
-    /* Nonmatching */
     bool o_retval = false;
     switch (mActNo) {
         case 0:
@@ -717,7 +716,6 @@ bool daNpc_De1_c::event_action() {
         case 3:
         case 4:
         case 5:
-        case 6:
             o_retval = true;
             break;
         default:
