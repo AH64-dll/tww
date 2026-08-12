@@ -552,7 +552,7 @@ void daObjTry::Act_c::make_vib() {
 }
 
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::check_circle() {
+bool daObjTry::Act_c::check_circle() {
     /* Nonmatching */
 }
 
