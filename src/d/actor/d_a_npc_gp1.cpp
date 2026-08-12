@@ -126,6 +126,7 @@ void daNpc_Gp1_c::nodeGp1Control(J3DNode* i_node, J3DModel* i_model) {
     i_model->setAnmMtx(jointIdx, mDoMtx_stack_c::get());
 }
 
+/* Nonmatching */
 /* 000003E8-00000468       .text init_GP1_0__11daNpc_Gp1_cFv */
 bool daNpc_Gp1_c::init_GP1_0() {
     if(dComIfGs_isEventBit(0x2D01)) {
@@ -297,6 +298,7 @@ BOOL daNpc_Gp1_c::setAnm_anm(daNpc_Gp1_c::anm_prm_c* i_anmPrmP) {
     return TRUE;
 }
 
+/* Nonmatching */
 /* 00000A78-00000AE4       .text setAnm_NUM__11daNpc_Gp1_cFii */
 void daNpc_Gp1_c::setAnm_NUM(int i_param_1, int i_param_2) {
     static anm_prm_c a_anm_prm_tbl[9] = {
@@ -386,6 +388,7 @@ void daNpc_Gp1_c::control_anmAtr() {
     }
 }
 
+/* Nonmatching */
 /* 00000D00-00000D68       .text setAnm_ATR__11daNpc_Gp1_cFi */
 void daNpc_Gp1_c::setAnm_ATR(int i_param_1) {
     static anm_prm_c a_anm_prm_tbl[7] = {
@@ -787,6 +790,7 @@ void daNpc_Gp1_c::gp_clcMovSpd() {
     cLib_chaseF(&speedF, m7CC, m7D0);
 }
 
+/* Nonmatching */
 /* 00001B80-00001C40       .text gp_nMove__11daNpc_Gp1_cFv */
 void daNpc_Gp1_c::gp_nMove() {
     if(m800) {
@@ -892,6 +896,7 @@ bool daNpc_Gp1_c::event_action() {
     return true;
 }
 
+/* Nonmatching */
 /* 00001FF4-000020E0       .text privateCut__11daNpc_Gp1_cFi */
 void daNpc_Gp1_c::privateCut(int i_staff_idx) {
     static char* a_cut_tbl[] = {
