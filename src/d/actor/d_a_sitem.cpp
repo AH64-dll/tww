@@ -23,10 +23,10 @@ void hand_draw(sitem_class* i_this) {
         g_env_light.setLightTevColorType(model, &i_this->tevStr);
         mDoExt_modelUpdateDL(model);
     }
-    i_this->mLineMat1.update(0xA, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &i_this->tevStr);
+    i_this->mLineMat1.update(0xA, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &i_this->tevStr);
     dComIfGd_set3DlineMat(&i_this->mLineMat1);
     if (i_this->mHandPos.z > 0.1f) {
-        i_this->mLineMat2.update(5, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &i_this->tevStr);
+        i_this->mLineMat2.update(5, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &i_this->tevStr);
         dComIfGd_set3DlineMat(&i_this->mLineMat2);
     }
 }
@@ -270,7 +270,7 @@ void cut_control2(sitem_class* i_this) {
 /* Nonmatching */
 void hand_move(sitem_class* i_this) {
     dBgS_GndChk gndChk;
-    s32 isCut = 0;
+    u8 isCut = 0;
     f32 f31 = 0.1f;
     f32 f29 = 1.0f;
     f32 f28 = 5.0f + REG0_F(14);
@@ -283,10 +283,23 @@ void hand_move(sitem_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
 
     cXyz sp64;
-    cXyz sp58;
+    Vec sp58;
     switch (i_this->m2C0) {
+    case 0:
+    case 1:
+        cXyz sp70;
+        sp70.x = (25.0f + REG0_F(16)) * cM_ssin(i_this->m2BC * 0x258);
+        sp70.y = f27;
+        sp70.z = (25.0f + REG0_F(16)) * cM_ssin(i_this->m2BC * 0x2BC);
+        MtxPosition(&sp70, &sp64);
+        sp58 = i_this->current.pos + sp64;
+        if (i_this->m2C0 == 0) {
+            i_this->mHomePos = sp58;
+            i_this->m2C0 = 1;
+        }
+        break;
     case 5:
-        f28 = 25.0f;
+        f28 = 50.0f;
         i_this->mHandPos.x = f28;
         isCut = 1;
         f30 = 25.0f;
@@ -298,12 +311,14 @@ void hand_move(sitem_class* i_this) {
         }
         i_this->mAcch.CrrPos(*dComIfG_Bgsp());
         i_this->m2C6 = 5;
-        gndChk.m_pos.set(i_this->mHomePos.x, i_this->mHomePos.y + 100.0f, i_this->mHomePos.z);
-        f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (i_this->speed.y < 0.0f &&
-            (groundY == -1000000000.0f || i_this->mHomePos.y <= 30.0f + groundY)) {
-            i_this->mHomePos.y = 30.0f + groundY;
-            my_break(i_this);
+        if (i_this->speed.y < 0.0f) {
+            gndChk.m_pos.set(i_this->mHomePos.x, i_this->mHomePos.y + 100.0f, i_this->mHomePos.z);
+            i_this->mHandPos.y = dComIfG_Bgsp()->GroundCross(&gndChk);
+            if (i_this->mHandPos.y == -1000000000.0f ||
+                i_this->mHomePos.y <= 30.0f + i_this->mHandPos.y) {
+                i_this->mHomePos.y = 30.0f + i_this->mHandPos.y;
+                my_break(i_this);
+            }
         }
         break;
     case 6:
@@ -316,20 +331,6 @@ void hand_move(sitem_class* i_this) {
         }
         if (i_this->m2C2[0] == 0) {
             fopAcM_delete(i_this);
-        }
-        break;
-    default:
-        f32 f1 = 25.0f + REG0_F(16);
-        cXyz sp70;
-        sp70.x = f1 * cM_ssin(i_this->m2BC * 0x258);
-        sp70.y = f27;
-        sp70.z = f1 * cM_ssin(i_this->m2BC * 0x2BC);
-        MtxPosition(&sp70, &sp64);
-        cXyz sp28 = i_this->current.pos + sp64;
-        sp58 = sp28;
-        if (i_this->m2C0 == 0) {
-            i_this->mHomePos = sp28;
-            i_this->m2C0 = 1;
         }
         break;
     }
@@ -389,31 +390,31 @@ void hand_move(sitem_class* i_this) {
     i_this->attention_info.position = i_this->eyePos;
     i_this->mStts.Move();
     if (isCut == 0) {
-        i_this->mSph[3].SetC(i_this->eyePos);
+        i_this->mBmSph.SetC(i_this->eyePos);
     } else {
-        i_this->mSph[3].SetC(non_pos);
+        i_this->mBmSph.SetC(non_pos);
     }
+    cCcD_Obj* hitObj = NULL;
     dComIfG_Ccsp()->Set(&i_this->mBmSph);
     for (int i = 0; i < 3; i++) {
-        cXyz pos = pPos[(i_this->m2BC & 3) + i * 2];
+        cXyz pos = pPos[((i_this->m2BC & 3) + i * 2) % 10];
         if (isCut == 0) {
             i_this->mSph[i].SetC(pos);
         } else {
             i_this->mSph[i].SetC(non_pos);
         }
         if (i_this->m2C0 == 3) {
-            i_this->mSph[i].OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+            i_this->mSph[i].OffCoSPrmBit(cCcD_CoSPrm_Set_e);
         } else {
-            i_this->mSph[i].OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+            i_this->mSph[i].OnCoSPrmBit(cCcD_CoSPrm_Set_e);
         }
         dComIfG_Ccsp()->Set(&i_this->mSph[i]);
     }
-    i_this->mBmSph.SetR(25.0f);
-    i_this->mBmSph.SetC(i_this->mB00);
-    i_this->mSph[3].OnTgSPrmBit(cCcD_TgSPrm_IsEnemy_e);
+    i_this->mSph[3].SetR(25.0f);
+    i_this->mSph[3].SetC(i_this->mB00);
+    i_this->mSph[3].OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     dComIfG_Ccsp()->Set(&i_this->mSph[3]);
 
-    cCcD_Obj* hitObj = NULL;
     if (i_this->m2C6 == 0) {
         if (i_this->mSph[3].ChkTgHit() || (i_this->mB0C > 100.0f && i_this->mSph[3].ChkCoHit())) {
             hitObj = i_this->mSph[3].GetTgHitObj();
@@ -436,13 +437,13 @@ void hand_move(sitem_class* i_this) {
         }
     }
 
-    if (isCut != 0 && i_this->m2C6 == 0) {
+    if ((isCut != 0 || i_this->mBmSph.ChkTgHit()) && i_this->m2C6 == 0) {
         i_this->m2C6 = 0x14;
         if (isCut == 0) {
             hitObj = i_this->mBmSph.GetTgHitObj();
             CcAtInfo atInfo;
             atInfo.mpObj = hitObj;
-            atInfo.mpActor = at_power_check(&atInfo);
+            at_power_check(&atInfo);
             if (atInfo.mResultingAttackType == 8) {
                 i_this->mB0C = 300.0f + REG0_F(13);
                 i_this->mB10 = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
