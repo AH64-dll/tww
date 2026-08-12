@@ -201,15 +201,14 @@ void cut_control1(sss_class* i_this) {
         f32 fVar7 = pos2.x + (hand_i->mPos.x - hand_i[-1].mPos.x);
         f32 fVar8 = pos2.y + (hand_i->mPos.y - hand_i[-1].mPos.y);
         f32 fVar9 = pos2.z + (hand_i->mPos.z - hand_i[-1].mPos.z);
-        s16 angle_x = cM_atan2s(fVar7, fVar9);
+        int angle_x = cM_atan2s(fVar7, fVar9);
         f32 fVar10 = (fVar7 * fVar7) + (fVar9 * fVar9);
         if (fVar10 > fVar6) {
             fVar10 = std::sqrtf(fVar10);
         }
         s16 angle_y = -cM_atan2s(fVar8, fVar10);
         MtxPush();
-        mDoMtx_YrotS(*calc_mtx, angle_x);
-        mDoMtx_XrotM(*calc_mtx, angle_y);
+        mDoMtx_YrotS(*calc_mtx, angle_x);        mDoMtx_XrotM(*calc_mtx, angle_y);
         MtxPosition(&pos, &pos3);
         MtxPull();
         hand_i->mPos = (cXyz&)hand_i[-1].mPos + pos3;
@@ -223,7 +222,7 @@ void cut_control1(sss_class* i_this) {
         pos.x = pos4.x;
         pos.y = pos4.y;
         pos.z = pos4.z;
-        s16 angle_x = cM_atan2s(pos.x, pos.z);
+        int angle_x = cM_atan2s(pos.x, pos.z);
         f32 fVar11 = (pos.x * pos.x) + (pos.z * pos.z);
         if (fVar11 > 0.0f) {
             fVar11 = std::sqrtf(fVar11);
@@ -318,7 +317,7 @@ void cut_control2(sss_class* i_this) {
         pos.x = pos4.x;
         pos.y = pos4.y;
         pos.z = pos4.z;
-        s16 angle_x = cM_atan2s(pos.x, pos.z);
+        int angle_x = cM_atan2s(pos.x, pos.z);
         f32 fVar11 = (pos.x * pos.x) + (pos.z * pos.z);
         if (fVar11 > 0.0f) {
             fVar11 = std::sqrtf(fVar11);
