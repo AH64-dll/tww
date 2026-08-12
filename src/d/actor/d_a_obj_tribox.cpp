@@ -405,6 +405,7 @@ namespace daObjTribox {
     }
 
     /* 00001378-00001464       .text eff_smoke_start__Q211daObjTribox5Act_cFv */
+        /* Nonmatching */
     void Act_c::eff_smoke_start() {
         static cXyz scl(0.6f, 0.6f, 0.6f);
         eff_smoke_pos();
@@ -458,6 +459,7 @@ namespace daObjTribox {
     }
 
     /* 0000162C-00001740       .text eff_sink_smoke_start__Q211daObjTribox5Act_cFv */
+        /* Nonmatching */
     void Act_c::eff_sink_smoke_start() {
         if (m3F8 == 0) {
             m3F8 = 1;
@@ -495,6 +497,7 @@ namespace daObjTribox {
     }
 
     /* 00001828-000018FC       .text vib_sink_start__Q211daObjTribox5Act_cFv */
+        /* Nonmatching */
     void Act_c::vib_sink_start() {
         if (m3F9 == 0) {
             m3F9 = 1;
@@ -541,6 +544,7 @@ namespace daObjTribox {
     }
 
     /* 00001AC4-00001D0C       .text sound_get_mapinfo__Q211daObjTribox5Act_cFRC4cXyz */
+        /* Nonmatching */
     int Act_c::sound_get_mapinfo(const cXyz& i_pos) {
         dBgS_ObjGndChk gndChk;
         gndChk.SetObj();
@@ -625,10 +629,11 @@ namespace daObjTribox {
         m30C = 0x14;
         m344 = current.pos;
         eff_smoke_start();
-        dComIfGp_event_onEventFlag(0x800);
+        daPy_getPlayerActorClass()->onPushPullKeep();
     }
 
     /* 0000262C-00002B34       .text mode_block_walk__Q211daObjTribox5Act_cFv */
+        /* Nonmatching */
     void Act_c::mode_block_walk() {
         m30C--;
         bool finished = (m30C <= 0);
