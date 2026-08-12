@@ -231,9 +231,9 @@ cXyz daObjTrap_c::check_wall() {
     static const s16 angleY[] = {0x0000, 0x4000, 0xC000};
     static const f32 transA[] = {0.0f, 145.0f, 145.0f};
 
-    cXyz ret = cXyz::Zero;
     cXyz spB8 = mDir * 150.0f;
     cXyz sp7C = cXyz::BaseY * 75.0f;
+    cXyz ret = cXyz::Zero;
 
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::YrotS(angleY[i]);
@@ -269,6 +269,7 @@ cXyz daObjTrap_c::check_wall() {
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
 BOOL daObjTrap_c::check_block_target_pos(cXyz* i_targetPos) {
+    BOOL ret = FALSE;
     cXyz diff = *i_targetPos - current.pos;
     f32 dot = mDir.x * diff.x + mDir.z * diff.z;
     if (dot >= 0.0f && dot < 150.0f + mDist) {
@@ -277,10 +278,10 @@ BOOL daObjTrap_c::check_block_target_pos(cXyz* i_targetPos) {
         mDoMtx_stack_c::multVec(&mDir, &rot);
         f32 dot2 = rot.x * diff.x + rot.z * diff.z;
         if (std::fabsf(dot2) < 225.0f) {
-            return TRUE;
+            ret = TRUE;
         }
     }
-    return FALSE;
+    return ret;
 }
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
