@@ -216,34 +216,36 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
 void hand_1_move(ss_class* i_this, ss_s* hand) {
     ss_s_s* pos = hand->mSss;
     u8 count = hand->m3A;
+    s8 sCount = (s8)count;
 
-    if (!(i_this->m2C0 & 3) && i_this->m2C4 < 0x32 && (s8)count < 0x14) {
+    if (!(i_this->m2C0 & 3) && i_this->m2C4 < 0x32 && sCount < 0x14) {
         hand->m3A = count + 1;
     }
 
     s32 sphIdx = 0;
     for (int j = 0; j < 20; j++) {
-        if (j >= (s8)count - 1) {
-            pos[j].mSize = 0;
-        } else if (j == (s8)count - 2) {
-            pos[j].mSize = 1;
-        } else if (j == (s8)count - 3) {
-            pos[j].mSize = 2;
-        } else if (j == (s8)count - 4) {
-            pos[j].mSize = 3;
+        if (j >= sCount - 1) {
+            pos->mSize = 0;
+        } else if (j == sCount - 2) {
+            pos->mSize = 1;
+        } else if (j == sCount - 3) {
+            pos->mSize = 2;
+        } else if (j == sCount - 4) {
+            pos->mSize = 3;
         } else {
-            pos[j].mSize = 4;
+            pos->mSize = 4;
         }
 
         if (i_this->m2C4 < 0x32 && (j == (i_this->m2C0 & 3) + 2 || j == (i_this->m2C0 & 3) + 7 ||
                                     j == (i_this->m2C0 & 3) + 0xC || j == (i_this->m2C0 & 3) + 0x11)) {
-            hand->mSph[sphIdx].SetC(pos[j].mPos);
+            hand->mSph[sphIdx].SetC(pos->mPos);
             dComIfG_Ccsp()->Set(&hand->mSph[sphIdx]);
             sphIdx++;
         }
+        pos++;
     }
 
-    s32 hitState = 0;
+    u8 hitState = 0;
     cCcD_Obj* hitObj = NULL;
     for (int k = 0; k < 4; k++) {
         if (hand->mSph[k].ChkTgHit()) {
@@ -251,7 +253,7 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
             if (hitObj != NULL) {
                 CcAtInfo atInfo;
                 atInfo.mpObj = hitObj;
-                at_power_check(&atInfo);
+                atInfo.mpActor = at_power_check(&atInfo);
                 if (atInfo.mResultingAttackType == 5) {
                     hitState = 2;
                 } else if (hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
@@ -278,17 +280,18 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
         hand->m32 = (s16)(3000.0f + cM_rndF(3000.0f));
         hand->m34 = (s16)cM_rndFX(2000.0f);
         f32 velY, velZ;
+        cXyz sp8;
         if (hitState == 2) {
             hand->m3B = 1;
-            velY = 5.0f;
-            velZ = 5.0f;
+            sp8.y = 5.0f;
+            sp8.z = 5.0f;
             hand->m36 = 2;
         } else {
-            velY = 25.0f + REG8_F(12) + cM_rndF(7.0f);
-            velZ = 7.0f + REG8_F(13) + cM_rndF(5.0f);
+            sp8.y = 25.0f + REG8_F(12) + cM_rndF(7.0f);
+            sp8.z = 7.0f + REG8_F(13) + cM_rndF(5.0f);
             hand->m36 = REG8_S(7) + 8;
         }
-        cXyz sp8(0.0f, velY, velZ);
+        sp8.x = 0.0f;
         mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
         MtxPosition(&sp8, &hand->mVel);
     }
