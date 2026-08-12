@@ -561,37 +561,42 @@ BOOL daMozo_c::checkRange(int i_param) {
 
 /* 00001D8C-00001F70       .text setAnm__8daMozo_cFif */
 void daMozo_c::setAnm(int i_idx, float i_morf) {
-    /* Nonmatching */
     mAnmIdx = i_idx;
     J3DAnmTransform* res;
     f32 speed, start, end;
+    int loopMode;
     switch (i_idx) {
     case 0:
         res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        loopMode = 0;
         start = 0.0f;
         end = -1.0f;
         speed = start;
         break;
     case 1:
         res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        loopMode = 0;
         start = 0.0f;
         end = -1.0f;
         speed = 1.0f;
         break;
     case 2:
         res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        loopMode = 0;
         start = 24.0f;
         end = 36.0f;
         speed = -0.25f;
         break;
     case 3:
         res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        loopMode = 0;
         start = 25.0f;
         end = -1.0f;
         speed = 1.0f;
         break;
     case 4:
         res = (J3DAnmTransform*)dComIfG_getObjectRes("Mozo", dRes_INDEX_MOZO_BCK_MOZ_e);
+        loopMode = 0;
         start = 32.0f;
         end = 36.0f;
         speed = -0.25f;
@@ -599,7 +604,7 @@ void daMozo_c::setAnm(int i_idx, float i_morf) {
     default:
         return;
     }
-    mAnimMorf->setAnm(res, 0, i_morf, speed, start, end, NULL);
+    mAnimMorf->setAnm(res, loopMode, i_morf, speed, start, end, NULL);
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
