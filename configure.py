@@ -341,10 +341,11 @@ def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 
 
 # Helper function for actor RELs
-def ActorRel(status, rel_name, extra_cflags=[]):
+def ActorRel(status, rel_name, extra_cflags=[], mw_version=None):
     return Rel(rel_name, [Object(
         status, f"d/actor/{rel_name}.cpp",
         extra_cflags=extra_cflags,
+        mw_version=mw_version,
         scratch_preset_id=73, # The Wind Waker (REL)
     )])
 
