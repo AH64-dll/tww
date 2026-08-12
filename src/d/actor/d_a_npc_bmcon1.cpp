@@ -518,10 +518,10 @@ cPhs_State daNpcBmcon_c::createInit() {
         mPathRun.setInf(railID, current.roomNo, 1);
         if (mPathRun.isPath()) {
             dPath_GetNextRoomPath(mPathRun.getPath(), -1);
-            actor_status &= ~0x100;
+            actor_status &= ~0x80;
             cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             old.pos = point;
-            current.pos = point;
+            current.pos = old.pos;
             mPathRun.incIdxLoop();
             m796 = 1;
             railID = 0xFE;
@@ -533,17 +533,21 @@ cPhs_State daNpcBmcon_c::createInit() {
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_tbl[mBckNo]);
 
-    if (mNpcNo == 0) {
+    switch (mNpcNo) {
+    case 0:
         mEventIdx1 = dComIfGp_evmng_getEventIdx("BMCON_RESULT", 0xff);
         mEventIdx2 = dComIfGp_evmng_getEventIdx("BMCON_GET_ITEM", 0xff);
         if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0210)) {
             dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0210);
-            fopAcM_orderChangeEventId(dComIfGp_getLinkPlayer(), this, mEventIdx1, 0, 0xffff);
-            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onWaterDrop();
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+            fopAcM_orderChangeEventId(player, this, mEventIdx1, 0, 0xffff);
+            player->onWaterDrop();
         }
-    } else if (mNpcNo == 1) {
+        break;
+    case 1:
         mEventIdx1 = dComIfGp_evmng_getEventIdx("BMCON_END", 0xff);
         mEventIdx2 = dComIfGp_evmng_getEventIdx("BMCON_END2", 0xff);
+        break;
     }
 
     eventInfo.mpCheckCB = daNpcBmcon_XyCheckCB;
@@ -556,7 +560,7 @@ cPhs_State daNpcBmcon_c::createInit() {
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
-    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_UNK1000000_e;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     m_jnt.setParam(
         l_npc_dat[mNpcNo].mMax_backbone_x,
         l_npc_dat[mNpcNo].mMax_backbone_y,
@@ -574,14 +578,15 @@ cPhs_State daNpcBmcon_c::createInit() {
     mAttnAngle = l_npc_dat[mNpcNo].field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-    if (mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
-        home.pos.y = mObjAcch.GetGroundH();
-        current.pos.y = mObjAcch.GetGroundH();
+    f32 groundH = mObjAcch.GetGroundH();
+    if (groundH != -G_CM3D_F_INF) {
+        home.pos.y = groundH;
+        current.pos.y = groundH;
     }
 
     setMtx();
     mpMorf->getModel()->calc();
-    mStts.Init(0xFF, 0xFF, this);
+    mStts.Init(railID, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
     setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
@@ -612,7 +617,7 @@ bool daNpcBmcon_c::_draw() {
     mpArmMorf->updateDL();
 
     MTXCopy(model->getAnmMtx(m_jnt.getHeadJntNum()), headModel->getBaseTRMtx());
-    mDoExt_modelUpdateDL(headModel);
+    mDoExt_modelUpdateDL(mpHeadModel);
 
     cXyz shadowPos(
         current.pos.x,
@@ -621,7 +626,7 @@ bool daNpcBmcon_c::_draw() {
     );
 
     mShadowID = dComIfGd_setShadow(
-        mShadowID, 1, model, &shadowPos, 800.0f, 20.0f,
+        mShadowID, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0, 1.0f,
         &dDlst_shadowControl_c::mSimpleTexObj
     );
@@ -631,10 +636,13 @@ bool daNpcBmcon_c::_draw() {
         dComIfGd_addRealShadow(mShadowID, armModel);
     }
 
-    if (mNpcNo == 0) {
+    switch (mNpcNo) {
+    case 0:
         dSnap_RegistFig(DSNAP_TYPE_UNK95, this, 1.0f, 1.0f, 1.0f);
-    } else if (mNpcNo == 1) {
+        break;
+    case 1:
         dSnap_RegistFig(DSNAP_TYPE_UNK94, this, 1.0f, 1.0f, 1.0f);
+        break;
     }
     return true;
 }
@@ -816,7 +824,6 @@ void daNpcBmcon_c::executeTalk() {
     if(talk2(1) == fopMsgStts_BOX_CLOSED_e) {
         m7AC = 0;
         executeSetMode(0);
-        dComIfGp_event_reset();
         m7BF = l_npc_dat[mNpcNo].field_0x4A;
         m7C0 = l_npc_dat[mNpcNo].field_0x4B;
         if(m7C2) {
@@ -1623,7 +1630,7 @@ BOOL daNpcBmcon_c::chkEndEvent() {
 
 /* 00003DC4-00003DFC       .text isClear__12daNpcBmcon_cFv */
 BOOL daNpcBmcon_c::isClear() {
-    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_2B40);
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_2B40) ? TRUE : FALSE;
 }
 
 /* 00003DFC-00003E1C       .text daNpc_BmconCreate__FPv */
