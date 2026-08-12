@@ -812,7 +812,7 @@ void daNpcMn_c::executeTurn() {
         m794 = 0;
         mLookMode = 2;
         m_jnt.setTrn();
-        if (shape_angle.y == angle) {
+        if (current.angle.y == angle) {
             executeSetMode(2);
         }
     }
@@ -1107,10 +1107,11 @@ s32 daNpcMn_c::eventTurn(int staffIdx) {
     m794 = 0;
     mLookMode = 2;
     m_jnt.setTrn();
-    if (shape_angle.y == angle) {
+    if (current.angle.y == angle) {
         return 1;
+    } else {
+        return 0;
     }
-    return 0;
 }
 
 /* 000027B4-000027DC       .text eventWalkInit__9daNpcMn_cFv */
