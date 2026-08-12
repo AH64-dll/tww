@@ -22,9 +22,9 @@ public:
     /* 0x2B9 */ u8 m2B9;
     /* 0x2BA */ u8 m2BA;
     /* 0x2BC */ s16 m2BC;
+    /* 0x2BE */ s16 m2BE;
     /* 0x2C0 */ s16 m2C0;
-    /* 0x2C2 */ s16 m2C2;
-    /* 0x2C4 */ s16 m2C4;
+    /* 0x2C2 */ s16 m2C2[2];
     /* 0x2C6 */ s16 m2C6;
     /* 0x2C8 */ cXyz m2C8;
     /* 0x2D4 */ cXyz m2D4;

@@ -218,7 +218,7 @@ void cut_control1(sss_class* i_this) {
     }
     if (i_this->mpEmitterA10 == NULL && i_this->mA18 != 0) {
         i_this->mpEmitterA10 = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, (cXyz*)&i_this->m490[4].mPos, NULL, NULL, 0xFF);
-        i_this->m2C4 = 0x3C;
+        i_this->m2C2[1] = 0x3C;
     }
     if (i_this->mpEmitterA10 != NULL) {
         pos4 = cXyz(i_this->m490[4].mPos) - i_this->m490[3].mPos;
@@ -237,7 +237,7 @@ void cut_control1(sss_class* i_this) {
         angle.y = angle_x;
         angle.z = 0;
         i_this->mpEmitterA10->setGlobalRotation(angle);
-        if (i_this->m2C4 == 1) {
+        if (i_this->m2C2[1] == 1) {
             i_this->mpEmitterA10->becomeInvalidEmitter();
             i_this->mpEmitterA10 = NULL;
         }
@@ -331,7 +331,7 @@ void cut_control2(sss_class* i_this) {
         angle.y = angle_x;
         angle.z = 0;
         i_this->mpEmitterA14->setGlobalRotation(angle);
-        if (i_this->m2C4 == 1) {
+        if (i_this->m2C2[1] == 1) {
             i_this->mpEmitterA14->becomeInvalidEmitter();
             i_this->mpEmitterA14 = NULL;
             i_this->mA18 = 0;
@@ -400,17 +400,17 @@ void hand_move(sss_class* i_this) {
         f6 = 0.0f;
         f8 = 0.5f;
         f9 = -20.0f;
-        if (i_this->m2C2 == 0) {
+        if (i_this->m2C2[0] == 0) {
             if (i_this->m2BA != 0) {
                 if (dComIfGs_isSwitch(i_this->m2BA, (s8)actor->current.roomNo) || REG0_S(0) != 0) {
                     i_this->m2C0 = 1;
-                    i_this->m2C2 = 0x1E;
+                    i_this->m2C2[0] = 0x1E;
                     hand_open(i_this);
                     cut = 1;
                 }
             } else if (dist < f10) {
                 i_this->m2C0 = 1;
-                i_this->m2C2 = 0x1E;
+                i_this->m2C2[0] = 0x1E;
                 hand_open(i_this);
                 cut = 1;
             }
@@ -430,7 +430,7 @@ void hand_move(sss_class* i_this) {
         pos.z = f11 * cM_ssin(i_this->m2BC * 0x2BC);
         MtxPosition(&pos, &pos2);
         pos = pos2 + actor->current.pos;
-        if (i_this->m2C2 == 0 && dist < 300.0f + REG0_F(14)) {
+        if (i_this->m2C2[0] == 0 && dist < 300.0f + REG0_F(14)) {
             i_this->m2C0 = 2;
         }
         if (dist > 100.0f + f10) {
@@ -512,7 +512,7 @@ void hand_move(sss_class* i_this) {
         i_this->m2F8 = dComIfG_Bgsp()->GroundCross(&gndChk);
         if (i_this->m2F8 == -1.0e9f || i_this->m2C8.y <= i_this->m2F8 + 10.0f) {
             i_this->m2C8.y = i_this->m2F8 + 10.0f;
-            i_this->m2C2 = 0x64;
+            i_this->m2C2[0] = 0x64;
             i_this->m2C0 = 6;
         }
         break;
@@ -520,12 +520,12 @@ void hand_move(sss_class* i_this) {
         keep_3 = 1;
         f22 = 0.0f;
         i_this->m2C6 = 0xA;
-        if (i_this->m2C2 < 0x28) {
+        if (i_this->m2C2[0] < 0x28) {
             f6 = f22;
             f8 = 1.0f;
             i_this->m2C8.y -= 2.0f;
         }
-        if (i_this->m2C2 == 0) {
+        if (i_this->m2C2[0] == 0) {
             i_this->m2C8 = actor->current.pos;
             i_this->m2C8.y = actor->current.pos.y;
             i_this->m2C8.z = actor->current.pos.z;
@@ -656,11 +656,10 @@ void hand_main(sss_class*) {
 /* 00002618-0000269C       .text daSss_Execute__FP9sss_class */
 static BOOL daSss_Execute(sss_class* i_this) {
     i_this->m2BC++;
-    if (i_this->m2C2 != 0) {
-        i_this->m2C2--;
-    }
-    if (i_this->m2C4 != 0) {
-        i_this->m2C4--;
+    for (int i = 0; i < 2; i++) {
+        if (i_this->m2C2[i] != 0) {
+            i_this->m2C2[i]--;
+        }
     }
     if (i_this->m2C6 != 0) {
         i_this->m2C6--;
