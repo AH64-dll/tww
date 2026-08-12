@@ -92,8 +92,34 @@ void control1(sitem_class* i_this) {
 }
 
 /* 00000748-000009E8       .text control2__FP11sitem_class */
-void control2(sitem_class*) {
-    /* Nonmatching */
+void control2(sitem_class* i_this) {
+    cXyz sp34(0.0f, 0.0f, i_this->m2F4);
+    i_this->mSitem1[9].mPos = i_this->mHomePos;
+
+    sitem_s* cur = &i_this->mSitem1[8];
+    for (int i = 8; i >= 1; i--) {
+        f32 x = cur->mPos.x - (cur - 1)->mPos.x;
+        f32 y = cur->mPos.y - (cur - 1)->mPos.y;
+        f32 z = cur->mPos.z - (cur - 1)->mPos.z;
+        s16 yrot = cM_atan2s(x, z);
+        f32 dist = std::sqrtf(x * x + z * z);
+        s16 xrot = (s16)-cM_atan2s(y, dist);
+        mDoMtx_YrotS(*calc_mtx, yrot);
+        mDoMtx_XrotM(*calc_mtx, xrot);
+        sp34.z = i_this->m2F4;
+        cXyz sp28;
+        MtxPosition(&sp34, &sp28);
+        cXyz sp1C = (cur - 1)->mPos + sp28;
+        cur->mPos = sp1C;
+        cur--;
+    }
+
+    i_this->m2E0 = i_this->mSitem1[9].mPos;
+    cXyz sp10 = i_this->mSitem1[8].mPos - i_this->mSitem1[9].mPos;
+    i_this->m2EC.x = (s16)-cM_atan2s(sp10.y, sp10.z);
+    f32 dist = std::sqrtf(sp10.y * sp10.y + sp10.z * sp10.z);
+    i_this->m2EC.y = cM_atan2s(sp10.x, dist);
+    hand_mtx_set(i_this);
 }
 
 /* 000009E8-00000E2C       .text cut_control1__FP11sitem_class */
