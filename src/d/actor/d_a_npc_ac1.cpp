@@ -930,13 +930,13 @@ cPhs_State daNpc_Ac1_c::_create() {
 
 /* 0000256C-00002838       .text create_Anm__11daNpc_Ac1_cFv */
 J3DModelData* daNpc_Ac1_c::create_Anm() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes("Ac", 5);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 5);
     JUT_ASSERT(0x6BE, a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Ac", 1),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 1),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -966,13 +966,13 @@ J3DModelData* daNpc_Ac1_c::create_Anm() {
 
 /* 00002838-00002A4C       .text create_wng_Anm__11daNpc_Ac1_cFv */
 J3DModelData* daNpc_Ac1_c::create_wng_Anm() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes("Ac", 3);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 3);
     JUT_ASSERT(0x6EA, a_mdl_dat != NULL);
     mpWingMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Ac", 0),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 0),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -998,13 +998,13 @@ J3DModelData* daNpc_Ac1_c::create_wng_Anm() {
 
 /* 00002A4C-00002CBC       .text create_arm_Anm__11daNpc_Ac1_cFv */
 J3DModelData* daNpc_Ac1_c::create_arm_Anm() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes("Ac", 2);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 2);
     JUT_ASSERT(0x711, a_mdl_dat != NULL);
     mpArmMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Ac", 0),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 0),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1035,9 +1035,9 @@ bool daNpc_Ac1_c::create_itm_Mdl() {
     mpItemModel = NULL;
     J3DModelData* a_mdl_dat;
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580)) {
-        a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes("Ac", 0xF);
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 0xF);
     } else {
-        a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes("Ac", 4);
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 4);
     }
     JUT_ASSERT(0x744, a_mdl_dat != NULL);
     mpItemModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
