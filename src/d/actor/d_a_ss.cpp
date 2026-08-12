@@ -78,6 +78,7 @@ void anm_init(ss_class* i_this, int bckIdx, f32 morf, u8 loopMode, f32 playSpeed
 }
 
 /* 00000438-000008D0       .text hand_1_set__FP8ss_classP4ss_s */
+/* Nonmatching */
 void hand_1_set(ss_class* i_this, ss_s* hand) {
     dBgS_LinChk linChk;
     cXyz sp48;
@@ -119,6 +120,7 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
 }
 
 /* 00000D08-000011BC       .text hand_1_set_2__FP8ss_classP4ss_s */
+/* Nonmatching */
 void hand_1_set_2(ss_class* i_this, ss_s* hand) {
     dBgS_LinChk linChk;
     cXyz sp3C;
@@ -161,6 +163,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
 }
 
 /* 000011BC-0000152C       .text hand_1_move__FP8ss_classP4ss_s */
+/* Nonmatching */
 void hand_1_move(ss_class* i_this, ss_s* hand) {
     ss_s_s* pos = hand->mSss;
     u8 count = hand->m3A;
@@ -246,6 +249,7 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
 }
 
 /* 0000152C-00001D30       .text hand_1_cut__FP8ss_classP4ss_s */
+/* Nonmatching */
 void hand_1_cut(ss_class* i_this, ss_s* hand) {
     cXyz sp58(0.0f, 0.0f, 15.0f + REG8_F(11));
     cXyz sp4C;
@@ -353,6 +357,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 }
 
 /* 00001EC8-0000236C       .text hand_move__FP8ss_class */
+/* Nonmatching */
 void hand_move(ss_class* i_this) {
     dBgS_LinChk linChk;
     cXyz sp8;
@@ -412,6 +417,7 @@ void hand_move(ss_class* i_this) {
 }
 
 /* 0000236C-00002B84       .text core_move__FP8ss_class */
+/* Nonmatching */
 void core_move(ss_class* i_this) {
     f32 dist = fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0));
     f32 maxDist = 350.0f;
@@ -588,6 +594,7 @@ void core_move(ss_class* i_this) {
 }
 
 /* 00002B84-00002F1C       .text daSs_Execute__FP8ss_class */
+/* Nonmatching */
 static BOOL daSs_Execute(ss_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -663,6 +670,7 @@ static BOOL daSs_Delete(ss_class* i_this) {
 }
 
 /* 00002F58-000030D4       .text useHeapInit__FP10fopAc_ac_c */
+/* Nonmatching */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     ss_class* i_this = (ss_class*)a_this;
 
