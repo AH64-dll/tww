@@ -314,31 +314,36 @@ namespace daObjTribox {
     }
 
     /* 00000E54-00000F8C       .text push_pullCB__Q211daObjTribox5Act_cFP10fopAc_ac_cP10fopAc_ac_csQ24dBgW13PushPullLabel */
-    fopAc_ac_c* Act_c::push_pullCB(fopAc_ac_c* i_actor, fopAc_ac_c*, s16 i_angle, dBgW::PushPullLabel i_pp_label) {
+    fopAc_ac_c* Act_c::push_pullCB(fopAc_ac_c* i_actor, fopAc_ac_c* i_actor2, s16 i_angle, dBgW::PushPullLabel i_pp_label) {
         static const s16 face_ang_offset[3] = {0, 0x5555, 0xAAAB};
-        Act_c* self = static_cast<Act_c*>(i_actor);
         dBgW::PushPullLabel pp_label = (dBgW::PushPullLabel)(i_pp_label & 3);
         if (pp_label != 0) {
             const int pp_field = dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL;
             JUT_ASSERT(0x2B0, pp_label != pp_field);
-            self->mPP[0].mZ = (pp_label & 1) ? 0 : 1;
-            s16 angleDiff = (i_angle - 0x8000) - self->shape_angle.y;
+            if (pp_label & 1) {
+                ((Act_c*)i_actor)->mPP[0].mZ = 0;
+            } else {
+                ((Act_c*)i_actor)->mPP[0].mZ = 1;
+            }
+            s16 angle = i_angle - 0x8000;
+            s16 angleDiff = angle - ((Act_c*)i_actor)->shape_angle.y;
             if (angleDiff >= -0x2AAA && angleDiff < 0x2AAA) {
-                self->mPP[0].mX = 0;
+                ((Act_c*)i_actor)->mPP[0].mX = 0;
             } else if (angleDiff >= 0x2AAA) {
-                self->mPP[0].mX = 1;
+                ((Act_c*)i_actor)->mPP[0].mX = 1;
             } else {
-                self->mPP[0].mX = 2;
+                ((Act_c*)i_actor)->mPP[0].mX = 2;
             }
-            s16 faceAngle = self->shape_angle.y + face_ang_offset[self->mPP[0].mX];
-            if ((s16)(faceAngle - fopAcM_searchActorAngleY(self, i_actor)) >= 0) {
-                self->mPP[0].mY = 0;
+            s16 searchAngle = fopAcM_searchActorAngleY((fopAc_ac_c*)i_actor, i_actor2);
+            s16 faceAngle = ((Act_c*)i_actor)->shape_angle.y + face_ang_offset[((Act_c*)i_actor)->mPP[0].mX];
+            if ((s16)(faceAngle - searchAngle) >= 0) {
+                ((Act_c*)i_actor)->mPP[0].mY = 0;
             } else {
-                self->mPP[0].mY = 1;
+                ((Act_c*)i_actor)->mPP[0].mY = 1;
             }
-            self->mPP[0].mFlag = 1;
+            ((Act_c*)i_actor)->mPP[0].mFlag = 1;
         }
-        return self;
+        return (fopAc_ac_c*)i_actor;
     }
 
     /* 00000F8C-00000FF4       .text line_cross__Q211daObjTribox5Act_cCFPC4cXyzPC4cXyz */
