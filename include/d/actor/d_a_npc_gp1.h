@@ -124,9 +124,9 @@ public:
     /* 0x7F2 */ s16 m7F2;
     /* 0x7F4 */ s16 m7F4;
     /* 0x7F6 */ s16 m7F6;
-    /* 0x7F8 */ bool mbMorfAnimStopped;
-    /* 0x7F9 */ bool m7F9;
-    /* 0x7FA */ bool m7FA;
+    /* 0x7F8 */ s8 mbMorfAnimStopped;
+    /* 0x7F9 */ s8 m7F9;
+    /* 0x7FA */ s8 m7FA;
     /* 0x7FB */ u8 m7FB;
     /* 0x7FC */ bool m7FC;
     /* 0x7FD */ bool m7FD;

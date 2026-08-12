@@ -347,23 +347,29 @@ void daNpc_Gp1_c::chg_anmAtr(u8 i_param_1) {
 void daNpc_Gp1_c::control_anmAtr() {
     switch(m80F) {
         case 1:
-        case 6:
             if(mbMorfAnimStopped) {
                 m80F = 0;
                 setAnm_NUM(0, 1);
             }
             break;
         case 5:
+            if(!mbMorfAnimStopped) {
+                if(mpMorf->checkFrame(80.0f)) {
+                    create_rupee();
+                    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_LUPY_OUT, NULL, 0, dComIfGp_getReverb(current.roomNo));
+                    m7F4 = 0;
+                }
+            } else {
+                m80F = 0;
+                setAnm_NUM(0, 1);
+            }
+            break;
+        case 6:
             if(mbMorfAnimStopped) {
-                m7F9++;
-                if(m7F9 >= 2) {
+                if(++m7F9 >= 2) {
                     m80F = 0;
                     setAnm_NUM(0, 1);
                 }
-            } else if(mpMorf->checkFrame(80.0f)) {
-                create_rupee();
-                JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_LUPY_OUT, NULL, 0, dComIfGp_getReverb(current.roomNo));
-                m7F4 = 0;
             }
             break;
         default:
