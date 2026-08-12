@@ -979,8 +979,11 @@ u8 daNpcSv_c::getTalkNo() {
 }
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
-bool daNpcSv_c::isTalkOK() {
-    return !dComIfGp_checkPlayerStatus0(0, 0x100000);
+s32 daNpcSv_c::isTalkOK() {
+    if (g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & 0x100000) {
+        return 0;
+    }
+    return 1;
 }
 
 /* 00002958-00002978       .text daNpc_PeopleCreate__FPv */
