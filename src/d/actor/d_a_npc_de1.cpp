@@ -279,15 +279,17 @@ void daNpc_De1_c::setStt(s8 i_status) {
             mAnmAtr = 0xFF;
             mPrevStatus = prev_status;
             return;
+        case 3:
+            break;
         case 7:
             attention_info.flags |= fopAc_Attn_ENEMYFLAG_NOLOCKON_e;
             attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x22;
             // fall through
-        case 3:
         default:
             setAnm();
             return;
-    }}
+    }
+}
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
 u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
