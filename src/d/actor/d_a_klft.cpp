@@ -22,6 +22,7 @@ static f32* wp;
 
 /* 00000078-00000374       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+    /* Nonmatching - regalloc */
     f32 stickY;
     f32 stickX;
     klft_class* pActor = (klft_class*)i_ac;
@@ -281,6 +282,7 @@ void himo_move(klft_class* i_this) {
 
 /* 00001140-00001444       .text daKlft_Execute__FP10klft_class */
 static BOOL daKlft_Execute(klft_class* i_this) {
+    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(i_this);
     if (i_this->field_3B2 != 0) {
         i_this->field_3B2--;
@@ -389,6 +391,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000017C4-00001C78       .text daKlft_Create__FP10fopAc_ac_c */
 static cPhs_State daKlft_Create(fopAc_ac_c* i_this) {
+    /* Nonmatching - regalloc */
     static dCcD_SrcSph utiwa_sph_src = {
         // dCcD_SrcGObjInf
         {
