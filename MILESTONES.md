@@ -59,3 +59,19 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-12T13:54Z — M5: flip batch complete — #1161 d_a_kb, #1162 d_a_bridge, #1163 d_a_bmdfoot all Equivalent regalloc flips CI-green x4 (single configure.py each from upstream/main). Eleven org PRs open+mergeable (#1152/#1153/#1154/#1155/#1157/#1158/#1159/#1160/#1161/#1162/#1163). Flip-pool exhausted (exactly 6 flips, all in-flight). Free-flip pattern proven: kb/bridge/bmdfoot/kt/ship were all hidden flips found by the outside-queue sweep.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-12T20:00Z — M6: isolated-mode flip batch complete — 17 Equivalent flips ALL locally gated; flip pool exhausted; gate re-verified at HEAD b96f8029e
+
+**State (2026-08-12 22:53 EEST)**: ISOLATED MODE FOREVER (zero GitHub outbound — no PRs/CI/upstream; local flip+gates only). Main HEAD `b96f8029e`, verify worktree reset to it, forced explicit gate `build-lock.sh build/GZLE01/ok` → **416 files OK** (fresh ok stamp 22:53:25; the 22:52 stamp was a 0-byte configure placeholder — always force + confirm mtime moved). 87 `ActorRel(NonMatching)` rows remain in configure.py; 120 verdicts in `.org/actor-data/`.
+
+**Delivered**
+- **17 Equivalent flips all locally gated** (bridge, lod_bg, obj_ikada, obj_tide, himo3, kamome, kt, obj_swflat, ship, bmdfoot, kb, klft, mant, npc_co1, npc_ji1, movie_player, msdan MatchingFor 3-retail) — every flip commit accounted for in flip-gate-audit; 0 unverified flips (mozo premature flip reverted).
+- **Flip pool EXHAUSTED**: 0 free-flip candidates; every near-100 actor has ≥1 real (non-regalloc) holdout per the preverify bench. Near-flip targets each need real fixes: kantera (switch-pivot, do-not-retest), ac1 (setBtp getIDRes), gk1 (createInit structural), kddoor (3 stragglers), bpw (action_bunri_dousa API diffs), tribox (holdouts + onPushPullKeep landed).
+- **mwcc 1.3.2r family fully characterized**: mozo is the ONLY real 1.3.2r override; 9/10 pair-detect "primes" disproven by .o-swap + stub-check (near-zero scores were empty `/* Nonmatching */` stubs, not compiler-version).
+- **Org-wide anti-slop sweep**: Nonmatching marker gaps closed in multiple actors; stale markers on 100% fns removed (mozo 9, ob1 6); s32→bool fix landed for sv (QACop-flagged regression 100→88.889 → 100).
+- **One-liners landed this session**: de1 demo() u8->bool + setMtx mAnmNum + CreateHeap priority 1, ob1 get_attPos path-inline, kddoor calcMtx m19A + nodeCB revert, tribox onPushPullKeep + L_attr, ac1 setMtx, ss useHeapInit 0x8, mn 0x78C mItemId.
+- **Quota recovery**: full 30-agent wave died to provider 429 (weekly/monthly/5h limits); lesser-scale Pro wave + Main-as-Pro surgical lane carried the flip/gate work; roster trimmed; orgctl queue absorbed mass death with zero loss.
+
+See .org/log.md + .org/lessons.md for details.
