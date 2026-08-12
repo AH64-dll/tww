@@ -163,32 +163,32 @@ void daNpc_Yw1_c::anmAtr(unsigned short) {
 }
 
 /* 000013F4-0000148C       .text next_msgStatus__11daNpc_Yw1_cFPUl */
-void daNpc_Yw1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Yw1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 0000148C-00001588       .text getMsg_YW1_0__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::getMsg_YW1_0() {
+u32 daNpc_Yw1_c::getMsg_YW1_0() {
     /* Nonmatching */
 }
 
 /* 00001588-00001600       .text getMsg_YW1_1__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::getMsg_YW1_1() {
+u32 daNpc_Yw1_c::getMsg_YW1_1() {
     /* Nonmatching */
 }
 
 /* 00001600-00001678       .text getMsg_YW1_2__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::getMsg_YW1_2() {
+u32 daNpc_Yw1_c::getMsg_YW1_2() {
     /* Nonmatching */
 }
 
 /* 00001678-000016F0       .text getMsg_YW1_3__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::getMsg_YW1_3() {
+u32 daNpc_Yw1_c::getMsg_YW1_3() {
     /* Nonmatching */
 }
 
 /* 000016F0-00001770       .text getMsg__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::getMsg() {
+u32 daNpc_Yw1_c::getMsg() {
     /* Nonmatching */
 }
 
