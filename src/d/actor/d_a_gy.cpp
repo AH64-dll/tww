@@ -697,7 +697,11 @@ void daGy_c::setWave() {
 
 /* 00003268-000032E4       .text lineCheck__6daGy_cFP4cXyzP4cXyz */
 void daGy_c::lineCheck(cXyz* param_0, cXyz* param_1) {
-    /* Nonmatching */
+    mE14.Set(param_0, param_1, this);
+    if (dComIfG_Bgsp()->LineCross(&mE14)) {
+        *param_1 = mE14.GetCross();
+        mE80 = 1;
+    }
 }
 
 /* 000032E4-000038EC       .text checkTgHit__6daGy_cFv */
