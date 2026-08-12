@@ -87,6 +87,7 @@ int daObjTrap_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
 int daObjTrap_c::create_heap() {
+    /* Nonmatching */
     int ret = 0;
 
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_TRAP_BDL_HTORA1_e);
@@ -113,6 +114,7 @@ int daObjTrap_c::create_heap() {
 
 /* 000002A4-00000510       .text _create__11daObjTrap_cFv */
 cPhs_State daObjTrap_c::_create() {
+    /* Nonmatching */
     fopAcM_ct(this, daObjTrap_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
@@ -154,6 +156,7 @@ cPhs_State daObjTrap_c::_create() {
 
 /* 00000DF0-00000E84       .text _delete__11daObjTrap_cFv */
 bool daObjTrap_c::_delete() {
+    /* Nonmatching */
     if (heap && mpBgW) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
@@ -222,6 +225,7 @@ bool daObjTrap_c::check_arrival() {
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
 cXyz daObjTrap_c::check_wall() {
+    /* Nonmatching */
     static dBgS_ObjLinChk l_wall_work;
     static const s16 angleY[] = {0x0000, 0x4000, 0xC000};
     static const f32 transA[] = {0.0f, 145.0f, 145.0f};
@@ -288,6 +292,7 @@ BOOL daObjTrap_c::check_block_target_pos(cXyz* i_targetPos) {
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
 cXyz daObjTrap_c::check_block(cXyz i_blockPos) {
+    /* Nonmatching */
     static dBgS_ObjLinChk l_block_work;
     static s16 angleY[] = {0x4000, 0xC000};
 
@@ -392,6 +397,7 @@ void daObjTrap_c::vibrate() {
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
 void daObjTrap_c::bound() {
+    /* Nonmatching */
     cXyz sp14 = mDir * -1.0f;
     PSVECSubtract(&mCurPos, &mVibPos, &mCurPos);
     f32 vibF = mVibF;
@@ -425,6 +431,7 @@ void daObjTrap_c::shine_move() {
 
 /* 00002758-00002CB0       .text _execute__11daObjTrap_cFv */
 bool daObjTrap_c::_execute() {
+    /* Nonmatching */
     mCurPos = current.pos;
 
     switch (mVibMode) {
