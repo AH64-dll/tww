@@ -13,6 +13,7 @@ class daGy_c : public fopEn_enemy_c {
 public:
     daGy_c();
     static const u32 m_heapsize;
+    static const char m_arc_name[];
 
     void _nodeControl(J3DNode*, J3DModel*);
     BOOL _createHeap();
