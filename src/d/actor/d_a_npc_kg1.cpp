@@ -91,10 +91,9 @@ void daNpc_Kg1_c::initTexPatternAnm(int, bool) {
 
 /* 000008D8-00000944       .text playTexPatternAnm__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::playTexPatternAnm() {
-    if (cLib_calcTimer(&m72C) == 0) {
-        s16 frameMax = m6F4->getFrameMax();
-        if (m720 >= frameMax) {
-            m720 = m720 - frameMax;
+    if (!cLib_calcTimer(&m72C)) {
+        if (m720 >= m6F4->getFrameMax()) {
+            m720 -= m6F4->getFrameMax();
             m72C = 0x78;
         } else {
             m720++;
