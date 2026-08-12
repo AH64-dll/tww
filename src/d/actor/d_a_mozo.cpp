@@ -604,7 +604,7 @@ void daMozo_c::setAnm(int i_idx, float i_morf) {
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
 cPhs_State daMozo_c::CreateInit() {
-    /* Nonmatching */
+    
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
 
     u8 temp = fopAcM_GetParam(this) & 0xFF;
