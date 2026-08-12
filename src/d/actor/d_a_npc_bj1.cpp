@@ -327,8 +327,29 @@ void daNpc_Bj1_c::setAnm_ATR() {
 }
 
 /* 00001470-00001534       .text anmAtr__11daNpc_Bj1_cFUs */
-void daNpc_Bj1_c::anmAtr(unsigned short) {
-    /* Nonmatching */
+void daNpc_Bj1_c::anmAtr(unsigned short i_attr) {
+    switch (i_attr) {
+    case 0x6:
+        if (m8B7 == 0) {
+            m8AD = 0xFF;
+            chg_anmAtr(g_dComIfG_gameInfo.play.mMesgAnime);
+            m8B7++;
+        }
+        {
+            u8 tagInfo = g_dComIfG_gameInfo.play.mMesgAnimeTagInfo;
+            g_dComIfG_gameInfo.play.mMesgAnimeTagInfo = 0xFF;
+            if (tagInfo != 0xFF && m8AE != tagInfo) {
+                m8AE = tagInfo;
+                chg_anmTag();
+            }
+        }
+        break;
+    case 0xE:
+        m8B7 = 0;
+        break;
+    }
+    control_anmTag();
+    control_anmAtr();
 }
 
 /* 00001534-000015D8       .text eventOrder__11daNpc_Bj1_cFv */

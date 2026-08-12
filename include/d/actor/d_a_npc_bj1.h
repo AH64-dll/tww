@@ -234,7 +234,7 @@ public:
     /* 0x8AB */ u8 m8AB;
     /* 0x8AC */ u8 m8AC;
     /* 0x8AD */ u8 m8AD;
-    /* 0x8AE */ s8 m8AE;
+    /* 0x8AE */ u8 m8AE;
     /* 0x8AF */ u8 m8AF;
     /* 0x8B0 */ u8 mStatus;
     /* 0x8B1 */ u8 mPrevStatus;
@@ -243,7 +243,7 @@ public:
     /* 0x8B4 */ s8 mType;
     /* 0x8B5 */ s8 mSpecificType;
     /* 0x8B6 */ s8 mActionIndex;
-    /* 0x8B7 */ u8 m8B7;
+    /* 0x8B7 */ s8 m8B7;
 };  // Size: 0x8B8
 
 class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
