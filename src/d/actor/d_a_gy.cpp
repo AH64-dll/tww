@@ -359,12 +359,24 @@ void daGy_c::modeDeleteBombInit() {
 
 /* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
 void daGy_c::modeCircleInit() {
-    /* Nonmatching */
+    m2B0 = 1;
+    s32 type = mpCtrl->m320;
+    if(type == 0) {
+        m914 = (s32)((f32)l_HIO.m116 + cM_rndF((f32)(l_HIO.m118 - l_HIO.m116)));
+    } else if(type == 1) {
+        m914 = (s32)((f32)l_HIO.m112 + cM_rndF((f32)(l_HIO.m114 - l_HIO.m112)));
+    }
+    m508 = 0.0f;
 }
 
 /* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
 void daGy_c::modeWithCircleInit() {
-    /* Nonmatching */
+    m2B0 = 6;
+    m4F8 = (s32)cM_rndF((f32)l_HIO.m132);
+    if(m4F8 <= l_HIO.m130) {
+        m4F8 = l_HIO.m130;
+    }
+    m914 = l_HIO.m110 + m4F8;
 }
 
 /* 00000C30-00000C7C       .text setAnm__6daGy_cFv */
