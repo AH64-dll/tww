@@ -42,32 +42,32 @@ void daNpc_Bj1_c::nodePrpControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000664-00000710       .text init_BJ4_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::init_BJ4_0() {
+bool daNpc_Bj1_c::init_BJ4_0() {
     /* Nonmatching */
 }
 
 /* 00000710-000007D4       .text init_BJ6_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::init_BJ6_0() {
+bool daNpc_Bj1_c::init_BJ6_0() {
     /* Nonmatching */
 }
 
 /* 000007D4-00000864       .text init_BJ7_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::init_BJ7_0() {
+bool daNpc_Bj1_c::init_BJ7_0() {
     /* Nonmatching */
 }
 
 /* 00000864-00000910       .text init_BJX_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::init_BJX_0() {
+bool daNpc_Bj1_c::init_BJX_0() {
     /* Nonmatching */
 }
 
 /* 00000910-00000998       .text init_BJX_1__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::init_BJX_1() {
+bool daNpc_Bj1_c::init_BJX_1() {
     /* Nonmatching */
 }
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::createInit() {
+BOOL daNpc_Bj1_c::createInit() {
     /* Nonmatching */
 }
 
@@ -82,12 +82,12 @@ void daNpc_Bj1_c::setMtx(bool) {
 }
 
 /* 00001098-000010AC       .text anmNum_toResID__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::anmNum_toResID(int) {
+int daNpc_Bj1_c::anmNum_toResID(int) {
     /* Nonmatching */
 }
 
 /* 000010AC-00001188       .text setAnm_anm__11daNpc_Bj1_cFPQ211daNpc_Bj1_c9anm_prm_c */
-void daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c*) {
+BOOL daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c*) {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ void daNpc_Bj1_c::setAnm_NUM(int) {
 }
 
 /* 000011B8-000011F4       .text setAnm__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::setAnm() {
+bool daNpc_Bj1_c::setAnm() {
     /* Nonmatching */
 }
 
 /* 000011F4-00001378       .text setAnm_prp__11daNpc_Bj1_cFSc */
-void daNpc_Bj1_c::setAnm_prp(signed char) {
+BOOL daNpc_Bj1_c::setAnm_prp(signed char) {
     /* Nonmatching */
 }
 
@@ -147,17 +147,17 @@ void daNpc_Bj1_c::checkOrder() {
 }
 
 /* 00001690-0000172C       .text chk_talk__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::chk_talk() {
+bool daNpc_Bj1_c::chk_talk() {
     /* Nonmatching */
 }
 
 /* 0000172C-000017C0       .text chk_drct__11daNpc_Bj1_cFf */
-void daNpc_Bj1_c::chk_drct(float) {
+bool daNpc_Bj1_c::chk_drct(float) {
     /* Nonmatching */
 }
 
 /* 000017C0-000017F0       .text chk_partsNotMove__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::chk_partsNotMove() {
+bool daNpc_Bj1_c::chk_partsNotMove() {
     /* Nonmatching */
 }
 
@@ -167,12 +167,12 @@ void daNpc_Bj1_c::lookBack() {
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
-void daNpc_Bj1_c::getMaskInf(unsigned char*) {
+bool daNpc_Bj1_c::getMaskInf(unsigned char*) {
     /* Nonmatching */
 }
 
 /* 00001A44-00001AA8       .text chkReg__11daNpc_Bj1_cFUs */
-void daNpc_Bj1_c::chkReg(unsigned short) {
+bool daNpc_Bj1_c::chkReg(unsigned short) {
     /* Nonmatching */
 }
 
@@ -182,67 +182,67 @@ void daNpc_Bj1_c::setReg(unsigned short) {
 }
 
 /* 00001B14-00001E84       .text next_msgStatus__11daNpc_Bj1_cFPUl */
-void daNpc_Bj1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Bj1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 00001E84-00001F14       .text getMsg_BJ1_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ1_0() {
+u32 daNpc_Bj1_c::getMsg_BJ1_0() {
     /* Nonmatching */
 }
 
 /* 00001F14-00001F54       .text getMsg_BJ2_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ2_0() {
+u32 daNpc_Bj1_c::getMsg_BJ2_0() {
     /* Nonmatching */
 }
 
 /* 00001F54-00001FA8       .text getMsg_BJ3_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ3_0() {
+u32 daNpc_Bj1_c::getMsg_BJ3_0() {
     /* Nonmatching */
 }
 
 /* 00001FA8-00001FE8       .text getMsg_BJ4_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ4_0() {
+u32 daNpc_Bj1_c::getMsg_BJ4_0() {
     /* Nonmatching */
 }
 
 /* 00001FE8-00002028       .text getMsg_BJ5_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ5_0() {
+u32 daNpc_Bj1_c::getMsg_BJ5_0() {
     /* Nonmatching */
 }
 
 /* 00002028-00002068       .text getMsg_BJ6_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ6_0() {
+u32 daNpc_Bj1_c::getMsg_BJ6_0() {
     /* Nonmatching */
 }
 
 /* 00002068-000021C4       .text getMsg_BJ7_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ7_0() {
+u32 daNpc_Bj1_c::getMsg_BJ7_0() {
     /* Nonmatching */
 }
 
 /* 000021C4-00002254       .text getMsg_BJ8_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ8_0() {
+u32 daNpc_Bj1_c::getMsg_BJ8_0() {
     /* Nonmatching */
 }
 
 /* 00002254-00002294       .text getMsg_BJ9_0__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_BJ9_0() {
+u32 daNpc_Bj1_c::getMsg_BJ9_0() {
     /* Nonmatching */
 }
 
 /* 00002294-0000242C       .text getMsg_Corog__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg_Corog() {
+u32 daNpc_Bj1_c::getMsg_Corog() {
     /* Nonmatching */
 }
 
 /* 0000242C-000024EC       .text getMsg__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::getMsg() {
+u32 daNpc_Bj1_c::getMsg() {
     /* Nonmatching */
 }
 
 /* 000024EC-0000256C       .text chkAttention__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::chkAttention() {
+bool daNpc_Bj1_c::chkAttention() {
     /* Nonmatching */
 }
 
@@ -252,12 +252,12 @@ void daNpc_Bj1_c::setAttention(bool) {
 }
 
 /* 000025D4-00002608       .text searchByID__11daNpc_Bj1_cFUi */
-void daNpc_Bj1_c::searchByID(fpc_ProcID) {
+fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID) {
     /* Nonmatching */
 }
 
 /* 00002608-000026B8       .text partner_srch_sub__11daNpc_Bj1_cFPFPvPv_Pv */
-void daNpc_Bj1_c::partner_srch_sub(void* (*)(void*, void*)) {
+bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc) {
     /* Nonmatching */
 }
 
@@ -347,7 +347,7 @@ void daNpc_Bj1_c::deleteSeed() {
 }
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::charDecide(int) {
+bool daNpc_Bj1_c::charDecide(int) {
     /* Nonmatching */
 }
 
@@ -372,7 +372,7 @@ void daNpc_Bj1_c::eInit_calcRelativPos(cXyz*, int*) {
 }
 
 /* 00003B10-00003B20       .text eInit_prmFloat__11daNpc_Bj1_cFPff */
-void daNpc_Bj1_c::eInit_prmFloat(float*, float) {
+f32 daNpc_Bj1_c::eInit_prmFloat(float*, float) {
     /* Nonmatching */
 }
 
@@ -467,7 +467,7 @@ void daNpc_Bj1_c::endEvent() {
 }
 
 /* 000047F4-0000482C       .text isEventEntry__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::isEventEntry() {
+BOOL daNpc_Bj1_c::isEventEntry() {
     /* Nonmatching */
 }
 
@@ -477,7 +477,7 @@ void daNpc_Bj1_c::event_proc(int) {
 }
 
 /* 00004914-000049C0       .text set_action__11daNpc_Bj1_cFM11daNpc_Bj1_cFPCvPvPv_iPv */
-void daNpc_Bj1_c::set_action(int (daNpc_Bj1_c::*)(void*), void*) {
+BOOL daNpc_Bj1_c::set_action(daNpc_Bj1_c::ProcFunc, void*) {
     /* Nonmatching */
 }
 
@@ -487,22 +487,22 @@ void daNpc_Bj1_c::setStt(signed char) {
 }
 
 /* 00004B60-00004C30       .text wait_1__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::wait_1() {
+BOOL daNpc_Bj1_c::wait_1() {
     /* Nonmatching */
 }
 
 /* 00004C30-00004D10       .text wait_2__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::wait_2() {
+BOOL daNpc_Bj1_c::wait_2() {
     /* Nonmatching */
 }
 
 /* 00004D10-00004E2C       .text wait_3__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::wait_3() {
+BOOL daNpc_Bj1_c::wait_3() {
     /* Nonmatching */
 }
 
 /* 00004E2C-00004F48       .text wait_4__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::wait_4() {
+BOOL daNpc_Bj1_c::wait_4() {
     /* Nonmatching */
 }
 
@@ -517,37 +517,37 @@ void daNpc_Bj1_c::fall01() {
 }
 
 /* 0000514C-00005510       .text talk_1__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::talk_1() {
+BOOL daNpc_Bj1_c::talk_1() {
     /* Nonmatching */
 }
 
 /* 00005510-000055D8       .text walk_1__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::walk_1() {
+BOOL daNpc_Bj1_c::walk_1() {
     /* Nonmatching */
 }
 
 /* 000055D8-00005694       .text wait_action1__11daNpc_Bj1_cFPv */
-void daNpc_Bj1_c::wait_action1(void*) {
+BOOL daNpc_Bj1_c::wait_action1(void*) {
     /* Nonmatching */
 }
 
 /* 00005694-0000577C       .text wait_action2__11daNpc_Bj1_cFPv */
-void daNpc_Bj1_c::wait_action2(void*) {
+BOOL daNpc_Bj1_c::wait_action2(void*) {
     /* Nonmatching */
 }
 
 /* 0000577C-00005860       .text wait_action3__11daNpc_Bj1_cFPv */
-void daNpc_Bj1_c::wait_action3(void*) {
+BOOL daNpc_Bj1_c::wait_action3(void*) {
     /* Nonmatching */
 }
 
 /* 00005860-00005928       .text wait_action4__11daNpc_Bj1_cFPv */
-void daNpc_Bj1_c::wait_action4(void*) {
+BOOL daNpc_Bj1_c::wait_action4(void*) {
     /* Nonmatching */
 }
 
 /* 00005928-000059C4       .text demo__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::demo() {
+bool daNpc_Bj1_c::demo() {
     /* Nonmatching */
 }
 
@@ -597,7 +597,7 @@ void daNpc_Bj1_c::create_itm_Mdl() {
 }
 
 /* 00006F54-00007114       .text CreateHeap__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::CreateHeap() {
+BOOL daNpc_Bj1_c::CreateHeap() {
     /* Nonmatching */
 }
 
