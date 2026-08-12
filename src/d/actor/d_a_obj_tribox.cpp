@@ -915,15 +915,21 @@ namespace daObjTribox {
             if (m394) {
                 g_env_light.setLightTevColorType(mpModel2, &tevStr);
                 if (m394 == 1) {
-                    mBrkAnm.entry(mpModel2->getModelData());
+                    J3DModelData* modelData = mpModel2->getModelData();
+                    mBrkAnm.entry(modelData, mBrkAnm.getFrame());
                 } else {
-                    mBrkAnm2.entry(mpModel2->getModelData());
+                    J3DModelData* modelData2 = mpModel2->getModelData();
+                    mBrkAnm2.entry(modelData2, mBrkAnm2.getFrame());
                 }
+            }
+            if (m394) {
                 dComIfGd_setListP1();
                 mDoExt_modelUpdateDL(mpModel2);
+                dComIfGd_setList();
             }
-            dComIfGd_setList();
+            dComIfGd_setListBG();
             mDoExt_modelUpdateDL(mpModel);
+            dComIfGd_setList();
         }
         return true;
     }
