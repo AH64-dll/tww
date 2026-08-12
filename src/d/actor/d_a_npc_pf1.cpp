@@ -738,13 +738,14 @@ void daNpc_Pf1_c::setStt(s8 i_status) {
 
 /* 0000179C-00001958       .text createTama__11daNpc_Pf1_cFf */
 void daNpc_Pf1_c::createTama(f32 i_param_1) {
+    csXyz angle(0, 0, 0);
     cXyz eye_pos = eyePos;
     eye_pos.y += 15.0f;
     cXyz player_eye_pos = dNpc_playerEyePos(-20.0f);
     cXyz diff = player_eye_pos - eye_pos;
-    f32 mag = std::sqrtf(diff.abs2XZ());
-    s16 angle_y = cLib_targetAngleY(&eye_pos, &player_eye_pos);
-    csXyz angle(cLib_targetAngleX(&eye_pos, &player_eye_pos), angle_y, 0);
+    f32 mag = std::sqrtf(diff.abs2());
+    angle.x = cLib_targetAngleX(&eye_pos, &player_eye_pos);
+    angle.y = cLib_targetAngleY(&eye_pos, &player_eye_pos);
     fopAc_ac_c* tama = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_TAMA_e, 0, &eyePos, fopAcM_GetRoomNo(this), &angle, NULL, -1, NULL);
     if (tama != NULL) {
         static_cast<daTama_c*>(tama)->setPartnerID(fopAcM_GetID(this));
