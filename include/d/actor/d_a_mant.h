@@ -25,14 +25,8 @@ public:
     /* 0xFA8 */ u8 mTexNo;
     /* 0xFA9 */ u8 mFlag;
 
-    inline MtxP getMtx() {
-        cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, mMtx);
-        return mMtx;
-    }
-    inline MtxP getMtx2() {
-        cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, mMtx2);
-        return mMtx2;
-    }
+    inline MtxP getMtx() { return mMtx; }
+    inline MtxP getMtx2() { return mMtx2; }
     inline cXyz* getPos() { return mPosArr; }
     inline cXyz* getNrm() { return mNrmArr; }
     inline u8 getTexNo() { return mTexNo; }

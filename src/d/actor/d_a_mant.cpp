@@ -174,10 +174,10 @@ static BOOL daMant_Draw(mant_class* i_this) {
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0_FULL, &i_this->current.pos, &i_this->tevStr);
     MtxTrans(0.0f, 0.0f, 0.0f, 0);
-    i_this->mPacket.getMtx();
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mPacket.getMtx());
     if (i_this->m1244 != mant_class::Type_PHANTOM_GANON_e) {
         MtxTrans(0.0f, -3.0f, 0.0f, 0);
-        i_this->mPacket.getMtx2();
+        cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mPacket.getMtx2());
     }
     i_this->mPacket.mTevstr = &i_this->tevStr;
     j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
