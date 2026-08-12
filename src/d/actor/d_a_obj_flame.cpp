@@ -467,8 +467,8 @@ void daObjFlame::Act_c::em_manual_inv() {
 /* 00001010-00001070       .text ki_init__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::ki_init() {
     s32 count = prm_get_kiNum() + 1;
-    s32 temp = count - 32 - 1;
-    s32 mask = temp - temp - (count < 33);
+    s32 temp = count - 32;
+    s32 mask = temp - temp - (temp == 0);
     if ((count & ~mask) > 0) {
         mKiCount = 0;
         mKiIdx = 0;
@@ -479,21 +479,23 @@ void daObjFlame::Act_c::ki_init() {
 /* 00001070-00001194       .text ki_make__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::ki_make() {
     if (mbKi != 0) {
-        if (mKiTimer > 0) {
-            mKiTimer--;
-            return;
-        }
-        s32 count = prm_get_kiNum() + 1;
-        s32 temp = count - 32 - 1;
-        s32 clamped = count & ~(temp - temp - (count < 33));
-        if (mKiIdx >= clamped) {
+        if (mKiTimer <= 0) {
+            s32 count = prm_get_kiNum() + 1;
+            s32 idx = mKiIdx;
+            if (idx < (count & ~((count - 32) - (count - 32) - ((count - 32) == 0)))) {
+                if (--mKiCount <= 0) {
+                    mKiCount = M_attr_base.mKiMax - 1;
+                    mKiIdx++;
+                    csXyz angle(0, (s16)cM_rndFX(32768.0f), 0);
+                    fopAcM_create(0xD8, (s16)0x8002, &current.pos, fopAcM_GetRoomNo(this), &angle, NULL, -1);
+                }
+            } else {
+                mbKi = 0;
+                mKiTimer = prm_get_prm();
+            }
+        } else {
             mbKi = 0;
-            mKiTimer = prm_get_prm();
-        } else if (--mKiCount <= 0) {
-            mKiCount = M_attr_base.mKiMax - 1;
-            mKiIdx++;
-            csXyz angle(0, (s16)cM_rndFX(32768.0f), 0);
-            fopAcM_create(0xD8, 0x8002, &current.pos, fopAcM_GetRoomNo(this), &angle, NULL, -1);
+            mKiTimer--;
         }
     }
 }
