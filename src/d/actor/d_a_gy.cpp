@@ -332,7 +332,7 @@ void daGy_c::_nodeControl(J3DNode* node, J3DModel* model) {
 
     if (jntNo == 2) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
-        cXyz sp30 = current.pos - player->current.pos;
+        const cXyz& sp30 = current.pos - player->current.pos;
         spC.x = sp30.x;
         spC.y = 0.0f;
         spC.z = sp30.z;
@@ -542,7 +542,7 @@ void daGy_c::modeDive() {
             return;
         }
         fopAc_ac_c* cb1_player = dComIfGp_getCb1Player();
-        cXyz sp3C = current.pos - m2BC;
+        const cXyz& sp3C = current.pos - m2BC;
         Vec spC;
         spC.x = sp3C.x;
         spC.y = 0.0f;
