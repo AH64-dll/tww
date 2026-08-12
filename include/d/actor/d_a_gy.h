@@ -101,7 +101,8 @@ public:
     /* 0xA90 */ u8 mA90[0xAE0 - 0xA90];
     /* 0xAE0 */ dBgS_AcchCir mAE0;
     /* 0xB20 */ dBgS_Acch mB20;
-    /* 0xCE4 */ u8 mCE4[0xCEC - 0xCE4];
+    /* 0xCE4 */ JntHit_c* mCE4;
+    /* 0xCE8 */ u8 mCE8[0xCEC - 0xCE8];
     /* 0xCEC */ cXyz mCEC;
     /* 0xCF8 */ Quaternion mCF8;
     /* 0xD08 */ cXyz mD08;

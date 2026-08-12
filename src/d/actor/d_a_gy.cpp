@@ -381,7 +381,45 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000008A8-00000AAC       .text _createHeap__6daGy_cFv */
 BOOL daGy_c::_createHeap() {
-    /* Nonmatching */
+    J3DModelData* mdl = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 0xF);
+    JUT_ASSERT(0x377, mdl != NULL);
+
+    mpMorf = new mDoExt_McaMorf(
+        mdl, NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, 0xB),
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        NULL,
+        0,
+        0x11020203
+    );
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    mpMorf->getModel()->setUserArea((u32)this);
+    if (m2D8.create(mpMorf->getModel()) == 0) {
+        return FALSE;
+    }
+
+    for (u16 i = 0; i < mdl->getJointNum(); i++) {
+        switch (i) {
+        case 2:
+        case 5:
+        case 6:
+        case 7:
+        case 9:
+        case 10:
+            mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeControl_CB);
+            break;
+        }
+    }
+
+    mCE4 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
+    if (mCE4 == NULL) {
+        return FALSE;
+    }
+    jntHit = mCE4;
+    return TRUE;
 }
 
 /* 00000AAC-00000C30       .text setMtx__6daGy_cFv */
