@@ -535,8 +535,7 @@ namespace daObjTribox {
         if (m38E) {
             M_sound_pos = home.pos * 0.33333334f;
         } else {
-            cXyz pos = home.pos * 0.33333334f;
-            PSVECAdd(&M_sound_pos, &pos, &M_sound_pos);
+            M_sound_pos += home.pos * 0.33333334f;
         }
     }
 
