@@ -213,6 +213,7 @@ void bon_move(kantera_class* i_this) {
     i_this->mPlight.mFluctuation = 250.0f;
 }
 
+/* Nonmatching */
 void kantera_move(kantera_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* target = fopAcM_SearchByID(i_this->mTargetActorID);
