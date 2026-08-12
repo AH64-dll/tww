@@ -56,7 +56,7 @@ public:
     void event_proc(int);
     BOOL set_action(int (daNpc_Gk1_c::*)(void*), void*);
     void setStt(s8);
-    u8 chk_attn();
+    bool chk_attn();
     BOOL wait_1();
     BOOL talk_1();
     BOOL wait_action1(void*);
