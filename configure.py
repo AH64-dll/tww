@@ -1664,7 +1664,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_btsw"),
     ActorRel(Matching,    "d_a_npc_btsw2"),
     ActorRel(Equivalent, "d_a_npc_co1"), # weak data (PR #1157 shape)
-    ActorRel(NonMatching, "d_a_npc_de1"),
+    ActorRel(Equivalent, "d_a_npc_de1"),  # 3 anchor-only holdouts (CreateHeap 99.98/_draw 99.85/setMtx 99.83); .data/.rodata 100; weak order
     ActorRel(NonMatching, "d_a_npc_ds1"),
     ActorRel(NonMatching, "d_a_npc_gk1"),
     ActorRel(NonMatching, "d_a_npc_gp1"),
