@@ -498,8 +498,9 @@ void daObjFlame::Act_c::eff_hase() {
 
 /* 000011E4-00001254       .text se_fireblast_omen__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::se_fireblast_omen() {
-    JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_OMEN, &current.pos, 0,
-                                         dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+    JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_OMEN, &current.pos, 0, reverb,
+                                         1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 00001254-00001610       .text liftup_magmarock__Q210daObjFlame5Act_cFPvPv */
@@ -644,7 +645,7 @@ void daObjFlame::Act_c::mode_l_before() {
     if (mTimer <= 0.0f) {
         mModeProc = 3;
         mTimer = 22.0f;
-        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_BLOW, &eyePos, 0, mReverb, 0.04f, 0.04f, -1.0f, -1.0f, 0);
+        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_BLOW, &eyePos, 0, mReverb);
         return;
     }
     se_fireblast_omen();
@@ -731,7 +732,7 @@ void daObjFlame::Act_c::mode_proc_call() {
         if (mpBrkAnm != NULL) {
             mpBrkAnm->play();
         }
-        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_NOISE, &eyePos, 0, mReverb, 0.04f, 0.04f, -1.0f, -1.0f, 0);
+        JAIZelBasic::getInterface()->seStart(JA_SE_FIREBLAST_NOISE, &eyePos, 0, mReverb);
     }
 
     if (mbCol) {

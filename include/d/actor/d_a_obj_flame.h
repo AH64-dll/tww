@@ -132,7 +132,7 @@ namespace daObjFlame {
         /* 0x455 */ s8 mEm1State;
         /* 0x456 */ s8 mEm2State;
         /* 0x457 */ s8 mbEmPosition;
-        /* 0x458 */ u8 mReverb;
+        /* 0x458 */ s8 mReverb;
         /* 0x459 */ u8 mbLiftup;
         /* 0x45A */ u8 mbKi;
         /* 0x45B */ u8 m45B;
