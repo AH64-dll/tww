@@ -119,7 +119,7 @@ public:
     /* 0x7A3 */ u8 m7A3;
     /* 0x7A4 */ u8 m7A4;
     /* 0x7A5 */ u8 m7A5;
-    /* 0x7A6 */ u8 m7A6;
+    /* 0x7A6 */ bool m7A6;
     /* 0x7A7 */ u8 m7A7;
     /* 0x7A8 */ u8 m7A8;
     /* 0x7A9 */ s8 m7A9;
@@ -130,7 +130,7 @@ public:
     /* 0x7AE */ s8 mStatus;
     /* 0x7AF */ s8 mAnmNum;
     /* 0x7B0 */ u8 m7B0;
-    /* 0x7B1 */ u8 m7B1;
+    /* 0x7B1 */ s8 m7B1;
     /* 0x7B2 */ s8 mTypeInit;
     /* 0x7B3 */ s8 mType;
     /* 0x7B4 */ u8 m7B4;

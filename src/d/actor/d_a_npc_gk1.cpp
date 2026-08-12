@@ -492,6 +492,7 @@ void daNpc_Gk1_c::lookBack() {
     cXyz* dst_pos_p;
     cXyz src_pos;
     s16 desired_yrot;
+    bool head_only_follow;
     mLookAtNckX = m_jnt.getHead_y();
     mLookAtBoneX = m_jnt.getBackbone_y();
     mLookAtY = current.angle.y;
@@ -502,16 +503,17 @@ void daNpc_Gk1_c::lookBack() {
     dst_pos.set(0.0f, 0.0f, 0.0f);
     dst_pos_p = NULL;
     desired_yrot = current.angle.y;
-    bool head_only_follow = m7A6;
+    head_only_follow = m7A6;
 
     switch (m7B1) {
         case 1:
-            dst_pos = dNpc_playerEyePos(-20.0f);
-            mEyePos = dst_pos;
+            mEyePos = dNpc_playerEyePos(-20.0f);
+            dst_pos = mEyePos;
             dst_pos_p = &dst_pos;
             break;
         case 2:
-            dst_pos_p = &mEyePos;
+            dst_pos = mEyePos;
+            dst_pos_p = &dst_pos;
             break;
         case 3:
             desired_yrot = m79A;
@@ -523,6 +525,7 @@ void daNpc_Gk1_c::lookBack() {
             if (actor != NULL && result == 0) {
                 mEyePos = actor->current.pos;
                 mEyePos.y = actor->eyePos.y;
+                dst_pos = mEyePos;
                 dst_pos_p = &dst_pos;
             }
             break;
