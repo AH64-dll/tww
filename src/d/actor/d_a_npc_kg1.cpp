@@ -149,13 +149,15 @@ void daNpc_Kg1_c::lookBack() {
 
 /* 00000688-000007D8       .text chkAttention__11daNpc_Kg1_cFv */
 s32 daNpc_Kg1_c::chkAttention() {
-    cXyz dist = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    f32 dist_xz = dist.absXZ();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    f32 dist_xz = (player->current.pos - current.pos).absXZ();
+    s16 max_attn_angle = l_HIO.mHio[0].mMaxAttnAngleY;
     if (dist_xz < l_HIO.mHio[0].mMaxAttnDistXZ) {
-        f32 dx = dComIfGp_getPlayer(0)->current.pos.x - current.pos.x;
-        f32 dz = dComIfGp_getPlayer(0)->current.pos.z - current.pos.z;
+        f32 dx = player->current.pos.x - current.pos.x;
+        f32 dz = player->current.pos.z - current.pos.z;
         s16 angle = cM_atan2s(dx, dz) - (current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
-        if (abs(angle) < l_HIO.mHio[0].mMaxAttnAngleY) {
+        s16 angle_diff = abs(angle);
+        if (angle_diff < max_attn_angle) {
             return 1;
         }
     }
