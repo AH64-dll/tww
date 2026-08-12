@@ -45,8 +45,12 @@ void daObj_hsh_c::particle_set(unsigned short i_particleID) {
 }
 
 /* 000003F4-00000488       .text particle_set__11daObj_hsh_cFPP14JPABaseEmitterUs */
-void daObj_hsh_c::particle_set(JPABaseEmitter**, unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, unsigned short i_particleID) {
+    if (*pEmitter == NULL) {
+        *pEmitter = dComIfGp_particle_set(i_particleID, &current.pos, &current.angle);
+        if (*pEmitter != NULL) {
+            (*pEmitter)->mFlags |= 0x40;
+        }    }
 }
 
 /* 00000488-000004C4       .text emitterDelete__11daObj_hsh_cFPP14JPABaseEmitter */
