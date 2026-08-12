@@ -271,11 +271,12 @@ BOOL daNpc_Ob1_c::setAnm_anm(anm_prm_c* i_anm) {
     }
     mAnmNum = i_anm->mAnmNum;
     int anmResID = anmNum_toResID(mAnmNum);
-    BOOL ret = dNpc_setAnmIDRes(mpMorf, i_anm->mLoopMode, i_anm->mMorf, i_anm->mSpeed, anmResID, -1, "Ob");
-    mbMorfAnimStopped = 0;
-    m7E5 = 0;
-    mPrevMorfFrame = 0;
-    return ret;
+    dNpc_setAnmIDRes(mpMorf, i_anm->mLoopMode, i_anm->mMorf, i_anm->mSpeed, anmResID, -1, "Ob");
+    int zero = 0;
+    mbMorfAnimStopped = zero;
+    m7E5 = zero;
+    mPrevMorfFrame = zero;
+    return TRUE;
 }
 
 static daNpc_Ob1_c::anm_prm_c a_anm_prm_tbl[] = {
