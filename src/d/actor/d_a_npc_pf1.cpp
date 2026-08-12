@@ -366,14 +366,20 @@ void daNpc_Pf1_c::chngAnmAtr(u8 i_param_1) {
 
 /* 00000BDC-00000C48       .text ctrlAnmAtr__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::ctrlAnmAtr() {
-    if (m7B3 == 4) {
-        if (m7A0 != 0) {
-            m7A1 += 1;
-            if (m7A1 > 2) {
-                m7B3 = 6;
-                setAnm_NUM(0, 1);
+    s32 anm_atr = m7B3;
+    switch (anm_atr) {
+        case 4:
+            if (m7A0 != 0) {
+                s8 counter = m7A1 + 1;
+                m7A1 = counter;
+                if (counter > 2) {
+                    m7B3 = 6;
+                    setAnm_NUM(0, 1);
+                }
             }
-        }
+            break;
+        default:
+            break;
     }
 }
 
