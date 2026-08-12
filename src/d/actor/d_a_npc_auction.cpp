@@ -1270,7 +1270,7 @@ BOOL daNpcAuction_c::initTexPatternAnm(bool i_anm_play) {
     }
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[mDataNo], (u16)mBtpNo);
     JUT_ASSERT(2203, m_head_tex_pattern != 0);
-    if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, false, i_anm_play)) {
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, i_anm_play, false)) {
         return FALSE;
     }
     m73F = 0;
