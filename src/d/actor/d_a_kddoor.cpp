@@ -523,6 +523,9 @@ dDoor_ssk_sub_c::dDoor_ssk_sub_c() {
     mScale2[2] = 1.0f;
 }
 
+/* 00002E5C-00002FD8       .text __dt__15dDoor_ssk_sub_cFv */
+dDoor_ssk_sub_c::~dDoor_ssk_sub_c() {}
+
 /* 000015A4-00001778       .text drawSet__15dDoor_ssk_sub_cFv */
 BOOL dDoor_ssk_sub_c::drawSet() {
     mpMorf = new mDoExt_McaMorf(
