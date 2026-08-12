@@ -40,22 +40,55 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-00000108       .text __ct__21daNpc_Bms1_childHIO_cFv */
 daNpc_Bms1_childHIO_c::daNpc_Bms1_childHIO_c() {
-    /* Nonmatching */
 }
 
 /* 00000108-00000148       .text daNpc_Bms1_shopMsgCheck__FUl */
-void daNpc_Bms1_shopMsgCheck(unsigned long) {
-    /* Nonmatching */
+static BOOL daNpc_Bms1_shopMsgCheck(u32 i_msgNo) {
+    if ((i_msgNo >= 0x2788 && i_msgNo <= 0x2790) || (i_msgNo >= 0x277A && i_msgNo <= 0x2781) ||
+        i_msgNo == 0x2783 || i_msgNo == 0x2776)
+    {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000148-00000188       .text daNpc_Bms1_shopStickMoveMsgCheck__FUl */
-void daNpc_Bms1_shopStickMoveMsgCheck(unsigned long) {
-    /* Nonmatching */
+static BOOL daNpc_Bms1_shopStickMoveMsgCheck(u32 i_msgNo) {
+    if ((i_msgNo >= 0x2788 && i_msgNo <= 0x278A) || (i_msgNo >= 0x277A && i_msgNo <= 0x277C) ||
+        i_msgNo == 0x2783 || i_msgNo == 0x2776)
+    {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000188-000002A0       .text __ct__16daNpc_Bms1_HIO_cFv */
 daNpc_Bms1_HIO_c::daNpc_Bms1_HIO_c() {
-    /* Nonmatching */
+    mChild[0].mNpc.m04 = -50.0f;
+    mChild[0].mNpc.mMaxHeadX = 0x1388;
+    mChild[0].mNpc.mMaxHeadY = 0x2710;
+    mChild[0].mNpc.mMaxBackboneX = 0;
+    mChild[0].mNpc.mMaxBackboneY = 0x834;
+    mChild[0].mNpc.mMinHeadX = -0x1FFE;
+    mChild[0].mNpc.mMinHeadY = 0;
+    mChild[0].mNpc.mMinBackboneX = 0;
+    mChild[0].mNpc.mMinBackboneY = 0;
+    mChild[0].mNpc.mMaxTurnStep = 0x1000;
+    mChild[0].mNpc.mMaxHeadTurnVel = 0x800;
+    mChild[0].mNpc.mAttnYOffset = 40.0f;
+    mChild[0].mNpc.m22 = 0;
+    mChild[0].mNpc.mMaxAttnDistXZ = 300.0f;
+    mChild[0].m2C = 0.65f;
+    mChild[0].m30 = 0.9f;
+    mChild[0].m34 = 0.5f;
+    mChild[0].m38 = 27.0f;
+    mChild[0].m3C = 20.0f;
+    mChild[0].m40 = 0.45f;
+    mChild[0].m44 = 0.8f;
+    mChild[0].m48 = 0.9f;
+    mChild[0].m4C = 0.000122f;
+    mNo = 0xFF;
+    m8 = -1;
 }
 
 /* 00000300-000004C4       .text nodeCallBack_Bms__FP7J3DNodei */
@@ -74,7 +107,7 @@ void daNpc_Bms1_c::set_mtx() {
 }
 
 /* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
-void daNpc_Bms1_c::initTexPatternAnm(bool) {
+BOOL daNpc_Bms1_c::initTexPatternAnm(bool) {
     /* Nonmatching */
 }
 
@@ -84,12 +117,12 @@ void daNpc_Bms1_c::playTexPatternAnm() {
 }
 
 /* 00000DE0-00000E78       .text setAnm__12daNpc_Bms1_cFScf */
-void daNpc_Bms1_c::setAnm(signed char, float) {
+void daNpc_Bms1_c::setAnm(s8, f32) {
     /* Nonmatching */
 }
 
 /* 00000E78-00000EBC       .text setTexAnm__12daNpc_Bms1_cFSc */
-void daNpc_Bms1_c::setTexAnm(signed char) {
+void daNpc_Bms1_c::setTexAnm(s8) {
     /* Nonmatching */
 }
 
@@ -99,7 +132,7 @@ void daNpc_Bms1_c::setAnmFromMsgTag() {
 }
 
 /* 00001100-000011D8       .text chkAttention__12daNpc_Bms1_cF4cXyzs */
-void daNpc_Bms1_c::chkAttention(cXyz, short) {
+BOOL daNpc_Bms1_c::chkAttention(cXyz, s16) {
     /* Nonmatching */
 }
 
@@ -114,12 +147,12 @@ void daNpc_Bms1_c::checkOrder() {
 }
 
 /* 000014AC-000017FC       .text next_msgStatus__12daNpc_Bms1_cFPUl */
-void daNpc_Bms1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Bms1_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 000017FC-00001860       .text getMsg__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::getMsg() {
+u32 daNpc_Bms1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -134,22 +167,22 @@ void daNpc_Bms1_c::talkInit() {
 }
 
 /* 00001928-00001A34       .text normal_talk__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::normal_talk() {
+u16 daNpc_Bms1_c::normal_talk() {
     /* Nonmatching */
 }
 
 /* 00001A34-00001B88       .text shop_talk__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::shop_talk() {
+u16 daNpc_Bms1_c::shop_talk() {
     /* Nonmatching */
 }
 
 /* 00001B88-00001D68       .text talk__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::talk() {
+u16 daNpc_Bms1_c::talk() {
     /* Nonmatching */
 }
 
 /* 00001D68-00002104       .text CreateInit__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::CreateInit() {
+BOOL daNpc_Bms1_c::CreateInit() {
     /* Nonmatching */
 }
 
@@ -169,62 +202,62 @@ void daNpc_Bms1_c::lookBack() {
 }
 
 /* 00002424-0000249C       .text wait01__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::wait01() {
+bool daNpc_Bms1_c::wait01() {
     /* Nonmatching */
 }
 
 /* 0000249C-00002590       .text talk01__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::talk01() {
+bool daNpc_Bms1_c::talk01() {
     /* Nonmatching */
 }
 
 /* 00002590-00002764       .text getdemo_action__12daNpc_Bms1_cFPv */
-void daNpc_Bms1_c::getdemo_action(void*) {
+BOOL daNpc_Bms1_c::getdemo_action(void*) {
     /* Nonmatching */
 }
 
 /* 00002764-00002918       .text wait_action__12daNpc_Bms1_cFPv */
-void daNpc_Bms1_c::wait_action(void*) {
+BOOL daNpc_Bms1_c::wait_action(void*) {
     /* Nonmatching */
 }
 
 /* 00002918-00002A98       .text event_action__12daNpc_Bms1_cFPv */
-void daNpc_Bms1_c::event_action(void*) {
+BOOL daNpc_Bms1_c::event_action(void*) {
     /* Nonmatching */
 }
 
 /* 00002A98-00002B94       .text evn_talk_init__12daNpc_Bms1_cFi */
-void daNpc_Bms1_c::evn_talk_init(int) {
+BOOL daNpc_Bms1_c::evn_talk_init(int) {
     /* Nonmatching */
 }
 
 /* 00002B94-00002BFC       .text evn_continue_talk_init__12daNpc_Bms1_cFi */
-void daNpc_Bms1_c::evn_continue_talk_init(int) {
+BOOL daNpc_Bms1_c::evn_continue_talk_init(int) {
     /* Nonmatching */
 }
 
 /* 00002BFC-00002DD8       .text evn_talk__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::evn_talk() {
+BOOL daNpc_Bms1_c::evn_talk() {
     /* Nonmatching */
 }
 
 /* 00002DD8-00002E30       .text evn_viblation_init__12daNpc_Bms1_cFi */
-void daNpc_Bms1_c::evn_viblation_init(int) {
+BOOL daNpc_Bms1_c::evn_viblation_init(int) {
     /* Nonmatching */
 }
 
 /* 00002E30-00002E68       .text evn_head_swing_init__12daNpc_Bms1_cFi */
-void daNpc_Bms1_c::evn_head_swing_init(int) {
+BOOL daNpc_Bms1_c::evn_head_swing_init(int) {
     /* Nonmatching */
 }
 
 /* 00002E68-00002FBC       .text privateCut__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::privateCut() {
+BOOL daNpc_Bms1_c::privateCut() {
     /* Nonmatching */
 }
 
 /* 00002FBC-000030A4       .text demo_move__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::demo_move() {
+BOOL daNpc_Bms1_c::demo_move() {
     /* Nonmatching */
 }
 
@@ -259,7 +292,7 @@ cPhs_State daNpc_Bms1_c::_create() {
 }
 
 /* 00003CE8-000043B8       .text CreateHeap__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::CreateHeap() {
+BOOL daNpc_Bms1_c::CreateHeap() {
     /* Nonmatching */
 }
 
