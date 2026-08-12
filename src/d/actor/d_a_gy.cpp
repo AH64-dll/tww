@@ -517,6 +517,7 @@ void daGy_c::modeDiveInit() {
 
 /* 00000FDC-000012DC       .text modeDive__6daGy_cFv */
 void daGy_c::modeDive() {
+    /* Nonmatching */
     if (mD15 != 5) {
         mD15 = 1;
         if (mpCtrl->m324 == 3 || mE80 != 0) {
@@ -561,6 +562,7 @@ void daGy_c::modeDive() {
 
 /* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
 void daGy_c::modeCircleInit() {
+    /* Nonmatching */
     m2B0 = 1;
     s32 type = mpCtrl->m320;
     if(type == 0) {
@@ -578,6 +580,7 @@ void daGy_c::modeCircle() {
 
 /* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
 void daGy_c::modeWithCircleInit() {
+    /* Nonmatching */
     m2B0 = 6;
     m4F8 = (s32)cM_rndF((f32)l_HIO.m132);
     if(m4F8 <= l_HIO.m130) {
