@@ -77,6 +77,7 @@ daMozo_HIO_c::daMozo_HIO_c() {
 
 /* 000002D0-00000568       .text daMozo_nodeCallBackBeam__FP8daMozo_cP8J3DModelP7J3DNodei */
 static BOOL daMozo_nodeCallBackBeam(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     s32 jntNo = ((J3DJoint*)node)->getJntNo();
 
     if (calcTiming == 0) {
@@ -113,6 +114,7 @@ static BOOL daMozo_nodeCallBackBeam(daMozo_c* i_this, J3DModel* model, J3DNode* 
 
 /* 00000568-00000728       .text daMozo_nodeCallBackFire__FP8daMozo_cP8J3DModelP7J3DNodei */
 static BOOL daMozo_nodeCallBackFire(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     s32 jntNo = ((J3DJoint*)node)->getJntNo();
 
     if (calcTiming == 0) {
@@ -210,6 +212,7 @@ void daMozo_c::set_mtx() {
 
 /* 00000AAC-00000C38       .text anime_proc__8daMozo_cFv */
 void daMozo_c::anime_proc() {
+    /* Nonmatching */
     mAnimMorf->play(NULL, 0, 0);
     mBrkAnm.play();
     mBtkAnm.play();
@@ -230,6 +233,7 @@ void daMozo_c::anime_proc() {
 
 /* 00000C38-00000C90       .text wait_proc_init__8daMozo_cFv */
 void daMozo_c::wait_proc_init() {
+    /* Nonmatching */
     setAnm(0, 0.0f);
     setProcess(&daMozo_c::wait_proc);
 }
@@ -257,6 +261,7 @@ void daMozo_c::wait_proc() {
 
 /* 00000D58-00000DE0       .text search_beam_proc_init__8daMozo_cFv */
 void daMozo_c::search_beam_proc_init() {
+    /* Nonmatching */
     setAnm(1, 0.0f);
     setProcess(&daMozo_c::search_beam_proc);
 
@@ -273,6 +278,7 @@ void daMozo_c::search_beam_proc() {
 
 /* 00001230-000012C0       .text search_fire_proc_init__8daMozo_cFv */
 void daMozo_c::search_fire_proc_init() {
+    /* Nonmatching */
     setAnm(1, 0.0f);
     setProcess(&daMozo_c::search_fire_proc);
 
@@ -291,6 +297,7 @@ void daMozo_c::search_fire_proc() {
 
 /* 000017F4-00001874       .text towait_proc_init__8daMozo_cFv */
 void daMozo_c::towait_proc_init() {
+    /* Nonmatching */
     setAnm(2, 0.0f);
     mAnimMorf->setPlaySpeed(-0.5f);
     setProcess(&daMozo_c::towait_proc);
@@ -301,6 +308,7 @@ void daMozo_c::towait_proc_init() {
 
 /* 00001874-00001B3C       .text towait_proc__8daMozo_cFv */
 void daMozo_c::towait_proc() {
+    /* Nonmatching */
     daBeam_c* beam1 = (daBeam_c*)getBeamActor(mBeam1ID);
     daBeam_c* beam2 = (daBeam_c*)getBeamActor(mBeam2ID);
 
@@ -372,6 +380,7 @@ void daMozo_c::towait_proc() {
 
 /* 00001B3C-00001D8C       .text checkRange__8daMozo_cFi */
 BOOL daMozo_c::checkRange(int i_param) {
+    /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (i_param == 0 && player->checkGrabWear()) {
         return 0;
@@ -406,6 +415,7 @@ BOOL daMozo_c::checkRange(int i_param) {
 
 /* 00001D8C-00001F70       .text setAnm__8daMozo_cFif */
 void daMozo_c::setAnm(int i_idx, float i_morf) {
+    /* Nonmatching */
     mAnmIdx = i_idx;
     J3DAnmTransform* res;
     f32 speed, start, end;
