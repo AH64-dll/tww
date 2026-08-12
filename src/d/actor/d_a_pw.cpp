@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pw.h"
+#include "d/actor/d_a_bpw.h"
+#include "d/actor/d_a_kantera.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_com_inf_game.h"
@@ -13,6 +15,9 @@
 #include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_manager.h"
 #include "d/d_cc_d.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "SSystem/SComponent/c_lib.h"
 
 enum daPW__BehaviorType {
     VisibleFromStart = 0x0,
@@ -26,8 +31,22 @@ enum daPW__BehaviorType {
 static bool TORITUKI_ON = false;
 
 /* 00000078-00000158       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        pw_class* i_this = (pw_class*)model->getUserArea();
+        if (i_this && jntNo == 0x17) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            i_this->m2E4 = i_this->m2CC;
+            cXyz offset(0.0f, 0.0f, 0.0f);
+            MtxPosition(&offset, &i_this->m2CC);
+            MTXCopy(*calc_mtx, model->getAnmMtx(jntNo));
+            MTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+    return 1;
 }
 
 /* 00000158-00000230       .text draw_SUB__FP8pw_class */
@@ -66,18 +85,75 @@ void anm_init(pw_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed
 }
 
 /* 00000600-000006F4       .text kantera_break__FP8pw_class */
-void kantera_break(pw_class*) {
-    /* Nonmatching */
+void kantera_break(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    i_this->m346 = 0;
+
+    if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* kantera;
+        if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
+            fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
+        {
+            s16 angle = cM_atan2s(kantera->current.pos.x - player->current.pos.x,
+                                  kantera->current.pos.z - player->current.pos.z);
+            mDoMtx_YrotS(*calc_mtx, angle);
+            cXyz offset(0.0f, 0.0f, 20.0f);
+            MtxPosition(&offset, &kantera->speed);
+            kantera->speed.y = 10.0f;
+            ((kantera_class*)kantera)->mState = 5;
+            i_this->mKanteraID = fpcM_ERROR_PROCESS_ID_e;
+        }
+    }
 }
 
 /* 000006F4-000007CC       .text Big_pow_gattai_check__FP8pw_class */
-void Big_pow_gattai_check(pw_class*) {
-    /* Nonmatching */
+BOOL Big_pow_gattai_check(pw_class* i_this) {
+    if (i_this->mJalhallaID != fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* jalhalla;
+        if (fopAcM_SearchByID(i_this->mJalhallaID, &jalhalla) && jalhalla != NULL &&
+            fopAcM_GetName(jalhalla) == fpcNm_BPW_e && ((bpw_class*)jalhalla)->m3E9 != 0)
+        {
+            i_this->m340 = 0;
+            i_this->mCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+            i_this->mCyl.ClrAtSet();
+            i_this->mCyl.OffTgSetBit();
+            i_this->mCyl.ClrTgHit();
+            i_this->m38C = fopAcM_searchActorAngleY(i_this, jalhalla);
+            i_this->mAction = 5;
+            i_this->mMode = 0xAA;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 000007CC-000008B0       .text Big_pow_down_check__FP8pw_class */
-void Big_pow_down_check(pw_class*) {
-    /* Nonmatching */
+BOOL Big_pow_down_check(pw_class* i_this) {
+    if (i_this->health > 0) {
+        return FALSE;
+    }
+    if (i_this->m345) {
+        return FALSE;
+    }
+    if (i_this->mJalhallaID != fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* jalhalla;
+        if (fopAcM_SearchByID(i_this->mJalhallaID, &jalhalla) && jalhalla != NULL &&
+            fopAcM_GetName(jalhalla) == fpcNm_BPW_e)
+        {
+            bpw_class* bpw = (bpw_class*)jalhalla;
+            if (bpw->mActionState == 0x6F && bpw->mSomeCountdownTimers[0] > 3) {
+                bpw->actor.health--;
+                if (bpw->actor.health <= 0) {
+                    i_this->m344 = 1;
+                }
+                i_this->m345 = 1;
+            } else {
+                i_this->health = 4;
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* 000008B0-0000121C       .text body_atari_check__FP8pw_class */
@@ -108,6 +184,7 @@ void BG_check(pw_class* i_this) {
 
 /* 00001990-00001D60       .text Line_check__FP8pw_class4cXyzUc */
 BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
+    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     dBgS_LinChk linChk;
     i_this->m314 = destPos;
@@ -130,13 +207,45 @@ BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
 }
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
-void alpha_anime(pw_class*) {
-    /* Nonmatching */
+void alpha_anime(pw_class* i_this) {
+    if (i_this->m33E) {
+        return;
+    }
+    i_this->m38E += 0x400;
+    cLib_addCalcAngleS2(&i_this->m39C, 0x64, 0x1, 0xA);
+    i_this->m39A = (s16)((f32)i_this->m39C + 30.0f * cM_ssin(i_this->m38E));
 }
 
 /* 00002254-00002400       .text fuwafuwa_calc__FP8pw_class */
-void fuwafuwa_calc(pw_class*) {
-    /* Nonmatching */
+void fuwafuwa_calc(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 targetY = i_this->m2F0.y;
+    i_this->m390 += 0x2BC;
+    if (i_this->mAcch.m_ground_h != -G_CM3D_F_INF) {
+        if (dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd)) {
+            if (dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == dBgS_Attr_GRASS_e) {
+                if (i_this->mAction == 1) {
+                    targetY = player->current.pos.y;
+                }
+                i_this->current.pos.y = targetY + 30.0f;
+                return;
+            }
+        }
+    }
+    if (!i_this->mHoversAtInitialYPos) {
+        targetY = i_this->mAcch.m_ground_h;
+    }
+    if (i_this->mMode == 0x21 || i_this->mMode == 0x28) {
+        targetY = player->current.pos.y;
+    }
+    cLib_addCalc2(&i_this->current.pos.y, 30.0f + targetY + 30.0f * cM_ssin(i_this->m390), 1.0f, 3.0f);
+    if (i_this->mMode == 0x26) {
+        i_this->m392 += 0x3E8;
+        f32 sinVal = cM_ssin(i_this->m392);
+        f32 zTarget = 50.0f + i_this->m320.z + 50.0f * sinVal;
+        cLib_addCalc2(&i_this->current.pos.x, 50.0f + i_this->m320.x + 50.0f * sinVal, 1.0f, 5.0f);
+        cLib_addCalc2(&i_this->current.pos.z, zTarget, 1.0f, 5.0f);
+    }
 }
 
 /* 00002400-00002560       .text kougen_hani_check__FP8pw_classUc */
@@ -155,18 +264,43 @@ BOOL hani_check(pw_class*) {
 }
 
 /* 0000289C-000029C8       .text next_dousa_check__FP8pw_class */
-void next_dousa_check(pw_class*) {
-    /* Nonmatching */
+void next_dousa_check(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    i_this->mCyl.SetTgType(AT_TYPE_LIGHT | AT_TYPE_LIGHT_ARROW);
+    i_this->mCyl.OffTgNoConHit();
+    if (!Line_check(i_this, player->current.pos, 1) && !hani_check(i_this) &&
+        fopAcM_searchActorDistance(i_this, player) < 500.0f &&
+        std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f)
+    {
+        i_this->mAction = 1;
+        i_this->mMode = 0x20;
+    } else {
+        i_this->m37C = (s16)(cM_rndF(70.0f) + 70.0f);
+        if (i_this->mPathIndex == 0xFF) {
+            i_this->m2F0.x = i_this->current.pos.x;
+            i_this->m2F0.z = i_this->current.pos.z;
+        }
+        i_this->mAction = 0;
+        i_this->mMode = 0x0D;
+    }
 }
 
 /* 000029C8-00002A54       .text move_sound__FP8pw_class */
-void move_sound(pw_class*) {
-    /* Nonmatching */
+void move_sound(pw_class* i_this) {
+    u32 volume = (u32)(4.0f * i_this->speedF);
+    mDoAud_seStart(JA_SE_CHR_PW_MOVE, &i_this->eyePos, volume,
+                   dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
 }
 
 /* 00002A54-00002A90       .text first_mode_change__FP8pw_class */
-void first_mode_change(pw_class*) {
-    /* Nonmatching */
+void first_mode_change(pw_class* i_this) {
+    i_this->m340 = 0;
+    i_this->m39A = 100;
+    i_this->m39C = 100;
+    i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+    i_this->actor_status |= fopAcStts_SHOWMAP_e;
+    i_this->m38C = i_this->shape_angle.y;
+    i_this->current.angle.y = i_this->m38C;
 }
 
 /* 00002A90-00003B08       .text action_dousa__FP8pw_class */
