@@ -1233,26 +1233,30 @@ BOOL daNpc_Ob1_c::talk_1() {
 
 /* 00002A58-00002B60       .text manzai__11daNpc_Ob1_cFv */
 BOOL daNpc_Ob1_c::manzai() {
-    if (field_0x6bc[0] == 2) {
-        fopAc_ac_c* partner = searchByID(*(u32*)&field_0x6b4[0]);
-        if (partner != g_dComIfG_gameInfo.play.mMesgCamInfo.mActor[g_dComIfG_gameInfo.play.mMesgCamInfo.mBasicID - 1]) {
-            if (mAttr != 0xFF) {
-                mLookBackState = 3;
-                mTargetYRot = mInitialAngle.y;
-                m_jnt.setTrn();
-                mStatus = mPrevStatus;
-                setAnm();
-                mStatus = 6;
-                mAttr = 0xFF;
+    dComIfG_MesgCamInfo_c* camInfo = &g_dComIfG_gameInfo.play.mMesgCamInfo;
+    switch (field_0x6bc[0]) {
+        case 2:
+            fopAc_ac_c* partner = searchByID(*(u32*)&field_0x6b4[0]);
+            if (this != camInfo->mActor[camInfo->mBasicID - 1]) {
+                if (mAttr != 0xFF) {
+                    mLookBackState = 3;
+                    mTargetYRot = mInitialAngle.y;
+                    m_jnt.setTrn();
+                    mStatus = mPrevStatus;
+                    setAnm();
+                    mStatus = 6;
+                    mAttr = 0xFF;
+                }
+            } else {
+                m7CC = ((fopNpc_npc_c*)partner)->mCurrMsgNo;
+                anmAtr(*(u16*)&((fopNpc_npc_c*)partner)->field_0x6b4[4]);
             }
-        } else {
-            m7CC = ((fopNpc_npc_c*)partner)->mCurrMsgNo;
-            ((fopNpc_npc_c*)partner)->anmAtr(*(u16*)&((fopNpc_npc_c*)partner)->field_0x6b4[4]);
-        }
-    } else if (field_0x6bc[0] == 3) {
-        fopAcM_OffStatus(this, fopAcStts_UNK10000_e | fopAcStts_NOPAUSE_e);
-        setStt(mPrevStatus);
-        field_0x6bc[0] = 0;
+            break;
+        case 3:
+            fopAcM_OffStatus(this, fopAcStts_UNK4000_e);
+            setStt(mPrevStatus);
+            field_0x6bc[0] = 0;
+            break;
     }
     return TRUE;
 }
