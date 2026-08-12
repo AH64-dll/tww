@@ -47,7 +47,7 @@ public:
     BOOL chk_parts_notMov();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
     void lookBack();
-    BOOL chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     bool decideType(int);
     void privateCut(int);
@@ -122,7 +122,7 @@ public:
     /* 0x7A6 */ u8 m7A6;
     /* 0x7A7 */ u8 m7A7;
     /* 0x7A8 */ u8 m7A8;
-    /* 0x7A9 */ u8 m7A9;
+    /* 0x7A9 */ s8 m7A9;
     /* 0x7AA */ u8 mAnmAtr;
     /* 0x7AB */ u8 mAnmTag;
     /* 0x7AC */ s8 mBtpNum;

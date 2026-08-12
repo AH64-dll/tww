@@ -66,10 +66,6 @@ static char* l_evn_tbl[] = {
     "dummy",
 };
 
-static char* a_cut_tbl[] = {
-    "dummy",
-};
-
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 static BOOL nodeCB_Head(J3DNode* i_node, int i_param_2) {
@@ -472,7 +468,11 @@ BOOL daNpc_Gk1_c::chk_talk() {
 
 /* 00001164-000011A4       .text chk_parts_notMov__11daNpc_Gk1_cFv */
 BOOL daNpc_Gk1_c::chk_parts_notMov() {
-    return mLookAtNckX != m_jnt.getHead_y() || mLookAtBoneX != m_jnt.getBackbone_y() || mLookAtY != current.angle.y;
+    int ret = FALSE;
+    if (mLookAtNckX != m_jnt.getHead_y() || mLookAtBoneX != m_jnt.getBackbone_y() || mLookAtY != current.angle.y) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 000011A4-000011F8       .text searchByID__11daNpc_Gk1_cFUiPi */
@@ -531,7 +531,7 @@ void daNpc_Gk1_c::lookBack() {
 }
 
 /* 000013BC-0000143C       .text chkAttention__11daNpc_Gk1_cFv */
-BOOL daNpc_Gk1_c::chkAttention() {
+bool daNpc_Gk1_c::chkAttention() {
     dAttention_c& attention = dComIfGp_getAttention();
     if (attention.LockonTruth()) {
         return this == attention.LockonTarget(0);
@@ -565,9 +565,12 @@ bool daNpc_Gk1_c::decideType(int i_type) {
 
 /* 0000151C-000015BC       .text privateCut__11daNpc_Gk1_cFi */
 void daNpc_Gk1_c::privateCut(int i_staff_idx) {
+    static char* a_cut_tbl[] = {
+        "dummy",
+    };
     if (i_staff_idx != -1) {
         m7A9 = dComIfGp_evmng_getMyActIdx(i_staff_idx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
-        if (m7A9 == 0xFF) {
+        if (m7A9 == -1) {
             dComIfGp_evmng_cutEnd(i_staff_idx);
             return;
         }
