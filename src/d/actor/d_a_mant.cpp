@@ -26,7 +26,7 @@
 
 /* Unreferenced static data at the start of the original .data:
    @2100/@2080 (weak_data.h fake_data_2100/2080), @1811 (attnFnTbl),
-   sqrtf localstatics — all emitted via dolzel.pch (DECOMPCTX). */
+   sqrtf localstatics -- all emitted via dolzel.pch (DECOMPCTX). */
 
 #include "assets/l_pg_mantle1TEX.h"
 #include "assets/l_pg_mantle1_palettePAL.h"
@@ -397,7 +397,7 @@ void mant_n_calc(mant_class* i_this) {
             f32 dx = local_C.x;
             f32 dy = local_C.y;
             f32 dz = local_C.z;
-            mDoMtx_YrotS(*calc_mtx, cM_atan2s(dx, dz));
+            mDoMtx_YrotS(*calc_mtx, cM_atan2s(local_C.x, local_C.z));
             f32 dist = dx * dx + dz * dz;
             if (dist > 0.0f) {
                 dist = std::sqrtf(dist);
