@@ -216,7 +216,10 @@ void daNpc_De1_c::ctrlAnmTag() {
 
 /* 000007C4-00000800       .text chngAnmAtr__11daNpc_De1_cFUc */
 void daNpc_De1_c::chngAnmAtr(u8 i_param_1) {
-    if (i_param_1 >= 0x4 || i_param_1 == mAnmAtr) {
+    if (i_param_1 >= 0x4) {
+        return;
+    }
+    if (i_param_1 == mAnmAtr) {
         return;
     }
     mAnmAtr = i_param_1;
