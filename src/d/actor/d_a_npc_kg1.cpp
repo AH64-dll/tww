@@ -83,23 +83,24 @@ static BOOL daNpc_Kg1_nodeCallBack(J3DNode* node, int param) {
     if (param == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Kg1_c* actor = (daNpc_Kg1_c*)model->getUserArea();
-        u16 jnt_no = ((J3DJoint*)node)->getJntNo();
+        u16 jnt_no_raw = ((J3DJoint*)node)->getJntNo();
+        int jnt_no = jnt_no_raw;
         mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
-        if (jnt_no == (u8)actor->m_jnt.getHeadJntNum()) {
-            static cXyz l_head_pos = cXyz(24.0f, 5.0f, 0.0f);
-            static cXyz l_eye_pos = cXyz(24.0f, -16.0f, 0.0f);
-            mDoMtx_stack_c::XrotM(actor->m_jnt.getHead_y());
-            mDoMtx_stack_c::ZrotM(-actor->m_jnt.getHead_x());
+        if (jnt_no == actor->m_jnt.getHeadJntNum()) {
+            mDoMtx_XrotM(mDoMtx_stack_c::now, actor->m_jnt.getHead_y());
+            mDoMtx_ZrotM(mDoMtx_stack_c::now, -actor->m_jnt.getHead_x());
+            static cXyz l_head_pos(24.0f, 5.0f, 0.0f);
+            static cXyz l_eye_pos(24.0f, -16.0f, 0.0f);
             mDoMtx_stack_c::multVec(&l_head_pos, &actor->getAttentionBasePos());
-            mDoMtx_stack_c::XrotM(actor->m_jnt.getHead_y());
-            mDoMtx_stack_c::ZrotM(-actor->m_jnt.getHead_x());
+            mDoMtx_XrotM(mDoMtx_stack_c::now, actor->m_jnt.getHead_y());
+            mDoMtx_ZrotM(mDoMtx_stack_c::now, -actor->m_jnt.getHead_x());
             mDoMtx_stack_c::multVec(&l_eye_pos, &actor->getEyePos());
             mDoMtx_stack_c::multVec(&l_head_pos, &actor->attention_info.position);
             actor->attention_info.position.y += l_HIO.mHio[0].mAttnYOffset;
         }
-        if (jnt_no == (u8)actor->m_jnt.getBackboneJntNum()) {
-            mDoMtx_stack_c::XrotM(actor->m_jnt.getBackbone_y());
-            mDoMtx_stack_c::ZrotM(-actor->m_jnt.getBackbone_x());
+        if (jnt_no == actor->m_jnt.getBackboneJntNum()) {
+            mDoMtx_XrotM(mDoMtx_stack_c::now, actor->m_jnt.getBackbone_y());
+            mDoMtx_ZrotM(mDoMtx_stack_c::now, -actor->m_jnt.getBackbone_x());
         }
         model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
