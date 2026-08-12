@@ -9,90 +9,83 @@
 
 namespace daObjFtree {
     struct _ftree_seach_info_ {
-        
+        /* 0x00 */ s32 mCount;
+        /* 0x04 */ s32 mBroughtCount;
     };
 
     static void Ftree_get_water_pos(cXyz*, cXyz*);
-    static void Ftree_checkXyEventCallBack(void*, int);
-    static void Ftree_XyEventCallBack(void*, int);
-    static void is_broughtID(int);
+    static s16 Ftree_checkXyEventCallBack(void*, int);
+    static s16 Ftree_XyEventCallBack(void*, int);
+    static BOOL is_broughtID(int);
     static BOOL Ftree_NodeCallBack_Effect(J3DNode*, int);
     static BOOL Ftree_NodeCallBack_M(J3DNode*, int);
     static BOOL Ftree_NodeCallBack_L(J3DNode*, int);
 
     class Act_c : public fopAc_ac_c {
     public:
-        void GetRate(float, float, float) {}
-        void brought() {}
-        void check_heart() {}
-        void check_water() {}
-        void init_water() {}
-        void param_get_tree_idx() const; // weak but not inlined?
-        void set_heart(short) {}
-        void set_water(short) {}
-        void tree_brouht(int) {}
-    
+        s32 param_get_tree_idx() const; // weak but not inlined?
+
         void search_heart_part();
-        void launch_heart_part();
+        BOOL launch_heart_part();
         void place_heart_part();
-        void estimate_water();
-        void XyEventCallBack(int);
+        BOOL estimate_water();
+        s16 XyEventCallBack(int);
         void XyEvent_init();
-        void XyEvent_set(short);
+        BOOL XyEvent_set(s16);
         void XyEvent_exe();
-        void SetJointAnimation(int, float, float, int);
-        void PlayStopJointAnimation();
-        void PlayStopColorAnimation();
+        BOOL SetJointAnimation(int, float, float, int);
+        BOOL PlayStopJointAnimation();
+        BOOL PlayStopColorAnimation();
         void set_first_stat();
         void set_collision();
         void talk_ct();
         void talk_main();
         void get_tev_material0_color(J3DModelData*, unsigned long, short*, short*, short*);
         void set_tev_color(J3DModelData*, unsigned long, short, short, short);
-        void is_brought();
+        BOOL is_brought();
         void set_broughtID(int);
         void set_brought();
         void unset_broughtID(int);
         void unset_brought();
         void get_ftree_info(_ftree_seach_info_*);
-        void iam_last();
-        void action_none_init(short);
+        BOOL iam_last();
+        s32 action_none_init(short);
         void action_none_main();
-        void action_waitS_init(short);
+        s32 action_waitS_init(short);
         void action_waitS_main();
-        void action_waitM_init(short);
+        s32 action_waitM_init(short);
         void action_waitM_main();
-        void action_waitL_init(short);
+        s32 action_waitL_init(short);
         void action_waitL_main();
-        void action_pikupikuS_init(short);
+        s32 action_pikupikuS_init(short);
         void action_pikupikuS_main();
-        void action_pikupikuM_init(short);
+        s32 action_pikupikuM_init(short);
         void action_pikupikuM_main();
-        void action_pikupikuL_init(short);
+        s32 action_pikupikuL_init(short);
         void action_pikupikuL_main();
-        void action_changeSL_init(short);
+        s32 action_changeSL_init(short);
         void action_changeSL_main();
-        void action_changeSL2_init(short);
+        s32 action_changeSL2_init(short);
         void action_changeSL2_main();
-        void action_changeLS_init(short);
+        s32 action_changeLS_init(short);
         void action_changeLS_main();
-        void action_changeLS2_init(short);
+        s32 action_changeLS2_init(short);
         void action_changeLS2_main();
-        void action_changeSM_init(short);
+        s32 action_changeSM_init(short);
         void action_changeSM_main();
-        void action_changeMS_init(short);
+        s32 action_changeMS_init(short);
         void action_changeMS_main();
-        void process_init(int, short);
+        s32 process_init(int, short);
         void process_main();
-        void solidHeapCB(fopAc_ac_c*);
+        BOOL solidHeapCB(fopAc_ac_c*);
         BOOL NodeCallBack_Effect(J3DNode*, int);
-        void create_heap();
+        bool create_heap();
         cPhs_State _create();
         bool _delete();
         void set_mtx();
         bool _execute();
         bool _draw();
-    
+
     public:
         /* 0x290 */ void* m290;
         /* 0x294 */ s16 m294;
@@ -120,7 +113,8 @@ namespace daObjFtree {
         /* 0x4C8 */ f32 m4C8;
         /* 0x4CC */ dCcD_Stts m4CC;
         /* 0x508 */ dCcD_Cyl m508;
-        /* 0x638 */ u8 m638[0x64C - 0x638];
+        /* 0x638 */ u8 m638[0x648 - 0x638];
+        /* 0x648 */ s16 m648;
         /* 0x64C */ fpc_ProcID mSpawnedHeartPieceProcessId;
         /* 0x650 */ s16 m650;
         /* 0x652 */ s16 m652;
