@@ -83,6 +83,7 @@ namespace daObjFtree {
         void action_changeMS_main();
         s32 process_init(int, short);
         void process_main();
+        virtual ~Act_c() {}
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL NodeCallBack_Effect(J3DNode*, int);
         bool create_heap();
@@ -93,9 +94,8 @@ namespace daObjFtree {
         bool _draw();
 
     public:
-        /* 0x290 */ void* m290;
-        /* 0x294 */ s16 m294;
-        /* 0x296 */ s16 m296;
+        /* 0x290 */ /* vtable */
+        /* 0x294 */ s16 m294;        /* 0x296 */ s16 m296;
         /* 0x298 */ s16 m298;
         /* 0x29A */ s16 m29A;
         /* 0x29C */ request_of_phase_process_class mPhs;

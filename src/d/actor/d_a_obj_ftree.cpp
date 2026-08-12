@@ -77,7 +77,6 @@ static const dCcD_SrcCyl M_cyl_srcW = {
         /* Height */ 200.0f,
     }},
 };
-static const u8 ret_tree_no[] = {0x0F, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0F, 0x06, 0x07};
 }
 
 
@@ -242,9 +241,12 @@ void daObjFtree::Act_c::XyEvent_exe() {
     }
 }
 
+namespace daObjFtree {
+static const u8 ret_tree_no[] = {0x0F, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0F, 0x06, 0x07};
+}
+
 /* 00000764-000007A8       .text param_get_tree_idx__Q210daObjFtree5Act_cCFv */
 s32 daObjFtree::Act_c::param_get_tree_idx() const {
-    /* Nonmatching */
     static const u8 ret_num = 0xA;
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < ret_num) {
@@ -258,6 +260,7 @@ BOOL daObjFtree::Act_c::SetJointAnimation(int i_anm, float i_f1, float i_f2, int
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, i_anm);
     s32 v = cLib_maxLimit(i_arg, 0);
     if (anm != NULL) {
+    /* Nonmatching */
         if (v == 0) {
             mpMorf->setAnm(anm, 0, i_f2, i_f1, 0.0f, -1.0f, NULL);
         } else {
@@ -280,7 +283,6 @@ BOOL daObjFtree::Act_c::PlayStopColorAnimation() {
 
 /* 0000093C-00000A1C       .text set_first_stat__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_first_stat() {
-    /* Nonmatching */
     if (dComIfGs_isSymbol(2) != 0) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) != 0) {
             process_init(3, 0);
@@ -299,12 +301,40 @@ void daObjFtree::Act_c::set_first_stat() {
 
 /* 00000A1C-00000C1C       .text set_collision__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_collision() {
-    /* Nonmatching */
+    if (m2A6 == 1 || m2A7 == 1) {
+        if (m508.ChkTgHit()) {
+            if (m2A6 == 1) {
+                daObj::HitSeStart(&current.pos, current.roomNo, &m508, 8);
+            } else {
+                daObj::HitSeStart(&current.pos, current.roomNo, &m508, 7);
+                daObj::HitEff_kikuzu(this, &m508);
+            }
+            dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
+            m508.ClrTgHit();
+        } else if (m2A6 == 1) {
+            cXyz pos = current.pos;
+            pos.y -= 50.0f;
+            m398.SetR(61.0f);
+            m398.SetH(96.0f);
+            m398.SetC(pos);
+            dComIfG_Ccsp()->Set(&m398);
+            m4C8 = 61.0f;
+            m508.SetR(61.0f);
+            m508.SetH(96.0f);
+            m508.SetC(current.pos);
+            dComIfG_Ccsp()->Set(&m508);
+        } else if (m2A7 == 1) {
+            m4C8 = 132.0f * m63C;
+            m508.SetR(m4C8);
+            m508.SetH(950.0f * m63C);
+            m508.SetC(current.pos);
+            dComIfG_Ccsp()->Set(&m508);
+        }
+    }
 }
 
 /* 00000C1C-00000D50       .text talk_ct__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_ct() {
-    /* Nonmatching */
     m6A4 = -1;
     m6A8 = NULL;
     cXyz pos = current.pos;
@@ -412,7 +442,6 @@ BOOL daObjFtree::is_broughtID(int i_id) {
 
 /* 000010F0-00001138       .text is_brought__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::is_brought() {
-    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -441,7 +470,6 @@ void daObjFtree::Act_c::set_broughtID(int i_id) {
 
 /* 000011FC-00001260       .text set_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_brought() {
-    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -463,7 +491,6 @@ void daObjFtree::Act_c::unset_broughtID(int i_id) {
 
 /* 000012D0-00001334       .text unset_brought__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::unset_brought() {
-    /* Nonmatching */
     s32 tree_no = daObj::PrmAbstract(this, 4, 0);
     if (tree_no < 0xA) {
         tree_no = ret_tree_no[tree_no];
@@ -522,7 +549,6 @@ s32 daObjFtree::Act_c::action_waitS_init(s16) {
 
 /* 000014E8-00001608       .text action_waitS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitS_main() {
-    /* Nonmatching */
     if (m652 == 1) {
         s32 ret;
         if (m356 == mEventCam2Idx) {
@@ -546,7 +572,6 @@ void daObjFtree::Act_c::action_waitS_main() {
 
 /* 00001608-0000173C       .text action_waitM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_waitM_init(s16) {
-    /* Nonmatching */
     set_brought();
     m2A6 = 1;
     m2A7 = 0;
@@ -597,7 +622,6 @@ s32 daObjFtree::Act_c::action_waitL_init(s16) {
 
 /* 000018AC-000019BC       .text action_waitL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitL_main() {
-    /* Nonmatching */
     if (mMode == 3) {
         if (dKy_rain_check() != 0) {
             process_init(0xC, -1);
@@ -635,7 +659,6 @@ s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
 
 /* 00001A4C-00001AF4       .text action_pikupikuS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuS_main() {
-    /* Nonmatching */
     if (PlayStopJointAnimation()) {
         if (m68C < m688) {
             SetJointAnimation(6, 0.7f + 0.3f * cM_rndF(1.0f), 10.0f, 0);
@@ -730,7 +753,6 @@ void daObjFtree::Act_c::action_changeSL_main() {
 
 /* 00001F0C-00001FB4       .text action_changeSL2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
-    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
     m2A4 = 1;
@@ -749,6 +771,45 @@ s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
 /* 00001FB4-00002300       .text action_changeSL2_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSL2_main() {
     /* Nonmatching */
+    if (m2A6 != 0) {
+        cLib_addCalc(&m640, 1.0f, 0.2f, 1.0f, 0.007f);
+        m66C = (s16)((f32)m65C + (255.0f - (f32)m65C) * m640);
+        m66E = (s16)((f32)m65E + (255.0f - (f32)m65E) * m640);
+        m670 = (s16)((f32)m660 + (255.0f - (f32)m660) * m640);
+        if (m640 == 1.0f) {
+            if (m684 > 0) {
+                m684--;
+            }
+            if (m684 == 0) {
+                m2A6 = 0;
+                m2A7 = 1;
+            }
+        }
+    }
+    if (m2A7 != 0) {
+        f32 ratio;
+        if (m63C <= 0.2f) {
+            ratio = 0.0f;
+        } else {
+            ratio = 1.0f;
+            if (m63C >= ratio) {
+            } else {
+                ratio = (m63C - 0.2f) / 0.8f;
+            }
+        }
+        cLib_addCalc(&m63C, 1.0f, 0.02f, 1.0f, 0.005f);
+        m674.r = (s16)(255.0f + ((f32)m664.r - 255.0f) * ratio);
+        m674.g = (s16)(255.0f + ((f32)m664.g - 255.0f) * ratio);
+        m674.b = (s16)(255.0f + ((f32)m664.b - 255.0f) * ratio);
+        if (m63C == 1.0f) {
+            if (process_init(3, 0) != 0) {
+                m650 = 0x2f;
+            }
+        }
+        m6A0 = (s16)(30.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        m6A2 = (s16)(36.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        m69E += 0xBB8;
+    }
 }
 
 /* 00002300-00002344       .text action_changeLS_init__Q210daObjFtree5Act_cFs */
@@ -763,12 +824,38 @@ s32 daObjFtree::Act_c::action_changeLS_init(s16) {
 
 /* 00002344-000025DC       .text action_changeLS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeLS_main() {
+    if (m2A7 != 0) {
+        f32 ratio;
+        if (m63C <= 0.2f) {
+            ratio = 0.0f;
+        } else if (m63C >= 1.0f) {
+            ratio = 1.0f;
+        } else {
+            ratio = (m63C - 0.2f) / 0.8f;
+        }
+        cLib_addCalc(&m63C, 0.2f, 0.02f, 1.0f, 0.005f);
+        m674.r = (s16)(255.0f + ((f32)m664.r - 255.0f) * ratio);
+        m674.g = (s16)(255.0f + ((f32)m664.g - 255.0f) * ratio);
+        m674.b = (s16)(255.0f + ((f32)m664.b - 255.0f) * ratio);
+        if (m63C == 0.2f) {
     /* Nonmatching */
+            m2A6 = 1;
+            m2A7 = 0;
+        }
+    }
+    if (m2A6 != 0) {
+        cLib_addCalc(&m640, 0.0f, 0.2f, 1.0f, 0.007f);
+        m66C = (s16)((f32)m65C + (255.0f - (f32)m65C) * m640);
+        m66E = (s16)((f32)m65E + (255.0f - (f32)m65E) * m640);
+        m670 = (s16)((f32)m660 + (255.0f - (f32)m660) * m640);
+        if (m640 == 0.0f) {
+            process_init(7, 0);
+        }
+    }
 }
 
 /* 000025DC-000026AC       .text action_changeLS2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeLS2_init(s16) {
-    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
 
@@ -792,7 +879,6 @@ void daObjFtree::Act_c::action_changeLS2_main() {
 
 /* 0000270C-00002794       .text action_changeSM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSM_init(s16) {
-    /* Nonmatching */
     set_brought();
     if (action_changeSL_init(0) == 1) {
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -842,6 +928,7 @@ s32 daObjFtree::Act_c::process_init(int i_state, s16 i_arg) {
         &Act_c::action_pikupikuL_init,
     };
     if (i_state >= 0 && i_state < 0xD) {
+    /* Nonmatching */
         if ((this->*init_table[i_state])(i_arg)) {
             m696 = 0;
             m698 = 0;
@@ -872,6 +959,7 @@ void daObjFtree::Act_c::process_main() {
         &Act_c::action_pikupikuL_main,
     };
     if (mMode >= 0 && mMode < 0xD) {
+    /* Nonmatching */
         (this->*main_table[mMode])();
     }
 }
@@ -1016,7 +1104,6 @@ bool daObjFtree::Act_c::create_heap() {
 
 /* 00003354-000035F4       .text _create__Q210daObjFtree5Act_cFv */
 cPhs_State daObjFtree::Act_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daObjFtree::Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
@@ -1237,3 +1324,4 @@ actor_process_profile_definition g_profile_Obj_Ftree = {
     /* Group        */ fopAc_ACTOR_e,
     /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
+
