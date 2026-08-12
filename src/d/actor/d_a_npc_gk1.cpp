@@ -618,6 +618,8 @@ void daNpc_Gk1_c::setStt(s8 i_status) {
     s8 temp = mAnmNum;
     mAnmNum = i_status;
     switch (mAnmNum) {
+        case 0:
+            break;
         case 1:
             mStatus = 0;
             speedF = 0.0f;
