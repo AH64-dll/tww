@@ -14,7 +14,8 @@
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 s32 daKddoor_c::chkMakeKey() {
-    return getType() == 2;
+    u8 type = getType();
+    return type == 2 ? 1 : 0;
 }
 
 /* 000000A8-00000114       .text setKey__10daKddoor_cFv */
@@ -49,13 +50,16 @@ s32 daKddoor_c::chkStopF() {
         return 0;
     }
 
-    if (type < 2) {
-        if (dComIfGp_roomControl_checkStatusFlag(roomNo, 0x1) == FALSE) {
-            return -1;
-        }
-        return !dComIfGs_isSwitch(swbit, roomNo);
+    switch (type) {
+        case 0:
+        case 1:
+            if (dComIfGp_roomControl_checkStatusFlag(roomNo, 0x1) == FALSE) {
+                return -1;
+            }
+            return !dComIfGs_isSwitch(swbit, roomNo);
+        default:
+            return 0;
     }
-    return 0;
 }
 
 /* 00000240-000002D0       .text chkStopB__10daKddoor_cFv */
