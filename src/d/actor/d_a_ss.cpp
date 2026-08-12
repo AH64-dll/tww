@@ -24,58 +24,6 @@
 static _GXColor col;
 static cXyz non_pos;
 
-static dCcD_SrcSph tg_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        // cCcD_SrcObj
-        {
-            /* Flags */ 0,
-            {
-                // cCcD_SrcObjAt
-                {
-                    /* Type */ 0,
-                    /* Atp  */ 0,
-                    { /* SPrm */ 0 },
-                },
-                // cCcD_SrcObjTg
-                {
-                    /* Type */ AT_TYPE_ALL & ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_WATER),
-                    { /* SPrm */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e },
-                },
-                // cCcD_SrcObjCo
-                {
-                    { /* SPrm */ 0 },
-                },
-            },
-        },
-        // dCcD_SrcGObjAt
-        {
-            /* Se      */ 0,
-            /* HitMark */ 0,
-            /* Spl     */ 0,
-            /* Mtrl    */ 0,
-            /* SPrm    */ 0,
-        },
-        // dCcD_SrcGObjTg
-        {
-            /* Se      */ 5,
-            /* HitMark */ 0xC,
-            /* Spl     */ 0,
-            /* Mtrl    */ 0,
-            /* SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
-        },
-        // dCcD_SrcGObjCo
-        {
-            /* SPrm */ 0,
-        },
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 15.0f,
-    }},
-};
-
 /* 000000EC-000001DC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
@@ -343,7 +291,7 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         if (curY < groundY) {
             curY = groundY;
         }
-        sp34v.z = 3000.0f + REG8_F(17);
+        sp34v.z = -2.0f + REG8_F(17);
         sp34v.x = hand->m28 * cM_ssin(hand->m30 + idx * hand->m32);
         mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
         MtxPosition(&sp34v, &sp40);
@@ -629,7 +577,7 @@ void core_move(ss_class* i_this) {
     }
 
     if (i_this->m2C4 >= 0x32) {
-        i_this->eyePos.set(-10000.0f, -10000.0f, -10000.0f);
+        i_this->eyePos.set(10000.0f, 10000.0f, 10000.0f);
     }
     i_this->mSph.SetC(i_this->eyePos);
     i_this->mSph.SetR(35.0f + REG0_F(3));
@@ -746,6 +694,58 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
 /* 000030D4-0000339C       .text daSs_Create__FP10fopAc_ac_c */
 static cPhs_State daSs_Create(fopAc_ac_c* a_this) {
+    static dCcD_SrcSph tg_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            // cCcD_SrcObj
+            {
+                /* Flags */ 0,
+                {
+                    // cCcD_SrcObjAt
+                    {
+                        /* Type */ 0,
+                        /* Atp  */ 0,
+                        { /* SPrm */ 0 },
+                    },
+                    // cCcD_SrcObjTg
+                    {
+                        /* Type */ AT_TYPE_ALL & ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_WATER),
+                        { /* SPrm */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e },
+                    },
+                    // cCcD_SrcObjCo
+                    {
+                        { /* SPrm */ 0 },
+                    },
+                },
+            },
+            // dCcD_SrcGObjAt
+            {
+                /* Se      */ 0,
+                /* HitMark */ 0,
+                /* Spl     */ 0,
+                /* Mtrl    */ 0,
+                /* SPrm    */ 0,
+            },
+            // dCcD_SrcGObjTg
+            {
+                /* Se      */ 5,
+                /* HitMark */ 0xC,
+                /* Spl     */ 0,
+                /* Mtrl    */ 0,
+                /* SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            },
+            // dCcD_SrcGObjCo
+            {
+                /* SPrm */ 0,
+            },
+        },
+        // cM3dGSphS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 15.0f,
+        }},
+    };
+
     ss_class* i_this = (ss_class*)a_this;
 
     if (!fopAcM_CheckCondition(a_this, fopAcCnd_INIT_e)) {
