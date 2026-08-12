@@ -485,7 +485,7 @@ cPhs_State daNpcMn_c::createInit() {
         l_npc_dat[mNpcNo].mMin_head_y,
         l_npc_dat[mNpcNo].mMax_turn_step
     );
-    m794 = l_npc_dat[mNpcNo].field_0x4A;
+    m7BE = l_npc_dat[mNpcNo].field_0x4A;
     m7BF = l_npc_dat[mNpcNo].field_0x4B;
     mAttnDist = l_npc_dat[mNpcNo].field_0x20;
     mTurnSpeed = l_npc_dat[mNpcNo].field_0x28;
@@ -1495,11 +1495,11 @@ void daNpcMn_c::chkAttention() {
 /* 00003478-000035C4       .text lookBack__9daNpcMn_cFv */
 void daNpcMn_c::lookBack() {
     s16 angAccel = m7AA;
-    s16 angle = shape_angle.y;
+    s16 angle = current.angle.y;
     cXyz lookAtPos;
     cXyz* pTarget = NULL;
     cXyz eyePos = this->eyePos;
-    u8 attnFlag = m794;
+    bool attnFlag = m794;
     u8 lookMode = mLookMode;
     switch (lookMode) {
         case 1:
@@ -1510,7 +1510,7 @@ void daNpcMn_c::lookBack() {
             angle = m7AE;
             break;
     }
-    if (mMode && m794) {
+    if (mMode && m7BE) {
         attnFlag = 0;
         m_jnt.setTrn();
     }
@@ -1522,7 +1522,7 @@ void daNpcMn_c::lookBack() {
     } else {
         mAngAccel = 0;
     }
-    m_jnt.lookAtTarget(&shape_angle.y, pTarget, eyePos, angle, mAngAccel, attnFlag);
+    m_jnt.lookAtTarget(&current.angle.y, pTarget, eyePos, angle, mAngAccel, attnFlag);
     shape_angle = current.angle;
 }
 

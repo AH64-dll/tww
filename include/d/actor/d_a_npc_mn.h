@@ -161,7 +161,7 @@ public:
     /* 0x788 */ f32 m788;
     /* 0x78C */ u32 mItemId;
     /* 0x790 */ u32 m790;
-    /* 0x794 */ u8 m794;
+    /* 0x794 */ bool m794;
     /* 0x795 */ u8 field_0x795[0x796 - 0x795];
     /* 0x796 */ s16 mEventIdx;
     /* 0x798 */ s16 mTimer;
