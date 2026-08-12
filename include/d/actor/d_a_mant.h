@@ -16,6 +16,8 @@ struct mant_j_s {
 
 class daMant_packet_c : public J3DPacket {
 public:
+    daMant_packet_c() { mType = 0; }
+
     /* 0x010 */ Mtx mMtx;
     /* 0x040 */ Mtx mMtx2;
     /* 0x070 */ dKy_tevstr_c* mTevstr;
@@ -38,6 +40,8 @@ public:
 
 class mant_class : public fopAc_ac_c {
 public:
+    mant_class() {}
+
     enum CapeType {
         /* 0x0 */ Type_DARKNUT_e = 0x0,
         /* 0x1 */ Type_PHANTOM_GANON_e = 0x1,
@@ -50,8 +54,9 @@ public:
     /* 0x1248 */ s32 m1248;
     /* 0x124C */ u8 m124C[0x1250 - 0x124C];
     /* 0x1250 */ mant_j_s mJoint[9];
-    /* 0x1BE0 */ cXyz m1BE0;
-    /* 0x1BEC */ cXyz m1BEC;
+    /* 0x1BE0 */ cXyz m1BE0_arr[2];
+#define m1BE0 m1BE0_arr[0]
+#define m1BEC m1BE0_arr[1]
     /* 0x1BF8 */ f32 m1BF8;
     /* 0x1BFC */ f32 m1BFC;
     /* 0x1C00 */ f32 m1C00;

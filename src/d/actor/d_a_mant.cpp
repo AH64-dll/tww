@@ -73,6 +73,16 @@ static void* pal_d[] = {
     l_pg_mantle1_palettePAL,
 };
 
+/* .bss:0x0  weak_bss_3569 (cXyz, via dolzel.pch) */
+/* .bss:0xC  16x weak_bss_936_to_1036 u8s 4-aligned (via dolzel.pch) */
+static cXyz* l_v_pos;
+static s32 l_v_count;
+static s32 l_mesh_cc_ct;
+/* .bss:0x58 DestructorChain regmem for l_non_pos (compiler-emitted) */
+static cXyz l_non_pos(-20000.0f, -200000.0f, -100000.0f);
+
+/* 000000EC-000003EC       .text draw__15daMant_packet_cFv */
+void daMant_packet_c::draw() {
 static GXVtxDescList l_vtxDescList[] = {
     {GX_VA_POS, GX_INDEX8},
     {GX_VA_NRM, GX_INDEX8},
@@ -87,24 +97,6 @@ static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
     {GX_VA_NULL, GX_CLR_RGBA, GX_F32, 0},
 };
 
-static f32 l_d_p[] = {
-    0.6f, 0.4f, 0.3f, 0.3f, 0.2f, 0.2f, 0.2f, 0.1f,
-};
-
-static f32 l_d_p2[] = {
-    5.0f, 2.0f, 1.0f, 0.5f, 0.0f, -0.3f, -0.3f, 0.0f,
-};
-
-/* .bss:0x0  weak_bss_3569 (cXyz, via dolzel.pch) */
-/* .bss:0xC  16x weak_bss_936_to_1036 u8s 4-aligned (via dolzel.pch) */
-static cXyz* l_v_pos;
-static s32 l_v_count;
-static s32 l_mesh_cc_ct;
-/* .bss:0x58 DestructorChain regmem for l_non_pos (compiler-emitted) */
-static cXyz l_non_pos(-20000.0f, -200000.0f, -100000.0f);
-
-/* 000000EC-000003EC       .text draw__15daMant_packet_cFv */
-void daMant_packet_c::draw() {
     GXTlutObj tlutObj;
     GXTexObj texObj;
     void* tex = tex_d[mTexNo];
@@ -186,6 +178,14 @@ static BOOL daMant_Draw(mant_class* i_this) {
 
 /* 000004E8-00000FC0       .text joint_control__FP10mant_classP8mant_j_si */
 void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
+static f32 l_d_p[] = {
+    0.6f, 0.4f, 0.3f, 0.3f, 0.2f, 0.2f, 0.2f, 0.1f,
+};
+
+static f32 l_d_p2[] = {
+    5.0f, 2.0f, 1.0f, 0.5f, 0.0f, -0.3f, -0.3f, 0.0f,
+};
+
     dBgS_GndChk gndChk;
     cXyz pos(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z);
     gndChk.SetPos(&pos);
@@ -484,7 +484,8 @@ static BOOL daMant_Delete(mant_class*) {
 }
 
 /* 00001A4C-00001D18       .text daMant_Create__FP10fopAc_ac_c */
-static dCcD_SrcSph wind_cc_sph_src = {
+static cPhs_State daMant_Create(fopAc_ac_c* pActor) {
+    static dCcD_SrcSph wind_cc_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -512,7 +513,7 @@ static dCcD_SrcSph wind_cc_sph_src = {
         /* Radius */ 200.0f,
     }},
 };
-static dCcD_SrcSph mesh_cc_sph_src = {
+    static dCcD_SrcSph mesh_cc_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -541,13 +542,16 @@ static dCcD_SrcSph mesh_cc_sph_src = {
     }},
 };
 
-static cPhs_State daMant_Create(fopAc_ac_c* pActor) {
     mant_class* i_this = static_cast<mant_class*>(pActor);
     fopAcM_ct(i_this, mant_class);
 
     i_this->m1244 = fopAcM_GetParam(i_this) & 0xFF;
-    i_this->cull.box.min = cXyz(-2000.0f, -2000.0f, -2000.0f);
-    i_this->cull.box.max = cXyz(2000.0f, 2000.0f, 2000.0f);
+    i_this->cull.box.min.x = -2000.0f;
+    i_this->cull.box.min.y = -2000.0f;
+    i_this->cull.box.min.z = -2000.0f;
+    i_this->cull.box.max.x = 2000.0f;
+    i_this->cull.box.max.y = 2000.0f;
+    i_this->cull.box.max.z = 2000.0f;
     i_this->cullMtx = i_this->mBaseMtx;
     i_this->mPacket.mFlag = i_this->m1244;
     if (i_this->m1244 == mant_class::Type_PHANTOM_GANON_e) {
@@ -568,7 +572,9 @@ static cPhs_State daMant_Create(fopAc_ac_c* pActor) {
         }
         i_this->m2834 = 0xA;
     }
-    i_this->scale = cXyz(1.0f, 1.0f, 1.0f);
+    i_this->scale.x = 1.0f;
+    i_this->scale.y = 1.0f;
+    i_this->scale.z = 1.0f;
     for (s32 i = 0; i < 10; i++) {
         daMant_Execute(i_this);
     }
