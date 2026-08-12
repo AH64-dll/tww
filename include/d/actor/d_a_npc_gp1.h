@@ -143,7 +143,7 @@ public:
     /* 0x80B */ bool mbInDemo;
     /* 0x80C */ s8 mActionIndex;
     /* 0x80D */ s8 mActNo;
-    /* 0x80E */ u8 m80E;
+    /* 0x80E */ s8 m80E;
     /* 0x80F */ u8 m80F;
     /* 0x810 */ s8 mBtpNum;
     /* 0x811 */ s8 mAnmNum;

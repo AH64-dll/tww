@@ -857,7 +857,10 @@ void daNpc_Gp1_c::event_actionInit(int i_staff_idx) {
 
 /* 00001FE0-00001FF4       .text event_action__11daNpc_Gp1_cFv */
 bool daNpc_Gp1_c::event_action() {
-    return m80E != 2;
+    if (m80E >= 2) {
+        return true;
+    }
+    return true;
 }
 
 /* 00001FF4-000020E0       .text privateCut__11daNpc_Gp1_cFi */
@@ -873,19 +876,19 @@ void daNpc_Gp1_c::privateCut(int i_staff_idx) {
         return;
     }
 
-    mActionIndex = dComIfGp_evmng_getMyActIdx(i_staff_idx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
-    if(mActionIndex == -1) {
+    mActNo = dComIfGp_evmng_getMyActIdx(i_staff_idx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
+    if(mActNo == -1) {
         dComIfGp_evmng_cutEnd(i_staff_idx);
     } else {
         if(dComIfGp_evmng_getIsAddvance(i_staff_idx)) {
-            switch(mActionIndex) {
+            switch(mActNo) {
                 case ACT_ACTION:
                     event_actionInit(i_staff_idx);
                     break;
             }
         }
         bool endCut;
-        switch(mActionIndex) {
+        switch(mActNo) {
             case ACT_ACTION:
                 endCut = event_action();
                 break;
