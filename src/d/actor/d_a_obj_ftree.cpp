@@ -10,7 +10,7 @@
 #include "d/d_a_obj.h"
 
 namespace daObjFtree {
-const char Act_c::M_arcname[] = "Vmr";
+char Act_c::M_arcname[] = "Vmr";
 
 static const u32 L_attr[] = {
     0x42740000, 0x42C00000, 0x41C80000, 0x42500000, 0x43040000, 0x446D8000, 0x42900000, 0x42140000,

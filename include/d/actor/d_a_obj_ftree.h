@@ -23,7 +23,7 @@ namespace daObjFtree {
 
     class Act_c : public fopAc_ac_c {
     public:
-        static const char M_arcname[];
+        static char M_arcname[];
 
         s32 param_get_tree_idx() const; // weak but not inlined?
 
