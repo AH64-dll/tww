@@ -524,7 +524,7 @@ void daNpc_De1_c::setAttention() {
     mDoMtx_stack_c::multVec(&offset, &m76C);
     mTransformedEyePos = m76C;
     attention_info.position.set(mTransformedEyePos.x, mTransformedEyePos.y + l_HIO.mPrmTbl.mAttPosOffsetY, mTransformedEyePos.z);
-    eyePos = m76C;
+    eyePos.set(m76C.x, m76C.y, m76C.z);
 }
 
 /* 00001194-000011C8       .text searchByID__11daNpc_De1_cFUi */
@@ -601,8 +601,10 @@ void daNpc_De1_c::del_pa_happa() {
 /* 00001550-000015CC       .text followPa_happa__11daNpc_De1_cFv */
 void daNpc_De1_c::followPa_happa() {
     if (mEcallBack.getEmitter() != NULL) {
-        PSMTXCopy(mpMorf->getModel()->getAnmMtx(m_head_jnt_num), mDoMtx_stack_c::get());
-        mParticlePos.set(mDoMtx_stack_c::get()[0][3], mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+        PSMTXCopy(mpMorf->getModel()->getAnmMtx(m_branchL_jnt_num), mDoMtx_stack_c::get());
+        mParticlePos.x = mDoMtx_stack_c::get()[0][3];
+        mParticlePos.y = mDoMtx_stack_c::get()[1][3];
+        mParticlePos.z = mDoMtx_stack_c::get()[2][3];
     }
 }
 
