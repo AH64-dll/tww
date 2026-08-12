@@ -43,7 +43,7 @@ public:
     void anmAtr(u16);
     void eventOrder();
     void checkOrder();
-    BOOL chk_talk();
+    u8 chk_talk();
     BOOL chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(u32*);
@@ -130,7 +130,7 @@ public:
     /* 0x7E0 */ s16 mTargetYRot;
     /* 0x7E2 */ s16 m7E2;
     /* 0x7E4 */ s8 mbMorfAnimStopped;
-    /* 0x7E5 */ u8 m7E5;
+    /* 0x7E5 */ s8 m7E5;
     /* 0x7E6 */ u8 field_0x7E6;
     /* 0x7E7 */ s8 m7E7;
     /* 0x7E8 */ s8 m7E8;

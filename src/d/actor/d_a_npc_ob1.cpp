@@ -274,7 +274,7 @@ BOOL daNpc_Ob1_c::setAnm_anm(anm_prm_c* i_anm) {
     BOOL ret = dNpc_setAnmIDRes(mpMorf, i_anm->mLoopMode, i_anm->mMorf, i_anm->mSpeed, anmResID, -1, "Ob");
     mbMorfAnimStopped = 0;
     m7E5 = 0;
-    mPrevMorfFrame = 0.0f;
+    mPrevMorfFrame = 0;
     return ret;
 }
 
@@ -453,7 +453,7 @@ void daNpc_Ob1_c::checkOrder() {
 }
 
 /* 00001120-000011C0       .text chk_talk__11daNpc_Ob1_cFv */
-BOOL daNpc_Ob1_c::chk_talk() {
+u8 daNpc_Ob1_c::chk_talk() {
     BOOL ret = FALSE;
     u8 talkBtn = dComIfGp_event_getTalkXYBtn();
     if (talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e) {
