@@ -1030,7 +1030,8 @@ s32 daNpcMn_c::eventSwOn() {
         mEvTimer--;
         return 0;
     }
-    dComIfGs_onSwitch(getPrmSwitchBit2(), (s8)home.roomNo);
+    int swBit = getPrmSwitchBit2();
+    dComIfGs_onSwitch(swBit, (s8)home.roomNo);
     return 1;
 }
 
