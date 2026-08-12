@@ -7,10 +7,15 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
 
+class daGy_Ctrl_c;
+
 class daGy_c : public fopEn_enemy_c {
 public:
+    daGy_c();
+    static const u32 m_heapsize;
+
     void _nodeControl(J3DNode*, J3DModel*);
-    void _createHeap();
+    BOOL _createHeap();
     void setMtx();
     void setAnm();
     void setAtCollision();
@@ -50,21 +55,44 @@ public:
     bool _delete();
 
 public:
-    /* 0x2AC */ u8 m2AC[0x2B0 - 0x2AC];
+    /* 0x2AC */ s32 m2AC;
     /* 0x2B0 */ s32 m2B0;
-    /* 0x2B4 */ u8 m2B4[0x2D4 - 0x2B4];
+    /* 0x2B4 */ f32 m2B4;
+    /* 0x2B8 */ daGy_Ctrl_c* mpCtrl;
+    /* 0x2BC */ cXyz m2BC;
+    /* 0x2C8 */ request_of_phase_process_class mPhs;
+    /* 0x2D0 */ u8 m2D0[0x2D4 - 0x2D0];
     /* 0x2D4 */ mDoExt_McaMorf* mpMorf;
     /* 0x2D8 */ mDoExt_invisibleModel m2D8;
     /* 0x2E0 */ dBgS_Acch mAcch;
     /* 0x4A4 */ dBgS_AcchCir mAcchCir;
-    /* 0x4E4 */ u8 m4E4[0x50C - 0x4E4];
+    /* 0x4E4 */ f32 m4E4;
+    /* 0x4E8 */ f32 m4E8;
+    /* 0x4EC */ f32 m4EC;
+    /* 0x4F0 */ f32 m4F0;
+    /* 0x4F4 */ u8 m4F4[0x4F8 - 0x4F4];
+    /* 0x4F8 */ s32 m4F8;
+    /* 0x4FC */ s32 m4FC;
+    /* 0x500 */ s32 m500;
+    /* 0x504 */ f32 m504;
+    /* 0x508 */ f32 m508;
     /* 0x50C */ dCcD_GObjInf m50C;
     /* 0x604 */ u8 m604[0x624 - 0x604];
     /* 0x624 */ cM3dGSph m624;
     /* 0x638 */ u8 m638[0x8C4 - 0x638];
     /* 0x8C4 */ dCcD_GStts mGStts;
     /* 0x8E4 */ u32 m8E4;
-    /* 0x8E8 */ u8 m8E8[0x978 - 0x8E8];
+    /* 0x8E8 */ u8 m8E8[0x8F8 - 0x8E8];
+    /* 0x8F8 */ cXyz m8F8;
+    /* 0x904 */ cXyz m904;
+    /* 0x910 */ u8 m910[0x914 - 0x910];
+    /* 0x914 */ s32 m914;
+    /* 0x918 */ s32 m918;
+    /* 0x91C */ u8 m91C[0x920 - 0x91C];
+    /* 0x920 */ s32 m920;
+    /* 0x924 */ s32 m924;
+    /* 0x928 */ s32 m928;
+    /* 0x92C */ u8 m92C[0x978 - 0x92C];
     /* 0x978 */ dCcD_GStts m978;
     /* 0x998 */ dCcD_GObjInf m998;
     /* 0xA90 */ u8 mA90[0xAE0 - 0xA90];
@@ -83,12 +111,119 @@ public:
     /* 0xE6C */ u8 mE6C[0xE90 - 0xE6C];
 };
 
-class daGy_HIO_c {
+class daGy_HIO_c : public mDoHIO_entry_c {
 public:
     daGy_HIO_c();
+    virtual ~daGy_HIO_c() {}
+    void genMessage(JORMContext*);
 
-public:
-    /* Place member variables here */
-};
+    /* 0x04 */ f32 m04;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ s16 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ f32 m18;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ f32 m24;
+    /* 0x28 */ f32 m28;
+    /* 0x2C */ f32 m2C;
+    /* 0x30 */ f32 m30;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ f32 m38;
+    /* 0x3C */ f32 m3C;
+    /* 0x40 */ f32 m40;
+    /* 0x44 */ f32 m44;
+    /* 0x48 */ f32 m48;
+    /* 0x4C */ f32 m4C;
+    /* 0x50 */ f32 m50;
+    /* 0x54 */ f32 m54;
+    /* 0x58 */ f32 m58;
+    /* 0x5C */ f32 m5C;
+    /* 0x60 */ f32 m60;
+    /* 0x64 */ f32 m64;
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 m6C;
+    /* 0x70 */ f32 m70;
+    /* 0x74 */ f32 m74;
+    /* 0x78 */ f32 m78;
+    /* 0x7C */ f32 m7C;
+    /* 0x80 */ f32 m80;
+    /* 0x84 */ f32 m84;
+    /* 0x88 */ f32 m88;
+    /* 0x8C */ f32 m8C;
+    /* 0x90 */ f32 m90;
+    /* 0x94 */ u8 m94;
+    /* 0x95 */ u8 m95;
+    /* 0x96 */ u8 m96;
+    /* 0x97 */ u8 m97;
+    /* 0x98 */ u8 m98;
+    /* 0x99 */ u8 m99;
+    /* 0x9C */ f32 m9C;
+    /* 0xA0 */ f32 mA0;
+    /* 0xA4 */ f32 mA4;
+    /* 0xA8 */ f32 mA8;
+    /* 0xAC */ f32 mAC;
+    /* 0xB0 */ f32 mB0;
+    /* 0xB4 */ f32 mB4;
+    /* 0xB8 */ f32 mB8;
+    /* 0xBC */ f32 mBC;
+    /* 0xC0 */ f32 mC0;
+    /* 0xC4 */ f32 mC4;
+    /* 0xC8 */ f32 mC8;
+    /* 0xCC */ f32 mCC;
+    /* 0xD0 */ f32 mD0;
+    /* 0xD4 */ f32 mD4;
+    /* 0xD8 */ f32 mD8;
+    /* 0xDC */ f32 mDC;
+    /* 0xE0 */ f32 mE0;
+    /* 0xE4 */ f32 mE4;
+    /* 0xE8 */ f32 mE8;
+    /* 0xEC */ f32 mEC;
+    /* 0xF0 */ f32 mF0;
+    /* 0xF4 */ f32 mF4;
+    /* 0xF8 */ f32 mF8;
+    /* 0xFC */ f32 mFC;
+    /* 0x100 */ f32 m100;
+    /* 0x104 */ f32 m104;
+    /* 0x108 */ f32 m108;
+    /* 0x10C */ s16 m10C;
+    /* 0x10E */ s16 m10E;
+    /* 0x110 */ s16 m110;
+    /* 0x112 */ s16 m112;
+    /* 0x114 */ s16 m114;
+    /* 0x116 */ s16 m116;
+    /* 0x118 */ s16 m118;
+    /* 0x11A */ u8 m11A[0x12];
+    /* 0x12C */ f32 m12C;
+    /* 0x130 */ s16 m130;
+    /* 0x132 */ s16 m132;
+    /* 0x134 */ f32 m134;
+    /* 0x138 */ f32 m138;
+    /* 0x13C */ f32 m13C;
+    /* 0x140 */ s16 m140;
+    /* 0x142 */ s16 m142;
+    /* 0x144 */ f32 m144;
+    /* 0x148 */ f32 m148;
+    /* 0x150 */ f32 m150;
+    /* 0x154 */ f32 m154;
+    /* 0x158 */ f32 m158;
+    /* 0x15C */ f32 m15C;
+    /* 0x160 */ f32 m160;
+    /* 0x164 */ s16 m164;
+    /* 0x168 */ f32 m168;
+    /* 0x16C */ f32 m16C;
+    /* 0x170 */ f32 m170;
+    /* 0x174 */ f32 m174;
+    /* 0x178 */ f32 m178;
+    /* 0x17C */ f32 m17C;
+    /* 0x180 */ s16 m180;
+    /* 0x184 */ f32 m184;
+    /* 0x188 */ f32 m188;
+    /* 0x18C */ f32 m18C;
+    /* 0x190 */ f32 m190;
+    /* 0x194 */ f32 m194;
+    /* 0x198 */ s16 m198;
+}; // size = 0x19A
 
 #endif /* D_A_GY_H */
