@@ -21,7 +21,7 @@ static char* l_npc_staff_id[] = {
 
 static const char* l_arcname_tbl[] = {
     "Bmcon1",
-    "Bmcon2",
+    "Bmcon1",
 };
 
 static const int l_bmd_ix_tbl[] = {
@@ -162,8 +162,8 @@ static NpcDatStruct l_npc_dat[] = {
         190.0f,
         200.0f,
         0.0f,
-        0x0514,
         0x4E20,
+        0x0514,
         0x0190,
         0,
         60.0f,
@@ -196,8 +196,8 @@ static NpcDatStruct l_npc_dat[] = {
         190.0f,
         220.0f,
         0.0f,
-        0x0514,
         0x7FFF,
+        0x0514,
         0x0190,
         0,
         60.0f,
@@ -513,9 +513,10 @@ static s16 daNpcBmcon_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 0000107C-00001468       .text createInit__12daNpcBmcon_cFv */
 cPhs_State daNpcBmcon_c::createInit() {
-    u8 railID = getPrmRailID();
-    if (railID != 0xFF) {
-        mPathRun.setInf(railID, current.roomNo, 1);
+    u8 railID = 0xFF;
+    u8 prmRailID = getPrmRailID();
+    if (prmRailID != 0xFF) {
+        mPathRun.setInf(prmRailID, current.roomNo, 1);
         if (mPathRun.isPath()) {
             dPath_GetNextRoomPath(mPathRun.getPath(), -1);
             actor_status &= ~0x80;
