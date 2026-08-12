@@ -120,12 +120,14 @@ void daNpc_Yw1_c::setMtx(bool) {
 
 /* 00000F48-00000F5C       .text bckResID__11daNpc_Yw1_cFi */
 int daNpc_Yw1_c::bckResID(int param) {
+    /* Nonmatching */
     static const int a_res_id_tbl[] = {0, 3, 4, 2, 1, 5, 9};
     return a_res_id_tbl[param];
 }
 
 /* 00000F5C-00000F70       .text btpResID__11daNpc_Yw1_cFi */
 int daNpc_Yw1_c::btpResID(int param) {
+    /* Nonmatching */
     static const int a_res_id_tbl[] = {8};
     return a_res_id_tbl[param];
 }
