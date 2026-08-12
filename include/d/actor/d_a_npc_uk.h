@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+#include "d/actor/d_a_npc_mk_static.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "SSystem/SComponent/c_phase.h"
@@ -21,6 +22,37 @@ public:
         ACTION_STARTING = 0,
         ACTION_ONGOING = 1,
         ACTION_ENDING = -1,
+    };
+
+    enum VisitModes {
+        VISIT_START = 0,
+        VISIT_TALK = 1,
+        VISIT_WALK_PATH = 2,
+        VISIT_RUN_LINK = 3,
+        VISIT_NOTICE_LINK = 4,
+        VISIT_REACHED_LINK = 5,
+        VISIT_WALK_AROUND_LINK = 6,
+        VISIT_LEFT_PATH = 7,
+        VISIT_WAIT = 8,
+        VISIT_WAIT_2 = 9,
+        VISIT_WAIT_3 = 10,
+    };
+
+    enum States {
+        STATE_WAIT = 0,
+        STATE_TALK01 = 1,
+        STATE_VISIT = 2,
+        STATE_DEMO01 = 3,
+        STATE_DEMO02 = 4,
+        STATE_5 = 5, // unsure how to call
+        STATE_WARNING_B = 6,
+        STATE_WARNING_C = 7,
+        STATE_WARNING_D = 8,
+        STATE_FOUND = 9,
+        STATE_RUNAWAY = 10,
+        STATE_JUMP = 11,
+        STATE_JITANDA01 = 12,
+        STATE_JITANDA02 = 13,
     };
 
     enum Types {
@@ -99,7 +131,7 @@ public:
     void setAttention(bool);
     u8 getLookBackMode();
     void lookBack();
-    u32 getStaffName();
+    char* getStaffName();
     BOOL checkDemoStart();
     s32 getNowEventAction();
     void visitInit(u8);
@@ -137,7 +169,7 @@ public:
     /* 0x298 */ mDoExt_McaMorf* mpMorf;
     /* 0x29C */ J3DModel* mpModel;
     /* 0x2A0 */ u32 mShadowId;
-    /* 0x2A4 */ J3DAnmTexPattern* mBtpRes;
+    /* 0x2A4 */ J3DAnmTexPattern* m_maba_tex_pattern;
     /* 0x2A8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x2BC */ u8 mBlinkFrame;
     /* 0x2BD */ u8 field_0x2BD;
@@ -185,12 +217,12 @@ public:
     /* 0x6C9 */ u8 field_0x6C9[0x6CC - 0x6C9];
     /* 0x6CC */ cXyz field_0x6CC;
     /* 0x6D8 */ cXyz field_0x6D8;
-    /* 0x6E4 */ s16 mEventIdx;
-    /* 0x6E6 */ s16 mTimer;
+    /* 0x6E4 */ s16 field_0x6E4;
+    /* 0x6E6 */ s16 mEventIdx;
     /* 0x6E8 */ s16 field_0x6E8;
     /* 0x6EA */ u8 field_0x6EA[0x6EC - 0x6EA];
-    /* 0x6EC */ char* mpName;
-    /* 0x6F0 */ u8 field_0x6F0[0x700 - 0x6F0];
+    /* 0x6EC */ u32 mMsgNo;
+    /* 0x6F0 */ daNpc_Mk_Static_c mUkStatic;
 };  // Size: 0x700
 
 #endif /* D_A_NPC_UK_H */
