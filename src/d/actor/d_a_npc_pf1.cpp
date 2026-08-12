@@ -777,7 +777,7 @@ BOOL daNpc_Pf1_c::startEvent_check() {
     cXyz pos = mHomePos;
     pos.y += 100.0f;
     if (chk_areaIN(l_HIO.mPrmTbl.m38, pos)) {
-        f32 dist = std::sqrtf((dComIfGp_getLinkPlayer()->current.pos - current.pos).abs2XZ());
+        f32 dist = std::sqrtf((dComIfGp_getLinkPlayer()->current.pos - current.pos).abs2());
         if (dist < 210.0f || field_0x6ba != 0) {
             return TRUE;
         }
