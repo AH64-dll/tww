@@ -118,21 +118,36 @@ static dCcD_SrcCps l_cps_src = {
 
 #include "d/d_jnt_hit.h"
 
-static Vec atama_cyl_offset = {0.0f, 150.0f, 0.0f};
-static Vec ago_cyl_offset = {0.0f, 90.0f, 0.0f};
-static Vec body1_cyl_offset = {-10.0f, -20.0f, 0.0f};
-static Vec body2_cyl_offset = {-10.0f, -10.0f, 0.0f};
-static Vec sebire1_cyl_offset = {-10.0f, 60.0f, 0.0f};
+static Vec atama_cyl_offset[] = {
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 150.0f, 0.0f},
+};
+static Vec ago_cyl_offset[] = {
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 90.0f, 0.0f},
+};
+static Vec body1_cyl_offset[] = {
+    {-10.0f, -20.0f, 0.0f},
+    {40.0f, -20.0f, 0.0f},
+};
+static Vec body2_cyl_offset[] = {
+    {-10.0f, -10.0f, 0.0f},
+    {40.0f, -10.0f, 0.0f},
+};
+static Vec sebire1_cyl_offset[] = {
+    {-10.0f, 60.0f, 0.0f},
+    {150.0f, -100.0f, 0.0f},
+};
 
-static const __jnt_hit_data_c search_data[] = {
-    {0, 2, 30.0f, (Vec*)&atama_cyl_offset},
-    {0, 3, 30.0f, (Vec*)&ago_cyl_offset},
-    {0, 4, 60.0f, (Vec*)&body1_cyl_offset},
-    {0, 5, 20.0f, (Vec*)&sebire1_cyl_offset},
-    {0, 6, 60.0f, (Vec*)&body1_cyl_offset},
-    {0, 7, 50.0f, (Vec*)&body1_cyl_offset},
-    {0, 9, 30.0f, (Vec*)&body1_cyl_offset},
-    {0, 10, 30.0f, (Vec*)&body2_cyl_offset},
+static __jnt_hit_data_c search_data[] = {
+    {0, 2, 30.0f, atama_cyl_offset},
+    {0, 3, 30.0f, ago_cyl_offset},
+    {0, 4, 60.0f, body1_cyl_offset},
+    {0, 5, 20.0f, sebire1_cyl_offset},
+    {0, 6, 60.0f, body1_cyl_offset},
+    {0, 7, 50.0f, body1_cyl_offset},
+    {0, 9, 30.0f, body1_cyl_offset},
+    {0, 10, 30.0f, body2_cyl_offset},
 };
 
 static daGy_HIO_c l_HIO;
@@ -222,6 +237,13 @@ daGy_HIO_c::daGy_HIO_c() {
     mD0 = 20.0f;
     m104 = -40.0f;
     m108 = 25.0f;
+    m10C = 0x78;
+    m10E = 0x3C;
+    m110 = 0x78;
+    m112 = 0xB4;
+    m114 = 0x168;
+    m116 = 0x5A;
+    m118 = 0xF0;
     m188 = 0.2f;
     m12C = 10.0f;
     m144 = 400.0f;
