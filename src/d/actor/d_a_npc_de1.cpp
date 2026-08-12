@@ -252,8 +252,8 @@ void daNpc_De1_c::anmAtr(u16 i_msgStatus) {
             }
             {
                 u8 mesgAnimeTagInfo = dComIfGp_getMesgAnimeTagInfo();
-                dComIfGp_clearMesgAnimeTagInfo();
                 if (mesgAnimeTagInfo != 0xFF && mAnmTag != mesgAnimeTagInfo) {
+                    dComIfGp_clearMesgAnimeTagInfo();
                     mAnmTag = mesgAnimeTagInfo;
                     chngAnmTag();
                 }
