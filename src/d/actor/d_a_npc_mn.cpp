@@ -1241,12 +1241,14 @@ u8 daNpcMn_c::talk3(int i_param) {
     } else if (mpCurrMsg) {
         status = dComIfGp_getScopeMesgStatus();
         switch (status) {
-            case fopMsgStts_MSG_DISPLAYED_e:
-                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
-                if (mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-                    fopMsgM_messageSet(mCurrMsgNo);
+            case fopMsgStts_MSG_DISPLAYED_e: {
+                u8 msgStatus = next_msgStatus(&mCurrMsgNo);
+                dComIfGp_setScopeMesgStatus(msgStatus);
+                if (msgStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_scopeMessageSet(mCurrMsgNo);
                 }
                 break;
+            }
 
             case fopMsgStts_MSG_TYPING_e:
                 if (mMsgStatus == fopMsgStts_MSG_CONTINUES_e) {
@@ -1255,7 +1257,7 @@ u8 daNpcMn_c::talk3(int i_param) {
                 break;
 
             case fopMsgStts_BOX_CLOSED_e:
-                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSING_e);
                 mCurrMsgBsPcId = -1;
                 break;
         }
