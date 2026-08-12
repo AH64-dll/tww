@@ -746,11 +746,8 @@ s32 daObjFtree::Act_c::action_changeLS2_init(s16) {
 
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
     if (brk != NULL) {
-        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 61.0f, 0, -1, 1, FALSE) != 0
-            && SetJointAnimation(5, 61.0f, 950.0f, 0) != 0) {
-            set_brought();
-            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, 0.0f, 0.0f, 0);
-            return 1;
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, -1.0f, 0, -1, 1, FALSE) != 0) {
+            return SetJointAnimation(5, -0.7f, 10.0f, -0x14);
         }
     }
     return 0;
