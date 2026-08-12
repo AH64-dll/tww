@@ -300,6 +300,7 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 0000049C-00000888       .text _nodeControl__6daGy_cFP7J3DNodeP8J3DModel */
+/* Nonmatching */
 void daGy_c::_nodeControl(J3DNode* node, J3DModel* model) {
     s32 jntNo = ((J3DJoint*)node)->getJntNo();
     Mtx sp94;
@@ -381,6 +382,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000008A8-00000AAC       .text _createHeap__6daGy_cFv */
 BOOL daGy_c::_createHeap() {
+    /* Nonmatching */
     J3DModelData* mdl = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 0xF);
     JUT_ASSERT(0x377, mdl != NULL);
 
@@ -732,6 +734,7 @@ cPhs_State daGy_c::_create() {
 }
 
 /* 00004A80-00005A80       .text __ct__6daGy_cFv */
+/* Nonmatching */
 daGy_c::daGy_c() {}
 
 /* 00005A80-00005AD4       .text _delete__6daGy_cFv */
