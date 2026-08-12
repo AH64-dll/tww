@@ -148,7 +148,7 @@ s32 daNpc_Gk1_c::init_GK1_0() {
 }
 
 /* 0000058C-00000720       .text createInit__11daNpc_Gk1_cFv */
-s32 daNpc_Gk1_c::createInit() {
+u8 daNpc_Gk1_c::createInit() {
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
     mEventCut.setActorInfo2("Gk1", this);
     attention_info.flags = 0xA;
@@ -899,7 +899,7 @@ BOOL daNpc_Gk1_c::_delete() {
 
 /* 000022D4-00002520       .text _create__11daNpc_Gk1_cFv */
 cPhs_State daNpc_Gk1_c::_create() {
-    static int a_size_tbl[] = {
+    static int a_siz_tbl[] = {
         0x00000000
     };
 
@@ -916,7 +916,7 @@ cPhs_State daNpc_Gk1_c::_create() {
     l_HIO.entryHIO("");
     fopAcM_ct(this, daNpc_Gk1_c);
 #endif
-    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mTypeInit])) {
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[mTypeInit])) {
         return cPhs_ERROR_e;
     }
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());

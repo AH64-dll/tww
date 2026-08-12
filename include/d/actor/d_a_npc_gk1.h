@@ -22,7 +22,7 @@ public:
     void _nodeCB_Neck(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     s32 init_GK1_0();
-    s32 createInit();
+    u8 createInit();
     void play_animation();
     void setMtx(bool);
     int bckResID(int);
