@@ -17,13 +17,13 @@ daObj_hsh_c::~daObj_hsh_c() {
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
-static s16 daObj_hsh_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daObj_hsh_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000002C4-000002E8       .text XyCheckCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daObj_hsh_c::XyCheckCB(int i_itemBtn) {
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e ? TRUE : FALSE;
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */

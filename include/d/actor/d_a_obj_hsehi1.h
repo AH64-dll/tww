@@ -20,7 +20,7 @@ public:
     void onTactCancel() {}
     void onTactCorrect() {}
 
-    void XyCheckCB(int);
+    s16 XyCheckCB(int);
     void XyEventCB(int);
     void particle_set(unsigned short);
     void particle_set(JPABaseEmitter**, unsigned short);
