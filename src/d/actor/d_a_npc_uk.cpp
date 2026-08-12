@@ -362,7 +362,7 @@ static const int l_btp_ix_tbl[] = {
 
 /* 00000F48-00001070       .text initTexPatternAnm__10daNpc_Uk_cFb */
 BOOL daNpc_Uk_c::initTexPatternAnm(bool i_modify) {
-    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    J3DModelData* modelData = mpModel->getModelData();
 
     if (getShapeType() != 1) {
         return TRUE;
