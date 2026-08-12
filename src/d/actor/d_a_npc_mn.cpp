@@ -519,6 +519,9 @@ bool daNpcMn_c::_delete() {
 
 /* 00000FE4-00001154       .text _draw__9daNpcMn_cFv */
 bool daNpcMn_c::_draw() {
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0408)) {
+        return true;
+    }
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
