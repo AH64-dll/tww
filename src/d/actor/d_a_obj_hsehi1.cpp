@@ -40,8 +40,8 @@ s16 daObj_hsh_c::XyEventCB(int) {
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
-void daObj_hsh_c::particle_set(unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(unsigned short i_particleID) {
+    dComIfGp_particle_set(i_particleID, &current.pos, &current.angle);
 }
 
 /* 000003F4-00000488       .text particle_set__11daObj_hsh_cFPP14JPABaseEmitterUs */
