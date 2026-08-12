@@ -773,10 +773,12 @@ u8 daNpc_Gk1_c::demo() {
             m_jnt.setBackBone_x(0);
         }
         dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
-        if (mBtpAnm.getBtpAnm()) {
+        J3DAnmTexPattern* demo_btp = mBtpAnm.getBtpAnm();
+        if (demo_btp) {
+            u8 frame_max = (u8)demo_btp->getFrameMax();
             mBlinkFrame += 1;
-            if (mBlinkFrame >= mBtpAnm.getBtpAnm()->getFrameMax()) {
-                mBlinkFrame = mBtpAnm.getBtpAnm()->getFrameMax();
+            if (mBlinkFrame >= frame_max) {
+                mBlinkFrame = frame_max;
             }
         }
         J3DAnmTexPattern* demo_pattern = demo_actor->getP_BtpData(m_arcname);
