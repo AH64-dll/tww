@@ -178,6 +178,7 @@ static BOOL daMant_Draw(mant_class* i_this) {
 
 /* 000004E8-00000FC0       .text joint_control__FP10mant_classP8mant_j_si */
 void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
+    /* Nonmatching */
     static f32 d_p[] = {
         0.6f, 0.4f, 0.3f, 0.3f, 0.2f, 0.2f, 0.2f, 0.1f,
     };
@@ -190,7 +191,7 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
     cXyz* p_speed = i_joint->mSpeed;
 
     dBgS_GndChk gndChk;
-    gndChk.SetPos(&cXyz(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z));
+    gndChk.m_pos.set(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z);
     f32 f30 = 1.5f + dComIfG_Bgsp()->GroundCross(&gndChk);
     if (f30 - i_joint->mPos[0].y > 50.0f) {
         f30 = i_joint->mPos[0].y;
@@ -210,7 +211,10 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
 
     s16 angle = i_this->m1C0C + (s16)((i_idx - 4) * 0xBB8);
     mDoMtx_YrotS(*calc_mtx, angle);
-    cXyz local_B4_2(0.0f, 0.0f, i_this->m1C00);
+    cXyz local_B4_2;
+    local_B4_2.x = 0.0f;
+    local_B4_2.y = 0.0f;
+    local_B4_2.z = i_this->m1C00;
     s16 diff = angle - i_joint->mRot.y;
     if (diff < 0) {
         diff *= -1;
@@ -225,7 +229,11 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
     cXyz local_60;
     MtxPosition(&local_B4_2, &local_60);
 
-    cXyz local_B4_3(0.0f, 0.0f, (i_this->m1BF8 + cM_ssin((s16)(i_idx * 0x59D8))) * i_this->scale.y);
+    cXyz local_B4_3;
+    local_B4_3.x = 0.0f;
+    local_B4_3.y = 0.0f;
+    local_B4_3.z = i_this->m1BF8 + cM_ssin((s16)(i_idx * 0x59D8));
+    local_B4_3.z *= i_this->scale.y;
 
     s32 i = 0;
     s32 phase = 0;
@@ -233,7 +241,7 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
     s32 base = i_idx * 0x2710;
     dCcS* ccS = dComIfG_Ccsp();
 
-    for (i = 0; i < 9; i++, p_pos++, p_speed++, phase += 0x2710, dp_idx += 4) {
+    for (i = 0; i < 9; i++, phase += 0x2710, p_pos++, p_speed++, dp_idx += 4) {
         if (i > 0) {
             cXyz local_90 = local_9C * d_p[i - 1];
 
@@ -253,13 +261,13 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
                 MtxPosition(&local_78, &local_6C);
             }
 
-            f32 f31 = local_6C.x + (local_84.x + (local_54.x + (local_90.x + (p_speed->x + (p_pos->x - i_joint->mPos[i - 1].x)))));
-            f32 f27 = local_6C.z + (local_84.z + (local_54.z + (local_90.z + (p_speed->z + (p_pos->z - i_joint->mPos[i - 1].z)))));
+            f32 f31 = local_6C.x + (local_84.x + (local_54.x + (local_90.x + (p_speed->x + (p_pos->x - p_pos[-1].x)))));
+            f32 f27 = local_6C.z + (local_84.z + (local_54.z + (local_90.z + (p_speed->z + (p_pos->z - p_pos[-1].z)))));
             f32 f1 = local_54.y + (i_this->m1C08 + (p_pos->y + p_speed->y));
             if (f1 < f30) {
                 f1 = f30;
             }
-            f32 f28 = f1 - i_joint->mPos[i - 1].y;
+            f32 f28 = f1 - p_pos[-1].y;
 
             s16 x_angle = -cM_atan2s(f28, f27);
             f32 dist = f28 * f28 + f27 * f27;
@@ -270,16 +278,16 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
                 guess = 0.5 * guess * (3.0 - guess * guess * dist);
                 dist = (f32)(dist * guess);
             }
-            s16 y_angle = cM_atan2s(f31, dist);
+            s16 y_angle = (s16)cM_atan2s(f31, dist);
             mDoMtx_XrotS(*calc_mtx, x_angle);
             mDoMtx_YrotM(*calc_mtx, y_angle);
             cXyz local_A8;
             MtxPosition(&local_B4, &local_A8);
 
             *p_speed = *p_pos;
-            p_pos->x += local_A8.x;
-            p_pos->y += local_A8.y;
-            p_pos->z += local_A8.z;
+            p_pos->x = p_pos[-1].x + local_A8.x;
+            p_pos->y = p_pos[-1].y + local_A8.y;
+            p_pos->z = p_pos[-1].z + local_A8.z;
             p_speed->x = i_this->m1BFC * (p_pos->x - p_speed->x);
             p_speed->y = i_this->m1BFC * (p_pos->y - p_speed->y);
             p_speed->z = i_this->m1BFC * (p_pos->z - p_speed->z);
@@ -313,10 +321,12 @@ void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
                             i_this->m2834 = 0;
                             res = 1;
                         }
-                    } else if (i_this->mPacket.mTexNo == 0) {
-                        i_this->mPacket.mTexNo = 4;
-                        i_this->m2834 = 0;
-                        res = 1;
+                    } else {
+                        if (atInfo.mResultingAttackType == 1 && i_this->mPacket.mTexNo == 0) {
+                            i_this->mPacket.mTexNo = 4;
+                            i_this->m2834 = 0;
+                            res = 1;
+                        }
                     }
                 }
                 if (res != 0) {
@@ -502,6 +512,7 @@ static BOOL daMant_Delete(mant_class*) {
 
 /* 00001A4C-00001D18       .text daMant_Create__FP10fopAc_ac_c */
 static cPhs_State daMant_Create(fopAc_ac_c* pActor) {
+    /* Nonmatching */
     static dCcD_SrcSph wind_cc_sph_src = {
     // dCcD_SrcGObjInf
     {
