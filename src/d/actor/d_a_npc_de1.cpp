@@ -341,8 +341,7 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
                     *i_msg_no = 0x13C7;
                     break;
                 default:
-                    *i_msg_no = 0x13C6;
-                    break;
+                    goto msg_13C6;
             }
             break;
         case 0x13AB:
@@ -354,8 +353,7 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
                     *i_msg_no = 0x13CC;
                     break;
                 default:
-                    *i_msg_no = 0x13C6;
-                    break;
+                    goto msg_13C6;
             }
             break;
         case 0x13CC:
@@ -401,8 +399,7 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
                     *i_msg_no = 0x13B6;
                     break;
                 default:
-                    *i_msg_no = 0x13C6;
-                    break;
+                    goto msg_13C6;
             }
             break;
         case 0x13B6:
@@ -429,6 +426,9 @@ u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
         case 0x13C3:
         case 0x13C4:
             *i_msg_no = 0x13C5;
+            break;
+        msg_13C6:
+            *i_msg_no = 0x13C6;
             break;
         default:
             o_retval = fopMsgStts_MSG_ENDS_e;
