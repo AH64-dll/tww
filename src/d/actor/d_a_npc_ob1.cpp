@@ -1538,11 +1538,11 @@ BOOL daNpc_Ob1_c::CreateHeap() {
     }
     for (u16 i = 0; i < model_data->getJointNum(); i++) {
         if (i == m_hed_jnt_num || i == m_bbone_jnt_num) {
-            model_data->getJointNodePointer(i)->setCallBack(nodeCallBack_Ob1);
+            mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Ob1);
         }
     }
     mpMorf->getModel()->setUserArea((u32)this);
-    mAcchCir.SetWall(l_HIO.mPrmTbl.mMaxHeadX, l_HIO.mPrmTbl.field_0x38);
+    mAcchCir.SetWall(30.0f, 80.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
     return TRUE;
 }
