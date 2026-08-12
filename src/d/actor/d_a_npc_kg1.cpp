@@ -584,7 +584,7 @@ out:
 
 /* 000019B4-00001C7C       .text next_msgStatus__11daNpc_Kg1_cFPUl */
 u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
-    u16 ret = fopMsgStts_MSG_ENDS_e;
+    u16 ret = fopMsgStts_MSG_CONTINUES_e;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     switch (*pMsgNo) {
     case 0x1D4D:
@@ -611,11 +611,11 @@ u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
         clr_seq_flag();
         switch (mpCurrMsg->mSelectNum) {
         case 0:
-            if (dComIfGp_getItemRupeeCount() < 0xA) {
+            if (dComIfGs_getRupee() < 0xA) {
                 *pMsgNo = 0x1D54;
             } else {
                 m74D = 1;
-                dComIfGs_setRupee(dComIfGs_getRupee() - 10);
+                dComIfGp_setItemRupeeCount(-10);
                 m751 = 1;
                 m_jnt.mbHeadLock = true;
                 cXyz pos(0.0f, 0.0f, 250.0f);
