@@ -268,7 +268,20 @@ BOOL daObjFtree::Act_c::PlayStopColorAnimation() {
 
 /* 0000093C-00000A1C       .text set_first_stat__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_first_stat() {
-    /* Nonmatching */
+    if (dComIfGs_isSymbol(2) != 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) != 0) {
+            process_init(3, 0);
+            m63C = 1.0f;
+        } else if (is_brought() == 0) {
+            process_init(1, 0);
+            m63C = 0.2f;
+        } else {
+            process_init(2, 0);
+            m63C = 0.2f;
+        }
+    } else {
+        process_init(0, 0);
+    }
 }
 
 /* 00000A1C-00000C1C       .text set_collision__Q210daObjFtree5Act_cFv */
@@ -287,13 +300,24 @@ void daObjFtree::Act_c::talk_main() {
 }
 
 /* 00000F14-00000FC4       .text get_tev_material0_color__Q210daObjFtree5Act_cFP12J3DModelDataUlPsPsPs */
-void daObjFtree::Act_c::get_tev_material0_color(J3DModelData*, unsigned long, short*, short*, short*) {
-    /* Nonmatching */
+void daObjFtree::Act_c::get_tev_material0_color(J3DModelData* modelData, unsigned long i_idx, short* o_r, short* o_g, short* o_b) {
+    J3DMaterial* mat = modelData->getJointNodePointer(0)->getMesh();
+    if (mat != NULL) {
+        *o_r = mat->mTevBlock->getTevColor(i_idx)->mColor.r;
+        *o_g = mat->mTevBlock->getTevColor(i_idx)->mColor.g;
+        *o_b = mat->mTevBlock->getTevColor(i_idx)->mColor.b;
+    }
 }
 
 /* 00000FC4-00001070       .text set_tev_color__Q210daObjFtree5Act_cFP12J3DModelDataUlsss */
-void daObjFtree::Act_c::set_tev_color(J3DModelData*, unsigned long, short, short, short) {
-    /* Nonmatching */
+void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_idx, short i_r, short i_g, short i_b) {
+    J3DMaterial* mat = modelData->getJointNodePointer(0)->getMesh();
+    while (mat != NULL) {
+        mat->mTevBlock->getTevColor(i_idx)->mColor.r = i_r;
+        mat->mTevBlock->getTevColor(i_idx)->mColor.g = i_g;
+        mat->mTevBlock->getTevColor(i_idx)->mColor.b = i_b;
+        mat = mat->mNext;
+    }
 }
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
