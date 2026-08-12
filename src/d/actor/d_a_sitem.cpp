@@ -6,25 +6,52 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sitem.h"
 #include "d/d_cc_d.h"
+#include "d/d_s_play.h"
+
+static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
-void hand_draw(sitem_class*) {
-    /* Nonmatching */
+void hand_draw(sitem_class* i_this) {
+    J3DModel* model = i_this->mpModel;
+    if (i_this->m2C0 < 6) {
+        g_env_light.setLightTevColorType(model, &i_this->tevStr);
+        mDoExt_modelUpdateDL(model);
+    }
+    i_this->mLineMat1.update(0xA, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &i_this->tevStr);
+    dComIfGd_set3DlineMat(&i_this->mLineMat1);
+    if (i_this->mHandPos.z > 0.1f) {
+        i_this->mLineMat2.update(5, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &i_this->tevStr);
+        dComIfGd_set3DlineMat(&i_this->mLineMat2);
+    }
 }
 
 /* 000001FC-00000248       .text daSitem_Draw__FP11sitem_class */
-static BOOL daSitem_Draw(sitem_class*) {
-    /* Nonmatching */
+static BOOL daSitem_Draw(sitem_class* i_this) {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->eyePos, &i_this->tevStr);
+    hand_draw(i_this);
+    return TRUE;
 }
 
 /* 00000248-0000034C       .text hand_mtx_set__FP11sitem_class */
-void hand_mtx_set(sitem_class*) {
-    /* Nonmatching */
+void hand_mtx_set(sitem_class* i_this) {
+    MtxTrans(i_this->m2E0.x, i_this->m2E0.y, i_this->m2E0.z, 0);
+    mDoMtx_XrotM(*calc_mtx, i_this->m2EC.x);
+    mDoMtx_YrotM(*calc_mtx, i_this->m2EC.y);
+    mDoMtx_XrotM(*calc_mtx, (s16)(REG12_S(1) + 0x4000));
+    cXyz pos(0.0f, -60.0f + REG12_F(4), 0.0f);
+    MtxPosition(&pos, &i_this->mB00);
+    MtxTrans(0.0f, -50.0f + REG12_F(3), 0.0f, 1);
+    PSMTXCopy(*calc_mtx, i_this->mpModel->getBaseTRMtx());
 }
 
 /* 00000388-00000410       .text control3__FP11sitem_class */
-void control3(sitem_class*) {
-    /* Nonmatching */
+void control3(sitem_class* i_this) {
+    sitem_s* item = i_this->mSitem1;
+    for (int i = 0; i < 10; i++) {
+        f32 scale = 0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64);
+        item->m18 = scale * size_d[i];
+        item++;
+    }
 }
 
 /* 00000410-00000748       .text control1__FP11sitem_class */
