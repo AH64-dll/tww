@@ -70,6 +70,7 @@ void draw_SUB(pw_class* i_this) {
 
 /* 00000230-000004D4       .text daPW_Draw__FP8pw_class */
 static BOOL daPW_Draw(pw_class* i_this) {
+    /* Nonmatching */
     J3DModel* model = i_this->mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
 
@@ -732,6 +733,7 @@ void action_itai(pw_class*) {
 
 /* 00004C50-00004FFC       .text action_demo__FP8pw_class */
 void action_demo(pw_class* i_this) {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz local = player->current.pos;
@@ -813,6 +815,7 @@ void action_demo(pw_class* i_this) {
 
 /* 00004FFC-000052B8       .text action_torituku__FP8pw_class */
 void action_torituku(pw_class* i_this) {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* playerPtr = dComIfGp_getLinkPlayer();
     cXyz local = player->current.pos;
