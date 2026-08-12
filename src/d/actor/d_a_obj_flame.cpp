@@ -200,26 +200,28 @@ int daObjFlame::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000134-00000414       .text create_heap__Q210daObjFlame5Act_cFv */
     /* Nonmatching */
 int daObjFlame::Act_c::create_heap() {
-    BOOL btkOk = FALSE;
+    BOOL ret = FALSE;
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBdlResID);
     JUT_ASSERT(499, mdl_data != 0);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
 
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBtkResID);
+    mpBtkAnm = new mDoExt_btkAnm();
+    BOOL btkOk = FALSE;
     JUT_ASSERT(508, btk != 0);
 
-    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm != NULL) {
         btkOk = mpBtkAnm->init(mdl_data, btk, 1, 2, M_attr_scl[mType].mRate, 0, -1, 0, 0);
     }
 
     BOOL brkOk = FALSE;
-    if (M_attr_scl[mType].mBrkResID >= 0) {
-        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, M_attr_scl[mType].mBrkResID);
+    s32 brkResID = M_attr_scl[mType].mBrkResID;
+    if (brkResID >= 0) {
+        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, brkResID);
+        mpBrkAnm = new mDoExt_brkAnm();
         JUT_ASSERT(530, brk != 0);
 
-        mpBrkAnm = new mDoExt_brkAnm();
         if (mpBrkAnm != NULL) {
             brkOk = mpBrkAnm->init(mdl_data, brk, 1, 2, M_attr_scl[mType].mRate, 0, -1, 0, 0);
         }
@@ -228,9 +230,9 @@ int daObjFlame::Act_c::create_heap() {
     }
 
     if (mpModel != NULL && btkOk && brkOk) {
-        return TRUE;
+        ret = TRUE;
     }
-    return FALSE;
+    return ret;
 }
 
 /* 0000045C-000007D8       .text create_mode_init__Q210daObjFlame5Act_cFv */
