@@ -18,7 +18,7 @@ public:
 
     void lookBack();
     void chkAttention();
-    void initTexPatternAnm(int, bool);
+    BOOL initTexPatternAnm(int, bool);
     void playTexPatternAnm();
     void set_mtx();
     BOOL CreateHeap();
@@ -38,6 +38,7 @@ public:
     static const char m_arcname[];
     static cXyz m_camera_ctr;
     static cXyz m_camera_eye;
+    static f32 m_camera_fovy;
 
 public:
     /* 0x6C4 */ J3DModel* m6C4;
@@ -45,7 +46,7 @@ public:
     /* 0x6DC */ request_of_phase_process_class mPhs;
     /* 0x6E4 */ void (daNpc_Kg1_c::*mAction)();
     /* 0x6F0 */ u8 m6F0[0x6F4 - 0x6F0];
-    /* 0x6F4 */ J3DAnmTexPattern* m6F4;
+    /* 0x6F4 */ J3DAnmTexPattern* m_eye_tex_pattern;
     /* 0x6F8 */ mDoExt_btpAnm m6F8;
     /* 0x70C */ mDoExt_btpAnm m70C;
     /* 0x720 */ u8 m720;

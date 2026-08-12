@@ -68,6 +68,7 @@ static daNpc_Kg1_HIO_c l_HIO;
 const char daNpc_Kg1_c::m_arcname[] = "Kg";
 cXyz daNpc_Kg1_c::m_camera_ctr(-200.0f, 140.0f, 85.0f);
 cXyz daNpc_Kg1_c::m_camera_eye(-117.0f, 92.0f, 344.0f);
+f32 daNpc_Kg1_c::m_camera_fovy = 40.0f;
 
 /* 000001E0-00000428       .text daNpc_Kg1_nodeCallBack__FP7J3DNodei */
 static BOOL daNpc_Kg1_nodeCallBack(J3DNode*, int) {
@@ -84,16 +85,27 @@ void daNpc_Kg1_c::chkAttention() {
     /* Nonmatching */
 }
 
+static const int l_btp_ix_tbl[] = {9, 11, 13, 12};
+
 /* 000007D8-000008D8       .text initTexPatternAnm__11daNpc_Kg1_cFib */
-void daNpc_Kg1_c::initTexPatternAnm(int, bool) {
-    /* Nonmatching */
+BOOL daNpc_Kg1_c::initTexPatternAnm(int param_2, bool param_3) {
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    m_eye_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(m_arcname, l_btp_ix_tbl[param_2]);
+    JUT_ASSERT(0x1CC, m_eye_tex_pattern != 0);
+    BOOL ret = m6F8.init(modelData, m_eye_tex_pattern, 1, 2, 1.0f, 0, -1, param_3, FALSE);
+    if (ret == FALSE) {
+        return FALSE;
+    }
+    m720 = 0;
+    m72C = 0;
+    return TRUE;
 }
 
 /* 000008D8-00000944       .text playTexPatternAnm__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::playTexPatternAnm() {
     if (!cLib_calcTimer(&m72C)) {
-        if (m720 >= m6F4->getFrameMax()) {
-            m720 -= m6F4->getFrameMax();
+        if (m720 >= m_eye_tex_pattern->getFrameMax()) {
+            m720 -= m_eye_tex_pattern->getFrameMax();
             m72C = 0x78;
         } else {
             m720++;
@@ -140,7 +152,7 @@ void daNpc_Kg1_c::kg1_talk_camera() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     if (m751 && camera != NULL) {
         camera->mCamera.Stay();
-        camera->mCamera.Set(m_camera_ctr, m_camera_eye, 40.0f, 0);
+        camera->mCamera.Set(m_camera_ctr, m_camera_eye, m_camera_fovy, 0);
         camera->mCamera.Reset();
         camera->mCamera.SetTrimSize(1);
     }
