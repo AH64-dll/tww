@@ -653,7 +653,23 @@ s32 daNpcSv_c::eventGetItem() {
 
 /* 000018F8-000019E0       .text eventSetAngleInit__9daNpcSv_cFv */
 void daNpcSv_c::eventSetAngleInit() {
-    /* Nonmatching */
+    fopAc_ac_c* i_target;
+    fopAcM_SearchByID(parentActorID, &i_target);
+    if(i_target != NULL) {
+        fopAc_ac_c* link = dComIfGp_getLinkPlayer();
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(i_target->current.pos, link->current.pos, NULL, &angle);
+        angle -= i_target->shape_angle.y;
+        if(angle > 0) {
+            m72C = i_target->shape_angle.y + 0x4000;
+        } else {
+            m72C = i_target->shape_angle.y - 0x4000;
+        }
+        m728 = m72C;
+    } else {
+        m72C = m728;
+    }
+    m73C |= 2;
 }
 
 /* 000019E0-00001A74       .text eventAttentionInit__9daNpcSv_cFi */
@@ -766,7 +782,18 @@ void daNpcSv_c::lookBack() {
 
 /* 00002520-000025E8       .text playAnm__9daNpcSv_cFv */
 void daNpcSv_c::playAnm() {
-    /* Nonmatching */
+    m73E &= 0xFE;
+    if(mpMorf->play(NULL, 0, 0) != 0 && mAnmDat != NULL && (s8)m73F > 0) {
+        m73F--;
+        if((s8)m73F == 0) {
+            mAnmDat++;
+            if(setAnmTbl(mAnmDat) != 0) {
+                m73E |= 1;
+            }
+        } else {
+            setAnm(mAnmDat->mAnmNo, 0, 0.0f);
+        }
+    }
 }
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
