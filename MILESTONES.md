@@ -64,7 +64,7 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 
 ## 2026-08-12T20:00Z — M6: isolated-mode flip batch complete — 17 Equivalent flips ALL locally gated; flip pool exhausted; gate re-verified at HEAD b96f8029e
 
-**State (2026-08-12 22:53 EEST)**: ISOLATED MODE FOREVER (zero GitHub outbound — no PRs/CI/upstream; local flip+gates only). Main HEAD `b96f8029e`, verify worktree reset to it, forced explicit gate `build-lock.sh build/GZLE01/ok` → **416 files OK** (fresh ok stamp 22:53:25; the 22:52 stamp was a 0-byte configure placeholder — always force + confirm mtime moved). 87 `ActorRel(NonMatching)` rows remain in configure.py; 120 verdicts in `.org/actor-data/`.
+**State (2026-08-12 22:55 EEST)**: ISOLATED MODE FOREVER (zero GitHub outbound — no PRs/CI/upstream; local flip+gates only). Main HEAD `b96f8029e`, verify worktree reset to it, forced explicit gate `build-lock.sh build/GZLE01/ok` → **416 files OK** (authoritative ok stamp 22:54:34 after configure regen; earlier 22:52/22:53 stamps were 0-byte placeholders — always force + confirm mtime moved after regen). 87 `ActorRel(NonMatching)` rows remain in configure.py; 120 verdicts in `.org/actor-data/`.
 
 **Delivered**
 - **17 Equivalent flips all locally gated** (bridge, lod_bg, obj_ikada, obj_tide, himo3, kamome, kt, obj_swflat, ship, bmdfoot, kb, klft, mant, npc_co1, npc_ji1, movie_player, msdan MatchingFor 3-retail) — every flip commit accounted for in flip-gate-audit; 0 unverified flips (mozo premature flip reverted).
