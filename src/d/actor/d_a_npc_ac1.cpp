@@ -200,10 +200,10 @@ void daNpc_Ac1_c::setMtx(bool i_param_1) {
     mDoMtx_stack_c::YrotM(current.angle.y);
     cMtx_copy(mDoMtx_stack_c::get(), mpMorf->getModel()->getBaseTRMtx());
     mpMorf->calc();
-    if (mbHasArms) {
-        mpArmMorf->calc();
-    } else {
+    if (!mbHasArms) {
         mpWingMorf->calc();
+    } else {
+        mpArmMorf->calc();
     }
     if (mpItemModel != NULL && mbHasArms) {
         cMtx_copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num), mpItemModel->getBaseTRMtx());
