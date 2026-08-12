@@ -21,8 +21,7 @@ static cXyz non_pos(0.0f, 30000.0f, -20000.0f);
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */
 void hand_draw(sss_class* i_this) {
-    /* Nonmatching */
-    fopAc_ac_c* actor = i_this;
+        fopAc_ac_c* actor = i_this;
     g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &actor->tevStr);
     i_this->mpMorf->updateDL();
     i_this->m300.update(0xA, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &actor->tevStr);
@@ -61,8 +60,7 @@ void hand_open(sss_class* i_this) {
 
 /* 00000348-00000444       .text hand_mtx_set__FP9sss_class */
 void hand_mtx_set(sss_class* i_this) {
-    /* Nonmatching */
-    MtxTrans(i_this->m2D4.x, i_this->m2D4.y, i_this->m2D4.z, 0);
+        MtxTrans(i_this->m2D4.x, i_this->m2D4.y, i_this->m2D4.z, 0);
     mDoMtx_XrotM(*calc_mtx, i_this->m2E0);
     mDoMtx_YrotM(*calc_mtx, i_this->m2E2);
     mDoMtx_XrotM(*calc_mtx, REG12_S(1) - 0x4000);
@@ -73,10 +71,9 @@ void hand_mtx_set(sss_class* i_this) {
 
 /* 00000444-000004CC       .text control3__FP9sss_class */
 void control3(sss_class* i_this) {
-    /* Nonmatching */
-    int i = 0;
-    for (i = 0; i < 10; i++) {
-        i_this->m33C[i].mSize = (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64)) * l_size_d[i];
+    sss_s* p = i_this->m33C;
+    for (int i = 0; i < 10; i++, p++) {
+        p->mSize = l_size_d[i] * (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64));
     }
 }
 
@@ -687,7 +684,6 @@ static BOOL daSss_IsDelete(sss_class*) {
 
 /* 000026A4-00002720       .text daSss_Delete__FP9sss_class */
 static BOOL daSss_Delete(sss_class* i_this) {
-    /* Nonmatching */
     dComIfG_resDelete(&i_this->mPhase, "Sss");
     if (i_this->mpEmitterA10 != NULL) {
         i_this->mpEmitterA10->becomeInvalidEmitter();
@@ -699,8 +695,7 @@ static BOOL daSss_Delete(sss_class* i_this) {
 }
 
 /* 00002720-000028A0       .text useHeapInit__FP9sss_class */
-void useHeapInit(sss_class* i_this) {
-    /* Nonmatching */
+BOOL useHeapInit(sss_class* i_this) {
     i_this->mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Sss", dRes_INDEX_SSS_BMD_SSS_HAND_e),
         NULL, NULL,
@@ -709,23 +704,18 @@ void useHeapInit(sss_class* i_this) {
         NULL, 0, 0x11020203
     );
     if (i_this->mpMorf->getModel() == NULL) {
-        return;
+        return FALSE;
     }
-    ResTIMG* pBti = (ResTIMG*)dComIfG_getObjectRes("Sss", dRes_INDEX_SSS_BTI_SSS_e);
-    if (!i_this->m300.init(1, 0xA, pBti, 1)) {
-        return;
+    if (!i_this->m300.init(1, 0xA, (ResTIMG*)dComIfG_getObjectRes("Sss", dRes_INDEX_SSS_BTI_SSS_e), 1)) {
+        return FALSE;
     }
-    if (!i_this->m454.init(1, 5, pBti, 1)) {
-        return;
-    }
+    return i_this->m454.init(1, 5, (ResTIMG*)dComIfG_getObjectRes("Sss", dRes_INDEX_SSS_BTI_SSS_e), 1) != 0 ? 1 : 0;
 }
 
 /* 000028A0-000028C0       .text daSss_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daSss_solidHeapCB(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     sss_class* i_this = (sss_class*)a_this;
-    useHeapInit(i_this);
-    return TRUE;
+    return useHeapInit(i_this);
 }
 
 /* 000028C0-00002BB4       .text daSss_Create__FP10fopAc_ac_c */
