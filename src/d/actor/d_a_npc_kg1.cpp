@@ -829,9 +829,9 @@ static BOOL daNpc_Kg1Draw(void* i_this) {
     daNpc_Kg1_c* self = static_cast<daNpc_Kg1_c*>(i_this);
     dSnap_RegistFig(0x81, (fopAc_ac_c*)i_this, 1.0f, 1.0f, 1.0f);
     J3DModelData* modelData = self->mpMorf->getModel()->getModelData();
+    g_env_light.settingTevStruct(0, &self->current.pos, &self->tevStr);
     cXyz* pos = &self->current.pos;
     dKy_tevstr_c* tevStr = &self->tevStr;
-    g_env_light.settingTevStruct(0, pos, tevStr);
     g_env_light.setLightTevColorType(self->mpMorf->getModel(), tevStr);
     g_env_light.setLightTevColorType(self->m6C4, tevStr);
     self->m6F8.entry(modelData, self->m720);
