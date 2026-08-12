@@ -99,7 +99,7 @@ public:
     /* 0x79C */ s16 field_0x79C;
     /* 0x79E */ s16 mTimer2;
     /* 0x7A0 */ u8 field_0x7A0[4];
-    /* 0x7A4 */ u8 mbMorfAnimStopped;
+    /* 0x7A4 */ s8 mbMorfAnimStopped;
     /* 0x7A5 */ u8 m7A5;
     /* 0x7A6 */ u8 m7A6;
     /* 0x7A7 */ u8 m7A7;
@@ -122,7 +122,7 @@ public:
     /* 0x810 */ u32 mPartnerProcID;
     /* 0x814 */ s8 mActIdx;
     /* 0x815 */ s8 mActNo;
-    /* 0x816 */ u8 mAnmAtr;
+    /* 0x816 */ s8 mAnmAtr;
     /* 0x817 */ u8 mAnmTag;
     /* 0x818 */ s8 mAnmNum;
     /* 0x819 */ s8 mOrder;
