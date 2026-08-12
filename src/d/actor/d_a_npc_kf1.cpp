@@ -113,12 +113,10 @@ void daNpc_Kf1_c::setAnm() {
 
 /* 00000D80-00000D84       .text chngAnmTag__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::chngAnmTag() {
-    /* Nonmatching */
 }
 
 /* 00000D84-00000D88       .text ctrlAnmTag__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::ctrlAnmTag() {
-    /* Nonmatching */
 }
 
 /* 00000D88-00000DEC       .text chngAnmAtr__11daNpc_Kf1_cFUc */
@@ -283,7 +281,6 @@ void daNpc_Kf1_c::cut_move_PLYER_TRN() {
 
 /* 000020B4-000020B8       .text cut_init_RUPEE_CNT_END__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_RUPEE_CNT_END(int) {
-    /* Nonmatching */
 }
 
 /* 000020B8-000020EC       .text cut_move_RUPEE_CNT_END__11daNpc_Kf1_cFv */
