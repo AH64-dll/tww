@@ -479,6 +479,16 @@ s32 daNpcSv_c::_delete() {
 
 /* 00000CD8-00000DAC       .text _draw__9daNpcSv_cFv */
 s32 daNpcSv_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+    mpMorf->updateDL();
+
+    cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(
+        mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
+        current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
+    );
+
     return true;
 }
 
@@ -761,7 +771,17 @@ void daNpcSv_c::playAnm() {
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
 void daNpcSv_c::setAnm(u8 anmNo, int mode, f32 speed) {
-    /* Nonmatching */
+    f32 curFrame = m70C;
+    f32 morf = speed;
+    if (curFrame >= 0.0f) {
+        morf = curFrame;
+        m70C = -1.0f;
+    }
+    mpMorf->setAnm(
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][anmNo]),
+        mode, morf, 1.0f, 0.0f, -1.0f, NULL
+    );
+    m73D = anmNo;
 }
 
 /* 000026C8-00002768       .text setAnmTbl__9daNpcSv_cFP9sSvAnmDat */
@@ -794,8 +814,8 @@ void daNpcSv_c::setCollision(dCcD_Cyl* pCyl, cXyz pos, f32 radius, f32 height) {
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */
 u8 daNpcSv_c::getTalkNo() {
+    int bHook = dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e) != 0;
     m746 = 0;
-    s32 bHook = dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e) != 0;
     u16 flags = m734;
 
     if (!(flags & 0x20)) {
