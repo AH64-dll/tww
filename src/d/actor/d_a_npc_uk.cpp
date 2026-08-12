@@ -228,7 +228,6 @@ u8 daNpc_Uk_c::nextVisitMode() {
 }
 
 /* 000008B0-00000930       .text approachRun__10daNpc_Uk_cFP10fopAc_ac_c */
-    /* Nonmatching */
 void daNpc_Uk_c::approachRun(fopAc_ac_c* i_pTarget) {
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, i_pTarget->current.pos, NULL, &angle);
@@ -236,7 +235,6 @@ void daNpc_Uk_c::approachRun(fopAc_ac_c* i_pTarget) {
 }
 
 /* 00000930-00000964       .text aroundWalk__10daNpc_Uk_cFP10fopAc_ac_c */
-    /* Nonmatching */
 void daNpc_Uk_c::aroundWalk(fopAc_ac_c* i_pTarget) {
     mUkStatic.aroundWalk(this, i_pTarget, mRunAroundLinkTimer);
 }
@@ -724,7 +722,6 @@ void daNpc_Uk_c::setAttention(bool param_1) {
 }
 
 /* 00001E38-00001F5C       .text getLookBackMode__10daNpc_Uk_cFv */
-    /* Nonmatching */
 u8 daNpc_Uk_c::getLookBackMode() {
     u32 localId = mLookActorId;
     fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &localId);
