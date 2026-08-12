@@ -12,7 +12,7 @@
 namespace daObjFtree {
 char Act_c::M_arcname[] = "Vmr";
 
-s32 message_table[] = {0, 0x149F, 0x14A0, 0x14A1, 0, 0, 0, 0, 0, 0, 0x149F, 0x14A0, 0x14A1};
+u32 message_table[] = {0, 0x149F, 0x14A0, 0x14A1, 0, 0, 0, 0, 0, 0, 0x149F, 0x14A0, 0x14A1};
 
 static const u32 L_attr[] = {
     0x42740000, 0x42C00000, 0x41C80000, 0x42500000, 0x43040000, 0x446D8000, 0x42900000, 0x42140000,
@@ -294,7 +294,7 @@ void daObjFtree::Act_c::set_collision() {
 /* 00000C1C-00000D50       .text talk_ct__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_ct() {
     m6A4 = -1;
-    m6A8 = 0;
+    m6A8 = NULL;
     cXyz pos = current.pos;
     cXyz pos2 = current.pos;
     if (mMode >= 0 && mMode < 0xD) {
@@ -322,7 +322,46 @@ void daObjFtree::Act_c::talk_ct() {
 
 /* 00000D50-00000F14       .text talk_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_main() {
-    /* Nonmatching */
+    if (m356 == -1 && eventInfo.mCommand == dEvtCmd_INTALK_e) {
+        if (m6A4 == fpcM_ERROR_PROCESS_ID_e) {
+            m6A4 = fopMsgM_messageSet(message_table[mMode], this);
+            m6A8 = NULL;
+            return;
+        }
+        if (m6A8 == NULL) {
+            m6A8 = fopMsgM_SearchByID(m6A4);
+            return;
+        }
+        switch (m6A8->mStatus) {
+        case fopMsgStts_MSG_DISPLAYED_e:
+            m6A8->mStatus = fopMsgStts_MSG_ENDS_e;
+            return;
+        case fopMsgStts_BOX_CLOSED_e:
+            m6A8->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+            talk_ct();
+            return;
+        }
+        return;
+    }
+    if (mMode >= 0 && mMode < 0xD && message_table[mMode] != 0) {
+        if (PSVECSquareDistance(&current.pos, &dComIfGp_getPlayer(0)->current.pos) <=
+            (m4C8 + 130.0f) * (m4C8 + 130.0f)) {
+            talk_ct();
+            fopAc_ac_c* player = dComIfGp_getPlayer(0);
+            if (player != NULL) {
+                cXyz diff = current.pos - player->current.pos;
+                s16 diffAngle = cM_atan2s(diff.x, diff.z) - player->shape_angle.y;
+                if (diffAngle <= 0) {
+                    diffAngle = -diffAngle;
+                }
+                if (diffAngle <= 0x4000) {
+                    eventInfo.mCondition |= 1;
+                }
+            }
+            eventInfo.mCondition |= 0x20;
+        }
+    }
 }
 
 /* 00000F14-00000FC4       .text get_tev_material0_color__Q210daObjFtree5Act_cFP12J3DModelDataUlPsPsPs */

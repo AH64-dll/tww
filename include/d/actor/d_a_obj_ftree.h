@@ -2,6 +2,7 @@
 #define D_A_OBJ_FTREE_H
 
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_msg.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "m_Do/m_Do_ext.h"
@@ -150,8 +151,8 @@ namespace daObjFtree {
         /* 0x69E */ s16 m69E;
         /* 0x6A0 */ s16 m6A0;
         /* 0x6A2 */ s16 m6A2;
-        /* 0x6A4 */ s32 m6A4;
-        /* 0x6A8 */ s32 m6A8;
+        /* 0x6A4 */ u32 m6A4;
+        /* 0x6A8 */ msg_class* m6A8;
         /* 0x6AC */ s32 m6AC;
     };
 };
