@@ -801,7 +801,7 @@ void daNpcAuction_c::privateCut() {
             return;
         }
         if (evm->getIsAddvance(staffId)) {
-            switch (mActIdx) {
+            switch ((s8)mActIdx) {
             case 0:
                 eventMainInit();
                 break;
@@ -811,7 +811,7 @@ void daNpcAuction_c::privateCut() {
             }
         }
         int ret;
-        switch (mActIdx) {
+        switch ((s8)mActIdx) {
         case 0:
             ret = eventMain();
             break;
@@ -822,7 +822,7 @@ void daNpcAuction_c::privateCut() {
             ret = 1;
             break;
         }
-        if (ret != 0) {
+        if ((u8)ret != 0) {
             evm->cutEnd(staffId);
         }
     }

@@ -255,7 +255,7 @@ cPhs_State daNpc_Kg1_c::CreateInit() {
     mCyl.SetStts(&mStts);
     setCollision(60.0f, 150.0f);
     gravity = -18.0f;
-    mEventCut.setActorInfo2((char*)m_arcname, this);
+    mEventCut.setActorInfo2("Auc0", this);
     set_mtx();
     m72E = 0;
     m730 = 0;
@@ -370,7 +370,9 @@ void daNpc_Kg1_c::wait_action() {
         }
         if (mCurrMsgNo == 0x1D5B) {
             m750 = 0;
-        } else if ((mCurrMsgNo == 0x1D5C || mCurrMsgNo == 0x1D57) && talkRet == 6) {
+        } else if (mCurrMsgNo == 0x1D5C && talkRet == 6) {
+            m750 = 1;
+        } else if (mCurrMsgNo == 0x1D57 && talkRet == 6) {
             m750 = 1;
         }
         if (talkRet == 0x12) {
