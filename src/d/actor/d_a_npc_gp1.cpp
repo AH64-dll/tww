@@ -810,11 +810,11 @@ bool daNpc_Gp1_c::create_rupee() {
     csXyz angle(0, 0, 0);
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_hnd_L_jnt_num));
     cXyz pos(mDoMtx_stack_c::get()[0][3], mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
-    static f32 a_off_tbl[3] = {-30.0f, 0.0f, 30.0f};
     int counter = g_Counter.mTimer;
     int created = 0;
     do {
-        angle.y = current.angle.y + (s16)(cM_deg2s(a_off_tbl[counter % 3] + cM_rndF(30.0f) - 15.0f));
+        f32 a_off_tbl[3] = {-30.0f, 0.0f, 30.0f};
+        angle.y = current.angle.y + cM_deg2s((f32)(s16)((cM_rndF(30.0f) - 15.0f) + a_off_tbl[counter % 3]));
         s8 room_no = current.roomNo;
         f32 scale_y = 33.0f + cM_rndFX(6.0f);
         f32 scale_xz = 10.0f + cM_rndFX(3.0f);
@@ -828,8 +828,8 @@ bool daNpc_Gp1_c::create_rupee() {
         item->speed.z = scale.z;
         item->current.angle = angle;
         item->shape_angle = angle;
-        created++;
         counter++;
+        created++;
     } while(created < m7F4);
     return true;
 }
