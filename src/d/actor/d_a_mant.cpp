@@ -107,6 +107,8 @@ static cXyz l_non_pos(-20000.0f, -200000.0f, -100000.0f);
 void daMant_packet_c::draw() {
     GXTlutObj tlutObj;
     GXTexObj texObj;
+    void* tex = tex_d[mTexNo];
+    void* pal = pal_d[mTexNo];
 
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -118,8 +120,8 @@ void daMant_packet_c::draw() {
     GFSetArray(GX_VA_NRM, &mNrmArr[mType * (0x3CC / 0xC)], sizeof(cXyz));
     GFSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
 
-    GXInitTlutObj(&tlutObj, pal_d[mTexNo], GX_TL_RGB5A3, 0x100);
-    GXInitTexObjCI(&texObj, tex_d[mTexNo], 0x80, 0x80, GX_TF_C4, GX_CLAMP, GX_CLAMP, GX_FALSE, 0);
+    GXInitTlutObj(&tlutObj, pal, GX_TL_RGB5A3, 0x100);
+    GXInitTexObjCI(&texObj, tex, 0x80, 0x80, GX_TF_C4, GX_CLAMP, GX_CLAMP, GX_FALSE, 0);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTlut(&tlutObj, GX_TLUT0);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -127,8 +129,8 @@ void daMant_packet_c::draw() {
     GXColor tevColor = {0xFF, 0xFF, 0xFF, 0xFF};
     if (mFlag == 1) {
         GXColorS10 tevColorS10 = {0xFF, 0xFF, 0xFF, 0xFF};
-        GFSetTevColorS10(GX_TEVREG1, tevColorS10);
-        GFSetTevColor(GX_TEVREG2, tevColor);
+        GFSetTevColorS10(GX_TEVREG0, tevColorS10);
+        GFSetTevColor(GX_TEVREG1, tevColor);
         GXCallDisplayList(l_matDL_LIGHTOFF, 0x80);
         GFLoadPosMtxImm(mMtx, 0);
         Mtx mtx;
@@ -137,8 +139,8 @@ void daMant_packet_c::draw() {
         GXCallDisplayList(l_DL, 0x1E0);
     } else {
         GXColorS10 tevColorS10 = {55, 55, 55, 0xFF};
-        GFSetTevColorS10(GX_TEVREG1, tevColorS10);
-        GFSetTevColor(GX_TEVREG2, tevColor);
+        GFSetTevColorS10(GX_TEVREG0, tevColorS10);
+        GFSetTevColor(GX_TEVREG1, tevColor);
         GXCallDisplayList(l_matDL, 0xA0);
         GFLoadPosMtxImm(mMtx, 0);
         Mtx mtx;
@@ -152,8 +154,8 @@ void daMant_packet_c::draw() {
         tevColor.r = 0;
         tevColor.g = 0;
         tevColor.b = 0;
-        GFSetTevColorS10(GX_TEVREG1, tevColorS10);
-        GFSetTevColor(GX_TEVREG2, tevColor);
+        GFSetTevColorS10(GX_TEVREG0, tevColorS10);
+        GFSetTevColor(GX_TEVREG1, tevColor);
         GXCallDisplayList(l_matDL2, 0x40);
         GFLoadPosMtxImm(mMtx2, 0);
         mDoMtx_inverseTranspose(mMtx2, mtx);
