@@ -172,8 +172,30 @@ void cut_control1(sitem_class* i_this) {
 }
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
-void my_break(sitem_class*) {
-    /* Nonmatching */
+void my_break(sitem_class* i_this) {
+    i_this->m2C2 = 0x32;
+    i_this->m2C0 = 6;
+    csXyz angle(0, i_this->current.angle.y, 0);
+    fopAcM_createItemFromTable(&i_this->mHomePos, i_this->m2BB, i_this->m2BA & 0x7F,
+                               i_this->home.roomNo, 0, &angle, 1, NULL);
+
+    if (i_this->mType <= 1) {
+        dComIfGp_particle_set(0x8168, &i_this->mHomePos, NULL, NULL, 0xFF, NULL, -1);
+        dComIfGp_particle_set(0x8167, &i_this->mHomePos, NULL, NULL, 0xFF, NULL, -1,
+                              &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+        if (i_this->mType == 1) {
+            dComIfGp_particle_set(0x8169, &i_this->mHomePos, NULL, NULL, 0xFF, NULL, -1,
+                                  &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+        }
+    }
+    if (i_this->mType == 2) {
+        dComIfGp_particle_set(0x816A, &i_this->mHomePos, NULL, NULL, 0xFF, NULL, -1,
+                              &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+    }
+
+    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_BREAK_CHAIR, &i_this->eyePos, 0,
+                                    dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    fopAcM_create(0x1D9, 4, &i_this->mHomePos, -1, NULL, NULL, -1, NULL);
 }
 
 /* 00001094-000015C0       .text cut_control2__FP11sitem_class */
