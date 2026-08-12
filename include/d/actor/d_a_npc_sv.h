@@ -87,7 +87,7 @@ public:
     u8 setAnmTbl(sSvAnmDat*);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     u8 getTalkNo();
-    s32 isTalkOK();
+    bool isTalkOK();
 
     static const char m_arcname[];
 

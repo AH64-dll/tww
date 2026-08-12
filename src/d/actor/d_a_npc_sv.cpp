@@ -669,23 +669,21 @@ void daNpcSv_c::executeTalk() {
 
 /* 000013B8-000013EC       .text checkOrder__9daNpcSv_cFv */
 void daNpcSv_c::checkOrder() {
-    /* Nonmatching */
-    switch(m734) {
-        case 1:
-            if(m738 == 2 || m738 == 1) {
-                m736 = 1;
-                return;
-            }
-        case 2:
-            return;
+    if(eventInfo.mCommand == 2) {
+        return;
+    }
+    if(eventInfo.mCommand != 1) {
+        return;
+    }
+    if(m738 == 2 || m738 == 1) {
+        m736 = 1;
     }
 }
 
 /* 000013EC-00001458       .text eventOrder__9daNpcSv_cFv */
 void daNpcSv_c::eventOrder() {
-    /* Nonmatching */
     if((m738 == 2 || m738 == 1) && isTalkOK()) {
-        m734 |= 1;
+        eventInfo.mCondition |= 1;
         if(m738 == 2) {
             fopAcM_orderSpeakEvent(this);
         }
@@ -857,12 +855,10 @@ void daNpcSv_c::setAnmFromMsgTag() {
 
 /* 00001F74-00001F94       .text getPrmNpcNo__9daNpcSv_cFv */
 u8 daNpcSv_c::getPrmNpcNo() {
-    /* Nonmatching */
-    u8 ret = argument;
-    if(ret >= 4) {
-        ret = 0;
+    if(0 <= argument && argument < 4) {
+        return argument;
     }
-    return ret;
+    return 0;
 }
 
 /* 00001F94-0000209C       .text setMtx__9daNpcSv_cFv */
@@ -986,9 +982,8 @@ u8 daNpcSv_c::getTalkNo() {
 }
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
-s32 daNpcSv_c::isTalkOK() {
-    /* Nonmatching */
-    return (dComIfGp_checkPlayerStatus0(0, 0x100000)) == 0;
+bool daNpcSv_c::isTalkOK() {
+    return !dComIfGp_checkPlayerStatus0(0, 0x100000);
 }
 
 /* 00002958-00002978       .text daNpc_PeopleCreate__FPv */
