@@ -23,11 +23,13 @@ namespace daObjFtree {
 
     class Act_c : public fopAc_ac_c {
     public:
+        static const char M_arcname[];
+
         s32 param_get_tree_idx() const; // weak but not inlined?
 
         void search_heart_part();
         BOOL launch_heart_part();
-        void place_heart_part();
+        BOOL place_heart_part();
         BOOL estimate_water();
         s16 XyEventCallBack(int);
         void XyEvent_init();
@@ -113,25 +115,44 @@ namespace daObjFtree {
         /* 0x4C8 */ f32 m4C8;
         /* 0x4CC */ dCcD_Stts m4CC;
         /* 0x508 */ dCcD_Cyl m508;
-        /* 0x638 */ u8 m638[0x648 - 0x638];
+        /* 0x638 */ s32 m638;
+        /* 0x63C */ f32 m63C;
+        /* 0x640 */ f32 m640;
+        /* 0x644 */ s32 m644;
         /* 0x648 */ s16 m648;
         /* 0x64C */ fpc_ProcID mSpawnedHeartPieceProcessId;
         /* 0x650 */ s16 m650;
         /* 0x652 */ s16 m652;
         /* 0x654 */ GXColorS10 m654;
-        /* 0x65C */ u8 m65C[0x664 - 0x65C];
+        /* 0x65C */ s16 m65C;
+        /* 0x65E */ s16 m65E;
+        /* 0x660 */ s16 m660;
+        /* 0x662 */ s16 m662;
         /* 0x664 */ GXColorS10 m664;
-        /* 0x66C */ GXColorS10 m66C;
+        /* 0x66C */ s16 m66C;
+        /* 0x66E */ s16 m66E;
+        /* 0x670 */ s16 m670;
+        /* 0x672 */ s16 m672;
         /* 0x674 */ GXColorS10 m674;
-        /* 0x67C */ u8 m67C[0x680 - 0x67C];
+        /* 0x67C */ s32 m67C;
         /* 0x680 */ u32 mMode;
-        /* 0x684 */ u8 m684[0x696 - 0x684];
+        /* 0x684 */ s16 m684;
+        /* 0x686 */ s16 m686;
+        /* 0x688 */ s32 m688;
+        /* 0x68C */ s32 m68C;
+        /* 0x690 */ s16 m690;
+        /* 0x692 */ s16 m692;
+        /* 0x694 */ s16 m694;
         /* 0x696 */ s16 m696;
         /* 0x698 */ s16 m698;
-        /* 0x69A */ u8 m69A[0x6A0 - 0x69A];
+        /* 0x69A */ s16 m69A;
+        /* 0x69C */ s16 m69C;
+        /* 0x69E */ s16 m69E;
         /* 0x6A0 */ s16 m6A0;
         /* 0x6A2 */ s16 m6A2;
-        /* 0x6A4 */ u8 m6A4[0x6B0 - 0x6A4];
+        /* 0x6A4 */ s32 m6A4;
+        /* 0x6A8 */ s32 m6A8;
+        /* 0x6AC */ s32 m6AC;
     };
 };
 

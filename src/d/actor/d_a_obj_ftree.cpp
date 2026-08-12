@@ -6,9 +6,77 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ftree.h"
 #include "d/actor/d_a_player.h"
+#include "res/Object/Vmr.h"
 #include "d/d_a_obj.h"
 
 namespace daObjFtree {
+const char Act_c::M_arcname[] = "Vmr";
+
+static const u32 L_attr[] = {
+    0x42740000, 0x42C00000, 0x41C80000, 0x42500000, 0x43040000, 0x446D8000, 0x42900000, 0x42140000,
+    0xC2140000, 0x00140000, 0x3E4CCCCD, 0x3E4CCCCD, 0x3CA3D70A, 0x42480000, 0x41A00000, 0x008C0000,
+    0x43020000, 0x3FE00000, 0x41F00000, 0x23280000, 0x44570000, 0xC0066666, 0x002F0000, 0x001E0000,
+};
+
+static const dCcD_SrcCyl M_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0xFF1DFEFF,
+        /* SrcObjTg  SPrm    */ 0xF,
+        /* SrcObjCo  SPrm    */ 0x79,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0x3,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 100.0f,
+        /* Height */ 200.0f,
+    }},
+};
+
+static const dCcD_SrcCyl M_cyl_srcW = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0x100,
+        /* SrcObjTg  SPrm    */ 0xF,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 100.0f,
+        /* Height */ 200.0f,
+    }},
+};
 static u8 ret_tree_no[] = {0x0F, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0F, 0x06, 0x07};
 }
 
@@ -44,8 +112,32 @@ BOOL daObjFtree::Act_c::launch_heart_part() {
 }
 
 /* 000001F0-00000394       .text place_heart_part__Q210daObjFtree5Act_cFv */
-void daObjFtree::Act_c::place_heart_part() {
-    /* Nonmatching */
+BOOL daObjFtree::Act_c::place_heart_part() {
+    if (m356 == -1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == TRUE) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E20)) {
+                if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_9B07) == param_get_tree_idx()) {
+                    cXyz offset(0.0f, 1.0f, 310.0f);
+                    s16 rot = (s16)(shape_angle.y + 0x2328);
+                    mDoMtx_stack_c::transS(current.pos);
+                    mDoMtx_stack_c::YrotM(rot);
+                    Mtx mtx;
+                    cMtx_copy(mDoMtx_stack_c::get(), mtx);
+                    cXyz pos;
+                    PSMTXMultVec(mtx, &offset, &pos);
+                    cXyz scale(1.0f, 1.0f, 1.0f);
+                    csXyz angle(0, 0, 0);
+                    fopAc_ac_c* heart_piece = (fopAc_ac_c*)fopAcM_fastCreateItem(&pos, 7, current.roomNo, &angle, &scale, 0.0f, 0.0f, -2.1f);
+                    if (heart_piece != NULL) {
+                        mSpawnedHeartPieceProcessId = fopAcM_GetID(heart_piece);
+                        dComIfGs_setEventReg(dSv_event_flag_c::UNK_9B07, param_get_tree_idx());
+                        return TRUE;
+                    }
+                }
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* 00000394-00000454       .text Ftree_get_water_pos__10daObjFtreeFP4cXyzP4cXyz */
@@ -246,17 +338,27 @@ BOOL daObjFtree::Act_c::iam_last() {
 
 /* 00001400-00001414       .text action_none_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_none_init(s16) {
-    /* Nonmatching */
+    m2A6 = 0;
+    m2A7 = 0;
+    return 1;
 }
 
 /* 00001414-00001418       .text action_none_main__Q210daObjFtree5Act_cFv */
-void daObjFtree::Act_c::action_none_main() {
-    /* Nonmatching */
-}
+void daObjFtree::Act_c::action_none_main() {}
 
 /* 00001418-000014E8       .text action_waitS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_waitS_init(s16) {
-    /* Nonmatching */
+    m2A6 = 1;
+    m2A7 = 0;
+    unset_brought();
+
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
+    if (brk != NULL) {
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 1.0f, 0, -1, 1, FALSE) != 0) {
+            return SetJointAnimation(6, 1.0f, 0.0f, 0);
+        }
+    }
+    return 0;
 }
 
 /* 000014E8-00001608       .text action_waitS_main__Q210daObjFtree5Act_cFv */
@@ -285,48 +387,123 @@ void daObjFtree::Act_c::action_waitL_main() {
 }
 
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
-s32 daObjFtree::Act_c::action_pikupikuS_init(s16) {
-    /* Nonmatching */
+s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
+    s16 cnt = 1;
+    if (i_cnt > 0) {
+        cnt = i_cnt;
+    }
+    m2A6 = 1;
+    m2A7 = 0;
+    m688 = cnt;
+    m68C = 0;
+    SetJointAnimation(6, 0.7f + 0.5f * cM_rndF(1.0f), 10.0f, 0);
+    return 1;
 }
 
 /* 00001A4C-00001AF4       .text action_pikupikuS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuS_main() {
-    /* Nonmatching */
+    if (PlayStopJointAnimation()) {
+        if (m68C < m688) {
+            SetJointAnimation(6, 0.7f + 0.3f * cM_rndF(1.0f), 10.0f, 0);
+        } else {
+            process_init(1, 0);
+        }
+        m68C++;
+    }
+    action_waitS_main();
 }
 
 /* 00001AF4-00001B4C       .text action_pikupikuM_init__Q210daObjFtree5Act_cFs */
-s32 daObjFtree::Act_c::action_pikupikuM_init(s16) {
-    /* Nonmatching */
+s32 daObjFtree::Act_c::action_pikupikuM_init(s16 i_cnt) {
+    set_brought();
+    m690 = i_cnt;
+    m692 = 0;
+    m694 = 0;
+    m2A6 = 1;
+    m2A7 = 0;
+    return 1;
 }
 
 /* 00001B4C-00001C44       .text action_pikupikuM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuM_main() {
-    /* Nonmatching */
+    s16 cnt = m692;
+    s16 max = m690;
+    if (cnt < max || max == -1) {
+        m696 = (s16)(100.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
+        m698 = (s16)(300.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
+        m694 += 0xFA0;
+    } else if (cnt >= max) {
+        process_init(2, 0);
+    }
+    m692++;
+    action_waitM_main();
 }
 
 /* 00001C44-00001C9C       .text action_pikupikuL_init__Q210daObjFtree5Act_cFs */
-s32 daObjFtree::Act_c::action_pikupikuL_init(s16) {
-    /* Nonmatching */
+s32 daObjFtree::Act_c::action_pikupikuL_init(s16 i_cnt) {
+    set_brought();
+    m69A = i_cnt;
+    m69C = 0;
+    m69E = 0;
+    m2A6 = 0;
+    m2A7 = 1;
+    return 1;
 }
 
 /* 00001C9C-00001D94       .text action_pikupikuL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuL_main() {
-    /* Nonmatching */
+    s16 cnt = m69C;
+    s16 max = m69A;
+    if (cnt < max || max == -1) {
+        m6A0 = (s16)(30.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        m6A2 = (s16)(36.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        m69E += 0xBB8;
+    } else if (cnt >= max) {
+        process_init(3, 0);
+    }
+    m69C++;
+    action_waitL_main();
 }
 
 /* 00001D94-00001EAC       .text action_changeSL_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL_init(s16) {
-    /* Nonmatching */
+    m2A6 = 1;
+    m2A7 = 0;
+
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
+    if (brk != NULL) {
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 61.0f, 0, -1, 1, FALSE) != 0
+            && SetJointAnimation(5, 61.0f, 950.0f, 0) != 0) {
+            set_brought();
+            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, 0.0f, 0.0f, 0);
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 00001EAC-00001F0C       .text action_changeSL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSL_main() {
-    /* Nonmatching */
+    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+        process_init(5, 0);
+    }
 }
 
 /* 00001F0C-00001FB4       .text action_changeSL2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
-    /* Nonmatching */
+    m2A6 = 1;
+    m2A7 = 0;
+    m2A4 = 1;
+    m640 = 0.0f;
+    m684 = 0x1E;
+    m63C = 0.2f;
+    get_tev_material0_color(mpMorf->getModel()->getModelData(), 2, &m65C, &m65E, &m660);
+    m66C = m65C;
+    m66E = m65E;
+    m670 = m660;
+    m672 = m662;
+    m69E = 0;
+    return 1;
 }
 
 /* 00001FB4-00002300       .text action_changeSL2_main__Q210daObjFtree5Act_cFv */
@@ -336,7 +513,12 @@ void daObjFtree::Act_c::action_changeSL2_main() {
 
 /* 00002300-00002344       .text action_changeLS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeLS_init(s16) {
-    /* Nonmatching */
+    m2A6 = 0;
+    m2A7 = 1;
+    m640 = 1.0f;
+    m63C = 1.0f;
+    unset_brought();
+    return 1;
 }
 
 /* 00002344-000025DC       .text action_changeLS_main__Q210daObjFtree5Act_cFv */
@@ -346,32 +528,57 @@ void daObjFtree::Act_c::action_changeLS_main() {
 
 /* 000025DC-000026AC       .text action_changeLS2_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeLS2_init(s16) {
-    /* Nonmatching */
+    m2A6 = 1;
+    m2A7 = 0;
+
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
+    if (brk != NULL) {
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 61.0f, 0, -1, 1, FALSE) != 0
+            && SetJointAnimation(5, 61.0f, 950.0f, 0) != 0) {
+            set_brought();
+            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, 0.0f, 0.0f, 0);
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 000026AC-0000270C       .text action_changeLS2_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeLS2_main() {
-    /* Nonmatching */
+    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+        process_init(1, 0);
+    }
 }
 
 /* 0000270C-00002794       .text action_changeSM_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSM_init(s16) {
-    /* Nonmatching */
+    set_brought();
+    if (action_changeSL_init(0) == 1) {
+        JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return 1;
+    }
+    return 0;
 }
 
 /* 00002794-000027F4       .text action_changeSM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSM_main() {
-    /* Nonmatching */
+    if (PlayStopJointAnimation() == 1 && PlayStopColorAnimation() == 1) {
+        process_init(2, 0);
+    }
 }
 
 /* 000027F4-00002840       .text action_changeMS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeMS_init(s16) {
-    /* Nonmatching */
+    if (action_changeLS2_init(0)) {
+        unset_brought();
+        return 1;
+    }
+    return 0;
 }
 
 /* 00002840-00002860       .text action_changeMS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeMS_main() {
-    /* Nonmatching */
+    action_changeLS2_main();
 }
 
 /* 00002860-00002A4C       .text process_init__Q210daObjFtree5Act_cFis */
@@ -452,8 +659,8 @@ BOOL Mthd_Delete(void* i_this) {
 }
 
 /* 000045A0-000045C4       .text Mthd_Execute__Q210daObjFtree27@unnamed@d_a_obj_ftree_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjFtree::Act_c*)i_this)->_execute();
 }
 
 /* 000045C4-000045E8       .text Mthd_Draw__Q210daObjFtree27@unnamed@d_a_obj_ftree_cpp@FPv */
