@@ -419,8 +419,7 @@ void core_move(ss_class* i_this) {
         maxDist = 1500.0f;
     }
 
-    if ((u32)i_this->m2C4 <= 0x32) {
-        switch (i_this->m2C4) {
+    switch (i_this->m2C4) {
         case 0:
             anm_init(i_this, 9, 1.0f, 2, 1.0f, -1);
             i_this->m2C4++;
@@ -537,7 +536,6 @@ void core_move(ss_class* i_this) {
             }
             break;
         }
-    }
 
     if (i_this->mSph.ChkTgHit() && i_this->m2D0 == 0) {
         i_this->m2D0 = 0xA;
