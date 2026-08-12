@@ -408,7 +408,6 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 void hand_move(ss_class* i_this) {
     dBgS_LinChk linChk;
     cXyz sp8;
-    cXyz sp14(0.0f, 0.0f, -1000.0f);
     s16 angle = 0;
 
     non_pos.set(0.0f, -10000.0f, 0.0f);
@@ -425,6 +424,7 @@ void hand_move(ss_class* i_this) {
             if (i_this->mFlag == 1) {
                 hand->mAngleY = (s16)(i_this->current.angle.y + 0x8000);
                 mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
+                cXyz sp14(0.0f, 0.0f, -1000.0f);
                 MtxPosition(&sp14, &sp8);
                 sp8 += i_this->current.pos;
                 linChk.Set(&i_this->current.pos, &sp8, i_this);
