@@ -245,7 +245,6 @@ void daNpc_De1_c::ctrlAnmAtr() {
 
 /* 00000848-0000087C       .text setAnm_ATR__11daNpc_De1_cFv */
 void daNpc_De1_c::setAnm_ATR() {
-    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[] = {
         {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
         {4, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
@@ -304,7 +303,6 @@ void daNpc_De1_c::setStt(s8 i_status) {
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
 u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
-    /* Nonmatching */
     u16 o_retval = fopMsgStts_MSG_CONTINUES_e;
     switch (*i_msg_no) {
         case 0x139D:
@@ -475,7 +473,6 @@ u32 daNpc_De1_c::getMsg() {
 
 /* 00000D6C-00000E14       .text eventOrder__11daNpc_De1_cFv */
 void daNpc_De1_c::eventOrder() {
-    /* Nonmatching */
     s8 order = mOrder;
     if (order == 1 || order == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -769,7 +766,6 @@ void daNpc_De1_c::endEvent() {
 
 /* 00001A60-00001B90       .text event_proc__11daNpc_De1_cFv */
 void daNpc_De1_c::event_proc() {
-    /* Nonmatching */
     if (dComIfGp_evmng_endCheck("LIFT_UP")) {
         endEvent();
         mOrder = 1;
@@ -988,7 +984,6 @@ u8 daNpc_De1_c::demo() {
 
 /* 00002248-00002358       .text _draw__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::_draw() {
-    /* Nonmatching */
     J3DModel* morf_model = mpMorf->getModel();
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(morf_model, &tevStr);
