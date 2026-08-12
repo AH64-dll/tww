@@ -684,7 +684,7 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
                 player->mDemo.setDemoType(daPy_demo_c::TYPE_ORIGINAL_e);
                 player->mDemo.setParam0(0);
                 player->mDemo.setDemoMode(0x18);
-                player->onFrollCrashFlg(0x1D);
+                player->voiceStart(0x1D);
                 break;
         }
     }
@@ -971,7 +971,7 @@ BOOL daNpc_De1_c::wait_action2(void*) {
 }
 
 /* 000021AC-00002248       .text demo__11daNpc_De1_cFv */
-BOOL daNpc_De1_c::demo() {
+bool daNpc_De1_c::demo() {
     if (demoActorID == 0) {
         if (mbInDemo != 0) {
             mbInDemo = 0;
