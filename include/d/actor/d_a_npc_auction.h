@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+class JPABaseEmitter;
 
 struct sAnmDat {
     /* 0x00 */ u8 mAnmNo;
