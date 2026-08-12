@@ -95,6 +95,7 @@ BOOL daNpc_De1_c::createInit() {
 
 /* 0000033C-00000550       .text setMtx__11daNpc_De1_cFv */
 void daNpc_De1_c::setMtx() {
+    /* Nonmatching */
     if (mbInDemo == 0) {
         mbMorfAnimStopped = mpMorf->play(&eyePos, 0, 0);
         if (mpMorf->getFrame() < mPrevMorfFrame) {
@@ -144,6 +145,7 @@ BOOL daNpc_De1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
 
 /* 00000658-00000744       .text setAnm_anm__11daNpc_De1_cFPQ211daNpc_De1_c9anm_prm_c */
 BOOL daNpc_De1_c::setAnm_anm(daNpc_De1_c::anm_prm_c* i_anmPrmP) {
+    /* Nonmatching */
     BOOL o_retval = FALSE;
     if (i_anmPrmP->mAnmNum >= 0) {
         if (mAnmNum == i_anmPrmP->mAnmNum) {
@@ -228,6 +230,7 @@ void daNpc_De1_c::chngAnmAtr(u8 i_param_1) {
 
 /* 00000800-00000848       .text ctrlAnmAtr__11daNpc_De1_cFv */
 void daNpc_De1_c::ctrlAnmAtr() {
+    /* Nonmatching */
     switch (mAnmAtr) {
         case 3:
             if (mbMorfAnimStopped) {
@@ -284,16 +287,18 @@ void daNpc_De1_c::setStt(s8 i_status) {
             mAnmAtr = 0xFF;
             mPrevStatus = prev_status;
             return;
+        case 0:
+        case 1:
         case 3:
             break;
         case 7:
             attention_info.flags |= fopAc_Attn_ENEMYFLAG_NOLOCKON_e;
             attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x22;
-            // fall through
+            break;
         default:
-            setAnm();
-            return;
+            break;
     }
+    setAnm();
 }
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
@@ -509,6 +514,7 @@ void daNpc_De1_c::checkOrder() {
 
 /* 00000F8C-000010B8       .text chkAttention__11daNpc_De1_cFv */
 bool daNpc_De1_c::chkAttention() {
+    /* Nonmatching */
     fopAc_ac_c* partner = searchByID(mPartnerProcID);
     if (partner != NULL) {
         f32 radius = l_HIO.mPrmTbl.mChkAttentionRadius;
@@ -635,6 +641,7 @@ bool daNpc_De1_c::decideType(int i_param_1) {
 
 /* 0000165C-00001858       .text event_actionInit__11daNpc_De1_cFi */
 void daNpc_De1_c::event_actionInit(int i_staff_idx) {
+    /* Nonmatching */
     int* act_no_p = dComIfGp_evmng_getMyIntegerP(i_staff_idx, "ActNo");
     int* timer_p = dComIfGp_evmng_getMyIntegerP(i_staff_idx, "Timer");
     int* num_p = dComIfGp_evmng_getMyIntegerP(i_staff_idx, "Num");
@@ -685,6 +692,7 @@ void daNpc_De1_c::event_actionInit(int i_staff_idx) {
 
 /* 00001858-00001938       .text event_action__11daNpc_De1_cFv */
 bool daNpc_De1_c::event_action() {
+    /* Nonmatching */
     bool o_retval = false;
     switch (mActNo) {
         case 0:
@@ -721,6 +729,7 @@ bool daNpc_De1_c::event_action() {
 
 /* 00001938-00001A40       .text privateCut__11daNpc_De1_cFv */
 void daNpc_De1_c::privateCut() {
+    /* Nonmatching */
     static char* a_cut_tbl[] = {
         "ACTION",
     };
@@ -758,6 +767,7 @@ void daNpc_De1_c::endEvent() {
 
 /* 00001A60-00001B90       .text event_proc__11daNpc_De1_cFv */
 void daNpc_De1_c::event_proc() {
+    /* Nonmatching */
     if (dComIfGp_evmng_endCheck("LIFT_UP")) {
         endEvent();
         mOrder = 1;
@@ -1001,6 +1011,7 @@ BOOL daNpc_De1_c::_draw() {
 
 /* 00002358-00002454       .text _execute__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::_execute() {
+    /* Nonmatching */
     if (mbRanExecute == 0) {
         mInitialPos = current.pos;
         mInitialAngle = current.angle;
@@ -1044,6 +1055,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002520-000027A4       .text _create__11daNpc_De1_cFv */
 cPhs_State daNpc_De1_c::_create() {
+    /* Nonmatching */
     fopAcM_ct_Retail(this, daNpc_De1_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "De");
     if (state != cPhs_COMPLEATE_e) {
@@ -1072,6 +1084,7 @@ cPhs_State daNpc_De1_c::_create() {
 
 /* 00002AB0-00002E04       .text CreateHeap__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::CreateHeap() {
+    /* Nonmatching */
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("De", dRes_ID_DE_BDL_DE_e);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
