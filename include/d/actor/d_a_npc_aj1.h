@@ -77,7 +77,7 @@ public:
     s32 cut_move_INVIT();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    s32 isEventEntry();
     void event_proc(int);
     void set_pa_pun();
     void set_pa_aka();
