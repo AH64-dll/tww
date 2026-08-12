@@ -51,8 +51,8 @@ public:
     u32 getMsg();
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void chk_parts_notMov();
+    bool chk_talk();
+    bool chk_parts_notMov();
     void searchByID(fpc_ProcID, int*);
     void partner_search_sub(void* (*)(void*, void*));
     void partner_search();
@@ -62,9 +62,9 @@ public:
     void decideType(int);
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    s32 isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Yw1_c::*)(void*), void*);
+    int set_action(int (daNpc_Yw1_c::*)(void*), void*);
     void setStt(signed char);
     void chngTsuboAnm();
     void chk_areaIN(float, float, short, cXyz);
@@ -177,15 +177,15 @@ public:
     /* 0x7BD */ u8 mAnmAtr;
     /* 0x7BE */ u8 mAnmTag;
     /* 0x7BF */ u8 m7BF;
-    /* 0x7C0 */ u8 mAnmNum;
+    /* 0x7C0 */ s8 mAnmNum;
     /* 0x7C1 */ s8 mStatus;
     /* 0x7C2 */ s8 mStt;
     /* 0x7C3 */ u8 m7C3;
     /* 0x7C4 */ u8 m7C4;
     /* 0x7C5 */ u8 m7C5;
-    /* 0x7C6 */ u8 m7C6;
+    /* 0x7C6 */ s8 m7C6;
     /* 0x7C7 */ u8 m7C7;
-    /* 0x7C8 */ u8 m7C8;
+    /* 0x7C8 */ s8 m7C8;
 };  // Size: 0x7CC
 
 class daNpc_Yw1_childHIO_c : public mDoHIO_entry_c {
@@ -194,15 +194,40 @@ public:
     virtual ~daNpc_Yw1_childHIO_c() {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ u8 field_0x04[0x34 - 0x04];
+    /* 0x34 */ u32 field_0x34;
+};  // Size: 0x38
 
-class daNpc_Yw1_HIO_c {
+class daNpc_Yw1_HIO_c : public mDoHIO_entry_c {
 public:
+    struct hio_prm_c {
+        /* 0x00 */ s16 mMaxHeadX;
+        /* 0x02 */ s16 mMaxHeadY;
+        /* 0x04 */ s16 mMinHeadX;
+        /* 0x06 */ s16 mMinHeadY;
+        /* 0x08 */ s16 mMaxBackboneX;
+        /* 0x0A */ s16 mMaxBackboneY;
+        /* 0x0C */ s16 mMinBackboneX;
+        /* 0x0E */ s16 mMinBackboneY;
+        /* 0x10 */ s16 mMaxTurnStep;
+        /* 0x12 */ s16 mCalcAngleTarget;
+        /* 0x14 */ f32 mAttPosOffsetY;
+        /* 0x18 */ f32 m18;
+        /* 0x1C */ f32 mMaxAttnDistXZ;
+        /* 0x20 */ s16 mMaxAttnAngleY;
+        /* 0x22 */ s16 m22;
+        /* 0x24 */ f32 m24;
+        /* 0x28 */ f32 m28;
+        /* 0x2C */ f32 m2C;
+    };  // Size: 0x30
+
     daNpc_Yw1_HIO_c();
+    virtual ~daNpc_Yw1_HIO_c() {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ daNpc_Yw1_childHIO_c mChildHIO[1];
+};  // Size: 0x44
 
 #endif /* D_A_NPC_YW1_H */
