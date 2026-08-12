@@ -457,7 +457,7 @@ static daNpc_Auction2_HIO_c l_npc_dat[] = {
 daNpcAuction_c::daNpcAuction_c() {
     m745 = 0;
     mEmitter = NULL;
-    m704[0] = 0;
+    *(u32*)&m704[0] = 0;
     m747 = 0;
     mpAnmDat = NULL;
     mAnmNo = 0;
