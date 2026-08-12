@@ -1524,12 +1524,12 @@ void daNpcMn_c::lookBack() {
 /* 000035C4-000036D0       .text initTexPatternAnm__9daNpcMn_cFb */
 BOOL daNpcMn_c::initTexPatternAnm(bool param_1) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    mBtp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
-    if (mBtp == NULL) {
-        JUT_ASSERT(0xA19, mBtp != NULL);
+    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
+    if (m_head_tex_pattern == NULL) {
+        JUT_ASSERT(0xA19, m_head_tex_pattern != NULL);
         OSPanic("d_a_npc_mn.cpp", 0xA19, "m_head_tex_pattern != 0");
     }
-    if (!mBtpAnm.init(modelData, mBtp, 1, 2, 1.0f, 0, -1, param_1, 0)) {
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, param_1, 0)) {
         return FALSE;
     }
     mTexPatternNo = 0;
@@ -1540,7 +1540,7 @@ BOOL daNpcMn_c::initTexPatternAnm(bool param_1) {
 /* 000036D0-0000373C       .text playTexPatternAnm__9daNpcMn_cFv */
 void daNpcMn_c::playTexPatternAnm() {
     if (cLib_calcTimer<s16>(&mTexTimer) == 0) {
-        s16 frameMax = mBtp->getFrameMax();
+        s16 frameMax = m_head_tex_pattern->getFrameMax();
         if (mTexPatternNo >= frameMax) {
             mTexPatternNo = mTexPatternNo - frameMax;
             mTexTimer = 0x78;
