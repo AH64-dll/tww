@@ -24,13 +24,9 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include <math.h>
 
-/* Unreferenced static data at the start of the original .data (leftover statics) */
-static u32 l_unk_0[] = {
-    0x3F800000, 0x3F800000, 0x3F800000,
-    0x3F800000, 0x3F800000, 0x3F800000,
-    0x02000201, 0x00000000, 0x40080000, 0x00000000, 0x3FE00000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x00000000,
-};
+/* Unreferenced static data at the start of the original .data:
+   @2100/@2080 (weak_data.h fake_data_2100/2080), @1811 (attnFnTbl),
+   sqrtf localstatics — all emitted via dolzel.pch (DECOMPCTX). */
 
 #include "assets/l_pg_mantle1TEX.h"
 #include "assets/l_pg_mantle1_palettePAL.h"
