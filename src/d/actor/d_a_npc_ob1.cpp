@@ -856,7 +856,7 @@ cXyz daNpc_Ob1_c::get_attPos() {
         if (idx == 0) {
             idx = mPathRun.maxPoint();
         }
-        ret = dPath_GetPnt(path, idx - 1)->m_position;
+        ret = path->m_points[idx - 1].m_position;
     }
     return ret;
 }
