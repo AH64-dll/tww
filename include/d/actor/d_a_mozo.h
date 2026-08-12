@@ -62,8 +62,8 @@ public:
     /* 0x372 */ u8 m372[0x376 - 0x372];
     /* 0x376 */ u8 field_0x376;
     /* 0x377 */ u8 field_0x377;
-    /* 0x378 */ u32 mPtcl0;
-    /* 0x37C */ u32 mPtcl1;
+    /* 0x378 */ JPABaseEmitter* mPtcl0;
+    /* 0x37C */ JPABaseEmitter* mPtcl1;
     /* 0x380 */ dCcD_Stts mStts;
     /* 0x3BC */ dCcD_Cps mCps;
 };
