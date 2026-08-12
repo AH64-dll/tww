@@ -521,6 +521,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000868-00000ACC       .text phase_1__FP14daNpcAuction_c */
+/* Nonmatching */
 static cPhs_State phase_1(daNpcAuction_c* i_this) {
     fopAc_ac_c* auction;
     u8 npc_no;
@@ -748,6 +749,7 @@ void daNpcAuction_c::eventOrder() {
 }
 
 /* 00001270-000013FC       .text eventMove__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::eventMove() {
     dEvent_manager_c* evm = dComIfGp_getPEvtManager();
     if (evm->endCheckOld("AUCTION_END2") || evm->endCheckOld("AUCTION_NO_ITEM") ||
@@ -787,6 +789,7 @@ void daNpcAuction_c::eventMove() {
 }
 
 /* 000013FC-00001548       .text privateCut__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::privateCut() {
     static char* cut_name_tbl[] = {
         "MAIN",
@@ -834,6 +837,7 @@ void daNpcAuction_c::eventMainInit() {
 }
 
 /* 00001554-00001888       .text eventMain__14daNpcAuction_cFv */
+/* Nonmatching */
 int daNpcAuction_c::eventMain() {
     daAuction_c* auction = (daAuction_c*)fopAcM_SearchByName(fpcNm_AUCTION_e);
     u32 flags = AUC->m834;
@@ -1038,10 +1042,19 @@ u16 daNpcAuction_c::next_msgStatus(u32* i_msg_no) {
 }
 
 /* 00001CD4-00001F04       .text getMsg__14daNpcAuction_cFv */
+/* Nonmatching */
 u32 daNpcAuction_c::getMsg() {
     if (mNpcNo == 0) {
         u8 state = dComIfGp_event_getTalkXYBtn();
-        if (state == 1 || state == 2 || state == 3) {
+        u8 is_xy_btn = 0;
+        switch (state) {
+        case 1:
+        case 2:
+        case 3:
+            is_xy_btn = 1;
+            break;
+        }
+        if (is_xy_btn) {
             if (dComIfGp_event_getPreItemNo() == 0x96) {
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1008)) {
                     m743 = 0;
@@ -1088,6 +1101,7 @@ u32 daNpcAuction_c::getMsg() {
 }
 
 /* 00001F04-00002070       .text setAnmFromMsgTag__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::setAnmFromMsgTag() {
     u8 itemBtn = dComIfGp_getMesgAnimeAttrInfo();
     if (mNpcNo == 0 || mNpcNo == 7) {
@@ -1182,6 +1196,7 @@ void daNpcAuction_c::setMtx() {
 }
 
 /* 00002118-00002488       .text lookBack__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::lookBack() {
     f32 attnDist = l_npc_dat[mDataNo].mAttnYOffset;
     s16 angle = l_npc_dat[mDataNo].mMaxHeadTurnVel;
@@ -1279,6 +1294,7 @@ BOOL daNpcAuction_c::initTexPatternAnm(bool i_anm_play) {
 }
 
 /* 000025AC-00002624       .text playTexPatternAnm__14daNpcAuction_cFv */
+/* Nonmatching */
 void daNpcAuction_c::playTexPatternAnm() {
     if (cLib_calcTimer<s16>(&m734) == 0) {
         s16 frameMax = m_head_tex_pattern->getFrameMax();
@@ -1399,6 +1415,7 @@ static BOOL daNpc_AuctionDelete(void* i_this) {
 }
 
 /* 00002A70-00002C70       .text daNpc_AuctionExecute__FPv */
+/* Nonmatching */
 static BOOL daNpc_AuctionExecute(void* i_this) {
     daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
     dBgS* bgsp = dComIfG_Bgsp();
@@ -1444,6 +1461,7 @@ static BOOL daNpc_AuctionExecute(void* i_this) {
 }
 
 /* 00002C70-00002EB8       .text daNpc_AuctionDraw__FPv */
+/* Nonmatching */
 static BOOL daNpc_AuctionDraw(void* i_this) {
     daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
     if (actor->isExecute()) {
