@@ -480,7 +480,25 @@ s32 daObjFtree::Act_c::action_waitM_init(s16) {
 
 /* 0000173C-00001878       .text action_waitM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitM_main() {
-    /* Nonmatching */
+    if (dComIfGs_getFwaterTimer() == 0) {
+        _ftree_seach_info_ info;
+        get_ftree_info(&info);
+        if (info.mCount != info.mBroughtCount) {
+            process_init(9, 0);
+            return;
+        }
+    }
+    if (mMode == 2) {
+        s32 hit = m508.ChkCoHit();
+        if (dKy_rain_check() != 0) {
+            process_init(0xB, -1);
+        } else if (m67C == 0 && hit == 1 && process_init(0xB, 0x78)) {
+            hit = 0;
+        } else if ((s32)cM_rndF(195.0f) == 0) {
+            process_init(0xB, 30.0f + 195.0f * cM_rndF(1.0f));
+        }
+        m67C = hit;
+    }
 }
 
 /* 00001878-000018AC       .text action_waitL_init__Q210daObjFtree5Act_cFs */
