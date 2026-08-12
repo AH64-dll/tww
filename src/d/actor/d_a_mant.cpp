@@ -178,17 +178,19 @@ static BOOL daMant_Draw(mant_class* i_this) {
 
 /* 000004E8-00000FC0       .text joint_control__FP10mant_classP8mant_j_si */
 void joint_control(mant_class* i_this, mant_j_s* i_joint, int i_idx) {
-static f32 l_d_p[] = {
-    0.6f, 0.4f, 0.3f, 0.3f, 0.2f, 0.2f, 0.2f, 0.1f,
-};
+    static f32 d_p[] = {
+        0.6f, 0.4f, 0.3f, 0.3f, 0.2f, 0.2f, 0.2f, 0.1f,
+    };
 
-static f32 l_d_p2[] = {
-    5.0f, 2.0f, 1.0f, 0.5f, 0.0f, -0.3f, -0.3f, 0.0f,
-};
+    static f32 d_p2[] = {
+        5.0f, 2.0f, 1.0f, 0.5f, 0.0f, -0.3f, -0.3f, 0.0f,
+    };
+
+    cXyz* p_pos = i_joint->mPos;
+    cXyz* p_speed = i_joint->mSpeed;
 
     dBgS_GndChk gndChk;
-    cXyz pos(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z);
-    gndChk.SetPos(&pos);
+    gndChk.SetPos(&cXyz(i_joint->mPos[0].x, i_joint->mPos[0].y + 50.0f, i_joint->mPos[0].z));
     f32 f30 = 1.5f + dComIfG_Bgsp()->GroundCross(&gndChk);
     if (f30 - i_joint->mPos[0].y > 50.0f) {
         f30 = i_joint->mPos[0].y;
@@ -211,7 +213,7 @@ static f32 l_d_p2[] = {
     cXyz local_B4_2(0.0f, 0.0f, i_this->m1C00);
     s16 diff = angle - i_joint->mRot.y;
     if (diff < 0) {
-        diff = -diff;
+        diff *= -1;
     }
     f32 f29;
     if ((u16)diff < 0x4000) {
@@ -223,8 +225,7 @@ static f32 l_d_p2[] = {
     cXyz local_60;
     MtxPosition(&local_B4_2, &local_60);
 
-    cXyz local_B4_3(0.0f, 0.0f, 0.0f);
-    local_B4_3.z = (i_this->m1BF8 + cM_ssin((s16)(i_idx * 0x59D8))) * i_this->scale.y;
+    cXyz local_B4_3(0.0f, 0.0f, (i_this->m1BF8 + cM_ssin((s16)(i_idx * 0x59D8))) * i_this->scale.y);
 
     s32 i = 0;
     s32 phase = 0;
@@ -232,26 +233,18 @@ static f32 l_d_p2[] = {
     s32 base = i_idx * 0x2710;
     dCcS* ccS = dComIfG_Ccsp();
 
-    for (i = 0; i < 9; i++, phase += 0x2710, dp_idx += 4) {
-        cXyz* p_pos = &i_joint->mPos[i];
-        cXyz* p_speed = &i_joint->mSpeed[i];
-
+    for (i = 0; i < 9; i++, p_pos++, p_speed++, phase += 0x2710, dp_idx += 4) {
         if (i > 0) {
-            cXyz local_48 = i_joint->mPos[i] * l_d_p[i - 1];
-            cXyz local_90(local_48.x, local_48.y, local_48.z);
+            cXyz local_90 = local_9C * d_p[i - 1];
 
             f32 wind = i_this->m1C00;
             if (std::fabsf(wind) > 0.1f) {
-                cXyz local_54_2 = local_60;
-                local_54_2.y = 0.5f * wind * cM_ssin((s16)((i_this->m1248 << 0xC) + (phase + base)));
-                local_54 = local_54_2;
+                local_54 = local_60;
+                local_54.y = 0.5f * wind * cM_ssin((s16)((i_this->m1248 << 0xC) + (phase + base)));
             }
 
             if (i_this->m1C04 > 0.01f) {
-                cXyz local_3C = local_9C * l_d_p2[i - 1];
-                cXyz local_30 = local_3C * i_this->m1C04;
-                cXyz local_24 = local_30 * f29;
-                local_84 = local_24;
+                local_84 = local_9C * d_p2[i - 1] * i_this->m1C04 * f29;
             }
 
             if (i_this->m1244 == mant_class::Type_PHANTOM_GANON_e) {
@@ -297,23 +290,22 @@ static f32 l_d_p2[] = {
         l_v_count++;
 
         if (i_this->m1244 == mant_class::Type_DARKNUT_e && !(i & 1) && !(i_idx & 1) && i != 0 && i != 8 && i_idx != 0 && i_idx != 8) {
-            dCcD_Sph* sph = &i_this->mMeshSph[l_mesh_cc_ct];
             if (i_this->m2834 != 0) {
-                sph->SetR(30.0f);
-                sph->SetC(*p_pos);
+                i_this->mMeshSph[l_mesh_cc_ct].SetR(30.0f);
+                i_this->mMeshSph[l_mesh_cc_ct].SetC(*p_pos);
             } else {
-                sph->SetR(-200.0f);
-                sph->SetC(l_non_pos);
+                i_this->mMeshSph[l_mesh_cc_ct].SetR(-200.0f);
+                i_this->mMeshSph[l_mesh_cc_ct].SetC(l_non_pos);
             }
-            ccS->Set(sph);
+            ccS->Set(&i_this->mMeshSph[l_mesh_cc_ct]);
 
-            if (i_this->m2836 == 0 && i_this->m2838 == 0 && sph->ChkTgHit()) {
+            if (i_this->m2836 == 0 && i_this->m2838 == 0 && i_this->mMeshSph[l_mesh_cc_ct].ChkTgHit()) {
                 i_this->m2836 = 0xA;
                 CcAtInfo atInfo;
-                atInfo.mpObj = sph->GetTgHitObj();
+                atInfo.mpObj = i_this->mMeshSph[l_mesh_cc_ct].GetTgHitObj();
                 at_power_check(&atInfo);
                 fopAc_ac_c* player = dComIfGp_getPlayer(0);
-                s32 res = 0;
+                s8 res = 0;
                 if (atInfo.mResultingAttackType == 1 || atInfo.mResultingAttackType == 2) {
                     if (atInfo.mResultingAttackType == 2) {
                         if (i_this->mPacket.mTexNo == 0) {
