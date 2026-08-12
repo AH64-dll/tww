@@ -524,7 +524,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 static cPhs_State phase_1(daNpcAuction_c* i_this) {
     fopAc_ac_c* auction;
     u8 npc_no;
-    int kind;
+    u8 kind;
 
     if (!(i_this->actor_condition & 8)) {
         new (i_this) daNpcAuction_c();
@@ -550,7 +550,7 @@ static cPhs_State phase_1(daNpcAuction_c* i_this) {
         return cPhs_INIT_e;
     }
     kind = l_kind_max[npc_no][0];
-    s32 max = l_kind_max[npc_no][1];
+    u8 max = l_kind_max[npc_no][1];
     if (npc_no == 2 || npc_no == 3) {
         if (AUC->mPrevNpcNo == 0xFF) {
             kind = kind + i_this->getRand((max - kind) + 1);
