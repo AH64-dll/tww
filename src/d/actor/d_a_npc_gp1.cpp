@@ -521,7 +521,7 @@ void daNpc_Gp1_c::lookBack() {
 /* 00001308-00001504       .text next_msgStatus__11daNpc_Gp1_cFPUl */
 u16 daNpc_Gp1_c::next_msgStatus(u32* i_msg_no) {
     u16 ret = 0xF;
-    u8 beast_num = dComIfGs_getBeastNum(0);
+    s16 beast_num = dComIfGs_getBeastNum(0);
     switch(*i_msg_no) {
         case 0x1E15:
             *i_msg_no = 0x1E16;
@@ -541,33 +541,10 @@ u16 daNpc_Gp1_c::next_msgStatus(u32* i_msg_no) {
         case 0x1E1B:
             *i_msg_no = 0x1E1C;
             break;
-        case 0x1E1C:
         case 0x1E29:
             *i_msg_no = 0x1E2A;
             m7F2 = beast_num;
             m801 = 1;
-            break;
-        case 0x1E20:
-            *i_msg_no = 0x1E21;
-            break;
-        case 0x1E21:
-            if(beast_num >= 0x14) {
-                *i_msg_no = 0x1E22;
-            } else {
-                *i_msg_no = 0x1E30;
-            }
-            break;
-        case 0x1E22:
-        case 0x1E28:
-            *i_msg_no = 0x1E24;
-            m801 = 1;
-            m7F2 = 0x14;
-            break;
-        case 0x1E24:
-            *i_msg_no = 0x1E25;
-            break;
-        case 0x1E26:
-            *i_msg_no = 0x1E27;
             break;
         case 0x1E2A:
             if(m7F2 >= 0x10) {
@@ -581,8 +558,30 @@ u16 daNpc_Gp1_c::next_msgStatus(u32* i_msg_no) {
                 m7F4 = 1;
             }
             break;
+        case 0x1E20:
+            *i_msg_no = 0x1E21;
+            break;
         case 0x1E30:
             *i_msg_no = 0x1E23;
+            break;
+        case 0x1E22:
+        case 0x1E28:
+            *i_msg_no = 0x1E24;
+            m801 = 1;
+            m7F2 = 0x14;
+            break;
+        case 0x1E24:
+            *i_msg_no = 0x1E25;
+            break;
+        case 0x1E26:
+            *i_msg_no = 0x1E27;
+            break;
+        case 0x1E21:
+            if(beast_num >= 0x14) {
+                *i_msg_no = 0x1E22;
+            } else {
+                *i_msg_no = 0x1E30;
+            }
             break;
         case 0x1EE6:
             *i_msg_no = 0x1EE7;
