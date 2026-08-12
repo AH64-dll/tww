@@ -61,6 +61,8 @@ daNpc_Gk1_HIO_c::daNpc_Gk1_HIO_c() {
 
 
 static daNpc_Gk1_HIO_c l_HIO;
+static fopAc_ac_c* l_check_inf[20];
+static int l_check_wrk;
 
 static char* l_evn_tbl[] = {
     "dummy",
