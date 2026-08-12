@@ -352,12 +352,12 @@ void daObjFlame::Act_c::em_position() {
             }
         }
         mDoMtx_stack_c::transM(0.0f, mScaleX * (1500.0f * mHeight * M_attr_scl[mType].mF04), 0.0f);
-        mDoMtx_stack_c::multVecZero(&eyePos);
+        PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &eyePos);
 
         mbCol = 1500.0f * mHeight - 300.0f > 0.0f;
         if (mbCol) {
             mDoMtx_stack_c::transM(0.0f, mScaleX * (-300.0f * M_attr_scl[mType].mF04), 0.0f);
-            mDoMtx_stack_c::multVecZero(&mCpsP1);
+            PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &mCpsP1);
         }
     }
 }
