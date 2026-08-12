@@ -283,8 +283,9 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_this) {
 /* 00000AF8-00000BB0       .text draw__11dDoor_ssk_cFP12dDoor_info_c */
 void dDoor_ssk_c::draw(dDoor_info_c* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &mTevstr);
+    dDoor_ssk_sub_c* sub;
     for (int i = 0; i < 3; i++) {
-        dDoor_ssk_sub_c* sub = &mSub[i];
+        sub = &mSub[i];
         if (sub->mpMorf != NULL) {
             g_env_light.setLightTevColorType(sub->mpMorf->getModel(), &mTevstr);
             sub->mpMorf->entryDL();
