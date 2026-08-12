@@ -54,8 +54,12 @@ void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, unsigned short i_parti
 }
 
 /* 00000488-000004C4       .text emitterDelete__11daObj_hsh_cFPP14JPABaseEmitter */
-void daObj_hsh_c::emitterDelete(JPABaseEmitter**) {
-    /* Nonmatching */
+void daObj_hsh_c::emitterDelete(JPABaseEmitter** pEmitter) {
+    if (*pEmitter != NULL) {
+        (*pEmitter)->mFlags &= ~0x40;
+        (*pEmitter)->becomeInvalidEmitter();
+        *pEmitter = NULL;
+    }
 }
 
 /* 000004C4-00000568       .text setAttention__11daObj_hsh_cFb */
