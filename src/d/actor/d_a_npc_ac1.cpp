@@ -247,7 +247,9 @@ int daNpc_Ac1_c::btpNum_toResID(int i_btpNum) {
 /* 000009C4-00000AD4       .text setBtp__11daNpc_Ac1_cFbi */
 bool daNpc_Ac1_c::setBtp(bool i_param_1, int i_btp_num) {
     J3DModelData* model_data = mpMorf->getModel()->getModelData();
-    m_hed_tex_pttrn = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ac", btpNum_toResID(i_btp_num)));
+    int res_id = btpNum_toResID(i_btp_num);
+    m_hed_tex_pttrn =
+        reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Ac", static_cast<u16>(res_id)));
     JUT_ASSERT(0x216, m_hed_tex_pttrn != NULL);
     int iVar1 = mBtpAnim.init(model_data, m_hed_tex_pttrn, 1, 2, 1.0f, 0, -1, i_param_1, 0);
     bool o_retval = iVar1 == 1;
