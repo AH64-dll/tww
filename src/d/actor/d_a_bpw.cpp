@@ -2061,14 +2061,14 @@ void action_damage(bpw_class* i_this) {
 
 /* 000062D8-00008BAC       .text action_bunri_dousa__FP9bpw_class */
 void action_bunri_dousa(bpw_class* i_this) {
-    /* Nonmatching - weird issue with inlines */
+    /* Nonmatching - rodata anchor labels (@4186/@7429) + register-name-only diffs (poe loop counter, float regs) */
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar2;
     pw_class* childPoe;
     f32 fVar9;
-    cXyz local_68;
-    cXyz local_74;
-    cXyz sp70;
+    Vec local_68;
+    Vec local_74;
+    Vec sp70;
     f32 f1;
     f32 f2;
 
@@ -2200,7 +2200,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = 0.0f;
         sp70.y = 0.0f;
         sp70.z = 1625.0f;
-        player->setPlayerPosAndAngle(&sp70, fopAcM_searchActorAngleY(player, actor));
+        player->setPlayerPosAndAngle((cXyz*)&sp70, fopAcM_searchActorAngleY(player, actor));
         i_this->mActionState++;
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_END_INIT:
         i_this->m40C.x = 156.0f;
@@ -2246,7 +2246,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = 0.0f;
         sp70.y = 0.0f;
         sp70.z = 1625.0f;
-        player->setPlayerPosAndAngle(&sp70, fopAcM_searchActorAngleY(player, actor));
+        player->setPlayerPosAndAngle((cXyz*)&sp70, fopAcM_searchActorAngleY(player, actor));
         if (i_this->m464 != 0) {
             anm_init(i_this, dRes_INDEX_BPW_BCK_CORE_NIGE1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m464 = 0;
@@ -2277,22 +2277,22 @@ void action_bunri_dousa(bpw_class* i_this) {
         }
         break;
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_END_GROW:
-        fVar2 = std::fabsf(i_this->m40C.x - (REG20_F(12) + 152.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG20_F(12) + 152.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG20_F(13) + 498.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG20_F(13) + 498.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m40C.y, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG20_F(14) + 983.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG20_F(14) + 983.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.x - (REG20_F(15) + 181.0f));
+        fVar2 = fabs(i_this->m418.x - (REG20_F(15) + 181.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m418.x, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.y - (REG20_F(16) + 504.0f));
+        fVar2 = fabs(i_this->m418.y - (REG20_F(16) + 504.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m418.y, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.z - (REG20_F(17) + 1196.0f));
+        fVar2 = fabs(i_this->m418.z - (REG20_F(17) + 1196.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.08f);
         cLib_addCalc2(&i_this->m418.z, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2361,8 +2361,9 @@ void action_bunri_dousa(bpw_class* i_this) {
         i_this->m3E5 = 0;
         actor->scale.setall(0.0f);
         anm_init(i_this, dRes_INDEX_BPW_BCK_CORE1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        pw_class* i_actor;
         if (i_this->m3FC != fpcM_ERROR_PROCESS_ID_e) {
-            fopAc_ac_c* i_actor = fopAcM_SearchByID(i_this->m3FC);
+            i_actor = (pw_class*)fopAcM_SearchByID(i_this->m3FC);
             fopAcM_createDisappear(i_actor, &i_actor->current.pos, 5, daDisItem_NONE3_e, 0xFF);
             fopAcM_delete(i_actor);
         }
@@ -2415,9 +2416,11 @@ void action_bunri_dousa(bpw_class* i_this) {
         local_68.x = 0.0f;
         local_68.y = 0.0f;
         local_68.z = 800.0f;
-        MtxPosition(&local_68, &local_74);
+        MtxPosition((cXyz*)&local_68, (cXyz*)&local_74);
 #if VERSION == VERSION_DEMO
-        local_74 += i_this->m424;
+        local_74.x += i_this->m424.x;
+        local_74.y += i_this->m424.y;
+        local_74.z += i_this->m424.z;
         i_this->m418.x = local_74.x;
         i_this->m418.y = local_74.y + 100.0f;
         i_this->m418.z = local_74.z;
@@ -2442,7 +2445,7 @@ void action_bunri_dousa(bpw_class* i_this) {
             sp70.x = -36.0f;
             sp70.y = player->current.pos.y;
             sp70.z = -777.0f;
-            player->setPlayerPosAndAngle(&sp70, (s16)cM_atan2s(player->current.pos.x - i_this->m424.x, player->current.pos.z - i_this->m424.z));
+            player->setPlayerPosAndAngle((cXyz*)&sp70, (s16)cM_atan2s(player->current.pos.x - i_this->m424.x, player->current.pos.z - i_this->m424.z));
             i_this->mActionState++;
         }
         break;
@@ -2460,7 +2463,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = -36.0f;
         sp70.y = player->current.pos.y;
         sp70.z = -777.0f;
-        player->setPlayerPosAndAngle(&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
+        player->setPlayerPosAndAngle((cXyz*)&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
         if (i_this->mSomeCountdownTimers[0] != 0) {
             if (i_this->mSomeCountdownTimers[0] == 1) {
                 fopAcM_seStart(actor, JA_SE_OBJ_BPW_MASK_APPEAR, 0);
@@ -2497,22 +2500,22 @@ void action_bunri_dousa(bpw_class* i_this) {
             break;
         }
         cLib_addCalc2(&i_this->m440, REG20_F(11) + 50.0f, 1.0f, 0.5f);
-        fVar2 = std::fabsf(i_this->m40C.x - (REG20_F(12) + -114.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG20_F(12) + -114.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG20_F(13) + 95.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG20_F(13) + 95.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m40C.y, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG20_F(14) + -293.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG20_F(14) + -293.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.x - (REG20_F(15) + -169.0f));
+        fVar2 = fabs(i_this->m418.x - (REG20_F(15) + -169.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m418.x, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.y - (REG20_F(16) + 98.0f));
+        fVar2 = fabs(i_this->m418.y - (REG20_F(16) + 98.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m418.y, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.z - (REG20_F(17) + -462.0f));
+        fVar2 = fabs(i_this->m418.z - (REG20_F(17) + -462.0f));
         fVar9 = fVar2 * (REG20_F(18) + 0.02f);
         cLib_addCalc2(&i_this->m418.z, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2592,22 +2595,22 @@ void action_bunri_dousa(bpw_class* i_this) {
             fopAcM_seStart(actor, JA_SE_CM_BPW_MASK_RUN_AWAY, 0);
         }
         cLib_addCalc2(&i_this->m440, REG19_F(9) + 50.0f, 1.0f, 0.5f);
-        fVar2 = std::fabsf(i_this->m40C.x - (REG19_F(10) + -471.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG19_F(10) + -471.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG19_F(10) + 120.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG19_F(10) + 120.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m40C.y, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG19_F(11) + -498.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG19_F(11) + -498.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.x - (REG20_F(15) + 115.0f));
+        fVar2 = fabs(i_this->m418.x - (REG20_F(15) + 115.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m418.x, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.y - (REG20_F(16) + 58.0f));
+        fVar2 = fabs(i_this->m418.y - (REG20_F(16) + 58.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m418.y, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.z - (REG20_F(17) + -1062.0f));
+        fVar2 = fabs(i_this->m418.z - (REG20_F(17) + -1062.0f));
         fVar9 = fVar2 * (REG19_F(12) + 0.05f);
         cLib_addCalc2(&i_this->m418.z, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2621,7 +2624,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = -36.0f;
         sp70.y = player->current.pos.y;
         sp70.z = -777.0f;
-        player->setPlayerPosAndAngle(&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
+        player->setPlayerPosAndAngle((cXyz*)&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
         if (std::sqrtf(SQUARE(dVar7) + SQUARE(dVar8)) < 5.0f) {
             actor->gravity = 0.0f;
             actor->speed.setall(0.0f);
@@ -2658,13 +2661,13 @@ void action_bunri_dousa(bpw_class* i_this) {
         cLib_addCalcAngleS2(&i_this->m476, -0x8000, 1, 0x2000);
         actor->speed.y = REG19_F(14) + 30.0f;
         cLib_addCalc2(&i_this->m440, REG19_F(15) + 50.0f, 1.0f, 0.5f);
-        fVar2 = std::fabsf(i_this->m40C.x - (REG19_F(16) + -538.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG19_F(16) + -538.0f));
         fVar9 = fVar2 * (REG19_F(19) + 0.04f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG19_F(17) + 748.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG19_F(17) + 748.0f));
         fVar9 = fVar2 * (REG19_F(19) + 0.04f);
         cLib_addCalc2(&i_this->m40C.y, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG19_F(18) + -567.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG19_F(18) + -567.0f));
         fVar9 = fVar2 * (REG19_F(19) + 0.04f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2776,13 +2779,13 @@ void action_bunri_dousa(bpw_class* i_this) {
         cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 0xC000, 1, 0x300);
         cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 1, 0x300);
         cLib_addCalc2(&i_this->m440, REG6_F(7) + 50.0f, 1.0f, 0.5f);
-        fVar2 = std::fabsf(i_this->m40C.x - (REG6_F(8) + -1352.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG6_F(8) + -1352.0f));
         fVar9 = fVar2 * (REG6_F(6) + 0.05f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG6_F(9) + 174.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG6_F(9) + 174.0f));
         fVar9 = fVar2 * (REG6_F(6) + 0.05f);
         cLib_addCalc2(&i_this->m40C.y, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG6_F(10) + 680.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG6_F(10) + 680.0f));
         fVar9 = fVar2 * (REG6_F(6) + 0.05f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2793,7 +2796,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = -36.0f;
         sp70.y = player->current.pos.y;
         sp70.z = -777.0f;
-        player->setPlayerPosAndAngle(&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
+        player->setPlayerPosAndAngle((cXyz*)&sp70, fopAcM_searchPlayerAngleY(actor) + 0x8000);
         if (REG6_F(19) + (i_this->mAcch.GetGroundH() + 1350.0f) < actor->current.pos.y) {
             break;
         }
@@ -2811,22 +2814,22 @@ void action_bunri_dousa(bpw_class* i_this) {
         // fallthrough
     case 0x86: {
         cLib_addCalc2(&i_this->m440, REG6_F(11) + 50.0f, 1.0f, 0.5f);
-        fVar2 = std::fabsf(i_this->m40C.x - (REG6_F(12) + -2340.0f));
+        fVar2 = fabs(i_this->m40C.x - (REG6_F(12) + -2340.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m40C.x, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.y - (REG6_F(13) + 36.0f));
+        fVar2 = fabs(i_this->m40C.y - (REG6_F(13) + 36.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m40C.y, DEMO_SELECT(fVar2, REG12_F(13) + 186.0f), DEMO_SELECT(1.0f, 0.5f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m40C.z - (REG6_F(14) + 1442.0f));
+        fVar2 = fabs(i_this->m40C.z - (REG6_F(14) + 1442.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m40C.z, fVar2, DEMO_SELECT(1.0f, 0.1f), DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.x - (REG6_F(15) + -744.0f));
+        fVar2 = fabs(i_this->m418.x - (REG6_F(15) + -744.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m418.x, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.y - (REG6_F(16) + 74.0f));
+        fVar2 = fabs(i_this->m418.y - (REG6_F(16) + 74.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m418.y, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
-        fVar2 = std::fabsf(i_this->m418.z - (REG6_F(17) + -432.0f));
+        fVar2 = fabs(i_this->m418.z - (REG6_F(17) + -432.0f));
         fVar9 = fVar2 * (REG6_F(18) + 0.1f);
         cLib_addCalc2(&i_this->m418.z, fVar2, 1.0f, DEMO_SELECT(fVar9, fVar9 * i_this->m43C));
 #if VERSION > VERSION_DEMO
@@ -2849,9 +2852,9 @@ void action_bunri_dousa(bpw_class* i_this) {
             emitter->setGlobalPrmColor(dKy_getEnvlight().mBG0_K0.r, dKy_getEnvlight().mBG0_K0.g, dKy_getEnvlight().mBG0_K0.b);
         }
         fopAcM_seStart(actor, JA_SE_CM_BOSS_EXPLODE, 0);
-        sp70 = actor->current.pos;
+        *(cXyz*)&sp70 = actor->current.pos;
         sp70.y += REG8_F(5) + 80.0f;
-        fopAcM_createDisappear(actor, &sp70, 0xF, daDisItem_HEART_CONTAINER_e, 0xFF);
+        fopAcM_createDisappear(actor, (cXyz*)&sp70, 0xF, daDisItem_HEART_CONTAINER_e, 0xFF);
         fopAcM_seStart(actor, JA_SE_CM_BPW_MASK_BREAK, 0);
         actor->scale.setall(0.0f);
         i_this->mActionState++;
@@ -2870,7 +2873,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = -36.0f;
         sp70.y = player->current.pos.y;
         sp70.z = -777.0f;
-        player->setPlayerPosAndAngle(&sp70, cM_atan2s(f1, f2) + 0x8000);
+        player->setPlayerPosAndAngle((cXyz*)&sp70, cM_atan2s(f1, f2) + 0x8000);
         i_this->m40C.setall(0.0f);
         i_this->m3F0 = REG9_F(1) + 1400.0f;
         i_this->m3F4 = REG9_F(2) + -15000.0f;
@@ -2900,7 +2903,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         sp70.x = -36.0f;
         sp70.y = player->current.pos.y;
         sp70.z = -777.0f;
-        player->setPlayerPosAndAngle(&sp70, cM_atan2s(f1, f2) + 0x8000);
+        player->setPlayerPosAndAngle((cXyz*)&sp70, cM_atan2s(f1, f2) + 0x8000);
         if (i_this->mSomeCountdownTimers[9] == 1) {
             i_this->m3EC = 0.0f;
             i_this->mKankyouHendouState = 6;
