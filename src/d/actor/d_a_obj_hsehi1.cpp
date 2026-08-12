@@ -32,8 +32,11 @@ static s16 daObj_hsh_XyEventCB(void*, int) {
 }
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyEventCB(int) {
-    /* Nonmatching */
+s16 daObj_hsh_c::XyEventCB(int) {
+    mDoAud_seStart(JA_SE_PRE_TAKT, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+    m504 |= 1;
+    m515 = 0;
+    return m530;
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */

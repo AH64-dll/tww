@@ -21,7 +21,7 @@ public:
     void onTactCorrect() {}
 
     s16 XyCheckCB(int);
-    void XyEventCB(int);
+    s16 XyEventCB(int);
     void particle_set(unsigned short);
     void particle_set(JPABaseEmitter**, unsigned short);
     void emitterDelete(JPABaseEmitter**);
@@ -66,7 +66,12 @@ public:
     BOOL draw();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ request_of_phase_process_class mPhase;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ u8 field_0x29C[0x504 - 0x29C];
+    /* 0x504 */ u32 m504;
+    /* 0x515 */ u8 m515;
+    /* 0x530 */ s16 m530;
 };
 
 class daObj_hsh_HIO_c {
