@@ -666,9 +666,15 @@ static BOOL daSs_Execute(ss_class* i_this) {
     for (int i = 0; i < 10; i++) {
         cXyz* pSeg = i_this->mLine.getPos(i);
         u8* pSize = i_this->mLine.getSize(i);
+        ss_s_s* pSss = i_this->mHand[i].mSss;
         for (int j = 0; j < 20; j++) {
-            pSeg[j] = i_this->mHand[i].mSss[j].mPos;
-            pSize[j] = i_this->mHand[i].mSss[j].mSize;
+            pSeg->x = pSss->mPos.x;
+            pSeg->y = pSss->mPos.y;
+            pSeg->z = pSss->mPos.z;
+            *pSize = pSss->mSize;
+            pSss++;
+            pSeg++;
+            pSize++;
         }
     }
 
@@ -684,11 +690,14 @@ static BOOL daSs_Execute(ss_class* i_this) {
     MtxPosition(&sp18, &i_this->eyePos);
 
     cXyz diff = player->eyePos - i_this->eyePos;
+
+    s32 sinTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_ssin((s16)(i_this->m2C0 * 0x2F00)));
+    s32 cosTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_scos((s16)(i_this->m2C0 * 0x2C00)));
+
+    i_this->m2D4 = (s16)((REG0_S(0) + 1) * cM_atan2s(diff.x, diff.z) - i_this->current.angle.y + sinTerm);
+
     f32 distXZ = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
-    i_this->m2D4 = (s16)((s32)((f32)((s8)i_this->m2D8 * 200) * cM_ssin((s16)(i_this->m2C0 * 0x2F00))) +
-                          (REG0_S(0) + 1) * cM_atan2s(diff.x, diff.z) - i_this->current.angle.y);
-    i_this->m2D2 = (s16)(-((s32)((f32)((s8)i_this->m2D8 * 200) * cM_scos((s16)(i_this->m2C0 * 0x2C00))) +
-                           (REG0_S(1) + 1) * cM_atan2s(diff.y, distXZ)));
+    i_this->m2D2 = (s16)(-(cosTerm + (REG0_S(2) + 1) * cM_atan2s(diff.y, distXZ)));
     if (i_this->m2D8 != 0) {
         i_this->m2D8--;
     }
