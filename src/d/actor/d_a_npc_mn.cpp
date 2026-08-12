@@ -366,6 +366,7 @@ static cPhs_State phase_2(daNpcMn_c* i_this) {
 }
 
 /* 000008D4-00000904       .text _create__9daNpcMn_cFv */
+    /* Nonmatching */
 cPhs_State daNpcMn_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
@@ -1183,6 +1184,7 @@ void daNpcMn_c::eventLookInit() {
 }
 
 /* 00002964-00002988       .text eventLook__9daNpcMn_cFv */
+    /* Nonmatching */
 s32 daNpcMn_c::eventLook() {
     return mpMorf->getFrame() >= 72.0f;
 }
@@ -1654,6 +1656,7 @@ s32 daNpcMn_c::XyCheckCB(int) {
 }
 
 /* 0000397C-000039E0       .text getRand__9daNpcMn_cFi */
+    /* Nonmatching */
 int daNpcMn_c::getRand(int i_max) {
     int rand = cM_rndF(i_max);
     if (rand == i_max) {
