@@ -235,8 +235,8 @@ void daNpc_Yw1_c::anmAtr(unsigned short i_param) {
                 m7C8++;
             }
             mesgAnimeTagInfo = dComIfGp_getMesgAnimeTagInfo();
-            dComIfGp_clearMesgAnimeTagInfo();
-            if (mesgAnimeTagInfo != 0xFF && mAnmTag != mesgAnimeTagInfo) {
+            if (mesgAnimeTagInfo != 0xFF && mesgAnimeTagInfo != mAnmTag) {
+                dComIfGp_clearMesgAnimeTagInfo();
                 mAnmTag = mesgAnimeTagInfo;
                 chngAnmTag();
             }
