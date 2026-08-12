@@ -557,14 +557,14 @@ void daNpc_Pf1_c::lookBack() {
     cXyz* dst_pos_p;
     cXyz src_pos;
     s16 desired_yrot;
-    bool head_only_follow;
+    u8 head_only_follow;
     m77E = m_jnt.getHead_y();
     m780 = m_jnt.getBackbone_y();
     m77C = current.angle.y;
     src_pos.x = current.pos.x;
     src_pos.y = current.pos.y;
     src_pos.z = current.pos.z;
-    src_pos.y = mEyePos.y;
+    src_pos.y = eyePos.y;
     dst_pos.set(0.0f, 0.0f, 0.0f);
     dst_pos_p = NULL;
     desired_yrot = current.angle.y;
@@ -578,7 +578,7 @@ void daNpc_Pf1_c::lookBack() {
             src_pos.x = current.pos.x;
             src_pos.y = current.pos.y;
             src_pos.z = current.pos.z;
-            src_pos.y = mEyePos.y;
+            src_pos.y = eyePos.y;
             break;
         case 2:
             dst_pos = mLookTargetPos;
@@ -586,7 +586,7 @@ void daNpc_Pf1_c::lookBack() {
             src_pos.x = current.pos.x;
             src_pos.y = current.pos.y;
             src_pos.z = current.pos.z;
-            src_pos.y = mEyePos.y;
+            src_pos.y = eyePos.y;
             break;
         case 3:
             desired_yrot = m79E;

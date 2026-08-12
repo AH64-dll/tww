@@ -147,7 +147,7 @@ public:
     /* 0x7B7 */ u8 m7B7;
     /* 0x7B8 */ s8 mStt;
     /* 0x7B9 */ u8 m7B9;
-    /* 0x7BA */ u8 m7BA;
+    /* 0x7BA */ s8 m7BA;
     /* 0x7BB */ s8 mType;
     /* 0x7BC */ u8 m7BC;
     /* 0x7BD */ u8 m7BD;
