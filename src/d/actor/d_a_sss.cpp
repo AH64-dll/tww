@@ -71,6 +71,7 @@ void hand_mtx_set(sss_class* i_this) {
 
 /* 00000444-000004CC       .text control3__FP9sss_class */
 void control3(sss_class* i_this) {
+    /* Nonmatching */
     sss_s* p = i_this->m33C;
     for (int i = 0; i < 10; i++, p++) {
         p->mSize = l_size_d[i] * (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64));
