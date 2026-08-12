@@ -833,7 +833,7 @@ BOOL daNpc_Ac1_c::_draw() {
     g_env_light.setLightTevColorType(model, &tevStr);
     mBtpAnim.entry(modelData, mBlinkFrame);
     mpMorf->entryDL();
-    modelData->getMaterialTable().removeTexNoAnimator(m_hed_tex_pttrn);
+    modelData->getMaterialTable().removeTexNoAnimator(mBtpAnim.getBtpAnm());
     if (mbHasArms) {
         g_env_light.setLightTevColorType(mpArmMorf->getModel(), &tevStr);
         mpArmMorf->entryDL();
@@ -931,7 +931,7 @@ cPhs_State daNpc_Ac1_c::_create() {
         return cPhs_ERROR_e;
     }
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -200.0f, -20.0f, -200.0f, 50.0f, 140.0f, 50.0f);
+    fopAcM_setCullSizeBox(this, -50.0f, -20.0f, -50.0f, 50.0f, 140.0f, 50.0f);
     return createInit() ? state : cPhs_ERROR_e;
 }
 
