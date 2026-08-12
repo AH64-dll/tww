@@ -447,7 +447,7 @@ static cPhs_State daKlft_Create(fopAc_ac_c* i_this) {
     cPhs_State phase = dComIfG_resLoad(&actor->mPhs, "Klft");
     if (phase == cPhs_COMPLEATE_e) {
         actor->mParam = fopAcM_GetParam(i_this);
-        s32 pathNo = (fopAcM_GetParam(i_this) >> 16) & 0xFF;
+        u8 pathNo = (fopAcM_GetParam(i_this) >> 16) & 0xFF;
         actor->mShapeParam = i_this->current.angle.z;
         i_this->current.angle.z = 0;
         if (actor->mShapeParam == 0xFF) {
@@ -500,8 +500,8 @@ static cPhs_State daKlft_Create(fopAc_ac_c* i_this) {
             i_this->scale.z = 0.7f;
             break;
         default:
-            i_this->scale.x = 1.0f;
             i_this->scale.z = 1.0f;
+            i_this->scale.x = 1.0f;
             break;
         }
         i_this->scale.y = 1.0f;
