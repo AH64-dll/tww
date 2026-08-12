@@ -112,11 +112,13 @@ void daNpc_De1_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::scaleM(l_HIO.mPrmTbl.mScale, l_HIO.mPrmTbl.mScale, l_HIO.mPrmTbl.mScale);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpMorf->getModel()->getBaseTRMtx());
+    J3DModel* model = mpMorf->getModel();
+    PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
     mpDeform->CopyBackVtx();
     mpMorf->calc();
-    mpDeform->SetVtx((Vec*)mpMorf->getModel()->getCurrentVtxPos());
-    mpDeform->Move();
+    dBgWDeform* deform = mpDeform;
+    deform->SetVtx((Vec*)mpMorf->getModel()->getCurrentVtxPos());
+    deform->Move();
     followPa_happa();
     setDemoStartCenter();
     if (mSpecificType == 0 && !dComIfGs_isEventBit(0x1801)) {
