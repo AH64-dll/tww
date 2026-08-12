@@ -1009,7 +1009,8 @@ s32 daNpcMn_c::eventWait(int staffIdx) {
         return 0;
     }
     if (dComIfGp_evmng_getMyIntegerP(staffIdx, "SwOn") != NULL) {
-        dComIfGs_onSwitch(getPrmSwitchBit2(), (s8)home.roomNo);
+        int swBit = getPrmSwitchBit2();
+        dComIfGs_onSwitch(swBit, (s8)home.roomNo);
     }
     return 1;
 }
