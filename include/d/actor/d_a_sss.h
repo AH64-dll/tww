@@ -32,6 +32,7 @@ public:
     /* 0x2E2 */ s16 m2E2;
     /* 0x2E4 */ f32 m2E4;
     /* 0x2E8 */ f32 m2E8;
+    /* 0x2EC */ f32 m2EC;
     /* 0x2F0 */ f32 m2F0;
     /* 0x2F4 */ f32 m2F4;
     /* 0x2F8 */ f32 m2F8;
