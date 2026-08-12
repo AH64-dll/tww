@@ -12,6 +12,8 @@
 namespace daObjFtree {
 char Act_c::M_arcname[] = "Vmr";
 
+s32 message_table[] = {0, 0x149F, 0x14A0, 0x14A1, 0, 0, 0, 0, 0, 0, 0x149F, 0x14A0, 0x14A1};
+
 static const u32 L_attr[] = {
     0x42740000, 0x42C00000, 0x41C80000, 0x42500000, 0x43040000, 0x446D8000, 0x42900000, 0x42140000,
     0xC2140000, 0x00140000, 0x3E4CCCCD, 0x3E4CCCCD, 0x3CA3D70A, 0x42480000, 0x41A00000, 0x008C0000,
@@ -291,7 +293,31 @@ void daObjFtree::Act_c::set_collision() {
 
 /* 00000C1C-00000D50       .text talk_ct__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_ct() {
-    /* Nonmatching */
+    m6A4 = -1;
+    m6A8 = 0;
+    cXyz pos = current.pos;
+    cXyz pos2 = current.pos;
+    if (mMode >= 0 && mMode < 0xD) {
+        switch (message_table[mMode]) {
+        case 0x149F:
+            pos2.y += 80.0f;
+            pos.y += 105.0f;
+            attention_info.flags = 0x800000A;
+            break;
+        case 0x14A0:
+            pos2.y += 90.0f;
+            pos.y += 195.0f;
+            attention_info.flags = 0x800000A;
+            break;
+        case 0x14A1:
+            pos2.y += 250.0f;
+            pos.y += 200.0f;
+            attention_info.flags = 0x8000008;
+            break;
+        }
+    }
+    attention_info.position = pos;
+    eyePos = pos2;
 }
 
 /* 00000D50-00000F14       .text talk_main__Q210daObjFtree5Act_cFv */
