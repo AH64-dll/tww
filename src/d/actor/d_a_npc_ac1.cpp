@@ -150,7 +150,14 @@ bool daNpc_Ac1_c::createInit() {
     mEventCut.setActorInfo2("Ac1", this);
     mAnmNum = 4;
 
-    bool init_success = init_AC1_0();
+    u8 init_success = 0;
+    switch (m879) {
+        case 0:
+            init_success = init_AC1_0();
+            break;
+        default:
+            break;
+    }
     if (init_success) {
         shape_angle = current.angle;
         mStts.Init(0xFF, 0xFF, this);
@@ -163,8 +170,9 @@ bool daNpc_Ac1_c::createInit() {
             mpWingMorf->setMorf(0.0f);
         }
         setMtx(true);
+        return true;
     }
-    return init_success;
+    return false;
 }
 
 /* 000007C8-00000988       .text setMtx__11daNpc_Ac1_cFb */
