@@ -50,7 +50,9 @@ public:
     /* 0x300 */ cXyz m300;
     /* 0x30C */ cXyz m30C;
     /* 0x318 */ cXyz m318;
-    /* 0x324 */ u8 m324[0x348 - 0x324];
+    /* 0x324 */ u8 m324[0x330 - 0x324];
+    /* 0x330 */ cXyz m330;
+    /* 0x33C */ cXyz m33C;
     /* 0x348 */ cXyz mSoundPos;
     /* 0x354 */ fpc_ProcID mBeam1ID;
     /* 0x358 */ fpc_ProcID mBeam2ID;

@@ -1648,7 +1648,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_mgameboard"),
     ActorRel(Matching,    "d_a_mmusic"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mo2"),
-    ActorRel(NonMatching, "d_a_mozo"),
+    ActorRel(Matching, "d_a_mozo", mw_version="GC/1.3.2r"),
     ActorRel(NonMatching, "d_a_mt"),
     ActorRel(NonMatching, "d_a_npc_ac1"),
     ActorRel(Matching,    "d_a_npc_ah"),

@@ -76,13 +76,71 @@ daMozo_HIO_c::daMozo_HIO_c() {
 }
 
 /* 000002D0-00000568       .text daMozo_nodeCallBackBeam__FP8daMozo_cP8J3DModelP7J3DNodei */
-static BOOL daMozo_nodeCallBackBeam(daMozo_c*, J3DModel*, J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daMozo_nodeCallBackBeam(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
+    s32 jntNo = ((J3DJoint*)node)->getJntNo();
+
+    if (calcTiming == 0) {
+        static cXyz a_beam_start(60.0f, -20.0f, 0.0f);
+        static cXyz a_beam_end(1250.0f, -250.0f, 0.0f);
+        static cXyz a_beamL_start(60.0f, -20.0f, 12.5f);
+        static cXyz a_beamR_start(60.0f, -20.0f, -12.5f);
+
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beam_start, &i_this->m30C);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beam_end, &i_this->m318);
+
+        Mtx sp14;
+        PSMTXCopy(mDoMtx_stack_c::now, sp14);
+        cXyz sp8(sp14[0][3], sp14[1][3], sp14[2][3]);
+        sp14[0][3] = 0.0f;
+        sp14[1][3] = 0.0f;
+        sp14[2][3] = 0.0f;
+        mDoMtx_stack_c::transS(sp8);
+        mDoMtx_stack_c::quatM(&i_this->mQuatRotation);
+        mDoMtx_stack_c::concat(sp14);
+
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beam_start, &i_this->m2DC);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beam_end, &i_this->m2E8);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beamL_start, &i_this->m2F4);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_beamR_start, &i_this->m300);
+
+        PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
+        PSMTXCopy(mDoMtx_stack_c::now, J3DSys::mCurrentMtx);
+    }
+
+    return TRUE;
 }
 
 /* 00000568-00000728       .text daMozo_nodeCallBackFire__FP8daMozo_cP8J3DModelP7J3DNodei */
-static BOOL daMozo_nodeCallBackFire(daMozo_c*, J3DModel*, J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daMozo_nodeCallBackFire(daMozo_c* i_this, J3DModel* model, J3DNode* node, int calcTiming) {
+    s32 jntNo = ((J3DJoint*)node)->getJntNo();
+
+    if (calcTiming == 0) {
+        static cXyz a_fire_start(0.0f, 0.0f, 0.0f);
+        static cXyz a_fire_end(5000.0f, 0.0f, 0.0f);
+
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_fire_start, &i_this->m30C);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_fire_end, &i_this->m318);
+
+        Mtx sp14;
+        PSMTXCopy(mDoMtx_stack_c::now, sp14);
+        cXyz sp8(sp14[0][3], sp14[1][3], sp14[2][3]);
+        sp14[0][3] = 0.0f;
+        sp14[1][3] = 0.0f;
+        sp14[2][3] = 0.0f;
+        mDoMtx_stack_c::transS(sp8);
+        mDoMtx_stack_c::quatM(&i_this->mQuatRotation);
+        mDoMtx_stack_c::concat(sp14);
+
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_fire_start, &i_this->m330);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a_fire_end, &i_this->m33C);
+
+        PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
+        PSMTXCopy(mDoMtx_stack_c::now, J3DSys::mCurrentMtx);
+    }
+
+    return TRUE;
 }
 
 /* 00000728-0000078C       .text daMozo_nodeCallBack__FP7J3DNodei */
