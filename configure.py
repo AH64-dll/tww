@@ -1828,7 +1828,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_ygcwp"),
     ActorRel(Matching,    "d_a_yougan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ghostship"),
-    ActorRel(NonMatching, "d_a_movie_player", extra_cflags=["-O3,p"]),
+    ActorRel(Equivalent, "d_a_movie_player", extra_cflags=["-O3,p"]),  # regalloc: __THPReadQuantizationTable 99.578 / daMP_THPPlayerOpen 99.577 norm-diff 0 (ReviewerD U-0293); weak order
 ]
 
 
