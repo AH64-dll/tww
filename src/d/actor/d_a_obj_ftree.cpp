@@ -392,7 +392,7 @@ void daObjFtree::Act_c::unset_brought() {
 void daObjFtree::Act_c::get_ftree_info(daObjFtree::_ftree_seach_info_* info) {
     info->mCount = 8;
     info->mBroughtCount = 0;
-    for (int i = 0; i < 8; i++) {
+    for (u32 i = 0; i < 8; i++) {
         if (is_broughtID(i)) {
             info->mBroughtCount++;
         }
