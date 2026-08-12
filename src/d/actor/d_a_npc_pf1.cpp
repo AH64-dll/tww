@@ -1081,17 +1081,18 @@ u8 daNpc_Pf1_c::demo() {
         if (m7B1 == 0) {
             m7B1 = 1;
             mAnmAtr = 0;
-            m_jnt.setHead_x(0);
             m_jnt.setHead_y(0);
-            m_jnt.setBackBone_x(0);
+            m_jnt.setHead_x(0);
             m_jnt.setBackBone_y(0);
+            m_jnt.setBackBone_x(0);
         }
         dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
         J3DAnmTexPattern* btp_anm = mBtpAnm.getBtpAnm();
         if (btp_anm != NULL) {
+            u8 frame_max = (u8)btp_anm->getFrameMax();
             mBtpFrame += 1;
-            if (mBtpFrame >= (u8)btp_anm->getFrameMax()) {
-                mBtpFrame = (u8)btp_anm->getFrameMax();
+            if (mBtpFrame >= frame_max) {
+                mBtpFrame = frame_max;
             }
         }
         J3DAnmTexPattern* demo_pattern = demo_actor->getP_BtpData(m_arcname);
