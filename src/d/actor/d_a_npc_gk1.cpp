@@ -544,7 +544,7 @@ void daNpc_Gk1_c::setAttention(bool i_setEyePos) {
 }
 
 /* 00001494-0000151C       .text decideType__11daNpc_Gk1_cFi */
-s32 daNpc_Gk1_c::decideType(int i_type) {
+bool daNpc_Gk1_c::decideType(int i_type) {
     if (mTypeInit > 0) {
         return 1;
     }
@@ -882,13 +882,13 @@ cPhs_State daNpc_Gk1_c::_create() {
     };
 
     fopAcM_ct_Retail(this, daNpc_Gk1_c);
-    cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
-    if (state != cPhs_COMPLEATE_e) {
-        return state;
-    }
-    u32 tmp = fopAcM_GetParam(this) & 0xFF;
-    if (!decideType(tmp)) {
+    if (!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
+    }
+    cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
+    mCreatePhase = state == cPhs_COMPLEATE_e;
+    if (!mCreatePhase) {
+        return state;
     }
 #if VERSION == VERSION_DEMO
     l_HIO.entryHIO("");

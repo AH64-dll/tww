@@ -49,7 +49,7 @@ public:
     void lookBack();
     BOOL chkAttention();
     void setAttention(bool);
-    s32 decideType(int);
+    bool decideType(int);
     void privateCut(int);
     void endEvent();
     s32 isEventEntry();
