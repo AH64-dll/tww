@@ -445,10 +445,14 @@ void daNpc_Gp1_c::checkOrder() {
 /* 00000F5C-00001008       .text chk_talk__11daNpc_Gp1_cFv */
 bool daNpc_Gp1_c::chk_talk() {
     bool ret = true;
+    m7FB = 0xFF;
     if(dComIfGp_event_chkTalkXY()) {
         if(dComIfGp_evmng_ChkPresentEnd()) {
+            m7FB = dComIfGp_event_getPreItemNo();
+        } else {
             ret = false;
         }
+        m7FB = dComIfGp_event_getPreItemNo();
     }
     return ret;
 }
