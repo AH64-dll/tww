@@ -233,14 +233,17 @@ void daNpc_De1_c::chngAnmAtr(u8 i_param_1) {
 
 /* 00000800-00000848       .text ctrlAnmAtr__11daNpc_De1_cFv */
 void daNpc_De1_c::ctrlAnmAtr() {
-    /* Nonmatching */
     switch (mAnmAtr) {
+        case 0:
+        case 1:
+        case 2:
+            break;
         case 3:
             if (mbMorfAnimStopped) {
                 mAnmAtr = 0;
                 setAnm_ATR();
             }
-            // fall through
+            break;
         default:
             break;
     }
