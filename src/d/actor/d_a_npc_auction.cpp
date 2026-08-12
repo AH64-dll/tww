@@ -1451,10 +1451,9 @@ static BOOL daNpc_AuctionDraw(void* i_this) {
     J3DModelData* modelData = model->getModelData();
     if (actor->mHeadModel != NULL) {
         J3DModelData* headModelData = actor->mHeadModel->getModelData();
-        dKy_tevstr_c* tevStr = &actor->tevStr;
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, tevStr);
-        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), tevStr);
-        g_env_light.setLightTevColorType(actor->mHeadModel, tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), &actor->tevStr);
+        g_env_light.setLightTevColorType(actor->mHeadModel, &actor->tevStr);
         actor->mBtpAnm.entry(headModelData, actor->m73F);
         if (actor->mBmtNo >= 0) {
             actor->mpMorf->updateDL((J3DMaterialTable*)dComIfG_getObjectIDRes(
@@ -1462,13 +1461,14 @@ static BOOL daNpc_AuctionDraw(void* i_this) {
         } else {
             actor->mpMorf->updateDL();
         }
-        MTXCopy(model->getAnmMtx(actor->m_jnt.getHeadJntNum()), actor->mHeadModel->getBaseTRMtx());
+        MtxP src_mtx = model->getAnmMtx(actor->m_jnt.getHeadJntNum());
+        MtxP dst_mtx = actor->mHeadModel->getBaseTRMtx();
+        MTXCopy(src_mtx, dst_mtx);
         mDoExt_modelUpdateDL(actor->mHeadModel);
         headModelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
     } else {
-        dKy_tevstr_c* tevStr = &actor->tevStr;
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, tevStr);
-        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+        g_env_light.setLightTevColorType(actor->mpMorf->getModel(), &actor->tevStr);
         actor->mBtpAnm.entry(modelData, actor->m73F);
         actor->mpMorf->updateDL();
         modelData->getMaterialTable().removeTexNoAnimator(actor->mBtpAnm.getBtpAnm());
