@@ -1200,9 +1200,8 @@ void daNpcAuction_c::setMtx() {
 
 /* 00002118-00002488       .text lookBack__14daNpcAuction_cFv */
 void daNpcAuction_c::lookBack() {
-    daNpc_Auction2_HIO_c* dat = &l_npc_dat[mDataNo];
-    f32 attnDist = dat->mAttnYOffset;
-    s16 angle = dat->mMaxHeadTurnVel;
+    f32 attnDist = l_npc_dat[mDataNo].mAttnYOffset;
+    s16 angle = l_npc_dat[mDataNo].mMaxHeadTurnVel;
     s16 targetY = current.angle.y;
     cXyz* lookPos = NULL;
     bool lookMode = true;
@@ -1225,13 +1224,11 @@ void daNpcAuction_c::lookBack() {
         }
     } else {
         f32 dist = m720;
-        int distAngle = dat->mMaxAttnAngleY;
+        int distAngle = l_npc_dat[mDataNo].mMaxAttnAngleY;
         int limitAngle = 0x4000;
-        cXyz pos = current.pos;
-        cXyz playerPos = g_dComIfG_gameInfo.play.getPlayerPtr(0)->current.pos;
         f32 d;
         s16 a;
-        dNpc_calc_DisXZ_AngY(pos, playerPos, &d, &a);
+        dNpc_calc_DisXZ_AngY(current.pos, g_dComIfG_gameInfo.play.getPlayerPtr(0)->current.pos, &d, &a);
         if (m73D != 0) {
             dist += 40.0f;
             limitAngle = 0x471C;
