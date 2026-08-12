@@ -605,15 +605,18 @@ void daNpc_De1_c::followPa_happa() {
 bool daNpc_De1_c::decideType(int i_param_1) {
     bool o_retval = true;
     mType = -1;
-    if (fopAcM_GetName(this) == fpcNm_NPC_DE1_e) {
+    switch (fopAcM_GetName(this)) {
+    case fpcNm_NPC_DE1_e:
         mType = 0;
-        if (dComIfGs_isSymbol(2)) {
-            mSpecificType = 1;
-        } else {
+        if (!dComIfGs_isSymbol(2)) {
             mSpecificType = 0;
+        } else {
+            mSpecificType = 1;
         }
-    } else {
+        break;
+    default:
         o_retval = false;
+        break;
     }
     return o_retval;
 }
