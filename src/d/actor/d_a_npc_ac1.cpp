@@ -704,15 +704,18 @@ BOOL daNpc_Ac1_c::talk_1() {
     }
     fopNpc_npc_c::talk(1);
     if (mpCurrMsg != NULL) {
-        if (mpCurrMsg->mStatus != 6) {
-            if (mpCurrMsg->mStatus == 0x13) {
+        switch (mpCurrMsg->mStatus) {
+            case 0x13:
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F02);
                 m85B = 0xFF;
                 m869 = 0;
                 setStt(mPrevStatus);
                 m84C = 0x3C;
                 endEvent();
-            }
+                break;
+            case 0x2:
+            case 0x6:
+                break;
         }
     }
     return o_retval;

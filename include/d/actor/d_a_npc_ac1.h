@@ -147,7 +147,7 @@ private:
     /* 0x872 */ u8 pad872[0x874 - 0x872];
     /* 0x874 */ s8 m874;
     /* 0x875 */ s8 mStatus;
-    /* 0x876 */ u8 mPrevStatus;
+    /* 0x876 */ s8 mPrevStatus;
     /* 0x877 */ s8 mLookBackState;
     /* 0x878 */ u8 m878;
     /* 0x879 */ u8 m879;
