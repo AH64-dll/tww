@@ -72,6 +72,8 @@ namespace daObjTribox {
         bool is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         void on_switch() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
 
+        Act_c() : mSmokeCB(1), mSinkSmokeCB(1, 1, 0, 0), mSinkSmokeCB2(1, 1, 0, 0), mSinkSmokeCB3(1, 1, 0, 0) {}
+
         void set_state();
         static BOOL solidHeapCB(fopAc_ac_c*);
         void create_heap();
@@ -162,7 +164,7 @@ namespace daObjTribox {
         /* 0x37C */ cXyz mSmokePos;
         /* 0x388 */ csXyz mSmokeAngle;
         /* 0x38E */ u8 m38E;
-        /* 0x390 */ s16 m390;
+        /* 0x390 */ f32 m390;
         /* 0x394 */ u8 m394;
         /* 0x395 */ u8 m395;
         /* 0x396 */ s16 m396;

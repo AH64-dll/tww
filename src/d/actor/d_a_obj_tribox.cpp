@@ -83,11 +83,20 @@ namespace daObjTribox {
     /* 000000EC-000001A4       .text set_state__Q211daObjTribox5Act_cFv */
     void Act_c::set_state() {
         int type = prm_get_type();
-        bool sw = dComIfGs_isSwitch(prm_get_swSave(), home.roomNo);
+        int swSave = prm_get_swSave();
+        bool sw = dComIfGs_isSwitch(swSave, home.roomNo);
         if (type == 0) {
-            mMode = sw ? 1 : 0;
+            if (sw) {
+                mMode = 1;
+            } else {
+                mMode = 0;
+            }
         } else {
-            mMode = sw ? 3 : 2;
+            if (sw) {
+                mMode = 3;
+            } else {
+                mMode = 2;
+            }
         }
     }
 
@@ -268,8 +277,13 @@ namespace daObjTribox {
         }
         set_state();
         controll_set();
-        mode_proc_call();
-        return cPhs_COMPLEATE_e;
+        static const cPhs_State (Act_c::*create_proc[])() = {
+            &Act_c::create_block_before,
+            &Act_c::create_block_after,
+            &Act_c::create_correct_before,
+            &Act_c::create_correct_after,
+        };
+        return (this->*create_proc[mMode])();
     }
 
     /* 00000BC4-00000CA4       .text _delete__Q211daObjTribox5Act_cFv */
