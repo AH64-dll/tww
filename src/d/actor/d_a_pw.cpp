@@ -9,6 +9,8 @@
 #include "d/actor/d_a_kantera.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/d_material.h"
+#include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
 #include "res/Object/Pw.h"
 #include "d/d_kankyo_rain.h"
@@ -67,8 +69,47 @@ void draw_SUB(pw_class* i_this) {
 }
 
 /* 00000230-000004D4       .text daPW_Draw__FP8pw_class */
-static BOOL daPW_Draw(pw_class*) {
-    /* Nonmatching */
+static BOOL daPW_Draw(pw_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+
+    dKy_getEnvlight().setLightTevColorType(model, &i_this->tevStr);
+    dSnap_RegistFig(DSNAP_TYPE_UNKB8, i_this, 1.0f, 1.0f, 1.0f);
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = i_this->m39A;
+    }
+    dComIfGd_setListMaskOff();
+    if (i_this->mEnemyIce.mFreezeTimer > 20) {
+        dMat_control_c::iceEntryDL(i_this->mpMorf, -1, &i_this->mInvisibleModel);
+        dComIfGd_setList();
+        return TRUE;
+    }
+    if (i_this->m33E) {
+        i_this->m2C0->entry(modelData, i_this->m2C0->getFrame());
+    } else if (i_this->m33F) {
+        i_this->m2C4->entry(modelData, i_this->m2C4->getFrame());
+    } else {
+        i_this->m2C8->entry(modelData, i_this->m2C8->getFrame());
+    }
+    i_this->m2BC->entry(modelData, i_this->m2BC->getFrame());
+    i_this->m2BC->setFrame(i_this->mColorIndex);
+    i_this->mpMorf->entryDL();
+    if (i_this->m33E) {
+        i_this->m2C0->remove(modelData);
+    } else if (i_this->m33F) {
+        i_this->m2C4->remove(modelData);
+    } else {
+        i_this->m2C8->remove(modelData);
+    }
+    i_this->m2BC->remove(modelData);
+    dComIfGd_setList();
+    i_this->mInvisibleModel.entryMaskOff();
+    if (i_this->mBehaviorType == 0 && i_this->mEnemyIce.mLightShrinkTimer == 0) {
+        dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mAcch.GetGroundH(), 50.0f,
+                                  i_this->mAcch.m_gnd, 0, 1.0f,
+                                  &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return TRUE;
 }
 
 /* 000004D4-00000600       .text anm_init__FP8pw_classifUcfi */
@@ -715,8 +756,21 @@ static BOOL daPW_IsDelete(pw_class*) {
 }
 
 /* 00006204-000062B0       .text daPW_Delete__FP8pw_class */
-static BOOL daPW_Delete(pw_class*) {
-    /* Nonmatching */
+static BOOL daPW_Delete(pw_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhase, "PW");
+    if (i_this->heap != NULL) {
+        i_this->mpMorf->stopZelAnime();
+    }
+    if (i_this->m343) {
+        i_this->m343 = 0;
+        TORITUKI_ON = false;
+    }
+    i_this->m5C4.remove();
+    enemy_fire_remove(&i_this->mEnemyFire);
+    if (i_this->mMode == 0x51) {
+        daPy_getPlayerActorClass()->offConfuse();
+    }
+    return TRUE;
 }
 
 /* 000062B0-000066D8       .text useHeapInit__FP10fopAc_ac_c */
