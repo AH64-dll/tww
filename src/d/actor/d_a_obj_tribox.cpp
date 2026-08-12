@@ -306,7 +306,7 @@ namespace daObjTribox {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
         PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
-        mDoMtx_stack_c::transM(0.0f, 251.0f, 0.0f);
+        mDoMtx_stack_c::now[1][3] += 251.0f;
         PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
     }
 
