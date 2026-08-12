@@ -274,24 +274,20 @@ void daNpc_De1_c::setStt(s8 i_status) {
     s8 prev_status = mStatus;
     mStatus = i_status;
     switch (mStatus) {
-        case 2:
         case 4:
+        case 2:
             mAnmAtr = 0xFF;
             mPrevStatus = prev_status;
-            break;
+            return;
         case 7:
-            attention_info.flags |= fopAc_Attn_UNK1000000_e;
+            attention_info.flags |= fopAc_Attn_ENEMYFLAG_NOLOCKON_e;
             attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x22;
-            break;
-        case 0:
-        case 1:
+            // fall through
         case 3:
-        case 5:
-        case 6:
+        default:
             setAnm();
-            break;
-    }
-}
+            return;
+    }}
 
 /* 000009B4-00000C98       .text next_msgStatus__11daNpc_De1_cFPUl */
 u16 daNpc_De1_c::next_msgStatus(u32* i_msg_no) {
