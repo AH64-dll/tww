@@ -112,7 +112,7 @@ public:
     /* 0x79C */ u8 m79C;
     /* 0x79D */ u8 m79D;
     /* 0x79E */ u8 mTalkStatus;
-    /* 0x79F */ u8 mCreatePhase;
+    /* 0x79F */ bool mCreatePhase;
     /* 0x7A0 */ u8 m7A0;
     /* 0x7A1 */ u8 m7A1;
     /* 0x7A2 */ u8 m7A2;
