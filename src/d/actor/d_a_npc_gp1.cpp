@@ -783,22 +783,23 @@ void daNpc_Gp1_c::gp_nMove() {
         m7FE = 1;
         return;
     }
-    if(mActionIndex != 1) {
-        return;
-    }
-    gp_clcMovSpd();
-    f32 spd = speedF * l_HIO.mPrmTbl.m24;
-    if(spd < 0.5f) {
-        spd = 0.5f;
-    }
-    mpMorf->setFrame(spd);
-    switch(gp_movPass()) {
+    switch(mActionIndex) {
         case 1:
-            m800 = 1;
-            break;
-        case 2:
-            m800 = 1;
-            mActionIndex = 0;
+            gp_clcMovSpd();
+            f32 spd = speedF * l_HIO.mPrmTbl.m24;
+            if(spd < 0.5f) {
+                spd = 0.5f;
+            }
+            mpMorf->setPlaySpeed(spd);
+            switch(gp_movPass()) {
+                case 1:
+                    m800 = 1;
+                    break;
+                case 2:
+                    m800 = 1;
+                    mActionIndex = 0;
+                    break;
+            }
             break;
     }
 }
