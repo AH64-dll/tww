@@ -846,15 +846,20 @@ BOOL daNpc_De1_c::wait05() {
     }
     mOrder = 0;
     int found_count = 0;
-    for (int i = 0; i < 10; i++) {
-        if (searchByID(m_cc_ID[i]) == NULL) {
-            found_count++;
-            if (found_count == 10) {
-                attention_info.flags &= ~fopAc_Attn_UNK1000000_e;
-                mOrder = 5;
-                break;
-            }
+    int i = 0;
+    while (true) {
+        if (searchByID(m_cc_ID[i]) != NULL) {
+            break;
         }
+        found_count++;
+        if (found_count == 10) {
+            break;
+        }
+        i++;
+    }
+    if (found_count == 10) {
+        attention_info.flags &= ~fopAc_Attn_UNK1000000_e;
+        mOrder = 5;
     }
     return TRUE;
 }
