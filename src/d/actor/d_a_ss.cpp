@@ -299,16 +299,12 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
 
 /* 0000152C-00001D30       .text hand_1_cut__FP8ss_classP4ss_s */
 void hand_1_cut(ss_class* i_this, ss_s* hand) {
-    dBgS_GndChk gndChk;
     cXyz sp58(0.0f, 0.0f, 15.0f + REG8_F(11));
     cXyz sp4C;
     cXyz sp40;
     cXyz sp28;
     cXyz sp1C;
     cXyz sp10;
-    f32 sp34;
-    f32 sp38;
-    f32 sp3C;
 
     if (hand->m36 != 0) {
         hand->m36--;
@@ -330,11 +326,14 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 
     hand->mSss[19].mPos = hand->mPos;
 
+    dBgS_GndChk gndChk;
+
     ss_s_s* cur = &hand->mSss[18];
     s32 idx = 0x12;
 
     cLib_addCalc2(&hand->m24, -20.0f + REG8_F(2), 1.0f, 1.0f + REG8_F(4));
-    sp38 = 0.0f;
+    cXyz sp34v;
+    sp34v.y = 0.0f;
 
     do {
         cXyz gndPos(cur->mPos.x, cur->mPos.y + 50.0f, cur->mPos.z);
@@ -344,10 +343,9 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         if (curY < groundY) {
             curY = groundY;
         }
-        sp3C = 3000.0f + REG8_F(17);
-        sp34 = hand->m28 * cM_ssin(hand->m30 + idx * hand->m32);
+        sp34v.z = 3000.0f + REG8_F(17);
+        sp34v.x = hand->m28 * cM_ssin(hand->m30 + idx * hand->m32);
         mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
-        cXyz sp34v(sp34, sp38, sp3C);
         MtxPosition(&sp34v, &sp40);
         sp4C.x = sp40.x + (cur->mPos.x - (cur - 1)->mPos.x);
         sp4C.y = curY - (cur - 1)->mPos.y;
