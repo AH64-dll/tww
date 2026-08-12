@@ -961,11 +961,11 @@ bool daNpc_De1_c::demo() {
 /* 00002248-00002358       .text _draw__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::_draw() {
     J3DModel* morf_model = mpMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(morf_model, &tevStr);
-    dComIfGd_setList();
-    mpMorf->entryDL();
     dComIfGd_setListBG();
+    mpMorf->entryDL();
+    dComIfGd_setList();
     if (l_HIO.mPrmTbl.mDebug != 0) {
         fopAc_ac_c* partner = searchByID(mPartnerProcID);
         if (partner != NULL) {
