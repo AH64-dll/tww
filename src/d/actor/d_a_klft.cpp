@@ -81,7 +81,7 @@ static BOOL nodeCallBack(J3DNode* i_node, int i_calcType) {
         int jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         klft_class* pActor = (klft_class*)model->getUserArea();
-        if (pActor != NULL && jnt_no == 1) {
+        if (pActor != NULL) {
             MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
             cMtx_YrotM(*calc_mtx, pActor->mRotY);
             model->setAnmMtx(jnt_no, *calc_mtx);
@@ -245,7 +245,7 @@ void klft_move(klft_class* i_this) {
     }
     i_this->shape_angle = i_this->current.angle + i_this->field_300;
     i_this->home.pos = i_this->mPath0[0] + (i_this->field_394 * i_this->field_3C0) * 0.01f;
-    i_this->home.pos.y += (-100.0f + REG0_F(2)) + moveSpeed * (-100.0f + i_this->field_3B8 + REG0_F(0));
+    i_this->home.pos.y += (-100.0f + REG0_F(2)) + sinAngle * (-100.0f + i_this->field_3B8 + REG0_F(0));
     cLib_addCalc2(&i_this->field_3B8, i_this->field_3BC, 0.1f, 25.0f);
     i_this->field_3BC = 0.0f;
     i_this->current.pos = i_this->home.pos + i_this->mSwingPos;
@@ -350,7 +350,7 @@ static BOOL daKlft_Delete(klft_class* i_this) {
 static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     klft_class* actor = static_cast<klft_class*>(i_this);
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Klft", 5);
-    actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x110203);
+    actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (actor->mModel == NULL) {
         return FALSE;
     }
@@ -371,12 +371,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     for (int i = 0; i < 2; i++) {
         actor->mMorf[i] = new mDoExt_McaMorf(
             (J3DModelData*)dComIfG_getObjectRes("Klft", 6), NULL, NULL, NULL, 2, 1.0f, 0, -1, 0,
-            NULL, 0, 0x110203);
-        actor->mMorf[i]->getModel()->setUserArea((u32)i_this);
-        J3DModelData* morfModelData = actor->mMorf[i]->getModel()->getModelData();
-        for (u16 j = 0; j < morfModelData->getJointNum(); j++) {
+            NULL, 0, 0x11020203);
+        J3DModel* morfModel = actor->mMorf[i]->getModel();
+        morfModel->setUserArea((u32)i_this);
+        for (u16 j = 0; j < morfModel->getModelData()->getJointNum(); j++) {
             if (j == 3) {
-                morfModelData->getJointNodePointer(j)->setCallBack(nodeCallBack);
+                morfModel->getModelData()->getJointNodePointer(j)->setCallBack(nodeCallBack);
             }
         }
     }
