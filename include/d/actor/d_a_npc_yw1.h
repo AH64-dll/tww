@@ -22,8 +22,8 @@ public:
     void play_animation();
     void upLift();
     void setMtx(bool);
-    void bckResID(int);
-    void btpResID(int);
+    int bckResID(int);
+    int btpResID(int);
     void init_texPttrnAnm(signed char, bool);
     void play_texPttrnAnm();
     void setAnm_anm(anm_prm_c*);

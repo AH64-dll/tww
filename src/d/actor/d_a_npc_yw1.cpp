@@ -96,14 +96,17 @@ void daNpc_Yw1_c::setMtx(bool) {
     /* Nonmatching */
 }
 
+static const int a_bck_res_id_tbl[] = {0, 3, 4, 2, 1, 5, 9};
+static const int a_btp_res_id_tbl[] = {8};
+
 /* 00000F48-00000F5C       .text bckResID__11daNpc_Yw1_cFi */
-void daNpc_Yw1_c::bckResID(int) {
-    /* Nonmatching */
+int daNpc_Yw1_c::bckResID(int param) {
+    return a_bck_res_id_tbl[param];
 }
 
 /* 00000F5C-00000F70       .text btpResID__11daNpc_Yw1_cFi */
-void daNpc_Yw1_c::btpResID(int) {
-    /* Nonmatching */
+int daNpc_Yw1_c::btpResID(int param) {
+    return a_btp_res_id_tbl[param];
 }
 
 /* 00000F70-00001078       .text init_texPttrnAnm__11daNpc_Yw1_cFScb */
