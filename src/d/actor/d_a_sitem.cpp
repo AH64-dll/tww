@@ -11,6 +11,8 @@
 static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
 static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
 static u16 bmd_data[3] = { 4, 5, 6 };
+static f32 hr_d[4] = { 10.0f, 25.0f, 40.0f, 65.0f };
+static f32 max_d[4] = { 100.0f, 250.0f, 400.0f, 600.0f };
 static cXyz non_pos;
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
@@ -257,8 +259,215 @@ void cut_control2(sitem_class* i_this) {
 }
 
 /* 000015C0-00002304       .text hand_move__FP11sitem_class */
-void hand_move(sitem_class*) {
-    /* Nonmatching */
+void hand_move(sitem_class* i_this) {
+    dBgS_GndChk gndChk;
+    s32 isCut = 0;
+    f32 f31 = 0.1f;
+    f32 f29 = 1.0f;
+    f32 f28 = 5.0f + REG0_F(14);
+
+    s32 hrIdx = i_this->m2B9 * 4;
+    f32 f30 = REG0_F(8) + hr_d[i_this->m2B9];
+    f32 f27 = max_d[i_this->m2B9];
+
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+
+    cXyz sp64;
+    cXyz sp58;
+    switch (i_this->m2C0) {
+    case 5:
+        f28 = 25.0f;
+        i_this->mHandPos.x = f28;
+        isCut = 1;
+        f30 = 25.0f;
+        i_this->mSpeed = i_this->mHomePos;
+        PSVECAdd(&i_this->mHomePos, &i_this->speed, &i_this->mHomePos);
+        i_this->speed.y -= 3.0f;
+        if (i_this->speed.y < -90.0f) {
+            i_this->speed.y = -90.0f;
+        }
+        i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+        i_this->m2C6 = 5;
+        gndChk.m_pos.set(i_this->mHomePos.x, i_this->mHomePos.y + 100.0f, i_this->mHomePos.z);
+        f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+        if (i_this->speed.y < 0.0f &&
+            (groundY == -1000000000.0f || i_this->mHomePos.y <= 30.0f + groundY)) {
+            i_this->mHomePos.y = 30.0f + groundY;
+            my_break(i_this);
+        }
+        break;
+    case 6:
+        isCut = 1;
+        f28 = 0.0f;
+        i_this->m2C6 = 0xA;
+        if (i_this->m2C2[0] < 0x28) {
+            f29 = 0.05f * f30;
+            f30 = f28;
+        }
+        if (i_this->m2C2[0] == 0) {
+            fopAcM_delete(i_this);
+        }
+        break;
+    default:
+        f32 f1 = 25.0f + REG0_F(16);
+        cXyz sp70;
+        sp70.x = f1 * cM_ssin(i_this->m2BC * 0x258);
+        sp70.y = f27;
+        sp70.z = f1 * cM_ssin(i_this->m2BC * 0x2BC);
+        MtxPosition(&sp70, &sp64);
+        cXyz sp28 = i_this->current.pos + sp64;
+        sp58 = sp28;
+        if (i_this->m2C0 == 0) {
+            i_this->mHomePos = sp28;
+            i_this->m2C0 = 1;
+        }
+        break;
+    }
+
+    cLib_addCalc2(&i_this->m2F4, f30, 0.5f, f29);
+    cLib_addCalc2(&i_this->m2FC, 0.0f, 1.0f, 0.2f);
+    cLib_addCalc2(&i_this->mHandPos.x, f28, 1.0f, 1.5f);
+
+    if (isCut == 0) {
+        cLib_addCalc2(&i_this->speedF, 8.0f, 1.0f, 0.1f);
+        if (i_this->mB0C > 1.0f && i_this->m2C0 != 3) {
+            mDoMtx_YrotS(*calc_mtx, i_this->mB10);
+            cXyz sp70;
+            sp70.x = 0.0f;
+            sp70.y = REG0_F(14);
+            sp70.z = i_this->mB0C;
+            MtxPosition(&sp70, &sp64);
+            PSVECAdd(&sp58, &sp64, &sp58);
+            f31 = 0.1f;
+            i_this->speedF = 0.2f * i_this->mB0C;
+            f32 limit = 30.0f + REG0_F(12);
+            if (i_this->speedF > limit) {
+                i_this->speedF = limit;
+            }
+        }
+        cLib_addCalc0(&i_this->mB0C, 1.0f, 5.0f + REG0_F(9));
+        cLib_addCalc2(&i_this->mHomePos.x, sp58.x, f31, i_this->speedF);
+        cLib_addCalc2(&i_this->mHomePos.y, sp58.y, f31, i_this->speedF);
+        cLib_addCalc2(&i_this->mHomePos.z, sp58.z, f31, i_this->speedF);
+        control1(i_this);
+        control2(i_this);
+    } else {
+        cut_control1(i_this);
+        cut_control2(i_this);
+        sitem_s* src = &i_this->mSitem2[0];
+        cXyz* dst = i_this->mLineMat2.getPos(0);
+        u8* dstSize = i_this->mLineMat2.getSize(0);
+        for (int i = 0; i < 5; i++) {
+            dst[i] = src[i].mPos;
+            dstSize[i] = (u8)src[i].m18;
+        }
+        cLib_addCalc0(&i_this->mHandPos.z, 1.0f, 1.0f + REG0_F(4));
+    }
+
+    control3(i_this);
+
+    sitem_s* src = &i_this->mSitem1[0];
+    cXyz* dst = i_this->mLineMat1.getPos(0);
+    u8* dstSize = i_this->mLineMat1.getSize(0);
+    for (int i = 0; i < 10; i++) {
+        dst[i] = src[i].mPos;
+        dstSize[i] = (u8)src[i].m18;
+    }
+
+    cXyz* pPos = i_this->mLineMat1.getPos(0);
+    i_this->eyePos = pPos[0];
+    i_this->attention_info.position = i_this->eyePos;
+    i_this->mStts.Move();
+    if (isCut == 0) {
+        i_this->mSph[3].SetC(i_this->eyePos);
+    } else {
+        i_this->mSph[3].SetC(non_pos);
+    }
+    dComIfG_Ccsp()->Set(&i_this->mBmSph);
+    for (int i = 0; i < 3; i++) {
+        cXyz pos = pPos[(i_this->m2BC & 3) + i * 2];
+        if (isCut == 0) {
+            i_this->mSph[i].SetC(pos);
+        } else {
+            i_this->mSph[i].SetC(non_pos);
+        }
+        if (i_this->m2C0 == 3) {
+            i_this->mSph[i].OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+        } else {
+            i_this->mSph[i].OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+        }
+        dComIfG_Ccsp()->Set(&i_this->mSph[i]);
+    }
+    i_this->mBmSph.SetR(25.0f);
+    i_this->mBmSph.SetC(i_this->mB00);
+    i_this->mSph[3].OnTgSPrmBit(cCcD_TgSPrm_IsEnemy_e);
+    dComIfG_Ccsp()->Set(&i_this->mSph[3]);
+
+    cCcD_Obj* hitObj = NULL;
+    if (i_this->m2C6 == 0) {
+        if (i_this->mSph[3].ChkTgHit() || (i_this->mB0C > 100.0f && i_this->mSph[3].ChkCoHit())) {
+            hitObj = i_this->mSph[3].GetTgHitObj();
+            if (hitObj != NULL && hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
+                return;
+            }
+            my_break(i_this);
+            isCut = 3;
+        } else {
+            for (int i = 0; i < 3; i++) {
+                if (i_this->mSph[i].ChkTgHit()) {
+                    hitObj = i_this->mSph[i].GetTgHitObj();
+                    if (hitObj != NULL && hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
+                        return;
+                    }
+                    isCut = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (isCut != 0 && i_this->m2C6 == 0) {
+        i_this->m2C6 = 0x14;
+        if (isCut == 0) {
+            hitObj = i_this->mBmSph.GetTgHitObj();
+            CcAtInfo atInfo;
+            atInfo.mpObj = hitObj;
+            atInfo.mpActor = at_power_check(&atInfo);
+            if (atInfo.mResultingAttackType == 8) {
+                i_this->mB0C = 300.0f + REG0_F(13);
+                i_this->mB10 = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+                return;
+            }
+        }
+        i_this->m2C0 = 5;
+        i_this->speed.x = cM_rndFX(10.0f);
+        i_this->speed.y = 10.0f + cM_rndF(5.0f);
+        i_this->speed.z = cM_rndFX(10.0f);
+        cXyz scale(0.3f, 0.3f, 0.3f);
+        dComIfGp_particle_set(0x16, &i_this->eyePos, NULL, &scale, 0xFF, NULL, -1);
+        i_this->mD4C = 1;
+        isCut = 1;
+    }
+
+    if (isCut != 0) {
+        if (hitObj != NULL) {
+            def_se_set(i_this, hitObj, 0x21);
+        }
+        sitem_s* dst = &i_this->mSitem2[0];
+        sitem_s* src = &i_this->mSitem1[0];
+        for (int i = 0; i < 5; i++) {
+            dst[i] = src[i];
+            if (i == 4) {
+                cXyz sp1C = dst[i].mPos - src[i].mPos;
+                f32 mag = PSVECSquareMag(&sp1C);
+                if (mag > 0.0f) {
+                    mag = std::sqrtf(mag);
+                }
+                i_this->mHandPos.z = (1.5f + REG0_F(5)) * mag;
+            }
+        }
+    }
 }
 
 /* 00002684-000026F4       .text daSitem_Execute__FP11sitem_class */
