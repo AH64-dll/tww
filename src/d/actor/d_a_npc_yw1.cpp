@@ -11,6 +11,7 @@ daNpc_Yw1_childHIO_c::daNpc_Yw1_childHIO_c() {}
 
 /* 00000150-000001DC       .text __ct__15daNpc_Yw1_HIO_cFv */
 daNpc_Yw1_HIO_c::daNpc_Yw1_HIO_c() {
+    /* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX      */ 0x2000,
         /* mMaxHeadY      */ 0x1E78,
