@@ -9,6 +9,7 @@
 #include "d/actor/d_a_leaflift.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_lib.h"
+#include "d/d_particle.h"
 #include "d/d_snap.h"
 #include "res/Object/De.h"
 
@@ -197,13 +198,19 @@ BOOL daNpc_De1_c::setAnm() {
 }
 
 /* 000007AC-000007B8       .text chngAnmTag__11daNpc_De1_cFv */
-bool daNpc_De1_c::chngAnmTag() {
-    return mAnmTag != 0;
+void daNpc_De1_c::chngAnmTag() {
+    switch (mAnmTag) {
+        case 0:
+            break;
+    }
 }
 
 /* 000007B8-000007C4       .text ctrlAnmTag__11daNpc_De1_cFv */
-bool daNpc_De1_c::ctrlAnmTag() {
-    return mAnmAtr != 0;
+void daNpc_De1_c::ctrlAnmTag() {
+    switch (mAnmAtr) {
+        case 0:
+            break;
+    }
 }
 
 /* 000007C4-00000800       .text chngAnmAtr__11daNpc_De1_cFUc */
@@ -591,9 +598,7 @@ void daNpc_De1_c::cc_set() {
 /* 000014A0-00001524       .text set_pa_happa__11daNpc_De1_cFv */
 void daNpc_De1_c::set_pa_happa() {
     mEcallBack.remove();
-    cXyz pos(0.0f, 0.0f, 0.0f);
-    pos.x = fopAcM_GetRoomNo(this);
-    dComIfGp_particle_set(0x7EBA, &pos, NULL, &mParticlePos, 0, &mEcallBack, 0xFF, NULL, NULL, NULL);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKU_HAPPA00, &mParticlePos, &current.angle, NULL, 0xFF, &mEcallBack, fopAcM_GetRoomNo(this), NULL, NULL, NULL);
 }
 
 /* 00001524-00001550       .text del_pa_happa__11daNpc_De1_cFv */

@@ -23,8 +23,8 @@ public:
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     BOOL setAnm();
-    bool chngAnmTag();
-    bool ctrlAnmTag();
+    void chngAnmTag();
+    void ctrlAnmTag();
     void chngAnmAtr(u8);
     void ctrlAnmAtr();
     void setAnm_ATR();
