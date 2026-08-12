@@ -9,36 +9,60 @@
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
 u8 daNpc_Uk_c::getType() {
-    return 0;
+    return fopAcM_GetParam(this) & 0xFF;
 }
 
 /* 000000F8-00000104       .text getPath__10daNpc_Uk_cFv */
 u8 daNpc_Uk_c::getPath() {
-    return 0;
+    return fopAcM_GetParam(this) >> 8 & 0xFF;
 }
 
 /* 00000104-00000110       .text getShapeType__10daNpc_Uk_cFv */
-u8 daNpc_Uk_c::getShapeType() {
-    return 0;
+int daNpc_Uk_c::getShapeType() {
+    return (fopAcM_GetParam(this) >> 16) & 0xF;
 }
 
 /* 00000110-0000015C       .text getCaughtFlag__10daNpc_Uk_cFv */
 u16 daNpc_Uk_c::getCaughtFlag() {
-    return 0;
+    switch (getShapeType()) {
+    case 1:
+        return 0x8;
+    case 2:
+        return 0x4;
+    default:
+        return 0x10;
+    }
 }
 
 /* 0000015C-000001A8       .text getFoundFlag__10daNpc_Uk_cFv */
 u16 daNpc_Uk_c::getFoundFlag() {
-    return 0;
+    switch (getShapeType()) {
+    case 1:
+        return 0x180;
+    case 2:
+        return 0x140;
+    default:
+        return 1;
+    }
 }
 
 /* 000001A8-000001F4       .text getFirstTalk__10daNpc_Uk_cFv */
 u32 daNpc_Uk_c::getFirstTalk() {
-    return 0;
+    switch (getShapeType()) {
+    case 0:
+        return 0x1202;
+    case 1:
+        return 0x1204;
+    default:
+        return 0x1201;
+    }
 }
 
 /* 000001F4-0000026C       .text chkGameStart__10daNpc_Uk_cFv */
 BOOL daNpc_Uk_c::chkGameStart() {
+    if (dComIfGs_isTmpBit(0x40) && !dComIfGs_isTmpBit(getCaughtFlag())) {
+        return TRUE;
+    }
     return FALSE;
 }
 

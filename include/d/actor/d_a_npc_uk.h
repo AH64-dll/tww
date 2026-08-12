@@ -69,7 +69,7 @@ public:
 
     u8 getType();
     u8 getPath();
-    u8 getShapeType();
+    int getShapeType();
     u16 getCaughtFlag();
     u16 getFoundFlag();
     u32 getFirstTalk();
