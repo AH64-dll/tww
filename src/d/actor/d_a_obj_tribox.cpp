@@ -188,7 +188,7 @@ namespace daObjTribox {
 
     /* 00000748-00000840       .text controll_set__Q211daObjTribox5Act_cFv */
     void Act_c::controll_set() {
-        if (argument == 0) {
+        if (base.base.mInitState == 0) {
             if (prm_get_type() == 1) {
                 fpcPi_Change(&base.base.mPi, -3, 2, 0xFFFD);
                 if (M_c_cont_cnt == 0) {
@@ -534,28 +534,28 @@ namespace daObjTribox {
     /* 000021CC-00002268       .text sound_sink_down_block__Q211daObjTribox5Act_cFv */
     void Act_c::sound_sink_down_block() {
         if (m38E) {
-            mDoAud_seStart(0x6222, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(home.roomNo));
+            mDoAud_seStart(0x6222, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(current.roomNo));
         }
     }
 
     /* 00002268-00002304       .text sound_sink_stop_block__Q211daObjTribox5Act_cFv */
     void Act_c::sound_sink_stop_block() {
         if (m38E) {
-            mDoAud_seStart(0x6A2C, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(home.roomNo));
+            mDoAud_seStart(0x6A2C, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(current.roomNo));
         }
     }
 
     /* 00002304-000023A0       .text sound_flash_shine__Q211daObjTribox5Act_cFv */
     void Act_c::sound_flash_shine() {
         if (m38E) {
-            mDoAud_seStart(0x6A24, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(home.roomNo));
+            mDoAud_seStart(0x6A24, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(current.roomNo));
         }
     }
 
     /* 000023A0-0000243C       .text sound_flash_light__Q211daObjTribox5Act_cFv */
     void Act_c::sound_flash_light() {
         if (m38E) {
-            mDoAud_seStart(0x6223, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(home.roomNo));
+            mDoAud_seStart(0x6223, &M_sound_pos, sound_get_mapinfo(M_sound_pos), dComIfGp_getReverb(current.roomNo));
         }
     }
 
@@ -635,7 +635,7 @@ namespace daObjTribox {
             m350 = (m350 + m358) % 6;
             if (chk_wall(1)) {
                 int mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(M_lin);
-                mDoAud_seStart(0x2823, &eyePos, mtrlSndId, dComIfGp_getReverb(home.roomNo));
+                mDoAud_seStart(0x2823, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo));
             }
             mode_block_wait_init();
             return;
@@ -648,7 +648,7 @@ namespace daObjTribox {
         if (dComIfG_Bgsp()->GroundCross(&gndChk)) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
         }
-        mDoAud_seStart(0x2022, &eyePos, mtrlSndId, dComIfGp_getReverb(home.roomNo));
+        mDoAud_seStart(0x2022, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo));
     }
 
     /* 00002B34-00002B90       .text mode_block_sink_init__Q211daObjTribox5Act_cFv */
