@@ -555,10 +555,8 @@ void daNpcSv_c::executeSetMode(u8 proc) {
 
 /* 00001000-00001080       .text executeWaitInit__9daNpcSv_cFv */
 s32 daNpcSv_c::executeWaitInit() {
-    /* Nonmatching */
     setAnmTbl(&l_npc_anm_wait);
-    sSvNpcDat* npcDat = &l_npc_dat[mNpcNo];
-    m_jnt.setParam(npcDat->mMaxHeadX, npcDat->mMaxHeadY, npcDat->mMaxBackboneX, npcDat->mMaxBackboneY, npcDat->mMinHeadX, npcDat->mMinHeadY, npcDat->mMinBackboneX, npcDat->mMinBackboneY, npcDat->mMaxTurnStep);
+    m_jnt.setParam(l_npc_dat[mNpcNo].mMaxBackboneX, l_npc_dat[mNpcNo].mMaxBackboneY, l_npc_dat[mNpcNo].mMinBackboneX, l_npc_dat[mNpcNo].mMinBackboneY, l_npc_dat[mNpcNo].mMaxHeadX, l_npc_dat[mNpcNo].mMaxHeadY, l_npc_dat[mNpcNo].mMinHeadX, l_npc_dat[mNpcNo].mMinHeadY, l_npc_dat[mNpcNo].mMaxTurnStep);
     return 0;
 }
 
@@ -720,8 +718,7 @@ void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
 }
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
-s32 daNpcSv_c::eventMesSet() {
-    /* Nonmatching */
+bool daNpcSv_c::eventMesSet() {
     return talk2(0, this) == 0x12;
 }
 
@@ -735,7 +732,7 @@ void daNpcSv_c::eventGetItemInit(int i_staffIdx) {
     } else {
         itemNo = m714;
     }
-    int proc = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, (s8)attention_info.distances[fopAc_Attn_TYPE_TALK_e], NULL, NULL);
+    int proc = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, fopAcM_GetRoomNo(this), NULL, NULL);
     if((u32)(proc + 0x10000) != 0xFFFF) {
         dComIfGp_event_setItemPartnerId(proc);
     }

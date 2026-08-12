@@ -66,7 +66,7 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    s32 eventMesSet();
+    bool eventMesSet();
     void eventGetItemInit(int);
     s32 eventGetItem();
     void eventSetAngleInit();
