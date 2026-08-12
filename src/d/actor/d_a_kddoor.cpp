@@ -268,7 +268,8 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_this) {
 
         if (sub->mScale[0] > 0.9f) {
             if (sub->mSoundTimer == 0) {
-                fopAcM_seStart(i_this, JA_SE_OBJ_SHOKU_LIFT_MOVE, 0);
+                JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SHOKU_LIFT_MOVE, (Vec*)&i_this->eyePos, 0,
+                                                dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 sub->mSoundTimer = (u8)(50.0f + 30.0f * cM_rnd());
             } else {
                 sub->mSoundTimer--;
