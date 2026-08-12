@@ -605,6 +605,7 @@ static cPhs_State phase_2(daNpcAuction_c* i_this) {
 
 /* 00000B4C-00000E74       .text createHeap__14daNpcAuction_cFv */
 BOOL daNpcAuction_c::createHeap() {
+    /* Nonmatching - per-symbol 99.9951 (fresh committed-state .o, 2026-08-12) */
     J3DModelData* bmd = (J3DModelData*)dComIfG_getObjectIDRes(
         l_arcname_tbl[mDataNo], (u16)l_bmd_ix_tbl[mDataNo]);
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
