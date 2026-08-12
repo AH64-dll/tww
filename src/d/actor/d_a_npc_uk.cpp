@@ -978,7 +978,7 @@ bool daNpc_Uk_c::talk02() {
             fopAcM_orderChangeEventId(this, mEventIdx, 0, 0xFFFF);
             mDoAud_seStart(JA_SE_END_WHISTLE);
             mState = STATE_DEMO02;
-            mPrevState = STATE_RUNAWAY;
+            mPrevState = STATE_5;
         }
         clrFlag(0x1);
         mAttentionTimer = 5;
@@ -1169,7 +1169,7 @@ bool daNpc_Uk_c::runaway() {
     if (mAnmIdx == 4) {
         cLib_chaseF(&speedF, mUkStatic.getSpeedF(15.0f, 18.0f), 2.8f);
     }
-    return true;
+    return false;
 }
 
 /* 00003148-000031E8       .text jump__10daNpc_Uk_cFv */
