@@ -650,7 +650,7 @@ u8 daNpc_Gk1_c::chk_attn() {
     s16 angle_diff = target_angle - current.angle.y;
     if (m7B1 == 1) {
         u8 ret = FALSE;
-        BOOL flag = FALSE;
+        u8 flag = ret;
         if (dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 90.0f) {
             flag = TRUE;
         }
@@ -660,7 +660,7 @@ u8 daNpc_Gk1_c::chk_attn() {
         return ret;
     } else {
         u8 ret = FALSE;
-        BOOL flag = FALSE;
+        u8 flag = ret;
         if (dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 60.0f) {
             flag = TRUE;
         }
