@@ -123,7 +123,7 @@ void daNpc_Ac1_c::nodeAc1Control(J3DNode* i_node, J3DModel* i_model) {
 }
 
 /* 000005A8-00000640       .text init_AC1_0__11daNpc_Ac1_cFv */
-/* Nonmatching: symbol/reloc naming only */
+/* Nonmatching: pure regalloc (subfe/clrlwi r30-vs-r0 swap, orig tests masked copy in r0, returns unmasked r30) */
 u8 daNpc_Ac1_c::init_AC1_0() {
     u8 ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) != 0;
     if (ret != 0) {
