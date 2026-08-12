@@ -51,6 +51,7 @@ public:
 
     daNpcAuction_c();
 
+    cPhs_State create();
     static const char m_arcname[4];
 
     request_of_phase_process_class* getPhaseP() { return &mPhs; }

@@ -15,6 +15,7 @@
 
 // daAuction_c members needed by this actor (d_a_auction.h keeps them private)
 struct daAuction_Access_c {
+    /* 0x000 */ u8 mPad[0x738];
     /* 0x738 */ fpc_ProcID mNpcID[8];
     /* 0x80C */ u8 mNpcNoTbl[8];
     /* 0x814 */ u8 mAucMdlNo[8];
@@ -66,7 +67,7 @@ static const int l_head_bmd_ix_tbl[] = {
 };
 
 /* 00000064-00000070       .rodata l_photo_no */
-static const char l_photo_no[] = "dghijkklmn__";
+static const char l_photo_no[12] = {'d', 'g', 'h', 'i', 'j', 'k', 'k', 'l', 'm', 'n', '_', '_'};
 
 /* 00000070-00000250       .rodata l_bck_ix_tbl */
 static const int l_bck_ix_tbl[][10] = {
@@ -74,9 +75,9 @@ static const int l_bck_ix_tbl[][10] = {
         dRes_ID_AUC_BCK_UM_WAIT01_e,
         dRes_ID_AUC_BCK_UM_TALK01_e,
         dRes_ID_AUC_BCK_UM_NEWSATU_e,
+        dRes_ID_AUC_BCK_UM_DOUSHO_e,
         dRes_ID_AUC_BCK_UM_KUYASI_e,
         dRes_ID_AUC_BCK_UM_GET_e,
-        dRes_ID_AUC_BCK_UM_DOUSHO_e,
         dRes_ID_AUC_BCK_UM_WAIT01_e,
         dRes_ID_AUC_BCK_UM_WAIT01_e,
         dRes_ID_AUC_BCK_UM_HAPPY_e,
@@ -87,94 +88,94 @@ static const int l_bck_ix_tbl[][10] = {
         dRes_ID_AUC_BCK_UW_TALK02_e,
         dRes_ID_AUC_BCK_UW_NEWSATU_e,
         dRes_ID_AUC_BCK_UW_DOUSHO_e,
-        dRes_ID_AUC_BCK_UW_GET_e,
         dRes_ID_AUC_BCK_UW_KUYASI_e,
+        dRes_ID_AUC_BCK_UW_GET_e,
         dRes_ID_AUC_BCK_UW_WAIT02_e,
         dRes_ID_AUC_BCK_UW_WAIT02_e,
         dRes_ID_AUC_BCK_UW_HAPPY_e,
         dRes_ID_AUC_BCK_UW_02HOKAN_e,
     },
     {
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
         dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_DOUSHO_e,
         dRes_ID_AUC_BCK_UO_KUYASI_e,
         dRes_ID_AUC_BCK_UO_GET_e,
-        dRes_ID_AUC_BCK_UO_DOUSHO_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
     },
     {
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
         dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_DOUSHO_e,
         dRes_ID_AUC_BCK_UO_KUYASI_e,
         dRes_ID_AUC_BCK_UO_GET_e,
-        dRes_ID_AUC_BCK_UO_DOUSHO_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
     },
     {
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
         dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_DOUSHO_e,
         dRes_ID_AUC_BCK_UO_KUYASI_e,
         dRes_ID_AUC_BCK_UO_GET_e,
-        dRes_ID_AUC_BCK_UO_DOUSHO_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
         dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
-        dRes_ID_AUC_BCK_UO_NEWSATU_e,
-        dRes_ID_AUC_BCK_UO_TALK01_e,
+        dRes_ID_AUC_BCK_UO_WAIT01_e,
     },
     {
-        dRes_ID_AUC_BCK_UB_YADA_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_NEWSATU_e,
         dRes_ID_AUC_BCK_UB_DOUSHO_e,
+        dRes_ID_AUC_BCK_UB_KUYASI_e,
         dRes_ID_AUC_BCK_UB_GET_e,
         dRes_ID_AUC_BCK_UB_WAIT01_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_TALK01_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
-    },
-    {
-        dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_TALK01_e,
-        dRes_ID_AUC_BCK_UB_NEWSATU_e,
-        dRes_ID_AUC_BCK_UB_DOUSHO_e,
-        dRes_ID_AUC_BCK_UB_GET_e,
         dRes_ID_AUC_BCK_UB_WAIT01_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_YADA_e,
     },
     {
-        dRes_ID_AUC_BCK_UB_YADA_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_NEWSATU_e,
         dRes_ID_AUC_BCK_UB_DOUSHO_e,
+        dRes_ID_AUC_BCK_UB_KUYASI_e,
         dRes_ID_AUC_BCK_UB_GET_e,
         dRes_ID_AUC_BCK_UB_WAIT01_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_YADA_e,
     },
     {
-        dRes_ID_AUC_BCK_UB_YADA_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_NEWSATU_e,
         dRes_ID_AUC_BCK_UB_DOUSHO_e,
+        dRes_ID_AUC_BCK_UB_KUYASI_e,
         dRes_ID_AUC_BCK_UB_GET_e,
         dRes_ID_AUC_BCK_UB_WAIT01_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
+        dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_YADA_e,
-        dRes_ID_AUC_BCK_UB_YADA_e,
+    },
+    {
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
+        dRes_ID_AUC_BCK_UB_TALK01_e,
+        dRes_ID_AUC_BCK_UB_NEWSATU_e,
+        dRes_ID_AUC_BCK_UB_DOUSHO_e,
+        dRes_ID_AUC_BCK_UB_KUYASI_e,
+        dRes_ID_AUC_BCK_UB_GET_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
+        dRes_ID_AUC_BCK_UB_WAIT01_e,
         dRes_ID_AUC_BCK_UB_TALK01_e,
         dRes_ID_AUC_BCK_UB_YADA_e,
     },
@@ -183,35 +184,35 @@ static const int l_bck_ix_tbl[][10] = {
         dRes_ID_AUC_BCK_SA_TALK01_e,
         dRes_ID_AUC_BCK_SA_NEWSATU_e,
         dRes_ID_AUC_BCK_SA_DOUSHO_e,
-        dRes_ID_AUC_BCK_SA_GET_e,
         dRes_ID_AUC_BCK_SA_KUYASI_e,
+        dRes_ID_AUC_BCK_SA_GET_e,
         dRes_ID_AUC_BCK_SA_WAIT01_e,
         dRes_ID_AUC_BCK_SA_WAIT01_e,
         dRes_ID_AUC_BCK_SA_TALK01_e,
         dRes_ID_AUC_BCK_SA_WAIT01_e,
     },
     {
-        dRes_ID_RS2_BCK_RS_WAIT02_e,
+        dRes_ID_RS2_BCK_RS_WAIT01_e,
         dRes_ID_RS2_BCK_RS_TALK01_e,
         dRes_ID_RS2_BCK_RS_TALK02_e,
         dRes_ID_RS2_BCK_RS_TALK03_e,
-        dRes_ID_RS2_BCK_RS_PUSH_e,
+        dRes_ID_RS2_BCK_RS_SWING_e,
         dRes_ID_RS2_BCK_RS_TAME_e,
         dRes_ID_RS2_BCK_RS_JAMP_e,
-        dRes_ID_RS2_BCK_RS_WAIT02_e,
-        dRes_ID_RS2_BCK_RS_WAIT02_e,
+        dRes_ID_RS2_BCK_RS_WAIT01_e,
+        dRes_ID_RS2_BCK_RS_WAIT01_e,
         dRes_ID_RS2_BCK_RS_JAMP_e,
     },
     {
-        dRes_ID_RS2_BCK_RS_WAIT01_e,
+        dRes_ID_RS2_BCK_RS_WAIT02_e,
         dRes_ID_RS2_BCK_RS_TALK01_e,
         dRes_ID_RS2_BCK_RS_TALK02_e,
         dRes_ID_RS2_BCK_RS_TALK03_e,
-        dRes_ID_RS2_BCK_RS_PUSH_e,
+        dRes_ID_RS2_BCK_RS_SWING_e,
         dRes_ID_RS2_BCK_RS_TAME_e,
         dRes_ID_RS2_BCK_RS_JAMP_e,
-        dRes_ID_RS2_BCK_RS_WAIT01_e,
-        dRes_ID_RS2_BCK_RS_WAIT01_e,
+        dRes_ID_RS2_BCK_RS_WAIT02_e,
+        dRes_ID_RS2_BCK_RS_WAIT02_e,
         dRes_ID_RS2_BCK_RS_JAMP_e,
     },
 };
@@ -277,17 +278,17 @@ static const int l_kind_max[][2] = {
 };
 
 /* 00000030-00000060       .data l_arcname_tbl */
-static const char* l_arcname_tbl[] = {
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
-    daNpcAuction_c::m_arcname,
+static char* l_arcname_tbl[] = {
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
+    "Auc",
     "Rs2",
     "Rs2",
 };
@@ -362,7 +363,7 @@ static sAnmDat l_npc_anm_dousho[] = {
 };
 
 /* 000000A4-00000134       .data l_npc_msg_id */
-static const u32 l_npc_msg_id[12][3] = {
+static u32 l_npc_msg_id[12][3] = {
     { 0x1D26, 0x1D27, 0x1D28 },
     { 0x1D29, 0x1D2A, 0x1D2B },
     { 0x1D2C, 0x1D2D, 0x1D2E },
@@ -391,9 +392,11 @@ static char* l_npc_staff_id[] = {
 
 static BOOL daNpc_Auction_nodeCallBack1(J3DNode*, int);
 static BOOL daNpc_Auction_nodeCallBack2(J3DNode*, int);
+static cPhs_State phase_1(daNpcAuction_c*);
+static cPhs_State phase_2(daNpcAuction_c*);
 
 /* 00000154-00000174       .data l_node_call_back_tbl */
-static const J3DNodeCallBack l_node_call_back_tbl[] = {
+static J3DNodeCallBack l_node_call_back_tbl[] = {
     daNpc_Auction_nodeCallBack1,
     daNpc_Auction_nodeCallBack2,
     daNpc_Auction_nodeCallBack2,
@@ -402,28 +405,6 @@ static const J3DNodeCallBack l_node_call_back_tbl[] = {
     daNpc_Auction_nodeCallBack2,
     daNpc_Auction_nodeCallBack2,
     daNpc_Auction_nodeCallBack1,
-};
-
-/* 0000018C-00000194       .data cut_name_tbl */
-static const char* cut_name_tbl[] = {
-    "MAIN",
-    "MES_SET",
-};
-
-/* 000001D4-00000204       .data l_mdl_status */
-static const u32 l_mdl_status[] = {
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000027,
-    0x00000027,
 };
 
 /* 000000DC-0000034C       .bss l_npc_dat */
@@ -453,6 +434,16 @@ static daNpc_Auction2_HIO_c l_npc_dat[] = {
     daNpc_Auction2_HIO_c(-20.0f, 0x0200, 0x1388, 0x0200, 0x1770, -0x0200, -0x1388, -0x0200,
                          -0x1770, 0x1000, 0x0800, 140.0f, 0x7FFF, 0, 0.0f, 80.0f, 0.0f, 120.0f),
 };
+
+/* 000029DC-00002A0C       .text create__14daNpcAuction_cFv */
+cPhs_State daNpcAuction_c::create() {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)&phase_1,
+        (cPhs__Handler)&phase_2,
+        NULL,
+    };
+    return dComLbG_PhaseHandler(&mPhs, l_method, this);
+}
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
 daNpcAuction_c::daNpcAuction_c() {
@@ -540,7 +531,7 @@ static cPhs_State phase_1(daNpcAuction_c* i_this) {
     npc_no = AUC->mNpcNoTbl[i_this->getPrmNpcNo()];
     i_this->mNpcNo = npc_no;
     s32 procID = fopAcM_GetID(i_this);
-    if (npc_no > 7 || AUC->mNpcID[npc_no] == 0xFFFF) {
+    if (npc_no > 7 || AUC->mNpcID[npc_no] == -1) {
         AUC->mNpcID[npc_no] = procID;
     } else {
         return cPhs_NEXT_e;
@@ -792,6 +783,10 @@ void daNpcAuction_c::eventMove() {
 
 /* 000013FC-00001548       .text privateCut__14daNpcAuction_cFv */
 void daNpcAuction_c::privateCut() {
+    static char* cut_name_tbl[] = {
+        "MAIN",
+        "MES_SET",
+    };
     dEvent_manager_c* evm = dComIfGp_getPEvtManager();
     s32 staffId = evm->getMyStaffId(l_npc_staff_id[mNpcNo], NULL, 0);
     if (staffId != -1) {
@@ -1154,6 +1149,22 @@ void daNpcAuction_c::setAnmFromMsgTag() {
     dComIfGp_setSelectItem(0);
 }
 
+/* 000001D4-00000204       .data l_mdl_status */
+static u32 l_mdl_status[] = {
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000027,
+    0x00000027,
+};
+
 /* 00002070-00002090       .text getPrmNpcNo__14daNpcAuction_cFv */
 u8 daNpcAuction_c::getPrmNpcNo() {
     s8 prm = argument;
@@ -1374,13 +1385,7 @@ void daNpcAuction_c::clrEmitter() {
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
 static cPhs_State daNpc_AuctionCreate(void* i_this) {
-    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
-    static cPhs__Handler l_method[] = {
-        (cPhs__Handler)&phase_1,
-        (cPhs__Handler)&phase_2,
-        NULL,
-    };
-    return dComLbG_PhaseHandler(&actor->mPhs, l_method, actor);
+    return ((daNpcAuction_c*)i_this)->create();
 }
 
 /* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */
