@@ -385,29 +385,50 @@ void mant_v_calc(mant_class* i_this) {
 
 /* 000015F0-000017EC       .text mant_n_calc__FP10mant_class */
 void mant_n_calc(mant_class* i_this) {
-    cXyz local_30(0.0f, 0.0f, 1.0f);
-    cXyz local_24;
+    s16 angle;
+    cXyz local_20;
+    cXyz cStack_2c;
+    cXyz local_44;
+    volatile f32 tmp;
+
+    local_20.x = 0.0f;
+    local_20.y = 0.0f;
+    local_20.z = 1.0f;
+
     mDoMtx_YrotS(*calc_mtx, 0x4FA0);
-    MtxPosition(&local_30, &local_24);
+    MtxPosition(&local_20, &cStack_2c);
 
-    cXyz* v_pos = &i_this->mPacket.mPosArr[i_this->mPacket.mType * (0x3CC / 0xC)];
-    cXyz* nrm = &i_this->mPacket.mNrmArr[i_this->mPacket.mType * (0x3CC / 0xC)];
-
-    for (s32 i = 0; i < 0x51; i++) {
-        if (i == 8 || i == 0x11 || i == 0x1A || i == 0x23 || i == 0x2C || i == 0x35 || i == 0x3E || i == 0x47) {
-            nrm[i] = nrm[i - 1];
-        } else if (i >= 0x48) {
-            nrm[i] = nrm[i - 9];
+    cXyz* pcVar3 = (cXyz*)((u8*)i_this + 0x310 + i_this->mPacket.mType * 0x3CC);
+    cXyz* pDst = (cXyz*)((u8*)i_this + 0xAA8 + i_this->mPacket.mType * 0x3CC);
+    for (int i = 0; i < 0x51; i++, pcVar3++, pDst++) {
+        if (((((i == 8) || (i == 0x11)) || (i == 0x1a)) || ((i == 0x23 || (i == 0x2c)))) ||
+           ((i == 0x35 || ((i == 0x3e || (i == 0x47)))))) {
+            pDst->x = pDst[-1].x;
+            pDst->y = pDst[-1].y;
+            pDst->z = pDst[-1].z;
+        } else if (!(i < 0x48)) {
+            pDst->x = pDst[-9].x;
+            pDst->y = pDst[-9].y;
+            pDst->z = pDst[-9].z;
         } else {
-            cXyz local_C = v_pos[i + 10] - v_pos[i];
-            cXyz local_18 = local_C;
-            mDoMtx_YrotS(*calc_mtx, cM_atan2s(local_C.x, local_C.z));
-            f32 dist = local_18.x * local_18.x + local_18.z * local_18.z;
-            if (dist > 0.0f) {
-                dist = std::sqrtf(dist);
+            local_44 = pcVar3[10] - pcVar3[0];
+            angle = cM_atan2s(local_44.x, local_44.z);
+            mDoMtx_YrotS(*calc_mtx, angle);
+            {
+                f32 dVar5 = local_44.x * local_44.x + local_44.z * local_44.z;
+                if (dVar5 > 0.0f) {
+                    const double half = 0.5;
+                    const double three = 3.0;
+                    double guess = __frsqrte(dVar5);
+                    guess = half * guess * (three - guess * guess * dVar5);
+                    guess = half * guess * (three - guess * guess * dVar5);
+                    guess = half * guess * (three - guess * guess * dVar5);
+                    tmp = (f32)(dVar5 * guess);
+                    dVar5 = tmp;
+                }
+                mDoMtx_XrotM(*calc_mtx, -cM_atan2s(local_44.y, dVar5));
             }
-            mDoMtx_XrotM(*calc_mtx, -cM_atan2s(local_18.y, dist));
-            MtxPosition(&local_24, &nrm[i]);
+            MtxPosition(&cStack_2c, pDst);
         }
     }
 }
