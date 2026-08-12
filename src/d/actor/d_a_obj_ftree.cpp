@@ -345,10 +345,12 @@ BOOL daObjFtree::Act_c::is_brought() {
 /* 00001138-000011FC       .text set_broughtID__Q210daObjFtree5Act_cFi */
 void daObjFtree::Act_c::set_broughtID(int i_id) {
     u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
-    u8 bit = 1 << (i_id & 7);
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg | bit);
+    int bit = 1 << (i_id & 7);
+    u8 value = reg | bit;
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, value);
     reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9AFF);
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9AFF, reg | bit);
+    value = reg | bit;
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9AFF, value);
 
     _ftree_seach_info_ info;
     get_ftree_info(&info);
@@ -371,9 +373,10 @@ void daObjFtree::Act_c::set_brought() {
 
 /* 00001260-000012D0       .text unset_broughtID__Q210daObjFtree5Act_cFi */
 void daObjFtree::Act_c::unset_broughtID(int i_id) {
-    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF);
-    u8 bit = 1 << (i_id & 7);
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, reg & ~bit);
+    dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
+    u8 reg = event->getEventReg(dSv_event_flag_c::UNK_9EFF);
+    int bit = 1 << (i_id & 7);
+    event->setEventReg(dSv_event_flag_c::UNK_9EFF, reg & ~bit);
 }
 
 /* 000012D0-00001334       .text unset_brought__Q210daObjFtree5Act_cFv */
