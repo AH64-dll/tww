@@ -229,18 +229,16 @@ u8 daNpc_Uk_c::nextVisitMode() {
 
 /* 000008B0-00000930       .text approachRun__10daNpc_Uk_cFP10fopAc_ac_c */
     /* Nonmatching */
-BOOL daNpc_Uk_c::approachRun(fopAc_ac_c* i_pTarget) {
+void daNpc_Uk_c::approachRun(fopAc_ac_c* i_pTarget) {
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, i_pTarget->current.pos, NULL, &angle);
     cLib_addCalcAngleS2(&current.angle.y, angle, 8, 0x800);
-    return TRUE;
 }
 
 /* 00000930-00000964       .text aroundWalk__10daNpc_Uk_cFP10fopAc_ac_c */
     /* Nonmatching */
-BOOL daNpc_Uk_c::aroundWalk(fopAc_ac_c* i_pTarget) {
+void daNpc_Uk_c::aroundWalk(fopAc_ac_c* i_pTarget) {
     mUkStatic.aroundWalk(this, i_pTarget, mRunAroundLinkTimer);
-    return TRUE;
 }
 
 /* 00000964-00000AD4       .text surrender__10daNpc_Uk_cFv */
@@ -728,12 +726,15 @@ void daNpc_Uk_c::setAttention(bool param_1) {
 /* 00001E38-00001F5C       .text getLookBackMode__10daNpc_Uk_cFv */
     /* Nonmatching */
 u8 daNpc_Uk_c::getLookBackMode() {
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+    u32 localId = mLookActorId;
+    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &localId);
     if (pActor != NULL && mState == STATE_VISIT) {
         if (mVisitMode == VISIT_WAIT || mVisitMode == VISIT_NOTICE_LINK) {
             return 3;
         }
-        if (((daNpc_Uk_c*)pActor)->mAnmIdx == 8 || ((daNpc_Uk_c*)pActor)->mAnmIdx == 9) {
+        BOOL isWalking = ((daNpc_Mk_c*)pActor)->mVisitMode == daNpc_Mk_c::VISIT_WALK_PATH_FAST ||
+                         ((daNpc_Mk_c*)pActor)->mVisitMode == daNpc_Mk_c::VISIT_WALK_PATH_IGNORE_LINK;
+        if (isWalking) {
             return 2;
         }
     }
@@ -762,14 +763,18 @@ u8 daNpc_Uk_c::getLookBackMode() {
 /* 00001F5C-0000218C       .text lookBack__10daNpc_Uk_cFv */
     /* Nonmatching */
 void daNpc_Uk_c::lookBack() {
+    u32 localId = mLookActorId;
+    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &localId);
     cXyz temp2;
     cXyz temp(0.0f, 0.0f, 0.0f);
     cXyz* dstPos = NULL;
     s16 desiredYRot = current.angle.y;
     bool headOnlyFollow = false;
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+    u8 lookMode = getLookBackMode();
+    temp.set(current.pos);
+    temp.y = eyePos.y;
 
-    switch (getLookBackMode()) {
+    switch (lookMode) {
     case 0:
         m_jnt.setTrn();
         temp2 = dNpc_playerEyePos(-20.0f);
@@ -786,7 +791,8 @@ void daNpc_Uk_c::lookBack() {
         break;
     case 3:
         m_jnt.setTrn();
-        temp2.set(pActor->current.pos.x, pActor->eyePos.y, pActor->current.pos.z);
+        temp2 = pActor->current.pos;
+        temp2.y = pActor->eyePos.y;
         dstPos = &temp2;
         break;
     case 4: {
@@ -874,7 +880,7 @@ void daNpc_Uk_c::visitInit(u8 i_nextVisitMode) {
     case VISIT_WALK_PATH:
         setAnm(4, 0);
         break;
-    case VISIT_RUN_LINK:
+    case VISIT_REACHED_LINK:
         setAnm(4, 0);
         if (mVisitMode == VISIT_WAIT_2) {
             mTimerToReachLink = 0x2D;
@@ -882,33 +888,34 @@ void daNpc_Uk_c::visitInit(u8 i_nextVisitMode) {
             mTimerToReachLink = 0;
         }
         break;
+    case VISIT_RUN_LINK:
     case VISIT_WALK_AROUND_LINK:
         setAnm(3, 0);
         break;
-    case VISIT_REACHED_LINK:
-        setAnm(4, 0);
-        if (mVisitMode == VISIT_WALK_PATH || mVisitMode == VISIT_WAIT || mVisitMode == VISIT_WAIT_2) {
+    case VISIT_LEFT_PATH:
+        if (mVisitMode == VISIT_WAIT_2 || mVisitMode == VISIT_WAIT || mVisitMode == VISIT_WALK_PATH) {
             mRunAroundLinkTimer = 0x2D;
         } else {
             mRunAroundLinkTimer = mTimerToReachLink;
         }
+        setAnm(4, 0);
         break;
-    case VISIT_NOTICE_LINK:
+    case VISIT_WAIT:
         setAnm(0, 0);
         mWaitTimer = 5;
         speedF = 0.0f;
         break;
-    case VISIT_LEFT_PATH:
+    case VISIT_WAIT_2:
         setAnm(0, 0);
         mWaitTimer = 0xF;
         speedF = 0.0f;
         break;
-    case VISIT_WAIT:
+    case VISIT_WAIT_3:
         setAnm(0, 0);
         mWaitTimer = 0x1E;
         speedF = 0.0f;
         break;
-    case VISIT_WAIT_2:
+    case VISIT_NOTICE_LINK:
         setAnm(0, 0);
         speedF = 0.0f;
         break;
@@ -1311,6 +1318,9 @@ bool daNpc_Uk_c::demoProc() {
         demoInitCom();
         switch (mEventAction) {
         case 0:
+            speedF = 0.0f;
+            setAnm(0, 0);
+            break;
         case 1:
         case 9:
             speedF = 0.0f;
@@ -1347,6 +1357,14 @@ bool daNpc_Uk_c::demoProc() {
             }
             break;
         }
+        case 13:
+            a_xyz = dComIfGp_evmng_getMyXyzP(mStaffIdx, "Pos");
+            JUT_ASSERT(2027, a_xyz);
+            field_0x6CC = current.pos;
+            field_0x6D8 = *a_xyz;
+            field_0x6E8 = cLib_targetAngleY(&field_0x6CC, &field_0x6D8);
+            setAnm(0, 0);
+            break;
         case 6:
             speedF = 0.0f;
             setFlag(0x10);
@@ -1354,6 +1372,7 @@ bool daNpc_Uk_c::demoProc() {
             mPrevState = STATE_5;
             break;
         case 7:
+            mCurrActionFunc = NULL;
             setAction(&daNpc_Uk_c::visit_action, NULL);
             mPrevState = mState;
             mState = STATE_DEMO01;
@@ -1370,14 +1389,14 @@ bool daNpc_Uk_c::demoProc() {
 
             mMsgNo = *a_intP;
             switch (getShapeType()) {
+            case 0:
+                setAnm(0, 0);
+                break;
             case 1:
                 setAnm(1, 0);
                 break;
-            case 2:
-                setAnm(2, 0);
-                break;
             default:
-                setAnm(0, 0);
+                setAnm(2, 0);
                 break;
             }
             temp = TRUE;
@@ -1385,14 +1404,15 @@ bool daNpc_Uk_c::demoProc() {
         case 10:
             speedF = 0.0f;
             setFlag(0x2);
+            speedF = 0.0f;
             setAnm(5, 1);
             break;
         case 11:
         case 12:
             setFlag(0x2);
             gravity = -3.3f;
-            speed.y = 30.0f;
-            speedF = 10.0f;
+            speed.y = 28.0f;
+            speedF = 12.0f;
             setFlag(0x200);
             setAnm(9, 0);
             switch (getShapeType()) {
@@ -1406,14 +1426,6 @@ bool daNpc_Uk_c::demoProc() {
                 fopAcM_seStart(this, JA_SE_CV_TR_KO_B_RUN_AWAY, 0);
                 break;
             }
-            break;
-        case 13:
-            a_xyz = dComIfGp_evmng_getMyXyzP(mStaffIdx, "Pos");
-            JUT_ASSERT(2027, a_xyz);
-            field_0x6CC = current.pos;
-            field_0x6D8 = *a_xyz;
-            field_0x6E8 = cLib_targetAngleY(&field_0x6CC, &field_0x6D8);
-            setAnm(0, 0);
             break;
         case 14:
             speedF = 0.0f;
@@ -1455,25 +1467,34 @@ bool daNpc_Uk_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
             }
         }
-        return true;
-    }
-    case 8: {
-        u16 temp4 = talk();
-        if (temp4 == fopMsgStts_BOX_CLOSED_e || temp4 == 0xFE) {
-            dComIfGp_evmng_cutEnd(mStaffIdx);
-        }
-        setFlag(0x20);
         break;
     }
-    case 9:
-        setFlag(0x40);
-        dComIfGp_evmng_cutEnd(mStaffIdx);
+    case 13:
+        cLib_addCalcAngleS(&current.angle.y, field_0x6E8, 1, 0x800, 0x800);
+        if (current.angle.y == field_0x6E8) {
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+        }
         break;
     case 1:
     case 2:
         setFlag(0x20);
         dComIfGp_evmng_cutEnd(mStaffIdx);
         break;
+    case 9:
+        setFlag(0x40);
+        dComIfGp_evmng_cutEnd(mStaffIdx);
+        break;
+    case 8: {
+        u16 temp4 = talk();
+        if (temp4 == fopMsgStts_BOX_CLOSED_e || temp4 == 0xFE) {
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+        }
+        setFlag(0x20);
+        if (temp) {
+            return true;
+        }
+        return mpMorf->isMorf();
+    }
     case 10:
         if (chkFlag(0x2)) {
             if (mAnmEnded != 0) {
@@ -1494,25 +1515,25 @@ bool daNpc_Uk_c::demoProc() {
                 clrFlag(0x2);
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 if (mEventAction == 12) {
-                    static cXyz scale = cXyz(0.6f, 0.6f, 0.6f);
-                    dComIfGp_particle_set(0x23, &current.pos, &current.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    static cXyz scale(0.6f, 0.6f, 0.6f);
+                    JPABaseEmitter* emitter = dComIfGp_particle_set(0x23, &current.pos, &current.angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    if (emitter != NULL) {
+                        emitter->setRate(18.0f);
+                        emitter->setSpread(1.0f);
+                        emitter->setMaxFrame(1);
+                    }
                 }
+            } else if (mAnmEnded != 0) {
+                dComIfGp_evmng_cutEnd(mStaffIdx);
             }
-        }
-        return true;
-    case 13:
-        if (cLib_addCalcAngleS(&current.angle.y, field_0x6E8, 1, 0x800, 0x800) == 0) {
-            dComIfGp_evmng_cutEnd(mStaffIdx);
         }
         break;
     default:
+        dComIfGp_evmng_cutEnd(mStaffIdx);
         break;
     }
 
-    if (temp) {
-        return true;
-    }
-    return mpMorf->isMorf();
+    return true;
 }
 
 /* 000040E0-000041B0       .text wait_action__10daNpc_Uk_cFPv */
@@ -1691,6 +1712,8 @@ BOOL daNpc_Uk_c::_draw() {
     g_env_light.setLightTevColorType(pModel, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
+    J3DTexture* matTex;
+    JUTNameTab* matTexName;
     if (getShapeType() != 0) {
         static int table_bmt[] = {
             -1,
@@ -1698,14 +1721,12 @@ BOOL daNpc_Uk_c::_draw() {
             dRes_INDEX_UK_BMT_UK_D_e,
         };
         J3DMaterialTable& matTable = pModelData->getMaterialTable();
-        J3DTexture* matTex = matTable.getTexture();
-        JUTNameTab* matTexName = matTable.getTextureName();
+        matTex = matTable.getTexture();
+        matTexName = matTable.getTextureName();
         pModelData->setMaterialTable(
             (J3DMaterialTable*)dComIfG_getObjectRes("Uk", table_bmt[getShapeType()]),
             J3DMatCopyFlag_Texture
         );
-        matTable.setTexture(matTex);
-        matTable.setTextureName(matTexName);
     }
 
     if (getShapeType() == 1) {
@@ -1713,11 +1734,18 @@ BOOL daNpc_Uk_c::_draw() {
     }
 
     mpMorf->entryDL();
-    PSMTXCopy(pModel->getAnmMtx(m_jnt.getHeadJntNum()), mpModel->getBaseTRMtx());
+    MtxP headMtx = pModel->getAnmMtx(m_jnt.getHeadJntNum());
+    PSMTXCopy(headMtx, mpModel->getBaseTRMtx());
     mDoExt_modelUpdateDL(mpModel);
 
     if (getShapeType() == 1) {
         mBtpAnm.remove(pHeadModelData);
+    }
+
+    if (getShapeType() != 0) {
+        J3DMaterialTable& matTable = pModelData->getMaterialTable();
+        matTable.setTexture(matTex);
+        matTable.setTextureName(matTexName);
     }
 
     cXyz shadowPos(current.pos.x, current.pos.y + 50.0f, current.pos.z);

@@ -108,8 +108,8 @@ public:
     BOOL chkGameStart();
     BOOL chkPositioning(f32, f32, f32, s16, s16);
     u8 nextVisitMode();
-    BOOL approachRun(fopAc_ac_c*);
-    BOOL aroundWalk(fopAc_ac_c*);
+    void approachRun(fopAc_ac_c*);
+    void aroundWalk(fopAc_ac_c*);
     void surrender();
     BOOL runawayInit();
     static BOOL nodeCallBack_Uk(J3DNode*, int);
