@@ -13,6 +13,8 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+const char daNpcMn_c::m_arcname[] = "Mn";
+
 static char* l_npc_staff_id[] = {
     "Mn",
 };
@@ -265,7 +267,7 @@ static char* l_room_name[] = {
     "K_Testb",
 };
 
-static const u16 l_figure_comp[] = {
+static u16 l_figure_comp[] = {
     0x95FF, 0x94FF,
     0x93FF, 0x92FF,
     0x91FF, 0x90FF,
@@ -440,18 +442,18 @@ static s16 daNpcMn_XyCheckCB(void* i_this, int i_param) {
 /* 00000C00-00000F3C       .text createInit__9daNpcMn_cFv */
     /* Nonmatching */
 cPhs_State daNpcMn_c::createInit() {
-    u8 railID = getPrmRailID();
     u8 ret = 0xFF;
+    u8 railID = getPrmRailID();
     if (railID != 0xFF) {
-        mPathRun.setInf(railID, (s8)current.angle.y, 1);
+        mPathRun.setInf(railID, current.roomNo, 1);
         if (!mPathRun.isPath()) {
             return cPhs_ERROR_e;
         }
         dPath_GetNextRoomPath(mPathRun.getPath(), -1);
-        m794 = 0;
+        actor_status &= ~fopAcStts_NOCULLEXEC_e;
         u8 idx = 0;
         while (idx < mPathRun.maxPoint()) {
-            if (mPathRun.pointArg(idx) != 0) {
+            if (mPathRun.getPath()->m_points[idx].mArg0 != 0) {
                 idx++;
                 continue;
             }
@@ -461,11 +463,8 @@ cPhs_State daNpcMn_c::createInit() {
             idx = 0;
         }
         mPathRun.setIdx(idx);
-        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
-        mLookAtX = point.x;
-        mLookAtY = point.y;
-        mLookAtZ = point.z;
-        current.pos.set(point.x, point.y, point.z);
+        old.pos = mPathRun.getPoint(idx);
+        current.pos = old.pos;
         mPathRun.incIdxLoop();
         mTimer = 1;
         ret = 0xFE;
@@ -475,16 +474,16 @@ cPhs_State daNpcMn_c::createInit() {
     setAnmTbl(l_npc_anm_wait);
     mEventIdx = dComIfGp_evmng_getEventIdx("FIGURE_HATCH_OPEN", 0xff);
     eventInfo.mpCheckCB = daNpcMn_XyCheckCB;
-    mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
+    mEventCut.setActorInfo2(l_npc_staff_id[0], this);
     mAngAccel = 0;
     mMode = 0;
     mAttnFlag = 0;
     m7C0 = 0;
     cullMtx = mpMorf->getModel()->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -280.0f, 1.0f, -280.0f, 280.0f, 200.0f, 280.0f);
-    m7BE = 0xAA;
-    m7BF = 0xAA;
-    m790 = 10;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     m_jnt.setParam(
         l_npc_dat[mNpcNo].mMax_backbone_x,
         l_npc_dat[mNpcNo].mMax_backbone_y,
@@ -507,18 +506,19 @@ cPhs_State daNpcMn_c::createInit() {
         current.pos.y = groundY;
     }
     setMtx();
-    mpMorf->getModel()->getBaseTRMtx();
+    mpMorf->getModel()->calc();
     mStts.Init(ret, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
     setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
-    return cPhs_NEXT_e;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000F3C-00000FE4       .text _delete__9daNpcMn_cFv */
     /* Nonmatching */
 bool daNpcMn_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
-    if (m794) {
+    if (heap != NULL) {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
@@ -658,17 +658,19 @@ s32 daNpcMn_c::executeWaitInit() {
 /* 00001518-000017CC       .text executeWait__9daNpcMn_cFv */
     /* Nonmatching */
 void daNpcMn_c::executeWait() {
-    executeCommon();
+    if (executeCommon()) {
+        return;
+    }
     if (mPosNo == 0) {
-        if (dComIfGp_getStartStagePoint() & 0x200000) {
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
             mAttnDist = (f32)(s16)(2.0f * l_npc_dat[mNpcNo].field_0x20);
         } else {
             mAttnDist = l_npc_dat[mNpcNo].field_0x20;
             m7A4 &= 0xFFFE;
         }
-        if (mAttnFlag && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08) && (dComIfGp_getStartStagePoint() & 0x200000)) {
-            m7BE = 1;
-            if (dComIfGp_getMesgAnimeAttrInfo() == 0xB) {
+        if (mAttnFlag && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08) && dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
+            dComIfGp_setScopeType(1);
+            if (dComIfGp_getMesgStatus() == 0xB) {
                 if (!(m7A4 & 1)) {
                     m7A4 |= 1;
                     executeSetMode(4);
@@ -678,7 +680,7 @@ void daNpcMn_c::executeWait() {
         if (!(mSwFlag & 1) && dComIfGs_isSwitch(getPrmSwitchBit(), (s8)home.roomNo)) {
             dComIfGs_onSwitch(getPrmSwitchBit(), (s8)home.roomNo);
             mSwFlag |= 1;
-            m794 = 0;
+            m7BE = 0;
             m7BF = 0;
             mOrderMode = 3;
         }

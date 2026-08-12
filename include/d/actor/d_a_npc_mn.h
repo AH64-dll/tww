@@ -170,7 +170,7 @@ public:
     /* 0x79E */ s16 mTurnSpeed;
     /* 0x7A0 */ s16 m7A0;
     /* 0x7A2 */ u16 mMsgStatus;
-    /* 0x7A4 */ s16 m7A4;
+    /* 0x7A4 */ u16 m7A4;
     /* 0x7A6 */ u8 field_0x7A6[0x7A8 - 0x7A6];
     /* 0x7A8 */ s16 mTexTimer;
     /* 0x7AA */ s16 m7AA;
