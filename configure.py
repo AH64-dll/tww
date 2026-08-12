@@ -1672,7 +1672,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_ho"),
     ActorRel(Matching,    "d_a_npc_hr"),
     ActorRel(Matching,    "d_a_npc_jb1"),
-    ActorRel(NonMatching, "d_a_npc_ji1"),
+    ActorRel(Equivalent, "d_a_npc_ji1"),  # regalloc: 3/183 sub-100 all anchor/cosmetic (NockBack 98.17 norm-diff 0); weak order
     ActorRel(Matching,    "d_a_npc_kamome"),
     ActorRel(NonMatching, "d_a_npc_kf1"),
     ActorRel(NonMatching, "d_a_npc_kg1"),
