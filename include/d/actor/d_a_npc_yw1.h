@@ -80,7 +80,7 @@ public:
     cPhs_State _create();
     void bodyCreateHeap();
     void headCreateHeap();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* Place member variables here */

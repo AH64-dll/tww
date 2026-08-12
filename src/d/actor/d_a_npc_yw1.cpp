@@ -47,8 +47,8 @@ void daNpc_Yw1_c::_nodeCB_BackBone(J3DNode*, J3DModel*) {
 }
 
 /* 000006A8-000006C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_Yw1_c*>(i_this)->CreateHeap();
 }
 
 /* 000006C8-00000740       .text searchActor_Bm1__FPvPv */
@@ -390,7 +390,7 @@ void daNpc_Yw1_c::headCreateHeap() {
 }
 
 /* 00004930-000049D0       .text CreateHeap__11daNpc_Yw1_cFv */
-void daNpc_Yw1_c::CreateHeap() {
+BOOL daNpc_Yw1_c::CreateHeap() {
     /* Nonmatching */
 }
 
