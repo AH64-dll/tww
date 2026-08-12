@@ -410,21 +410,23 @@ u32 daNpc_Gk1_c::getMsg_GK1_0() {
         return 0x28A1;
     }
     if (dKy_daynight_check() == 0) {
-        return (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1640) != 0) + 0x28A6;
+        return (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1640) != 0 ? 1 : 0) + 0x28A6;
     }
-    u32 msg = 0x28AB;
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E08)) {
-        msg = 0x28AF;
+        return 0x28AF;
     }
-    return msg;
+    return 0x28AB;
 }
 
 /* 00000F50-00000F8C       .text getMsg__11daNpc_Gk1_cFv */
 u32 daNpc_Gk1_c::getMsg() {
-    if (mType == 0) {
-        return getMsg_GK1_0();
+    u32 ret = 0;
+    switch (mType) {
+        case 0:
+            ret = getMsg_GK1_0();
+            break;
     }
-    return 0;
+    return ret;
 }
 
 
