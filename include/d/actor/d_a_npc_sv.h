@@ -52,9 +52,9 @@ public:
     cPhs_State _create();
     s32 createHeap();
     s32 createInit();
-    s32 _delete();
-    s32 _draw();
-    s32 _execute();
+    bool _delete();
+    bool _draw();
+    bool _execute();
     s32 executeCommon();
     void executeSetMode(u8);
     s32 executeWaitInit();

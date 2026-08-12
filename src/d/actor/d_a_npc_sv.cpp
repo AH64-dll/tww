@@ -473,7 +473,7 @@ s32 daNpcSv_c::createInit() {
 }
 
 /* 00000C74-00000CD8       .text _delete__9daNpcSv_cFv */
-s32 daNpcSv_c::_delete() {
+bool daNpcSv_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname_tbl[mNpcNo]);
     if(fopAcM_CheckCondition(this, 0x2000)) {
         if(mpMorf != NULL) {
@@ -484,7 +484,7 @@ s32 daNpcSv_c::_delete() {
 }
 
 /* 00000CD8-00000DAC       .text _draw__9daNpcSv_cFv */
-s32 daNpcSv_c::_draw() {
+bool daNpcSv_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
     mpMorf->updateDL();
@@ -499,7 +499,7 @@ s32 daNpcSv_c::_draw() {
 }
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
-s32 daNpcSv_c::_execute() {
+bool daNpcSv_c::_execute() {
     fopAc_ac_c* i_target;
     fopAcM_SearchByID(parentActorID, &i_target);
 
