@@ -539,7 +539,7 @@ BOOL dDoor_ssk_sub_c::drawSet() {
     mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e),
         NULL, NULL, NULL,
-        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00000000,
         0x11020203
@@ -556,7 +556,7 @@ BOOL dDoor_ssk_sub_c::drawSet() {
     mpMorf2 = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_KTANA_00_e),
         NULL, NULL, NULL,
-        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00000000,
         0x11020203
