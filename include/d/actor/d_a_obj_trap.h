@@ -11,16 +11,16 @@ class dPath;
 
 class daObjTrap_c : public fopAc_ac_c {
 public:
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    static int solidHeapCB(fopAc_ac_c* i_this);
+    int create_heap();
     cPhs_State _create();
     bool _delete();
     void init_mtx();
     void set_co_pos();
     void get_ground();
-    void circle_search();
+    bool circle_search();
     void set_move_info();
-    void check_arrival();
+    bool check_arrival();
     cXyz check_wall();
     cXyz check_block(cXyz);
     BOOL check_block_target_pos(cXyz*);
@@ -54,9 +54,9 @@ public:
     /* 0x4C0 */ cXyz mVibPos;
     /* 0x4CC */ f32 mDist;
     /* 0x4D0 */ s16 mWaitTimer;
-    /* 0x4D2 */ s16 mBoundTimer;
+    /* 0x4D2 */ u16 mBoundTimer;
     /* 0x4D4 */ f32 mVibF;
-    /* 0x4D8 */ s16 mVibTimer;
+    /* 0x4D8 */ u16 mVibTimer;
     /* 0x4DA */ s16 mAngleY;
     /* 0x4DC */ u8 mPathIdx;
     /* 0x4DD */ u8 mParam;
