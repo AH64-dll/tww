@@ -748,11 +748,11 @@ void daNpc_De1_c::privateCut() {
             event_actionInit(staff_idx);
         }
     }
-    BOOL end_cut;
-    if ((s32)mActIdx != 0) {
-        end_cut = true;
-    } else {
+    bool end_cut;
+    if ((s32)mActIdx == 0) {
         end_cut = event_action();
+    } else {
+        end_cut = true;
     }
     if (end_cut) {
         dComIfGp_evmng_cutEnd(staff_idx);
