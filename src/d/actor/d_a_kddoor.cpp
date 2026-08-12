@@ -266,9 +266,10 @@ void dDoor_ssk_c::execute(dDoor_info_c* i_this) {
 
         dComIfG_Ccsp()->Set(&sub->mCyl);
 
+        Vec* eyePos = &i_this->eyePos;
         if (sub->mScale[0] > 0.9f) {
             if (sub->mSoundTimer == 0) {
-                JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SHOKU_LIFT_MOVE, (Vec*)&i_this->eyePos, 0,
+                JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SHOKU_LIFT_MOVE, (Vec*)eyePos, 0,
                                                 dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 sub->mSoundTimer = (u8)(50.0f + 30.0f * cM_rnd());
             } else {
@@ -562,10 +563,8 @@ BOOL dDoor_ssk_sub_c::drawSet() {
 /* 00001778-00001904       .text calcMtx__15dDoor_ssk_sub_cFP12dDoor_info_cffUc */
 void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_this, f32 x, f32 z, u8 arg3) {
     if (mpMorf != NULL) {
-        Vec scale = {mScale[0], mScale[1], mScale[2]};
-        Vec scale2 = {mScale2[0], mScale2[1], mScale2[2]};
-        mpMorf->getModel()->setBaseScale(scale);
-        mpMorf2->getModel()->setBaseScale(scale2);
+        mpMorf->getModel()->setBaseScale(*(Vec*)mScale);
+        mpMorf2->getModel()->setBaseScale(*(Vec*)mScale2);
 
         mDoMtx_stack_c::transS(i_this->current.pos);
         mDoMtx_stack_c::YrotM(i_this->current.angle.y);
@@ -578,7 +577,7 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_this, f32 x, f32 z, u8 arg3) {
         mpMorf2->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 
         cXyz zero(0.0f, 0.0f, 0.0f);
-        MtxPosition(&zero, &mPos);
+        PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &mPos);
         mCyl.SetC(mPos);
         mCyl.SetR(50.0f * mScale2[0]);
     }
@@ -672,8 +671,12 @@ void daKddoor_c::setEventPrm() {
             m2C6 += 2;
         }
 
-        if ((mKey.mbEnabled == 0 || dComIfGs_isDungeonItemBossKey()) &&
-            (!chkFeelerCase() || getSwbit() == 0xFF || dComIfGs_isSwitch(getSwbit(), getFRoomNo())) &&
+        if (mKey.mbEnabled != 0 && dComIfGs_getKeyNum() == 0) {
+            return;
+        }
+
+        u8 swbit = getSwbit();
+        if ((!chkFeelerCase() || swbit == 0xFF || dComIfGs_isSwitch(swbit, getFRoomNo())) &&
             checkArea(12100.0f, 12100.0f, 62500.0f))
         {
             eventInfo.setEventId(mEventIdx[m2C6]);
