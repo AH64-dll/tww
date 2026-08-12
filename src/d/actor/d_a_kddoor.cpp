@@ -119,9 +119,10 @@ BOOL daKddoor_c::chkFeelerCase() {
             case 4:
                 return TRUE;
             default:
-                return FALSE;
+                goto ret0;
         }
     }
+ret0:
     return FALSE;
 }
 
