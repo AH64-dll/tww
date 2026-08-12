@@ -199,8 +199,59 @@ void my_break(sitem_class* i_this) {
 }
 
 /* 00001094-000015C0       .text cut_control2__FP11sitem_class */
-void cut_control2(sitem_class*) {
-    /* Nonmatching */
+void cut_control2(sitem_class* i_this) {
+    cXyz sp60(0.0f, 0.0f, i_this->m2F4);
+    i_this->mSitem1[9].mPos = i_this->mHomePos;
+
+    sitem_s* cur = &i_this->mSitem1[8];
+    f32 f27 = i_this->mHandPos.x;
+    for (int i = 8; i >= 0; i--) {
+        f32 sin1 = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x9C4) + i * (REG0_S(6) + 0xBB8));
+        f32 sin2 = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0xB86) + i * (REG0_S(6) + 0xFA0));
+        f32 cos1 = f27 * cM_scos(i_this->m2BC * (REG0_S(7) + 0xAF0) + i * (REG0_S(8) + 0xDAC));
+        f32 x = sin1 + (cur->mPos.x - (cur - 1)->mPos.x);
+        f32 y = (cur->mPos.y - 10.0f) + sin2;
+        f32 limit = 5.0f + i_this->mHandPos.y;
+        if (y < limit) {
+            y = limit;
+        }
+        f32 y2 = y - (cur - 1)->mPos.y;
+        f32 z = cos1 + (cur->mPos.z - (cur - 1)->mPos.z);
+        s16 yrot = cM_atan2s(x, z);
+        f32 dist = std::sqrtf(x * x + z * z);
+        s16 xrot = (s16)-cM_atan2s(y2, dist);
+        mDoMtx_YrotS(*calc_mtx, yrot);
+        mDoMtx_XrotM(*calc_mtx, xrot);
+        sp60.z = i_this->m2F4;
+        cXyz sp54;
+        MtxPosition(&sp60, &sp54);
+        cXyz sp3C = (cur - 1)->mPos + sp54;
+        cur->mPos = sp3C;
+        cur--;
+    }
+
+    i_this->m2E0 = i_this->mSitem1[9].mPos;
+    cXyz sp30 = i_this->mSitem1[8].mPos - i_this->mSitem1[9].mPos;
+    i_this->m2EC.x = (s16)-cM_atan2s(sp30.y, sp30.z);
+    f32 dist = std::sqrtf(sp30.y * sp30.y + sp30.z * sp30.z);
+    i_this->m2EC.y = cM_atan2s(sp30.x, dist);
+    hand_mtx_set(i_this);
+
+    if (i_this->mFollow[1].getEmitter() == NULL && i_this->mD4C != 0) {
+        i_this->mFollow[1].end();
+        dComIfGp_particle_set(0x8184, &i_this->mSitem1[0].mPos, &i_this->mCSxyz[1], NULL, 0xFF,
+                              &i_this->mFollow[1], fopAcM_GetRoomNo(i_this));
+        return;
+    }
+
+    cXyz sp24 = i_this->mSitem1[0].mPos - i_this->mHomePos;
+    i_this->mCSxyz[1].y = cM_atan2s(sp24.x, sp24.z);
+    f32 dist2 = std::sqrtf(sp24.x * sp24.x + sp24.z * sp24.z);
+    i_this->mCSxyz[1].x = (s16)-cM_atan2s(sp24.y, dist2);
+    if (i_this->m2C6 == 1 && i_this->mFollow[1].getEmitter() != NULL) {
+        i_this->mFollow[1].end();
+        i_this->mD4C = 0;
+    }
 }
 
 /* 000015C0-00002304       .text hand_move__FP11sitem_class */
