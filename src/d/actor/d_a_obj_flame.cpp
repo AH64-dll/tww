@@ -52,9 +52,9 @@ namespace daObjFlame {
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e,
             /* SrcObjCo  SPrm    */ 0,
-            /* SrcGObjAt Se      */ 0x100,
+            /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
@@ -485,8 +485,8 @@ void daObjFlame::Act_c::ki_make() {
         } else if (--mKiCount <= 0) {
             mKiCount = M_attr_base.mKiMax - 1;
             mKiIdx++;
-            SVec angle = {0, (s16)cM_rndFX(32768.0f), 0};
-            fopAcM_create(0xD8, 0x8002, &current.pos, fopAcM_GetRoomNo(this), (csXyz*)&angle, NULL, -1);
+            csXyz angle(0, (s16)cM_rndFX(32768.0f), 0);
+            fopAcM_create(0xD8, 0x8002, &current.pos, fopAcM_GetRoomNo(this), &angle, NULL, -1);
         }
     }
 }
@@ -514,8 +514,8 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         f32 f30 = maxY + M_attr_base.mF0A;
         f32 f29 = maxY + M_attr_base.mF0C;
 
-        Vec a = {rock->current.pos.x, 0.0f, rock->current.pos.z};
-        Vec b = {flame->eyePos.x, 0.0f, flame->eyePos.z};
+        cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
+        cXyz b(flame->eyePos.x, 0.0f, flame->eyePos.z);
         f32 dist = std::sqrtf(PSVECSquareDistance(&a, &b));
 
         if (dist < f31 && rock->current.pos.y > f30 && rock->current.pos.y < f29 && flame->mType != 1) {
@@ -534,9 +534,9 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
             }
 
             f32 f0 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
-            Vec pos = {flame->current.pos.x, flame->current.pos.y + f4 * f0 + f3 * f0, flame->current.pos.z};
+            cXyz pos(flame->current.pos.x, flame->current.pos.y + f4 * f0 + f3 * f0, flame->current.pos.z);
             if (flame->mModeProc == 1 || flame->mModeProc == 2) {
-                rock->BeforeLiftRequest((cXyz&)pos);
+                rock->BeforeLiftRequest(pos);
             } else {
                 rock->LiftUpRequest((cXyz&)pos);
             }
@@ -576,7 +576,7 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
         }
 
         f32 f1 = flame->mScaleX * M_attr_scl[flame->mType].mF04;
-        Vec pos = {flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z};
+        cXyz pos(flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z);
         f32 clampY = flame->current.pos.y + f0;
         if (pos.y > clampY) {
             pos.y = clampY;
