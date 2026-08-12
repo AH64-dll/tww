@@ -1650,7 +1650,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mo2"),
     ActorRel(NonMatching, "d_a_mozo", mw_version="GC/1.3.2r"),
     ActorRel(NonMatching, "d_a_mt"),
-    ActorRel(NonMatching, "d_a_npc_ac1"),
+    ActorRel(Equivalent, "d_a_npc_ac1"), # regalloc: getMsg 89.8 REGALLOC_ACCEPT + 3 anchor-only; weak order
     ActorRel(Matching,    "d_a_npc_ah"),
     ActorRel(NonMatching, "d_a_npc_aj1"),
     ActorRel(NonMatching, "d_a_npc_auction"),
