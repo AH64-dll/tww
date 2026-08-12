@@ -325,27 +325,32 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000718-0000085C       .text phase_1__FP9daNpcMn_c */
-    /* Nonmatching */
 static cPhs_State phase_1(daNpcMn_c* i_this) {
     fopAcM_SetupActor(i_this, daNpcMn_c);
 
-    if (i_this->mPosNo != 0) {
-        u8 reg = dComIfGs_getEventReg(0x870F);
-        if (i_this->isChangePos(reg)) {
-            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
-                reg = i_this->getPosNo();
-            } else {
-                reg = 1;
+    switch (i_this->mPosNo) {
+        case 0:
+            dComIfGs_setEventReg(0x870F, 0);
+            s32 swBit = i_this->getPrmSwitchBit();
+            if (dComIfGs_isSwitch(swBit, i_this->home.roomNo)) {
+                return cPhs_STOP_e;
             }
-            dComIfGs_setEventReg(0x870F, reg);
-        }
-        if (reg != i_this->mPosNo) {
-            return cPhs_ERROR_e;
-        }
-    } else {
-        dComIfGs_setEventReg(0x870F, 0);
-        if (dComIfGs_isSwitch(i_this->getPrmSwitchBit(), (s8)i_this->home.field_0x13)) {
-            return cPhs_ERROR_e;
+            break;
+
+        default: {
+            u8 reg = dComIfGs_getEventReg(0x870F);
+            if (i_this->isChangePos(reg)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
+                    reg = i_this->getPosNo();
+                } else {
+                    reg = 1;
+                }
+                dComIfGs_setEventReg(0x870F, reg);
+            }
+            if (reg != i_this->mPosNo) {
+                return cPhs_STOP_e;
+            }
+            break;
         }
     }
     i_this->m7B5 = 1;
@@ -1312,15 +1317,11 @@ u16 daNpcMn_c::next_msgStatus(u32* pMsgNo) {
     if (mpMsgTbl) {
         mpMsgTbl++;
         switch (*mpMsgTbl) {
-            case 2:
-                dPb_erasePicture();
             case 0:
                 mpMsgTbl = NULL;
                 status = fopMsgStts_MSG_ENDS_e;
                 break;
-            case 1:
-                *pMsgNo = l_msg_mn_figure[dSnap_GetFigRoomId(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A9FF))];
-                break;
+
             default:
                 *pMsgNo = *mpMsgTbl;
                 break;
