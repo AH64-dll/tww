@@ -107,7 +107,7 @@ public:
     /* 0xCF8 */ Quaternion mCF8;
     /* 0xD08 */ cXyz mD08;
     /* 0xD14 */ u8 mD14[0xD15 - 0xD14];
-    /* 0xD15 */ u8 mD15;
+    /* 0xD15 */ s8 mD15;
     /* 0xD16 */ u8 mD16[0xD18 - 0xD16];
     /* 0xD18 */ dPa_waveEcallBack mD18;
     /* 0xD7C */ dPa_waveEcallBack mD7C;
