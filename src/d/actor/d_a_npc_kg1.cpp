@@ -79,6 +79,7 @@ cXyz daNpc_Kg1_c::m_camera_eye(-117.0f, 92.0f, 344.0f);
 const f32 daNpc_Kg1_c::m_camera_fovy = 40.0f;
 
 /* 000001E0-00000428       .text daNpc_Kg1_nodeCallBack__FP7J3DNodei */
+/* Nonmatching */
 static BOOL daNpc_Kg1_nodeCallBack(J3DNode* node, int param) {
     if (param == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -105,7 +106,7 @@ static BOOL daNpc_Kg1_nodeCallBack(J3DNode* node, int param) {
         model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
         if (jnt_no == 8) {
-            mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
+            mDoMtx_stack_c::transM(23.46f, -22.26f, -47.05f);
             mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
             actor->m6C4->setBaseTRMtx(mDoMtx_stack_c::get());
         }
@@ -114,6 +115,7 @@ static BOOL daNpc_Kg1_nodeCallBack(J3DNode* node, int param) {
 }
 
 /* 00000464-00000688       .text lookBack__11daNpc_Kg1_cFv */
+/* Nonmatching */
 void daNpc_Kg1_c::lookBack() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 dist_xz = (player->current.pos - current.pos).absXZ();
@@ -148,6 +150,7 @@ void daNpc_Kg1_c::lookBack() {
 }
 
 /* 00000688-000007D8       .text chkAttention__11daNpc_Kg1_cFv */
+/* Nonmatching */
 s32 daNpc_Kg1_c::chkAttention() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 dist_xz = (player->current.pos - current.pos).absXZ();
@@ -155,7 +158,7 @@ s32 daNpc_Kg1_c::chkAttention() {
     if (dist_xz < l_HIO.mHio[0].mMaxAttnDistXZ) {
         f32 dx = player->current.pos.x - current.pos.x;
         f32 dz = player->current.pos.z - current.pos.z;
-        s16 angle = cM_atan2s(dx, dz) - (current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
+        s16 angle = cM_atan2s(dx, dz) - (s16)(current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y());
         s16 angle_diff = abs(angle);
         if (angle_diff < max_attn_angle) {
             return 1;
@@ -167,6 +170,7 @@ s32 daNpc_Kg1_c::chkAttention() {
 static const int l_btp_ix_tbl[] = {9, 11, 13, 12};
 
 /* 000007D8-000008D8       .text initTexPatternAnm__11daNpc_Kg1_cFib */
+/* Nonmatching */
 BOOL daNpc_Kg1_c::initTexPatternAnm(int param_2, bool param_3) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_eye_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[param_2]);
@@ -330,12 +334,14 @@ void daNpc_Kg1_c::kg1_talk_camera() {
 }
 
 /* 00001188-000011D4       .text wait_action_init__11daNpc_Kg1_cFv */
+/* Nonmatching */
 void daNpc_Kg1_c::wait_action_init() {
     clr_seq_flag();
     mAction = &daNpc_Kg1_c::wait_action;
 }
 
 /* 000011D4-00001858       .text wait_action__11daNpc_Kg1_cFv */
+/* Nonmatching */
 void daNpc_Kg1_c::wait_action() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("Kg1", NULL, 0);
     s16 procName = fpcNm_MGBOARD_e;
@@ -370,13 +376,11 @@ void daNpc_Kg1_c::wait_action() {
         }
         if (mCurrMsgNo == 0x1D5B) {
             m750 = 0;
-        } else if (mCurrMsgNo == 0x1D5C && talkRet == 6) {
-            m750 = 1;
-        } else if (mCurrMsgNo == 0x1D57 && talkRet == 6) {
+        } else if ((mCurrMsgNo == 0x1D5C && talkRet == 6) || (mCurrMsgNo == 0x1D57 && talkRet == 6)) {
             m750 = 1;
         }
         if (talkRet == 0x12) {
-            dComIfGp_event_onHindFlag(8);
+            dComIfGp_event_onEventFlag(8);
             if (m772) {
                 m732 = 3;
                 mWaitMode = 2;
@@ -412,7 +416,7 @@ void daNpc_Kg1_c::wait_action() {
                 mEndGameTimer = 0x5A;
                 m778 = 0;
                 mWaitMode = 4;
-                dComIfGp_event_offHindFlag(3);
+                dComIfGp_event_offHindFlag(2);
                 m779 = 1;
             }
         }
@@ -430,7 +434,7 @@ void daNpc_Kg1_c::wait_action() {
             mWaitMode = 5;
             m732 = 2;
             dComIfGp_evmng_cutEnd(staffIdx);
-            dComIfGp_event_onHindFlag(8);
+            dComIfGp_event_onEventFlag(8);
         }
         break;
     case 5:
@@ -438,7 +442,7 @@ void daNpc_Kg1_c::wait_action() {
             m751 = 1;
             if (talk(1) == 0x12) {
                 m732 = 0;
-                dComIfGp_event_onHindFlag(8);
+                dComIfGp_event_onEventFlag(8);
                 m730 = 0;
                 if (m773) {
                     m732 = 5;
@@ -454,11 +458,11 @@ void daNpc_Kg1_c::wait_action() {
         }
         break;
     case 6: {
-        u8 item_tbl[3] = {0x07, 0xCC, 0x05};
         if (m732 == 0) {
             m751 = 0;
-            m77C = fopAcM_createItemForPresentDemo(&current.pos, item_tbl[dComIfGs_getEventReg(0xFE07) - 1], 0, -1,
-                                                   fopAcM_GetRoomNo(this));
+            u8 item_tbl[3] = {0x07, 0xCC, 0x05};
+            u8 idx = dComIfGs_getEventReg(0xFE07) - 1;
+            m77C = fopAcM_createItemForPresentDemo(&current.pos, item_tbl[idx], 0, -1, fopAcM_GetRoomNo(this));
             if (m77C != fpcM_ERROR_PROCESS_ID_e) {
                 dComIfGp_event_setItemPartnerId(m77C);
             }
@@ -468,7 +472,7 @@ void daNpc_Kg1_c::wait_action() {
     }
     case 7:
         if (dComIfGp_evmng_endCheck(m788)) {
-            dComIfGp_event_onHindFlag(8);
+            dComIfGp_event_onEventFlag(8);
             m775 = 1;
             m732 = 2;
             mWaitMode = 8;
@@ -481,7 +485,7 @@ void daNpc_Kg1_c::wait_action() {
         if (m730 == 1) {
             m751 = 1;
             if (talk(1) == 0x12) {
-                dComIfGp_event_onHindFlag(8);
+                dComIfGp_event_onEventFlag(8);
                 m730 = 0;
                 m732 = 0;
                 if (m777) {
@@ -495,9 +499,9 @@ void daNpc_Kg1_c::wait_action() {
         }
         break;
     case 9: {
-        u8 item_tbl[2] = {0xF1, 0x06};
         if (m732 == 0) {
             m751 = 0;
+            u8 item_tbl[2] = {0xF1, 0x06};
             u8 idx = dComIfGs_getEventReg(0xFF07) - 1;
             if (idx > 1) {
                 idx = 1;
@@ -512,7 +516,7 @@ void daNpc_Kg1_c::wait_action() {
     }
     case 10:
         if (dComIfGp_evmng_endCheck(m788)) {
-            dComIfGp_event_onHindFlag(8);
+            dComIfGp_event_onEventFlag(8);
             m776 = 1;
             m732 = 2;
             mWaitMode = 0xB;
@@ -522,7 +526,7 @@ void daNpc_Kg1_c::wait_action() {
         if (m730 == 1) {
             m751 = 1;
             if (talk(1) == 0x12) {
-                dComIfGp_event_onHindFlag(8);
+                dComIfGp_event_onEventFlag(8);
                 m732 = 0;
                 m730 = 0;
                 mWaitMode = 0;
@@ -589,6 +593,7 @@ out:
 }
 
 /* 000019B4-00001C7C       .text next_msgStatus__11daNpc_Kg1_cFPUl */
+/* Nonmatching */
 u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -596,7 +601,7 @@ u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
     case 0x1D4D:
         if (!dComIfGs_isEventBit(0xE04)) {
             *pMsgNo = 0x1D52;
-        } else if (dLib_getIplDaysFromSaveTime() < 4) {
+        } else if ((s32)dLib_getIplDaysFromSaveTime() < 4) {
             *pMsgNo = 0x1D4F;
         } else if (dComIfGs_isTmpBit(0x101)) {
             *pMsgNo = 0x1D50;
@@ -617,7 +622,7 @@ u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
         clr_seq_flag();
         switch (mpCurrMsg->mSelectNum) {
         case 0:
-            if (dComIfGs_getRupee() < 0xA) {
+            if ((u32)dComIfGs_getRupee() < 0xA) {
                 *pMsgNo = 0x1D54;
             } else {
                 m74D = 1;
@@ -635,7 +640,11 @@ u16 daNpc_Kg1_c::next_msgStatus(u32* pMsgNo) {
         }
         break;
     case 0x1D55:
-        *pMsgNo = (m771 != 0) ? 0x1D5C : 0x1D56;
+        if (m771 == 0) {
+            *pMsgNo = 0x1D56;
+        } else {
+            *pMsgNo = 0x1D5C;
+        }
         m772 = 1;
         break;
     case 0x1D56:
@@ -789,6 +798,7 @@ static BOOL daNpc_Kg1Delete(void* i_this) {
 }
 
 /* 0000250C-00002648       .text daNpc_Kg1Execute__FPv */
+/* Nonmatching */
 static BOOL daNpc_Kg1Execute(void* i_this) {
     daNpc_Kg1_c* self = static_cast<daNpc_Kg1_c*>(i_this);
     self->m_jnt.setParam(l_HIO.mHio[0].mMaxBackboneX, l_HIO.mHio[0].mMaxBackboneY,
@@ -814,13 +824,14 @@ static BOOL daNpc_Kg1Execute(void* i_this) {
 }
 
 /* 00002648-000027CC       .text daNpc_Kg1Draw__FPv */
+/* Nonmatching */
 static BOOL daNpc_Kg1Draw(void* i_this) {
     daNpc_Kg1_c* self = static_cast<daNpc_Kg1_c*>(i_this);
     dSnap_RegistFig(0x81, (fopAc_ac_c*)i_this, 1.0f, 1.0f, 1.0f);
     J3DModelData* modelData = self->mpMorf->getModel()->getModelData();
-    g_env_light.settingTevStruct(0, &self->current.pos, &self->tevStr);
     cXyz* pos = &self->current.pos;
     dKy_tevstr_c* tevStr = &self->tevStr;
+    g_env_light.settingTevStruct(0, pos, tevStr);
     g_env_light.setLightTevColorType(self->mpMorf->getModel(), tevStr);
     g_env_light.setLightTevColorType(self->m6C4, tevStr);
     self->m6F8.entry(modelData, self->m720);
