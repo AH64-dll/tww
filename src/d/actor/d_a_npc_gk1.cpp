@@ -935,8 +935,8 @@ s32 daNpc_Gk1_c::bodyCreateHeap() {
         a_mdl_dat,
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes(m_arcname, bckResID(0)),
-        J3DFrameCtrl::EMode_LOOP,
+        NULL,
+        -1,
         1.0f,
         0,
         -1,
@@ -974,7 +974,10 @@ s32 daNpc_Gk1_c::itemCreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAIR_e);
     JUT_ASSERT(VERSION_SELECT(1596, 1596, 1598, 1598), a_mdl_dat != NULL);
     mpItemModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
-    return mpItemModel != NULL;
+    if (mpItemModel != NULL) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00002BA8-00002C68       .text hat_CreateHeap__11daNpc_Gk1_cFv */
@@ -982,7 +985,10 @@ s32 daNpc_Gk1_c::hat_CreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(m_arcname, dRes_ID_GK_BDL_GK_HAT_e);
     JUT_ASSERT(VERSION_SELECT(1612, 1612, 1614, 1614), a_mdl_dat != NULL);
     mpHatModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
-    return mpHatModel != NULL;
+    if (mpHatModel != NULL) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00002C68-00002D2C       .text CreateHeap__11daNpc_Gk1_cFv */
