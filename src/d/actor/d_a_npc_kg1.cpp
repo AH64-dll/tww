@@ -115,27 +115,28 @@ static BOOL daNpc_Kg1_nodeCallBack(J3DNode* node, int param) {
 
 /* 00000464-00000688       .text lookBack__11daNpc_Kg1_cFv */
 void daNpc_Kg1_c::lookBack() {
-    cXyz dist = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    f32 dist_xz = dist.absXZ();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    f32 dist_xz = (player->current.pos - current.pos).absXZ();
+    cXyz look_pos;
     cXyz* p_look_pos = NULL;
     if (mEventCut.getAttnFlag()) {
         m_jnt.setTrn();
-        cXyz attn_pos = mEventCut.getAttnPos();
-        p_look_pos = &attn_pos;
+        look_pos = mEventCut.getAttnPos();
+        p_look_pos = &look_pos;
         m731 = 1;
     } else if (m74D == 8) {
-        cXyz cam_eye = m_camera_eye;
-        p_look_pos = &cam_eye;
+        look_pos = m_camera_eye;
+        p_look_pos = &look_pos;
     } else if (dist_xz < l_HIO.mHio[0].mMaxAttnDistXZ) {
-        cXyz player_eye = dNpc_playerEyePos(l_HIO.mHio[0].m04);
-        p_look_pos = &player_eye;
+        look_pos = dNpc_playerEyePos(l_HIO.mHio[0].m04);
+        p_look_pos = &look_pos;
         m731 = chkAttention();
     } else {
         m731 = 0;
     }
-    if (mEventCut.getAttnFlag()) {
+    if (m_jnt.trnChk()) {
         s16 turn_speed = l_HIO.mHio[0].mMaxHeadTurnVel;
-        s16 turn_speed2 = m72E;
+        s16 turn_speed2 = mEventCut.getTurnSpeed();
         if (turn_speed2 != 0) {
             turn_speed = turn_speed2;
         }
@@ -143,8 +144,7 @@ void daNpc_Kg1_c::lookBack() {
     } else {
         m72E = 0;
     }
-    cXyz eye_pos = eyePos;
-    m_jnt.lookAtTarget(&current.angle.y, p_look_pos, eye_pos, current.angle.y, m72E, 1);
+    m_jnt.lookAtTarget(&current.angle.y, p_look_pos, eyePos, current.angle.y, m72E, 1);
 }
 
 /* 00000688-000007D8       .text chkAttention__11daNpc_Kg1_cFv */
