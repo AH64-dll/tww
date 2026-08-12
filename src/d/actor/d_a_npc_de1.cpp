@@ -484,21 +484,15 @@ void daNpc_De1_c::eventOrder() {
 /* 00000E14-00000F8C       .text checkOrder__11daNpc_De1_cFv */
 void daNpc_De1_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck("LIFT_UP")) {
-            if (mOrder == 3) {
-                mOrder = 0;
-            }
-        } else if (dComIfGp_evmng_startCheck("DE_CHUCHU")) {
-            if (mOrder == 4) {
-                mDoAud_bgmStart(JA_BGM_DEKU_PINCH);
-                mOrder = 0;
-            }
-        } else if (dComIfGp_evmng_startCheck("contact")) {
-            if (mOrder == 5) {
-                dComIfGs_onEventBit(0x1801);
-                dComIfGp_setNextStage("Omori", 0xD5, 0, 8, 0.0f, 0, 1, 0);
-                mOrder = 0;
-            }
+        if (dComIfGp_evmng_startCheck("LIFT_UP") && mOrder == 3) {
+            mOrder = 0;
+        } else if (dComIfGp_evmng_startCheck("DE_CHUCHU") && mOrder == 4) {
+            mDoAud_bgmStart(JA_BGM_DEKU_PINCH);
+            mOrder = 0;
+        } else if (dComIfGp_evmng_startCheck("contact") && mOrder == 5) {
+            dComIfGs_onEventBit(0x1801);
+            dComIfGp_setNextStage("Omori", 0xD5, 0, 8, 0.0f, 0, 1, 0);
+            mOrder = 0;
         }
     } else if (eventInfo.checkCommandTalk() && (mOrder == 1 || mOrder == 2)) {
         mOrder = 0;
