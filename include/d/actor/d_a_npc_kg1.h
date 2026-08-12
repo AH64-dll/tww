@@ -1,11 +1,12 @@
 #ifndef D_A_NPC_KG1_H
 #define D_A_NPC_KG1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class daNpc_Kg1_c : public fopAc_ac_c {
+class daNpc_Kg1_c : public fopNpc_npc_c {
 public:
     inline cPhs_State _create();
     inline bool _delete();
@@ -20,7 +21,7 @@ public:
     void initTexPatternAnm(int, bool);
     void playTexPatternAnm();
     void set_mtx();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     void eventOrder();
     void checkOrder();
@@ -28,8 +29,8 @@ public:
     void wait_action_init();
     void wait_action();
     void clr_seq_flag();
-    void getMsg();
-    void next_msgStatus(u32*);
+    u32 getMsg();
+    u16 next_msgStatus(u32*);
     void anmAtr(u16);
     void setAnm();
 
@@ -39,7 +40,8 @@ public:
     /* 0x6C4 */ J3DModel* m6C4;
     /* 0x6C8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6DC */ request_of_phase_process_class mPhs;
-    /* 0x6E4 */ u8 m6E4[0x6F8 - 0x6E4];
+    /* 0x6E4 */ void (daNpc_Kg1_c::*mAction)();
+    /* 0x6F0 */ u8 m6F0[0x6F8 - 0x6F0];
     /* 0x6F8 */ mDoExt_btpAnm m6F8;
     /* 0x70C */ mDoExt_btpAnm m70C;
     /* 0x720 */ u8 m720;
@@ -54,10 +56,13 @@ public:
     /* 0x74E */ u8 m74E[0x750 - 0x74E];
     /* 0x750 */ u8 m750;
     /* 0x751 */ u8 m751;
-    /* 0x752 */ u8 m752[0x773 - 0x752];
-    /* 0x773 */ u8 mbDidClearGame;
-    /* 0x774 */ u8 mbGameEnd;
-    /* 0x775 */ u8 m775[0x778 - 0x775];
+    /* 0x752 */ u8 m752[0x772 - 0x752];
+    /* 0x772 */ u8 m772;
+    /* 0x773 */ u8 m773;
+    /* 0x774 */ u8 m774;
+    /* 0x775 */ u8 m775;
+    /* 0x776 */ u8 m776;
+    /* 0x777 */ u8 m777;
     /* 0x778 */ u8 m778;
     /* 0x779 */ u8 m779;
     /* 0x77A */ u8 mGameBoardScore;
