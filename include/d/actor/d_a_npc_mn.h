@@ -49,6 +49,8 @@ struct sMnDat {
 
 class daNpcMn_c : public fopNpc_npc_c {
 public:
+    static const char m_arcname[];
+
     typedef s32 (daNpcMn_c::*InitFunc_t)();
     typedef void (daNpcMn_c::*MoveFunc_t)();
 
@@ -143,7 +145,7 @@ public:
     /* 0x724 */ request_of_phase_process_class mPhs;
     /* 0x72C */ request_of_phase_process_class mPhs2;
     /* 0x734 */ J3DModel* m734;
-    /* 0x738 */ J3DAnmTexPattern* mBtp;
+    /* 0x738 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x73C */ mDoExt_btpAnm mBtpAnm;
     /* 0x750 */ u32 mShadowId;
     /* 0x754 */ dNpc_PathRun_c mPathRun;
@@ -157,6 +159,8 @@ public:
     /* 0x780 */ f32 m780;
     /* 0x784 */ f32 mAttnDist;
     /* 0x788 */ f32 m788;
+    /* 0x78C */ u32 mItemNo;
+    /* 0x78C */ u32 mItemId;
     /* 0x790 */ u32 m790;
     /* 0x794 */ u8 m794;
     /* 0x795 */ u8 field_0x795[0x796 - 0x795];
