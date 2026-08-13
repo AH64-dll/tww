@@ -7,6 +7,7 @@
 #include "d/actor/d_a_obj_kanoke.h"
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
+#include "m_Do/m_Do_audio.h"
 
 static dCcD_SrcCps l_cps_src_body = {
     // dCcD_SrcGObjInf
@@ -272,7 +273,63 @@ BOOL daObjKanoke_c::_execute() {
 
 /* 00000E7C-0000122C       .text executeNormal__13daObjKanoke_cFv */
 void daObjKanoke_c::executeNormal() {
-    /* Nonmatching */
+    BOOL triggered = FALSE;
+    if (m88D != 0xFF && dComIfGs_isSwitch(m88D, home.roomNo)) {
+        triggered = TRUE;
+    } else if (dComIfGp_getDetect().chk_light(&current.pos) || mCps0.ChkTgHit()) {
+        m888++;
+        if (m888 > 0x14) {
+            mCps0.GetObjCo().SetSPrm(0);
+            triggered = TRUE;
+        }
+    } else {
+        m888 = 0;
+        if (m88C != 0) {
+            cXyz diff = dComIfGp_getPlayer(0)->current.pos - home.pos;
+            f32 dist = PSVECSquareMag((Vec*)&diff);
+            if (dist > 0.0f) {
+                dist = std::sqrtf(dist);
+            }
+            if (dist < 100.0f * m88C) {
+                triggered = TRUE;
+            }
+        }
+    }
+
+    if (triggered) {
+        dComIfG_Ccsp()->Set(&mCps0);
+        if (m88D != 0xFF) {
+            dComIfGs_onSwitch(m88D, home.roomNo);
+        }
+        m882 = 0;
+        if (getPrmYure() != 0) {
+            m884 = 0;
+            if (m88A == 0) {
+                JAIZelBasic::zel_basic->seStart(0x695B, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                m88B = 1;
+                m880 = 0;
+                m886 = 0x100;
+                return;
+            }
+            JAIZelBasic::zel_basic->seStart(0x6959, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            m88B = 4;
+            m87E = 0;
+            m886 = 0x400;
+            return;
+        }
+        if (m88A == 0) {
+            JAIZelBasic::zel_basic->seStart(0x695C, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            m88B = 2;
+            m880 = 0;
+            return;
+        }
+        JAIZelBasic::zel_basic->seStart(0x695A, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        m88B = 5;
+        if (m2A4->ChkUsed()) {
+            dComIfG_Bgsp()->Release(m2A4);
+        }
+        m87C = 0;
+    }
 }
 
 /* 0000122C-00001358       .text executeYureYoko__13daObjKanoke_cFv */
@@ -307,7 +364,6 @@ void daObjKanoke_c::executeEffectTate() {
 
 /* 00001B24-00001B28       .text executeWait__13daObjKanoke_cFv */
 void daObjKanoke_c::executeWait() {
-    /* Nonmatching */
 }
 
 /* 00000000-00000000       .text getPrmType__13daObjKanoke_cFv */
