@@ -525,28 +525,28 @@ bool daNpc_Bj1_c::getMaskInf(unsigned char* i_mask) {
     bool ret = i_mask != NULL;
     if (ret) {
         switch (mSpecificType) {
-        case 0:
+        case 1:
             *i_mask = 0x1;
             break;
-        case 1:
+        case 3:
             *i_mask = 0x2;
             break;
-        case 2:
+        case 5:
             *i_mask = 0x4;
             break;
-        case 3:
+        case 7:
             *i_mask = 0x8;
             break;
-        case 4:
+        case 9:
             *i_mask = 0x10;
             break;
-        case 5:
+        case 11:
             *i_mask = 0x20;
             break;
-        case 6:
+        case 14:
             *i_mask = 0x40;
             break;
-        case 7:
+        case 16:
             *i_mask = 0x80;
             break;
         default:
