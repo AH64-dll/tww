@@ -850,6 +850,7 @@ void daNpcMn_c::checkOrder() {
 }
 
 /* 00001E80-00001F00       .text eventOrder__9daNpcMn_cFv */
+    /* Nonmatching */
 void daNpcMn_c::eventOrder() {
     if (mOrderMode == 2 || mOrderMode == 1) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -1007,6 +1008,7 @@ s32 daNpcMn_c::eventMesSet() {
 }
 
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
+    /* Nonmatching */
 void daNpcMn_c::eventGetItemInit() {
     fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, mItemId, 0, -1, -1);
     if (itemID != fpcM_ERROR_PROCESS_ID_e) {
@@ -1321,45 +1323,42 @@ u16 daNpcMn_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
-    /* Nonmatching */
 u32 daNpcMn_c::getMsg() {
     u32 msgNo = 0;
     mpMsgTbl = NULL;
 
-    if (dComIfGp_event_chkTalkXY()) {
-        return 0;
-    }
-
-    if (mPosNo == 0) {
-        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08)) {
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F08);
-            mpMsgTbl = l_msg_mn_1st_talk;
-        } else {
-            mpMsgTbl = l_msg_mn_2nd_talk;
-        }
-    } else if (mPosNo == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08)) {
-        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F04);
-        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3120);
-            mpMsgTbl = l_msg_mn_comp_1st;
-        } else {
-            mpMsgTbl = l_msg_mn_comp_2nd;
-        }
-    } else {
-        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F04)) {
+    if (!dComIfGp_event_chkTalkXY()) {
+        if (mPosNo == 0) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F08);
+                mpMsgTbl = l_msg_mn_1st_talk;
+            } else {
+                mpMsgTbl = l_msg_mn_2nd_talk;
+            }
+        } else if (mPosNo == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08)) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F04);
-            mpMsgTbl = l_msg_mn_1st_talk_in;
-        } else if (m7C4 != 0) {
-            msgNo = l_msg_mn_figure[m7C5];
-        } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
-            mpMsgTbl = l_msg_mn_2nd_talk_in;
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3120);
+                mpMsgTbl = l_msg_mn_comp_1st;
+            } else {
+                mpMsgTbl = l_msg_mn_comp_2nd;
+            }
         } else {
-            mpMsgTbl = l_msg_mn_3rd_talk_in;
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F04)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F04);
+                mpMsgTbl = l_msg_mn_1st_talk_in;
+            } else if (m7C4 != 0) {
+                msgNo = l_msg_mn_figure[m7C5];
+            } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
+                mpMsgTbl = l_msg_mn_2nd_talk_in;
+            } else {
+                mpMsgTbl = l_msg_mn_3rd_talk_in;
+            }
         }
-    }
 
-    if (mpMsgTbl != NULL) {
-        msgNo = *mpMsgTbl;
+        if (mpMsgTbl != NULL) {
+            msgNo = *mpMsgTbl;
+        }
     }
     return msgNo;
 }
