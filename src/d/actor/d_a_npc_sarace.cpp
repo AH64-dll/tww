@@ -149,26 +149,24 @@ void daNpc_Sarace_c::playTexPatternAnm() {
 
 /* 0000060C-00000760       .text chkAttention__14daNpc_Sarace_cF4cXyzs */
 
-    /* Nonmatching */BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
+    BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
     cXyz sp10;
     f32 distXZ;
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 maxDist = l_HIO.mNpc.mMaxAttnDistXZ;
-    s16 maxAngle = l_HIO.mNpc.mMaxAttnAngleY;
+    int maxAngle = l_HIO.mNpc.mMaxAttnAngleY;
     sp10.x = player->current.pos.x - pos.x;
     sp10.z = player->current.pos.z - pos.z;
-    distXZ = sp10.x * sp10.x + sp10.z * sp10.z;
-    distXZ = std::sqrtf(distXZ);
+    distXZ = std::sqrtf(sp10.x * sp10.x + sp10.z * sp10.z);
     s16 atanAngle = cM_atan2s(sp10.x, sp10.z);
     if (m728 != 0) {
         maxDist += 40.0f;
         maxAngle += 0x71C;
     }
-    s16 diff = atanAngle - angle;
+    atanAngle -= angle;
     BOOL ret = FALSE;
-    s16 angleDiff = abs(diff);
-    if (maxAngle > angleDiff && maxDist > distXZ)
+    if (maxAngle > abs(atanAngle) && maxDist > distXZ)
         ret = TRUE;
     return ret;
 }
@@ -205,7 +203,7 @@ void daNpc_Sarace_c::checkOrder() {
 
 /* 000008E8-00000A6C       .text next_msgStatus__14daNpc_Sarace_cFPUl */
 
-    /* Nonmatching */u16 daNpc_Sarace_c::next_msgStatus(u32* pMsgNo) {
+    u16 daNpc_Sarace_c::next_msgStatus(u32* pMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
     switch (*pMsgNo) {
         case 0xFA1:
@@ -263,15 +261,7 @@ void daNpc_Sarace_c::checkOrder() {
         case 0xFA9:
             *pMsgNo = 0xFA3;
             break;
-        case 0xFA4:
-        case 0xFA6:
-        case 0xFAB:
-        case 0xFAC:
-        case 0xFAD:
-        case 0xFAE:
-        case 0xFAF:
-        case 0xFB0:
-        case 0xFB6:
+        default:
             ret = fopMsgStts_MSG_ENDS_e;
             break;
     }
@@ -374,26 +364,30 @@ void daNpc_Sarace_c::setAttention() {
 
 /* 00000E68-00000FF4       .text lookBack__14daNpc_Sarace_cFv */
 
-    /* Nonmatching */void daNpc_Sarace_c::lookBack() {
+    void daNpc_Sarace_c::lookBack() {
+    cXyz playerEyePos;
     cXyz srcPos(0.0f, 0.0f, 0.0f);
     cXyz* pDstPos = NULL;
     s16 defaultY = current.angle.y;
     bool param_6 = true;
 
-    if (m743 < 3 && m743 >= 1) {
+    switch (m743) {
+    case 1:
+    case 2:
         if (m743 == 2) {
             m_jnt.setTrn();
             if (m728 == 0) {
-                cXyz eyePosLocal = dNpc_playerEyePos(l_HIO.mNpc.m04);
-                cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &eyePosLocal), 4, 0x1800);
+                playerEyePos = dNpc_playerEyePos(l_HIO.mNpc.m04);
+                cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &playerEyePos), 4, 0x1800);
             }
         }
         if (m728 != 0) {
-            cXyz eyePosLocal = dNpc_playerEyePos(l_HIO.mNpc.m04);
-            pDstPos = &eyePosLocal;
+            playerEyePos = dNpc_playerEyePos(l_HIO.mNpc.m04);
+            pDstPos = &playerEyePos;
             srcPos = current.pos;
             srcPos.y = eyePos.y;
         }
+        break;
     }
 
     if (m_jnt.trnChk()) {
