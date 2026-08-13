@@ -35,6 +35,23 @@ namespace {
     };
     static ModeFunc mode_proc[5];
     static u8 mode_proc_ready;
+
+    static GXColor L_bingoPrmClr[2] = {
+        {12, 24, 72, 0},
+        {72, 12, 24, 0},
+    };
+    static GXColor L_bingoEnvClr[2] = {
+        {66, 73, 202, 0},
+        {103, 62, 202, 0},
+    };
+    static GXColor L_bingoPrmClr2[2] = {
+        {2, 12, 56, 0},
+        {56, 2, 12, 0},
+    };
+    static GXColor L_bingoEnvClr2[2] = {
+        {8, 62, 27, 0},
+        {42, 62, 98, 0},
+    };
 }; // namespace
 
 const char Act_c::M_arcname[] = "Hseki";
@@ -544,11 +561,11 @@ void daObjTry::Act_c::mode_wait_init() {
 void daObjTry::Act_c::mode_wait() {
     /* Nonmatching */
     int bingo = 0;
-    if (attr().m74 != 0 && m64C != 0) {
+    if (attr().m74 != 0 && (u8)m64C != 0) {
         bingo = 1;
     }
 
-    if (attr().m73 != 0 && m64D != 0) {
+    if (attr().m73 != 0 && (u8)m64D != 0) {
         f32 y = current.pos.y;
         cLib_chasePos(&current.pos, m63C, 10.0f);
         current.pos.y = y;
@@ -948,8 +965,28 @@ void daObjTry::Act_c::init_mtx() {
 }
 
 /* 00002540-00002718       .text eff_set_bingo__Q28daObjTry5Act_cFbb */
-void daObjTry::Act_c::eff_set_bingo(bool, bool) {
-    /* Nonmatching */
+void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
+    if (m651 == 0) {
+        u32 idx = (u32)(5 - mType) > 0;
+        g_dComIfG_gameInfo.play.getParticle()->set(
+            dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY00, &current.pos, &shape_angle, NULL,
+            0xFF, &mFollowCb, -1, &L_bingoPrmClr[idx], &L_bingoEnvClr[idx], NULL);
+        const cXyz* pos = param_2 ? &home.pos : &current.pos;
+        csXyz angle(0, m64A, 0);
+        m668 = (u32)g_dComIfG_gameInfo.play.getParticle()->set(
+            dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos, &angle, NULL, 0xFF, NULL, -1,
+            &L_bingoPrmClr2[idx], &L_bingoEnvClr2[idx], NULL);
+        if (param_1) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_STATUE_SET, &eyePos, 0,
+                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
+                                            -1.0f, -1.0f, 0);
+        }
+        m651 = 1;
+    } else {
+        JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_ST_LIGHT, &eyePos, 0,
+                                        dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f, -1.0f,
+                                        -1.0f, 0);
+    }
 }
 
 /* 00002718-00002790       .text eff_clr_bingo__Q28daObjTry5Act_cFv */
