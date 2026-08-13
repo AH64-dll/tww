@@ -28,7 +28,7 @@ void daObjMagmarock::Act_c::set_mtx() {
     /* Nonmatching */
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     Quaternion quat;
     PSQUATMultiply(&mQuat1, &mQuat3, &quat);
     mDoMtx_stack_c::quatM(&quat);
@@ -77,22 +77,24 @@ void daObjMagmarock::Act_c::ControlEffect() {
             }
         } else {
             if (mpEffectA != NULL) {
-                mpEffectA->mMaxFrame = -1;
-                mpEffectA->setStatus(JPAEmtrStts_StopEmit);
+                JPABaseEmitter* emtr = mpEffectA;
+                emtr->mMaxFrame = -1;
+                emtr->setStatus(JPAEmtrStts_StopEmit);
                 mpEffectA = NULL;
             }
             if (mpEffectB == NULL) {
                 dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
-                mpEffectB = dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGMAISLAND01, &current.pos, NULL,
-                                                  NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                mpEffectB = dComIfGp_particle_setToon(dPa_name::ID_AK_SN_MAGMAISLAND01, &current.pos, NULL,
+                                                      NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             } else {
                 mpEffectB->setGlobalTranslation(current.pos.x, current.pos.y, current.pos.z);
             }
         }
     } else {
         if (mpEffectB != NULL) {
-            mpEffectB->mMaxFrame = -1;
-            mpEffectB->setStatus(JPAEmtrStts_StopEmit);
+            JPABaseEmitter* emtr = mpEffectB;
+            emtr->mMaxFrame = -1;
+            emtr->setStatus(JPAEmtrStts_StopEmit);
             mpEffectB = NULL;
         }
     }
