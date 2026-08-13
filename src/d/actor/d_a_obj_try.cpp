@@ -504,15 +504,12 @@ void daObjTry::Act_c::mode_restart_init() {
     mAcch.OffLineCheck();
     speedF = 0.0f;
     m630 = 0x6E;
-    f32 posZ = home.pos.z;
     current.pos.x = home.pos.x;
     current.pos.y = home.pos.y + (-10.0f - (f32)attr().m4D);
-    current.pos.z = posZ;
-    s16 angZ = home.angle.z;
-    s16 angX = home.angle.x;
-    shape_angle.x = angX;
+    current.pos.z = home.pos.z;
+    shape_angle.x = home.angle.x;
     shape_angle.y = home.angle.y - 0x8000;
-    shape_angle.z = angZ;
+    shape_angle.z = home.angle.z;
     current.angle = shape_angle;
     old.pos = current.pos;
     old.angle = current.angle;
