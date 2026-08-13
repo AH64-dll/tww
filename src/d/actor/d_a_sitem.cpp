@@ -39,7 +39,6 @@ static BOOL daSitem_Draw(sitem_class* i_this) {
 }
 
 /* 00000248-0000034C       .text hand_mtx_set__FP11sitem_class */
-/* Nonmatching */
 void hand_mtx_set(sitem_class* i_this) {
     MtxTrans(i_this->m2E0.x, i_this->m2E0.y, i_this->m2E0.z, 0);
     mDoMtx_XrotM(*calc_mtx, i_this->m2EC.x);
