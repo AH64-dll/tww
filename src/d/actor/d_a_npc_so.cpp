@@ -441,6 +441,7 @@ void daNpc_So_c::setAttention() {
 
 /* 00001430-00001524       .text setAnm__10daNpc_So_cFScb */
 void daNpc_So_c::setAnm(s8 i_anmIdx, bool i_loopFlag) {
+    /* Nonmatching */
     static const int a_anm_bcks_tbl[] = {
         9, 6, 7, 5, 8,
     };
@@ -473,7 +474,22 @@ void daNpc_So_c::setAnm(s8 i_anmIdx, bool i_loopFlag) {
 
 /* 00001524-00001644       .text setAnmSwimSpeed__10daNpc_So_cFv */
 void daNpc_So_c::setAnmSwimSpeed() {
+    if (field_0x6D3 == 2) {
     /* Nonmatching */
+        const cXyz& delta = current.pos - old.pos;
+        f32 dist = std::sqrtf(PSVECSquareMag(&delta));
+        dist = dist / 10.0f;
+        if (dist <= 0.0f) {
+            dist = 0.0f;
+        } else if (dist >= 1.0f) {
+            dist = 1.0f;
+        }
+        f32 speed = l_HIO.field_0x38;
+        if (dist * l_HIO.field_0x34 >= l_HIO.field_0x38) {
+            speed = dist * l_HIO.field_0x34;
+        }
+        mpMorf->setPlaySpeed(speed);
+    }
 }
 
 /* 00001644-000016E8       .text setMtx__10daNpc_So_cFv */
