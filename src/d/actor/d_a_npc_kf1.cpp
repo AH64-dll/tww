@@ -410,7 +410,7 @@ void daNpc_Kf1_c::setAnm_ATR() { /* Nonmatching */
 }
 
 /* 00000EC4-00000F80       .text anmAtr__11daNpc_Kf1_cFUs */
-void daNpc_Kf1_c::anmAtr(u16 i_msgStatus) { /* Nonmatching */
+void daNpc_Kf1_c::anmAtr(u16 i_msgStatus) {
     switch (i_msgStatus) {
         case 6:
             if ((s8)m7FE == 0) {
@@ -763,7 +763,7 @@ BOOL daNpc_Kf1_c::chkAttention() { /* Nonmatching */
 }
 
 /* 00001C50-00001CA8       .text setAttention__11daNpc_Kf1_cFb */
-void daNpc_Kf1_c::setAttention(bool i_setEyePos) { /* Nonmatching */
+void daNpc_Kf1_c::setAttention(bool i_setEyePos) {
     f32 offset = l_HIO.mPrmTbl.mAttPosOffsetY;
     attention_info.position.set(current.pos.x, current.pos.y + offset, current.pos.z);
     if (m77C != 0 || i_setEyePos) {
@@ -906,7 +906,7 @@ BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() { /* Nonmatching */
 }
 
 /* 000020EC-00002168       .text cut_init_START_AGE__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_START_AGE(int i_actIdx) { /* Nonmatching */
+void daNpc_Kf1_c::cut_init_START_AGE(int i_actIdx) {
     mTargetPos.set(0.0f, eyePos.y, 0.0f);
     shape_angle.y = cLib_targetAngleY(&current.pos, &mTargetPos);
     mStartAge = 1;
@@ -1601,7 +1601,7 @@ BOOL daNpc_Kf1_c::_execute() { /* Nonmatching */
 }
 
 /* 00003C20-00003C80       .text _delete__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::_delete() { /* Nonmatching */
+BOOL daNpc_Kf1_c::_delete() {
     dComIfG_resDelete(&mPhs, mArcName);
     if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
