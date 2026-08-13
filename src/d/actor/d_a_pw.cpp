@@ -207,8 +207,118 @@ void body_atari_check(pw_class*) {
 }
 
 /* 00001258-000016FC       .text kantera_atari_check__FP8pw_class */
-void kantera_atari_check(pw_class*) {
-    /* Nonmatching */
+BOOL kantera_atari_check(pw_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    if (i_this->m346 <= 0) {
+        return FALSE;
+    }
+    fopAc_ac_c* kantera;
+    if (i_this->mKanteraID == fpcM_ERROR_PROCESS_ID_e) {
+        return FALSE;
+    }
+    if (!fopAcM_SearchByID(i_this->mKanteraID, &kantera)) {
+        return FALSE;
+    }
+    if (kantera == NULL) {
+        return FALSE;
+    }
+    if (fopAcM_GetName(kantera) != fpcNm_KANTERA_e) {
+        return FALSE;
+    }
+    s16 timer = i_this->m398;
+    i_this->mStts.Move();
+    i_this->m33D = 0;
+    if (i_this->mSph.ChkTgHit()) {
+        if (i_this->m342) {
+            return FALSE;
+        }
+        cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
+        if (hitObj == NULL) {
+            return FALSE;
+        }
+        i_this->m342 = 1;
+        switch (hitObj->GetAtType()) {
+        case AT_TYPE_SWORD:
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_SW_HIT_S, &i_this->eyePos, 0x40,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+            i_this->m398 -= 1;
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD)
+            {
+                i_this->m33D = 1;
+                i_this->m398 -= 1;
+            }
+            break;
+        case AT_TYPE_WIND:
+            i_this->m33D = 3;
+            break;
+        case AT_TYPE_BOOMERANG:
+            i_this->m33D = 4;
+            // Fall-through
+        case AT_TYPE_BOKO_STICK:
+            i_this->m398 -= 1;
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_W_WEP_HIT, &i_this->eyePos, 0x40,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+            break;
+        case AT_TYPE_SKULL_HAMMER:
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_HAMMER_HIT, &i_this->eyePos, 0x40,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+            i_this->m33D = 7;
+            if (player->getCutType() == 0x11) {
+                i_this->m33D = 8;
+            }
+            i_this->m398 = 0;
+            break;
+        case AT_TYPE_BOMB:
+            i_this->m33D = 6;
+            i_this->m398 -= 2;
+            break;
+        case AT_TYPE_LIGHT_ARROW:
+        case AT_TYPE_ICE_ARROW:
+        case AT_TYPE_FIRE_ARROW:
+            i_this->m398 -= 2;
+            // Fall-through
+        case AT_TYPE_NORMAL_ARROW:
+            i_this->m33D = 5;
+            // Fall-through
+        default:
+            i_this->m398 -= 1;
+            i_this->m33D = 0;
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x40,
+                                            dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                            -1.0f, -1.0f, 0);
+            break;
+        }
+    } else {
+        i_this->m342 = 0;
+    }
+    if (timer != i_this->m398) {
+        if (i_this->m398 <= 0) {
+            cXyz pos = *i_this->mSph.GetTgHitPosP();
+            i_this->m398 = 0;
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &pos, NULL, NULL, 0xFF, NULL, -1,
+                                  NULL, NULL, NULL);
+            cXyz scale(1.0f, 1.0f, 1.0f);
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &pos, &player->shape_angle, &scale, 0xFF,
+                                  NULL, -1, NULL, NULL, NULL);
+        }
+        i_this->mAction = 2;
+        i_this->mMode = 0x32;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 000016FC-000018FC       .text kantera_calc__FP8pw_class */
