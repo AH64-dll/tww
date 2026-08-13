@@ -494,7 +494,6 @@ void daNpc_Kg2_c::setAttention() {
 
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::lookBack() {
-    /* Nonmatching */
     cXyz eye_pos;
     cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz* p_look_pos = NULL;
@@ -541,7 +540,7 @@ BOOL daNpc_Kg2_c::CreateHeap() {
         (J3DAnmTransform*)dComIfG_getObjectRes("Kg", 0x1A),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
-        0x80000,
+        0,
         0x11020203
     );
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -578,7 +577,6 @@ BOOL daNpc_Kg2_c::CreateHeap() {
 
 /* 0000180C-00001A9C       .text CreateInit__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::CreateInit() {
-    /* Nonmatching */
     m724 = current.angle.x;
     m726 = current.angle.y;
     m728 = current.angle.z;
