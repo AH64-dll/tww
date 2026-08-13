@@ -45,12 +45,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-static const int l_bck_ix_tbl[] = {
-    0x11, 0x1A, 0x19, 0x14, 0x16, 0x12, 0x13, 0x15, 0x17, 0x18, 0x1B, 0x1C, 0x14, 0x16, 0x1D,
-};
-static const int l_btp_ix_tbl[] = {9, 11, 13, 12, 14};
-
 static daNpc_Kg2_HIO_c l_HIO;
+
 
 u8 daNpc_Kg2_c::canon_game_result = 0;
 daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer = NULL;
@@ -76,6 +72,11 @@ daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
     field_0x30 = 0;
     mNo = -1;
 }
+
+static const int l_bck_ix_tbl[] = {
+    0x11, 0x1A, 0x19, 0x14, 0x16, 0x12, 0x13, 0x15, 0x17, 0x18, 0x1B, 0x1C, 0x14, 0x16, 0x1D,
+};
+static const int l_btp_ix_tbl[] = {9, 11, 13, 12, 14};
 
 static BOOL nodeCallBack(J3DNode* node, int param) {
     /* Nonmatching */
@@ -253,8 +254,9 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
         max_attn_angle += 0x71C;
         max_attn_dist += 40.0f;
     }
+    s16 angle_diff = (s16)(angle - i_angleY);
     s32 ret = 0;
-    if (max_attn_angle > abs((s16)(angle - i_angleY)) && max_attn_dist > dist) {
+    if (max_attn_angle > abs(angle_diff) && max_attn_dist > dist) {
         ret = 1;
     }
     return ret;
