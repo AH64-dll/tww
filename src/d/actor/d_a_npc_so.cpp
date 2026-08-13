@@ -8,6 +8,7 @@
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
+#include "d/d_lib.h"
 #include "m_Do/m_Do_ext.h"
 #include "res/Object/So.h"
 
@@ -429,12 +430,45 @@ void daNpc_So_c::lookBack() {
 
 /* 000013A0-00001430       .text setAttention__10daNpc_So_cFv */
 void daNpc_So_c::setAttention() {
-    /* Nonmatching */
+    attention_info.position = field_0xB60;
+    attention_info.position.y += l_HIO.mNpc.mAttnYOffset;
+    f32 waterY = dLib_getWaterY(attention_info.position, mObjAcch);
+    if (attention_info.position.y <= waterY) {
+        attention_info.position.y = waterY;
+    }
+    eyePos = field_0xB54;
 }
 
 /* 00001430-00001524       .text setAnm__10daNpc_So_cFScb */
-void daNpc_So_c::setAnm(signed char, bool) {
-    /* Nonmatching */
+void daNpc_So_c::setAnm(s8 i_anmIdx, bool i_loopFlag) {
+    static const int a_anm_bcks_tbl[] = {
+        9, 6, 7, 5, 8,
+    };
+    static const dLib_anm_prm_c a_anm_prm_tbl[] = {
+        {0x00, 0xFF, 0x00, 8.0f, 1.0f, 2},
+        {0x00, 0xFF, 0x00, 8.0f, 1.0f, 2},
+        {0x01, 0xFF, 0x00, 8.0f, 1.0f, 2},
+        {0x02, 0xFF, 0x00, 8.0f, 1.0f, 2},
+        {0x03, 0xFF, 0x00, 8.0f, 1.0f, 2},
+        {0x04, 0xFF, 0x00, 8.0f, 1.0f, 2},
+    };
+
+    if (i_anmIdx != 6) {
+        field_0x6D3 = i_anmIdx;
+    }
+
+    if (mpMorf->getFrame() >= mpMorf->getEndFrame() - 1.0f) {
+        if (cM_rndF(100.0f) < l_HIO.field_0x5C) {
+            if (field_0x6D3 == 5) {
+                field_0x6D3 = 3;
+            } else if (field_0x6D3 == 3) {
+                field_0x6D3 = 5;
+            }
+        }
+    }
+
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &field_0x6D2, &field_0x6D3, &field_0x6D4, a_anm_bcks_tbl,
+                     a_anm_prm_tbl, i_loopFlag);
 }
 
 /* 00001524-00001644       .text setAnmSwimSpeed__10daNpc_So_cFv */
