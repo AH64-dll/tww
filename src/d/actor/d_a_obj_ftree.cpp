@@ -785,16 +785,7 @@ void daObjFtree::Act_c::action_changeSL2_main() {
         }
     }
     if (m2A7 != 0) {
-        f32 ratio;
-        if (m63C <= 0.2f) {
-            ratio = 0.0f;
-        } else {
-            ratio = 1.0f;
-            if (m63C >= ratio) {
-            } else {
-                ratio = (m63C - 0.2f) / 0.8f;
-            }
-        }
+        f32 ratio = (m63C <= 0.2f) ? 0.0f : ((m63C >= 1.0f) ? 1.0f : (m63C - 0.2f) / 0.8f);
         cLib_addCalc(&m63C, 1.0f, 0.02f, 1.0f, 0.005f);
         m674.r = (s16)(255.0f + ((f32)m664.r - 255.0f) * ratio);
         m674.g = (s16)(255.0f + ((f32)m664.g - 255.0f) * ratio);
@@ -804,8 +795,10 @@ void daObjFtree::Act_c::action_changeSL2_main() {
                 m650 = 0x2f;
             }
         }
-        m6A0 = (s16)(30.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
-        m6A2 = (s16)(36.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        f32 sin = jmaSinTable[(u16)m69E >> jmaSinShift];
+        m6A0 = (s16)(30.0f * sin);
+        sin = jmaSinTable[(u16)m69E >> jmaSinShift];
+        m6A2 = (s16)(36.0f * sin);
         m69E += 0xBB8;
     }
 }
