@@ -25,14 +25,15 @@ GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /* 00000078-00000128       .text set_mtx__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::set_mtx() {
-    /* Nonmatching */
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     Quaternion quat;
     PSQUATMultiply(&mQuat1, &mQuat3, &quat);
     mDoMtx_stack_c::quatM(&quat);
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    J3DModel* mdl = mpModel;
+    MtxP now = mDoMtx_stack_c::get();
+    MTXCopy(now, mdl->getBaseTRMtx());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
