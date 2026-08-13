@@ -461,7 +461,7 @@ BOOL daNpcBmcon_c::createHeap() {
 
     mpHeadModel = mDoExt_J3DModel__create(
         (J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bmd_ix_tbl[mNpcNo]),
-        0x8000000, 0x37441422
+        0x80000, 0x37441422
     );
 
     if (mpHeadModel == NULL) {
