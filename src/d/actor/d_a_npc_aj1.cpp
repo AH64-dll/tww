@@ -362,7 +362,7 @@ int daNpc_Aj1_c::btpResID(int i_resNo) {
 
 /* 00000B58-00000C64       .text init_texPttrnAnm__11daNpc_Aj1_cFScb */
         /* Nonmatching */
-s32 daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
+u8 daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     if (i_btpNo < 0) {
         return 0;
@@ -1540,7 +1540,7 @@ s32 daNpc_Aj1_c::bodyCreateHeap() {
         NULL,
         NULL,
         NULL,
-        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NULL,
         1.0f,
         0,
         -1,

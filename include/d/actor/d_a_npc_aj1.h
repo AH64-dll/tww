@@ -35,7 +35,7 @@ public:
     void setMtx(bool);
     int bckResID(int);
     int btpResID(int);
-    s32 init_texPttrnAnm(signed char, bool);
+    u8 init_texPttrnAnm(signed char, bool);
     void play_texPttrnAnm();
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
