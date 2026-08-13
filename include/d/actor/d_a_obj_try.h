@@ -138,7 +138,7 @@ namespace daObjTry {
         void damaged();
         bool damage_cc_proc();
         bool damage_bg_proc();
-        bool damage_bg_proc_directly();
+        void damage_bg_proc_directly();
         bool chk_sink_water();
         bool chk_sinkdown_water();
         void calc_drop_param(float*, float*, float*) const;
@@ -168,7 +168,7 @@ namespace daObjTry {
         /* 0x4F4 */ dCcD_Cyl mCyl;
         /* 0x624 */ int mType;
         /* 0x628 */ int mMode;
-        /* 0x62C */ u32 m62C;
+        /* 0x62C */ int m62C;
         /* 0x630 */ s16 m630;
         /* 0x632 */ s16 m632;
         /* 0x634 */ u8 m634;

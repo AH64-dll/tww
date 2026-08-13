@@ -895,7 +895,7 @@ bool daObjTry::Act_c::damage_bg_proc() {
 }
 
 /* 00001E98-00001FEC       .text damage_bg_proc_directly__Q28daObjTry5Act_cFv */
-bool daObjTry::Act_c::damage_bg_proc_directly() {
+void daObjTry::Act_c::damage_bg_proc_directly() {
     /* Nonmatching */
     bool groundHit = mAcch.ChkGroundHit();
     if (mMode == 3 && (mAcch.ChkRoofHit() || chk_sink_water() || groundHit)) {
@@ -904,7 +904,7 @@ bool daObjTry::Act_c::damage_bg_proc_directly() {
 
     if (m632 > 0) {
         m632--;
-        return false;
+        return;
     }
 
     if (groundHit && m634 == 0) {
@@ -924,7 +924,6 @@ bool daObjTry::Act_c::damage_bg_proc_directly() {
     } else {
         m634 = 0;
     }
-    return false;
 }
 
 /* 00001FEC-00002034       .text chk_sink_water__Q28daObjTry5Act_cFv */
