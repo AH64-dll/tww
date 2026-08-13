@@ -696,16 +696,16 @@ void daNpc_Aj1_c::lookBack() {
     mJointHeadY = m_jnt.getHead_y();
     mJointBackboneY = m_jnt.getBackbone_y();
     mActorAngleY = current.angle.y;
-    cXyz temp_pos(current.pos.x, current.pos.y, current.pos.z);
+    cXyz temp_pos = current.pos;
     temp_pos.y = eyePos.y;
     cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz* pLookPos = NULL;
     s16 angle = current.angle.y;
-    u8 headOnlyFollow = mHeadOnlyFollow;
+    bool headOnlyFollow = mHeadOnlyFollow != 0;
     switch (mLookBackState) {
         case 1:
             dNpc_playerEyePos(-20.0f);
-            look_pos = cXyz(temp_pos.x, temp_pos.y, temp_pos.z);
+            look_pos = temp_pos;
             pLookPos = &look_pos;
             break;
         case 2:
