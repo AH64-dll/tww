@@ -834,8 +834,184 @@ void action_dousa(pw_class* i_this) {
 }
 
 /* 00003B08-000042B8       .text action_kougeki__FP8pw_class */
-void action_kougeki(pw_class*) {
-    /* Nonmatching */
+void action_kougeki(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    switch (i_this->mMode) {
+    case 30:
+        if (i_this->m346 == 1) {
+            anm_init(i_this, dRes_INDEX_PW_BCK_KIDUKU1_e, 12.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        } else {
+            anm_init(i_this, dRes_INDEX_PW_BCK_KIDUKU2_e, 12.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        }
+        i_this->m340 = 0;
+        i_this->mMode += 1;
+        break;
+    case 31:
+        kyori_sub(i_this);
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        cLib_addCalc0(&i_this->speedF, 1.0f, 23.0f);
+        if (i_this->mpMorf->isStop()) {
+            i_this->mMode += 1;
+            // Fall-through
+    case 32:
+            kyori_sub(i_this);
+            for (int i = 0; i < 4; i++) {
+                i_this->m384[i] = 0;
+            }
+            i_this->m340 = 0;
+            if (i_this->m346 == 1) {
+                anm_init(i_this, dRes_INDEX_PW_BCK_ATTACK1_e, 12.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 7);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PW_ATTACK, 0);
+                i_this->m341 = 1;
+                i_this->mMode = 0x21;
+            } else {
+                anm_init(i_this, dRes_INDEX_PW_BCK_TORITUKI1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                i_this->m378[0] = 0x64;
+                i_this->mMode = 0x28;
+            }
+        }
+        break;
+    case 33:
+        kyori_sub(i_this);
+        cLib_addCalc0(&i_this->speedF, 1.0f, 23.0f);
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        if (i_this->mpMorf->checkFrame(24.0f)) {
+            i_this->speedF = 28.0f;
+            i_this->mMode += 1;
+        }
+        break;
+    case 34:
+        move_sound(i_this);
+        if (kougen_hani_check(i_this, 0)) {
+            i_this->mMode = 0x25;
+            break;
+        }
+        if (kougen_hani_check(i_this, 1)) {
+            i_this->mMode = 0x25;
+            break;
+        }
+        if (i_this->mpMorf->checkFrame(40.0f)) {
+            i_this->mSph.OnAtSetBit();
+            i_this->mSph.OnAtHitBit();
+        }
+        if (i_this->mpMorf->getFrame() > 40.0f && i_this->mSph.ChkAtShieldHit()) {
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->mAction = 0;
+            i_this->mMode = 0x19;
+            return;
+        }
+        if (i_this->mpMorf->checkFrame(-24.0f)) {
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->mMode += 1;
+        }
+        break;
+    case 35:
+        cLib_addCalc0(&i_this->speedF, 1.0f, 5.0f);
+        if (std::fabsf(i_this->speedF) < 6.0f) {
+            i_this->mMode = 0x25;
+        }
+        break;
+    case 36:
+        cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
+        if (i_this->mpMorf->isStop()) {
+            i_this->mMode = 0x25;
+        }
+        break;
+    case 37:
+        for (int i = 0; i < 4; i++) {
+            i_this->m384[i] = 0;
+        }
+        i_this->speedF = 0.0f;
+        if (i_this->m346 == 1) {
+            if (i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT1_e) {
+                anm_init(i_this, dRes_INDEX_PW_BCK_WAIT1_e, -80.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            }
+        } else if (i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT2_e) {
+            anm_init(i_this, dRes_INDEX_PW_BCK_WAIT2_e, -80.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        }
+        i_this->m378[2] = (s16)(70.0f + cM_rndF(70.0f));
+        i_this->m320 = i_this->current.pos;
+        i_this->m392 = 0;
+        i_this->m340 = 0;
+        i_this->m341 = 0;
+        i_this->mMode += 1;
+        // Fall-through
+    case 38:
+        kyori_sub(i_this);
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
+        if (i_this->m378[2] == 0) {
+            i_this->speedF = 0.0f;
+            next_dousa_check(i_this);
+        }
+        break;
+    case 40:
+        cLib_addCalc0(&i_this->speedF, 1.0f, 23.0f);
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        if (i_this->m378[0] == 0) {
+            i_this->m378[0] = 0x12C;
+            anm_init(i_this, dRes_INDEX_PW_BCK_TORITUKI2_e, 4.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_PW_GO_CURSE, 0);
+            i_this->mMode += 1;
+        }
+        break;
+    case 41:
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        if (kougen_hani_check(i_this, 0)) {
+            i_this->mMode = 0x25;
+        } else if (kougen_hani_check(i_this, 1)) {
+            i_this->mMode = 0x25;
+        } else {
+            cLib_addCalc2(&i_this->speedF, 45.0f, 1.0f, 3.0f);
+            move_sound(i_this);
+            if (i_this->m378[0] == 0) {
+                anm_init(i_this, dRes_INDEX_PW_BCK_IKIGIRE1_e, 12.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                i_this->mMode = 0x24;
+            } else {
+                cXyz pos = player->current.pos;
+                if (Line_check(i_this, pos, 1)) {
+                    i_this->m378[2] = (s16)(70.0f + cM_rndF(70.0f));
+                    if (i_this->mPathIndex == 0xFF) {
+                        i_this->m2F0.x = i_this->current.pos.x;
+                        i_this->m2F0.z = i_this->current.pos.z;
+                    }
+                    i_this->mAction = 0;
+                    i_this->mMode = 0x0D;
+                }
+            }
+        }
+        break;
+    }
+
+    if (i_this->m346 == 0) {
+        if (TORITUKI_ON) {
+            i_this->m378[2] = (s16)(70.0f + cM_rndF(70.0f));
+            if (i_this->mPathIndex == 0xFF) {
+                i_this->m2F0.x = i_this->current.pos.x;
+                i_this->m2F0.z = i_this->current.pos.z;
+            }
+            i_this->mAction = 0;
+            i_this->mMode = 0x0D;
+        } else {
+            s16 mode = i_this->mMode;
+            if ((mode == 0x28 || mode == 0x29 || mode == 0x26) && i_this->mCyl.ChkAtHit()) {
+                if (i_this->mCyl.GetAtHitAc() != NULL && i_this->mCyl.GetAtHitAc() == player) {
+                    i_this->speedF = 0.0f;
+                    i_this->mCyl.ClrAtSet();
+                    i_this->mCyl.ClrAtSet();
+                    i_this->mCyl.SetTgType(0x800000);
+                    TORITUKI_ON = true;
+                    i_this->m343 = 1;
+                    i_this->mAction = 3;
+                    i_this->mMode = 0x46;
+                }
+            }
+        }
+    }
+    alpha_anime(i_this);
+    fuwafuwa_calc(i_this);
 }
 
 /* 000042B8-00004C50       .text action_itai__FP8pw_class */
