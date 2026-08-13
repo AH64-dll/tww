@@ -106,9 +106,9 @@ static const int l_btp_ix_tbl[] = {0x14};
 
     /* Nonmatching */BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf2->getModel()->getModelData();
-    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Sarace", l_btp_ix_tbl[m740]);
-    JUT_ASSERT(0xF9, m_head_tex_pattern != NULL);
-    BOOL ret = mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, modify, FALSE);
+    m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Sarace", l_btp_ix_tbl[m740]);
+    JUT_ASSERT(0xF9, m_btp != 0);
+    BOOL ret = mBtpAnm.init(modelData, m_btp, 1, 2, 1.0f, 0, -1, modify, FALSE);
     if (ret == FALSE)
         return FALSE;
     else {
@@ -122,8 +122,8 @@ static const int l_btp_ix_tbl[] = {0x14};
 
     /* Nonmatching */void daNpc_Sarace_c::playTexPatternAnm() {
     if (!cLib_calcTimer(&mTimer)) {
-        if (mBtpFrame >= m_head_tex_pattern->getFrameMax()) {
-            mBtpFrame -= m_head_tex_pattern->getFrameMax();
+        if (mBtpFrame >= m_btp->getFrameMax()) {
+            mBtpFrame -= m_btp->getFrameMax();
             mTimer = cM_rndF(100.0f) + 30.0f;
         }
         else {
@@ -636,7 +636,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
     /* Nonmatching */BOOL daNpc_Sarace_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", 0xE);
-    JUT_ASSERT(0x3F0, modelData != NULL);
+    JUT_ASSERT(0x3F0, modelData != 0);
     mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL,
                                 (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", 0x9),
                                 J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 2, NULL, 0x80000, 0x11020203);
@@ -648,7 +648,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     JUT_ASSERT(0x402, m_jnt.getBackboneJntNum() >= 0);
 
     J3DModelData* headModelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", 0x11);
-    JUT_ASSERT(0x40A, headModelData != NULL);
+    JUT_ASSERT(0x40A, headModelData != 0);
     mpMorf2 = new mDoExt_McaMorf(headModelData, NULL, NULL,
                                  (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", 0x7),
                                  J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 2, NULL, 0x80000, 0x11020203);

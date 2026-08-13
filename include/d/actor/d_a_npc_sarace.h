@@ -62,7 +62,7 @@ public:
     /* 0x6D4 */ u32 m6D4;
     /* 0x6D8 */ u32 mBarrelAId;
     /* 0x6DC */ u32 mBarrelBId;
-    /* 0x6E0 */ J3DAnmTexPattern* m_head_tex_pattern;
+    /* 0x6E0 */ J3DAnmTexPattern* m_btp;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBtpFrame;
     /* 0x6F9 */ u8 m6F9;
