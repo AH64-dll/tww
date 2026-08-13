@@ -104,7 +104,7 @@ static const int l_btp_ix_tbl[] = {0x14};
 
 /* 00000364-00000478       .text initTexPatternAnm__14daNpc_Sarace_cFb */
 
-    /* Nonmatching */BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
+BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf2->getModel()->getModelData();
     m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Sarace", l_btp_ix_tbl[m740]);
     JUT_ASSERT(0xF9, m_btp != 0);
@@ -177,7 +177,7 @@ static const int l_btp_ix_tbl[] = {0x14};
 
 /* 00000760-000007D8       .text eventOrder__14daNpc_Sarace_cFv */
 
-    /* Nonmatching */void daNpc_Sarace_c::eventOrder() {
+void daNpc_Sarace_c::eventOrder() {
     if (m742 == 3) {
         fopAcM_orderOtherEvent2(this, "SARACE_EXPCAM", 1, 0xFFFF);
     }
@@ -613,7 +613,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00001B00-00001D1C       .text _create__14daNpc_Sarace_cFv */
 
-    /* Nonmatching */cPhs_State daNpc_Sarace_c::_create() {
+cPhs_State daNpc_Sarace_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Sarace_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "Sarace");
     if (state == cPhs_COMPLEATE_e) {
