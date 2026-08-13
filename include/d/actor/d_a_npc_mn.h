@@ -194,7 +194,7 @@ public:
     /* 0x7BF */ u8 m7BF;
     /* 0x7C0 */ u8 m7C0;
     /* 0x7C1 */ u8 mPosNo;
-    /* 0x7C2 */ u8 m7C2;
+    /* 0x7C2 */ s8 m7C2;
     /* 0x7C3 */ u8 m7C3;
     /* 0x7C4 */ u8 m7C4;
     /* 0x7C5 */ u8 m7C5;

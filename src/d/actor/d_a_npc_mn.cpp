@@ -478,7 +478,7 @@ cPhs_State daNpcMn_c::createInit() {
     mAttnFlag = 0;
     m7C0 = 0;
     cullMtx = mpMorf->getModel()->getBaseTRMtx();
-    fopAcM_setCullSizeBox(this, -280.0f, 1.0f, -280.0f, 280.0f, 200.0f, 280.0f);
+    fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
@@ -499,8 +499,8 @@ cPhs_State daNpcMn_c::createInit() {
     mTurnSpeed = l_npc_dat[mNpcNo].field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
     f32 groundY = mObjAcch.GetGroundH();
-    if (l_npc_dat[mNpcNo].field_0x18 != groundY) {
-        mLookAtY = groundY;
+    if (groundY != -G_CM3D_F_INF) {
+        home.pos.y = groundY;
         current.pos.y = groundY;
     }
     setMtx();
@@ -541,11 +541,9 @@ bool daNpcMn_c::_draw() {
     mpMorf->updateDL();
     mBtpAnm.remove(modelData);
 
-    J3DModel* model2 = m734;
-    g_env_light.setLightTevColorType(model2, &tevStr);
-    mDoMtx_stack_c::copy(model->getAnmMtx(m7C2));
-    model2->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoExt_modelUpdateDL(model2);
+    g_env_light.setLightTevColorType(m734, &tevStr);
+    m734->setBaseTRMtx(model->getAnmMtx(m7C2));
+    mDoExt_modelUpdateDL(m734);
 
     cXyz shadowPos(
         current.pos.x,
@@ -553,7 +551,7 @@ bool daNpcMn_c::_draw() {
         current.pos.z
     );
     mShadowId = dComIfGd_setShadow(
-        mShadowId, 1, model, &shadowPos, 800.0f, 20.0f,
+        mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
     dSnap_RegistFig(DSNAP_TYPE_UNKA8, this, 1.0f, 1.0f, 1.0f);
