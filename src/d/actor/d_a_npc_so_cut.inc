@@ -66,6 +66,9 @@ void daNpc_So_c::cutDiveProc() {
 /* 000056E0-00005778       .text cutDisappearStart__10daNpc_So_cFv */
 void daNpc_So_c::cutDisappearStart() {
     /* Nonmatching */
+    offsetDive();
+    JAIZelBasic::getInterface()->seStart(0x593B, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 1.4f, 0);
 }
 
 /* 00005778-000057D0       .text cutDisappearProc__10daNpc_So_cFv */
