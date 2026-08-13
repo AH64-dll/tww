@@ -650,21 +650,18 @@ void daNpc_Aj1_c::eventOrder() {
 /* 00001574-00001624       .text checkOrder__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::checkOrder() {
-    switch (eventInfo.getCommand()) {
-        case dEvtCmd_INDEMO_e:
-            if (dComIfGp_evmng_startCheck(mEventIdTable[mEventIdx])) {
-                if (mEventIdx == 0) {
-                    actor_status &= ~0x4000;
-                }
-                m812 = 0;
+    if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
+        if (dComIfGp_evmng_startCheck(mEventIdTable[mEventIdx])) {
+            if (mEventIdx == 0) {
+                actor_status &= ~0x4000;
             }
-            break;
-        case dEvtCmd_INTALK_e:
-            if (m812 == 1 || m812 == 2) {
-                m812 = 0;
-                m769 = 1;
-            }
-            break;
+            m812 = 0;
+        }
+    } else if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
+        if (m812 == 1 || m812 == 2) {
+            m812 = 0;
+            m769 = 1;
+        }
     }
 }
 
