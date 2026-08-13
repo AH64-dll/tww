@@ -262,7 +262,7 @@ void daObjFlame::Act_c::create_mode_init() {
             idx++;
         }
         s32 type = mType;
-        f32 f3 = (f32)(timer + cycle * idx) * flameAttrIdx(type)->mF24;
+        f32 f3 = (f32)(timer + cycle * idx) * flameAttr(this)->mF24;
         if (type != 1) {
             f3 -= 127.0f;
         }
@@ -540,10 +540,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         u32 isLess = y1 < y2;
         f32 f2 = isLess ? y1 : y2;
         f32 f30 = f2 + M_attr_base.mF0A;
-        f32 f4 = y2;
-        if (isLess == 0) {
-            f4 = y1;
-        }
+        f32 f4 = isLess ? y2 : y1;
         f32 f29 = f4 + M_attr_base.mF0C;
 
         cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
