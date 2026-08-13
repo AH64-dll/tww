@@ -335,19 +335,38 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
     /* Nonmatching */
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
     switch (*pMsgNo) {
+    case 0x3140:
+    case 0x3145:
+    case 0x3146:
+    case 0x3147:
+    case 0x3148:
+    case 0x314C:
+    case 0x314E:
+    case 0x3150:
+    case 0x3152:
+    case 0x3154:
+    case 0x3156:
+    case 0x3158:
+        (*pMsgNo)++;
+        break;
+    case 0x314D:
+        *pMsgNo = 0x3147;
+        break;
     case 0x3139:
         if (!dComIfGs_getEventReg(0xB703)) {
             *pMsgNo = 0x313E;
-        } else if (dLib_getIplDaysFromSaveTime() < 4) {
+        } else if ((s32)dLib_getIplDaysFromSaveTime() < 4) {
             *pMsgNo = 0x313B;
-        } else if (dComIfGs_isEventBit(0x102)) {
-            *pMsgNo = 0x313C;
         } else {
-            dComIfGs_onEventBit(0x102);
-            *pMsgNo = 0x313D;
+            if (dComIfGs_isTmpBit(0x102)) {
+                *pMsgNo = 0x313C;
+            } else {
+                dComIfGs_onTmpBit(0x102);
+                *pMsgNo = 0x313D;
+            }
         }
         break;
-    case 0x313A:
+    case 0x3149:
         if (mpCurrMsg->mSelectNum == 0) {
             dComIfGs_onEventBit(0x2508);
             m735 = 1;
@@ -356,13 +375,18 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = 0x314A;
         }
         break;
-    case 0x313C:
+    case 0x314A:
         *pMsgNo = 0x3148;
         break;
+    case 0x313A:
+    case 0x313B:
+    case 0x313C:
+    case 0x313D:
     case 0x313E:
         *pMsgNo = 0x313F;
         break;
     case 0x313F:
+    case 0x314F:
         if (mpCurrMsg->mSelectNum == 0) {
             if (dComIfGs_getRupee() < 50) {
                 *pMsgNo = 0x3143;
@@ -375,28 +399,13 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = 0x3142;
         }
         break;
-    case 0x3140:
+    case 0x3141:
         if (m734 == 0) {
             m734 = 1;
             *pMsgNo = 0x3139;
         } else {
             *pMsgNo = 0x313A;
         }
-        break;
-    case 0x3141:
-        *pMsgNo = 0x3147;
-        break;
-    case 0x3142:
-        *pMsgNo++;
-        break;
-    case 0x3143:
-        *pMsgNo = 0x3144;
-        break;
-    case 0x3144:
-        *pMsgNo++;
-        break;
-    case 0x3147:
-        *pMsgNo = 0x3145;
         break;
     default:
         ret = fopMsgStts_MSG_ENDS_e;
