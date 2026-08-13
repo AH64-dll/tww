@@ -48,9 +48,6 @@ static dCcD_SrcCyl l_cyl_src = {
 static daNpc_Kg2_HIO_c l_HIO;
 
 
-u8 daNpc_Kg2_c::canon_game_result = 0;
-daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer = NULL;
-
 /* 000000EC-00000194       .text __ct__15daNpc_Kg2_HIO_cFv */
 daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
     mHio.m04 = -20.0f;
