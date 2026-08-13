@@ -411,11 +411,10 @@ void daObjFlame::Act_c::em_simple_inv() {
 }
 
 /* 00000CEC-00000F04       .text em_manual_set__Q210daObjFlame5Act_cFv */
-    /* Nonmatching */
 void daObjFlame::Act_c::em_manual_set() {
     u8 flag = 0;
     const attr_scl_s* attr = &M_attr_scl[mType];
-    if (attr->mF2D != 0 && mbLiftup == 0) {
+    if (attr->mF2D == 0 || mbLiftup == 0) {
         flag = 1;
     }
 
@@ -783,7 +782,6 @@ cPhs_State daObjFlame::Method::Create(void* i_this) {
 }
 
 /* 00001ECC-00002200       .text _create__Q210daObjFlame5Act_cFv */
-    /* Nonmatching */
 cPhs_State daObjFlame::Act_c::_create() {
     fopAcM_SetupActor(this, daObjFlame::Act_c);
 
@@ -817,7 +815,7 @@ cPhs_State daObjFlame::Act_c::_create() {
             mCpsRad = 145.0f * flameAttr(this)->mScale;
             mbCol = FALSE;
             em_position();
-            mReverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+            mReverb = dComIfGp_getReverb(fopAcM_GetHomeRoomNo(this));
             mbLiftup = 0;
             mKiTimer = (s32)cM_rndF(prm_get_prm() + 1);
             if (mModeProc != 0 && mKiTimer == 0) {
