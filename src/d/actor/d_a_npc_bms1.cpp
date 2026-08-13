@@ -598,9 +598,18 @@ BOOL daNpc_Bms1_c::_execute() {
 
 /* 00003474-00003514       .text _delete__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::_delete() {
-    /* Nonmatching */
+    if (m8A5 == 1) {
+        return TRUE;
+    }
+    dComIfG_resDelete(&mPhs, m_arcname);
+    if (heap != NULL && mpMorf != NULL) {
+        mpMorf->stopZelAnime();
+    }
+    if (l_HIO.m8 >= 0 && (l_HIO.m8 -= 1) < 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+    }
+    return TRUE;
 }
-
 /* 00003514-00003534       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daNpc_Bms1_c*)i_this)->CreateHeap();
