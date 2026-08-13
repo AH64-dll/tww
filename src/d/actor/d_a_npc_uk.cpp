@@ -261,7 +261,6 @@ void daNpc_Uk_c::surrender() {
 }
 
 /* 00000AD4-00000D88       .text runawayInit__10daNpc_Uk_cFv */
-    /* Nonmatching */
 BOOL daNpc_Uk_c::runawayInit() {
     switch (mUkStatic.m0) {
     case 1:
