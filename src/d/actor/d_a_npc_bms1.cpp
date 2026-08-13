@@ -916,6 +916,38 @@ BOOL daNpc_Bms1_c::getdemo_action(void*) {
 /* 00002764-00002918       .text wait_action__12daNpc_Bms1_cFPv */
 BOOL daNpc_Bms1_c::wait_action(void*) {
     /* Nonmatching */
+    if (mActionStatus == 0) {
+        m89C = 1;
+        mActionStatus += 1;
+    } else if (mActionStatus != -1) {
+        s16 val = current.angle.y + mJntCtrl.getBackbone_y() + mJntCtrl.getHead_y();
+        m7CC = chkAttention(current.pos, val);
+        if (mShopIdx == 1) {
+            if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+                if (cLib_calcTimer(&m89A) == 0) {
+                    m89A = 3;
+                    mDoAud_seStart(JA_SE_CV_BO_STRUGGLE, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+                }
+            }
+        }
+
+        switch (m89C) {
+        case 1:
+            wait01();
+            break;
+        case 2:
+            talk01();
+            break;
+        }
+        lookBack();
+        if (checkPlayerLanding()) {
+            if (mShopIdx != 1) {
+                m89B = 4;
+            }
+        }
+        setAttention(TRUE);
+    }
+    return TRUE;
 }
 
 /* 00002918-00002A98       .text event_action__12daNpc_Bms1_cFPv */
