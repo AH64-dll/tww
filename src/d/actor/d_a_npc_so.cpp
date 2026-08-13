@@ -8,6 +8,7 @@
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_ext.h"
@@ -595,6 +596,20 @@ void daNpc_So_c::modeEventFirstWaitInit() {
 /* 0000217C-000022D0       .text modeEventFirstWait__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirstWait() {
     /* Nonmatching */
+    daShip_c* player = dComIfGp_getShipActor();
+    if (player != NULL) {
+        current.pos = player->current.pos;
+        cXyz diff = player->current.pos - field_0xAAC;
+        cXyz flat;
+        flat.x = diff.x;
+        flat.y = 0.0f;
+        flat.z = diff.z;
+        f32 dist = std::sqrtf(PSVECSquareMag(&flat));
+        if (dist >= l_HIO.field_0x54 && dComIfGs_checkGetItem(0x78) && dComIfGs_isStageBossEnemy(3) &&
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+            modeProc(PROC_INIT_e, 6);
+        }
+    }
 }
 
 /* 000022D0-00002314       .text modeEventFirstInit__10daNpc_So_cFv */
