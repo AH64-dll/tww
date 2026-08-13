@@ -625,12 +625,32 @@ void daObjTry::Act_c::mode_carry() {
 
 /* 000013D4-000014A8       .text mode_drop_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_drop_init() {
-    /* Nonmatching */
+    f32 spd = attr().m14 + dComIfGp_getPlayer(0)->speedF * attr().m18;
+    mCyl.OnAtSetBit();
+    mCyl.OnTgSetBit();
+    mCyl.OnCoSetBit();
+    mAcch.ClrRoofNone();
+    mAcch.ClrWallNone();
+    mAcch.ClrGrndNone();
+    mAcch.ClrWaterNone();
+    mAcch.OnLineCheck();
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    speed.y = attr().m10;
+    speedF = spd;
+    gravity = attr().mGravity;
+    mMode = 3;
 }
 
 /* 000014A8-00001518       .text mode_drop__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_drop() {
-    /* Nonmatching */
+    daObj::SetCurrentRoomNo(this, &mAcch.m_gnd);
+    bound();
+    f32 spd;
+    f32 f1;
+    f32 f2;
+    calc_drop_param(&spd, &f1, &f2);
+    gravity = spd;
+    daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &cXyz::Zero, f1, f2);
 }
 
 /* 00001518-000016A0       .text mode_sink_init__Q28daObjTry5Act_cFv */
