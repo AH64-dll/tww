@@ -398,12 +398,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000904-00000994       .text phase_1__FP12daNpcBmcon_c */
 static cPhs_State phase_1(daNpcBmcon_c* i_this) {
-    /* Nonmatching */
     fopAcM_ct(i_this, daNpcBmcon_c);
 
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (player == NULL || fpcM_IsCreating(fopAcM_GetID(player))) {
-        return cPhs_ERROR_e;
+        return cPhs_INIT_e;
     }
 
     i_this->setResFlag(1);
