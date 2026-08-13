@@ -999,7 +999,6 @@ BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
 
 /* 00002DDC-00002E9C       .text Ftree_NodeCallBack_M__10daObjFtreeFP7J3DNodei */
 BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode* i_node, int i_param) {
-    /* Nonmatching */
     if (i_param == 0) {
         u32 jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -1017,7 +1016,6 @@ BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode* i_node, int i_param) {
 
 /* 00002E9C-00002F5C       .text Ftree_NodeCallBack_L__10daObjFtreeFP7J3DNodei */
 BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode* i_node, int i_param) {
-    /* Nonmatching */
     if (i_param == 0) {
         u32 jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
