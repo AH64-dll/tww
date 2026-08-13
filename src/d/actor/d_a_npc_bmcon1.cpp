@@ -1009,7 +1009,6 @@ void daNpcBmcon_c::privateCut() {
 
 /* 000025F8-00002A48       .text eventMesSetInit__12daNpcBmcon_cFi */
 void daNpcBmcon_c::eventMesSetInit(int staffIdx) {
-    /* Nonmatching */
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if (pData) {
         mpMsgTbl = NULL;
@@ -1076,7 +1075,7 @@ void daNpcBmcon_c::eventMesSetInit(int staffIdx) {
                         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2B40)) {
                             setMessage(0x2AAF);
                         } else {
-                            int dist = getFlyDistNow() * 6 >> 8;
+                            int dist = getFlyDistNow() * 6 / 256;
                             if (dist > 4) {
                                 dist = 4;
                             }
@@ -1087,9 +1086,6 @@ void daNpcBmcon_c::eventMesSetInit(int staffIdx) {
                         setMessage(0x2AB1);
                         break;
                     case 3:
-                        setMessage(0x2AB6);
-                        break;
-                    default:
                         setMessage(0x2AB6);
                         break;
                 }
