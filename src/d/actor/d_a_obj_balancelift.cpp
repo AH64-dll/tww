@@ -202,8 +202,7 @@ void daBalancelift_c::calc_weight() {
 
     cXyz vec(mRightPos.x, 0.0f, mRightPos.z);
     f32 mag = PSVECSquareMag(&vec);
-    f32 diff = target_height * target_height - mag;
-    diff = std::sqrtf(diff);
+    f32 diff = std::sqrtf(target_height * target_height - mag);
 
     mVelocity += 0.005f * (diff - mCurrentY);
     mVelocity *= 0.92f;
