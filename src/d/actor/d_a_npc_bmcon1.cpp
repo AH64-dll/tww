@@ -515,23 +515,21 @@ static s16 daNpcBmcon_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 0000107C-00001468       .text createInit__12daNpcBmcon_cFv */
 cPhs_State daNpcBmcon_c::createInit() {
-    /* Nonmatching */
-    u8 railID = 0xFF;
+    int railID = 0xFF;
     u8 prmRailID = getPrmRailID();
     if (prmRailID != 0xFF) {
         mPathRun.setInf(prmRailID, current.roomNo, 1);
-        if (mPathRun.isPath()) {
-            dPath_GetNextRoomPath(mPathRun.getPath(), -1);
-            actor_status &= ~0x80;
-            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
-            old.pos = point;
-            current.pos = old.pos;
-            mPathRun.incIdxLoop();
-            m796 = 1;
-            railID = 0xFE;
-        } else {
+        if (!mPathRun.isPath()) {
             return cPhs_ERROR_e;
         }
+        dPath_GetNextRoomPath(mPathRun.getPath(), -1);
+        actor_status &= ~0x80;
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
+        old.pos = point;
+        current.pos = old.pos;
+        mPathRun.incIdxLoop();
+        m796 = 1;
+        railID = 0xFE;
     }
 
     gravity = -9.0f;
@@ -582,8 +580,8 @@ cPhs_State daNpcBmcon_c::createInit() {
     mAttnAngle = l_npc_dat[mNpcNo].field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-    f32 groundH = mObjAcch.GetGroundH();
-    if (groundH != -G_CM3D_F_INF) {
+    if (mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
+        f32 groundH = mObjAcch.GetGroundH();
         home.pos.y = groundH;
         current.pos.y = groundH;
     }
