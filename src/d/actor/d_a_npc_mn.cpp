@@ -1580,6 +1580,7 @@ void daNpcMn_c::playTexPatternAnm() {
 }
 
 /* 0000373C-000037F8       .text playAnm__9daNpcMn_cFv */
+    /* Nonmatching */
 void daNpcMn_c::playAnm() {
     if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && mAnmCnt > 0) {
         mAnmCnt--;
