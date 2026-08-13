@@ -1006,7 +1006,7 @@ void daNpc_Aj1_c::set_pa_aka() {
 /* 000021B4-00002280       .text set_pa_don__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_don() {
-    cXyz pos(24.0f, 0.0f, -4.5f);
+    cXyz pos(37.3f, 0.0f, 13.8f);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&pos, &m7A8);
