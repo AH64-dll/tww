@@ -225,6 +225,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000070C-00000A20       .text _createHeap__10daNpc_So_cFv */
 BOOL daNpc_So_c::_createHeap() {
+    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_e));
     JUT_ASSERT(0x1FD, modelData != NULL);
 
@@ -270,6 +271,7 @@ BOOL daNpc_So_c::_createHeap() {
 
 /* 00000A20-00000A84       .text jntHitCreateHeap__10daNpc_So_cFv */
 bool daNpc_So_c::jntHitCreateHeap() {
+    /* Nonmatching */
     static Vec cyl_offset_B[] = {
         {15.0f, 0.0f, 0.0f},
         {-15.0f, 0.0f, 0.0f},
@@ -305,6 +307,7 @@ void daNpc_So_c::checkTgHit() {
 
 /* 00000C8C-00000CB0       .text offsetZero__10daNpc_So_cFv */
 void daNpc_So_c::offsetZero() {
+    /* Nonmatching */
     field_0xB38.z = 0.1f;
     field_0xB38.y = 20.0f;
     field_0xB38.x = -1.0f;
@@ -312,6 +315,7 @@ void daNpc_So_c::offsetZero() {
 
 /* 00000CB0-00000CD4       .text offsetDive__10daNpc_So_cFv */
 void daNpc_So_c::offsetDive() {
+    /* Nonmatching */
     field_0xB38.z = 0.3f;
     field_0xB38.y = 10.0f;
     field_0xB38.x = -150.0f;
@@ -319,6 +323,7 @@ void daNpc_So_c::offsetDive() {
 
 /* 00000CD4-00000CF8       .text offsetSwim__10daNpc_So_cFv */
 void daNpc_So_c::offsetSwim() {
+    /* Nonmatching */
     field_0xB38.z = 0.3f;
     field_0xB38.y = 10.0f;
     field_0xB38.x = -40.0f;
@@ -326,6 +331,7 @@ void daNpc_So_c::offsetSwim() {
 
 /* 00000CF8-00000D1C       .text offsetAppear__10daNpc_So_cFv */
 void daNpc_So_c::offsetAppear() {
+    /* Nonmatching */
     field_0xB38.z = 0.4f;
     field_0xB38.y = 22.0f;
     field_0xB38.x = 110.0f;
@@ -333,6 +339,7 @@ void daNpc_So_c::offsetAppear() {
 
 /* 00000D1C-00000E40       .text getMsg__10daNpc_So_cFv */
 u32 daNpc_So_c::getMsg() {
+    /* Nonmatching */
     if (field_0xB0C != 0) {
         if (l_HIO.field_0x2C[2] != 0 || field_0xB7C >= 0xA) {
             if (field_0xBD9) {
