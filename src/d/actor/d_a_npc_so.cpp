@@ -819,6 +819,21 @@ void daNpc_So_c::checkOrder() {
 /* 0000330C-000033F4       .text setScale__10daNpc_So_cFv */
 void daNpc_So_c::setScale() {
     /* Nonmatching */
+    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    if (dist > l_HIO.field_0x48) {
+        field_0xB08 = 1.0f + (dist - l_HIO.field_0x48) / ((100000.0f - l_HIO.field_0x48) / l_HIO.field_0x4C);
+        if (field_0xB08 > l_HIO.field_0x4C) {
+            field_0xB08 = l_HIO.field_0x4C;
+        }
+    } else {
+        field_0xB08 = l_HIO.field_0x44;
+    }
+    if (field_0x6CC == 0xF) {
+        field_0xB08 = 1.0f;
+        scale.set(field_0xB08, field_0xB08, field_0xB08);
+    }
+    cXyz target(field_0xB08, field_0xB08, field_0xB08);
+    cLib_addCalcPos2(&scale, target, 0.1f, 0.5f);
 }
 
 /* 000033F4-00003844       .text _execute__10daNpc_So_cFv */
