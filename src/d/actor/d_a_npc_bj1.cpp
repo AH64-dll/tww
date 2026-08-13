@@ -472,6 +472,7 @@ void daNpc_Bj1_c::lookBack() {
     dstPos.set(0.0f, 0.0f, 0.0f);
     dstPos_p = NULL;
     desiredYrot = current.angle.y;
+    bool flag = m856;
 
     switch (m8B3) {
     case 1:
@@ -498,7 +499,7 @@ void daNpc_Bj1_c::lookBack() {
     if (!m_jnt.trnChk()) {
         m838 = 0;
     }
-    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYrot, m838, m856);
+    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYrot, m838, flag);
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
