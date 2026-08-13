@@ -973,9 +973,8 @@ void daNpc_Aj1_c::event_proc(int i_eventNo) {
 /* 00002098-00002118       .text set_pa_pun__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_pun() {
-    s8 roomNo = current.roomNo;
     mPunEmitter = dComIfGp_particle_set(0x8113, &current.pos, NULL, NULL, 0xFF, NULL,
-                                        roomNo, NULL, NULL, NULL);
+                                        current.roomNo, NULL, NULL, NULL);
     if (mPunEmitter != NULL) {
         mPunTimer = 0;
     }
