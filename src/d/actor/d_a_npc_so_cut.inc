@@ -21,6 +21,19 @@ void daNpc_So_c::cutSwimProc() {
 /* 00005364-000054A4       .text cutJumpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutJumpStart() {
     /* Nonmatching */
+    field_0xA9C = 15;
+    current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
+
+    f32* jumpSpeed = dComIfGp_evmng_getMyFloatP(field_0xB6C, "Speed_y");
+    f32* swimSpeed = dComIfGp_evmng_getMyFloatP(field_0xB6C, "SpeedF");
+    shape_angle.x = l_HIO.field_0x68;
+    speed.y = jumpSpeed != NULL ? *jumpSpeed : 40.0f;
+    field_0xAFC = swimSpeed != NULL ? *swimSpeed : 5.0f;
+
+    offsetSwim();
+    speedF = field_0xAFC;
+    setAnm(4, 0);
+    JAIZelBasic::getInterface()->seStart(0x5938, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 000054A4-00005598       .text cutJumpProc__10daNpc_So_cFv */
@@ -31,6 +44,8 @@ void daNpc_So_c::cutJumpProc() {
 /* 00005598-00005610       .text cutAppearStart__10daNpc_So_cFv */
 void daNpc_So_c::cutAppearStart() {
     /* Nonmatching */
+    JAIZelBasic::getInterface()->seStart(0x593A, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    offsetAppear();
 }
 
 /* 00005610-00005668       .text cutAppearProc__10daNpc_So_cFv */
@@ -40,7 +55,7 @@ void daNpc_So_c::cutAppearProc() {
 
 /* 00005668-00005688       .text cutDiveStart__10daNpc_So_cFv */
 void daNpc_So_c::cutDiveStart() {
-    /* Nonmatching */
+    offsetDive();
 }
 
 /* 00005688-000056E0       .text cutDiveProc__10daNpc_So_cFv */
@@ -100,7 +115,9 @@ void daNpc_So_c::cutUnequipProc() {
 
 /* 00005B5C-00005B98       .text cutEatesaStart__10daNpc_So_cFv */
 void daNpc_So_c::cutEatesaStart() {
-    /* Nonmatching */
+    offsetZero();
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
 }
 
 /* 00005B98-00005BF8       .text cutEatesaProc__10daNpc_So_cFv */
@@ -140,7 +157,7 @@ void daNpc_So_c::cutMiniGameProc() {
 
 /* 00006FE4-00006FF0       .text cutTurnStart__10daNpc_So_cFv */
 void daNpc_So_c::cutTurnStart() {
-    /* Nonmatching */
+    field_0xA9C = 30;
 }
 
 /* 00006FF0-00007114       .text cutTurnProc__10daNpc_So_cFv */
