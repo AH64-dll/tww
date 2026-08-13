@@ -907,7 +907,16 @@ void daNpc_So_c::modeDisappear() {
 
 /* 00002A90-00002B60       .text modeDebugInit__10daNpc_So_cFv */
 void daNpc_So_c::modeDebugInit() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    field_0xAFC = 0.0f;
+    setAnm(1, 0);
+
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz pos = player->current.pos;
+    pos.x += 100.0f * cM_scos(player->shape_angle.y);
+    pos.z += 100.0f * cM_ssin(player->shape_angle.y);
+    current.pos = pos;
+    offsetAppear();
 }
 
 /* 00002B60-00002B64       .text modeDebug__10daNpc_So_cFv */
