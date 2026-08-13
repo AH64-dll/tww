@@ -12,6 +12,7 @@
 #include "d/d_item.h"
 #include "d/d_lib.h"
 #include "d/d_snap.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -268,6 +269,8 @@ void daNpc_Bms1_c::set_mtx() {
     }
 }
 
+static msg_class* l_msg;
+
 static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
 static const int l_bck_ix_tbl[] = { 0x13, 0x14, 0x16, 0x17, 0x15, 0x16, 0x17 };
 
@@ -367,8 +370,122 @@ void daNpc_Bms1_c::checkOrder() {
 }
 
 /* 000014AC-000017FC       .text next_msgStatus__12daNpc_Bms1_cFPUl */
-u16 daNpc_Bms1_c::next_msgStatus(u32*) {
+u16 daNpc_Bms1_c::next_msgStatus(u32* pMsgNo) {
     /* Nonmatching */
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
+
+    switch (*pMsgNo) {
+    case 0x2775:
+    case 0x2777:
+    case 0x2780:
+    case 0x2782:
+        *pMsgNo += 1;
+        break;
+    case 0x2784:
+        *pMsgNo = 0x2786;
+        break;
+    case 0x2776:
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+            *pMsgNo = 0x2779;
+        } else {
+            g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
+            g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
+            msgStatus = 0xE;
+        }
+        break;
+    case 0x2783:
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+            *pMsgNo = 0x2787;
+        } else {
+            g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
+            g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
+            msgStatus = 0xE;
+        }
+        break;
+    case 0x277A:
+    case 0x277B:
+    case 0x277C:
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+            *pMsgNo = 0x2779;
+        } else {
+            g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
+            g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
+            *pMsgNo += 3;
+            msgStatus = 0xE;
+        }
+        break;
+    case 0x2788:
+    case 0x2789:
+    case 0x278A:
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.b) {
+            *pMsgNo = 0x2787;
+        } else {
+            g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
+            g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
+            *pMsgNo += 3;
+            msgStatus = 0xE;
+        }
+        break;
+    case 0x2778:
+    case 0x2781:
+        *pMsgNo = 0x2776;
+        break;
+    case 0x277D:
+    case 0x277E:
+    case 0x277F:
+        if (g_dComIfG_gameInfo.play.mMesgCancelButton != 0) {
+            *pMsgNo = *pMsgNo - 3;
+        } else if (l_msg->mSelectNum == 0) {
+            *pMsgNo = 0x2780;
+        }
+        break;
+    case 0x278B:
+    case 0x278C:
+    case 0x278D:
+        if (g_dComIfG_gameInfo.play.mMesgCancelButton != 0) {
+            *pMsgNo = *pMsgNo - 3;
+        } else if (l_msg->mSelectNum == 0) {
+            int itemPrice = dComIfGp_getMessageRupee();
+            u8 status = dShop_BoughtErrorStatus(&mShopItems, 0, itemPrice);
+            if (status & 0x20) {
+                *pMsgNo = 0x278E;
+                break;
+            }
+            if (status & 0x4) {
+                *pMsgNo = 0x278F;
+                break;
+            }
+            fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
+            mShopItems.hideSelectItem();
+            m7E8 = mShopItems.getSelectItemNo();
+            dComIfGp_setItemRupeeCount(-itemPrice);
+            u8 itemNo = mShopItems.getSelectItemNo();
+            if (!checkItemGet(itemNo, TRUE)) {
+                m89B = 3;
+                msgStatus = fopMsgStts_MSG_ENDS_e;
+                break;
+            }
+            itemNo = mShopItems.getSelectItemNo();
+            execItemGet(itemNo);
+            *pMsgNo = 0x2790;
+        } else {
+            *pMsgNo = *pMsgNo - 3;
+        }
+        break;
+    case 0x2790:
+        *pMsgNo = 0x2783;
+        break;
+    case 0x2786:
+    case 0x278E:
+    case 0x278F:
+        *pMsgNo = 0x2783;
+        break;
+    default:
+        msgStatus = fopMsgStts_MSG_ENDS_e;
+        break;
+    }
+
+    return msgStatus;
 }
 
 /* 000017FC-00001860       .text getMsg__12daNpc_Bms1_cFv */
