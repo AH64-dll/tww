@@ -474,11 +474,17 @@ inline bool daObjMagmarock::Act_c::_execute() {
     calc_ground_quat();
 
     if (m45C == 0) {
-        if (mProcFunc == &Act_c::quake_proc) {
-        } else if (mProcFunc == &Act_c::vanish_proc) {
+        void (Act_c::*quakeProc)() = &Act_c::quake_proc;
+        int isQuake = mProcFunc == quakeProc;
+        if (isQuake) {
         } else {
-            cLib_addCalc2(&mQuakeAngle, 0.0f, 0.2f, 20.0f);
-            cLib_addCalcAngleS2(&mAngleAdd, 0, 4, 0x100);
+            void (Act_c::*vanishProc)() = &Act_c::vanish_proc;
+            int isVanish = mProcFunc == vanishProc;
+            if (isVanish) {
+            } else {
+                cLib_addCalc2(&mQuakeAngle, 0.0f, 0.2f, 20.0f);
+                cLib_addCalcAngleS2(&mAngleAdd, 0, 4, 0x100);
+            }
         }
         current.pos.y += speed.y;
         speed.y += gravity;
@@ -486,9 +492,8 @@ inline bool daObjMagmarock::Act_c::_execute() {
         speed.y = 0.0f;
     }
 
-    f32 ground = home.pos.y + 100.0f;
-    if (current.pos.y < ground) {
-        if (old.pos.y >= ground) {
+    if (current.pos.y < home.pos.y + 100.0f) {
+        if (old.pos.y >= home.pos.y + 100.0f) {
             dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
         }
         if (current.pos.y < home.pos.y) {
@@ -501,9 +506,13 @@ inline bool daObjMagmarock::Act_c::_execute() {
         speed.y *= 0.65f - REG10_F(25);
     }
 
-    if (m45C == 0 && mProcFunc != &Act_c::stay_proc) {
-        mProcTimer--;
-        mAnmIdx++;
+    if (m45C == 0) {
+        void (Act_c::*stayProc)() = &Act_c::stay_proc;
+        int isStay = mProcFunc == stayProc;
+        if (!isStay) {
+            mProcTimer--;
+            mAnmIdx++;
+        }
     }
 
     set_mtx();
@@ -514,8 +523,8 @@ inline bool daObjMagmarock::Act_c::_execute() {
     (this->*mProcFunc)();
     play_anim();
 
-    current.angle.x = mQuakeAngle * cM_scos(mAngle);
-    current.angle.z = mQuakeAngle * cM_ssin(mAngle);
+    shape_angle.x = mQuakeAngle * cM_scos(mAngle);
+    shape_angle.z = mQuakeAngle * cM_ssin(mAngle);
     if (m29C == 0) {
         mQuat2 = ZeroQuat;
     }
