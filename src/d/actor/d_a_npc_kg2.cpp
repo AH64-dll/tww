@@ -574,7 +574,7 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     model->getModelData()->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(daNpc_Kg2_nodeCallBack);
     model->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 1.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &old.angle, &shape_angle);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, 0, 0);
     return TRUE;
 }
 
