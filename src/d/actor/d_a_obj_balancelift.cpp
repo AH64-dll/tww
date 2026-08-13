@@ -148,7 +148,6 @@ void daBalancelift_c::calc_quat() {
 
 /* 00000510-00000670       .text set_mtx__15daBalancelift_cFv */
 void daBalancelift_c::set_mtx() {
-    /* Nonmatching */
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::quatM(&mQuatL);
     mDoMtx_stack_c::transM(0.0f, -mCurrentY, 0.0f);
@@ -247,7 +246,6 @@ BOOL daBalancelift_c::CreateHeap() {
 
 /* 00000BA0-00000F34       .text CreateInit__15daBalancelift_cFv */
 cPhs_State daBalancelift_c::CreateInit() {
-    /* Nonmatching */
     u8 pathIdx = fopAcM_GetParam(this) >> 16;
     if (pathIdx != 0xFF) {
         mPath = dPath_GetRoomPath(pathIdx, current.roomNo);
