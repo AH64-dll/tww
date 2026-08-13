@@ -375,6 +375,7 @@ static BOOL daNpc_Arm_nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000834-000008E4       .text nodeArmControl__12daNpcBmcon_cFP7J3DNodeP8J3DModel */
 void daNpcBmcon_c::nodeArmControl(J3DNode* node, J3DModel* model) {
+    /* Nonmatching */
     J3DJoint* joint = (J3DJoint*)node;
     s32 jntNo = joint->getJntNo();
 
@@ -398,6 +399,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000904-00000994       .text phase_1__FP12daNpcBmcon_c */
 static cPhs_State phase_1(daNpcBmcon_c* i_this) {
+    /* Nonmatching */
     fopAcM_ct(i_this, daNpcBmcon_c);
 
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
@@ -513,6 +515,7 @@ static s16 daNpcBmcon_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 0000107C-00001468       .text createInit__12daNpcBmcon_cFv */
 cPhs_State daNpcBmcon_c::createInit() {
+    /* Nonmatching */
     u8 railID = 0xFF;
     u8 prmRailID = getPrmRailID();
     if (prmRailID != 0xFF) {
@@ -702,6 +705,7 @@ bool daNpcBmcon_c::_execute() {
 
 /* 00001878-00001BC8       .text executeCommon__12daNpcBmcon_cFv */
 BOOL daNpcBmcon_c::executeCommon() {
+    /* Nonmatching */
     if (m7AD) {
         if (m7C3 == 0) {
             m7AE = 1;
@@ -807,6 +811,7 @@ s32 daNpcBmcon_c::executeWaitInit() {
 
 /* 00001CC8-00001D38       .text executeWait__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeWait() {
+    /* Nonmatching */
     executeCommon();
     if (mNpcNo == 1 && m7AD != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
         m7AE = 2;
@@ -847,6 +852,7 @@ s32 daNpcBmcon_c::executeWalkInit() {
 
 /* 00001E6C-00002050       .text executeWalk__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeWalk() {
+    /* Nonmatching */
     if (!executeCommon()) {
         bool passed = false;
         if (mPathRun.chkPointPass(current.pos, (bool)mPathRun.getDir())) {
@@ -895,6 +901,7 @@ s32 daNpcBmcon_c::executeTurnInit() {
 
 /* 00002194-00002264       .text executeTurn__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeTurn() {
+    /* Nonmatching */
     if (!executeCommon()) {
         cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         s16 angle;
@@ -1011,6 +1018,7 @@ void daNpcBmcon_c::privateCut() {
 
 /* 000025F8-00002A48       .text eventMesSetInit__12daNpcBmcon_cFi */
 void daNpcBmcon_c::eventMesSetInit(int staffIdx) {
+    /* Nonmatching */
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if (pData) {
         mpMsgTbl = NULL;
@@ -1137,6 +1145,7 @@ void daNpcBmcon_c::eventGetItemInit() {
 
 /* 00002B38-00002C8C       .text talk2__12daNpcBmcon_cFi */
 u16 daNpcBmcon_c::talk2(int i_param) {
+    /* Nonmatching */
     u16 status = 0xFF;
     if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
 
@@ -1181,6 +1190,7 @@ u16 daNpcBmcon_c::talk2(int i_param) {
 
 /* 00002C8C-00002E58       .text next_msgStatus__12daNpcBmcon_cFPUl */
 u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
+    /* Nonmatching */
     u16 status = fopMsgStts_MSG_CONTINUES_e;
     if (*pMsgNo == 0x2AB4) {
         *pMsgNo = 0x2AFF;
@@ -1248,6 +1258,7 @@ u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00002E58-0000301C       .text getMsg__12daNpcBmcon_cFv */
 u32 daNpcBmcon_c::getMsg() {
+    /* Nonmatching */
     u32 msgNo = 0;
     mpMsgTbl = NULL;
 
@@ -1363,6 +1374,7 @@ void daNpcBmcon_c::setMtx() {
 
 /* 0000322C-0000356C       .text chkAttention__12daNpcBmcon_cFv */
 void daNpcBmcon_c::chkAttention() {
+    /* Nonmatching */
     m7C1 = 0;
 
     if(mEventCut.getAttnFlag()) {
@@ -1459,6 +1471,7 @@ void daNpcBmcon_c::chkAttention() {
 
 /* 0000356C-000036B8       .text lookBack__12daNpcBmcon_cFv */
 void daNpcBmcon_c::lookBack() {
+    /* Nonmatching */
     short target = m7A6;
     short desiredYRot = current.angle.y;
     cXyz* dstTemp = NULL;
@@ -1585,6 +1598,7 @@ cXyz daNpcBmcon_c::calcFlyDist() {
 
 /* 00003A7C-00003AE8       .text getFlyDistMax__12daNpcBmcon_cFv */
 s16 daNpcBmcon_c::getFlyDistMax() {
+    /* Nonmatching */
     return dComIfGs_getEventReg(dSv_event_flag_c::UNK_A7FF) + (dComIfGs_getEventReg(dSv_event_flag_c::UNK_A8FF) << 8);
 }
 
@@ -1596,6 +1610,7 @@ void daNpcBmcon_c::setFlyDistMax(s16 dist) {
 
 /* 00003B6C-00003BD8       .text getFlyDistNow__12daNpcBmcon_cFv */
 s16 daNpcBmcon_c::getFlyDistNow() {
+    /* Nonmatching */
     return dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_FBFF) + (dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_FAFF) << 8);
 }
 
@@ -1607,6 +1622,7 @@ void daNpcBmcon_c::setFlyDistNow(s16 dist) {
 
 /* 00003C5C-00003DC4       .text chkEndEvent__12daNpcBmcon_cFv */
 BOOL daNpcBmcon_c::chkEndEvent() {
+    /* Nonmatching */
     if (mNpcNo == 0) {
         if (dComIfGp_evmng_endCheck(mEventIdx1) && dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_F903) != 0) {
             g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
