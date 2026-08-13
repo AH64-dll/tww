@@ -529,6 +529,7 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
 }
 
 /* 00001FA4-00002304       .text daKantera_Create__FP10fopAc_ac_c */
+/* Nonmatching */
 static cPhs_State daKantera_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcSph at_sph_src = {
         // dCcD_SrcGObjInf
