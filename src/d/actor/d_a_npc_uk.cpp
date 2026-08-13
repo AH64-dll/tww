@@ -107,14 +107,15 @@ BOOL daNpc_Uk_c::chkPositioning(f32 param_0, f32 param_1, f32 param_2, s16 param
     /* Nonmatching */
 u8 daNpc_Uk_c::nextVisitMode() {
     u32 procId = mLookActorId;
-    fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
+    daNpc_Mk_c* pMk = (daNpc_Mk_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
+    fopAc_ac_c* pActor = pMk;
     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
     u8 lookMode;
-    if (pActor == NULL) {
+    if (pMk == NULL) {
         mVisitMode = VISIT_START;
     } else {
-        lookMode = ((daNpc_Mk_c*)pActor)->mVisitMode;
+        lookMode = pMk->mVisitMode;
     }
 
     if (mVisitMode == VISIT_WAIT_3) {
