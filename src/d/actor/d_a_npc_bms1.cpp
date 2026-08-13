@@ -270,6 +270,7 @@ void daNpc_Bms1_c::set_mtx() {
 }
 
 static msg_class* l_msg;
+static fpc_ProcID l_msgId;
 
 static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
 static const int l_bck_ix_tbl[] = { 0x13, 0x14, 0x16, 0x17, 0x15, 0x16, 0x17 };
@@ -793,13 +794,38 @@ BOOL daNpc_Bms1_c::event_action(void*) {
 }
 
 /* 00002A98-00002B94       .text evn_talk_init__12daNpc_Bms1_cFi */
-BOOL daNpc_Bms1_c::evn_talk_init(int) {
-    /* Nonmatching */
+BOOL daNpc_Bms1_c::evn_talk_init(int actorId) {
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    l_msgId = fpcM_ERROR_PROCESS_ID_e;
+    l_msg = NULL;
+    if (pMsgNo != NULL) {
+        mMsgNo = *pMsgNo;
+        if (mMsgNo == 0x2791) {
+            if (dComIfGs_isEventBit(0xA02)) {
+                mMsgNo = 0x2792;
+            }
+        }
+    } else {
+        mMsgNo = 0;
+    }
+    if (pEndMsgNo != NULL) {
+        m7E0 = *pEndMsgNo;
+    } else {
+        m7E0 = 0;
+    }
+    return TRUE;
 }
 
 /* 00002B94-00002BFC       .text evn_continue_talk_init__12daNpc_Bms1_cFi */
-BOOL daNpc_Bms1_c::evn_continue_talk_init(int) {
-    /* Nonmatching */
+BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    if (pEndMsgNo != NULL) {
+        m7E0 = *pEndMsgNo;
+    } else {
+        m7E0 = 0;
+    }
+    return TRUE;
 }
 
 /* 00002BFC-00002DD8       .text evn_talk__12daNpc_Bms1_cFv */
