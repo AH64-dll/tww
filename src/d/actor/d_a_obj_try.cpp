@@ -679,7 +679,18 @@ void daObjTry::Act_c::mode_sink_init() {
 
 /* 000016A0-0000177C       .text mode_sink__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_sink() {
-    /* Nonmatching */
+    f32 waterH = get_water_h();
+    f32 groundH = mAcch.GetGroundH();
+    daObj::SetCurrentRoomNo(this, &mAcch.m_gnd);
+    if (speed.y != 0.0f) {
+        if (current.pos.y + attr().m04 > waterH) {
+            f32 y = waterH - attr().m04;
+            if (y > groundH) {
+                current.pos.y = y;
+            }
+        }
+    }
+    daObj::posMoveF_stream(this, mStts.GetCCMoveP(), &cXyz::Zero, attr().m28, attr().m2C);
 }
 
 /* 0000177C-00001B58       .text mode_proc_call__Q28daObjTry5Act_cFv */
