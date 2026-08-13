@@ -1138,7 +1138,7 @@ bool daObjTry::Act_c::_execute() {
     }
 
     m635 = 0;
-    bool deleteFlag = true;
+    int deleteFlag = 1;
     if (!damage_cc_proc()) {
         if (!damage_bg_proc()) {
             if (m636 > 0) {
@@ -1148,7 +1148,7 @@ bool daObjTry::Act_c::_execute() {
     }
     m64E = 0;
     if (mode_proc_call()) {
-        deleteFlag = false;
+        deleteFlag = 0;
         set_mtx();
         mStts.SetRoomId(current.roomNo);
         mCyl.MoveCAtTg(current.pos);
