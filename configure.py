@@ -1788,7 +1788,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_vmsdz"),
     ActorRel(Matching,    "d_a_obj_vmsms"),
     ActorRel(Matching,    "d_a_obj_volcano"),
-    ActorRel(NonMatching, "d_a_obj_vtil"),
+    ActorRel(Equivalent, "d_a_obj_vtil"),  # stack-slot/anchor: 2/70 sub-100 0-one-sided accept
     ActorRel(NonMatching, "d_a_obj_vyasi"),
     ActorRel(Matching,    "d_a_obj_xfuta"),
     ActorRel(Matching,    "d_a_obj_zouK"),
