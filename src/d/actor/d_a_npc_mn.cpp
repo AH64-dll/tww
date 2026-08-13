@@ -850,7 +850,6 @@ void daNpcMn_c::checkOrder() {
 }
 
 /* 00001E80-00001F00       .text eventOrder__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventOrder() {
     if (mOrderMode == 2 || mOrderMode == 1) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -1008,7 +1007,6 @@ s32 daNpcMn_c::eventMesSet() {
 }
 
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventGetItemInit() {
     fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, mItemId, 0, -1, -1);
     if (itemID != fpcM_ERROR_PROCESS_ID_e) {
