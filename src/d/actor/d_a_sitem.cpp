@@ -18,8 +18,8 @@ static cXyz non_pos;
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
 /* Nonmatching */
 void hand_draw(sitem_class* i_this) {
-    J3DModel* model = i_this->mpModel;
     if (i_this->m2C0 < 6) {
+        J3DModel* model = i_this->mpModel;
         g_env_light.setLightTevColorType(model, &i_this->tevStr);
         mDoExt_modelUpdateDL(model);
     }
