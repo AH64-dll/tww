@@ -113,6 +113,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjKanoke_c*)i_this)->createHeap();
 }
 
+/* Nonmatching */
 /* 00000664-00000700       .text _create__13daObjKanoke_cFv */
 cPhs_State daObjKanoke_c::_create() {
     if (!(actor_condition & 8)) {
@@ -279,6 +280,7 @@ BOOL daObjKanoke_c::_execute() {
     return TRUE;
 }
 
+/* Nonmatching */
 /* 00000E7C-0000122C       .text executeNormal__13daObjKanoke_cFv */
 void daObjKanoke_c::executeNormal() {
     bool triggered = false;
@@ -358,6 +360,7 @@ void daObjKanoke_c::executeYureYoko() {
     }
 }
 
+/* Nonmatching */
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenYoko() {
     m860.x += 4.0f;
@@ -439,6 +442,7 @@ void daObjKanoke_c::executeOpenTate() {
     /* Nonmatching */
 }
 
+/* Nonmatching */
 /* 00001A6C-00001B24       .text executeEffectTate__13daObjKanoke_cFv */
 void daObjKanoke_c::executeEffectTate() {
     m884--;
@@ -485,6 +489,7 @@ u8 daObjKanoke_c::getPrmSwNo2() {
     return daObj::PrmAbstract(this, 0x8, 0x10);
 }
 
+/* Nonmatching */
 /* 00001C04-00001C9C       .text setMtx__13daObjKanoke_cFv */
 void daObjKanoke_c::setMtx() {
     if (!(m88F & 1)) {
