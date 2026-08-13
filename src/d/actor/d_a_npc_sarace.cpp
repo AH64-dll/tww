@@ -416,7 +416,7 @@ void daNpc_Sarace_c::wait01() {
 
 /* 00001024-000014B8       .text talk01__14daNpc_Sarace_cFv */
 
-    /* Nonmatching */void daNpc_Sarace_c::talk01() {
+    void daNpc_Sarace_c::talk01() {
     if (fopNpc_npc_c::talk(1) == fopMsgStts_BOX_CLOSED_e) {
         m743 = 1;
         if (mCurrMsgNo == 0xFA4) {
@@ -449,12 +449,10 @@ void daNpc_Sarace_c::wait01() {
         m729 = 0;
     }
     else if (mCurrMsgNo == 0xFB6) {
-        if (dComIfGp_checkMesgSendButton()) {
+        if (dComIfGp_checkMesgSendButton() == 1) {
             dComIfGp_setItemRupeeCount(ship_race_rupee);
             u8 reg = dComIfGs_getEventReg(0xAAFF);
-            u8 newReg = reg + 1;
-            if (newReg > 0xC)
-                newReg = 0xC;
+            u8 newReg = reg + 1 > 0xC ? 0xC : reg + 1;
             dComIfGs_setEventReg(0xAAFF, newReg);
             if (reg != newReg) {
                 dComIfGs_onEventBit(0x2820);
