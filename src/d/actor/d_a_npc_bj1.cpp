@@ -837,12 +837,34 @@ void daNpc_Bj1_c::partner_srch() {
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setCollision_SP_() {
-    /* Nonmatching */
+    static f32 l_chk_tbl[9][2] = {
+        {130.0f, 40.0f},
+        {100.0f, 40.0f},
+        {150.0f, 40.0f},
+        {100.0f, 40.0f},
+        {100.0f, 40.0f},
+        {130.0f, 40.0f},
+        {130.0f, 40.0f},
+        {130.0f, 40.0f},
+        {130.0f, 40.0f},
+    };
+    mCyl.SetC(current.pos);
+    mCyl.SetR(l_chk_tbl[mType][1]);
+    mCyl.SetH(l_chk_tbl[mType][0]);
+    g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
 }
 
 /* 000027B0-00002840       .text set_pthPoint__11daNpc_Bj1_cFUc */
-void daNpc_Bj1_c::set_pthPoint(unsigned char) {
-    /* Nonmatching */
+void daNpc_Bj1_c::set_pthPoint(u8 i_point) {
+    if (mPathRun.isPath()) {
+        u8 max = mPathRun.maxPoint();
+        if (i_point > max) {
+            i_point = max;
+        }
+        mPathRun.setIdx(i_point);
+        current.pos = mPathRun.getPoint(i_point);
+        mPathRun.nextIdxAuto();
+    }
 }
 
 /* 00002840-00002988       .text bj_clcFlySpd__11daNpc_Bj1_cFv */
@@ -887,12 +909,36 @@ void daNpc_Bj1_c::setPrtcl_drugPot_2() {
 
 /* 000032B4-00003330       .text delPrtcl_drugPot__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_drugPot() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter = mpPrtcl1;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        mpPrtcl1 = NULL;
+    }
+    emitter = mpPrtcl2;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        mpPrtcl2 = NULL;
+    }
+    emitter = mpPrtcl3;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        mpPrtcl3 = NULL;
+    }
 }
 
 /* 00003330-000033F4       .text setPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_danceLR() {
-    /* Nonmatching */
+    delPrtcl_danceLR();
+    dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+    mpPrtclDance1 = particle->set(
+        dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_NIYATODANCEL00, &current.pos, NULL, NULL, 0xFF,
+        NULL, current.roomNo, NULL, NULL, NULL);
+    mpPrtclDance2 = particle->set(
+        dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_NIYATODANCER00, &current.pos, NULL, NULL, 0xFF,
+        NULL, current.roomNo, NULL, NULL, NULL);
 }
 
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
@@ -902,7 +948,18 @@ void daNpc_Bj1_c::flwPrtcl_danceLR() {
 
 /* 00003484-000034D8       .text delPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_danceLR() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter = mpPrtclDance1;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        mpPrtclDance1 = NULL;
+    }
+    emitter = mpPrtclDance2;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(1);
+        mpPrtclDance2 = NULL;
+    }
 }
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */

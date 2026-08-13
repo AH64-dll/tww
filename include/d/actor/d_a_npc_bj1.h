@@ -220,12 +220,12 @@ public:
     /* 0x870 */ f32 m870;
     /* 0x874 */ f32 m874;
     /* 0x878 */ s32 m878;
-    /* 0x87C */ s32 m87C;
-    /* 0x880 */ s32 m880;
-    /* 0x884 */ s32 m884;
+    /* 0x87C */ JPABaseEmitter* mpPrtcl1;
+    /* 0x880 */ JPABaseEmitter* mpPrtcl2;
+    /* 0x884 */ JPABaseEmitter* mpPrtcl3;
     /* 0x888 */ s32 m888;
-    /* 0x88C */ s32 m88C;
-    /* 0x890 */ s32 m890;
+    /* 0x88C */ JPABaseEmitter* mpPrtclDance1;
+    /* 0x890 */ JPABaseEmitter* mpPrtclDance2;
     /* 0x894 */ s16 m894;
     /* 0x898 */ s32 mSeedProcID[4];
     /* 0x8A8 */ s8 m8A8;
