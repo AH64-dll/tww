@@ -650,6 +650,7 @@ u16 daNpc_Uk_c::talk() {
 /* 000018F0-00001DE4       .text init__10daNpc_Uk_cFv */
     /* Nonmatching */
 BOOL daNpc_Uk_c::init() {
+    cXyz temp(0.0f, 0.0f, 0.0f);
     attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
@@ -958,8 +959,11 @@ void daNpc_Uk_c::visitProc() {
         break;
     }
 
-    if ((int)mVisitMode < 0xB && (int)mVisitMode >= 9) {
+    switch (mVisitMode) {
+    case VISIT_WAIT_2:
+    case VISIT_WAIT_3:
         setFlag(0x20);
+        break;
     }
 }
 
@@ -1884,11 +1888,9 @@ cPhs_State daNpc_Uk_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Uk_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "Uk");
     if (state == cPhs_COMPLEATE_e) {
-        if (fopAcM_GetName(this) != fpcNm_NPC_UK_e) {
-            return cPhs_ERROR_e;
-        }
-
-        switch (getType()) {
+        switch (fopAcM_GetName(this)) {
+        case fpcNm_NPC_UK_e:
+            switch (getType()) {
         case TYPE_NORMAL:
             mType = TYPE_NORMAL;
             switch (getShapeType()) {
@@ -1914,6 +1916,10 @@ cPhs_State daNpc_Uk_c::_create() {
         default:
             mType = TYPE_NONE;
             break;
+            }
+            break;
+        default:
+            return cPhs_ERROR_e;
         }
 
         if (!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0xB7B0)) {
