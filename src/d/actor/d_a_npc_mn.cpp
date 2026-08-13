@@ -20,10 +20,10 @@ static char* l_npc_staff_id[] = {
 };
 
 static const char* l_arcname_tbl[] = { "Mn" };
-static const u16 l_bmd_ix_tbl[] = { 2 };
-static const u16 l_etc_bmd_ix_tbl[] = { 1 };
-static const u16 l_bck_ix_tbl[] = { 6, 10, 4, 5, 11, 7, 8, 9 };
-static const u16 l_btp_ix_tbl[] = { 3 };
+static const int l_bmd_ix_tbl[] = { 2 };
+static const int l_etc_bmd_ix_tbl[] = { 1 };
+static const int l_bck_ix_tbl[] = { 6, 10, 4, 5, 11, 7, 8, 9 };
+static const int l_btp_ix_tbl[] = { 3 };
 
 static sMnAnmDat l_npc_anm_wait[] = {
     {
@@ -304,19 +304,19 @@ static BOOL daNpc_Mn_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
 
-        mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
         if (jntNo == i_this->m_jnt.getHeadJntNum()) {
-            mDoMtx_stack_c::XrotM(i_this->m_jnt.getHead_y());
-            mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
         if (jntNo == i_this->m_jnt.getBackboneJntNum()) {
-            mDoMtx_stack_c::XrotM(i_this->m_jnt.getBackbone_y());
-            mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 
-        model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-        PSMTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        model->setAnmMtx(jntNo, *calc_mtx);
+        MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
     }
     return TRUE;
 }
@@ -1439,11 +1439,10 @@ u8 daNpcMn_c::getPrmSwitchBit2() {
 /* 000030C0-00003148       .text setMtx__9daNpcMn_cFv */
     /* Nonmatching */
 void daNpcMn_c::setMtx() {
-    J3DModel* model = mpMorf->getModel();
-    model->setBaseScale(scale);
+    mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::YrotM(shape_angle.y);
-    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00003148-00003478       .text chkAttention__9daNpcMn_cFv */
@@ -1579,10 +1578,7 @@ void daNpcMn_c::lookBack() {
 BOOL daNpcMn_c::initTexPatternAnm(bool param_1) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
-    if (m_head_tex_pattern == NULL) {
-        JUT_ASSERT(0xA19, m_head_tex_pattern != NULL);
-        OSPanic("d_a_npc_mn.cpp", 0xA19, "m_head_tex_pattern != 0");
-    }
+    JUT_ASSERT(0xA19, m_head_tex_pattern != NULL);
     if (!mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0f, 0, -1, param_1, 0)) {
         return FALSE;
     }
