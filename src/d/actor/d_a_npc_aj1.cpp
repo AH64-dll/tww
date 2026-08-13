@@ -729,9 +729,9 @@ void daNpc_Aj1_c::lookBack() {
 s32 daNpc_Aj1_c::chkAttention() {
     dAttention_c* attn = &dComIfGp_getAttention();
     if (attn->LockonTruth()) {
-        return this == attn->LockonTarget(0);
+        return this == attn->LockonTarget(0) ? 1 : 0;
     }
-    return this == attn->ActionTarget(0);
+    return this == attn->ActionTarget(0) ? 1 : 0;
 }
 
 /* 0000189C-000018DC       .text setAttention__11daNpc_Aj1_cFb */
