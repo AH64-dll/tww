@@ -109,3 +109,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T11:53Z — M10: 3-flip wave — #30 aygr Matching (first Matching-class, byte-perfect rel), #31 kg2 Equivalent (full approval trail), #32 sarace Equivalent (ratified by arbiter R2-7-2, bgt byte-identical proof). Ledger 74 NonMatching / 30 Equivalent / 313 Matching. Flip-discipline codified after 2 stale-incarnation violations (B9-3 stood down): flips only after RLead consensus + Main approval + BLead gate; valid-evidence flips stand gated never reverted. Bench caught 12+ real value bugs pre-flip this session. 4-version cycle green at e8aafa15d.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T12:37Z — M11: flip #33 d_a_tag_ba1 → ActorRel(Matching) — 2nd Matching-class flip, FULL approval trail (D5 fixes b343d9d7b → R9-7 4-step FLIP-READY → RLead-7 concurrence → Main approval → BLead execute+gate 3cd5fae91 15:37:12). Rel re-linked + sha1 byte-perfect vs pin (no Equivalent fallback). Ledger: 73 NonMatching / 30 Equivalent / 314 Matching. Orgctl lock-GC fixed (rmdir logging + status GC pass). Section-scan discipline held: 15+ real value bugs caught today pre-flip.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
