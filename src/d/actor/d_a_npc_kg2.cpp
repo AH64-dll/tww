@@ -201,7 +201,6 @@ void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
 
 /* 00000838-000009E8       .text subAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::subAnm() {
-    /* Nonmatching */
     if (m748 == 4) {
         s8 reverb = dComIfGp_getReverb(current.roomNo);
         JAIZelBasic::getInterface()->seStart(JA_SE_CV_KG_SLEEP, &eyePos, 0, reverb, 1.0f, 1.0f,
