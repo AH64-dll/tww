@@ -219,7 +219,7 @@ void daObjMagmarock::ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     f32 dist = sp30.abs2();
     f32 invDist;
     if (dist > 0.0f) {
-        invDist = 1.0f / std::sqrtf(dist);
+        invDist = std::sqrtf(dist);
     } else {
         invDist = dist;
     }
@@ -399,7 +399,6 @@ bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz& i_pos) {
 
 /* 0000167C-000017DC       .text calc_ground_quat__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::calc_ground_quat() {
-    /* Nonmatching */
     f32 yPos;
     if (dComIfGp_getMagma() != NULL) {
         yPos = dComIfGp_getMagma()->checkYpos(current.pos);
@@ -471,7 +470,6 @@ BOOL daObjMagmarock::Method::Execute(void* i_this) {
 
 /* 00001B38-00001EC0       .text _execute__Q214daObjMagmarock5Act_cFv */
 inline bool daObjMagmarock::Act_c::_execute() {
-    /* Nonmatching */
     calc_ground_quat();
 
     if (m45C == 0) {
