@@ -1416,7 +1416,7 @@ BOOL daNpc_Kf1_c::walk_1() { /* Nonmatching */
 
 /* 000035B0-00003670       .text talk_1__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::talk_1() { /* Nonmatching */
-    BOOL ret = FALSE;
+    bool ret = false;
     talk(1);
     if (mpCurrMsg == NULL) {
         return TRUE;
@@ -1426,8 +1426,8 @@ BOOL daNpc_Kf1_c::talk_1() { /* Nonmatching */
         case 6:
             break;
         case 0x13:
-            if (mCurrMsgNo == 0x1C2B) {
-                ret = TRUE;
+            if ((s32)mCurrMsgNo == 0x1C2B) {
+                ret = true;
             }
             m79E = 0xFF;
             mTalkOrder = 0;

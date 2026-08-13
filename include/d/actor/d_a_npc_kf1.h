@@ -179,10 +179,10 @@ public:
     /* 0x7F3 */ u8 mAtr;
     /* 0x7F4 */ u8 mTag;
     /* 0x7F5 */ s8 mBtpNo;
-    /* 0x7F6 */ u8 mAnmNo;
+    /* 0x7F6 */ s8 mAnmNo;
     /* 0x7F7 */ u8 mOrder;
     /* 0x7F8 */ u8 mStatus;
-    /* 0x7F9 */ u8 mPrevStatus;
+    /* 0x7F9 */ s8 mPrevStatus;
     /* 0x7FA */ u8 mLookMode;
     /* 0x7FB */ s8 mType;
     /* 0x7FC */ u8 mType2;
