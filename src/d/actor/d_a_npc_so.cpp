@@ -723,7 +723,7 @@ void daNpc_So_c::modeSwim() {
         } else {
             cLib_addCalc2(&field_0xB04, 1.0f, 1.0f, 3.0f);
             cXyz move = (mCirclePath.mPos - current.pos) * field_0xB04;
-            current.pos += move;
+            current.pos = current.pos + move;
             cLib_addCalcAngleS2(&shape_angle.y, mCirclePath.mAngle + 0x8000, 4, 0x400);
         }
 
@@ -780,7 +780,7 @@ void daNpc_So_c::modeNearSwim() {
         } else {
             cLib_addCalc2(&field_0xB04, 1.0f, 1.0f, 3.0f);
             cXyz move = (mCirclePath.mPos - current.pos) * field_0xB04;
-            current.pos += move;
+            current.pos = current.pos + move;
             cLib_addCalcAngleS2(&shape_angle.y, mCirclePath.mAngle + 0x8000, 4, 0x400);
             current.pos.y += field_0xB34;
         }
