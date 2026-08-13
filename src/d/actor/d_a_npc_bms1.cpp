@@ -266,9 +266,20 @@ void daNpc_Bms1_c::set_mtx() {
     }
 }
 
+static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
+
 /* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
-BOOL daNpc_Bms1_c::initTexPatternAnm(bool) {
-    /* Nonmatching */
+BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
+    J3DModelData* modelData = mpModel->getModelData();
+    mpBtpRes = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[mBtpIdx]);
+    JUT_ASSERT(0x23E, mpBtpRes != NULL);
+
+    if (mBtpAnm.init(modelData, mpBtpRes, TRUE, 2, 1.0f, 0, -1, i_0) == 0) {
+        return FALSE;
+    }
+    mBtpFrame = 0;
+    m34E = 0;
+    return TRUE;
 }
 
 /* 00000D54-00000DE0       .text playTexPatternAnm__12daNpc_Bms1_cFv */

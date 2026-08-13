@@ -90,10 +90,11 @@ public:
     /* 0x324 */ request_of_phase_process_class mPhs;
     /* 0x32C */ mDoExt_McaMorf* mpMorf;
     /* 0x330 */ u32 mShadowID;
-    /* 0x334 */ u8 m334[0x338 - 0x334];
+    /* 0x334 */ J3DAnmTexPattern* mpBtpRes;
     /* 0x338 */ mDoExt_btpAnm mBtpAnm;
     /* 0x34C */ u8 mBtpFrame;
-    /* 0x34D */ u8 m34D[0x350 - 0x34D];
+    /* 0x34D */ u8 m34D;
+    /* 0x34E */ u16 m34E;
     /* 0x350 */ J3DModel* mpModel;
     /* 0x354 */ J3DModel* mpModel2;
     /* 0x358 */ J3DModel* mpModel3;
@@ -139,7 +140,7 @@ public:
     /* 0x7F8 */ ShopCam_action_c mShopCam;
     /* 0x850 */ ShopItems_c mShopItems;
     /* 0x894 */ ShopCursor_c* mpShopCursor;
-    /* 0x898 */ u8 mBtpIdx;
+    /* 0x898 */ s8 mBtpIdx;
     /* 0x899 */ u8 m899;
     /* 0x89A */ u8 m89A;
     /* 0x89B */ s8 m89B;
