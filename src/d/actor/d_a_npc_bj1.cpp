@@ -805,13 +805,34 @@ fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID i_id) {
 }
 
 /* 00002608-000026B8       .text partner_srch_sub__11daNpc_Bj1_cFPFPvPv_Pv */
-bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_judgeFunc) {
+    bool ret = false;
+    mPartnerProcID = -1;
+    l_check_wrk = 0;
+    for (int i = 0; i < 20; i++) {
+        l_check_inf[i] = NULL;
+    }
+    fpcEx_Search(i_judgeFunc, this);
+    if (l_check_wrk != 0) {
+        fopAc_ac_c* actor = l_check_inf[0];
+        if (actor != NULL) {
+            mPartnerProcID = fopAcM_GetID(actor);
+        }
+        ret = true;
+    }
+    return ret;
 }
 
 /* 000026B8-00002724       .text partner_srch__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::partner_srch() {
-    /* Nonmatching */
+    fpcLyIt_JudgeFunc judge = NULL;
+    if (mActionIndex == 1) {
+        if (mSpecificType == 4) {
+            if (partner_srch_sub(searchActor_Jb)) {
+                mActionIndex++;
+            }
+        }
+    }
 }
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
