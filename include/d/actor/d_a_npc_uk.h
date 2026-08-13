@@ -99,7 +99,7 @@ public:
     void setEyePos(cXyz i_eyePos) { mEyePos = i_eyePos; }
     void setFlag(u16 flag) { mFlags |= flag; }
 
-    u8 getType();
+    int getType();
     u8 getPath();
     int getShapeType();
     u16 getCaughtFlag();

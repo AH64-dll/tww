@@ -17,7 +17,7 @@ static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
-u8 daNpc_Uk_c::getType() {
+int daNpc_Uk_c::getType() {
     return fopAcM_GetParam(this) & 0xFF;
 }
 
