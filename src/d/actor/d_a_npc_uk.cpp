@@ -1875,7 +1875,7 @@ cPhs_State daNpc_Uk_c::_create() {
                 m694 = 10.0f;
                 break;
             case 1:
-                m690 = 2.6f;
+                m690 = 2.3f;
                 m694 = 8.5f;
                 break;
             case 2:
