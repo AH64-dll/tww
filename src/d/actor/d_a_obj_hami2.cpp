@@ -95,7 +95,7 @@ BOOL daObjHami2::Act_c::CreateHeap() {
     cullMtx = mpModel->getBaseTRMtx();
 
     int prm = daObj::PrmAbstract(this, PRM_SWSAVE_W_e, PRM_SWSAVE_S_e);
-    if (dComIfGs_isSwitch(prm, fopAcM_GetRoomNo(this))) {
+    if (dComIfGs_isSwitch(prm, home.roomNo)) {
         mState = 3;
         mSpinAngle = 0x4000;
     } else {
