@@ -367,8 +367,8 @@ void daNpc_Kf1_c::ctrlAnmTag() {}
 
 /* 00000D88-00000DEC       .text chngAnmAtr__11daNpc_Kf1_cFUc */
 void daNpc_Kf1_c::chngAnmAtr(u8 i_attr) { /* Nonmatching */
-    if (mCurrMsgNo == 0x1C2E) {
-        g_dComIfG_gameInfo.play.getEvent()->mHindFlag &= ~0x40;
+    if ((s32)mCurrMsgNo == 0x1C2E) {
+        g_dComIfG_gameInfo.play.getEvent()->mHindFlag &= ~0x80;
     }
     if (i_attr != mAtr && i_attr <= 0xB) {
         mAtr = i_attr;
@@ -872,7 +872,7 @@ BOOL daNpc_Kf1_c::cut_move_GET_OUT() { /* Nonmatching */
 
 /* 00002044-0000205C       .text cut_init_DSP_RUPEE_CNT__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_DSP_RUPEE_CNT(int i_actIdx) { /* Nonmatching */
-    g_dComIfG_gameInfo.play.getEvent()->mHindFlag &= ~0x40;
+    g_dComIfG_gameInfo.play.getEvent()->mHindFlag &= ~0x80;
 }
 
 /* 0000205C-00002064       .text cut_move_DSP_RUPEE_CNT__11daNpc_Kf1_cFv */
@@ -896,7 +896,7 @@ void daNpc_Kf1_c::cut_init_RUPEE_CNT_END(int i_actIdx) {}
 
 /* 000020B8-000020EC       .text cut_move_RUPEE_CNT_END__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() { /* Nonmatching */
-    if (dComIfGs_getRupee() == g_dComIfG_gameInfo.play.mItemNowRupee) {
+    if ((u16)dComIfGs_getRupee() == (u16)g_dComIfG_gameInfo.play.mItemNowRupee) {
         g_dComIfG_gameInfo.play.getEvent()->mHindFlag |= 0x80;
         return TRUE;
     }
