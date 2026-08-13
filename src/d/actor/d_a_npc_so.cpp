@@ -826,7 +826,11 @@ void daNpc_So_c::modeGetRupee() {
 
 /* 00002C6C-00002CC0       .text modeEventTriForceInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventTriForceInit() {
-    /* Nonmatching */
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
+    offsetAppear();
+    setAnm(1, 0);
 }
 
 /* 00002CC0-00002D80       .text modeEventTriForce__10daNpc_So_cFv */
