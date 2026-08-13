@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ym1.h"
+#include "res/Object/Ym.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Ym1_childHIO_cFv */
 daNpc_Ym1_childHIO_c::daNpc_Ym1_childHIO_c() {
@@ -23,7 +24,7 @@ void area_check(fopAc_ac_c*, cXyz*, unsigned long) {
 
 /* 00000290-0000029C       .text setKariFlg__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::setKariFlg() {
-    /* Nonmatching */
+    mKariFlag = 1;
 }
 
 /* 0000029C-000002E8       .text nodeCB_Head__FP7J3DNodei */
@@ -102,13 +103,36 @@ void daNpc_Ym1_c::setMtx(bool) {
 }
 
 /* 00000D34-00000D48       .text bckResID__11daNpc_Ym1_cFi */
-void daNpc_Ym1_c::bckResID(int) {
+int daNpc_Ym1_c::bckResID(int idx) {
     /* Nonmatching */
+    static const int a_res_id_tbl[] = {
+        dRes_ID_YM_BCK_WAIT01_e, dRes_ID_YM_BCK_YM_KARI01_e,
+        dRes_ID_YM_BCK_YM_KARI2WAIT_e, dRes_ID_YM_BCK_YM_KTALK_e,
+        dRes_ID_YM_BCK_YM_KTALK02_e, dRes_ID_YM_BCK_YM_KWAIT_e,
+        dRes_ID_YM_BCK_YM_NBTLOOK_e, dRes_ID_YM_BCK_YM_NBTTALK_e,
+        dRes_ID_YM_BCK_YM_NBTWAIT_e, dRes_ID_YM_BCK_YM_WAIT02_e,
+        dRes_ID_YM_BCK_YM_SIT_e, dRes_ID_YM_BCK_YM_SITTALK_e,
+        dRes_ID_YM_BCK_YM_TALK01_e,
+    };
+    return a_res_id_tbl[idx];
 }
 
 /* 00000D48-00000D98       .text btpResID__11daNpc_Ym1_cFi */
-void daNpc_Ym1_c::btpResID(int) {
+int daNpc_Ym1_c::btpResID(int idx) {
     /* Nonmatching */
+    static const int a_res_id_tbl[] = {
+        dRes_ID_YM_BTP_YMHEAD01_e,
+    };
+    int resID = a_res_id_tbl[idx];
+    if (resID == dRes_ID_YM_BTP_YMHEAD01_e) {
+        switch (mSubType) {
+        case 1:
+            return dRes_ID_YM_BTP_YMHEAD01_e;
+        case 2:
+            return dRes_ID_YM_BTP_YMHEAD02_e;
+        }
+    }
+    return resID;
 }
 
 /* 00000D98-00000E98       .text init_texPttrnAnm__11daNpc_Ym1_cFScb */
