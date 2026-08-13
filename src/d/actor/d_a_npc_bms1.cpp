@@ -686,7 +686,6 @@ void daNpc_Bms1_c::setAttention(bool i_attn) {
 
 /* 00002144-000021F4       .text checkPlayerLanding__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::checkPlayerLanding() {
-    /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 playerY = player->current.pos.y;
     BOOL landed = FALSE;
@@ -702,6 +701,62 @@ BOOL daNpc_Bms1_c::checkPlayerLanding() {
 /* 000021F4-00002424       .text lookBack__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::lookBack() {
     /* Nonmatching */
+    cXyz target(0.0f, 0.0f, 0.0f);
+    cXyz* pTarget = NULL;
+    s16 angle = shape_angle.y;
+
+    switch (m89C) {
+    case 0:
+        break;
+    case 1:
+        if (m7CC != 0) {
+            cXyz eyePos = dNpc_playerEyePos(l_HIO.field_0x14);
+            target.x = eyePos.x;
+            target.y = eyePos.y;
+            target.z = eyePos.z;
+            pTarget = &target;
+            target.x = current.pos.x;
+            target.y = current.pos.y;
+            target.z = current.pos.z;
+            target.y = eyePos.y;
+        } else {
+            pTarget = NULL;
+        }
+        break;
+    case 2:
+        if (mShopItems.mItemId == -1) {
+            cXyz itemPos = mShopCam.getItemZoomPos(1.0f);
+            target.x = itemPos.x;
+            target.y = itemPos.y;
+            target.z = itemPos.z;
+        } else {
+            cXyz basePos = mShopItems.getSelectItemBasePos();
+            target.x = basePos.x;
+            target.y = basePos.y;
+            target.z = basePos.z;
+            cXyz itemPos = mShopItems.getSelectItemPos();
+            target.x = itemPos.x;
+            target.y = itemPos.y;
+            target.z = itemPos.z;
+            mpShopCursor->setPos(target);
+            mpShopCursor->setPos(basePos);
+            mpShopCursor->anm_play();
+        }
+        pTarget = &target;
+        target.x = current.pos.x;
+        target.y = current.pos.y;
+        target.z = current.pos.z;
+        target.y = eyePos.y;
+        break;
+    }
+
+    if (mJntCtrl.mbTrn) {
+        cLib_addCalcAngleS2(&m7C0, l_HIO.field_0x2A, 4, 0x800);
+    } else {
+        m7C0 = 0;
+    }
+
+    mJntCtrl.lookAtTarget(&shape_angle.y, &target, pTarget, angle, m7C0, true);
 }
 
 /* 00002424-0000249C       .text wait01__12daNpc_Bms1_cFv */
@@ -909,6 +964,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00003534-00003718       .text _create__12daNpc_Bms1_cFv */
 cPhs_State daNpc_Bms1_c::_create() {
+    /* Nonmatching */
     fopAcM_ct_Retail(this, daNpc_Bms1_c);
 
     mShopIdx = fopAcM_GetParam(this) >> 24;
