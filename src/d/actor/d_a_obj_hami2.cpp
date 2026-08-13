@@ -56,25 +56,24 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 0000012C-0000032C       .text CreateHeap__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::CreateHeap() {
+BOOL daObjHami2::Act_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
     JUT_ASSERT(0x68, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (mpModel == NULL) {
+    if (mpModel != NULL) {
+        JUTNameTab* jointName = mpModel->getModelData()->getJointName();
+        for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+            if (strcmp("mono1", jointName->getName(i)) == 0) {
+                mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+                break;
+            }
+        }
+        mpModel->setUserArea((u32)this);
+    } else {
         return FALSE;
     }
-
-    JUTNameTab* jointName = mpModel->getModelData()->getJointName();
-    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-        if (strcmp("mono1", jointName->getName(i)) == 0) {
-            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
-            break;
-        }
-    }
-    mpModel->setUserArea((u32)this);
-
-    BOOL ok = TRUE;
+    int ret = 1;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale);
@@ -82,9 +81,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
     mpBgW = new dBgW();
     if (mpBgW == NULL || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, 7), 1, &mMtx) != 0) {
-        ok = FALSE;
+        ret = 0;
     }
-    return ok;
+    if (ret != 1) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 0000032C-0000042C       .text Create__Q210daObjHami25Act_cFv */
@@ -112,9 +114,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* Nonmatching */cPhs_State daObjHami2::Act_c::Mthd_Create() {
     if (!(actor_condition & 8)) {
-        if (this != NULL) {
-            new (this) daObjHami2::Act_c();
-        }
+        new (this) daObjHami2::Act_c();
         actor_condition |= 8;
     }
 
