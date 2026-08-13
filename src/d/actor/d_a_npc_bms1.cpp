@@ -237,11 +237,11 @@ void daNpc_Bms1_c::set_mtx() {
     if (mShopIdx == 0) {
         cXyz offset(0.0f, 100.0f, 35.0f);
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::YrotM(current.angle.y);
         mDoMtx_stack_c::transM(offset);
     } else {
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::YrotM(current.angle.y);
     }
 
     PSMTXCopy(mDoMtx_stack_c::now, pModel->getBaseTRMtx());
