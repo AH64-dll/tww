@@ -337,6 +337,61 @@ void daNpc_Bms1_c::setTexAnm(s8 i_texNo) {
 /* 00000EBC-00001100       .text setAnmFromMsgTag__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::setAnmFromMsgTag() {
     /* Nonmatching */
+    if (mShopIdx == 1) {
+        return;
+    }
+
+    switch (g_dComIfG_gameInfo.play.mMesgAnime) {
+    case 0:
+        setAnm(0, -1.0f);
+        break;
+    case 1:
+        setAnm(1, -1.0f);
+        break;
+    case 2:
+        setAnm(2, -1.0f);
+        break;
+    case 3:
+        setAnm(3, -1.0f);
+        break;
+    case 4:
+        setAnm(4, -1.0f);
+        m89A = 1;
+        break;
+    case 5:
+        setAnm(5, -1.0f);
+        m89A = 3;
+        break;
+    case 6:
+        setAnm(6, -1.0f);
+        m89A = 3;
+        break;
+    }
+
+    if (m899 == 5) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+            if ((m89A -= 1) != 0) {
+            } else {
+                setAnm(0, 13.0f);
+            }
+        }
+    } else if (m899 == 6) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+            if ((m89A -= 1) != 0) {
+            } else {
+                setAnm(1, -1.0f);
+            }
+        }
+    } else if (m899 == 4) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+            if ((m89A -= 1) != 0) {
+            } else {
+                setAnm(1, -1.0f);
+            }
+        }
+    }
+
+    g_dComIfG_gameInfo.play.mMesgAnime = 0xFF;
 }
 
 /* 00001100-000011D8       .text chkAttention__12daNpc_Bms1_cF4cXyzs */
