@@ -864,10 +864,9 @@ void daNpcMn_c::eventOrder() {
 }
 
 /* 00001F00-00001F74       .text eventMove__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventMove() {
     if (!chkEndEvent()) {
-        u8 oldFlag = mEventCut.getAttnFlag();
+        bool oldFlag = mEventCut.getAttnFlag();
         if (mEventCut.cutProc()) {
             if (mEventCut.getAttnFlag() == 0) {
                 mEventCut.setAttnFlag(oldFlag);
