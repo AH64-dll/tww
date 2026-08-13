@@ -12,6 +12,7 @@ namespace daObjAygr {
     const char Act_c::M_arcname[] = "Aygr";
 
     /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */
+        /* Nonmatching */
     BOOL Act_c::CreateHeap() {
         J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGR_e);
         JUT_ASSERT(0x50, model_data != NULL);
@@ -97,6 +98,7 @@ namespace daObjAygr {
     }
 
     /* 0000054C-000005F8       .text set_mtx__Q29daObjAygr5Act_cFv */
+        /* Nonmatching */
     void Act_c::set_mtx() {
         PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -124,6 +126,7 @@ namespace daObjAygr {
     }
 
     /* 000006B0-0000079C       .text Draw__Q29daObjAygr5Act_cFv */
+        /* Nonmatching */
     BOOL Act_c::Draw() {
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
