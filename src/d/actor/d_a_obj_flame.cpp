@@ -536,10 +536,11 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
     daObjMagmarock::Act_c* rock = (daObjMagmarock::Act_c*)i_actor;
     Act_c* flame = (Act_c*)i_this;
     if (fopAc_IsActor(rock) && fopAcM_GetName(rock) == 0x2C && !fpcM_IsCreating(fopAcM_GetID(rock))) {
-        f32 f31 = 145.0f * flameAttr(flame)->mScale + M_attr_base.mF08;
-        f32 y1 = flame->current.pos.y;
-        f32 y2 = flame->eyePos.y;
-        f32 maxY = y1 > y2 ? y1 : y2;
+        f32 mScale = 145.0f * flameAttr(flame)->mScale;
+        f32 f31 = mScale + M_attr_base.mF08;
+        f32 y1 = flame->eyePos.y;
+        f32 y2 = flame->current.pos.y;
+        f32 maxY = y1 < y2 ? y2 : y1;
         f32 f30 = maxY + M_attr_base.mF0A;
         f32 f29 = maxY + M_attr_base.mF0C;
 
@@ -596,7 +597,7 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
         if (f4 < 0.1f) {
             f5 = M_attr_base.mF0E;
             f3 = 10.0f * M_attr_base.mF10 * f4;
-        } else if (f4 <= 0.9f) {
+        } else if (f4 > 0.9f) {
             f3 = 1.0f - f4;
             f5 = 10.0f * M_attr_base.mF0E * f3;
             f3 = 10.0f * M_attr_base.mF10 * f3;
