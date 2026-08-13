@@ -729,6 +729,88 @@ void daObjTry::Act_c::mode_sink() {
 /* 0000177C-00001B58       .text mode_proc_call__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::mode_proc_call() {
     /* Nonmatching */
+    if (mode_proc_ready == 0) {
+        mode_proc[0] = mode_proc_init[0];
+        mode_proc[1] = mode_proc_init[1];
+        mode_proc[2] = mode_proc_init[2];
+        mode_proc[3] = mode_proc_init[3];
+        mode_proc[4] = mode_proc_init[4];
+        mode_proc_ready = 1;
+    }
+
+    if (mMode == 2 && (actor_status & fopAcStts_CARRY_e) != 0) {
+        mode_carry_init();
+    }
+
+    M_bingo = 0;
+    M_restart = 0;
+    (this->*mode_proc[mMode])();
+
+    if (attr().m48 >= 0) {
+        if (M_bingo != 0 || M_restart != 0) {
+            eff_set_bingo(M_bingo, M_restart);
+        } else {
+            eff_clr_bingo();
+        }
+
+        if (M_bingo == 0 && M_restart == 0 && mMode != 2) {
+            mBrkAnm.getFrameCtrl()->setAttribute(0);
+        } else {
+            mBrkAnm.getFrameCtrl()->setRate(0.0f);
+            mBrkAnm.getFrameCtrl()->setAttribute(2);
+            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_RES_ST_BLINK, &eyePos, 0,
+                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
+                                            -1.0f, -1.0f, 0);
+        }
+    }
+
+    if (mType == 5) {
+        if (mMode == 2) {
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0108);
+        } else {
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0108);
+        }
+    } else if (mType == 6) {
+        if (mMode == 2) {
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0110);
+        } else {
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0110);
+        }
+    }
+    mBrkAnm.play();
+
+    m638 = speed.y;
+    cXyz curPos = current.pos;
+    cXyz curSpeed = speed;
+    mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    if (g_dComIfG_gameInfo.play.mBgS.ChkMoveBG(mAcch.m_gnd)) {
+        m635 = 1;
+    }
+    if (mMode == 0 || mMode == 2) {
+        current.pos = curPos;
+        speed = curSpeed;
+    }
+
+    damage_bg_proc_directly();
+
+    if (mMode != 2) {
+        tevStr.mRoomNo = current.roomNo;
+        tevStr.mEnvrIdxOverride = g_dComIfG_gameInfo.play.mBgS.GetPolyColor(mAcch.m_gnd);
+    }
+
+    if (current.roomNo != home.roomNo) {
+        m64F = 1;
+        if (attr().m72 != 0) {
+            if (daObj::PrmAbstract(this, 8, 8) != 0xFF) {
+                prm_set_swSave(0xFF);
+            }
+        }
+    }
+
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
+        m64E = 1;
+    }
+    return true;
 }
 
 /* 00001B58-00001B90       .text cull_set_draw__Q28daObjTry5Act_cFv */
