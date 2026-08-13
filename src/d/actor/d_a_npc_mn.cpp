@@ -1533,7 +1533,9 @@ void daNpcMn_c::lookBack() {
     s8 lookMode = mLookMode;
     switch (lookMode) {
         case 1:
-            lookAtPos.set(mLookAtX, mLookAtY, mLookAtZ);
+            lookAtPos.x = mLookAtX;
+            lookAtPos.y = mLookAtY;
+            lookAtPos.z = mLookAtZ;
             pTarget = &lookAtPos;
             break;
         case 2:
