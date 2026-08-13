@@ -73,7 +73,8 @@ static const int l_bck_head_ix_tbl[] = {0x7, 0x6, 0xA};
 static const int l_btp_ix_tbl[] = {0x14};
 
 /* 00000198-00000328       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+
+    /* Nonmatching */static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Sarace_c* i_this = (daNpc_Sarace_c*)model->getUserArea();
@@ -102,7 +103,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 00000364-00000478       .text initTexPatternAnm__14daNpc_Sarace_cFb */
-BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
     J3DModelData* modelData = mpMorf2->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Sarace", l_btp_ix_tbl[m740]);
     JUT_ASSERT(0xF9, m_head_tex_pattern != NULL);
@@ -117,7 +119,8 @@ BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
 }
 
 /* 00000478-00000504       .text playTexPatternAnm__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::playTexPatternAnm() {
+
+    /* Nonmatching */void daNpc_Sarace_c::playTexPatternAnm() {
     if (!cLib_calcTimer(&mTimer)) {
         if (mBtpFrame >= m_head_tex_pattern->getFrameMax()) {
             mBtpFrame -= m_head_tex_pattern->getFrameMax();
@@ -130,7 +133,8 @@ void daNpc_Sarace_c::playTexPatternAnm() {
 }
 
 /* 00000504-0000060C       .text setAnm__14daNpc_Sarace_cFScf */
-void daNpc_Sarace_c::setAnm(s8 anmIdx, f32 morf) {
+
+    /* Nonmatching */void daNpc_Sarace_c::setAnm(s8 anmIdx, f32 morf) {
     static u32 a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
     };
@@ -148,7 +152,8 @@ void daNpc_Sarace_c::setAnm(s8 anmIdx, f32 morf) {
 }
 
 /* 0000060C-00000760       .text chkAttention__14daNpc_Sarace_cF4cXyzs */
-BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
     f32 distXZ;
     s16 angleDiff;
 
@@ -171,7 +176,8 @@ BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
 }
 
 /* 00000760-000007D8       .text eventOrder__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::eventOrder() {
+
+    /* Nonmatching */void daNpc_Sarace_c::eventOrder() {
     if (m742 == 3) {
         fopAcM_orderOtherEvent2(this, "SARACE_EXPCAM", 1, 0xFFFF);
     }
@@ -200,7 +206,8 @@ void daNpc_Sarace_c::checkOrder() {
 }
 
 /* 000008E8-00000A6C       .text next_msgStatus__14daNpc_Sarace_cFPUl */
-u16 daNpc_Sarace_c::next_msgStatus(u32* pMsgNo) {
+
+    /* Nonmatching */u16 daNpc_Sarace_c::next_msgStatus(u32* pMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
     switch (*pMsgNo) {
         case 0xFA1:
@@ -307,7 +314,8 @@ u32 daNpc_Sarace_c::getMsg() {
 }
 
 /* 00000B50-00000BEC       .text anmAtr__14daNpc_Sarace_cFUs */
-void daNpc_Sarace_c::anmAtr(u16) {
+
+    /* Nonmatching */void daNpc_Sarace_c::anmAtr(u16) {
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
         case 0:
             setAnm(0, -1.0f);
@@ -323,7 +331,8 @@ void daNpc_Sarace_c::anmAtr(u16) {
 }
 
 /* 00000BEC-00000E24       .text CreateInit__14daNpc_Sarace_cFv */
-BOOL daNpc_Sarace_c::CreateInit() {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::CreateInit() {
     m718 = current.angle.x;
     m71A = current.angle.y;
     m71C = current.angle.z;
@@ -368,7 +377,8 @@ void daNpc_Sarace_c::setAttention() {
 }
 
 /* 00000E68-00000FF4       .text lookBack__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::lookBack() {
+
+    /* Nonmatching */void daNpc_Sarace_c::lookBack() {
     cXyz srcPos = cXyz::Zero;
     cXyz* pDstPos = NULL;
     s16 defaultY = current.angle.y;
@@ -411,7 +421,8 @@ void daNpc_Sarace_c::wait01() {
 }
 
 /* 00001024-000014B8       .text talk01__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::talk01() {
+
+    /* Nonmatching */void daNpc_Sarace_c::talk01() {
     if (fopNpc_npc_c::talk(1) == fopMsgStts_BOX_CLOSED_e) {
         m743 = 1;
         if (mCurrMsgNo == 0xFA4) {
@@ -468,7 +479,8 @@ BOOL daNpc_Sarace_c::dummy_action(void*) {
 }
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
-BOOL daNpc_Sarace_c::wait_action(void*) {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::wait_action(void*) {
     if (m746 == 0) {
         m743 = 1;
         m746++;
@@ -493,7 +505,8 @@ BOOL daNpc_Sarace_c::wait_action(void*) {
 }
 
 /* 000015BC-0000173C       .text event_endCheck_action__14daNpc_Sarace_cFPv */
-BOOL daNpc_Sarace_c::event_endCheck_action(void*) {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::event_endCheck_action(void*) {
     if (m746 == 0) {
         m746++;
         return TRUE;
@@ -533,7 +546,8 @@ void daNpc_Sarace_c::set_mtx() {
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
-BOOL daNpc_Sarace_c::_draw() {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::_draw() {
     J3DModel* model1 = mpMorf->getModel();
     J3DModel* model2 = mpMorf2->getModel();
     J3DModelData* modelData = model2->getModelData();
@@ -558,7 +572,8 @@ BOOL daNpc_Sarace_c::_draw() {
 }
 
 /* 00001938-00001A68       .text _execute__14daNpc_Sarace_cFv */
-BOOL daNpc_Sarace_c::_execute() {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::_execute() {
     m_jnt.setParam(l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX,
                    l_HIO.mNpc.mMinBackboneY, l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY,
                    l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY, l_HIO.mNpc.mMaxTurnStep);
@@ -597,7 +612,8 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00001B00-00001D1C       .text _create__14daNpc_Sarace_cFv */
-cPhs_State daNpc_Sarace_c::_create() {
+
+    /* Nonmatching */cPhs_State daNpc_Sarace_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Sarace_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "Sarace");
     if (state == cPhs_COMPLEATE_e) {
@@ -617,7 +633,8 @@ cPhs_State daNpc_Sarace_c::_create() {
 }
 
 /* 000020CC-00002498       .text CreateHeap__14daNpc_Sarace_cFv */
-BOOL daNpc_Sarace_c::CreateHeap() {
+
+    /* Nonmatching */BOOL daNpc_Sarace_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", 0xE);
     JUT_ASSERT(0x3F0, modelData != NULL);
     mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL,
