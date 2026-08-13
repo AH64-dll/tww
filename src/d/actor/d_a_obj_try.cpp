@@ -627,7 +627,7 @@ void daObjTry::Act_c::mode_carry() {
         m630--;
     }
     speed.y = 0.0f;
-    if ((actor_status & fopAcStts_UNK40000_e) == 0) {
+    if ((actor_status & fopAcStts_CARRY_e) == 0) {
         if (speedF > 0.0f) {
             mode_drop_init();
             mode_drop();
@@ -969,21 +969,21 @@ void daObjTry::Act_c::eff_clr_bingo() {
 /* 00002790-000027BC       .text eff_land_smoke__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_land_smoke() {
     /* Nonmatching */
-    daObj::make_land_effect(this, &mAcch.m_gnd, 0.0f);
+    daObj::make_land_effect(this, &mAcch.m_gnd, 1.0f);
 }
 
 /* 000027BC-0000280C       .text eff_hit_water_splash__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_hit_water_splash() {
     /* Nonmatching */
     cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
-    fopKyM_createWpillar(&pos, 0.0f, 0.75f, 0);
+    fopKyM_createWpillar(&pos, 1.0f, 0.75f, 0);
 }
 
 /* 0000280C-00002868       .text make_vib__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::make_vib() {
     /* Nonmatching */
     int ret = check_circle();
-    g_dComIfG_gameInfo.play.mVibration.StartShock(ret + 1, 1, cXyz(0.0f, 0.0f, 0.0f));
+    g_dComIfG_gameInfo.play.mVibration.StartShock(ret + 1, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
@@ -1070,7 +1070,7 @@ bool daObjTry::Act_c::_draw() {
     }
     mDoExt_modelUpdateDL(mpModel);
 
-    if ((actor_status & fopAcStts_UNK40000_e) == 0) {
+    if ((actor_status & fopAcStts_CARRY_e) == 0) {
         f32 h = (f32)attr().m4A;
         dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), h, mAcch.m_gnd, 0, 0.0f,
                                   &dDlst_shadowControl_c::mSimpleTexObj);
