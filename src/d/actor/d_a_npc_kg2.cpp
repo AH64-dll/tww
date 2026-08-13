@@ -195,11 +195,11 @@ void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
         }
     }
     if (m749 == 2) {
-        m_jnt.mbBackBoneLock = false;
-        m_jnt.mbHeadLock = true;
-    } else {
+        m_jnt.mbHeadLock = false;
         m_jnt.mbBackBoneLock = true;
+    } else {
         m_jnt.mbHeadLock = true;
+        m_jnt.mbBackBoneLock = true;
     }
 }
 
@@ -513,7 +513,7 @@ void daNpc_Kg2_c::lookBack() {
             look_pos.x = current.pos.x;
             look_pos.y = current.pos.y;
             look_pos.z = current.pos.z;
-            look_pos.y = m708.y;
+            look_pos.y = eyePos.y;
         }
         break;
     default:
