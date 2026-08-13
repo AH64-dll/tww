@@ -655,7 +655,26 @@ void daObjTry::Act_c::mode_drop() {
 
 /* 00001518-000016A0       .text mode_sink_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_sink_init() {
-    /* Nonmatching */
+    mCyl.ClrAtSet();
+    mCyl.OnTgSetBit();
+    mCyl.OnCoSetBit();
+    mAcch.SetRoofNone();
+    mAcch.ClrWallNone();
+    mAcch.ClrGrndNone();
+    mAcch.ClrWaterNone();
+    mAcch.OnLineCheck();
+    gravity = attr().mGravity + attr().m24;
+    f32 spd = speed.y * speed.y + speedF * speedF;
+    if (spd > 0.0f) {
+        spd = std::sqrtf(spd);
+    }
+    if (spd > attr().m30) {
+        f32 scale = attr().m30 / spd;
+        PSVECScale(&speed, &speed, scale);
+        speedF *= scale;
+    }
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    mMode = 4;
 }
 
 /* 000016A0-0000177C       .text mode_sink__Q28daObjTry5Act_cFv */
