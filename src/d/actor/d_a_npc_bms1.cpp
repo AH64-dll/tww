@@ -977,7 +977,6 @@ BOOL daNpc_Bms1_c::event_action(void*) {
 
 /* 00002A98-00002B94       .text evn_talk_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_talk_init(int actorId) {
-    /* Nonmatching */
     int* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
     int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
@@ -1014,7 +1013,6 @@ BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
 
 /* 00002BFC-00002DD8       .text evn_talk__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::evn_talk() {
-    /* Nonmatching */
     if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
     } else if (l_msg == NULL) {
@@ -1030,8 +1028,8 @@ BOOL daNpc_Bms1_c::evn_talk() {
             }
         } else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
             if (mMsgNo == 0x1DCA) {
-                s16 priceIdx;
-                s16 priceDelta;
+                int priceIdx;
+                int priceDelta;
                 if (m8A3[0] == 0x49) {
                     priceIdx = 4;
                     priceDelta = -10;
@@ -1044,7 +1042,7 @@ BOOL daNpc_Bms1_c::evn_talk() {
                 }
                 g_dComIfG_gameInfo.play.mItemBeastNumCounts[priceIdx] += priceDelta;
             } else if (mMsgNo == 0x1DC4) {
-                s16 priceIdx;
+                int priceIdx;
                 if (m8A3[0] == 0x49) {
                     priceIdx = 4;
                 } else if (m8A3[0] == 0x4A) {
