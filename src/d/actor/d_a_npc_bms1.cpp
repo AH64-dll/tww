@@ -1080,7 +1080,21 @@ BOOL daNpc_Bms1_c::privateCut() {
 
 /* 00002FBC-000030A4       .text demo_move__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::demo_move() {
-    /* Nonmatching */
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    if (demo_actor == NULL) {
+        if (m7E9 == 1) {
+            demo_end_init();
+        }
+        return FALSE;
+    }
+
+    m7E9 = 1;
+    J3DAnmTexPattern* btp = demo_actor->getP_BtpData("Bms");
+    if (btp != NULL) {
+        mBtpAnm.init(mpModel->getModelData(), btp, TRUE, 2, 1.0f, 0, -1, TRUE, 0);
+    }
+    dDemo_setDemoData(this, 0x6A, mpMorf, "Bms");
+    return TRUE;
 }
 
 /* 000030A4-000030B0       .text demo_end_init__12daNpc_Bms1_cFv */
