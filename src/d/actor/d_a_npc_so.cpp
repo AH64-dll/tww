@@ -13,6 +13,8 @@
 const s32 daNpc_So_c::m_heapsize = 0x1C00;
 const char daNpc_So_c::m_arc_name[] = "So";
 
+static daNpc_So_HIO_c l_HIO;
+
 const dCcD_SrcSph daNpc_So_c::m_sph_src = {
     // dCcD_SrcGObjInf
     {
@@ -54,7 +56,7 @@ daNpc_So_HIO_c::daNpc_So_HIO_c() {
     field_0x2C[4] = 0;
     field_0x2C[5] = 0;
     field_0x34 = 3.0f;
-    field_0x38 = 1.75f;
+    field_0x38 = 0.9f;
     field_0x3C = 100.0f;
     field_0x40 = 2000.0f;
     field_0x54 = 20000.0f;
@@ -290,9 +292,10 @@ bool daNpc_So_c::jntHitCreateHeap() {
     field_0xAA8 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (field_0xAA8 != NULL) {
         jntHit = field_0xAA8;
-        return TRUE;
+    } else {
+        return FALSE;
     }
-    return FALSE;
+    return TRUE;
 }
 
 /* 00000A84-00000C8C       .text checkTgHit__10daNpc_So_cFv */
@@ -329,8 +332,28 @@ void daNpc_So_c::offsetAppear() {
 }
 
 /* 00000D1C-00000E40       .text getMsg__10daNpc_So_cFv */
-void daNpc_So_c::getMsg() {
-    /* Nonmatching */
+u32 daNpc_So_c::getMsg() {
+    if (field_0xB0C != 0) {
+        if (l_HIO.field_0x2C[2] != 0 || field_0xB7C >= 0xA) {
+            if (field_0xBD9) {
+                return 0x32E2;
+            }
+            return 0x32DD;
+        }
+        if (field_0xB7C == 0) {
+            return 0x32E1;
+        }
+        if (field_0xB7C == 1) {
+            return 0x32E0;
+        }
+        dComIfGp_setMessageCountNumber(field_0xB7C);
+        return 0x32DF;
+    }
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0901) &&
+        strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 0xD) {
+        return field_0xBD8 ? field_0x6D0 : 0x32CA;
+    }
+    return field_0xBD8 ? field_0x6D0 : 0x32D0;
 }
 
 /* 00000E40-00001214       .text next_msgStatus__10daNpc_So_cFPUl */
