@@ -683,8 +683,10 @@ void daObjFtree::Act_c::action_pikupikuM_main() {
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
-        m696 = (s16)(100.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
-        m698 = (s16)(300.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
+        f32 sin = jmaSinTable[(u16)m694 >> jmaSinShift];
+        m696 = (s16)(100.0f * sin);
+        sin = jmaSinTable[(u16)m694 >> jmaSinShift];
+        m698 = (s16)(300.0f * sin);
         m694 += 0xFA0;
     } else if (cnt >= max) {
         process_init(2, 0);
@@ -710,8 +712,10 @@ void daObjFtree::Act_c::action_pikupikuL_main() {
     s16 cnt = m69C;
     s16 max = m69A;
     if (cnt < max || max == -1) {
-        m6A0 = (s16)(30.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
-        m6A2 = (s16)(36.0f * jmaSinTable[(u16)m69E >> jmaSinShift]);
+        f32 sin = jmaSinTable[(u16)m69E >> jmaSinShift];
+        m6A0 = (s16)(30.0f * sin);
+        sin = jmaSinTable[(u16)m69E >> jmaSinShift];
+        m6A2 = (s16)(36.0f * sin);
         m69E += 0xBB8;
     } else if (cnt >= max) {
         process_init(3, 0);
