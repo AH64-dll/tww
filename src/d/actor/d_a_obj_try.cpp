@@ -607,6 +607,7 @@ void daObjTry::Act_c::mode_carry_init() {
 
 /* 00001344-000013D4       .text mode_carry__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_carry() {
+    /* Nonmatching */
     if (m630 > 0) {
         m630--;
     }
@@ -655,6 +656,7 @@ void daObjTry::Act_c::mode_drop() {
 
 /* 00001518-000016A0       .text mode_sink_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_sink_init() {
+    /* Nonmatching */
     mCyl.ClrAtSet();
     mCyl.OnTgSetBit();
     mCyl.OnCoSetBit();
@@ -719,6 +721,7 @@ void daObjTry::Act_c::damaged() {
 
 /* 00001BE8-00001CD8       .text damage_cc_proc__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::damage_cc_proc() {
+    /* Nonmatching */
     if (mCyl.ChkAtHit()) {
         mCyl.ClrAtHit();
         speedF *= 0.3f;
@@ -733,8 +736,59 @@ bool daObjTry::Act_c::damage_cc_proc() {
 }
 
 /* 00001CD8-00001E98       .text damage_bg_proc__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::damage_bg_proc() {
+bool daObjTry::Act_c::damage_bg_proc() {
     /* Nonmatching */
+    s32 homeRoom = home.roomNo;
+    s32 stayRoom = dStage_roomControl_c::mStayNo;
+    bool groundHit = mAcch.ChkGroundHit();
+    bool sink = chk_sink_water();
+    bool ret = false;
+    bool sinkdown = false;
+
+    if (mMode == 1) {
+        if (sink) {
+            se_fall_water();
+            if (speed.y != 0.0f) {
+                eff_hit_water_splash();
+                m653 = 1;
+            } else {
+                m653 = 0;
+            }
+            mode_sink_init();
+        }
+    } else if (mMode == 3) {
+        if (groundHit) {
+            mode_wait_init();
+        } else if (sink) {
+            se_fall_water();
+            eff_hit_water_splash();
+            m653 = 1;
+            mode_sink_init();
+        }
+    } else if (mMode == 4) {
+        if (chk_sinkdown_water()) {
+            sinkdown = true;
+            if (m653 == 0) {
+                eff_hit_water_splash();
+            }
+        } else if (!sink) {
+            mode_wait_init();
+        }
+    }
+
+    if (groundHit && dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+        sinkdown = true;
+    }
+
+    if (sinkdown) {
+        if (homeRoom == stayRoom && (attr().m71 != 0 || m64F == 0)) {
+            mode_restart_init();
+        } else {
+            damaged();
+            ret = true;
+        }
+    }
+    return ret;
 }
 
 /* 00001E98-00001FEC       .text damage_bg_proc_directly__Q28daObjTry5Act_cFv */
