@@ -493,25 +493,7 @@ u16 daNpc_Uk_c::next_msgStatus(u32* pMsgNo) {
     switch (*pMsgNo) {
     case 0x26BF:
     case 0x26C1:
-    case 0x26C4:
-    case 0x26C6:
-    case 0x26C7:
-    case 0x26C8:
-    case 0x26C9:
-    case 0x26CA:
-    case 0x26CB:
-    case 0x26CC:
-    case 0x26CD:
-    case 0x26CE:
-    case 0x26CF:
-    case 0x26D0:
-    case 0x26D1:
-    case 0x26D2:
-    case 0x26D3:
-    case 0x26D4:
-    case 0x26D5:
-    case 0x26D6:
-    case 0x26D7:
+    case 0x26C3:
     case 0x26D8:
         *pMsgNo += 1;
         break;
