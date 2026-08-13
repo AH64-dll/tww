@@ -62,10 +62,10 @@ public:
     /* 0x47C */ dCcD_Cps mCps[3];
     /* 0x824 */ s32 m824[2];
     /* 0x82C */ dPa_smokeEcallBack mSmokeCb;
-    /* 0x84C */ u8 m84C[0x860 - 0x84C];
-    /* 0x860 */ f32 m860;
-    /* 0x864 */ f32 m864;
-    /* 0x868 */ f32 m868;
+    /* 0x84C */ cXyz m84C;
+    /* 0x858 */ csXyz m858;
+    /* 0x85E */ u8 m85E[0x860 - 0x85E];
+    /* 0x860 */ cXyz m860;
     /* 0x86C */ f32 m86C;
     /* 0x870 */ f32 m870;
     /* 0x874 */ f32 m874;

@@ -70,6 +70,8 @@ static dCcD_SrcCps l_cps_src_huta = {
     }},
 };
 
+static cXyz daObjKanoke_Yoko_pfs;
+
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */
 daObjKanoke_c::daObjKanoke_c() {
@@ -88,9 +90,7 @@ daObjKanoke_c::daObjKanoke_c() {
         m870 = 35.0f;
         m874 = 200.0f;
     }
-    m860 = 0.0f;
-    m864 = 75.0f;
-    m868 = 0.0f;
+    m860.set(0.0f, 75.0f, 0.0f);
     m87C = 0;
     m87E = 0;
     m880 = 0;
@@ -181,9 +181,7 @@ cPhs_State daObjKanoke_c::createInit() {
                 if (dComIfG_Bgsp()->Regist(m2A4, this)) {
                     return cPhs_ERROR_e;
                 }
-                m860 = 148.0f;
-                m864 = 75.0f;
-                m868 = 0.0f;
+                m860.set(148.0f, 75.0f, 0.0f);
                 m86C = 200.0f;
                 m870 = 0.0f;
                 m874 = 0.0f;
@@ -352,7 +350,37 @@ void daObjKanoke_c::executeYureYoko() {
 
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenYoko() {
-    /* Nonmatching */
+    m860.x += 4.0f;
+    m86C = 100.0f - m860.x;
+    if (m860.x > 100.0f) {
+        m880 += m882;
+        m882 -= 0x64;
+        if (m880 <= -0x15E0) {
+            m880 = -0x15E0;
+            m88B = 3;
+            mDoMtx_stack_c::YrotS(shape_angle.y);
+            mDoMtx_stack_c::transM(100.0f, 75.0f, 0.0f);
+            mDoMtx_stack_c::ZrotM(m880);
+            mDoMtx_stack_c::transM(-100.0f, -75.0f, 0.0f);
+            Mtx mtx;
+            PSMTXCopy(mDoMtx_stack_c::get(), mtx);
+            m858.x = 0;
+            m858.y = shape_angle.y;
+            m858.z = 0;
+            m878 = 180.0f;
+            cXyz pos = m860 + daObjKanoke_Yoko_pfs;
+            cXyz sp30;
+            PSMTXMultVec(mtx, (Vec*)&pos, (Vec*)&sp30);
+            m84C = sp30 + current.pos;
+            if (mSmokeCb.getEmitter() == NULL) {
+                dComIfGp_particle_set(0xA181, &m84C, &m858, NULL, (u8)m878, &mSmokeCb, -1);
+            }
+            if (mSmokeCb.getEmitter() != NULL) {
+                mSmokeCb.getEmitter()->mFlags |= 0x40;
+            }
+            m884 = 0x3C;
+        }
+    }
 }
 
 /* 00001544-000015F8       .text executeEffectYoko__13daObjKanoke_cFv */
@@ -365,7 +393,7 @@ void daObjKanoke_c::executeEffectYoko() {
                 m878 = 0.0f;
             }
             if (mSmokeCb.getEmitter() != NULL) {
-                mSmokeCb.getEmitter()->mGlobalPrmColor.b = (u8)m878;
+                mSmokeCb.getEmitter()->mGlobalPrmColor.a = (u8)m878;
             }
         }
     } else {
