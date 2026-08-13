@@ -1666,24 +1666,24 @@ BOOL daNpc_Uk_c::visit_action(void*) {
         chkAttention();
         clrFlag(0x40 | 0x20);
         switch (mState) {
-        case STATE_TALK01:
-            temp = talk01();
-            break;
-        case STATE_VISIT:
-            temp = visit01();
-            break;
         case STATE_DEMO01:
             temp = demo01();
             break;
         case STATE_DEMO02:
             temp = demo02();
             break;
-        case STATE_5:
-            temp = false;
-            setAction(&daNpc_Uk_c::hind_action, NULL);
+        case STATE_VISIT:
+            temp = visit01();
+            break;
+        case STATE_TALK01:
+            temp = talk01();
             break;
         case STATE_JITANDA02:
             temp = jitanda02();
+            break;
+        case STATE_5:
+            temp = false;
+            setAction(&daNpc_Uk_c::hind_action, NULL);
             break;
         default:
             temp = false;
