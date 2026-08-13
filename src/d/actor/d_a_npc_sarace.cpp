@@ -43,9 +43,6 @@ static dCcD_SrcCyl l_cyl_src = {
 
 static daNpc_Sarace_HIO_c l_HIO;
 
-s32 daNpc_Sarace_c::ship_race_rupee;
-s32 daNpc_Sarace_c::ship_race_result;
-
 /* 000000EC-00000198       .text __ct__18daNpc_Sarace_HIO_cFv */
 daNpc_Sarace_HIO_c::daNpc_Sarace_HIO_c() {
     mNpc.m04 = -20.0f;
@@ -85,10 +82,10 @@ static const int l_btp_ix_tbl[] = {0x14};
 
             if (jointNo == i_this->m_jnt.getHeadJntNum()) {
                 static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
+                cXyz pos(24.0f, 14.0f, 0.0f);
                 mDoMtx_stack_c::multVec(&l_offsetAttPos, &i_this->m708);
                 mDoMtx_stack_c::XrotM(i_this->m_jnt.getHead_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
-                cXyz pos(24.0f, 14.0f, 0.0f);
                 mDoMtx_stack_c::multVec(&pos, &i_this->m6FC);
             }
             else if (jointNo == i_this->m_jnt.getBackboneJntNum()) {
@@ -119,8 +116,7 @@ BOOL daNpc_Sarace_c::initTexPatternAnm(bool modify) {
 }
 
 /* 00000478-00000504       .text playTexPatternAnm__14daNpc_Sarace_cFv */
-
-    /* Nonmatching */void daNpc_Sarace_c::playTexPatternAnm() {
+void daNpc_Sarace_c::playTexPatternAnm() {
     if (!cLib_calcTimer(&mTimer)) {
         if (mBtpFrame >= m_btp->getFrameMax()) {
             mBtpFrame -= m_btp->getFrameMax();
@@ -314,8 +310,7 @@ u32 daNpc_Sarace_c::getMsg() {
 }
 
 /* 00000B50-00000BEC       .text anmAtr__14daNpc_Sarace_cFUs */
-
-    /* Nonmatching */void daNpc_Sarace_c::anmAtr(u16) {
+void daNpc_Sarace_c::anmAtr(u16) {
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
         case 0:
             setAnm(0, -1.0f);
@@ -331,8 +326,7 @@ u32 daNpc_Sarace_c::getMsg() {
 }
 
 /* 00000BEC-00000E24       .text CreateInit__14daNpc_Sarace_cFv */
-
-    /* Nonmatching */BOOL daNpc_Sarace_c::CreateInit() {
+BOOL daNpc_Sarace_c::CreateInit() {
     m718 = current.angle.x;
     m71A = current.angle.y;
     m71C = current.angle.z;
@@ -572,8 +566,7 @@ void daNpc_Sarace_c::set_mtx() {
 }
 
 /* 00001938-00001A68       .text _execute__14daNpc_Sarace_cFv */
-
-    /* Nonmatching */BOOL daNpc_Sarace_c::_execute() {
+BOOL daNpc_Sarace_c::_execute() {
     m_jnt.setParam(l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX,
                    l_HIO.mNpc.mMinBackboneY, l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY,
                    l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY, l_HIO.mNpc.mMaxTurnStep);
