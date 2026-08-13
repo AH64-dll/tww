@@ -1007,6 +1007,8 @@ void daNpcMn_c::eventMesSetInit(int staffIdx) {
 }
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
+    /* Nonmatching */
+    /* Nonmatching */
 s32 daNpcMn_c::eventMesSet() {
     return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
@@ -1030,6 +1032,7 @@ void daNpcMn_c::eventWaitInit(int staffIdx) {
 }
 
 /* 00002358-000023E8       .text eventWait__9daNpcMn_cFi */
+    /* Nonmatching */
 s32 daNpcMn_c::eventWait(int staffIdx) {
     if (mEvTimer != 0) {
         mEvTimer--;
@@ -1051,7 +1054,9 @@ void daNpcMn_c::eventSwOnInit(int staffIdx) {
     }
 }
 
+    /* Nonmatching */
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
+    /* Nonmatching */
 s32 daNpcMn_c::eventSwOn() {
     if (mEvTimer != 0) {
         mEvTimer--;
@@ -1073,6 +1078,7 @@ void daNpcMn_c::eventHatchInit() {
 }
 
 /* 00002540-00002578       .text eventHatch__9daNpcMn_cFv */
+    /* Nonmatching */
 s32 daNpcMn_c::eventHatch() {
     m7AE = m7A0;
     m794 = 0;
@@ -1150,6 +1156,7 @@ void daNpcMn_c::eventWalkInit() {
 }
 
 /* 000027DC-0000293C       .text eventWalk__9daNpcMn_cFv */
+    /* Nonmatching */
 s32 daNpcMn_c::eventWalk() {
     u8 turnFlag = 0;
     cXyz myPos = current.pos;
@@ -1185,6 +1192,7 @@ s32 daNpcMn_c::eventLook() {
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
+    /* Nonmatching */
 void daNpcMn_c::eventJumpInit(int staffIdx) {
     f32* pSpeedX = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedX");
     f32* pSpeedY = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedY");
