@@ -354,16 +354,15 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     if (isWait) {
         void (Act_c::*appearProc)() = &Act_c::appear_proc;
         int isAppear = mProcFunc == appearProc;
-        if (isAppear) {
-            return FALSE;
+        if (!isAppear) {
+            cXyz sp2C = current.pos - mLiftPos;
+            sp2C.y = 0.0f;
+            if (!sp2C.normalizeRS()) {
+                sp2C.set(0.0f, 0.0f, 1.0f);
+            }
+            PSVECScale(&sp2C, &sp2C, 10.0f);
+            PSVECAdd(&current.pos, &sp2C, &current.pos);
         }
-        cXyz sp2C = current.pos - mLiftPos;
-        sp2C.y = 0.0f;
-        if (!sp2C.normalizeRS()) {
-            sp2C.set(0.0f, 0.0f, 1.0f);
-        }
-        PSVECScale(&sp2C, &sp2C, 10.0f);
-        PSVECAdd(&current.pos, &sp2C, &current.pos);
         return FALSE;
     }
     cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
