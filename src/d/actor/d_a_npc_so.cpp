@@ -412,7 +412,7 @@ u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
         return msg_status;
     }
 
-    switch (*pMsgNo) {
+    switch ((s32)*pMsgNo) {
     case 0x32CA:
         *pMsgNo = 0x32CB;
         break;

@@ -12,6 +12,9 @@ class dCcD_SrcSph;
 
 class daNpc_So_c : public fopNpc_npc_c {
 public:
+    daNpc_So_c() {}
+    virtual ~daNpc_So_c() {}
+
     enum Proc_e {
         PROC_INIT_e = 0,
         PROC_EXEC_e = 1,
