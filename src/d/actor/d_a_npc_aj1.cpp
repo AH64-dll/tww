@@ -443,15 +443,13 @@ void daNpc_Aj1_c::ctrlAnmTag() {
 /* 00000F08-00000F44       .text chngAnmAtr__11daNpc_Aj1_cFUc */
         /* Nonmatching */
 void daNpc_Aj1_c::chngAnmAtr(u8 i_atr) {
-    if (i_atr != mAnmAtr) {
-        if (i_atr > 9) {
-            return;
-        }
-        mAnmAtr = i_atr;
-        setAnm_ATR();
-        if (mAnmAtr == 8) {
-            m75C = 3;
-        }
+    if (i_atr == mAnmAtr || i_atr > 9) {
+        return;
+    }
+    mAnmAtr = i_atr;
+    setAnm_ATR();
+    if (mAnmAtr == 8) {
+        m75C = 3;
     }
 }
 
