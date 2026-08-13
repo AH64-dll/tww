@@ -334,7 +334,20 @@ void daObjKanoke_c::executeNormal() {
 
 /* 0000122C-00001358       .text executeYureYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeYureYoko() {
-    /* Nonmatching */
+    m884 += 0x2000;
+    m886 -= 8;
+    m880 = (s16)(m886 * cM_ssin(m884));
+    if (m880 < 0) {
+        m86C = 100.0f;
+    } else {
+        m86C = -100.0f;
+    }
+    if (m886 <= 0) {
+        JAIZelBasic::zel_basic->seStart(0x695C, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        m88B = 2;
+        m880 = 0;
+        m86C = 0.0f;
+    }
 }
 
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
@@ -344,12 +357,43 @@ void daObjKanoke_c::executeOpenYoko() {
 
 /* 00001544-000015F8       .text executeEffectYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeEffectYoko() {
-    /* Nonmatching */
+    m884--;
+    if (m884 != 0) {
+        if (m884 <= 0x32) {
+            m878 -= 4.0f;
+            if (m878 < 0.0f) {
+                m878 = 0.0f;
+            }
+            if (mSmokeCb.getEmitter() != NULL) {
+                mSmokeCb.getEmitter()->mGlobalPrmColor.b = (u8)m878;
+            }
+        }
+    } else {
+        mSmokeCb.remove();
+        m88B = 7;
+    }
 }
 
 /* 000015F8-00001764       .text executeYureTate__13daObjKanoke_cFv */
 void daObjKanoke_c::executeYureTate() {
-    /* Nonmatching */
+    m884 += 0x2000;
+    m886 -= 0x20;
+    m87E = (s16)(m886 * cM_ssin(m884));
+    if (m87E < 0) {
+        m86C = 100.0f;
+    } else {
+        m86C = -100.0f;
+    }
+    if (m886 <= 0) {
+        JAIZelBasic::zel_basic->seStart(0x695A, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        m88B = 5;
+        if (m2A4->ChkUsed()) {
+            dComIfG_Bgsp()->Release(m2A4);
+        }
+        m87C = 0;
+        m87E = 0;
+        m86C = 0.0f;
+    }
 }
 
 /* 00001764-00001A6C       .text executeOpenTate__13daObjKanoke_cFv */
