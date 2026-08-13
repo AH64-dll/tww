@@ -1150,7 +1150,10 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
         /* Nonmatching */
 s32 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
     cXyz diff = i_pos - dComIfGp_getPlayer(0)->current.pos;
-    cXyz diffXZ(diff.x, 0.0f, diff.z);
+    cXyz diffXZ;
+    diffXZ.x = diff.x;
+    diffXZ.y = 0.0f;
+    diffXZ.z = diff.z;
     f32 distSq = PSVECSquareMag(&diffXZ);
     f32 dist;
     if (distSq > 0.0f) {
@@ -1257,7 +1260,7 @@ s32 daNpc_Aj1_c::wait_1() {
 
 /* 00002BC8-00002D08       .text talk_1__11daNpc_Aj1_cFv */
         /* Nonmatching */
-u8 daNpc_Aj1_c::talk_1() {
+int daNpc_Aj1_c::talk_1() {
     u8 partsNotMov = chk_parts_notMov();
     talk(1);
     if (mpCurrMsg == NULL) {
@@ -1307,7 +1310,9 @@ int daNpc_Aj1_c::wait_action1(void*) {
             setStt(1);
             mActionIndex++;
             break;
-        default:
+        case 1:
+        case 2:
+        case 3:
             m768 = chkAttention();
             switch (mStatus) {
                 case 1:

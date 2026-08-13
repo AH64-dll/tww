@@ -94,7 +94,7 @@ public:
     s32 FARwai();
     s32 call_1();
     s32 wait_1();
-    u8 talk_1();
+    int talk_1();
     int wait_action1(void*);
     int wait_action2(void*);
     u8 demo();
