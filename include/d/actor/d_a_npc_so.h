@@ -150,7 +150,7 @@ public:
     /* 0x6D8 */ int field_0x6D8;
     /* 0x6DC */ dCcD_Stts mStts;
     /* 0x718 */ dCcD_Sph mSph;
-    /* 0x844 */ u8 field_0x844[0x84C - 0x844];
+    /* 0x844 */ request_of_phase_process_class mPhs;
     /* 0x84C */ mDoExt_McaMorf* mpMorf;
     /* 0x850 */ J3DModel* mpModel;
     /* 0x854 */ mDoExt_btpAnm mBtpAnm;

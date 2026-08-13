@@ -970,7 +970,12 @@ cPhs_State daNpc_So_c::_create() {
 
 /* 000046E4-00004754       .text _delete__10daNpc_So_cFv */
 bool daNpc_So_c::_delete() {
-    /* Nonmatching */
+    if (dComIfGp_getMiniGameType() == 8) {
+        dComIfGp_endMiniGame(8);
+    }
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    mRipple.end();
+    return true;
 }
 
 /* 00004754-00004774       .text daNpc_SoCreate__FPv */
