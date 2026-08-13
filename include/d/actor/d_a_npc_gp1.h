@@ -145,9 +145,9 @@ public:
     /* 0x80D */ s8 mActNo;
     /* 0x80E */ s8 m80E;
     /* 0x80F */ u8 m80F;
-    /* 0x810 */ s8 mBtpNum;
-    /* 0x811 */ s8 mAnmNum;
-    /* 0x812 */ s8 m812;
+    /* 0x810 */ s8 mAnmTag;
+    /* 0x811 */ s8 mBtpNum;
+    /* 0x812 */ s8 mAnmNum;
     /* 0x813 */ s8 mStatus;
     /* 0x814 */ s8 mPrevStatus;
     /* 0x815 */ s8 mLookBackState;

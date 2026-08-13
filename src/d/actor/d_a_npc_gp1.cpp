@@ -158,7 +158,7 @@ bool daNpc_Gp1_c::createInit() {
         }
     }
     mEventCut.setActorInfo2("Gp1", this);
-    m812 = 8;
+    mAnmNum = 8;
     bool ret;
     switch(m818) {
         case 0:
@@ -245,7 +245,7 @@ bool daNpc_Gp1_c::setBtp(bool i_param_1, int i_btp_num) {
 
 /* 00000890-000008B8       .text iniTexPttrnAnm__11daNpc_Gp1_cFb */
 bool daNpc_Gp1_c::iniTexPttrnAnm(bool i_param_1) {
-    return setBtp(i_param_1, mAnmNum);
+    return setBtp(i_param_1, mBtpNum);
 }
 
 /* Nonmatching */
@@ -289,7 +289,7 @@ BOOL daNpc_Gp1_c::setAnm_anm(daNpc_Gp1_c::anm_prm_c* i_anmPrmP) {
         -1,
         "Gp"
     );
-    if(m812 == 0) {
+    if(mAnmNum == 0) {
         m7F6 = (s16)(cM_rndF(120.0f) + 180.0f);
         mPrevMorfFrame = 0.0f;
         m7F9 = 0;
@@ -329,11 +329,11 @@ bool daNpc_Gp1_c::setAnm() {
         {4, 0, 0, 8, 1, J3DFrameCtrl::EMode_NONE},
         {-1, -1, 0, 0, 0, -1},
     };
-    if(a_anm_prm_tbl[mStatus].mBtpNum >= 0) {
-        setAnm_tex(a_anm_prm_tbl[mStatus].mBtpNum);
+    if(a_anm_prm_tbl[mPrevStatus].mBtpNum >= 0) {
+        setAnm_tex(a_anm_prm_tbl[mPrevStatus].mBtpNum);
     }
-    if(a_anm_prm_tbl[mStatus].mAnmNum >= 0) {
-        setAnm_anm(&a_anm_prm_tbl[mStatus]);
+    if(a_anm_prm_tbl[mPrevStatus].mAnmNum >= 0) {
+        setAnm_anm(&a_anm_prm_tbl[mPrevStatus]);
     }
     return true;
 }
@@ -418,8 +418,8 @@ void daNpc_Gp1_c::anmAtr(u16 i_param_1) {
             {
                 u8 tag = dComIfGp_getMesgAnimeTagInfo();
                 dComIfGp_setMesgAnimeTagInfo(0xFF);
-                if(tag != 0xFF && (u8)mBtpNum != tag) {
-                    mBtpNum = (s8)tag;
+                if(tag != 0xFF && (u8)mAnmTag != tag) {
+                    mAnmTag = (s8)tag;
                     chg_anmTag();
                 }
             }
@@ -515,7 +515,7 @@ void daNpc_Gp1_c::lookBack() {
     desiredYrot = current.angle.y;
     bool headOnlyFollow = mHeadOnlyFollow;
 
-    switch(mLookBackState) {
+    switch(mType) {
         case 1:
             dstPos = dNpc_playerEyePos(-20.0f);
             dstPos_p = &dstPos;
@@ -743,7 +743,7 @@ void daNpc_Gp1_c::partner_srch() {
 
 /* 00001918-000019AC       .text ctrl_WAITanm__11daNpc_Gp1_cFv */
 void daNpc_Gp1_c::ctrl_WAITanm() {
-    switch(m812) {
+    switch(mAnmNum) {
         case 0:
             if(cLib_calcTimer(&m7F6) == 0) {
                 setAnm_NUM(4, 1);
@@ -852,8 +852,8 @@ bool daNpc_Gp1_c::create_rupee() {
 /* Nonmatching */
 /* 00001ED8-00001EF4       .text charDecide__11daNpc_Gp1_cFi */
 bool daNpc_Gp1_c::charDecide(int) {
-    mType = 0;
-    mSpecificType = -1;
+    mSpecificType = 0;
+    m818 = -1;
     m818 = 0;
     return true;
 }
@@ -1026,7 +1026,7 @@ void daNpc_Gp1_c::setStt(s8 i_status) {
 /* 0000240C-0000255C       .text wait_1__11daNpc_Gp1_cFv */
 BOOL daNpc_Gp1_c::wait_1() {
     m7F6 = (s16)(cM_rndF(120.0f) + 180.0f);
-    if(m809 != 0 && m812 != 4) {
+    if(m809 != 0 && mAnmNum != 4) {
         if(chk_talk()) {
             setStt(2);
             mHeadOnlyFollow = 0;
@@ -1290,10 +1290,10 @@ BOOL daNpc_Gp1_c::_execute() {
         mInitialAngle = current.angle;
         m802 = true;
     }
-    m_jnt.setParam(l_HIO.mPrmTbl.mMaxHeadX, l_HIO.mPrmTbl.mMaxHeadY,
-        l_HIO.mPrmTbl.mMinHeadX, l_HIO.mPrmTbl.mMinHeadY,
-        l_HIO.mPrmTbl.mMaxBackboneX, l_HIO.mPrmTbl.mMaxBackboneY,
+    m_jnt.setParam(l_HIO.mPrmTbl.mMaxBackboneX, l_HIO.mPrmTbl.mMaxBackboneY,
         l_HIO.mPrmTbl.mMinBackboneX, l_HIO.mPrmTbl.mMinBackboneY,
+        l_HIO.mPrmTbl.mMaxHeadX, l_HIO.mPrmTbl.mMaxHeadY,
+        l_HIO.mPrmTbl.mMinHeadX, l_HIO.mPrmTbl.mMinHeadY,
         l_HIO.mPrmTbl.mMaxTurnStep);
     if(m7FC && demoActorID == 0) {
         return TRUE;
@@ -1366,7 +1366,7 @@ cPhs_State daNpc_Gp1_c::_create() {
     if(!charDecide(tmp)) {
         return cPhs_ERROR_e;
     }
-    if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
+    if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mSpecificType])) {
         return cPhs_ERROR_e;
     }
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
