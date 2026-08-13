@@ -74,7 +74,8 @@ void control3(sss_class* i_this) {
     /* Nonmatching */
     sss_s* p = i_this->m33C;
     for (int i = 0; i < 10; i++, p++) {
-        p->mSize = (0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64)) * l_size_d[i];
+        f32 s = cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64);
+        p->mSize = (0.8f + 0.1f * s) * l_size_d[i];
     }
 }
 
