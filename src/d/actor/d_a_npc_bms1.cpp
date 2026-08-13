@@ -1000,7 +1000,6 @@ BOOL daNpc_Bms1_c::evn_talk_init(int actorId) {
 
 /* 00002B94-00002BFC       .text evn_continue_talk_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
-    /* Nonmatching */
     int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     if (pEndMsgNo != NULL) {
         m7E0 = *pEndMsgNo;
