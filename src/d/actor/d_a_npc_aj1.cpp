@@ -946,7 +946,7 @@ void daNpc_Aj1_c::privateCut(int i_staffIdx) {
                 cutEnd = 1;
                 break;
         }
-        if (cutEnd != 0) {
+        if ((u8)cutEnd != 0) {
             evtmgr->cutEnd(i_staffIdx);
         }
     }
@@ -1261,9 +1261,9 @@ int daNpc_Aj1_c::talk_1() {
     if (mpCurrMsg == NULL) {
         return partsNotMov;
     }
-    switch (mpCurrMsg->mMsgNo) {
-        case 6:
-        case 2:
+    switch (mpCurrMsg->mStatus) {
+        case fopMsgStts_MSG_TYPING_e:
+        case fopMsgStts_BOX_OPENING_e:
             break;
         case 19:
             switch (mCurrMsgNo) {
