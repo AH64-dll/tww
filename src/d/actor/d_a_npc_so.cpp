@@ -982,8 +982,34 @@ void daNpc_So_c::modeEventTriForce() {
 }
 
 /* 00002D80-00003110       .text modeProc__10daNpc_So_cFQ210daNpc_So_c6Proc_ei */
-void daNpc_So_c::modeProc(daNpc_So_c::Proc_e, int) {
+void daNpc_So_c::modeProc(daNpc_So_c::Proc_e i_procType, int i_mode) {
     /* Nonmatching */
+    static void (daNpc_So_c::*mode_proc[][2])() = {
+        {&daNpc_So_c::modeWaitInit, &daNpc_So_c::modeWait},
+        {&daNpc_So_c::modeHideInit, &daNpc_So_c::modeHide},
+        {&daNpc_So_c::modeJumpInit, &daNpc_So_c::modeJump},
+        {&daNpc_So_c::modeSwimInit, &daNpc_So_c::modeSwim},
+        {&daNpc_So_c::modeNearSwimInit, &daNpc_So_c::modeNearSwim},
+        {&daNpc_So_c::modeEventFirstWaitInit, &daNpc_So_c::modeEventFirstWait},
+        {&daNpc_So_c::modeEventFirstInit, &daNpc_So_c::modeEventFirst},
+        {&daNpc_So_c::modeEventFirstEndInit, &daNpc_So_c::modeEventFirstEnd},
+        {&daNpc_So_c::modeEventEsaInit, &daNpc_So_c::modeEventEsa},
+        {&daNpc_So_c::modeEventMapopenInit, &daNpc_So_c::modeEventMapopen},
+        {&daNpc_So_c::modeEventBowInit, &daNpc_So_c::modeEventBow},
+        {&daNpc_So_c::modeTalkInit, &daNpc_So_c::modeTalk},
+        {&daNpc_So_c::modeDisappearInit, &daNpc_So_c::modeDisappear},
+        {&daNpc_So_c::modeDebugInit, &daNpc_So_c::modeDebug},
+        {&daNpc_So_c::modeGetRupeeInit, &daNpc_So_c::modeGetRupee},
+        {&daNpc_So_c::modeEventTriForceInit, &daNpc_So_c::modeEventTriForce},
+    };
+
+    if (i_procType == 0) {
+        field_0x6CC = i_mode;
+        (this->*mode_proc[field_0x6CC][0])();
+    } else if (i_procType == 1) {
+        field_0x6CC = i_mode;
+        (this->*mode_proc[field_0x6CC][1])();
+    }
 }
 
 /* 00003110-00003264       .text eventOrder__10daNpc_So_cFv */
