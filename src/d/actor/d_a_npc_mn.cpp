@@ -1210,12 +1210,11 @@ void daNpcMn_c::eventJumpInit(int staffIdx) {
 }
 
 /* 00002A90-00002AE8       .text eventJump__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventJump() {
     current.pos.y += m788;
-    m788 += maxFallSpeed;
-    if (m788 < 0.0f && m7C0 & 0x80) {
-        m788 = 0.0f;
+    m788 += gravity;
+    if (m788 < 0.0f && mObjAcch.ChkGroundLanding()) {
+        speedF = 0.0f;
         m77C = 0.0f;
         return 1;
     }
