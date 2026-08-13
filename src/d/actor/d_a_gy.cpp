@@ -695,7 +695,20 @@ void daGy_c::modeDeleteInit() {
 
 /* 000028B8-00002998       .text modeDelete__6daGy_cFv */
 void daGy_c::modeDelete() {
-    /* Nonmatching */
+    if (m500 != -1) {
+        if (cLib_calcTimer(&m500) == 0) {
+            m932 = 1;
+        }
+    } else if (m4FC != -1) {
+        if (cLib_calcTimer(&m4FC) == 0) {
+            m930 = l_HIO.m0C;
+        }
+    } else if (mD15 == 8) {
+        if (mpMorf->isStop()) {
+            fopAcM_createDisappear(this, &current.pos, 0xA, 0, 0xFF);
+            fopAcM_delete(this);
+        }
+    }
 }
 
 /* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
