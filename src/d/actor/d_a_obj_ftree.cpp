@@ -825,20 +825,12 @@ s32 daObjFtree::Act_c::action_changeLS_init(s16) {
 /* 00002344-000025DC       .text action_changeLS_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeLS_main() {
     if (m2A7 != 0) {
-        f32 ratio;
-        if (m63C <= 0.2f) {
-            ratio = 0.0f;
-        } else if (m63C >= 1.0f) {
-            ratio = 1.0f;
-        } else {
-            ratio = (m63C - 0.2f) / 0.8f;
-        }
+        f32 ratio = (m63C <= 0.2f) ? 0.0f : ((m63C >= 1.0f) ? 1.0f : (m63C - 0.2f) / 0.8f);
         cLib_addCalc(&m63C, 0.2f, 0.02f, 1.0f, 0.005f);
         m674.r = (s16)(255.0f + ((f32)m664.r - 255.0f) * ratio);
         m674.g = (s16)(255.0f + ((f32)m664.g - 255.0f) * ratio);
         m674.b = (s16)(255.0f + ((f32)m664.b - 255.0f) * ratio);
         if (m63C == 0.2f) {
-    /* Nonmatching */
             m2A6 = 1;
             m2A7 = 0;
         }
@@ -1216,7 +1208,6 @@ bool daObjFtree::Act_c::_execute() {
 
 /* 000042C4-0000455C       .text _draw__Q210daObjFtree5Act_cFv */
 bool daObjFtree::Act_c::_draw() {
-    /* Nonmatching */
     if (mMode == 0) {
         return true;
     }
@@ -1237,7 +1228,7 @@ bool daObjFtree::Act_c::_draw() {
         mpMorf->updateDL();
         dComIfGd_setList();
 
-        cXyz pos = current.pos;
+        cXyz pos(current.pos.x, current.pos.y, current.pos.z);
         dComIfGd_setSimpleShadow2(&pos, m34C, 75.0f, mGndChk, shape_angle.y, 1.0f,
                                   &dDlst_shadowControl_c::mSimpleTexObj);
     }
@@ -1251,15 +1242,8 @@ bool daObjFtree::Act_c::_draw() {
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
 
-        f32 ratio;
-        if (m63C <= 0.2f) {
-            ratio = 0.0f;
-        } else if (m63C >= 1.0f) {
-            ratio = 1.0f;
-        } else {
-            ratio = (m63C - 0.2f) / 0.8f;
-        }
-        cXyz pos = current.pos;
+        f32 ratio = (m63C <= 0.2f) ? 0.0f : ((m63C >= 1.0f) ? 1.0f : (m63C - 0.2f) / 0.8f);
+        cXyz pos(current.pos.x, current.pos.y, current.pos.z);
         dComIfGd_setSimpleShadow2(&pos, m34C, 75.0f * (1.0f + 2.5f * ratio), mGndChk,
                                   shape_angle.y, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
     }
