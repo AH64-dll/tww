@@ -511,7 +511,6 @@ cPhs_State daNpcMn_c::createInit() {
 }
 
 /* 00000F3C-00000FE4       .text _delete__9daNpcMn_cFv */
-    /* Nonmatching */
 bool daNpcMn_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
     if (heap != NULL) {
@@ -519,7 +518,7 @@ bool daNpcMn_c::_delete() {
             mpMorf->stopZelAnime();
         }
     }
-    if (dComIfGp_getStartStageRoomNo() != 0 && strcmp(dComIfGp_getNextStageName(), "sea") == 0) {
+    if (dComIfGp_isEnableNextStage() && strcmp(dComIfGp_getNextStageName(), "sea") == 0) {
         dComIfGs_setEventReg(0x870F, 0);
     }
     return true;
