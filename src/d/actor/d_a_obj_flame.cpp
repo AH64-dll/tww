@@ -376,15 +376,16 @@ void daObjFlame::Act_c::em_position() {
     /* Nonmatching */
 void daObjFlame::Act_c::em_simple_set() {
     u8 flag = 0;
-    if (flameAttr(this)->mF2D != 0 && mbLiftup == 0) {
+    const attr_scl_s* attr = flameAttr(this);
+    if (attr->mF2D != 0 && mbLiftup == 0) {
         flag = 1;
     }
 
     if (mEm0State == 1 && flag) {
         Vec pos;
-        pos.x = eyePos.x;
-        pos.y = eyePos.y + mScaleY * (-300.0f * flameAttr(this)->mF04);
         pos.z = eyePos.z;
+        pos.y = eyePos.y + mScaleY * (-300.0f * attr->mF04);
+        pos.x = eyePos.x;
         dComIfGp_particle_setSimple(0x805A, (cXyz*)&pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 
@@ -539,9 +540,14 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         f32 f31 = mScale + M_attr_base.mF08;
         f32 y1 = flame->eyePos.y;
         f32 y2 = flame->current.pos.y;
-        f32 maxY = y1 < y2 ? y2 : y1;
-        f32 f30 = maxY + M_attr_base.mF0A;
-        f32 f29 = maxY + M_attr_base.mF0C;
+        u32 isLess = y1 < y2;
+        f32 f2 = isLess ? y1 : y2;
+        f32 f30 = f2 + M_attr_base.mF0A;
+        f32 f4 = y2;
+        if (isLess == 0) {
+            f4 = y1;
+        }
+        f32 f29 = f4 + M_attr_base.mF0C;
 
         cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
         cXyz b(flame->eyePos.x, 0.0f, flame->eyePos.z);
@@ -767,12 +773,17 @@ void daObjFlame::Act_c::mode_proc_call() {
     }
 
     if (mbCol) {
-        if (mModeProc == 5 && !(mHeight > flameAttr(this)->mF54)) {
-            return;
+        u8 doColl;
+        if (mModeProc == 5) {
+            doColl = mHeight > flameAttr(this)->mF54;
+        } else {
+            doColl = TRUE;
         }
-        mCps.SetStartEnd(mCpsP0, mCpsP1);
-        mCps.SetR(mCpsRad);
-        dComIfG_Ccsp()->Set(&mCps);
+        if (doColl) {
+            mCps.SetStartEnd(mCpsP0, mCpsP1);
+            mCps.SetR(mCpsRad);
+            dComIfG_Ccsp()->Set(&mCps);
+        }
     }
 }
 
