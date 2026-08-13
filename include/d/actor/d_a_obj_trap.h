@@ -18,9 +18,9 @@ public:
     void init_mtx();
     void set_co_pos();
     void get_ground();
-    bool circle_search();
+    int circle_search();
     void set_move_info();
-    bool check_arrival();
+    int check_arrival();
     cXyz check_wall();
     cXyz check_block(cXyz);
     BOOL check_block_target_pos(cXyz*);

@@ -125,16 +125,20 @@ cPhs_State daObjTrap_c::_create() {
             if (mParam != 0xFF) {
                 mpPath = dPath_GetRoomPath(mParam, current.roomNo);
                 if (mpPath && mpPath->m_points) {
-                    mSpeedIdx = (fopAcM_GetParam(this) >> 20) & 0xF;
+                    mSpeedIdx = (fopAcM_GetParam(this) >> 8) & 0xF;
                     if (mSpeedIdx == 0xF) {
                         mSpeedIdx = 0;
                     }
                     mSpeed = M_speed_table[mSpeedIdx];
                     mWait = M_wait_f_table[mSpeedIdx];
-                    current.pos.x = mpPath->m_points[0].m_position.x;
-                    current.pos.z = mpPath->m_points[0].m_position.z;
+                    dPnt* pnt = &mpPath->m_points[0];
+                    f32 pos_z = pnt->m_position.z;
+                    f32 pos_x = pnt->m_position.x;
+                    current.pos.z = pos_z;
+                    current.pos.x = pos_x;
                     set_move_info();
-                    mDist = (mPathPosA - mPathPosB).absXZ();
+                    cXyz dist_vec = mPathPosA - mPathPosB;
+                    mDist = dist_vec.absXZ();
                     mCurPos = current.pos;
                     init_mtx();
                     mStts.Init(0, 0xFF, this);
@@ -192,7 +196,7 @@ void daObjTrap_c::get_ground() {
 }
 
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
-bool daObjTrap_c::circle_search() {
+int daObjTrap_c::circle_search() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz diff = player->current.pos - current.pos;
     f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
@@ -213,7 +217,7 @@ void daObjTrap_c::set_move_info() {
 }
 
 /* 0000122C-000013E4       .text check_arrival__11daObjTrap_cFv */
-bool daObjTrap_c::check_arrival() {
+int daObjTrap_c::check_arrival() {
     cXyz d1 = mCurPos - mPathPosB;
     cXyz d2 = mPathPosA - mPathPosB;
     f32 mag1 = PSVECSquareMag((Vec*)&cXyz(d1.x, 0.0f, d1.z));
@@ -444,19 +448,19 @@ bool daObjTrap_c::_execute() {
             mCurPos = block;
             set_vib_mode();
             set_shine();
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else if (chase == 1) {
             set_vib_mode();
             set_shine();
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
-        } else if (circle_search()) {
+        } else if (circle_search() == 1) {
             mVibMode = 1;
         } else {
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
@@ -471,18 +475,18 @@ bool daObjTrap_c::_execute() {
             mCurPos = block;
             set_vib_mode();
             set_shine();
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
-        } else if (check_arrival()) {
+        } else if (check_arrival() == 1) {
             mCurPos = mPathPosA;
             set_vib_mode();
             set_shine();
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_STOP, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
         } else {
-            u32 reverb = dComIfGp_getReverb(current.roomNo);
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
             JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_WDUN_TRAP_MOVE, &current.pos, 0, reverb,
                                                  1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
@@ -498,7 +502,7 @@ bool daObjTrap_c::_execute() {
             mBoundTimer--;
         }
         if (mVibTimer == 0) {
-            shape_angle.y = mAngleY;
+            shape_angle.x = mAngleY;
             if (mBoundTimer == 0) {
                 mWaitTimer = mWait;
                 mVibMode = 3;
