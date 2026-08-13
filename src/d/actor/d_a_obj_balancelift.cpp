@@ -248,7 +248,7 @@ BOOL daBalancelift_c::CreateHeap() {
 /* 00000BA0-00000F34       .text CreateInit__15daBalancelift_cFv */
 cPhs_State daBalancelift_c::CreateInit() {
     /* Nonmatching */
-    u8 pathIdx = fopAcM_GetParam(this) >> 8;
+    u8 pathIdx = fopAcM_GetParam(this) >> 16;
     if (pathIdx != 0xFF) {
         mPath = dPath_GetRoomPath(pathIdx, current.roomNo);
         if (mPath != NULL && mPath->m_num > 0) {
@@ -256,8 +256,9 @@ cPhs_State daBalancelift_c::CreateInit() {
             home.pos = current.pos;
 
             if (mPath->m_num > 1) {
+                cXyz child_pos = mPath->m_points[1].m_position;
                 fpc_ProcID child_id = fopAcM_createChild(fpcNm_Balancelift_e, fopAcM_GetID(this), -1,
-                                                         &mPath->m_points[1].m_position, tevStr.mRoomNo,
+                                                         &child_pos, tevStr.mRoomNo,
                                                          NULL, NULL, -1);
                 parentActorID = child_id;
             }
@@ -297,6 +298,7 @@ cPhs_State daBalancelift_c::CreateInit() {
     dComIfG_Bgsp()->Regist(pm_bgw, this);
 
     mOldPos = current.pos;
+    mOldPos.y -= mCurrentY;
     mOffset = cXyz::Zero;
     mTarget = cXyz::Zero;
     mRightPos = cXyz::Zero;
