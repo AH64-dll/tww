@@ -269,6 +269,7 @@ void daNpc_Bms1_c::set_mtx() {
 static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
 
 /* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
+/* Nonmatching */
 BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
     J3DModelData* modelData = mpModel->getModelData();
     mpBtpRes = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[mBtpIdx]);
@@ -285,6 +286,15 @@ BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
 /* 00000D54-00000DE0       .text playTexPatternAnm__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::playTexPatternAnm() {
     /* Nonmatching */
+    if (cLib_calcTimer(&m34E) == 0) {
+        s16 frameCount = mpBtpRes->getFrameMax();
+        if (mBtpFrame >= frameCount) {
+            mBtpFrame = mBtpFrame - frameCount;
+            m34E = (s16)(cM_rndF(100.0f) + 30.0f);
+        } else {
+            mBtpFrame = mBtpFrame + 1;
+        }
+    }
 }
 
 /* 00000DE0-00000E78       .text setAnm__12daNpc_Bms1_cFScf */

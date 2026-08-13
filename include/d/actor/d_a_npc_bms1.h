@@ -94,7 +94,7 @@ public:
     /* 0x338 */ mDoExt_btpAnm mBtpAnm;
     /* 0x34C */ u8 mBtpFrame;
     /* 0x34D */ u8 m34D;
-    /* 0x34E */ u16 m34E;
+    /* 0x34E */ s16 m34E;
     /* 0x350 */ J3DModel* mpModel;
     /* 0x354 */ J3DModel* mpModel2;
     /* 0x358 */ J3DModel* mpModel3;
