@@ -140,10 +140,9 @@ void daBalancelift_c::calc_quat() {
     C_QUATSlerp(&mQuatL, &quat1, &out, 0.1f + REG10_F(23));
     mQuatL = out;
 
-    Quaternion quat2;
-    daObj::quat_rotBaseY2(&quat2, left);
-    PSQUATInverse(&quat2, &quat2);
-    C_QUATSlerp(&mQuatR, &quat2, &out, 0.15f + REG10_F(24));
+    daObj::quat_rotBaseY2(&quat1, left);
+    PSQUATInverse(&quat1, &quat1);
+    C_QUATSlerp(&mQuatR, &quat1, &out, 0.15f + REG10_F(24));
     mQuatR = out;
 }
 
