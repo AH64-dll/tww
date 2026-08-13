@@ -191,7 +191,6 @@ namespace daObjAshut {
     }
 
     /* 000008D4-00000A50       .text mode_l_u__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     void Act_c::mode_l_u() {
         if (mTimer2 > 0) {
             mTimer2--;
