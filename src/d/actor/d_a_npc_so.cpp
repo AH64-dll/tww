@@ -560,6 +560,11 @@ void daNpc_So_c::modeJump() {
 /* 000019F0-00001A6C       .text modeSwimInit__10daNpc_So_cFv */
 void daNpc_So_c::modeSwimInit() {
     /* Nonmatching */
+    attention_info.flags = 0x2000A;
+    field_0xA90 = (int)(30.0f + cM_rndF(90.0f));
+    setAnm(2, 0);
+    m_jnt.onBackBoneLock();
+    offsetDive();
 }
 
 /* 00001A6C-00001DB8       .text modeSwim__10daNpc_So_cFv */
@@ -569,7 +574,9 @@ void daNpc_So_c::modeSwim() {
 
 /* 00001DB8-00001DFC       .text modeNearSwimInit__10daNpc_So_cFv */
 void daNpc_So_c::modeNearSwimInit() {
-    /* Nonmatching */
+    setAnm(2, 0);
+    offsetDive();
+    m_jnt.onBackBoneLock();
 }
 
 /* 00001DFC-00002144       .text modeNearSwim__10daNpc_So_cFv */
@@ -656,7 +663,9 @@ void daNpc_So_c::modeEventBow() {
 
 /* 000027F8-0000283C       .text modeTalkInit__10daNpc_So_cFv */
 void daNpc_So_c::modeTalkInit() {
-    /* Nonmatching */
+    offsetAppear();
+    setAnm(3, 0);
+    m_jnt.offBackBoneLock();
 }
 
 /* 0000283C-0000289C       .text modeTalk__10daNpc_So_cFv */
@@ -666,7 +675,14 @@ void daNpc_So_c::modeTalk() {
 
 /* 0000289C-0000296C       .text modeDisappearInit__10daNpc_So_cFv */
 void daNpc_So_c::modeDisappearInit() {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0901)) {
     /* Nonmatching */
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0901);
+    }
+    offsetDive();
+    fopAcM_seStart(this, 0x593B, 0);
+    fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 45.0f, 0);
+    m_jnt.offBackBoneLock();
 }
 
 /* 0000296C-00002A90       .text modeDisappear__10daNpc_So_cFv */
@@ -686,7 +702,6 @@ void daNpc_So_c::modeDebug() {
 
 /* 00002B64-00002B68       .text modeGetRupeeInit__10daNpc_So_cFv */
 void daNpc_So_c::modeGetRupeeInit() {
-    
 }
 
 /* 00002B68-00002C6C       .text modeGetRupee__10daNpc_So_cFv */
