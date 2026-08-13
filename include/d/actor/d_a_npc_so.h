@@ -12,7 +12,8 @@ class dCcD_SrcSph;
 class daNpc_So_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
     int getMiniGameRestArrow() { return 10 - mB78; }
@@ -167,7 +168,8 @@ public:
     /* 0xAAC */ u8 field_0xAAC[0xAE8 - 0xAAC];
     /* 0xAE8 */ dPa_rippleEcallBack mRipple;
     /* 0xAFC */ f32 field_0xAFC;
-    /* 0xB00 */ u8 field_0xB00[0xB08 - 0xB00];
+    /* 0xB00 */ f32 field_0xB00;
+    /* 0xB04 */ u8 field_0xB04[0xB08 - 0xB04];
     /* 0xB08 */ f32 field_0xB08;
     /* 0xB0C */ u8 field_0xB0C;
     /* 0xB0D */ u8 field_0xB0D[0xB38 - 0xB0D];

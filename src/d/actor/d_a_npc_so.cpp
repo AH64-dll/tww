@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
+#include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "res/Object/So.h"
 
@@ -523,11 +524,37 @@ void daNpc_So_c::modeHide() {
 /* 00001778-00001880       .text modeJumpInit__10daNpc_So_cFv */
 void daNpc_So_c::modeJumpInit() {
     /* Nonmatching */
+    field_0xAFC = field_0xB08 * (5.0f + cM_rndF(5.0f));
+    speedF = field_0xAFC;
+    speed.y = 30.0f * field_0xB08 + 4.0f * speedF;
+    if (speed.y > l_HIO.field_0x50) {
+        speed.y = l_HIO.field_0x50;
+    }
+    field_0xB00 = speed.y;
+    shape_angle.x = l_HIO.field_0x68;
+    setAnm(4, 0);
+    m_jnt.onBackBoneLock();
+    fopAcM_seStart(this, 0x5938, 0);
 }
 
 /* 00001880-000019F0       .text modeJump__10daNpc_So_cFv */
 void daNpc_So_c::modeJump() {
+    if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
     /* Nonmatching */
+        fopAcM_seStart(this, 0x5939, 0);
+        fopKyM_createWpillar(&current.pos, 45.0f * scale.x, 45.0f, 0);
+
+        cXyz diff = field_0xA80 - current.pos;
+        cXyz flat;
+        flat.x = diff.x;
+        flat.y = 0.0f;
+        flat.z = diff.z;
+        f32 dist = std::sqrtf(PSVECSquareMag(&flat));
+        if (dist > field_0xA7C) {
+            current.pos = field_0xA80;
+        }
+        modeProc(PROC_INIT_e, 3);
+    }
 }
 
 /* 000019F0-00001A6C       .text modeSwimInit__10daNpc_So_cFv */
