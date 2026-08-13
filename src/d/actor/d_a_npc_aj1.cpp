@@ -957,7 +957,6 @@ s32 daNpc_Aj1_c::isEventEntry() {
 }
 
 /* 00001E2C-00001EB4       .text event_proc__11daNpc_Aj1_cFi */
-        /* Nonmatching */
 void daNpc_Aj1_c::event_proc(int i_eventNo) {
     if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
         switch (mEventIdx) {
@@ -1108,7 +1107,6 @@ int daNpc_Aj1_c::set_action(ProcFunc i_newProcFunc, void* i_argsP) {
 }
 
 /* 00002724-00002808       .text setStt__11daNpc_Aj1_cFSc */
-        /* Nonmatching */
 void daNpc_Aj1_c::setStt(s8 i_status) {
     s8 temp = mStatus;
     mStatus = i_status;
