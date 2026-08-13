@@ -696,10 +696,7 @@ int daNpc_Kg2_c::evn_setAnm() {
             m739--;
         }
     }
-    if (m739 == 0) {
-        return 1;
-    }
-    return 0;
+    return (m739 == 0) ? 1 : 0;
 }
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
