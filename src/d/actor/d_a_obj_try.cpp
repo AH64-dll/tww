@@ -1062,7 +1062,20 @@ skip:
 
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    if (attr().m48 >= 0) {
+        mBrkAnm.entry(mpModel->getModelData(), mBrkAnm.getFrameCtrl()->getFrame());
+    }
+    mDoExt_modelUpdateDL(mpModel);
+
+    if ((actor_status & fopAcStts_UNK40000_e) == 0) {
+        f32 h = (f32)attr().m4A;
+        dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), h, mAcch.m_gnd, 0, 0.0f,
+                                  &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return true;
 }
 
 namespace {
