@@ -743,7 +743,7 @@ void daNpc_Aj1_c::setAttention(bool i_flag) {
 
 /* 000018DC-00001930       .text decideType__11daNpc_Aj1_cFi */
         /* Nonmatching */
-s32 daNpc_Aj1_c::decideType(int i_type) {
+u8 daNpc_Aj1_c::decideType(int i_type) {
     mType = 0;
     mSpecificType = -1;
     switch (i_type) {

@@ -58,7 +58,7 @@ public:
     void lookBack();
     s32 chkAttention();
     void setAttention(bool);
-    s32 decideType(int);
+    u8 decideType(int);
     void cut_init_AJ1_TLK();
     s32 cut_move_AJ1_TLK();
     void cut_init_INI_ANGRY();
