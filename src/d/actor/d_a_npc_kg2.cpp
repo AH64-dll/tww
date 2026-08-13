@@ -509,7 +509,9 @@ void daNpc_Kg2_c::lookBack() {
         if (m72C) {
             eye_pos = dNpc_playerEyePos(l_HIO.mHio.m04);
             p_look_pos = &eye_pos;
-            look_pos.set(current.pos.x, current.pos.y, current.pos.z);
+            look_pos.x = current.pos.x;
+            look_pos.y = current.pos.y;
+            look_pos.z = current.pos.z;
             look_pos.y = m708.y;
         }
         break;
