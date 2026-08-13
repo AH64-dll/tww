@@ -22,7 +22,7 @@ namespace daObjAshut {
         };
 
         u8 prm_get_evId() const { return daObj::PrmAbstract(this, PRM_EV_ID_W, PRM_EV_ID_S); }
-        u8 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SW_SAVE_W, PRM_SW_SAVE_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SW_SAVE_W, PRM_SW_SAVE_S); }
         BOOL is_switch() const { return fopAcM_isSwitch((fopAc_ac_c*)this, prm_get_swSave()); }
 
         virtual BOOL CreateHeap();
@@ -32,7 +32,7 @@ namespace daObjAshut {
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        BOOL chk_safe_area() const;
+        u8 chk_safe_area() const;
         void mode_upper_init();
         void mode_upper();
         void mode_u_l_init();

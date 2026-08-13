@@ -105,13 +105,13 @@ namespace daObjAshut {
 
     /* 000004A8-000005A4       .text chk_safe_area__Q210daObjAshut5Act_cCFv */
     /* Nonmatching */
-    BOOL Act_c::chk_safe_area() const {
+    u8 Act_c::chk_safe_area() const {
         s16 angle = -shape_angle.y;
         cXyz sp20 = dComIfGp_getPlayer(0)->current.pos - current.pos;
         mDoMtx_stack_c::YrotS(angle);
         cXyz sp14;
         mDoMtx_stack_c::multVecSR(&sp20, &sp14);
-        BOOL result = FALSE;
+        u8 result = FALSE;
         if (std::fabsf(sp14.y) < 100.0f && std::fabsf(sp14.z) < 55.0f) {
             result = TRUE;
         }
@@ -215,8 +215,9 @@ namespace daObjAshut {
                 mode_upper_init();
             } else {
                 mTimer--;
-                mOffset = L_attr.mUpper + (mOffset - L_attr.mUpper) * L_attr.mDamp;
-                mSpeed *= L_attr.mDamp;
+                f32 damp = L_attr.mDamp;
+                mOffset = L_attr.mUpper + (mOffset - L_attr.mUpper) * damp;
+                mSpeed *= damp;
                 if (mSpeed < L_attr.mDampMin) {
                     mSpeed = L_attr.mDampMin;
                 }
@@ -242,7 +243,7 @@ namespace daObjAshut {
     /* 00000B0C-00000BE4       .text mode_demoreq__Q210daObjAshut5Act_cFv */
     /* Nonmatching */
     void Act_c::mode_demoreq() {
-        BOOL done = FALSE;
+        u8 done = FALSE;
         if (dComIfGp_evmng_existence(mEvtIdx)) {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 done = TRUE;
@@ -284,7 +285,7 @@ namespace daObjAshut {
     /* 00000D0C-00000D6C       .text Draw__Q210daObjAshut5Act_cFv */
     /* Nonmatching */
     BOOL Act_c::Draw() {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
         return TRUE;
