@@ -713,8 +713,52 @@ u32 daNpc_Bj1_c::getMsg_Corog() {
 
 /* 0000242C-000024EC       .text getMsg__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg() {
-    /* Nonmatching */
+    u32 msg = 0;
+    switch (mSpecificType) {
+    case 0:
+        msg = getMsg_BJ1_0();
+        break;
+    case 2:
+        msg = getMsg_BJ2_0();
+        break;
+    case 4:
+        msg = getMsg_BJ3_0();
+        break;
+    case 6:
+        msg = getMsg_BJ4_0();
+        break;
+    case 8:
+        msg = getMsg_BJ5_0();
+        break;
+    case 10:
+        msg = getMsg_BJ6_0();
+        break;
+    case 12:
+        msg = getMsg_BJ7_0();
+        break;
+    case 13:
+        msg = getMsg_BJ8_0();
+        break;
+    case 15:
+        msg = getMsg_BJ9_0();
+        break;
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 9:
+    case 11:
+    case 14:
+    case 16:
+        msg = getMsg_Corog();
+        break;
+    default:
+        break;
+    }
+    return msg;
 }
+
+
 
 /* 000024EC-0000256C       .text chkAttention__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::chkAttention() {
