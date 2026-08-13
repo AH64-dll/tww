@@ -457,7 +457,47 @@ bool daNpc_Bj1_c::chk_partsNotMove() {
 
 /* 000017F0-000019A0       .text lookBack__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::lookBack() {
-    /* Nonmatching */
+    cXyz dstPos;
+    cXyz* dstPos_p;
+    cXyz src_pos;
+    s16 desiredYrot;
+    m820 = m_jnt.getHead_y();
+    m822 = m_jnt.getBackbone_y();
+    mActorAngleY = current.angle.y;
+    src_pos.x = current.pos.x;
+    src_pos.y = current.pos.y;
+    src_pos.z = current.pos.z;
+    src_pos.y = eyePos.y;
+    dstPos.set(0.0f, 0.0f, 0.0f);
+    dstPos_p = NULL;
+    desiredYrot = current.angle.y;
+
+    switch (m8B3) {
+    case 1:
+        dstPos = dNpc_playerEyePos(-20.0f);
+        dstPos_p = &dstPos;
+        src_pos.x = current.pos.x;
+        src_pos.y = current.pos.y;
+        src_pos.z = current.pos.z;
+        src_pos.y = eyePos.y;
+        break;
+    case 2:
+        dstPos.set(mHomePos);
+        dstPos_p = &dstPos;
+        src_pos.x = current.pos.x;
+        src_pos.y = current.pos.y;
+        src_pos.z = current.pos.z;
+        src_pos.y = eyePos.y;
+        break;
+    case 3:
+        desiredYrot = m83A;
+        break;
+    }
+    cLib_addCalcAngleS2(&m838, l_HIO.mChild[mType].mPrm.field_0x12, 4, 0x800);
+    if (!m_jnt.trnChk()) {
+        m838 = 0;
+    }
+    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYrot, m838, m856);
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
