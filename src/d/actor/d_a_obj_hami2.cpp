@@ -31,7 +31,7 @@
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */
 
-/* Nonmatching */static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         int jnt_no = joint->getJntNo();
