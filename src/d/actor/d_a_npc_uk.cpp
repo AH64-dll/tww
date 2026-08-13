@@ -1568,6 +1568,7 @@ BOOL daNpc_Uk_c::wait_action(void*) {
 
 /* 000041B0-0000440C       .text seek_action__10daNpc_Uk_cFPv */
 BOOL daNpc_Uk_c::seek_action(void*) {
+    /* Nonmatching */
     if (mActionStatus == ACTION_STARTING) {
         if (dComIfGs_isTmpBit(getFoundFlag())) {
             mState = STATE_RUNAWAY;
@@ -1633,6 +1634,7 @@ BOOL daNpc_Uk_c::seek_action(void*) {
 
 /* 0000440C-0000457C       .text hind_action__10daNpc_Uk_cFPv */
 BOOL daNpc_Uk_c::hind_action(void*) {
+    /* Nonmatching */
     if (mActionStatus == ACTION_STARTING) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING) {
