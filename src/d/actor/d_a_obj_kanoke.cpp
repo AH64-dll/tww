@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_kanoke.h"
+#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCps l_cps_src_body = {
@@ -149,29 +150,29 @@ void daObjKanoke_c::executeWait() {
     /* Nonmatching */
 }
 
-/* 00001B28-00001B54       .text getPrmType__13daObjKanoke_cFv */
-void daObjKanoke_c::getPrmType() {
-    /* Nonmatching */
+/* 00000000-00000000       .text getPrmType__13daObjKanoke_cFv */
+u8 daObjKanoke_c::getPrmType() {
+    return daObj::PrmAbstract(this, 0x1, 0x0);
 }
 
-/* 00001B54-00001B80       .text getPrmSearch__13daObjKanoke_cFv */
-void daObjKanoke_c::getPrmSearch() {
-    /* Nonmatching */
+/* 00000000-00000000       .text getPrmSearch__13daObjKanoke_cFv */
+u8 daObjKanoke_c::getPrmSearch() {
+    return daObj::PrmAbstract(this, 0x5, 0x1);
 }
 
-/* 00001B80-00001BAC       .text getPrmYure__13daObjKanoke_cFv */
-void daObjKanoke_c::getPrmYure() {
-    /* Nonmatching */
+/* 00000000-00000000       .text getPrmYure__13daObjKanoke_cFv */
+u8 daObjKanoke_c::getPrmYure() {
+    return daObj::PrmAbstract(this, 0x1, 0x6);
 }
 
-/* 00001BAC-00001BD8       .text getPrmSwNo__13daObjKanoke_cFv */
-void daObjKanoke_c::getPrmSwNo() {
-    /* Nonmatching */
+/* 00000000-00000000       .text getPrmSwNo__13daObjKanoke_cFv */
+u8 daObjKanoke_c::getPrmSwNo() {
+    return daObj::PrmAbstract(this, 0x8, 0x8);
 }
 
-/* 00001BD8-00001C04       .text getPrmSwNo2__13daObjKanoke_cFv */
-void daObjKanoke_c::getPrmSwNo2() {
-    /* Nonmatching */
+/* 00000000-00000000       .text getPrmSwNo2__13daObjKanoke_cFv */
+u8 daObjKanoke_c::getPrmSwNo2() {
+    return daObj::PrmAbstract(this, 0x8, 0x10);
 }
 
 /* 00001C04-00001C9C       .text setMtx__13daObjKanoke_cFv */
