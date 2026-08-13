@@ -756,10 +756,7 @@ s32 daNpc_Aj1_c::decideType(int i_type) {
             mSpecificType = 2;
             break;
     }
-    if (mType != -1 && mSpecificType != -1) {
-        return 1;
-    }
-    return 0;
+    return mType != -1 && mSpecificType != -1;
 }
 
 /* 00001930-00001950       .text cut_init_AJ1_TLK__11daNpc_Aj1_cFv */
