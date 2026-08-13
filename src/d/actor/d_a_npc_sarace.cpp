@@ -630,9 +630,11 @@ cPhs_State daNpc_Sarace_c::_create() {
     JUT_ASSERT(0x3F0, modelData != 0);
     mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL,
                                 (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", 0x9),
-                                J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 2, NULL, 0x80000, 0x11020203);
-    if (mpMorf == NULL || mpMorf->getModel() == NULL)
+                                J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
         return FALSE;
+    }
     m_jnt.setHeadJntNum(modelData->getJointTree().getJointName()->getIndex("head"));
     JUT_ASSERT(0x400, m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointTree().getJointName()->getIndex("backbone"));
@@ -642,7 +644,7 @@ cPhs_State daNpc_Sarace_c::_create() {
     JUT_ASSERT(0x40A, headModelData != 0);
     mpMorf2 = new mDoExt_McaMorf(headModelData, NULL, NULL,
                                  (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", 0x7),
-                                 J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 2, NULL, 0x80000, 0x11020203);
+                                 J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     if (mpMorf2 == NULL || mpMorf2->getModel() == NULL)
         return FALSE;
 
@@ -652,7 +654,7 @@ cPhs_State daNpc_Sarace_c::_create() {
 
     for (u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++) {
         if (jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()) {
-            modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(nodeCallBack);
+            mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(jntIdx)->setCallBack(nodeCallBack);
         }
     }
     mpMorf->getModel()->setUserArea((u32)this);
