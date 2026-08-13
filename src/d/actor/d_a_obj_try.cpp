@@ -504,12 +504,15 @@ void daObjTry::Act_c::mode_restart_init() {
     mAcch.OffLineCheck();
     speedF = 0.0f;
     m630 = 0x6E;
+    f32 posZ = home.pos.z;
     current.pos.x = home.pos.x;
     current.pos.y = home.pos.y + (-10.0f - (f32)attr().m4D);
-    current.pos.z = home.pos.z;
-    shape_angle.x = home.angle.x;
+    current.pos.z = posZ;
+    s16 angZ = home.angle.z;
+    s16 angX = home.angle.x;
+    shape_angle.x = angX;
     shape_angle.y = home.angle.y - 0x8000;
-    shape_angle.z = home.angle.z;
+    shape_angle.z = angZ;
     current.angle = shape_angle;
     old.pos = current.pos;
     old.angle = current.angle;
@@ -580,7 +583,8 @@ void daObjTry::Act_c::mode_wait() {
             }
         }
 
-        m64A = (s16)(((u16)(shape_angle.y - m648 + 0x2000) & 0xC000) + m648);
+        s16 diff = (s16)(shape_angle.y - m648);
+        m64A = (s16)(((u16)(diff + 0x2000) & 0xC000) + m648);
         cLib_addCalcAngleS(&shape_angle.y, m64A, 3, 0x1800, 0x800);
     } else if (bingo == 0) {
         bound();
@@ -609,7 +613,7 @@ void daObjTry::Act_c::mode_wait() {
         move = mStts.GetCCMoveP();
     }
 
-    if (groundHit) {
+    if (mAcch.ChkGroundHit()) {
         this->gravity = attr().mGravity;
         fopAcM_posMoveF(this, move);
     } else {
@@ -698,9 +702,7 @@ void daObjTry::Act_c::mode_sink_init() {
     mAcch.OnLineCheck();
     gravity = attr().mGravity + attr().m24;
     f32 spd = speed.y * speed.y + speedF * speedF;
-    if (spd > 0.0f) {
-        spd = std::sqrtf(spd);
-    }
+    spd = std::sqrtf(spd);
     if (spd > attr().m30) {
         f32 scale = attr().m30 / spd;
         PSVECScale(&speed, &speed, scale);
