@@ -527,7 +527,8 @@ void daObjTry::Act_c::mode_restart() {
         return;
     }
     if (m630 < 0x32) {
-        f32 f4 = 0.5f * (0.0f - jmaCosTable[(u16)(655.36f * m630) >> jmaSinShift]);
+        f32 f3 = 0.0f;
+        f32 f4 = 0.5f * (f3 - jmaCosTable[(u16)(655.36f * m630) >> jmaSinShift]);
         current.pos.y = home.pos.y + f4 * (-10.0f - (f32)attr().m4D);
         shape_angle.y = home.angle.y + (s16)(-32768.0f * f4);
         current.angle.y = shape_angle.y;
