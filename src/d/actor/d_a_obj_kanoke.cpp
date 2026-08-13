@@ -108,17 +108,33 @@ daObjKanoke_c::daObjKanoke_c() {
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObjKanoke_c*)i_this)->createHeap();
 }
 
 /* 00000664-00000700       .text _create__13daObjKanoke_cFv */
 cPhs_State daObjKanoke_c::_create() {
-    /* Nonmatching */
+    if (!(actor_condition & 8)) {
+        if (this != NULL) {
+            new (this) daObjKanoke_c();
+        }
+        actor_condition |= 8;
+    }
+    cPhs_State phs = dComIfG_resLoad(&mPhs, "Mkanoke");
+    if (phs == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
+            createInit();
+        } else {
+            m2A4 = 0;
+            m2A0 = 0;
+            return cPhs_ERROR_e;
+        }
+    }
+    return phs;
 }
 
 /* 00000700-000008BC       .text createHeap__13daObjKanoke_cFv */
-void daObjKanoke_c::createHeap() {
+BOOL daObjKanoke_c::createHeap() {
     /* Nonmatching */
 }
 
