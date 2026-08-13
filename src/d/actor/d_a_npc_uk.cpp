@@ -847,7 +847,6 @@ BOOL daNpc_Uk_c::checkDemoStart() {
 }
 
 /* 000022C4-0000230C       .text getNowEventAction__10daNpc_Uk_cFv */
-    /* Nonmatching */
 s32 daNpc_Uk_c::getNowEventAction() {
     static char* action_table[] = {
         "WAIT",
@@ -1935,7 +1934,6 @@ cPhs_State daNpc_Uk_c::_create() {
 }
 
 /* 000053D8-00005728       .text CreateHeap__10daNpc_Uk_cFv */
-    /* Nonmatching */
 BOOL daNpc_Uk_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Uk", dRes_INDEX_UK_BDL_UK_e);
 
