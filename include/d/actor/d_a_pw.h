@@ -52,12 +52,7 @@ public:
     /* 0x36C */ fpc_ProcID mJalhallaID;
     /* 0x370 */ fpc_ProcID mKanteraID;
     /* 0x374 */ int mBckIdx;
-    /* 0x378 */ s16 m378;
-    /* 0x37A */ s16 m37A;
-    /* 0x37C */ s16 m37C;
-    /* 0x37E */ s16 m37E;
-    /* 0x380 */ s16 m380;
-    /* 0x382 */ s16 m382;
+    /* 0x378 */ s16 m378[6];
     /* 0x384 */ s16 m384[4];
     /* 0x38C */ s16 m38C;
     /* 0x38E */ s16 m38E;

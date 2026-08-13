@@ -12,6 +12,7 @@
 #include "d/d_material.h"
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 #include "res/Object/Pw.h"
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera.h"
@@ -213,7 +214,7 @@ void kantera_atari_check(pw_class*) {
 /* 000016FC-000018FC       .text kantera_calc__FP8pw_class */
 void kantera_calc(pw_class* i_this) {
     /* Nonmatching */
-    if (i_this->m346 > 0 && i_this->m382 == 0 && i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+    if (i_this->m346 > 0 && i_this->m378[5] == 0 && i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* kantera;
         if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
             fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
@@ -425,7 +426,7 @@ void next_dousa_check(pw_class* i_this) {
         i_this->mAction = 1;
         i_this->mMode = 0x20;
     } else {
-        i_this->m37C = (s16)(cM_rndF(70.0f) + 70.0f);
+        i_this->m378[2] = (s16)(cM_rndF(70.0f) + 70.0f);
         if (i_this->mPathIndex == 0xFF) {
             i_this->m2F0.x = i_this->current.pos.x;
             i_this->m2F0.z = i_this->current.pos.z;
@@ -507,7 +508,7 @@ void action_dousa(pw_class* i_this) {
         }
         i_this->mKanteraID = fopAcM_create(fpcNm_KANTERA_e, 0xFF000001, &i_this->m2CC, i_this->current.roomNo);
         if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
-            i_this->m382 = 5;
+            i_this->m378[5] = 5;
             switch (i_this->mBehaviorType) {
             case InvisibleAtStart:
                 i_this->mMode = 0xB;
@@ -540,7 +541,7 @@ void action_dousa(pw_class* i_this) {
                 i_this->m341 = 0;
                 i_this->mBehaviorType = VisibleFromStart;
                 first_mode_change(i_this);
-                i_this->m382 = 3;
+                i_this->m378[5] = 3;
                 i_this->m346 = 1;
                 i_this->mMode = 0xD;
             }
@@ -568,7 +569,7 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 8:
-        i_this->m380 = 2;
+        i_this->m378[4] = 2;
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
             anm_init(i_this, dRes_INDEX_PW_BCK_DERUB1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
@@ -581,7 +582,7 @@ void action_dousa(pw_class* i_this) {
         }
         i_this->m340 = 0;
         i_this->m341 = 0;
-        i_this->m378 = cM_rndF(60.0f) + 60.0f;
+        i_this->m378[0] = cM_rndF(60.0f) + 60.0f;
         if (i_this->m346 && i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT1_e) {
             anm_init(i_this, dRes_INDEX_PW_BCK_WAIT1_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         } else if (i_this->mBckIdx != dRes_INDEX_PW_BCK_WAIT2_e) {
@@ -591,13 +592,13 @@ void action_dousa(pw_class* i_this) {
         // Fall-through
     case 14:
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
-        if (i_this->m378) {
+        if (i_this->m378[0]) {
             break;
         }
         i_this->mMode += 1;
         // Fall-through
     case 15:
-        i_this->m378 = cM_rndF(120.0f) + 120.0f;
+        i_this->m378[0] = cM_rndF(120.0f) + 120.0f;
         if (i_this->m346 == 1) {
             if (i_this->mBckIdx != dRes_INDEX_PW_BCK_IDOU1_e) {
                 anm_init(i_this, dRes_INDEX_PW_BCK_IDOU1_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
@@ -617,10 +618,10 @@ void action_dousa(pw_class* i_this) {
     case 16:
         i_this->speedF = 5.0f;
         move_sound(i_this);
-        if (i_this->m37A == 0) {
+        if (i_this->m378[1] == 0) {
             if (Line_check(i_this, i_this->current.pos, 0) || hani_check(i_this)) {
-                i_this->m37A = 10;
-            } else if (i_this->m378 == 0) {
+                i_this->m378[1] = 10;
+            } else if (i_this->m378[0] == 0) {
                 i_this->mMode = 0xF;
             }
         }
@@ -702,7 +703,7 @@ void action_dousa(pw_class* i_this) {
     if (i_this->mMode <= 11) {
         return;
     }
-    if (i_this->m37C == 0 && i_this->mMode < 90) {
+    if (i_this->m378[2] == 0 && i_this->mMode < 90) {
         if (i_this->mMode == 14 || i_this->mMode == 16 || i_this->mMode == 20) {
             if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
                 if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
@@ -779,12 +780,12 @@ void action_demo(pw_class* i_this) {
             i_this->shape_angle.y = 0;
             i_this->shape_angle.z = 0;
             i_this->shape_angle.y = player->shape_angle.y;
-            i_this->m378 = 0x1E;
+            i_this->m378[0] = 0x1E;
             i_this->mMode += 1;
         }
         break;
     case 0x49:
-        if (i_this->m378 == 0) {
+        if (i_this->m378[0] == 0) {
             fopAc_ac_c* linkPlayer = dComIfGp_getLinkPlayer();
             dComIfGp_getVibration().StopQuake(0x20);
             camera->mCamera.Start();
@@ -827,7 +828,7 @@ void action_torituku(pw_class* i_this) {
         for (int i = 0; i < 4; i++) {
             i_this->m384[i] = 0;
         }
-        i_this->m378 = 0x12C;
+        i_this->m378[0] = 0x12C;
         i_this->m33E = 1;
         i_this->actor_status |= fopAcStts_UNK4000_e;
         player->onConfuse();
@@ -843,7 +844,7 @@ void action_torituku(pw_class* i_this) {
         i_this->current.pos.y = local.y;
         i_this->current.pos.z = local.z;
         i_this->shape_angle.y += 0x3E8;
-        if (i_this->m378 == 0 || dComIfGp_getDetect().chk_light(&i_this->current.pos) ||
+        if (i_this->m378[0] == 0 || dComIfGp_getDetect().chk_light(&i_this->current.pos) ||
             dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e) || player->getDamageWaitTimer() != 0 ||
             player != playerPtr || player->checkFairyUse())
         {
@@ -881,8 +882,159 @@ void action_big_demo(pw_class*) {
 }
 
 /* 00005CA4-000061FC       .text daPW_Execute__FP8pw_class */
-static BOOL daPW_Execute(pw_class*) {
-    /* Nonmatching */
+static BOOL daPW_Execute(pw_class* i_this) {
+    fopAcM_setGbaName(i_this, 0x3c, 0xd, 0x2d);
+
+    if (enemy_ice(&i_this->mEnemyIce)) {
+        J3DModel* model = i_this->mpMorf->getModel();
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+        i_this->mpMorf->calc();
+        return TRUE;
+    }
+
+    for (int i = 0; i < 6; i++) {
+        if (i_this->m378[i] != 0) {
+            i_this->m378[i]--;
+        }
+    }
+
+    switch (i_this->mAction) {
+    case 0:
+        action_dousa(i_this);
+        break;
+    case 1:
+        action_kougeki(i_this);
+        break;
+    case 2:
+        action_itai(i_this);
+        break;
+    case 3:
+        action_demo(i_this);
+        break;
+    case 4:
+        action_torituku(i_this);
+        break;
+    case 5:
+        action_big_demo(i_this);
+        break;
+    }
+
+    if (i_this->m340 == 0) {
+        s16 addAngleStep = 0x1000;
+        if (i_this->mMode == 0xf || i_this->mMode == 0x10 || i_this->mMode == 0x14) {
+            addAngleStep = 0x1f4;
+        }
+        if (i_this->mAction == 5) {
+            addAngleStep = i_this->m39E;
+        }
+        cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->m38C, 1, addAngleStep);
+        cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, addAngleStep);
+    }
+
+    if (i_this->m33E) {
+        i_this->m2C0->play();
+    } else if (i_this->m33F) {
+        i_this->m2C4->play();
+    } else {
+        i_this->m2C8->play();
+    }
+
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cXyz offset;
+    offset.x = 0.0f;
+    offset.y = 0.0f;
+    offset.z = i_this->speedF;
+    cXyz rotOffset;
+    MtxPosition(&offset, &rotOffset);
+    i_this->speed.x = rotOffset.x;
+    i_this->speed.z = rotOffset.z;
+    i_this->speed.y += i_this->gravity;
+    if (i_this->speed.y < -100.0f) {
+        i_this->speed.y = -100.0f;
+    }
+
+    if (i_this->m346 == 1) {
+        if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+            fopAc_ac_c* kantera;
+            if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
+                fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
+            {
+                i_this->attention_info.position = i_this->m2D8;
+                i_this->attention_info.position.y += 40.0f;
+                i_this->eyePos = i_this->m2D8;
+            }
+        }
+    } else {
+        i_this->attention_info.position = i_this->current.pos;
+        i_this->attention_info.position.y += 200.0f;
+        i_this->eyePos = i_this->current.pos;
+        i_this->eyePos.y += 100.0f;
+    }
+
+    cXyz cylPos = i_this->current.pos;
+    i_this->mCyl.SetC(cylPos);
+    if (i_this->mAction == 4) {
+        i_this->mCyl.SetH(100.0f);
+        i_this->mCyl.SetR(40.0f + REG8_F(14));
+    } else {
+        i_this->mCyl.SetH(200.0f);
+        i_this->mCyl.SetR(80.0f);
+    }
+    dComIfG_Ccsp()->Set(&i_this->mCyl);
+
+    if (i_this->mAction != 3 && i_this->mAction != 5 && i_this->mAction != 4 && i_this->mMode != 0x3d &&
+        i_this->mMode != 0x6e && i_this->mMode != 0x6f)
+    {
+        body_atari_check(i_this);
+    }
+
+    if (i_this->m346 == 1) {
+        fopAcM_posMove(i_this, i_this->mStts.GetCCMoveP());
+    } else {
+        fopAcM_posMove(i_this, NULL);
+    }
+
+    if (i_this->mMode != 0x51 && i_this->mMode != 0x3d && i_this->mMode != 0x8) {
+        BG_check(i_this);
+    }
+
+    if (i_this->mMode >= 2 && i_this->m378[4] == 0) {
+        if (i_this->mAcch.m_ground_h != -1000000000.0f) {
+            s8 roomNo = i_this->current.roomNo;
+            u32 mtrlSndId;
+            if (i_this->mAcch.ChkGroundHit()) {
+                mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(i_this->mAcch.m_gnd);
+            } else {
+                mtrlSndId = 0;
+            }
+            i_this->mpMorf->play(&i_this->eyePos, mtrlSndId, dComIfGp_getReverb(roomNo));
+        } else {
+            i_this->mpMorf->play(NULL, 0, 0);
+        }
+    }
+
+    draw_SUB(i_this);
+
+    if (i_this->m346 == 1) {
+        kantera_calc(i_this);
+        if (i_this->m378[5] != 0) {
+            return TRUE;
+        }
+        kantera_atari_check(i_this);
+        if (i_this->mKanteraID != fpcM_ERROR_PROCESS_ID_e) {
+            fopAc_ac_c* kantera;
+            if (fopAcM_SearchByID(i_this->mKanteraID, &kantera) && kantera != NULL &&
+                fopAcM_GetName(kantera) == fpcNm_KANTERA_e)
+            {
+                i_this->mSph.SetC(i_this->m2D8);
+                i_this->mSph.SetR(40.0f);
+                dComIfG_Ccsp()->Set(&i_this->mSph);
+            }
+        }
+    }
+
+    return TRUE;
 }
 
 /* 000061FC-00006204       .text daPW_IsDelete__FP8pw_class */
