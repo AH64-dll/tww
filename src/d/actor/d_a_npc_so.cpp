@@ -937,6 +937,18 @@ bool daNpc_So_c::_execute() {
 /* 00003844-000038E0       .text debugDraw__10daNpc_So_cFv */
 void daNpc_So_c::debugDraw() {
     /* Nonmatching */
+    cXyz a = field_0xA80;
+    a.y += -300.0f;
+    cXyz b = dComIfGp_getPlayer(0)->current.pos;
+    b.y += -300.0f;
+    cXyz c = current.pos;
+    c.y += -300.0f;
+    cXyz d = field_0xAAC;
+    d.y += -300.0f;
+    (void)a;
+    (void)b;
+    (void)c;
+    (void)d;
 }
 
 /* 000038E0-00003954       .text hudeDraw__10daNpc_So_cFv */
