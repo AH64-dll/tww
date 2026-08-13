@@ -523,7 +523,66 @@ void daObjTry::Act_c::mode_wait_init() {
 
 /* 00001074-000012C4       .text mode_wait__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_wait() {
-    /* Nonmatching */
+    int bingo = 0;
+    if (attr().m74 != 0 && m64C != 0) {
+        bingo = 1;
+    }
+
+    if (attr().m73 != 0 && m64D != 0) {
+        f32 y = current.pos.y;
+        cLib_chasePos(&current.pos, m63C, 10.0f);
+        current.pos.y = y;
+
+        cXyz a(m63C.x, 0.0f, m63C.z);
+        cXyz b(current.pos.x, 0.0f, current.pos.z);
+        if (PSVECSquareDistance(&a, &b) < 25.0f) {
+            current.pos.x = m63C.x;
+            current.pos.z = m63C.z;
+            if (PSVECSquareDistance(&m63C, &current.pos) < 0.0f) {
+                M_bingo = 1;
+            }
+        }
+
+        m64A = (s16)(((u16)(shape_angle.y - m648 + 0x2000) & 0xC000) + m648);
+        cLib_addCalcAngleS(&shape_angle.y, m64A, 3, 0x1800, 0x800);
+    } else if (bingo == 0) {
+        bound();
+    }
+
+    bool groundHit = mAcch.ChkGroundHit();
+    if (groundHit && bingo == 0) {
+        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+    } else {
+        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    }
+
+    if (bingo != 0) {
+        m64E = 1;
+    }
+
+    int ret = 0;
+    if (groundHit && (bingo != 0 || m64D != 0)) {
+        ret = 1;
+    }
+
+    const cXyz* move;
+    if (ret != 0) {
+        move = &cXyz::Zero;
+    } else {
+        move = mStts.GetCCMoveP();
+    }
+
+    if (groundHit) {
+        this->gravity = attr().mGravity;
+        fopAcM_posMoveF(this, move);
+    } else {
+        f32 spd;
+        f32 f1;
+        f32 f2;
+        calc_drop_param(&spd, &f1, &f2);
+        this->gravity = spd;
+        daObj::posMoveF_stream(this, move, &cXyz::Zero, f1, f2);
+    }
 }
 
 /* 000012C4-00001344       .text mode_carry_init__Q28daObjTry5Act_cFv */
