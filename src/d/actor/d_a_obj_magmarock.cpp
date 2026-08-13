@@ -21,7 +21,7 @@
 #include "dolphin/mtx/quat.h"
 
 const char daObjMagmarock::Act_c::M_arcname[] = "Kyjim";
-const GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
+GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /* 00000078-00000128       .text set_mtx__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::set_mtx() {
@@ -119,7 +119,6 @@ void daObjMagmarock::Act_c::play_anim() {
 
 /* 00000560-0000058C       .text appear_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::appear_proc_init() {
-    /* Nonmatching */
     mProcTimer = 30;
     mProcFunc = &Act_c::appear_proc;
 }
@@ -136,7 +135,6 @@ void daObjMagmarock::Act_c::appear_proc() {
 
 /* 000005EC-00000618       .text wait_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::wait_proc_init() {
-    /* Nonmatching */
     mProcTimer = 0x12C;
     mProcFunc = &Act_c::wait_proc;
 }
@@ -150,7 +148,6 @@ void daObjMagmarock::Act_c::wait_proc() {
 
 /* 00000644-000006E0       .text stay_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::stay_proc_init() {
-    /* Nonmatching */
     u8 param = fopAcM_GetParam(this);
     if (param == 0xFF) {
         param = 0;
@@ -174,7 +171,6 @@ void daObjMagmarock::Act_c::stay_proc() {
 
 /* 00000720-000007B8       .text quake_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::quake_proc_init() {
-    /* Nonmatching */
     s8 reverb = dComIfGp_getReverb(current.roomNo);
     JAIZelBasic::getInterface()->seStart(0x380F, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     mProcTimer = 0x2D;
@@ -183,7 +179,6 @@ void daObjMagmarock::Act_c::quake_proc_init() {
 
 /* 000007B8-0000084C       .text quake_proc__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::quake_proc() {
-    /* Nonmatching */
     mAngle += mAngleAdd;
     cLib_addCalcAngleS2(&mAngleAdd, 0x1000, 2, 0x100);
     cLib_addCalc2(&mQuakeAngle, 750.0f + REG10_F(10), 0.25f, 50.0f);
@@ -194,7 +189,6 @@ void daObjMagmarock::Act_c::quake_proc() {
 
 /* 0000084C-00000878       .text vanish_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::vanish_proc_init() {
-    /* Nonmatching */
     mProcTimer = 0x5A;
     mProcFunc = &Act_c::vanish_proc;
 }
@@ -230,7 +224,7 @@ void daObjMagmarock::ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 
     if (sp30.normalizeRS()) {
         cLib_addCalcAngleS2(&i_this->mRideAngle,
-                            (s16)(-invDist * (2.0f + 4.0f * 0.001f * (i_this->current.pos.y - i_this->home.pos.y))),
+                            (s16)(-invDist * (2.0f + 4.0f * (0.001f * (i_this->current.pos.y - i_this->home.pos.y)))),
                             8, 0x200);
         i_this->m29C = 1;
         i_this->m29E = 1;
@@ -348,10 +342,10 @@ void daObjMagmarock::Act_c::CreateInit() {
         mTevStr.mColorK0.b = (u8)(mTevStr.mColorK0.b + (s32)(0.12f * (255 - mTevStr.mColorK0.b)));
 
         mpLavaSmoke = dComIfGp_particle_setToon(
-            dPa_name::ID_AK_SN_YOGANYUGE00, &current.pos, NULL, NULL, (s32)(150.0f + 100.0f * REG10_F(25)),
+            dPa_name::ID_AK_SN_YOGANYUGE00, &current.pos, NULL, NULL, (s32)(153.0f + 102.0f * REG10_F(25)),
             NULL, -1, NULL, NULL, NULL);
         mpLavaBubble = dComIfGp_particle_setToon(
-            dPa_name::ID_AK_SN_YOGANYUGE01, &current.pos, NULL, NULL, (s32)(150.0f + 100.0f * REG10_F(26)),
+            dPa_name::ID_AK_SN_YOGANYUGE01, &current.pos, NULL, NULL, (s32)(153.0f + 102.0f * REG10_F(26)),
             NULL, -1, NULL, NULL, NULL);
 
         if (mpLavaSmoke != NULL) {
@@ -423,15 +417,15 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
     } else {
         yPos = current.pos.y - 10.0f;
     }
-    if (yPos > -100000000.0f) {
+    if (yPos > -99999992.0f) {
         home.pos.y = 15.0f + 10.0f + yPos;
     }
     home.pos.x = current.pos.x;
     home.pos.z = current.pos.z;
 
     mCorner[0].set(0.0f, 0.0f, 120.0f);
-    mCorner[1].set(104.8f, 0.0f, -60.0f);
-    mCorner[2].set(-104.8f, 0.0f, -60.0f);
+    mCorner[1].set(103.9f, 0.0f, -60.0f);
+    mCorner[2].set(-103.9f, 0.0f, -60.0f);
 
     for (s32 i = 0; i < 3; i++) {
         PSVECAdd(&mCorner[i], &home.pos, &mCorner[i]);
@@ -440,7 +434,7 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
         } else {
             yPos = current.pos.y - 10.0f;
         }
-        if (yPos > -100000000.0f) {
+        if (yPos > -99999992.0f) {
             mCorner[i].y = 15.0f + yPos;
         }
     }
@@ -516,7 +510,7 @@ inline bool daObjMagmarock::Act_c::_execute() {
             }
             speed.y -= (0.4f + REG10_F(26)) * (current.pos.y - home.pos.y);
         }
-        speed.y *= 0.9f - REG10_F(25);
+        speed.y *= 0.65f - REG10_F(25);
     }
 
     if (m45C == 0 && mProcFunc != &Act_c::stay_proc) {

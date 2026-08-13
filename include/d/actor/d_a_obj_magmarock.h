@@ -39,7 +39,7 @@ namespace daObjMagmarock {
         inline bool _execute();
 
         static const char M_arcname[];
-        static const GXColor default_color;
+        static GXColor default_color;
 
     public:
         /* 0x290 */ /* vtable */
