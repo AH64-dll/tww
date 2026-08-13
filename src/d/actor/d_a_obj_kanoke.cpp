@@ -214,9 +214,9 @@ cPhs_State daObjKanoke_c::createInit() {
     cullMtx = mpModel->getBaseTRMtx();
     setMtx();
     if (m88A == 0) {
-        fopAcM_setCullSizeBox(this, 120.0f, 0.0f, 210.0f, -48.0f, -110.0f, -210.0f);
+        fopAcM_setCullSizeBox(this, -110.0f, 0.0f, -210.0f, 310.0f, 120.0f, 210.0f);
     } else {
-        fopAcM_setCullSizeBox(this, 120.0f, 0.0f, 210.0f, 310.0f, 520.0f, -210.0f);
+        fopAcM_setCullSizeBox(this, -110.0f, 0.0f, -210.0f, 110.0f, 520.0f, 210.0f);
     }
     return cPhs_COMPLEATE_e;
 }
