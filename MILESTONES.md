@@ -127,3 +127,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T13:34Z — M13: flip #35 d_a_obj_vtil → Equivalent — 6 flips today (#30-35: aygr/tag_ba1/hami2 Matching, kg2/sarace/vtil Equivalent). Ledger: 71 NonMatching / 31 Equivalent / 315 Matching. vtil: 30/32 fns 100 via full stub transcription (4 real fixes incl HitSeStart &eyePos sound bug); 2 holdouts 0-one-sided (stack-slot trap-precedent + anchor). Gate 12a322c54 16:34:25. Bench pre-blocked flame (real fmuls-chain structural, 13 normdiffs) — discipline holding.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T14:11Z — M14: flip #36 d_a_obj_kanoke → Equivalent — 7 flips today (#30-36: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke Equivalent). Ledger: 69 NonMatching / 32 Equivalent / 314 Matching. kanoke: 3 sub-100 all 0-one-sided (executeNormal norm-diff-0, Tate fns paired single-insn moves, RLead-8 first arbitration); 4 real value bugs fixed during watch. Gate 71fa0ed68 17:10:14. DLead7-2 + RLead-8 shifts wrapped clean; DLead-8/RLead-9 booted.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
