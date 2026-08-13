@@ -180,7 +180,6 @@ void cut_control1(sitem_class* i_this) {
 }
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
-/* Nonmatching */
 void my_break(sitem_class* i_this) {
     i_this->m2C2[0] = 0x32;
     i_this->m2C0 = 6;
