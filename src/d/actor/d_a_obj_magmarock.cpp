@@ -347,10 +347,10 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     mLiftPos = i_pos;
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
     int isWait = mProcFunc == waitProc;
-    if (isWait) {
+    if (!isWait) {
         void (Act_c::*appearProc)() = &Act_c::appear_proc;
         int isAppear = mProcFunc == appearProc;
-        if (!isAppear) {
+        if (isAppear) {
             cXyz sp2C = current.pos - mLiftPos;
             sp2C.y = 0.0f;
             if (!sp2C.normalizeRS()) {
@@ -380,7 +380,7 @@ bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz& i_pos) {
 
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
     int isWait = mProcFunc == waitProc;
-    if (isWait) {
+    if (!isWait) {
         return FALSE;
     }
     cLib_addCalcPos2(&current.pos, mLiftPos, 0.05f, 5.0f);
