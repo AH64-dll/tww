@@ -553,7 +553,7 @@ cPhs_State daNpcBmcon_c::createInit() {
     }
 
     eventInfo.mpCheckCB = daNpcBmcon_XyCheckCB;
-    mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
+    mEventCut.setActorInfo2(l_npc_staff_id[getNpcNo()], this);
     m7A8 = 0;
     m7AC = 0;
     m7AD = 0;
@@ -564,20 +564,20 @@ cPhs_State daNpcBmcon_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     m_jnt.setParam(
-        l_npc_dat[mNpcNo].mMax_backbone_x,
-        l_npc_dat[mNpcNo].mMax_backbone_y,
-        l_npc_dat[mNpcNo].mMin_backbone_x,
-        l_npc_dat[mNpcNo].mMin_backbone_y,
-        l_npc_dat[mNpcNo].mMax_head_x,
-        l_npc_dat[mNpcNo].mMax_head_y,
-        l_npc_dat[mNpcNo].mMin_head_x,
-        l_npc_dat[mNpcNo].mMin_head_y,
-        l_npc_dat[mNpcNo].mMax_turn_step
+        l_npc_dat[getNpcNo()].mMax_backbone_x,
+        l_npc_dat[getNpcNo()].mMax_backbone_y,
+        l_npc_dat[getNpcNo()].mMin_backbone_x,
+        l_npc_dat[getNpcNo()].mMin_backbone_y,
+        l_npc_dat[getNpcNo()].mMax_head_x,
+        l_npc_dat[getNpcNo()].mMax_head_y,
+        l_npc_dat[getNpcNo()].mMin_head_x,
+        l_npc_dat[getNpcNo()].mMin_head_y,
+        l_npc_dat[getNpcNo()].mMax_turn_step
     );
-    m7BF = l_npc_dat[mNpcNo].field_0x4A;
-    m7C0 = l_npc_dat[mNpcNo].field_0x4B;
-    mAttnDist = l_npc_dat[mNpcNo].field_0x20;
-    mAttnAngle = l_npc_dat[mNpcNo].field_0x28;
+    m7BF = l_npc_dat[getNpcNo()].field_0x4A;
+    m7C0 = l_npc_dat[getNpcNo()].field_0x4B;
+    mAttnDist = l_npc_dat[getNpcNo()].field_0x20;
+    mAttnAngle = l_npc_dat[getNpcNo()].field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
     if (mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
@@ -591,7 +591,7 @@ cPhs_State daNpcBmcon_c::createInit() {
     mStts.Init(railID, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x30, 150.0f);
     return cPhs_COMPLEATE_e;
 }
 
@@ -703,7 +703,6 @@ bool daNpcBmcon_c::_execute() {
 
 /* 00001878-00001BC8       .text executeCommon__12daNpcBmcon_cFv */
 u8 daNpcBmcon_c::executeCommon() {
-    /* Nonmatching */
     if (m7AD && m7C3 == 0) {
         m7AE = 1;
     } else {
@@ -714,7 +713,10 @@ u8 daNpcBmcon_c::executeCommon() {
         executeSetMode(1);
     }
 
-    if (mNpcNo == 1) {
+    switch (getNpcNo()) {
+    case 0:
+        break;
+    case 1:
         if (dComIfGp_getStartStageLayer() == 2 || dComIfGp_getStartStageLayer() == 3) {
             cXyz flyDist = calcFlyDist();
 
@@ -729,12 +731,12 @@ u8 daNpcBmcon_c::executeCommon() {
             if (mFlyState == 1) {
                 if (flyDist.x > 25710.0f && flyDist.z < 1131.0f && flyDist.z > -1131.0f) {
                     mFlyState = 0;
-                    dComIfGp_setItemMagicCount(-(s8)dComIfGs_getMaxMagic());
-                } else if (flyDist.x >= -1948.0f && flyDist.x <= 25710.0f && flyDist.z >= -3534.0f && flyDist.z <= 3534.0f) {
-                    /* stay in flight */
-                } else {
+                    dComIfGp_setItemMagicCount(-(s16)dComIfGs_getMaxMagic());
+                } else if (flyDist.x < -1948.0f || flyDist.x > 25710.0f || flyDist.z < -3534.0f || flyDist.z > 3534.0f) {
                     mFlyState = 2;
-                    dComIfGp_setItemMagicCount(-(s8)dComIfGs_getMaxMagic());
+                    dComIfGp_setItemMagicCount(-(s16)dComIfGs_getMaxMagic());
+                } else {
+                    /* stay in flight */
                 }
             }
 
@@ -758,8 +760,7 @@ u8 daNpcBmcon_c::executeCommon() {
                     }
                 }
 
-                cXyz point = mPathRun.getPoint(mPathRun.getIdx());
-                old.pos = point;
+                old.pos = mPathRun.getPoint(mPathRun.getIdx());
                 current.pos = old.pos;
                 m79C = -0x6000;
                 current.angle.y = -0x6000;
@@ -770,6 +771,7 @@ u8 daNpcBmcon_c::executeCommon() {
                 }
             }
         }
+        break;
     }
 
     return m7AC;
@@ -806,7 +808,7 @@ s32 daNpcBmcon_c::executeWaitInit() {
 /* 00001CC8-00001D38       .text executeWait__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeWait() {
     if (!executeCommon()) {
-        if (mNpcNo == 1 && m7AD != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
+        if (getNpcNo() == 1 && m7AD != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
             m7AE = 2;
         }
     }
@@ -862,10 +864,10 @@ void daNpcBmcon_c::executeWalk() {
             m79C = a;
             m7AA = a;
             m790 = 0;
-            m7A6 = l_npc_dat[mNpcNo].field_0x2C;
+            m7A6 = l_npc_dat[getNpcNo()].field_0x2C;
             m7BE = 2;
             m_jnt.setTrn();
-            m780 = l_npc_dat[mNpcNo].field_0x38;
+            m780 = l_npc_dat[getNpcNo()].field_0x38;
         } else {
             mPathRun.turnDir();
             cXyz point = mPathRun.getPoint(mPathRun.getIdx());
@@ -1258,7 +1260,7 @@ u32 daNpcBmcon_c::getMsg() {
         /* wait for talk input */
     }
     else {
-        switch (mNpcNo) {
+        switch (getNpcNo()) {
         case 0:
             if (m7C2) {
                 mpMsgTbl = l_msg_bmcon1_talk;
@@ -1405,7 +1407,7 @@ void daNpcBmcon_c::chkAttention() {
         tmpAngle -= shape_angle.y;
         if(dist > tmpDist && angle > abs(tmpAngle)) {
             if(player->current.pos.y > current.pos.y - 200.0f) {
-                mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+                mLookAtPos = dNpc_playerEyePos(l_npc_dat[getNpcNo()].field_0x14);
                 m7BE = 1;
                 if(m7BF != 0) {
                     m790 = 0;
@@ -1429,10 +1431,10 @@ void daNpcBmcon_c::chkAttention() {
         else {
             if(m7AD == 1) {
                 m7AD = 0;
-                m798 = l_npc_dat[mNpcNo].field_0x48;
+                m798 = l_npc_dat[getNpcNo()].field_0x48;
             }
-            if(l_npc_dat[mNpcNo].field_0x24 > tmpDist){
-                mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+            if(l_npc_dat[getNpcNo()].field_0x24 > tmpDist){
+                mLookAtPos = dNpc_playerEyePos(l_npc_dat[getNpcNo()].field_0x14);
                 m7BE = 1;
                 if (m7BF != 0) {
                     m790 = 0;
@@ -1461,7 +1463,7 @@ void daNpcBmcon_c::chkAttention() {
         }
     }
 
-    m7A6 = l_npc_dat[mNpcNo].field_0x2A;
+    m7A6 = l_npc_dat[getNpcNo()].field_0x2A;
 }
 
 /* 0000356C-000036B8       .text lookBack__12daNpcBmcon_cFv */
