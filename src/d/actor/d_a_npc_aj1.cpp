@@ -85,48 +85,6 @@ static char* l_evn_tbl[] = {
     "angry",
 };
 
-static int a_res_id_tbl[9] = {
-    dRes_ID_AJ_BCK_WAIT01_e, dRes_ID_AJ_BCK_WAIT02_e, dRes_ID_AJ_BCK_ANGRY_e,
-    dRes_ID_AJ_BCK_JAMP_e, dRes_ID_AJ_BCK_SHOCK_e, dRes_ID_AJ_BCK_LOOK_e,
-    dRes_ID_AJ_BCK_TIRE_e, dRes_ID_AJ_BCK_CALL_e, dRes_ID_AJ_BCK_NOBI_e,
-};
-
-static int a_res_id_tbl2[1] = {
-    dRes_ID_AJ_BTP_MABA_e,
-};
-
-static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl[] = {
-    { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 1, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 2, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 3, 0, 0, 0, 8.0f, 1.0f, 0 },
-    { 4, 0, 0, 0, 0.0f, 1.0f, 0 },
-    { 5, 0, 0, 0, 5.0f, 1.0f, 0 },
-    { 6, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
-    { 8, 0, 0, 0, 8.0f, 1.0f, 0 },
-};
-
-static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl2[] = {
-    { -1, -1, 0, 0, 0.0f, 0.0f, -1 },
-    { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
-    { -1, -1, 0, 0, 0.0f, 0.0f, -1 },
-    { 0, 0, 0, 0, 8.0f, 1.0f, 2 },
-};
-
-static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl3[] = {
-    { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 1, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 0, 0, 0, 0, 8.0f, 1.0f, 2 },
-    { 2, 0, 0, 0, 0.0f, 1.0f, 2 },
-    { 3, 0, 0, 0, 8.0f, 1.0f, 0 },
-    { 1, 0, 0, 0, 8.0f, 1.0f, 2 },
-    { 4, 0, 0, 0, 0.0f, 1.0f, 0 },
-    { 5, 0, 0, 0, 5.0f, 1.0f, 0 },
-    { 6, 0, 0, 0, 0.0f, 1.0f, 2 },
-};
-
 static char* a_cut_tbl[] = {
     "AJ1_TLK",
     "INI_ANGRY",
@@ -150,7 +108,7 @@ static BOOL nodeCB_Head(J3DNode* i_node, int i_jntNo) {
 }
 
 /* 000001E4-0000030C       .text _nodeCB_Head__11daNpc_Aj1_cFP7J3DNodeP8J3DModel */
-        /* Nonmatching */
+
 void daNpc_Aj1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_model) {
     static cXyz a_eye_pos_off(24.0f, -16.0f, 0.0f);
     s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
@@ -303,7 +261,7 @@ void daNpc_Aj1_c::play_animation() {
 }
 
 /* 00000910-000009C0       .text ctrl_WAITanm__11daNpc_Aj1_cFv */
-        /* Nonmatching */
+
 void daNpc_Aj1_c::ctrl_WAITanm() {
     switch (mAnmNum) {
         case 0:
@@ -333,7 +291,7 @@ void daNpc_Aj1_c::ctrl_TIREanm() {
 }
 
 /* 00000A3C-00000B30       .text setMtx__11daNpc_Aj1_cFb */
-        /* Nonmatching */
+
 void daNpc_Aj1_c::setMtx(bool i_setMtx) {
     mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
@@ -351,13 +309,21 @@ void daNpc_Aj1_c::setMtx(bool i_setMtx) {
 /* 00000B30-00000B44       .text bckResID__11daNpc_Aj1_cFi */
         /* Nonmatching */
 int daNpc_Aj1_c::bckResID(int i_resNo) {
+    static int a_res_id_tbl[9] = {
+        dRes_ID_AJ_BCK_WAIT01_e, dRes_ID_AJ_BCK_WAIT02_e, dRes_ID_AJ_BCK_ANGRY_e,
+        dRes_ID_AJ_BCK_JAMP_e, dRes_ID_AJ_BCK_SHOCK_e, dRes_ID_AJ_BCK_LOOK_e,
+        dRes_ID_AJ_BCK_TIRE_e, dRes_ID_AJ_BCK_CALL_e, dRes_ID_AJ_BCK_NOBI_e,
+    };
     return a_res_id_tbl[i_resNo];
 }
 
 /* 00000B44-00000B58       .text btpResID__11daNpc_Aj1_cFi */
         /* Nonmatching */
 int daNpc_Aj1_c::btpResID(int i_resNo) {
-    return a_res_id_tbl2[i_resNo];
+    static int a_res_id_tbl[1] = {
+        dRes_ID_AJ_BTP_MABA_e,
+    };
+    return a_res_id_tbl[i_resNo];
 }
 
 /* 00000B58-00000C64       .text init_texPttrnAnm__11daNpc_Aj1_cFScb */
@@ -423,6 +389,17 @@ void daNpc_Aj1_c::setAnm_anm(daNpc_Aj1_c::anm_prm_c* i_prm) {
 /* 00000DFC-00000E6C       .text setAnm_NUM__11daNpc_Aj1_cFii */
         /* Nonmatching */
 void daNpc_Aj1_c::setAnm_NUM(int i_anmNum, int i_btpEntry) {
+    static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl[] = {
+        { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 1, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 2, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 3, 0, 0, 0, 8.0f, 1.0f, 0 },
+        { 4, 0, 0, 0, 0.0f, 1.0f, 0 },
+        { 5, 0, 0, 0, 5.0f, 1.0f, 0 },
+        { 6, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
+        { 8, 0, 0, 0, 8.0f, 1.0f, 0 },
+    };
     if (i_btpEntry != 0) {
         init_texPttrnAnm(a_anm_prm_tbl[i_anmNum].mBtpNum, 1);
     }
@@ -432,8 +409,15 @@ void daNpc_Aj1_c::setAnm_NUM(int i_anmNum, int i_btpEntry) {
 /* 00000E6C-00000ED8       .text setAnm__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::setAnm() {
-    init_texPttrnAnm(a_anm_prm_tbl2[mStatus].mBtpNum, 1);
-    setAnm_anm(&a_anm_prm_tbl2[mStatus]);
+    static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl[] = {
+        { -1, -1, 0, 0, 0.0f, 0.0f, -1 },
+        { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 7, 0, 0, 0, 8.0f, 1.0f, 2 },
+        { -1, -1, 0, 0, 0.0f, 0.0f, -1 },
+        { 0, 0, 0, 0, 8.0f, 1.0f, 2 },
+    };
+    init_texPttrnAnm(a_anm_prm_tbl[mStatus].mBtpNum, 1);
+    setAnm_anm(&a_anm_prm_tbl[mStatus]);
 }
 
 /* 00000ED8-00000EF0       .text chngAnmTag__11daNpc_Aj1_cFv */
@@ -477,8 +461,19 @@ void daNpc_Aj1_c::ctrlAnmAtr() {
 /* 00000F98-00001008       .text setAnm_ATR__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::setAnm_ATR() {
-    init_texPttrnAnm(a_anm_prm_tbl3[mAnmAtr].mBtpNum, 1);
-    setAnm_anm(&a_anm_prm_tbl3[mAnmAtr]);
+    static daNpc_Aj1_c::anm_prm_c a_anm_prm_tbl[] = {
+        { 0, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 1, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 0, 0, 0, 0, 8.0f, 1.0f, 2 },
+        { 2, 0, 0, 0, 0.0f, 1.0f, 2 },
+        { 3, 0, 0, 0, 8.0f, 1.0f, 0 },
+        { 1, 0, 0, 0, 8.0f, 1.0f, 2 },
+        { 4, 0, 0, 0, 0.0f, 1.0f, 0 },
+        { 5, 0, 0, 0, 5.0f, 1.0f, 0 },
+        { 6, 0, 0, 0, 0.0f, 1.0f, 2 },
+    };
+    init_texPttrnAnm(a_anm_prm_tbl[mAnmAtr].mBtpNum, 1);
+    setAnm_anm(&a_anm_prm_tbl[mAnmAtr]);
 }
 
 /* 00001024-000010B8       .text anmAtr__11daNpc_Aj1_cFUs */
@@ -723,7 +718,7 @@ void daNpc_Aj1_c::lookBack() {
 }
 
 /* 0000184C-0000189C       .text chkAttention__11daNpc_Aj1_cFv */
-        /* Nonmatching */
+
 s32 daNpc_Aj1_c::chkAttention() {
     dAttention_c* attn = &dComIfGp_getAttention();
     if (attn->LockonTruth()) {
@@ -733,7 +728,7 @@ s32 daNpc_Aj1_c::chkAttention() {
 }
 
 /* 0000189C-000018DC       .text setAttention__11daNpc_Aj1_cFb */
-        /* Nonmatching */
+
 void daNpc_Aj1_c::setAttention(bool i_flag) {
     attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY, current.pos.z);
     if (mActionResult != 0 || i_flag) {
@@ -1057,7 +1052,7 @@ void daNpc_Aj1_c::flw_pa_aka() {
 }
 
 /* 000024B0-000024EC       .text del_pa_aka__11daNpc_Aj1_cFv */
-        /* Nonmatching */
+
 void daNpc_Aj1_c::del_pa_aka() {
     if (m7B4 != 0) {
         JPABaseEmitter* emitter = mAkaEmitter;
