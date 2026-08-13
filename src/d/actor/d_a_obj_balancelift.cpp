@@ -76,6 +76,7 @@ const char daBalancelift_c::M_arcname[] = "Hten1";
 
 /* 0000019C-00000264       .text daObjBlift_ride_actor_check__FP10fopAc_ac_c */
 s32 daObjBlift_ride_actor_check(fopAc_ac_c* actor) {
+    /* Nonmatching */
     s32 result = 0;
     if (fopAc_IsActor(actor)) {
         s16 procName = fopAcM_GetName(actor);
