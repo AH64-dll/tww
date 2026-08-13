@@ -1321,6 +1321,7 @@ u16 daNpcMn_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
+    /* Nonmatching */
 u32 daNpcMn_c::getMsg() {
     u32 msgNo = 0;
     mpMsgTbl = NULL;
