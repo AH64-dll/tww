@@ -481,7 +481,6 @@ bool daObjTry::Act_c::_delete() {
 
 /* 00000D5C-00000EA8       .text mode_restart_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_restart_init() {
-    /* Nonmatching */
     mCyl.ClrAtSet();
     mCyl.ClrTgSet();
     mCyl.OnCoSetBit();
@@ -492,12 +491,18 @@ void daObjTry::Act_c::mode_restart_init() {
     mAcch.OffLineCheck();
     speedF = 0.0f;
     m630 = 0x6E;
-    current.pos.x = home.pos.x;
-    current.pos.y = home.pos.y + (-10.0f - (f32)attr().m4D);
-    current.pos.z = home.pos.z;
-    shape_angle.x = home.angle.x;
-    shape_angle.y = home.angle.y - 0x8000;
-    shape_angle.z = home.angle.z;
+    f32 posX = home.pos.x;
+    f32 posZ = home.pos.z;
+    f32 posY = home.pos.y + (-10.0f - (f32)attr().m4D);
+    current.pos.x = posX;
+    current.pos.y = posY;
+    current.pos.z = posZ;
+    s16 angX = home.angle.x;
+    s16 angZ = home.angle.z;
+    s16 angY = home.angle.y - 0x8000;
+    shape_angle.x = angX;
+    shape_angle.y = angY;
+    shape_angle.z = angZ;
     current.angle = shape_angle;
     old.pos = current.pos;
     old.angle = current.angle;
