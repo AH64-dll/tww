@@ -471,14 +471,12 @@ void daObjTry::Act_c::mode_proc_call() {
 
 /* 00001B58-00001B90       .text cull_set_draw__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_draw() {
-    /* Nonmatching */
-    fopAcM_setCullSizeSphere(this, 25.0f, 1.0f, 25.0f, 1.0f);
+    fopAcM_setCullSizeSphere(this, 0.0f, 65.0f, 0.0f, 100.0f);
 }
 
 /* 00001B90-00001BC8       .text cull_set_move__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_move() {
-    /* Nonmatching */
-    fopAcM_setCullSizeSphere(this, 25.0f, 1.0f, 25.0f, 1.0f);
+    fopAcM_setCullSizeSphere(this, 0.0f, 65.0f, 0.0f, 300.0f);
 }
 
 /* 00001BC8-00001BE8       .text damaged__Q28daObjTry5Act_cFv */
