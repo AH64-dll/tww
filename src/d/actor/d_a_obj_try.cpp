@@ -26,15 +26,7 @@ namespace {
     const f32 L_attrBase[3] = {-0.6f, 15.0f, 15.0f};
 
     typedef void (Act_c::*ModeFunc)();
-    static const ModeFunc mode_proc_init[5] = {
-        &Act_c::mode_restart,
-        &Act_c::mode_wait,
-        &Act_c::mode_carry,
-        &Act_c::mode_drop,
-        &Act_c::mode_sink,
-    };
-    static ModeFunc mode_proc[5];
-    static s8 mode_proc_ready;
+    static ModeFunc mode_proc[5] = {};
 
     static GXColor L_bingoPrmClr[2] = {
         {12, 24, 72, 0},
@@ -323,8 +315,8 @@ const Attr_c Act_c::M_attr[13] = {
     },
 };
 
-u8 Act_c::M_bingo;
-u8 Act_c::M_restart;
+bool Act_c::M_bingo;
+bool Act_c::M_restart;
 
 /* 00000078-00000090       .text prm_set_swSave__Q28daObjTry5Act_cFi */
 void Act_c::prm_set_swSave(int i_swSave) {
@@ -724,12 +716,13 @@ void daObjTry::Act_c::mode_sink() {
 /* 0000177C-00001B58       .text mode_proc_call__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::mode_proc_call() {
     /* Nonmatching */
+    static s8 mode_proc_ready;
     if (mode_proc_ready == 0) {
-        mode_proc[0] = mode_proc_init[0];
-        mode_proc[1] = mode_proc_init[1];
-        mode_proc[2] = mode_proc_init[2];
-        mode_proc[3] = mode_proc_init[3];
-        mode_proc[4] = mode_proc_init[4];
+        mode_proc[0] = &Act_c::mode_restart;
+        mode_proc[1] = &Act_c::mode_wait;
+        mode_proc[2] = &Act_c::mode_carry;
+        mode_proc[3] = &Act_c::mode_drop;
+        mode_proc[4] = &Act_c::mode_sink;
         mode_proc_ready = 1;
     }
 
@@ -743,7 +736,7 @@ bool daObjTry::Act_c::mode_proc_call() {
 
     if (attr().m48 >= 0) {
         if (M_bingo != 0 || M_restart != 0) {
-            eff_set_bingo(M_bingo != 0, M_restart != 0);
+            eff_set_bingo(M_bingo, M_restart);
         } else {
             eff_clr_bingo();
         }

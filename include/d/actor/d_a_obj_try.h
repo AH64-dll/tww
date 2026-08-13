@@ -110,8 +110,8 @@ namespace daObjTry {
         static const char M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;
         static const Attr_c M_attr[13];
-        static u8 M_bingo;
-        static u8 M_restart;
+        static bool M_bingo;
+        static bool M_restart;
 
         void prm_set_swSave(int);
         Act_c() : mFollowCb(0, 0) { m668 = 0; }
