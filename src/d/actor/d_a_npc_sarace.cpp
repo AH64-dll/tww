@@ -142,8 +142,8 @@ void daNpc_Sarace_c::playTexPatternAnm() {
     }
     if (m741 != anmIdx && m741 != -1) {
         m741 = anmIdx;
-        dNpc_setAnm(mpMorf, a_play_mode_tbl[anmIdx], morf, a_play_speed_tbl[anmIdx], l_bck_ix_tbl[anmIdx], -1, "Sarace");
-        dNpc_setAnm(mpMorf2, a_play_mode_tbl[anmIdx], morf, a_play_speed_tbl[anmIdx], l_bck_head_ix_tbl[anmIdx], -1, "Sarace");
+        dNpc_setAnm(mpMorf, a_play_mode_tbl[m741], morf, a_play_speed_tbl[m741], l_bck_ix_tbl[m741], -1, "Sarace");
+        dNpc_setAnm(mpMorf2, a_play_mode_tbl[m741], morf, a_play_speed_tbl[m741], l_bck_head_ix_tbl[m741], -1, "Sarace");
     }
 }
 
