@@ -189,7 +189,6 @@ u8 daNpc_Aj1_c::init_AJ1_2() {
 }
 
 /* 000006B0-00000868       .text createInit__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 u8 daNpc_Aj1_c::createInit() {
     m75B = (fopAcM_GetParam(this) >> 8) & 0xFF;
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
@@ -345,7 +344,6 @@ void daNpc_Aj1_c::play_texPttrnAnm() {
 }
 
 /* 00000CF4-00000DFC       .text setAnm_anm__11daNpc_Aj1_cFPQ211daNpc_Aj1_c9anm_prm_c */
-        /* Nonmatching */
 void daNpc_Aj1_c::setAnm_anm(daNpc_Aj1_c::anm_prm_c* i_prm) {
     if (i_prm->mAnmNum < 0 || mAnmNum == i_prm->mAnmNum) {
         return;
@@ -725,7 +723,6 @@ void daNpc_Aj1_c::setAttention(bool i_flag) {
 }
 
 /* 000018DC-00001930       .text decideType__11daNpc_Aj1_cFi */
-        /* Nonmatching */
 u8 daNpc_Aj1_c::decideType(int i_type) {
     mType = 0;
     mSpecificType = -1;
@@ -1319,7 +1316,6 @@ int daNpc_Aj1_c::wait_action1(void*) {
 }
 
 /* 00002DD0-00002E8C       .text wait_action2__11daNpc_Aj1_cFPv */
-        /* Nonmatching */
 int daNpc_Aj1_c::wait_action2(void*) {
     switch (mActionIndex) {
         case 9:
@@ -1351,7 +1347,6 @@ int daNpc_Aj1_c::wait_action2(void*) {
 }
 
 /* 0000304C-0000319C       .text demo__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 u8 daNpc_Aj1_c::demo() {
     if (demoActorID == 0) {
         if (mInDemo != 0) {
@@ -1477,7 +1472,6 @@ BOOL daNpc_Aj1_c::_execute() {
 }
 
 /* 000035A8-00003638       .text _delete__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 BOOL daNpc_Aj1_c::_delete() {
     dComIfG_resDelete(&mPhs, "Aj");
     if (heap != NULL && mpMorf != NULL) {
@@ -1516,7 +1510,6 @@ cPhs_State daNpc_Aj1_c::_create() {
 }
 
 /* 00003B5C-00003E88       .text bodyCreateHeap__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::bodyCreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Aj", dRes_ID_AJ_BDL_AJ_e);
     JUT_ASSERT(VERSION_SELECT(2238, 2237, 2238, 2238), a_mdl_dat != NULL);
@@ -1560,7 +1553,6 @@ s32 daNpc_Aj1_c::bodyCreateHeap() {
 }
 
 /* 00003E90-00003F78       .text itemCreateHeap__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::itemCreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Aj", dRes_ID_AJ_BDL_AJ_STICK_e);
     JUT_ASSERT(VERSION_SELECT(2291, 2290, 2291, 2291), a_mdl_dat != NULL);
