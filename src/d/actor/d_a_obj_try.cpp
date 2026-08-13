@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_try.h"
 
+#include "d/d_bg_s_func.h"
 #include "d/d_bg_w.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
@@ -576,13 +577,47 @@ void daObjTry::Act_c::calc_drop_param(float*, float*, float*) const {
 }
 
 /* 00002218-000022F4       .text bound__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::bound() {
-    /* Nonmatching */
+bool daObjTry::Act_c::bound() {
+    bool ret = mAcch.ChkGroundHit();
+    if (mAcch.ChkWallHit()) {
+        speedF *= L_attrBase[2];
+        current.angle.y = (s16)(mAcchCir.GetWallAngleY() * 2 - (current.angle.y + 0x8000));
+    }
+    if (mAcch.ChkGroundLanding()) {
+        f32 spd = std::fabsf(m638 * L_attrBase[0]);
+        if (spd > L_attrBase[1]) {
+            if (spd > L_attrBase[2]) {
+                speed.y = L_attrBase[2];
+            } else {
+                speed.y = spd;
+            }
+            ret = false;
+        }
+    } else if (mAcch.ChkGroundHit()) {
+        cLib_addCalc(&speed.y, 0.0f, 0.5f, 5.0f, 0.0f);
+    }
+    return ret;
 }
 
 /* 000022F4-0000240C       .text se_fall_water__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::se_fall_water() {
-    /* Nonmatching */
+    cBgS_PolyInfo* temp[2] = {
+        &mAcch.m_wtr,
+        &mAcch.m_gnd,
+    };
+
+    u32 mtrlSndId = 0x13;
+    for (int i = 0; i < ARRAY_SIZE(temp); i++) {
+        int bg_index = temp[i]->GetBgIndex();
+        if (bg_index >= 0 && bg_index < 0x100) {
+            mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(*temp[i]);
+            break;
+        }
+    }
+
+    JAIZelBasic::zel_basic->seStart(attr().m58, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo),
+                                    0.0f, 0.0f, -1.0f, -1.0f, 0);
+    set_senv(attr().m44, attr().m45);
 }
 
 /* 0000240C-00002460       .text set_senv__Q28daObjTry5Act_cCFii */
@@ -657,8 +692,13 @@ bool daObjTry::Act_c::check_circle() {
 }
 
 /* 00002960-00002A90       .text get_water_h__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::get_water_h() {
-    /* Nonmatching */
+f32 daObjTry::Act_c::get_water_h() {
+    dBgS_WtrChk waterChk;
+    f32 ret = current.pos.y;
+    if (dBgS_SplGrpChk_In_ObjGnd(current.pos, &waterChk, 100.0f)) {
+        ret = waterChk.GetHeight();
+    }
+    return ret;
 }
 
 /* 00002BB4-00002DA8       .text _execute__Q28daObjTry5Act_cFv */

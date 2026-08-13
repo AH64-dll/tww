@@ -142,7 +142,7 @@ namespace daObjTry {
         bool chk_sink_water();
         bool chk_sinkdown_water();
         void calc_drop_param(float*, float*, float*) const;
-        void bound();
+        bool bound();
         void se_fall_water();
         void set_senv(int, int) const;
         void cam_lockoff() const;
@@ -154,7 +154,7 @@ namespace daObjTry {
         void eff_hit_water_splash();
         void make_vib();
         bool check_circle();
-        void get_water_h();
+        f32 get_water_h();
         bool _execute();
         bool _draw();
 
