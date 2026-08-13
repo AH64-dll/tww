@@ -1001,7 +1001,7 @@ BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
 BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode* i_node, int i_param) {
     /* Nonmatching */
     if (i_param == 0) {
-        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        u32 jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         Act_c* area = (Act_c*)model->getUserArea();
         if (area != NULL) {
@@ -1019,7 +1019,7 @@ BOOL daObjFtree::Ftree_NodeCallBack_M(J3DNode* i_node, int i_param) {
 BOOL daObjFtree::Ftree_NodeCallBack_L(J3DNode* i_node, int i_param) {
     /* Nonmatching */
     if (i_param == 0) {
-        u16 jnt_no = ((J3DJoint*)i_node)->getJntNo();
+        u32 jnt_no = ((J3DJoint*)i_node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         Act_c* area = (Act_c*)model->getUserArea();
         if (area != NULL) {
