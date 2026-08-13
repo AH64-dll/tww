@@ -407,7 +407,6 @@ BOOL daNpc_Bms1_c::chkAttention(cXyz param, s16) {
 
 /* 000011D8-00001278       .text eventOrder__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::eventOrder() {
-    /* Nonmatching */
     if (m89B == 0x4) {
         fopAcM_orderOtherEvent2(this, "BMS_LAND_DEMO", 1, 0xFFFF);
     } else if (m89B == 0x3) {
