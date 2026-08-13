@@ -800,19 +800,19 @@ void daNpc_Uk_c::lookBack() {
 char* daNpc_Uk_c::getStaffName() {
     if (mType == TYPE_MINIGAME) {
         switch (getShapeType()) {
+        case 0:
+            return "UkB2";
         case 1:
             return "UkC2";
         case 2:
             return "UkD2";
-        case 0:
-            return "UkB2";
         }
     } else {
         switch (getShapeType()) {
-        case 2:
-            return "UkD";
         case 1:
             return "UkC";
+        case 2:
+            return "UkD";
         }
     }
     return "UkB";
@@ -1944,9 +1944,9 @@ BOOL daNpc_Uk_c::CreateHeap() {
         dRes_INDEX_UK_BDL_UKHEAD_C_e,
         dRes_INDEX_UK_BDL_UKHEAD_D_e,
     };
-    J3DModelData* headData = (J3DModelData*)dComIfG_getObjectRes("Uk", head_bdl_table[getShapeType()]);
-    JUT_ASSERT(2790, headData != NULL);
-    mpModel = mDoExt_J3DModel__create(headData, 0x80000, 0x11020022);
+    J3DModelData* headModelData = (J3DModelData*)dComIfG_getObjectRes("Uk", head_bdl_table[getShapeType()]);
+    JUT_ASSERT(2790, headModelData);
+    mpModel = mDoExt_J3DModel__create(headModelData, 0x80000, 0x11020022);
     if (mpModel == NULL) {
         return FALSE;
     }
