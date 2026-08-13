@@ -248,13 +248,17 @@ void daNpc_Uk_c::surrender() {
         cXyz dist = pActor->current.pos - current.pos;
         if (dist.abs2XZ() <= 7225.0f) {
             s16 angle = fopAcM_searchActorAngleY(pActor, this) - pActor->shape_angle.y;
-            if (angle <= 0x2AAA && angle >= -0x2AAA) {
-                s16 dir = angle < 0 ? (s16)(pActor->shape_angle.y - 0x4000)
-                                    : (s16)(pActor->shape_angle.y + 0x4000);
-                speed.x += 0.5f * cM_ssin(dir);
-                speed.z += 0.5f * cM_scos(dir);
-                setFlag(0x8);
+            if (angle > 0x2AAA) {
+                return;
             }
+            if (angle < -0x2AAA) {
+                return;
+            }
+            s16 dir = angle < 0 ? (s16)(pActor->shape_angle.y - 0x4000)
+                                : (s16)(pActor->shape_angle.y + 0x4000);
+            speed.x += 0.5f * cM_ssin(dir);
+            speed.z += 0.5f * cM_scos(dir);
+            setFlag(0x8);
         }
     }
 }
