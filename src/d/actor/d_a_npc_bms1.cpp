@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_vibration.h"
+#include "d/d_a_obj.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -128,8 +129,94 @@ static BOOL nodeCallBack_Bms(J3DNode* node, int calcTiming) {
 }
 
 /* 000004C4-00000A00       .text nodeCallBack_BmsHead__FP7J3DNodei */
-static BOOL nodeCallBack_BmsHead(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DModel* pModel = j3dSys.getModel();
+        daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
+        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        if (pBms != NULL) {
+            static cXyz l_zero = cXyz::Zero;
+            static cXyz l_ten = cXyz(40.0f, 0.0f, 0.0f);
+
+            PSMTXCopy(pModel->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+
+    if (jntNo == pBms->getHairLJntNum()) {
+        mDoMtx_stack_c::scaleM(pBms->m2B4.x * pBms->m2CC, pBms->m2B4.y, pBms->m2B4.z);
+        Mtx local;
+        PSMTXCopy(mDoMtx_stack_c::now, local);
+        cXyz trans(local[0][3], local[1][3], local[2][3]);
+        local[0][3] = 0.0f;
+        local[1][3] = 0.0f;
+        local[2][3] = 0.0f;
+        mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
+        mDoMtx_stack_c::quatM(&pBms->m304);
+        PSMTXConcat(mDoMtx_stack_c::now, local, mDoMtx_stack_c::now);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &pBms->m2D4);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &pBms->m2E0);
+        PSMTXCopy(mDoMtx_stack_c::now, pModel->getAnmMtx(jntNo));
+
+        if (pBms->m2D4.isZero()) {
+            pBms->m2D4 = pBms->m2E0;
+        }
+        cXyz diff = pBms->m2E0 - pBms->m2D4;
+        cXyz scaled = diff * l_HIO.mChild[0].m40;
+        pBms->m2EC = pBms->m2EC + scaled;
+        pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
+        pBms->m2D4 = pBms->m2D4 + pBms->m2EC;
+
+        cXyz v1 = pBms->m2E0 - pBms->m2D4;
+        cXyz v2 = pBms->m2E0 - pBms->m2D4;
+        Quaternion rot;
+        daObj::quat_rotVec(&rot, v1, v2);
+        C_QUATSlerp(&pBms->m304, &rot, &pBms->m304, l_HIO.mChild[0].m48);
+        f32 dot = PSVECDotProduct(&pBms->m2EC, &pBms->m2EC);
+        pBms->m2CC = 1.0f - l_HIO.mChild[0].m4C * dot;
+        if (pBms->m2CC < 0.5f) {
+            pBms->m2CC = 0.5f;
+        } else if (pBms->m2CC > 1.0f) {
+            pBms->m2CC = 1.0f;
+        }
+    } else if (jntNo == pBms->getHairRJntNum()) {
+        mDoMtx_stack_c::scaleM(pBms->m2C0.x * pBms->m2D0, pBms->m2C0.y, pBms->m2C0.z);
+        Mtx local;
+        PSMTXCopy(mDoMtx_stack_c::now, local);
+        cXyz trans(local[0][3], local[1][3], local[2][3]);
+        local[0][3] = 0.0f;
+        local[1][3] = 0.0f;
+        local[2][3] = 0.0f;
+        mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
+        mDoMtx_stack_c::quatM(&pBms->m314);
+        PSMTXConcat(mDoMtx_stack_c::now, local, mDoMtx_stack_c::now);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &pBms->m2E0);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &pBms->m2F8);
+        PSMTXCopy(mDoMtx_stack_c::now, pModel->getAnmMtx(jntNo));
+
+        if (pBms->m2E0.isZero()) {
+            pBms->m2E0 = pBms->m2F8;
+        }
+        cXyz diff = pBms->m2F8 - pBms->m2E0;
+        cXyz scaled = diff * l_HIO.mChild[0].m40;
+        pBms->m2EC = pBms->m2EC + scaled;
+        pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
+        pBms->m2E0 = pBms->m2E0 + pBms->m2EC;
+
+        cXyz v1 = pBms->m2F8 - pBms->m2E0;
+        cXyz v2 = pBms->m2F8 - pBms->m2E0;
+        Quaternion rot;
+        daObj::quat_rotVec(&rot, v1, v2);
+        C_QUATSlerp(&pBms->m314, &rot, &pBms->m314, l_HIO.mChild[0].m48);
+        f32 dot = PSVECDotProduct(&pBms->m2EC, &pBms->m2EC);
+        pBms->m2D0 = 1.0f - l_HIO.mChild[0].m4C * dot;
+        if (pBms->m2D0 < 0.5f) {
+            pBms->m2D0 = 0.5f;
+        } else if (pBms->m2D0 > 1.0f) {
+            pBms->m2D0 = 1.0f;
+        }
+        }
+    }
+    }
+
+    return TRUE;
 }
 
 /* 00000A00-00000C4C       .text set_mtx__12daNpc_Bms1_cFv */

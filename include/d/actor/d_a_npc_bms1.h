@@ -81,7 +81,10 @@ public:
     /* 0x2C0 */ cXyz m2C0;
     /* 0x2CC */ f32 m2CC;
     /* 0x2D0 */ f32 m2D0;
-    /* 0x2D4 */ u8 m2D4[0x304 - 0x2D4];
+    /* 0x2D4 */ cXyz m2D4;
+    /* 0x2E0 */ cXyz m2E0;
+    /* 0x2EC */ cXyz m2EC;
+    /* 0x2F8 */ cXyz m2F8;
     /* 0x304 */ Quaternion m304;
     /* 0x314 */ Quaternion m314;
     /* 0x324 */ request_of_phase_process_class mPhs;
