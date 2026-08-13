@@ -1753,7 +1753,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_htetu1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland"),
     ActorRel(Matching,    "d_a_obj_jump"),
-    ActorRel(NonMatching, "d_a_obj_kanoke"),
+    ActorRel(Equivalent, "d_a_obj_kanoke"),  # regalloc/pair-move: 3 sub-100 all 0 semantic one-sided (executeNormal 98.22 norm-diff-0, executeOpenTate 98.97 + executeEffectTate 95.65 paired single-insn); markers 3/3 keep
     ActorRel(Matching,    "d_a_obj_ladder"),
     ActorRel(NonMatching, "d_a_obj_light"),
     ActorRel(Matching,    "d_a_obj_mkie"),
