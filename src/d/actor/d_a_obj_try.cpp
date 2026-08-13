@@ -26,24 +26,6 @@ namespace {
     const f32 L_attrBase[3] = {-0.6f, 15.0f, 15.0f};
 
     typedef void (Act_c::*ModeFunc)();
-    static ModeFunc mode_proc[5] = {};
-
-    static GXColor L_bingoPrmClr[2] = {
-        {12, 24, 72, 0},
-        {72, 12, 24, 0},
-    };
-    static GXColor L_bingoEnvClr[2] = {
-        {66, 73, 202, 0},
-        {103, 62, 202, 0},
-    };
-    static GXColor L_bingoPrmClr2[2] = {
-        {2, 12, 56, 0},
-        {56, 2, 12, 0},
-    };
-    static GXColor L_bingoEnvClr2[2] = {
-        {8, 62, 27, 0},
-        {42, 62, 98, 0},
-    };
 }; // namespace
 
 const char Act_c::M_arcname[] = "Hseki";
@@ -722,15 +704,13 @@ void daObjTry::Act_c::mode_sink() {
 /* 0000177C-00001B58       .text mode_proc_call__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::mode_proc_call() {
     /* Nonmatching */
-    static s8 mode_proc_ready;
-    if (mode_proc_ready == 0) {
-        mode_proc[0] = &Act_c::mode_restart;
-        mode_proc[1] = &Act_c::mode_wait;
-        mode_proc[2] = &Act_c::mode_carry;
-        mode_proc[3] = &Act_c::mode_drop;
-        mode_proc[4] = &Act_c::mode_sink;
-        mode_proc_ready = 1;
-    }
+    static ModeFunc mode_proc[5] = {
+        &Act_c::mode_restart,
+        &Act_c::mode_wait,
+        &Act_c::mode_carry,
+        &Act_c::mode_drop,
+        &Act_c::mode_sink,
+    };
 
     if ((actor_status & fopAcStts_CARRY_e) != 0 && mMode != 2) {
         mode_carry_init();
@@ -1041,16 +1021,32 @@ void daObjTry::Act_c::init_mtx() {
 /* 00002540-00002718       .text eff_set_bingo__Q28daObjTry5Act_cFbb */
 void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
     /* Nonmatching */
+    static GXColor prm0[2] = {
+        {12, 24, 72, 0},
+        {72, 12, 24, 0},
+    };
+    static GXColor env0[2] = {
+        {66, 73, 202, 0},
+        {103, 62, 202, 0},
+    };
+    static GXColor prm1[2] = {
+        {2, 12, 56, 0},
+        {56, 2, 12, 0},
+    };
+    static GXColor env1[2] = {
+        {8, 62, 27, 0},
+        {42, 62, 98, 0},
+    };
     if (m651 == 0) {
         u32 idx = (u32)(5 - mType) > 0;
         dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
         particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY00, &current.pos,
-                      &shape_angle, NULL, 0xFF, &mFollowCb, -1, &L_bingoPrmClr[idx], &L_bingoEnvClr[idx],
+                      &shape_angle, NULL, 0xFF, &mFollowCb, -1, &prm0[idx], &env0[idx],
                       NULL);
         const cXyz* pos = param_2 ? &home.pos : &current.pos;
         csXyz angle(0, m64A, 0);
         m668 = (u32)g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos,
-                                  &angle, NULL, 0xFF, NULL, -1, &L_bingoPrmClr2[idx], &L_bingoEnvClr2[idx],
+                                  &angle, NULL, 0xFF, NULL, -1, &prm1[idx], &env1[idx],
                                   NULL);
         if (param_1) {
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_STATUE_SET, &eyePos, 0,
