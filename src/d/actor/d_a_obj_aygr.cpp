@@ -12,18 +12,17 @@ namespace daObjAygr {
     const char Act_c::M_arcname[] = "Aygr";
 
     /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */
-        /* Nonmatching */
     BOOL Act_c::CreateHeap() {
-        J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGR_e);
-        JUT_ASSERT(0x50, model_data != NULL);
-        mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+        J3DModelData* model_data_yagura = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGR_e);
+        JUT_ASSERT(0x50, model_data_yagura != NULL);
+        mpModel = mDoExt_J3DModel__create(model_data_yagura, 0, 0x11020203);
         if (mpModel == NULL) {
             return FALSE;
         }
         if (prm_get_mdl()) {
-            J3DModelData* model_data2 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGRH_e);
-            JUT_ASSERT(0x59, model_data2 != NULL);
-            mpModel2 = mDoExt_J3DModel__create(model_data2, 0, 0x11020203);
+            J3DModelData* model_data_hashigo = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGRH_e);
+            JUT_ASSERT(0x59, model_data_hashigo != NULL);
+            mpModel2 = mDoExt_J3DModel__create(model_data_hashigo, 0, 0x11020203);
             if (mpModel2 == NULL) {
                 return FALSE;
             }
@@ -98,13 +97,14 @@ namespace daObjAygr {
     }
 
     /* 0000054C-000005F8       .text set_mtx__Q29daObjAygr5Act_cFv */
-        /* Nonmatching */
     void Act_c::set_mtx() {
         PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-        PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+        J3DModel* mdl = mpModel;
+        PSMTXCopy(mDoMtx_stack_c::get(), mdl->getBaseTRMtx());
         if (prm_get_mdl()) {
-            PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
+            J3DModel* mdl2 = mpModel2;
+            PSMTXCopy(mDoMtx_stack_c::get(), mdl2->getBaseTRMtx());
         }
         PSMTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
     }
@@ -126,9 +126,8 @@ namespace daObjAygr {
     }
 
     /* 000006B0-0000079C       .text Draw__Q29daObjAygr5Act_cFv */
-        /* Nonmatching */
     BOOL Act_c::Draw() {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         if (prm_get_mdl()) {
             g_env_light.setLightTevColorType(mpModel2, &tevStr);
