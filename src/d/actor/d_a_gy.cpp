@@ -566,7 +566,6 @@ void daGy_c::modeDive() {
 
 /* 000012DC-0000141C       .text modeCircleInit__6daGy_cFv */
 void daGy_c::modeCircleInit() {
-    /* Nonmatching */
     m2B0 = 1;
     s32 type = mpCtrl->m320;
     if(type == 0) {
@@ -584,7 +583,6 @@ void daGy_c::modeCircle() {
 
 /* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
 void daGy_c::modeWithCircleInit() {
-    /* Nonmatching */
     m2B0 = 6;
     m4F8 = (s32)cM_rndF((f32)l_HIO.m132);
     if(m4F8 <= l_HIO.m130) {
@@ -642,7 +640,16 @@ void daGy_c::modeAttackPlayer() {
 
 /* 000022F8-00002400       .text modeAttackBackInit__6daGy_cFv */
 void daGy_c::modeAttackBackInit() {
-    /* Nonmatching */
+    m2B0 = 4;
+    mD15 = 4;
+    speedF = l_HIO.m104;
+    speed.y = l_HIO.m108;
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+
+    cXyz sp18(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
+              2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+              2.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+    dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp18, 0xFF, NULL, -1, NULL, NULL, NULL);
 }
 
 /* 00002400-00002560       .text modeAttackBack__6daGy_cFv */
@@ -652,7 +659,10 @@ void daGy_c::modeAttackBack() {
 
 /* 00002560-000025F0       .text modeDamageInit__6daGy_cFv */
 void daGy_c::modeDamageInit() {
-    /* Nonmatching */
+    m2B0 = 7;
+    mD15 = 6;
+    speed.y = 30.0f;
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 000025F0-00002754       .text modeDamage__6daGy_cFv */
@@ -662,7 +672,25 @@ void daGy_c::modeDamage() {
 
 /* 00002754-000028B8       .text modeDeleteInit__6daGy_cFv */
 void daGy_c::modeDeleteInit() {
-    /* Nonmatching */
+    actor_status &= ~0x20;
+    attention_info.flags &= ~0x4;
+
+    dSv_event_c* evt = &g_dComIfG_gameInfo.save.getEvent();
+    u8 evnt = evt->getEventReg(dSv_event_flag_c::UNK_7EFF);
+    u8 evnt2 = (evnt + 1 > 0xFF) ? 0xFF : evnt + 1;
+    evt->setEventReg(dSv_event_flag_c::UNK_7EFF, evnt2);
+
+    m2B0 = 8;
+    mD15 = 8;
+    m4F0 = 0.0f;
+    speedF = 0.0f;
+    speed.y = l_HIO.m15C;
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+
+    cXyz sp18(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
+              2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+              2.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+    dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp18, 0xFF, NULL, -1, NULL, NULL, NULL);
 }
 
 /* 000028B8-00002998       .text modeDelete__6daGy_cFv */
