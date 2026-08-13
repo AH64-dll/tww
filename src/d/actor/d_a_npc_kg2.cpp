@@ -208,7 +208,7 @@ void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
 void daNpc_Kg2_c::subAnm() {
     /* Nonmatching */
     if (m748 == 4) {
-        u32 reverb = dComIfGp_getReverb(current.roomNo);
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
         JAIZelBasic::getInterface()->seStart(JA_SE_CV_KG_SLEEP, &eyePos, 0, reverb, 1.0f, 1.0f,
                                              -1.0f, -1.0f, 0);
     }
@@ -227,12 +227,12 @@ void daNpc_Kg2_c::subAnm() {
             m737 = 2;
         }
     } else if (m749 == 0xC) {
-        if (mpMorf->checkFrame(mpMorf->getFrame() - 1.0f)) {
+        if (mpMorf->checkFrame(1.0f)) {
             m736 = 0;
             setAnm(1, -1.0f);
         }
     } else if (m749 == 0xD) {
-        if (mpMorf->checkFrame(mpMorf->getFrame() - 1.0f)) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
             setAnm(4, -1.0f);
         }
     }
