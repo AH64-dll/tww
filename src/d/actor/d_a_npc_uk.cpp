@@ -687,16 +687,16 @@ BOOL daNpc_Uk_c::init() {
         break;
     case TYPE_MINIGAME:
         mStts.SetWeight(0xFE);
-        mPathRun.setInf(getPath(), current.roomNo, true);
+        mPathRun.setInf((u8)getPath(), current.roomNo, true);
         if (mPathRun.getPath() == NULL) {
             return FALSE;
         }
         if (chkGameStart()) {
             setAction(&daNpc_Uk_c::seek_action, NULL);
         } else {
-            setAction(&daNpc_Uk_c::hind_action, NULL);
             setFlag(0x10);
             fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
+            setAction(&daNpc_Uk_c::hind_action, NULL);
         }
         fopAcM_OnStatus(this, fopAcStts_UNK40_e);
         break;
