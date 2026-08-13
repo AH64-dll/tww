@@ -349,26 +349,27 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
     int isWait = mProcFunc == waitProc;
     if (isWait) {
-        void (Act_c::*appearProc)() = &Act_c::appear_proc;
-        int isAppear = mProcFunc == appearProc;
-        if (!isAppear) {
-            cXyz sp2C = current.pos - mLiftPos;
-            sp2C.y = 0.0f;
-            if (!sp2C.normalizeRS()) {
-                sp2C.set(0.0f, 0.0f, 1.0f);
-            }
-            PSVECScale(&sp2C, &sp2C, 10.0f);
-            PSVECAdd(&current.pos, &sp2C, &current.pos);
-        }
+        cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
+        cLib_addCalc2(&mQuakeAngle, 750.0f, 0.5f, 40.0f);
+        cLib_addCalcAngleS2(&mAngleAdd, 0x1200, 4, 0x100);
+        mAngle += mAngleAdd;
+        cLib_addCalc2(&current.pos.y, i_pos.y, 0.25f, 150.0f);
+        m45C = 1;
+        return TRUE;
+    }
+    void (Act_c::*appearProc)() = &Act_c::appear_proc;
+    int isAppear = mProcFunc == appearProc;
+    if (isAppear) {
         return FALSE;
     }
-    cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
-    cLib_addCalc2(&mQuakeAngle, 750.0f, 0.5f, 40.0f);
-    cLib_addCalcAngleS2(&mAngleAdd, 0x1200, 4, 0x100);
-    mAngle += mAngleAdd;
-    cLib_addCalc2(&current.pos.y, i_pos.y, 0.25f, 150.0f);
-    m45C = 1;
-    return TRUE;
+    cXyz sp2C = current.pos - mLiftPos;
+    sp2C.y = 0.0f;
+    if (!sp2C.normalizeRS()) {
+        sp2C.set(0.0f, 0.0f, 1.0f);
+    }
+    PSVECScale(&sp2C, &sp2C, 10.0f);
+    PSVECAdd(&current.pos, &sp2C, &current.pos);
+    return FALSE;
 }
 
 /* 00001560-0000167C       .text BeforeLiftRequest__Q214daObjMagmarock5Act_cFR4cXyz */
@@ -542,7 +543,7 @@ BOOL daObjMagmarock::Method::Draw(void* i_this) {
     a_this->mTevStr.mColorK0.g = (u8)(a_this->mTevStr.mColorK0.g + (s32)(0.12f * (255 - a_this->mTevStr.mColorK0.g)));
     a_this->mTevStr.mColorK0.b = (u8)(a_this->mTevStr.mColorK0.b + (s32)(0.12f * (255 - a_this->mTevStr.mColorK0.b)));
 
-    g_env_light.setLightTevColorType(a_this->mpModel, &a_this->mTevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel, &a_this->tevStr);
     a_this->mBrkAnm.entry(a_this->mpModel->getModelData(), (s16)a_this->mBrkFrame);
     a_this->mBckAnm.entry(a_this->mpModel->getModelData(), (s16)a_this->mBckFrame);
     mDoExt_modelUpdateDL(a_this->mpModel);
