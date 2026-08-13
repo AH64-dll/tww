@@ -315,7 +315,6 @@ int daNpc_Aj1_c::btpResID(int i_resNo) {
 /* 00000B58-00000C64       .text init_texPttrnAnm__11daNpc_Aj1_cFScb */
         /* Nonmatching */
 bool daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
-    J3DModelData* modelData = mpMorf->getModel()->getModelData();
     if (i_btpNo < 0) {
         return 0;
     }
@@ -324,7 +323,7 @@ bool daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
     mBtpNum = i_btpNo;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(modelData, a_btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
+    return mBtpAnm.init(mpMorf->getModel()->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
 }
 
 /* 00000C64-00000CF4       .text play_texPttrnAnm__11daNpc_Aj1_cFv */
@@ -431,6 +430,8 @@ void daNpc_Aj1_c::chngAnmAtr(u8 i_atr) {
         /* Nonmatching */
 void daNpc_Aj1_c::ctrlAnmAtr() {
     switch (mAnmAtr) {
+        case 6:
+            break;
         case 2:
             ctrl_WAITanm();
             break;
