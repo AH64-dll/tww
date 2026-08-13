@@ -1008,7 +1008,6 @@ void daNpcMn_c::eventMesSetInit(int staffIdx) {
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
     /* Nonmatching */
-    /* Nonmatching */
 s32 daNpcMn_c::eventMesSet() {
     return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
@@ -1054,7 +1053,6 @@ void daNpcMn_c::eventSwOnInit(int staffIdx) {
     }
 }
 
-    /* Nonmatching */
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
     /* Nonmatching */
 s32 daNpcMn_c::eventSwOn() {
