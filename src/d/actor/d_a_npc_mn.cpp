@@ -296,7 +296,6 @@ daNpcMn_c::daNpcMn_c() {
 }
 
 /* 000005E0-000006F8       .text daNpc_Mn_nodeCallBack__FP7J3DNodei */
-    /* Nonmatching */
 static BOOL daNpc_Mn_nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -1437,7 +1436,6 @@ u8 daNpcMn_c::getPrmSwitchBit2() {
 }
 
 /* 000030C0-00003148       .text setMtx__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::setMtx() {
     mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
@@ -1574,7 +1572,6 @@ void daNpcMn_c::lookBack() {
 }
 
 /* 000035C4-000036D0       .text initTexPatternAnm__9daNpcMn_cFb */
-    /* Nonmatching */
 BOOL daNpcMn_c::initTexPatternAnm(bool param_1) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
