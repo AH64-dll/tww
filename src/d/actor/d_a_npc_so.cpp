@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_snap.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_lib.h"
@@ -945,7 +946,35 @@ void daNpc_So_c::hudeDraw() {
 
 /* 00003954-00003B00       .text _draw__10daNpc_So_cFv */
 bool daNpc_So_c::_draw() {
+    if (l_HIO.mNpc.m22 != 0) {
     /* Nonmatching */
+        debugDraw();
+    }
+    if (field_0x6CC == 5) {
+        return true;
+    }
+    if (l_HIO.field_0x2C[5] == 0) {
+        J3DModel* model = mpMorf->getModel();
+        J3DModelData* modelData = model->getModelData();
+        g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(model, &tevStr);
+        mBtpAnm.entry(modelData, mBtpAnmFrame);
+        mpMorf->entryDL();
+        modelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    }
+    if (field_0xA78 != 0 || l_HIO.field_0x2C[0] != 0) {
+        hudeDraw();
+    }
+
+    cXyz snapPos = current.pos;
+    snapPos.y += field_0xB34;
+    dSnap_RegistFig(0x7D, this, snapPos, shape_angle.y, 1.0f, 1.0f, 1.0f);
+
+    cXyz shadowPos(current.pos.x, current.pos.y + 20.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(mShadowId, 0, mpMorf->getModel(), &shadowPos, 30.0f, 6.0f,
+                                   current.pos.y + field_0xB34, mObjAcch.GetGroundH(), mObjAcch.m_gnd,
+                                   &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    return true;
 }
 
 /* 00003B00-00003DF8       .text createInit__10daNpc_So_cFv */
