@@ -162,7 +162,8 @@ void daBalancelift_c::set_mtx() {
 
     mDoMtx_stack_c::quatM(&mQuatR);
     mDoMtx_stack_c::scaleM(l_HIO.mFloat0x2C, l_HIO.mFloat0x30, l_HIO.mFloat0x34);
-    PSMTXCopy(mDoMtx_stack_c::get(), M_mdl->getBaseTRMtx());
+    J3DModel* mdl = M_mdl;
+    PSMTXCopy(mDoMtx_stack_c::get(), mdl->getBaseTRMtx());
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 
     cXyz* pt = m_chain->mPt;
