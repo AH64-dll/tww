@@ -140,7 +140,7 @@ public:
     /* 0x752 */ u8 field_0x752[2];
     /* 0x754 */ s16 mLookAtMaxVel;
     /* 0x756 */ s16 mTargetYRot;
-    /* 0x758 */ u8 mbMorfAnimStopped;
+    /* 0x758 */ s8 mbMorfAnimStopped;
     /* 0x759 */ u8 m759;
     /* 0x75A */ u8 mItemNo;
     /* 0x75B */ u8 m75B;

@@ -618,7 +618,6 @@ u32 daNpc_Aj1_c::getMsg_AJ1_2() {
 }
 
 /* 00001460-0000146C       .text getMsg__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 u32 daNpc_Aj1_c::getMsg() {
     u32 result = 0;
     switch (mSpecificType) {
@@ -964,7 +963,6 @@ void daNpc_Aj1_c::endEvent() {
 }
 
 /* 00001E10-00001E2C       .text isEventEntry__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::isEventEntry() {
     return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
 }
@@ -1301,7 +1299,6 @@ int daNpc_Aj1_c::talk_1() {
 }
 
 /* 00002D08-00002DD0       .text wait_action1__11daNpc_Aj1_cFPv */
-        /* Nonmatching */
 int daNpc_Aj1_c::wait_action1(void*) {
     switch (mActionIndex) {
         case 9:
