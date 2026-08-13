@@ -1234,8 +1234,218 @@ void action_kougeki(pw_class* i_this) {
 }
 
 /* 000042B8-00004C50       .text action_itai__FP8pw_class */
-void action_itai(pw_class*) {
-    /* Nonmatching */
+void action_itai(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    J3DModel* model = i_this->mpMorf->getModel();
+    switch (i_this->mMode) {
+    case 0x32:
+        i_this->mBehaviorType = 0;
+        i_this->m340 = 1;
+        i_this->m341 = 1;
+        i_this->attention_info.flags = 4;
+        i_this->actor_status |= 0x20;
+        i_this->m38C = fopAcM_searchActorAngleY(i_this, player);
+        i_this->current.angle.y = i_this->m38C;
+        i_this->shape_angle.y = i_this->m38C;
+        i_this->m38E = 0;
+        i_this->m39A = 0xC8;
+        i_this->m39C = 0xC8;
+        i_this->m378[3] = 3;
+        if (i_this->m398 == 0) {
+            kantera_break(i_this);
+        }
+        i_this->speedF = -20.0f;
+        anm_init(i_this, 0xF, 3.0f, 0, 1.0f, -1);
+        i_this->mMode += 1;
+        /* fallthrough */
+    default:
+    block_71:
+        if (i_this->mMode <= 0x33) {
+            if (i_this->m378[3] == 0) {
+                alpha_anime(i_this);
+            }
+            fuwafuwa_calc(i_this);
+        }
+        return;
+    case 0x33:
+        cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
+        if (i_this->mpMorf->isStop()) {
+            i_this->speedF = 0.0f;
+            next_dousa_check(i_this);
+        }
+        goto block_71;
+    case 0x34:
+        kantera_break(i_this);
+        i_this->m340 = 1;
+        i_this->m38C = i_this->current.angle.y;
+        i_this->shape_angle.y = i_this->m38C;
+        for (int i = 0; i < 4; i++) {
+            i_this->m384[i] = 0;
+        }
+        if (i_this->mBckIdx != 0x13) {
+            anm_init(i_this, 0x13, 3.0f, 2, 1.0f, -1);
+        }
+        i_this->m378[0] = 0x1E;
+        i_this->speedF = 0.0f;
+        i_this->mMode += 1;
+        /* fallthrough */
+    case 0x35:
+        if (i_this->mHitByWhat == 9 || i_this->mHitByWhat == 0xA) {
+            i_this->m378[0] = 0xA;
+            i_this->m39A += 5;
+            if (i_this->m33F == 0) {
+                i_this->m33F = 1;
+                i_this->m2C4->init(model->getModelData(),
+                                   (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_HIT_e),
+                                   true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
+            }
+            if (i_this->mHitByWhat == 0xA) {
+                i_this->m39A = 0xFF;
+            }
+            if (i_this->m39A >= 0xFF) {
+                i_this->m39A = 0xFF;
+                i_this->m38E = 0;
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_SOLID_END, &i_this->eyePos, 0,
+                                                dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                mDoAud_monsSeStart(JA_SE_CV_PW_APPEAR, &i_this->eyePos, fopAcM_GetID(i_this), 0,
+                                  dComIfGp_getReverb(i_this->current.roomNo));
+                i_this->mCyl.OnTgNoConHit();
+                i_this->m33E = 1;
+                i_this->m2C0->init(model->getModelData(),
+                                   (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_JITTAIKA1_e),
+                                   true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
+                i_this->mCyl.SetTgType(0xFF3DFEFF);
+                i_this->mAction = 0;
+                i_this->mMode = 0x64;
+                return;
+            }
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_BECOME_SOLID, &i_this->eyePos, 0,
+                                            dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            goto block_71;
+        }
+        if (i_this->m33F != 0) {
+            i_this->m33F = 0;
+            i_this->m2C8->init(model->getModelData(),
+                               (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_DEFAULT_e),
+                               true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
+        }
+        i_this->m39C = 0;
+        i_this->m39A = 0;
+        i_this->m38E = 0;
+        next_dousa_check(i_this);
+        goto block_71;
+    case 0x36:
+        i_this->m340 = 1;
+        i_this->m378[4] = 0;
+        i_this->m5C4.end();
+        i_this->m38C = i_this->shape_angle.y;
+        i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+        i_this->shape_angle.y = i_this->m38C;
+        i_this->speedF = -24.0f;
+        if (i_this->health <= 0) {
+            i_this->mCyl.OffAtSetBit();
+            i_this->mCyl.OffAtSetBit();
+            i_this->mCyl.OffTgSetBit();
+            i_this->mCyl.ClrTgHit();
+            i_this->speedF *= 1.5f;
+        }
+        mDoAud_monsSeStart(JA_SE_CV_PW_DAMAGE, &i_this->eyePos, fopAcM_GetID(i_this), 0,
+                              dComIfGp_getReverb(i_this->current.roomNo));
+        anm_init(i_this, 0xE, 3.0f, 0, 1.0f, -1);
+        i_this->mMode += 1;
+        goto block_71;
+    case 0x37:
+        if (!Big_pow_gattai_check(i_this)) {
+            cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
+            if (i_this->mpMorf->isStop()) {
+                i_this->speedF = 0.0f;
+                if (i_this->health > 0) {
+                    i_this->mAction = 0;
+                    i_this->mMode = 0x5A;
+                } else {
+                    i_this->mMode = 0x3C;
+                }
+            }
+        }
+        goto block_71;
+    case 0x38:
+        i_this->current.angle.y = dComIfGp_getPlayer(0)->shape_angle.y;
+        i_this->m340 = 1;
+        i_this->speedF = 24.0f;
+        i_this->mpMorf->setPlaySpeed(0.25f);
+        i_this->mMode += 1;
+        /* fallthrough */
+    case 0x39:
+        if (!Big_pow_gattai_check(i_this)) {
+            cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
+            if (i_this->speedF < 0.2f) {
+                i_this->speedF = 0.0f;
+                i_this->current.angle.y = i_this->shape_angle.y;
+                i_this->m340 = 0;
+                i_this->mpMorf->setPlaySpeed(1.0f);
+                i_this->mAction = 0;
+                i_this->mMode = 0x5A;
+            }
+        }
+        goto block_71;
+    case 0x3A:
+        i_this->m340 = 1;
+        i_this->speedF = 0.0f;
+        if (i_this->mHitByWhat == 4) {
+            enemy_piyo_set(i_this);
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_MD_PIYO, &i_this->eyePos, 0,
+                                            dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            i_this->m378[0] = REG9_S(0x49) + 0x4B;
+        }
+        anm_init(i_this, 0x1A, 3.0f, 0, 1.0f, -1);
+        i_this->mMode += 1;
+        /* fallthrough */
+    case 0x3B:
+        if (!Big_pow_gattai_check(i_this) && i_this->m378[0] == 0) {
+            i_this->mAction = 0;
+            i_this->mMode = 0x5A;
+        }
+        goto block_71;
+    case 0x3C:
+        anm_init(i_this, 0x1E, 2.0f, 2, 1.0f, -1);
+        i_this->m33E = 0;
+        i_this->attention_info.flags = 0;
+        i_this->m5C4.end();
+        if (i_this->m378[5] == 0) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_GO_HEAVEN, &i_this->eyePos, 0,
+                                            dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            mDoAud_monsSeStart(JA_SE_CV_PW_DIE, &i_this->eyePos, fopAcM_GetID(i_this), 0,
+                            dComIfGp_getReverb(i_this->current.roomNo));
+        }
+        if (i_this->m33F != 0) {
+            i_this->m33F = 0;
+            i_this->m2C8->init(model->getModelData(),
+                               (J3DAnmTevRegKey*)dComIfG_getObjectRes("PW", dRes_INDEX_PW_BRK_DEFAULT_e),
+                               true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
+        }
+        i_this->gravity = 0.6f;
+        i_this->mMode += 1;
+        /* fallthrough */
+    case 0x3D:
+        i_this->m39A -= 8;
+        if (i_this->m39A < 0) {
+            i_this->m38E = 0;
+            i_this->m39A = 0;
+            if (i_this->m378[5] == 0) {
+                cXyz pos = i_this->current.pos;
+                pos.y += 60.0f;
+                fopAcM_createDisappear(i_this, &pos, 5, 0, 0xFF);
+            }
+            fopAcM_delete(i_this);
+            dComIfGs_onActor(i_this->setID, i_this->current.roomNo);
+        }
+        goto block_71;
+    case 0x3E:
+        if (i_this->mpMorf->isStop()) {
+            i_this->mMode = 0x3C;
+        }
+        goto block_71;
+    }
 }
 
 /* 00004C50-00004FFC       .text action_demo__FP8pw_class */
