@@ -565,15 +565,15 @@ BOOL daNpc_Kg2_c::CreateHeap() {
         return FALSE;
     }
     J3DAnmTexPattern* cannonBtp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Kg", 0xA);
-    if (!mBtpAnm.init(cannonData, cannonBtp, 1, 2, 1.0f, 0, -1, FALSE, 0)) {
+    if (!mBtpAnm.init(cannonData, cannonBtp, 1, 2, 0.0f, 0, -1, FALSE, 0)) {
         return FALSE;
     }
     J3DModel* model = mpMorf->getModel();
     J3DModelData* data = model->getModelData();
-    model->getModelData()->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
-    model->getModelData()->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
+    data->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
+    data->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea((u32)this);
-    mAcchCir.SetWall(30.0f, 1.0f);
+    mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, 0, 0);
     return TRUE;
 }
