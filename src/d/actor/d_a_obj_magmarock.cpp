@@ -372,7 +372,6 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
 
 /* 00001560-0000167C       .text BeforeLiftRequest__Q214daObjMagmarock5Act_cFR4cXyz */
 bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz& i_pos) {
-    /* Nonmatching */
     mLiftPos = i_pos;
     if (mLiftPos.y < home.pos.y + 25.0f) {
         mLiftPos.y = home.pos.y + 25.0f;
