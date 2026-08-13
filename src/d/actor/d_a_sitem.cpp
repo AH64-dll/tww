@@ -279,10 +279,10 @@ void hand_move(sitem_class* i_this) {
     u8 isCut = 0;
     f32 f31 = 0.1f;
     f32 f29 = 1.0f;
-    f32 f28 = 5.0f + REG0_F(14);
+    f32 f28 = 5.0f + REG0_F(11);
 
     s32 hrIdx = i_this->m2B9 * 4;
-    f32 f30 = REG0_F(8) + hr_d[i_this->m2B9];
+    f32 f30 = REG0_F(5) + hr_d[i_this->m2B9];
     f32 f27 = max_d[i_this->m2B9];
 
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
@@ -294,9 +294,9 @@ void hand_move(sitem_class* i_this) {
     case 0:
     case 1:
         cXyz sp70;
-        sp70.x = (25.0f + REG0_F(16)) * cM_ssin(i_this->m2BC * 0x258);
+        sp70.x = (25.0f + REG0_F(13)) * cM_ssin(i_this->m2BC * 0x258);
         sp70.y = f27;
-        sp70.z = (25.0f + REG0_F(16)) * cM_ssin(i_this->m2BC * 0x2BC);
+        sp70.z = (25.0f + REG0_F(13)) * cM_ssin(i_this->m2BC * 0x2BC);
         MtxPosition(&sp70, &sp64);
         sp58 = i_this->current.pos + sp64;
         if (i_this->m2C0 == 0) {
@@ -351,18 +351,18 @@ void hand_move(sitem_class* i_this) {
             mDoMtx_YrotS(*calc_mtx, i_this->mB10);
             cXyz sp70;
             sp70.x = 0.0f;
-            sp70.y = REG0_F(14);
+            sp70.y = REG6_F(9);
             sp70.z = i_this->mB0C;
             MtxPosition(&sp70, &sp64);
             PSVECAdd(&sp58, &sp64, &sp58);
             f31 = 0.1f;
             i_this->speedF = 0.2f * i_this->mB0C;
-            f32 limit = 30.0f + REG0_F(12);
+            f32 limit = 30.0f + REG6_F(8);
             if (i_this->speedF > limit) {
                 i_this->speedF = limit;
             }
         }
-        cLib_addCalc0(&i_this->mB0C, 1.0f, 5.0f + REG0_F(9));
+        cLib_addCalc0(&i_this->mB0C, 1.0f, 5.0f + REG6_F(7));
         cLib_addCalc2(&i_this->mHomePos.x, sp58.x, f31, i_this->speedF);
         cLib_addCalc2(&i_this->mHomePos.y, sp58.y, f31, i_this->speedF);
         cLib_addCalc2(&i_this->mHomePos.z, sp58.z, f31, i_this->speedF);
@@ -378,7 +378,7 @@ void hand_move(sitem_class* i_this) {
             dst[i] = src[i].mPos;
             dstSize[i] = (u8)src[i].m18;
         }
-        cLib_addCalc0(&i_this->mHandPos.z, 1.0f, 1.0f + REG0_F(4));
+        cLib_addCalc0(&i_this->mHandPos.z, 1.0f, 1.0f + REG0_F(1));
     }
 
     control3(i_this);
@@ -451,7 +451,7 @@ void hand_move(sitem_class* i_this) {
             atInfo.mpObj = hitObj;
             at_power_check(&atInfo);
             if (atInfo.mResultingAttackType == 8) {
-                i_this->mB0C = 300.0f + REG0_F(13);
+                i_this->mB0C = 300.0f + REG6_F(6);
                 i_this->mB10 = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
                 return;
             }
