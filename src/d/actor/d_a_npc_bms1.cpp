@@ -1009,7 +1009,56 @@ BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
 
 /* 00002BFC-00002DD8       .text evn_talk__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::evn_talk() {
-    /* Nonmatching */
+    if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
+        l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
+    } else if (l_msg == NULL) {
+        l_msg = fopMsgM_SearchByID(l_msgId);
+        fopMsgM_demoMsgFlagOn();
+    } else {
+        setAnmFromMsgTag();
+        u16 msgStatus = l_msg->mStatus;
+        if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
+            l_msg->mStatus = next_msgStatus(&mMsgNo);
+            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(mMsgNo);
+            }
+        } else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+            if (mMsgNo == 0x1DCA) {
+                s16 priceIdx;
+                s16 priceDelta;
+                if (m8A3[0] == 0x49) {
+                    priceIdx = 4;
+                    priceDelta = -10;
+                } else if (m8A3[0] == 0x4A) {
+                    priceIdx = 5;
+                    priceDelta = -20;
+                } else {
+                    priceIdx = 6;
+                    priceDelta = -30;
+                }
+                g_dComIfG_gameInfo.play.mItemBeastNumCounts[priceIdx] += priceDelta;
+            } else if (mMsgNo == 0x1DC4) {
+                s16 priceIdx;
+                if (m8A3[0] == 0x49) {
+                    priceIdx = 4;
+                } else if (m8A3[0] == 0x4A) {
+                    priceIdx = 5;
+                } else {
+                    priceIdx = 6;
+                }
+                g_dComIfG_gameInfo.play.mItemBeastNumCounts[priceIdx] += -10;
+            }
+            l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            l_msg = NULL;
+            l_msgId = fpcM_ERROR_PROCESS_ID_e;
+            return TRUE;
+        } else if ((msgStatus == fopMsgStts_BOX_OPENING_e || msgStatus == fopMsgStts_MSG_TYPING_e) &&
+                   mMsgNo == m7E0) {
+            m7E0 = 0;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00002DD8-00002E30       .text evn_viblation_init__12daNpc_Bms1_cFi */
