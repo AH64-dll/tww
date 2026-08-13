@@ -640,7 +640,40 @@ void daGy_c::modeWithCircleInit() {
 
 /* 00001788-000019AC       .text modeWithCircle__6daGy_cFv */
 void daGy_c::modeWithCircle() {
-    /* Nonmatching */
+    if (mD15 != 5) {
+        m4E8 = l_HIO.mAC;
+        m4EC = l_HIO.mC4;
+        daGy_Ctrl_c* ctrl = mpCtrl;
+        if (ctrl->m312[m2AC] == 0) {
+            modeDiveInit();
+            return;
+        }
+        fopAc_ac_c* cb1_player = dComIfGp_getShipActor();
+        if (cb1_player != NULL) {
+            if (cb1_player->speedF < l_HIO.m50) {
+                modeCircleInit();
+            }
+            cLib_addCalcAngleS2(&current.angle.y, cb1_player->shape_angle.y, 8, 0x400);
+            int dist_angle = cLib_distanceAngleS(cb1_player->shape_angle.y,
+                                                 fopAcM_searchActorAngleY(cb1_player, this));
+            f32 player_dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
+            if (dist_angle < l_HIO.m142 && player_dist > l_HIO.m9C) {
+                m4F0 = cb1_player->speedF - 5.0f;
+            } else {
+                m4F0 = cb1_player->speedF + l_HIO.m40;
+            }
+            if (dist_angle < l_HIO.m140 && dist_angle > l_HIO.m142 && player_dist > l_HIO.m9C) {
+                speed.y = l_HIO.m138;
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                mD15 = 5;
+                cXyz sp18(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
+                          2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+                          2.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+                dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp18, 0xFF, NULL, -1, NULL, NULL, NULL);
+                modeWithAttackInit();
+            }
+        }
+    }
 }
 
 /* 000019AC-00001A14       .text modeAttackInit__6daGy_cFv */
