@@ -178,8 +178,8 @@ namespace daObjTry {
         /* 0x63C */ cXyz m63C;
         /* 0x648 */ s16 m648;
         /* 0x64A */ s16 m64A;
-        /* 0x64C */ u8 m64C;
-        /* 0x64D */ u8 m64D;
+        /* 0x64C */ s8 m64C;
+        /* 0x64D */ s8 m64D;
         /* 0x64E */ u8 m64E;
         /* 0x64F */ u8 m64F;
         /* 0x650 */ u8 m650;

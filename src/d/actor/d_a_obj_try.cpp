@@ -593,7 +593,7 @@ void daObjTry::Act_c::mode_wait() {
     }
 
     int ret = 0;
-    if (groundHit && (bingo != 0 || m64D != 0)) {
+    if (groundHit && (bingo != 0 || (u8)m64D != 0)) {
         ret = 1;
     }
 
