@@ -582,10 +582,10 @@ u32 daNpc_Aj1_c::getMsg_AJ1_2() {
         if (!dComIfGs_isEventBit(0x3701)) {
             return 0x9D7;
         }
-        if (dComIfGs_isEventBit(0xB20)) {
+        if (!dComIfGs_isEventBit(0xB20)) {
             return 0x9D9;
         }
-        return 0x9DA;
+        return 0x9D8;
     }
     if (!dComIfGs_isEventBit(0x3708)) {
         return 0x9D0;
@@ -593,7 +593,10 @@ u32 daNpc_Aj1_c::getMsg_AJ1_2() {
     if (!dComIfGs_isEventBit(0x2A20)) {
         return 0x9D4;
     }
-    return dKy_daynight_check() ? 0x9D6 : 0x9D5;
+    if (dKy_daynight_check() != 0) {
+        return 0x9D6;
+    }
+    return 0x9D5;
 }
 
 /* 00001460-0000146C       .text getMsg__11daNpc_Aj1_cFv */
