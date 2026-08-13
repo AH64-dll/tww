@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
 #include "d/d_shop.h"
+#include "d/d_lib.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
@@ -112,8 +113,8 @@ public:
     /* 0x6D9 */ u8 m6D9[0x6DC - 0x6D9];
     /* 0x6DC */ dNpc_JntCtrl_c mJntCtrl;
     /* 0x710 */ dNpc_EventCut_c mEventCut;
-    /* 0x77C */ u8 m77C[0x7A4 - 0x77C];
-    /* 0x7A4 */ u8 m7A4;
+    /* 0x77C */ STControl mStickControl;
+    /* 0x7A4 */ s8 m7A4;
     /* 0x7A5 */ u8 m7A5[0x7B4 - 0x7A5];
     /* 0x7B4 */ cXyz mAttnBasePos;
     /* 0x7C0 */ s16 m7C0;

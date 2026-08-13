@@ -602,12 +602,61 @@ void daNpc_Bms1_c::talkInit() {
 
 /* 00001928-00001A34       .text normal_talk__12daNpc_Bms1_cFv */
 u16 daNpc_Bms1_c::normal_talk() {
-    /* Nonmatching */
+    u16 status = l_msg->mStatus;
+    if (status == fopMsgStts_MSG_DISPLAYED_e) {
+        l_msg->mStatus = next_msgStatus(&mMsgNo);
+        if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+            fopMsgM_messageSet(mMsgNo);
+        }
+    } else if (status == fopMsgStts_BOX_CLOSED_e) {
+        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+    } else if (status == fopMsgStts_MSG_PREPARING_e) {
+        fopMsgM_demoMsgFlagOn();
+    }
+
+    cXyz pos = mShopCam.getItemZoomPos(100.0f);
+    mShopItems.Item_ZoomUp(pos);
+    mpShopCursor->hide();
+
+    if (dComIfGp_checkMesgSendButton()) {
+        mMsgNo = l_msg->mMsgNo;
+    }
+
+    return status;
 }
 
 /* 00001A34-00001B88       .text shop_talk__12daNpc_Bms1_cFv */
 u16 daNpc_Bms1_c::shop_talk() {
-    /* Nonmatching */
+    mpShopCursor->show();
+    if (dShop_now_triggercheck(l_msg, &mStickControl, &mShopItems, &mMsgNo, NULL, NULL)) {
+        m7A4 = 1;
+        mMsgNo2 = 0;
+        if (mShopItems.mSelectedItemIdx >= 0) {
+            if (!checkItemGet(0x69, TRUE)) {
+                mHeadAnm.swing_vertical_init(1, 0x1800, 0x1000, 1);
+            }
+        }
+    }
+
+    u16 status = l_msg->mStatus;
+    if (status == fopMsgStts_MSG_DISPLAYED_e || status == fopMsgStts_MSG_CONTINUES_e) {
+        if (m7A4 != 0) {
+            m7A4 = 0;
+        } else {
+            mMsgNo2 = mMsgNo;
+            l_msg->mStatus = next_msgStatus(&mMsgNo2);
+            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(mMsgNo2);
+            }
+        }
+    } else if (status == fopMsgStts_BOX_CLOSED_e) {
+        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+        mShopItems.mSelectedItemIdx = -1;
+    } else if (status == fopMsgStts_MSG_PREPARING_e) {
+        fopMsgM_demoMsgFlagOn();
+    }
+
+    return status;
 }
 
 /* 00001B88-00001D68       .text talk__12daNpc_Bms1_cFv */
