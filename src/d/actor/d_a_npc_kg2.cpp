@@ -859,8 +859,7 @@ int daNpc_Kg2_c::event_wait_action(void*) {
         m763++;
     } else if (m763 != -1) {
         s16 angleY = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
-        cXyz pos = current.pos;
-        m72C = chkAttention(pos, angleY);
+        m72C = chkAttention(current.pos, angleY);
         lookBack();
         setAttention();
         if (dComIfGp_evmng_endCheck(m758[m754])) {
@@ -879,11 +878,7 @@ int daNpc_Kg2_c::event_wait_action(void*) {
                 m750 = 3;
                 m754 = 2;
                 u8 reg = dComIfGs_getEventReg(0xB703);
-                s32 new_reg = reg + 1;
-                if (new_reg > 3) {
-                    new_reg = 3;
-                }
-                dComIfGs_setEventReg(0xB703, (u8)new_reg);
+                dComIfGs_setEventReg(0xB703, (u8)((reg + 1) > 3 ? 3 : (reg + 1)));
             } else if (m754 == 2) {
                 m750 = 1;
                 m74C = 0x315A;

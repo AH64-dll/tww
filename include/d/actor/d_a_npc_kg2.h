@@ -61,7 +61,7 @@ public:
         canon_game_result = 0;
     }
 
-    static s8 canon_game_result;
+    static u8 canon_game_result;
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
@@ -100,7 +100,7 @@ public:
     /* 0x74C */ u32 m74C;
     /* 0x750 */ s8 m750;
     /* 0x751 */ u8 field_0x751[0x754 - 0x751];
-    /* 0x754 */ u32 m754;
+    /* 0x754 */ s32 m754;
     /* 0x758 */ s16 m758[4];
     /* 0x760 */ s8 m760;
     /* 0x761 */ u8 field_0x761[0x763 - 0x761];
