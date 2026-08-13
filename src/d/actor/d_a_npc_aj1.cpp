@@ -980,8 +980,9 @@ void daNpc_Aj1_c::event_proc(int i_eventNo) {
 /* 00002098-00002118       .text set_pa_pun__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_pun() {
+    s8 roomNo = current.roomNo;
     mPunEmitter = dComIfGp_particle_set(0x8113, &current.pos, NULL, NULL, 0xFF, NULL,
-                                        current.roomNo, NULL, NULL, NULL);
+                                        roomNo, NULL, NULL, NULL);
     if (mPunEmitter != NULL) {
         mPunTimer = 0;
     }
@@ -1003,12 +1004,13 @@ void daNpc_Aj1_c::set_pa_aka() {
 /* 000021B4-00002280       .text set_pa_don__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_don() {
+    s8 roomNo = current.roomNo;
     cXyz pos(37.3f, 0.0f, 13.8f);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&pos, &m7A8);
     mDonEmitter = dComIfGp_particle_set(0x8114, &m7A8, NULL, NULL, 0xFF, NULL,
-                                        current.roomNo, NULL, NULL, NULL);
+                                        roomNo, NULL, NULL, NULL);
 }
 
 /* 00002284-00002404       .text set_pa_smk__11daNpc_Aj1_cFv */
