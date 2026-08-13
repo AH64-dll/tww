@@ -409,7 +409,8 @@ void daObjTrap_c::bound() {
     cXyz sp14 = mDir * -1.0f;
     PSVECSubtract(&mCurPos, &mVibPos, &mCurPos);
     f32 vibF = mVibF;
-    f32 f = std::fabsf((f32)(s16)(vibF * cM_ssin((mBoundTimer & 3) << 14)));
+    s16 idx = (mBoundTimer & 3) << 14;
+    f32 f = std::fabsf((f32)(s16)(vibF * cM_ssin(idx)));
     PSVECScale(&sp14, &sp14, f);
     PSVECAdd(&mCurPos, &sp14, &mCurPos);
     mVibPos = sp14;
