@@ -1050,7 +1050,7 @@ void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
                       NULL);
         const cXyz* pos = param_2 ? &home.pos : &current.pos;
         csXyz angle(0, m64A, 0);
-        m668 = (u32)particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos,
+        m668 = (u32)g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos,
                                   &angle, NULL, 0xFF, NULL, -1, &L_bingoPrmClr2[idx], &L_bingoEnvClr2[idx],
                                   NULL);
         if (param_1) {
@@ -1174,11 +1174,12 @@ skip:
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_draw() {
     /* Nonmatching */
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     if (attr().m48 >= 0) {
-        mBrkAnm.entry(mpModel->getModelData(), mBrkAnm.getFrameCtrl()->getFrame());
+        J3DModelData* modelData = mpModel->getModelData();
+        mBrkAnm.entry(modelData, mBrkAnm.getFrameCtrl()->getFrame());
     }
     mDoExt_modelUpdateDL(mpModel);
 
