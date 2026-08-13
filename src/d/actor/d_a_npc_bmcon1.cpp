@@ -706,12 +706,8 @@ bool daNpcBmcon_c::_execute() {
 /* 00001878-00001BC8       .text executeCommon__12daNpcBmcon_cFv */
 BOOL daNpcBmcon_c::executeCommon() {
     /* Nonmatching */
-    if (m7AD) {
-        if (m7C3 == 0) {
-            m7AE = 1;
-        } else {
-            m7AE = 0;
-        }
+    if (m7AD && m7C3 == 0) {
+        m7AE = 1;
     } else {
         m7AE = 0;
     }
@@ -766,7 +762,7 @@ BOOL daNpcBmcon_c::executeCommon() {
 
                 cXyz point = mPathRun.getPoint(mPathRun.getIdx());
                 old.pos = point;
-                current.pos = point;
+                current.pos = old.pos;
                 m79C = -0x6000;
                 current.angle.y = -0x6000;
 
