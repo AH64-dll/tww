@@ -11,6 +11,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_item.h"
 #include "d/d_lib.h"
+#include "d/d_snap.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -590,6 +591,58 @@ void daNpc_Bms1_c::demo_end_init() {
 /* 000030B0-00003314       .text _draw__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::_draw() {
     /* Nonmatching */
+    J3DModel* pModel = mpMorf->getModel();
+    J3DModelData* pModelData = mpModel->getModelData();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(pModel, &tevStr);
+    mBtpAnm.entry(pModelData, mBtpFrame);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpMorf->entryDL();
+    mDoExt_modelUpdateDL(mpModel);
+
+    if (mShopIdx == 1) {
+        g_env_light.setLightTevColorType(mpModel2, &tevStr);
+        mDoExt_modelUpdateDL(mpModel2);
+        g_env_light.setLightTevColorType(mpModel3, &tevStr);
+        mDoExt_modelUpdateDL(mpModel3);
+    } else if (dComIfGs_isEventBit(0xA02)) {
+        g_env_light.setLightTevColorType(mpModel2, &tevStr);
+        mDoExt_modelUpdateDL(mpModel2);
+    }
+
+    if (mpModel4 != NULL) {
+        g_env_light.setLightTevColorType(mpModel4, &tevStr);
+        mDoExt_modelUpdateDL(mpModel4);
+    }
+
+    if (mpModel5 != NULL) {
+        g_env_light.setLightTevColorType(mpModel5, &tevStr);
+        mDoExt_modelUpdateDL(mpModel5);
+    }
+
+    mBtpAnm.remove(pModelData);
+
+    cXyz shadowPos(current.pos.x, current.pos.y + 130.0f, current.pos.z);
+    mShadowID = dComIfGd_setShadow(
+        mShadowID, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
+    );
+
+    if (mShadowID != 0) {
+        g_dComIfG_gameInfo.drawlist.addRealShadow(mShadowID, mpModel);
+    }
+
+    if (mShopItems.mSelectedItemIdx >= 0) {
+        mpShopCursor->draw();
+    }
+
+    cXyz snapPos(current.pos);
+    if (mShopIdx == 1) {
+        snapPos.y -= 90.0f;
+    }
+    dSnap_RegistFig(0x5C, this, snapPos, current.angle.y, 1.0f, 1.0f, 1.0f);
+
+    return TRUE;
 }
 
 /* 00003314-00003474       .text _execute__12daNpc_Bms1_cFv */
