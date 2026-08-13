@@ -69,8 +69,8 @@ daBalancelift_HIO_c::daBalancelift_HIO_c() {
     mFloat0x24 = 440.0f;
     mFloat0x28 = 1800.0f;
     mFloat0x2C = 2.0f;
-    mFloat0x30 = 0.1f;
-    mFloat0x34 = 0.15f;
+    mFloat0x30 = 2.0f;
+    mFloat0x34 = 2.0f;
 }
 
 const char daBalancelift_c::M_arcname[] = "Hten1";
