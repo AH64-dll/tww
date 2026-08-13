@@ -312,10 +312,12 @@ bool daNpc_So_c::checkTgHit() {
         cCcD_Obj* hitObj = mSph.GetTgHitObj();
         field_0x6D8 = l_HIO.field_0x7C;
 
-        if (hitObj != NULL) {
-            if (hitObj->GetAtType() == 0x4000) {
-                fopAcM_seStart(this, 0x2879, 0x20);
-            }
+        if (hitObj == NULL) {
+            return false;
+        }
+
+        if (hitObj->GetAtType() == 0x4000) {
+            fopAcM_seStart(this, 0x2879, 0x20);
             fopAcM_monsSeStart(this, 0x4991, 0);
             dComIfGp_particle_set(0x10, hitPos);
             cXyz scale(2.0f, 2.0f, 2.0f);
