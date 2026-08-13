@@ -438,7 +438,7 @@ static s16 daNpcMn_XyCheckCB(void* i_this, int i_param) {
 /* 00000C00-00000F3C       .text createInit__9daNpcMn_cFv */
     /* Nonmatching */
 cPhs_State daNpcMn_c::createInit() {
-    u8 ret = 0xFF;
+    int ret = 0xFF;
     u8 railID = getPrmRailID();
     if (railID != 0xFF) {
         mPathRun.setInf(railID, current.roomNo, 1);
