@@ -1027,7 +1027,55 @@ BOOL daNpc_Bms1_c::evn_head_swing_init(int) {
 
 /* 00002E68-00002FBC       .text privateCut__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::privateCut() {
-    /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "TALKMSG",
+        "CONTINUE_TALK",
+        "VIBLATE",
+        "HEADSWING",
+    };
+
+    int staffId = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
+    if (staffId == -1) {
+        return FALSE;
+    }
+
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, cut_name_tbl, 4, TRUE, 0);
+    if (actIdx == -1) {
+        dComIfGp_evmng_cutEnd(staffId);
+    } else {
+        if (dComIfGp_evmng_getIsAddvance(staffId)) {
+            switch (actIdx) {
+            case 0:
+                evn_talk_init(staffId);
+                break;
+            case 1:
+                evn_continue_talk_init(staffId);
+                break;
+            case 2:
+                evn_viblation_init(staffId);
+                break;
+            case 3:
+                evn_head_swing_init(staffId);
+                break;
+            }
+        }
+
+        BOOL end;
+        switch (actIdx) {
+        case 0:
+        case 1:
+            end = evn_talk();
+            break;
+        default:
+            end = TRUE;
+            break;
+        }
+        if (end) {
+            dComIfGp_evmng_cutEnd(staffId);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00002FBC-000030A4       .text demo_move__12daNpc_Bms1_cFv */
