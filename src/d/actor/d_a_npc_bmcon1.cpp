@@ -1162,6 +1162,8 @@ u16 daNpcBmcon_c::talk2(int i_param) {
 
             case fopMsgStts_MSG_TYPING_e:
                 if (mMsgStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    /* nothing */
+                } else if (mMsgStatus == fopMsgStts_BOX_OPENING_e) {
                     chkMsg();
                 }
                 break;

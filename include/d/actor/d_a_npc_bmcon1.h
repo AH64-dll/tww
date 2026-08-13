@@ -149,7 +149,7 @@ private:
     /* 0x798 */ s16 m798;
     /* 0x79A */ s16 mAttnAngle;
     /* 0x79C */ s16 m79C;
-    /* 0x79E */ s16 mMsgStatus;
+    /* 0x79E */ u16 mMsgStatus;
     /* 0x7A0 */ s16 m7A0;
     /* 0x7A2 */ s16 mFlyDistNow;
     /* 0x7A4 */ s16 m7A4;
