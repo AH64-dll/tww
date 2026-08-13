@@ -553,13 +553,13 @@ void kantera_calc(pw_class* i_this) {
             switch (i_this->m341) {
             case 0:
                 cLib_addCalcAngleS2(&i_this->m396, 0xBB8, 0x1, 0x64);
-                cLib_addCalc2(&i_this->m3B0, 5000.0f, 1.0f, 3.0f);
-                cLib_addCalc2(&i_this->m3B8, -1000.0f, 1.0f, 3.0f);
+                cLib_addCalc2(&i_this->m3B0, 5000.0f, 1.0f, 1000.0f);
+                cLib_addCalc2(&i_this->m3B8, -1000.0f, 1.0f, 1000.0f);
                 break;
             case 1:
                 cLib_addCalcAngleS2(&i_this->m396, 0xFA0, 0x1, 0x64);
-                cLib_addCalc2(&i_this->m3B0, 10000.0f, 1.0f, 3.0f);
-                cLib_addCalc2(&i_this->m3B8, -10000.0f, 1.0f, 3.0f);
+                cLib_addCalc2(&i_this->m3B0, 10000.0f, 1.0f, 1000.0f);
+                cLib_addCalc2(&i_this->m3B8, -10000.0f, 1.0f, 1000.0f);
                 break;
             default:
                 break;
@@ -1485,7 +1485,7 @@ void action_demo(pw_class* i_this) {
         cLib_addCalc2(&i_this->current.pos.z, player->current.pos.z, 1.0f, 5.0f);
         if (i_this->mpMorf->isStop()) {
             anm_init(i_this, dRes_INDEX_PW_BCK_TORITUKI_WAIT1_e, 4.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            local.y += 7.0f;
+            local.y += 100.0f;
             i_this->m340 = 1;
             i_this->current.pos.x = local.x;
             i_this->current.pos.y = local.y;
@@ -1554,7 +1554,7 @@ void action_torituku(pw_class* i_this) {
                                         dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
                                         -1.0f, -1.0f, 0);
         i_this->m384[0] += 0x2BC;
-        local.y = 7.0f + player->current.pos.y + 10.0f * cM_ssin(i_this->m384[0]);
+        local.y = 100.0f + player->current.pos.y + 10.0f * cM_ssin(i_this->m384[0]);
         i_this->current.pos.x = local.x;
         i_this->current.pos.y = local.y;
         i_this->current.pos.z = local.z;
