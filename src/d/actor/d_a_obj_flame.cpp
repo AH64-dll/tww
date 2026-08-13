@@ -588,13 +588,17 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
     mflft_class* mflft = (mflft_class*)i_actor;
     Act_c* flame = (Act_c*)i_this;
     if (fopAc_IsActor(mflft) && fopAcM_GetName(mflft) == 0x5D) {
-        f32 f31 = 1.0f;
+        f32 f31;
         f32 f30;
-        f32 f0 = 5000.0f;
+        f32 f0;
         if (mflft->m29A == 0) {
+            f31 = 1.0f;
             f30 = 1.0004418f;
+            f0 = 5000.0f;
         } else {
+            f31 = 1.0f;
             f30 = f31;
+            f0 = 5000.0f;
         }
 
         f32 f4 = flame->mHeight;
@@ -613,7 +617,9 @@ void* daObjFlame::Act_c::liftup_mflft(void* i_actor, void* i_this) {
         }
 
         f32 f1 = flame->mScaleX * flameAttr(flame)->mF04;
-        cXyz pos(flame->current.pos.x, flame->current.pos.y + f5 * f1 + f3 * f1, flame->current.pos.z);
+        f32 p1 = f5 * f1;
+        f32 p2 = f3 * f1;
+        cXyz pos(flame->current.pos.x, flame->current.pos.y + p1 + p2, flame->current.pos.z);
         f32 clampY = flame->current.pos.y + f0;
         if (pos.y > clampY) {
             pos.y = clampY;
