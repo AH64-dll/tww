@@ -96,7 +96,7 @@ daNpc_Bms1_HIO_c::daNpc_Bms1_HIO_c() {
     mChild[0].m40 = 0.45f;
     mChild[0].m44 = 0.8f;
     mChild[0].m48 = 0.9f;
-    mChild[0].m4C = 0.000122f;
+    mChild[0].m4C = 0.00005f;
     mNo = 0xFF;
     m8 = -1;
 }
@@ -279,10 +279,10 @@ static const int l_bck_ix_tbl[] = { 0x13, 0x14, 0x16, 0x17, 0x15, 0x16, 0x17 };
 /* Nonmatching */
 BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
     J3DModelData* modelData = mpModel->getModelData();
-    mpBtpRes = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[mBtpIdx]);
-    JUT_ASSERT(0x23E, mpBtpRes != NULL);
+    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[mBtpIdx]);
+    JUT_ASSERT(0x23E, m_head_tex_pattern != 0);
 
-    if (mBtpAnm.init(modelData, mpBtpRes, TRUE, 2, 1.0f, 0, -1, i_0) == 0) {
+    if (mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, 2, 1.0f, 0, -1, i_0) == 0) {
         return FALSE;
     }
     mBtpFrame = 0;
@@ -294,7 +294,7 @@ BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
 void daNpc_Bms1_c::playTexPatternAnm() {
     /* Nonmatching */
     if (cLib_calcTimer(&m34E) == 0) {
-        s16 frameCount = mpBtpRes->getFrameMax();
+        s16 frameCount = m_head_tex_pattern->getFrameMax();
         if (mBtpFrame >= frameCount) {
             mBtpFrame = mBtpFrame - frameCount;
             m34E = (s16)(cM_rndF(100.0f) + 30.0f);
@@ -1307,7 +1307,7 @@ cPhs_State daNpc_Bms1_c::_create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
 
         if (l_HIO.m8 < 0) {
-            l_HIO.mNo = mDoHIO_createChild("Bms", &l_HIO);
+            l_HIO.mNo = mDoHIO_createChild("ボム屋店員", &l_HIO);
         }
         l_HIO.m8 += 1;
 

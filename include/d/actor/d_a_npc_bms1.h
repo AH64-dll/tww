@@ -91,7 +91,7 @@ public:
     /* 0x324 */ request_of_phase_process_class mPhs;
     /* 0x32C */ mDoExt_McaMorf* mpMorf;
     /* 0x330 */ u32 mShadowID;
-    /* 0x334 */ J3DAnmTexPattern* mpBtpRes;
+    /* 0x334 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x338 */ mDoExt_btpAnm mBtpAnm;
     /* 0x34C */ u8 mBtpFrame;
     /* 0x34D */ u8 m34D;
