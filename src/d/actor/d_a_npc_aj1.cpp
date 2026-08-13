@@ -1006,15 +1006,15 @@ void daNpc_Aj1_c::set_pa_don() {
 /* 00002284-00002404       .text set_pa_smk__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_smk() {
-    GXColor col = { 0xC8, 0x80, 0xA0, 0xA0 };
+    GXColor col = { 0xA0, 0xA0, 0x80, 0xC8 };
     PSMTXCopy(mpMorf->getModel()->getAnmMtx(m_fot_L_jnt_num), mDoMtx_stack_c::get());
     MtxP mtx = mDoMtx_stack_c::get();
     m79C.x = mtx[0][3];
     m79C.y = mtx[1][3];
     m79C.z = mtx[2][3];
     mSmokeEcallBack.end();
-    mSmokeEmitter = dComIfGp_particle_set(0x2027, &m79C, &current.angle, NULL, 0xC8, &mSmokeEcallBack,
-                                          current.roomNo, NULL, NULL, NULL);
+    mSmokeEmitter = dComIfGp_particle_setToon(0x2027, &m79C, &current.angle, NULL, 0xC8, &mSmokeEcallBack,
+                                               current.roomNo, NULL, NULL, NULL);
     if (mSmokeEmitter != NULL) {
         mSmokeEmitter->setGlobalParticleScale(0.3f, 0.3f);
         mSmokeEmitter->setGlobalDynamicsScale(JGeometry::TVec3<f32>(0.1f, 0.1f, 0.1f));
