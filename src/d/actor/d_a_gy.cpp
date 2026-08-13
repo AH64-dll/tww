@@ -133,15 +133,15 @@ static Vec ago_cyl_offset[] = {
     {0.0f, 90.0f, 0.0f},
 };
 static Vec body1_cyl_offset[] = {
-    {-10.0f, -20.0f, 0.0f},
+    {-40.0f, -20.0f, 0.0f},
     {40.0f, -20.0f, 0.0f},
 };
 static Vec body2_cyl_offset[] = {
-    {-10.0f, -10.0f, 0.0f},
+    {-40.0f, -10.0f, 0.0f},
     {40.0f, -10.0f, 0.0f},
 };
 static Vec sebire1_cyl_offset[] = {
-    {-10.0f, 60.0f, 0.0f},
+    {-40.0f, 60.0f, 0.0f},
     {150.0f, -100.0f, 0.0f},
 };
 
