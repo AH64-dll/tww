@@ -473,7 +473,27 @@ bool daObjTry::Act_c::_delete() {
 
 /* 00000D5C-00000EA8       .text mode_restart_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_restart_init() {
-    /* Nonmatching */
+    mCyl.ClrAtSet();
+    mCyl.ClrTgSet();
+    mCyl.OnCoSetBit();
+    mAcch.SetRoofNone();
+    mAcch.SetWallNone();
+    mAcch.ClrGrndNone();
+    mAcch.SetWaterNone();
+    mAcch.OffLineCheck();
+    speedF = 0.0f;
+    m630 = 0x6E;
+    current.pos.x = home.pos.x;
+    current.pos.y = home.pos.y + (-10.0f - (f32)attr().m4D);
+    current.pos.z = home.pos.z;
+    shape_angle.x = home.angle.x;
+    shape_angle.y = home.angle.y - 0x8000;
+    shape_angle.z = home.angle.z;
+    current.angle = shape_angle;
+    old.pos = current.pos;
+    old.angle = current.angle;
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    mMode = 0;
 }
 
 /* 00000EA8-00000FFC       .text mode_restart__Q28daObjTry5Act_cFv */
