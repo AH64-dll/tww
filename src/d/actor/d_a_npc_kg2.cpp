@@ -559,7 +559,7 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     if (!initTexPatternAnm(false)) {
         return FALSE;
     }
-    J3DModelData* cannonData = (J3DModelData*)dComIfG_getObjectRes("Kg", 6);
+    J3DModelData* const cannonData = (J3DModelData*)dComIfG_getObjectRes("Kg", 6);
     m6D4 = mDoExt_J3DModel__create(cannonData, 0x80000, 0x11020002);
     if (m6D4 == NULL) {
         return FALSE;
@@ -909,7 +909,7 @@ cPhs_State daNpc_Kg2_c::_create() {
         }
         cullMtx = mpMorf->getModel()->getBaseTRMtx();
         if (l_HIO.mNo < 0) {
-            l_HIO.mNo = mDoHIO_root.createChild("Kg2", &l_HIO);
+            l_HIO.mNo = mDoHIO_root.createChild("海戦ゲーム親父２", &l_HIO);
         }
         if (!CreateInit()) {
             return cPhs_ERROR_e;
@@ -958,7 +958,7 @@ BOOL daNpc_Kg2_c::_draw() {
     /* Nonmatching */
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(model, &tevStr);
     m6F0.entry(modelData, m704);
     mpMorf->entryDL();
