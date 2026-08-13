@@ -388,10 +388,10 @@ void daObjFtree::Act_c::talk_main() {
         return;
     }
     if (mMode >= 0 && mMode < 0xD && message_table[mMode] != 0) {
-        if (PSVECSquareDistance(&current.pos, &dComIfGp_getPlayer(0)->current.pos) <=
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        if (PSVECSquareDistance(&current.pos, &player->current.pos) <=
             (m4C8 + 130.0f) * (m4C8 + 130.0f)) {
             talk_ct();
-            fopAc_ac_c* player = dComIfGp_getPlayer(0);
             if (player != NULL) {
                 cXyz diff = current.pos - player->current.pos;
                 s16 diffAngle = cM_atan2s(diff.x, diff.z) - player->shape_angle.y;
