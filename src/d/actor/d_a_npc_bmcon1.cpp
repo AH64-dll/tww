@@ -1372,7 +1372,6 @@ void daNpcBmcon_c::setMtx() {
 
 /* 0000322C-0000356C       .text chkAttention__12daNpcBmcon_cFv */
 void daNpcBmcon_c::chkAttention() {
-    /* Nonmatching */
     m7C1 = 0;
 
     if(mEventCut.getAttnFlag()) {
@@ -1394,7 +1393,7 @@ void daNpcBmcon_c::chkAttention() {
         fopAc_ac_c* player = dComIfGp_getLinkPlayer();
 
         f32 dist = mAttnDist;
-        s16 angle = mAttnAngle;
+        s32 angle = mAttnAngle;
         f32 tmpDist;
         s16 tmpAngle;
 
@@ -1434,7 +1433,7 @@ void daNpcBmcon_c::chkAttention() {
                 m7AD = 0;
                 m798 = l_npc_dat[mNpcNo].field_0x48;
             }
-            if(l_npc_dat[mNpcNo].field_0x24 > tmpDist || m7C1 != 0){
+            if(l_npc_dat[mNpcNo].field_0x24 > tmpDist){
                 mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
                 m7BE = 1;
                 if (m7BF != 0) {
