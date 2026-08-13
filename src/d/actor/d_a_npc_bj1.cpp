@@ -450,7 +450,7 @@ bool daNpc_Bj1_c::chk_drct(f32 i_param_1) {
 /* 000017C0-000017F0       .text chk_partsNotMove__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::chk_partsNotMove() {
     bool ret = false;
-    if (m822 == m_jnt.getBackbone_y() && m820 != m_jnt.getHead_y()) {
+    if (m822 != m_jnt.getBackbone_y() || m820 != m_jnt.getHead_y()) {
         ret = true;
     }
     return ret;
