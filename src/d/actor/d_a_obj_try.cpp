@@ -948,15 +948,16 @@ void daObjTry::Act_c::calc_drop_param(f32* pGravity, f32* pViscous, f32* pInert)
     /* Nonmatching */
     dBgS_ObjAcch& acch = const_cast<dBgS_ObjAcch&>(mAcch);
     if (acch.ChkWaterHit()) {
+        f32 f0 = 0.0f;
         f32 f2 = current.pos.y - acch.m_wtr.GetHeight();
-        if (f2 <= 0.0f) {
-            f2 = 0.0f;
+        if (f2 >= f0) {
+            f2 = f0;
         } else if (f2 <= (f32)(-attr().m4D)) {
             f2 = 0.5f;
         } else {
             f2 = -f2 * (0.5f / (f32)attr().m4D);
         }
-        f32 f3 = 0.0f - f2;
+        f32 f3 = f0 - f2;
         *pViscous = f2 * attr().m28 + f3 * attr().m1C;
         *pInert = f2 * attr().m2C + f3 * attr().m20;
         *pGravity = f2 * attr().m24 + attr().mGravity;
