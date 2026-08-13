@@ -135,7 +135,37 @@ cPhs_State daObjKanoke_c::_create() {
 
 /* 00000700-000008BC       .text createHeap__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::createHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mkanoke", 4);
+    if (modelData == NULL) {
+        return FALSE;
+    }
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+    m2A0 = new dBgW();
+    if (m2A0 == NULL) {
+        return FALSE;
+    }
+    if (m2A0->Set((cBgD_t*)dComIfG_getObjectRes("Mkanoke", 8), 1, &mMtx) == 1) {
+        return FALSE;
+    }
+    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes("Mkanoke", 5);
+    if (modelData2 == NULL) {
+        return FALSE;
+    }
+    mpModel2 = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
+    if (mpModel2 == NULL) {
+        return FALSE;
+    }
+    m2A4 = new dBgW();
+    if (m2A4 == NULL) {
+        return FALSE;
+    }
+    if (m2A4->Set((cBgD_t*)dComIfG_getObjectRes("Mkanoke", 9), 1, &m2D8) == 1) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 000008BC-00000B28       .text createInit__13daObjKanoke_cFv */

@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
+#include "d/d_bg_w.h"
 
 class daObjKanoke_c : public fopAc_ac_c {
 public:
@@ -52,8 +53,8 @@ public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ J3DModel* mpModel2;
-    /* 0x2A0 */ u32 m2A0;
-    /* 0x2A4 */ u32 m2A4;
+    /* 0x2A0 */ dBgW* m2A0;
+    /* 0x2A4 */ dBgW* m2A4;
     /* 0x2A8 */ Mtx mMtx;
     /* 0x2D8 */ Mtx m2D8;
     /* 0x308 */ dCcD_Stts mStts;
