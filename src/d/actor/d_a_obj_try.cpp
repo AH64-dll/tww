@@ -592,12 +592,35 @@ void daObjTry::Act_c::mode_wait() {
 
 /* 000012C4-00001344       .text mode_carry_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_carry_init() {
-    /* Nonmatching */
+    mCyl.ClrAtSet();
+    mCyl.OnTgSetBit();
+    mCyl.ClrCoSet();
+    mAcch.ClrRoofNone();
+    mAcch.ClrWallNone();
+    mAcch.ClrGrndNone();
+    mAcch.ClrWaterNone();
+    mAcch.OffLineCheck();
+    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    m630 = 8;
+    mMode = 2;
 }
 
 /* 00001344-000013D4       .text mode_carry__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_carry() {
-    /* Nonmatching */
+    if (m630 > 0) {
+        m630--;
+    }
+    speed.y = 0.0f;
+    if ((actor_status & fopAcStts_UNK40000_e) == 0) {
+        if (speedF > 0.0f) {
+            mode_drop_init();
+            mode_drop();
+        } else {
+            daObj::SetCurrentRoomNo(this, &mAcch.m_gnd);
+            m636 = 2;
+            mode_wait_init();
+        }
+    }
 }
 
 /* 000013D4-000014A8       .text mode_drop_init__Q28daObjTry5Act_cFv */
