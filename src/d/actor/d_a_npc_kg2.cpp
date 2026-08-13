@@ -193,7 +193,7 @@ void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
         dNpc_setAnm(mpMorf, a_play_mode_tbl[m749], morf, a_play_speed_tbl[m749], l_bck_ix_tbl[m749], -1,
                     "Kg");
         if (m749 == 0xC) {
-            mpMorf->setFrame((f32)(s16)(mpMorf->getFrame() - 1.0f));
+            mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
             mpMorf->setPlaySpeed(-1.0f);
         }
     }
@@ -496,27 +496,32 @@ void daNpc_Kg2_c::setAttention() {
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::lookBack() {
     /* Nonmatching */
+    cXyz eye_pos;
     cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz* p_look_pos = NULL;
     s16 target_y = current.angle.y;
-    s8 action_no = m760;
-    if (action_no >= 1 && action_no < 3) {
-        if (action_no == 2) {
-            m_jnt.mbBackBoneLock = false;
+    switch (m760) {
+    case 1:
+    case 2:
+        if (m760 == 2) {
+            m_jnt.mbTrn = true;
         }
         if (m72C) {
-            look_pos = dNpc_playerEyePos(l_HIO.mHio.m04);
-            p_look_pos = &look_pos;
+            eye_pos = dNpc_playerEyePos(l_HIO.mHio.m04);
+            p_look_pos = &eye_pos;
             look_pos.set(current.pos.x, current.pos.y, current.pos.z);
             look_pos.y = m708.y;
         }
+        break;
+    default:
+        break;
     }
-    if (m_jnt.mbHeadLock) {
+    if (m_jnt.mbTrn) {
         cLib_addCalcAngleS2(&m720, l_HIO.mHio.mMaxHeadTurnVel, 4, 0x800);
     } else {
         m720 = 0;
     }
-    m_jnt.lookAtTarget(&current.angle.y, p_look_pos, cXyz(look_pos.x, look_pos.y, look_pos.z), target_y, m720, 1);
+    m_jnt.lookAtTarget(&current.angle.y, p_look_pos, look_pos, target_y, m720, 1);
 }
 
 /* 00001448-00001468       .text CallbackCreateHeap__FP10fopAc_ac_c */
