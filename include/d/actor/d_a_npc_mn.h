@@ -77,7 +77,7 @@ public:
     bool _delete();
     bool _draw();
     bool _execute();
-    BOOL executeCommon();
+    bool executeCommon();
     void executeSetMode(unsigned char);
     s32 executeWaitInit();
     void executeWait();
@@ -176,7 +176,7 @@ public:
     /* 0x7AA */ s16 m7AA;
     /* 0x7AC */ s16 mAngAccel;
     /* 0x7AE */ s16 m7AE;
-    /* 0x7B0 */ u8 mMode;
+    /* 0x7B0 */ bool mMode;
     /* 0x7B1 */ u8 mAttnFlag;
     /* 0x7B2 */ u8 mOrderMode;
     /* 0x7B3 */ u8 mTexPatternNo;

@@ -613,7 +613,7 @@ bool daNpcMn_c::_execute() {
 }
 
 /* 00001344-000013B4       .text executeCommon__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeCommon() {
+bool daNpcMn_c::executeCommon() {
     if (mAttnFlag) {
         mOrderMode = 1;
     } else {
@@ -761,13 +761,11 @@ s32 daNpcMn_c::executeWalkInit() {
 /* 00001948-00001BD4       .text executeWalk__9daNpcMn_cFv */
     /* Nonmatching */
 void daNpcMn_c::executeWalk() {
-    executeCommon();
-    if (mMode != 0) {
+    if (executeCommon()) {
         return;
     }
     u8 turnFlag = 0;
-    cXyz myPos = current.pos;
-    if (mPathRun.chkPointPass(myPos, mPathRun.getDir() != 0)) {
+    if (mPathRun.chkPointPass(current.pos, mPathRun.getDir() != 0)) {
         m790 = mPathRun.pointArg(mPathRun.getIdx());
         if (m790 != 0xFF) {
             fopAc_ac_c* actor = fopAcM_searchFromName("Figure", 0xFF, m790);
@@ -805,7 +803,7 @@ void daNpcMn_c::executeWalk() {
         s16 angle;
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
         m7A0 = angle;
-        mPathRun.setInf(0xFF, (s8)current.angle.y, 1);
+        mPathRun.setInf(0xFF, current.roomNo, 1);
         executeSetMode(0);
     }
 }
@@ -825,7 +823,6 @@ s32 daNpcMn_c::executeTurnInit() {
 }
 
 /* 00001D18-00001DE8       .text executeTurn__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::executeTurn() {
     if (executeCommon() == 0) {
         cXyz point = mPathRun.getPoint(mPathRun.getIdx());
@@ -1157,8 +1154,7 @@ void daNpcMn_c::eventWalkInit() {
     /* Nonmatching */
 s32 daNpcMn_c::eventWalk() {
     u8 turnFlag = 0;
-    cXyz myPos = current.pos;
-    if (mPathRun.chkPointPass(myPos, mPathRun.getDir() != 0) && !mPathRun.nextIdxAuto()) {
+    if (mPathRun.chkPointPass(current.pos, mPathRun.getDir() != 0) && !mPathRun.nextIdxAuto()) {
         turnFlag = 1;
     }
     if (turnFlag == 0) {
@@ -1174,7 +1170,7 @@ s32 daNpcMn_c::eventWalk() {
         m77C = l_npc_dat[mNpcNo].field_0x38;
         return 0;
     }
-    m788 = 0.0f;
+    speedF = 0.0f;
     m77C = 0.0f;
     return 1;
 }
