@@ -532,7 +532,7 @@ u32 daNpc_Kf1_c::getMsg() { /* Nonmatching */
 }
 
 /* 00001218-000012A4       .text eventOrder__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::eventOrder() { /* Nonmatching */
+void daNpc_Kf1_c::eventOrder() {
     s8 order = mOrder;
     if (order == 1 || order == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -872,7 +872,7 @@ BOOL daNpc_Kf1_c::cut_move_GET_OUT() { /* Nonmatching */
 }
 
 /* 00002044-0000205C       .text cut_init_DSP_RUPEE_CNT__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_DSP_RUPEE_CNT(int i_actIdx) { /* Nonmatching */
+void daNpc_Kf1_c::cut_init_DSP_RUPEE_CNT(int i_actIdx) {
     g_dComIfG_gameInfo.play.getEvent()->mHindFlag &= ~0x80;
 }
 
@@ -1315,7 +1315,7 @@ s16 daNpc_Kf1_c::chk_tsubo() {
 }
 
 /* 0000317C-00003278       .text orderTsuboEvent__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::orderTsuboEvent() { /* Nonmatching */
+BOOL daNpc_Kf1_c::orderTsuboEvent() {
     if (mTalkOrder != 0) {
         return FALSE;
     }
