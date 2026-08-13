@@ -52,7 +52,6 @@ static const int l_btp_ix_tbl[] = {9, 11, 13, 12, 14};
 
 static daNpc_Kg2_HIO_c l_HIO;
 
-const char daNpc_Kg2_c::M_arcname[] = "Kg";
 s8 daNpc_Kg2_c::canon_game_result = 0;
 daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer = NULL;
 
@@ -134,7 +133,7 @@ void daNpc_Kg2_c::set_mtx() {
 BOOL daNpc_Kg2_c::initTexPatternAnm(bool param) {
     /* Nonmatching */
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes(M_arcname, l_btp_ix_tbl[m748]);
+    m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Kg", l_btp_ix_tbl[m748]);
     JUT_ASSERT(0x12B, m_btp != 0);
     BOOL ret = m6F0.init(modelData, m_btp, 1, 2, 1.0f, 0, -1, param, FALSE);
     if (ret == FALSE) {
@@ -192,7 +191,7 @@ void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
     if (i_anmNo != m749 && m749 != -1) {
         m749 = i_anmNo;
         dNpc_setAnm(mpMorf, a_play_mode_tbl[m749], morf, a_play_speed_tbl[m749], l_bck_ix_tbl[m749], -1,
-                    M_arcname);
+                    "Kg");
         if (m749 == 0xC) {
             mpMorf->setFrame((f32)(s16)(mpMorf->getFrame() - 1.0f));
             mpMorf->setPlaySpeed(-1.0f);
@@ -413,7 +412,7 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
 void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
     /* Nonmatching */
-    s8 msg_attr = dComIfGp_getMesgAnimeAttrInfo();
+    u8 msg_attr = dComIfGp_getMesgAnimeAttrInfo();
     if (m738 != 1) {
         switch (msg_attr) {
         case 0:
@@ -478,7 +477,7 @@ void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
             break;
         }
         if (m749 == 3) {
-            if (mpMorf->checkFrame(mpMorf->getFrame() - 1.0f)) {
+            if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
                 setAnm(4, -1.0f);
                 m748 = 0;
                 initTexPatternAnm(true);
@@ -528,12 +527,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 /* 00001468-0000180C       .text CreateHeap__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::CreateHeap() {
     /* Nonmatching */
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 5);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kg", 5);
     JUT_ASSERT(0x391, modelData != 0);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, 0x1A),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Kg", 0x1A),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x80000,
@@ -552,12 +551,12 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     if (!initTexPatternAnm(false)) {
         return FALSE;
     }
-    J3DModelData* cannonData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 6);
+    J3DModelData* cannonData = (J3DModelData*)dComIfG_getObjectRes("Kg", 6);
     m6D4 = mDoExt_J3DModel__create(cannonData, 0x80000, 0x11020002);
     if (m6D4 == NULL) {
         return FALSE;
     }
-    J3DAnmTexPattern* cannonBtp = (J3DAnmTexPattern*)dComIfG_getObjectRes(M_arcname, 0xA);
+    J3DAnmTexPattern* cannonBtp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Kg", 0xA);
     if (!mBtpAnm.init(cannonData, cannonBtp, 1, 2, 1.0f, 0, -1, FALSE, 0)) {
         return FALSE;
     }
@@ -703,28 +702,26 @@ int daNpc_Kg2_c::evn_setAnm() {
 int daNpc_Kg2_c::evn_jnt_lock_init(int i_staffId) {
     /* Nonmatching */
     int* lock = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
-    s32 lock_no;
+    s32 lock_no = 0;
     if (lock != NULL) {
         lock_no = *lock;
-    } else {
-        lock_no = 0;
     }
     switch (lock_no) {
     case 0:
-        m_jnt.mbBackBoneLock = false;
         m_jnt.mbHeadLock = false;
+        m_jnt.mbBackBoneLock = false;
         break;
     case 1:
-        m_jnt.mbBackBoneLock = true;
-        m_jnt.mbHeadLock = false;
+        m_jnt.mbHeadLock = true;
+        m_jnt.mbBackBoneLock = false;
         break;
     case 2:
-        m_jnt.mbBackBoneLock = false;
-        m_jnt.mbHeadLock = true;
+        m_jnt.mbHeadLock = false;
+        m_jnt.mbBackBoneLock = true;
         break;
     case 3:
-        m_jnt.mbBackBoneLock = true;
         m_jnt.mbHeadLock = true;
+        m_jnt.mbBackBoneLock = true;
         break;
     }
     return 1;
@@ -827,7 +824,10 @@ int daNpc_Kg2_c::privateCut() {
 BOOL daNpc_Kg2_c::processMove() {
     /* Nonmatching */
     (this->*mAction)(0);
-    return mEventCut.cutProc() || privateCut();
+    if (mEventCut.cutProc() || privateCut()) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00002250-00002334       .text wait_action__11daNpc_Kg2_cFPv */
@@ -838,8 +838,7 @@ int daNpc_Kg2_c::wait_action(void*) {
         m763++;
     } else if (m763 != -1) {
         s16 angleY = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
-        cXyz pos = current.pos;
-        m72C = chkAttention(pos, angleY);
+        m72C = chkAttention(current.pos, angleY);
         m750 = 0;
         switch (m760) {
         case 1:
@@ -908,7 +907,7 @@ cPhs_State daNpc_Kg2_c::_create() {
         fopAcM_SetupActor(this, daNpc_Kg2_c);
         fopAcM_OnCondition(this, 8);
     }
-    cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase = dComIfG_resLoad(&mPhs, "Kg");
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x2D00)) {
             return cPhs_ERROR_e;
@@ -927,7 +926,7 @@ cPhs_State daNpc_Kg2_c::_create() {
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_delete() {
     /* Nonmatching */
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDelete(&mPhs, "Kg");
     if (heap && mpMorf) {
         mpMorf->stopZelAnime();
     }
