@@ -509,7 +509,7 @@ void daObjTry::Act_c::mode_restart() {
         return;
     }
     if (m630 < 0x32) {
-        f32 f3 = 0.0f;
+        f32 f3 = 1.0f;
         f32 f4 = 0.5f * (f3 - jmaCosTable[(u16)(655.36f * m630) >> jmaSinShift]);
         current.pos.y = home.pos.y + f4 * (-10.0f - (f32)attr().m4D);
         shape_angle.y = home.angle.y + (s16)(-32768.0f * f4);
@@ -551,7 +551,7 @@ void daObjTry::Act_c::mode_wait() {
         if (PSVECSquareDistance(&a, &b) < 25.0f) {
             current.pos.x = m63C.x;
             current.pos.z = m63C.z;
-            if (PSVECSquareDistance(&m63C, &current.pos) < 0.0f) {
+            if (PSVECSquareDistance(&m63C, &current.pos) < 1.0f) {
                 M_bingo = 1;
             }
         }
@@ -731,7 +731,7 @@ bool daObjTry::Act_c::mode_proc_call() {
             mBrkAnm.getFrameCtrl()->setRate(1.0f);
             mBrkAnm.getFrameCtrl()->setAttribute(2);
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_RES_ST_BLINK, &eyePos, 0,
-                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f,
                                             -1.0f, -1.0f, 0);
         } else {
             mBrkAnm.getFrameCtrl()->setAttribute(0);
@@ -891,7 +891,7 @@ void daObjTry::Act_c::damage_bg_proc_directly() {
             u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
             u32 se = attr().m54;
             JAIZelBasic::zel_basic->seStart(se, &eyePos, mtrlSndId,
-                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f, -1.0f,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f,
                                             -1.0f, 0);
             if (m62C != 4) {
                 eff_land_smoke();
@@ -967,7 +967,7 @@ bool daObjTry::Act_c::bound() {
             ret = false;
         }
     } else if (mAcch.ChkGroundHit()) {
-        cLib_addCalc(&speed.y, 0.0f, 0.5f, 5.0f, 0.0f);
+        cLib_addCalc(&speed.y, 0.0f, 0.5f, 5.0f, 1.0f);
     }
     return ret;
 }
@@ -990,8 +990,8 @@ void daObjTry::Act_c::se_fall_water() {
     }
 
     u32 se = attr().m58;
-    JAIZelBasic::zel_basic->seStart(se, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo), 0.0f,
-                                    0.0f, -1.0f, -1.0f, 0);
+    JAIZelBasic::zel_basic->seStart(se, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo), 1.0f,
+                                    1.0f, -1.0f, -1.0f, 0);
     set_senv(attr().m44, attr().m45);
 }
 
@@ -1050,13 +1050,13 @@ void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
                                   NULL);
         if (param_1) {
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_STATUE_SET, &eyePos, 0,
-                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f,
                                             -1.0f, -1.0f, 0);
         }
         m651 = 1;
     } else {
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_ST_LIGHT, &eyePos, 0,
-                                        dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f, -1.0f,
+                                        dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f,
                                         -1.0f, 0);
     }
 }
