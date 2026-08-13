@@ -1345,7 +1345,9 @@ int daNpc_Aj1_c::wait_action2(void*) {
             }
             mActionIndex++;
             break;
-        default:
+        case 1:
+        case 2:
+        case 3:
             m768 = chkAttention();
             switch (mStatus) {
                 case 4:
