@@ -374,7 +374,6 @@ void daObjFlame::Act_c::em_position() {
 }
 
 /* 00000B3C-00000CAC       .text em_simple_set__Q210daObjFlame5Act_cFv */
-    /* Nonmatching */
 void daObjFlame::Act_c::em_simple_set() {
     u8 flag = 0;
     const attr_scl_s* attr = flameAttr(this);
