@@ -989,13 +989,14 @@ void daNpc_Aj1_c::set_pa_pun() {
 /* 00002120-000021B0       .text set_pa_aka__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_aka() {
+    s8 roomNo = current.roomNo;
     JPABaseEmitter* emitter = mAkaEmitter;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(1);
     }
     mAkaEmitter = dComIfGp_particle_set(0x811F, &current.pos, NULL, NULL, 0xFF, NULL,
-                                        current.roomNo, NULL, NULL, NULL);
+                                        roomNo, NULL, NULL, NULL);
 }
 
 /* 000021B4-00002280       .text set_pa_don__11daNpc_Aj1_cFv */
