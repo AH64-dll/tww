@@ -672,6 +672,7 @@ void daGy_c::modeDamage() {
 
 /* 00002754-000028B8       .text modeDeleteInit__6daGy_cFv */
 void daGy_c::modeDeleteInit() {
+    /* Nonmatching */
     actor_status &= ~0x20;
     attention_info.flags &= ~0x4;
 
@@ -713,6 +714,7 @@ void daGy_c::modeDelete() {
 
 /* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
 void daGy_c::modeDeleteBombInit() {
+    /* Nonmatching */
     actor_status &= ~0x20;
     attention_info.flags &= ~0x4;
     m2B0 = 9;
