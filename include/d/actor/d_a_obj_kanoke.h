@@ -2,6 +2,8 @@
 #define D_A_OBJ_KANOKE_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
 
 class daObjKanoke_c : public fopAc_ac_c {
 public:
@@ -47,7 +49,34 @@ public:
     void setMtxHuta(cXyz*);
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ u8 m290[0x2A8 - 0x290];
+    /* 0x2A8 */ Mtx mMtx;
+    /* 0x2D8 */ Mtx m2D8;
+    /* 0x308 */ dCcD_Stts mStts;
+    /* 0x344 */ dCcD_Cps mCps0;
+    /* 0x47C */ dCcD_Cps mCps[3];
+    /* 0x824 */ s32 m824[2];
+    /* 0x82C */ dPa_smokeEcallBack mSmokeCb;
+    /* 0x84C */ u8 m84C[0x860 - 0x84C];
+    /* 0x860 */ f32 m860;
+    /* 0x864 */ f32 m864;
+    /* 0x868 */ f32 m868;
+    /* 0x86C */ f32 m86C;
+    /* 0x870 */ f32 m870;
+    /* 0x874 */ f32 m874;
+    /* 0x878 */ u8 m878[0x87C - 0x878];
+    /* 0x87C */ s16 m87C;
+    /* 0x87E */ s16 m87E;
+    /* 0x880 */ s16 m880;
+    /* 0x882 */ s16 m882;
+    /* 0x884 */ u8 m884[0x888 - 0x884];
+    /* 0x888 */ s16 m888;
+    /* 0x88A */ u8 m88A;
+    /* 0x88B */ u8 m88B;
+    /* 0x88C */ u8 m88C;
+    /* 0x88D */ u8 m88D;
+    /* 0x88E */ u8 m88E;
+    /* 0x88F */ u8 m88F;
+};  // Size: 0x890
 
 #endif /* D_A_OBJ_KANOKE_H */

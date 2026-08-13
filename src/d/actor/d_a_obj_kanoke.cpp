@@ -72,7 +72,39 @@ static dCcD_SrcCps l_cps_src_huta = {
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */
 daObjKanoke_c::daObjKanoke_c() {
-    /* Nonmatching */
+    m88A = getPrmType();
+    m88C = getPrmSearch();
+    m88D = getPrmSwNo();
+    m88E = getPrmSwNo2();
+    if (m88A == 0) {
+        m86C = 0.0f;
+        m870 = 0.0f;
+        m874 = 0.0f;
+    } else {
+        current.pos.y = 200.0f + home.pos.y;
+        shape_angle.x = 0x4000;
+        m86C = 0.0f;
+        m870 = 35.0f;
+        m874 = 200.0f;
+    }
+    m860 = 0.0f;
+    m864 = 75.0f;
+    m868 = 0.0f;
+    m87C = 0;
+    m87E = 0;
+    m880 = 0;
+    m882 = 0;
+    for (int i = 0; i < 2; i++) {
+        m824[i] = 0;
+    }
+    mSmokeCb.setRateOff(0);
+    m88B = 0;
+    m88F = 0;
+    m888 = 0;
+    setMtxHontai();
+    PSMTXCopy(mDoMtx_stack_c::get(), mMtx);
+    setMtxHuta(&current.pos);
+    PSMTXCopy(mDoMtx_stack_c::get(), m2D8);
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */
