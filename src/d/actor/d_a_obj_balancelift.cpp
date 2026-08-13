@@ -363,7 +363,6 @@ static BOOL daBalanceliftExecute(void* i_this) {
 
 /* 0000133C-000016F0       .text _execute__15daBalancelift_cFv */
 bool daBalancelift_c::_execute() {
-    /* Nonmatching */
     calc_weight();
     calc_quat();
     set_mtx();
@@ -385,7 +384,7 @@ bool daBalancelift_c::_execute() {
             }
 
             PSVECAdd(&mOffset, &(dir * -20.0f), &mOffset);
-            mVelocity += 440.0f * -dir.y;
+            mVelocity += 2.0f * -dir.y;
         } else if (hit_obj != NULL) {
             cXyz dir = *mCyl.GetTgRVecP();
             if (dir.normalizeRS() == 0) {
@@ -396,10 +395,10 @@ bool daBalancelift_c::_execute() {
 
             if (hit_obj->GetObjAt().GetType() & AT_TYPE_WIND) {
                 PSVECAdd(&mOffset, &(dir * -12.0f), &mOffset);
-                mVelocity += 440.0f * -dir.y;
+                mVelocity += 2.0f * -dir.y;
             } else if (hit_obj->GetObjAt().GetType() & AT_TYPE_SWORD) {
                 PSVECAdd(&mOffset, &(dir * -8.0f), &mOffset);
-                mVelocity += 440.0f * -dir.y;
+                mVelocity += 2.0f * -dir.y;
 
                 cXyz* hit_pos = mCyl.GetTgHitPosP();
                 if (hit_pos != NULL) {
