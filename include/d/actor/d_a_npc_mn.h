@@ -113,7 +113,7 @@ public:
     void eventJumpInit(int);
     s32 eventJump();
     u16 talk2(int);
-    u8 talk3(int);
+    u16 talk3(int);
     u16 next_msgStatus(u32*);
     u32 getMsg();
     u32 getMsg3();
@@ -132,7 +132,7 @@ public:
     void playAnm();
     void setAnm(unsigned char, int, float);
     s32 setAnmTbl(sMnAnmDat*);
-    s32 XyCheckCB(int);
+    s16 XyCheckCB(int);
     int getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, float, float);
     s32 chkEndEvent();

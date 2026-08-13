@@ -433,7 +433,6 @@ BOOL daNpcMn_c::createHeap() {
 }
 
 /* 00000BE0-00000C00       .text daNpcMn_XyCheckCB__FPvi */
-    /* Nonmatching */
 static s16 daNpcMn_XyCheckCB(void* i_this, int i_param) {
     return static_cast<daNpcMn_c*>(i_this)->XyCheckCB(i_param);
 }
@@ -734,23 +733,26 @@ s32 daNpcMn_c::executeTalk3Init() {
 }
 
 /* 0000185C-0000191C       .text executeTalk3__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::executeTalk3() {
-    if (m7C3 < 2) {
-        if (m7C3 < 0) {
-            return;
-        }
-        if (eventInfo.checkCommandDemoAccrpt()) {
-            m7C3 = 2;
-            return;
-        }
-        fopAcM_orderPotentialEvent(this, 0xA, 0, 0);
-        m7BE |= 2;
-        m7C3 = 1;
-    } else if (talk3(1) == fopMsgStts_BOX_CLOSED_e) {
-        m7C3 = 0;
-        executeSetMode(0);
-        dComIfGp_event_reset();
+    switch (m7C3) {
+        case 0:
+        case 1:
+            if (eventInfo.checkCommandDemoAccrpt()) {
+                m7C3 = 2;
+                break;
+            }
+            fopAcM_orderPotentialEvent(this, 0xA, 0, 0);
+            eventInfo.mCondition |= dEvtCnd_UNK2_e;
+            m7C3 = 1;
+            break;
+
+        case 2:
+            if (talk3(1) == fopMsgStts_BOX_CLOSED_e) {
+                m7C3 = 0;
+                executeSetMode(0);
+                dComIfGp_event_reset();
+            }
+            break;
     }
 }
 
@@ -1275,8 +1277,8 @@ u16 daNpcMn_c::talk2(int i_param) {
 }
 
 /* 00002C30-00002D68       .text talk3__9daNpcMn_cFi */
-u8 daNpcMn_c::talk3(int i_param) {
-    u8 status = 0xFF;
+u16 daNpcMn_c::talk3(int i_param) {
+    u16 status = 0xFF;
     if (mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
         if (i_param == 1) {
             mCurrMsgNo = getMsg3();
@@ -1650,7 +1652,7 @@ s32 daNpcMn_c::setAnmTbl(sMnAnmDat* pAnmDat) {
 }
 
 /* 00003974-0000397C       .text XyCheckCB__9daNpcMn_cFi */
-s32 daNpcMn_c::XyCheckCB(int) {
+s16 daNpcMn_c::XyCheckCB(int) {
     return 0;
 }
 
