@@ -209,7 +209,6 @@ void daObjMagmarock::Act_c::vanish_proc() {
 
 /* 000008F8-00000AEC       .text ride_call_back__14daObjMagmarockFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjMagmarock::ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
-    /* Nonmatching */
     Act_c* i_this = (Act_c*)i_ac;
 
     cXyz sp30 = i_pt->current.pos - i_ac->current.pos;
@@ -217,12 +216,7 @@ void daObjMagmarock::ride_call_back(dBgW*, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     sp30 = sp30.outprod(sp24);
 
     f32 dist = sp30.abs2();
-    f32 invDist;
-    if (dist > 0.0f) {
-        invDist = std::sqrtf(dist);
-    } else {
-        invDist = dist;
-    }
+    f32 invDist = std::sqrtf(dist);
 
     if (sp30.normalizeRS()) {
         cLib_addCalcAngleS2(&i_this->mRideAngle,
