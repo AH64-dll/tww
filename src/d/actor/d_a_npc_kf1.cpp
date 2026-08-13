@@ -248,14 +248,14 @@ void daNpc_Kf1_c::play_animation() {
 
 /* 000008E4-00000A20       .text setMtx__11daNpc_Kf1_cFb */
 void daNpc_Kf1_c::setMtx(bool i_setAttention) { /* Nonmatching */
-    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(m722.x, m722.y, m722.z);
     PSMTXCopy(mDoMtx_stack_c::get(), mpMorf->getModel()->getBaseTRMtx());
     mpMorf->calc();
     if (mpItemModel != NULL) {
-        PSMTXCopy(mpMorf->getModel()->getAnmMtx(mHeadJntNo), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::transM(0.0f, 0.0f, 0.0f);
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(mHeadJntNo));
+        mDoMtx_stack_c::transM(33.12f, 3.26f, 0.0f);
         mDoMtx_stack_c::XYZrotM(-0x4000, -0x4000, 0);
         PSMTXCopy(mDoMtx_stack_c::get(), mpItemModel->getBaseTRMtx());
         mDoExt_modelEntryDL(mpItemModel);
@@ -435,14 +435,8 @@ void daNpc_Kf1_c::anmAtr(u16 i_msgStatus) { /* Nonmatching */
 
 /* 00000F80-000010F4       .text next_msgStatus__11daNpc_Kf1_cFPUl */
 u16 daNpc_Kf1_c::next_msgStatus(u32* i_msgNo) { /* Nonmatching */
-    u16 ret = fopMsgStts_MSG_ENDS_e;
+    u16 ret = 0xF;
     switch (*i_msgNo) {
-        case 0x1C21:
-            *i_msgNo = 0x1C22;
-            break;
-        case 0x1C22:
-            *i_msgNo = 0x1C34;
-            break;
         case 0x1C23:
             switch (mpCurrMsg->mSelectNum) {
                 case 0:
@@ -452,13 +446,6 @@ u16 daNpc_Kf1_c::next_msgStatus(u32* i_msgNo) { /* Nonmatching */
                     *i_msgNo = 0x1C25;
                     break;
             }
-            break;
-        case 0x1C24:
-            dComIfGs_onEventBit(0xB02);
-            ret = 0x10;
-            break;
-        case 0x1C27:
-            *i_msgNo = 0x1C28;
             break;
         case 0x1C28:
             switch (mpCurrMsg->mSelectNum) {
@@ -470,27 +457,45 @@ u16 daNpc_Kf1_c::next_msgStatus(u32* i_msgNo) { /* Nonmatching */
                     break;
             }
             break;
-        case 0x1C2A:
-            *i_msgNo = 0x1C2B;
+        case 0x1C24:
+            dComIfGs_onEventBit(0xB02);
+            ret = 0x10;
             break;
         case 0x1C2B:
             m7A0 = 1;
             ret = 0x10;
             break;
-        case 0x1C2D:
-            *i_msgNo = 0x1C2E;
+        case 0x1C21:
+            *i_msgNo = 0x1C22;
             break;
-        case 0x1C30:
-            *i_msgNo = 0x1C31;
-            break;
-        case 0x1C33:
-            *i_msgNo = (mRupeeCnt < mTsuboIdx * 10) ? 0x1C2F : 0x1C30;
+        case 0x1C22:
+            *i_msgNo = 0x1C34;
             break;
         case 0x1C34:
             *i_msgNo = 0x1C23;
             break;
+        case 0x1C27:
+            *i_msgNo = 0x1C28;
+            break;
+        case 0x1C2A:
+            *i_msgNo = 0x1C2B;
+            break;
+        case 0x1C30:
+            *i_msgNo = 0x1C31;
+            break;
+        case 0x1C2D:
+            *i_msgNo = 0x1C2E;
+            break;
+        case 0x1C33: {
+            s32 bensyou = mTsuboIdx * 10;
+            *i_msgNo = (mRupeeCnt < bensyou) ? 0x1C2F : 0x1C30;
+            break;
+        }
         case 0x1C36:
             *i_msgNo = 0x1C37;
+            break;
+        default:
+            ret = 0x10;
             break;
     }
     return ret;
@@ -860,7 +865,7 @@ void daNpc_Kf1_c::cut_init_GET_OUT(int i_actIdx) { /* Nonmatching */
 /* 00001FE4-00002044       .text cut_move_GET_OUT__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::cut_move_GET_OUT() { /* Nonmatching */
     if (!cLib_calcTimer<s16>(&mCutTimer)) {
-        dComIfGp_setNextStage("Kf", 3, 0xB, -1, 0.0f, 0, 1);
+        dComIfGp_setNextStage("sea", 3, 0xB, -1, 0.0f, 0, 1);
     }
     return FALSE;
 }
@@ -911,7 +916,7 @@ void daNpc_Kf1_c::cut_init_START_AGE(int i_actIdx) { /* Nonmatching */
 
 /* 00002168-00002178       .text cut_move_START_AGE__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::cut_move_START_AGE() { /* Nonmatching */
-    return m_jnt.trnChk();
+    return !m_jnt.trnChk();
 }
 
 /* 00002178-00002284       .text cut_init_PLYER_MOV__11daNpc_Kf1_cFi */
