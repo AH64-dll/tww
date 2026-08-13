@@ -956,6 +956,11 @@ void daNpc_So_c::createInit() {
 /* 00003DF8-00003E24       .text getArg__10daNpc_So_cFv */
 void daNpc_So_c::getArg() {
     /* Nonmatching */
+    field_0x6D0 = home.angle.x;
+    if ((u16)field_0x6D0 != 0xFFFF && field_0x6D0 != 0) {
+        return;
+    }
+    field_0x6D0 = 1;
 }
 
 /* 00003E24-00003F38       .text _create__10daNpc_So_cFv */
