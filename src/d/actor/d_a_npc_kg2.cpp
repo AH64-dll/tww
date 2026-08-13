@@ -936,7 +936,6 @@ BOOL daNpc_Kg2_c::_delete() {
 
 /* 00002BFC-00002D14       .text _execute__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_execute() {
-    /* Nonmatching */
     m_jnt.setParam(l_HIO.mHio.mMaxBackboneX, l_HIO.mHio.mMaxBackboneY, l_HIO.mHio.mMinBackboneX,
                    l_HIO.mHio.mMinBackboneY, l_HIO.mHio.mMaxHeadX, l_HIO.mHio.mMaxHeadY,
                    l_HIO.mHio.mMinHeadX, l_HIO.mHio.mMinHeadY, l_HIO.mHio.mMaxTurnStep);
