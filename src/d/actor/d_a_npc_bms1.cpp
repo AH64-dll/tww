@@ -422,6 +422,28 @@ void daNpc_Bms1_c::eventOrder() {
 /* 00001278-000014AC       .text checkOrder__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::checkOrder() {
     /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (m89B == 4) {
+            m89B = 0;
+            mShopCam.Reset();
+            setAction(&daNpc_Bms1_c::event_action, NULL);
+        } else if (m89B == 3) {
+            m89B = 0;
+            mShopCam.Reset();
+            setAction(&daNpc_Bms1_c::getdemo_action, NULL);
+        }
+    } else if (eventInfo.checkCommandTalk()) {
+        if (m89B == 1 || m89B == 2) {
+            m89B = 0;
+            m7CD = 1;
+            talkInit();
+            mShopCam.shop_cam_action_init();
+            cXyz pos(-70.0f, 0.0f, 150.0f);
+            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, -0x7000);
+        }
+    } else {
+        mShopCam.Save();
+    }
 }
 
 /* 000014AC-000017FC       .text next_msgStatus__12daNpc_Bms1_cFPUl */
