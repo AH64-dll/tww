@@ -341,7 +341,8 @@ void daNpc_Aj1_c::setMtx(bool i_setMtx) {
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (mpItemModel != NULL) {
-        PSMTXCopy(mpMorf->getModel()->getAnmMtx(m_hnd_L_jnt_num), mpItemModel->getBaseTRMtx());
+        MtxP anmMtx = mpMorf->getModel()->getAnmMtx(m_hnd_L_jnt_num);
+        PSMTXCopy(anmMtx, mpItemModel->getBaseTRMtx());
         mpItemModel->calc();
     }
     setAttention(i_setMtx);
