@@ -685,7 +685,7 @@ void daNpc_Aj1_c::lookBack() {
     cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz* pLookPos = NULL;
     s16 angle = current.angle.y;
-    bool headOnlyFollow = mHeadOnlyFollow != 0;
+    u8 headOnlyFollow = mHeadOnlyFollow;
     switch (mLookBackState) {
         case 1:
             dNpc_playerEyePos(-20.0f);
@@ -704,7 +704,7 @@ void daNpc_Aj1_c::lookBack() {
     if (m_jnt.trnChk() == 0) {
         mLookAtMaxVel = 0;
     }
-    m_jnt.lookAtTarget(&current.angle.y, pLookPos, temp_pos, angle, mLookAtMaxVel, headOnlyFollow);
+    m_jnt.lookAtTarget(&current.angle.y, pLookPos, temp_pos, angle, mLookAtMaxVel, headOnlyFollow != 0);
 }
 
 /* 0000184C-0000189C       .text chkAttention__11daNpc_Aj1_cFv */
