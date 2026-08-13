@@ -121,3 +121,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T12:46Z — M12: flip #34 d_a_obj_hami2 → Matching — stub→Matching in ~40 min (D3 transcription + D6 fixes: nodeCallBack PSMTXCopy arg-order, set_mtx, CreateHeap ret-flag polarity, Mthd_Create ctor-guard; 25/25 fns 100.0; .data extra-weak proven hami3-identical + mwld-GC'd). Triple bench consensus (R4-7/RLead-7/R3-3). Gate 0b764dbe7 15:45:37 sha1 byte-perfect. Ledger: 72 NonMatching / 30 Equivalent / 315 Matching. 2 Matching flips via proper process this wave (#33/#34).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T13:34Z — M13: flip #35 d_a_obj_vtil → Equivalent — 6 flips today (#30-35: aygr/tag_ba1/hami2 Matching, kg2/sarace/vtil Equivalent). Ledger: 71 NonMatching / 31 Equivalent / 315 Matching. vtil: 30/32 fns 100 via full stub transcription (4 real fixes incl HitSeStart &eyePos sound bug); 2 holdouts 0-one-sided (stack-slot trap-precedent + anchor). Gate 12a322c54 16:34:25. Bench pre-blocked flame (real fmuls-chain structural, 13 normdiffs) — discipline holding.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
