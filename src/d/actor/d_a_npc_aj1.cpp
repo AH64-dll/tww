@@ -368,7 +368,7 @@ s32 daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
     mBtpNum = i_btpNo;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(modelData, btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE);
+    return mBtpAnm.init(modelData, btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
 }
 
 /* 00000C64-00000CF4       .text play_texPttrnAnm__11daNpc_Aj1_cFv */
