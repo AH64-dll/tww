@@ -1184,7 +1184,6 @@ s32 daNpcMn_c::eventLook() {
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventJumpInit(int staffIdx) {
     f32* pSpeedX = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedX");
     f32* pSpeedY = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedY");
