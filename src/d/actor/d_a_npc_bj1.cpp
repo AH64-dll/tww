@@ -675,7 +675,40 @@ u32 daNpc_Bj1_c::getMsg_BJ9_0() {
 }
 /* 00002294-0000242C       .text getMsg_Corog__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg_Corog() {
-    /* Nonmatching */
+    if (chkReg(0x9AFF)) {
+        if (dComIfGs_isEventBit(0x102)) {
+            return chkReg(0x99FF) ? 0x1486 : 0x1485;
+        }
+        if (chkReg(0x9EFF) == 0) {
+            if (chkReg(0x98FF)) {
+                return 0x149E;
+            }
+            return 0x1487;
+        }
+        if (chkReg(0x96FF)) {
+            return 0x1484;
+        }
+        s16 count = 0;
+        u8 reg = dComIfGs_getEventReg(0x9EFF);
+        for (int i = 0; i < 8; i++) {
+            if (reg & 1) {
+                count++;
+            }
+            reg >>= 1;
+        }
+        g_dComIfG_gameInfo.play.mMsgCountNumber = 8 - count;
+        return 0x1482;
+    }
+    if (dComIfGs_isEventBit(0x2E10)) {
+        if (chkReg(0x97FF)) {
+            return 0x1494;
+        }
+        return 0x1497;
+    }
+    if (chkReg(0x97FF)) {
+        return 0x1494;
+    }
+    return 0x148A;
 }
 
 /* 0000242C-000024EC       .text getMsg__11daNpc_Bj1_cFv */
