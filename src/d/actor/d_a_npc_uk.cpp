@@ -524,7 +524,6 @@ u16 daNpc_Uk_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00001464-000015E0       .text getMsg__10daNpc_Uk_cFv */
-    /* Nonmatching */
 u32 daNpc_Uk_c::getMsg() {
     u32 msgNo = 0;
     switch (mType) {
@@ -1013,7 +1012,6 @@ bool daNpc_Uk_c::talk02() {
 }
 
 /* 0000280C-00002968       .text visitTalkInit__10daNpc_Uk_cFv */
-    /* Nonmatching */
 u8 daNpc_Uk_c::visitTalkInit() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02)) {
         mEventIdx = eventInfo.mEventId;
@@ -1782,7 +1780,6 @@ BOOL daNpc_Uk_c::_draw() {
 }
 
 /* 00004A20-00004CE4       .text _execute__10daNpc_Uk_cFv */
-    /* Nonmatching */
 BOOL daNpc_Uk_c::_execute() {
     m_jnt.setParam(
         /* mMaxBackboneX */ 0,
