@@ -841,7 +841,22 @@ void daNpc_So_c::eventOrder() {
 
 /* 00003264-0000330C       .text checkOrder__10daNpc_So_cFv */
 void daNpc_So_c::checkOrder() {
+    if (eventInfo.getCommand() == 2) {
     /* Nonmatching */
+        field_0xB70 = 0;
+    } else if (eventInfo.getCommand() == 1) {
+        if (field_0xB70 == 1 || field_0xB70 == 2) {
+            u8 flag = 0;
+            u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+            if (talkBtn == 1 || talkBtn == 2 || talkBtn == 3) {
+                flag = 1;
+            }
+            if (flag != 0) {
+                modeProc(PROC_INIT_e, 8);
+            }
+        }
+        field_0xB70 = 0;
+    }
 }
 
 /* 0000330C-000033F4       .text setScale__10daNpc_So_cFv */
