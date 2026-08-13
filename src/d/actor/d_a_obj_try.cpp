@@ -737,7 +737,7 @@ bool daObjTry::Act_c::mode_proc_call() {
         mode_proc_ready = 1;
     }
 
-    if (mMode == 2 && (actor_status & fopAcStts_CARRY_e) != 0) {
+    if ((actor_status & fopAcStts_CARRY_e) != 0 && mMode != 2) {
         mode_carry_init();
     }
 
@@ -747,7 +747,7 @@ bool daObjTry::Act_c::mode_proc_call() {
 
     if (attr().m48 >= 0) {
         if (M_bingo != 0 || M_restart != 0) {
-            eff_set_bingo(M_bingo, M_restart);
+            eff_set_bingo(M_bingo != 0, M_restart != 0);
         } else {
             eff_clr_bingo();
         }
