@@ -966,6 +966,24 @@ void daNpc_So_c::getArg() {
 /* 00003E24-00003F38       .text _create__10daNpc_So_cFv */
 cPhs_State daNpc_So_c::_create() {
     /* Nonmatching */
+    fopAcM_ct(this, daNpc_So_c);
+
+    cPhs_State phase = dComIfG_resLoad(&mPhs, m_arc_name);
+    if (phase == cPhs_COMPLEATE_e) {
+        getArg();
+        if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 0x1A &&
+            !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40)) {
+            return cPhs_ERROR_e;
+        }
+        if (!dComIfGs_isStageBossEnemy(3)) {
+            return cPhs_ERROR_e;
+        }
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
+            return cPhs_ERROR_e;
+        }
+        createInit();
+    }
+    return phase;
 }
 
 /* 000046E4-00004754       .text _delete__10daNpc_So_cFv */
