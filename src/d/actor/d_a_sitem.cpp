@@ -357,9 +357,8 @@ void hand_move(sitem_class* i_this) {
             PSVECAdd(&sp58, &sp64, &sp58);
             f31 = 0.1f;
             i_this->speedF = 0.2f * i_this->mB0C;
-            f32 limit = 30.0f + REG6_F(8);
-            if (i_this->speedF > limit) {
-                i_this->speedF = limit;
+            if (i_this->speedF > 30.0f + REG6_F(8)) {
+                i_this->speedF = 30.0f + REG6_F(8);
             }
         }
         cLib_addCalc0(&i_this->mB0C, 1.0f, 5.0f + REG6_F(7));
