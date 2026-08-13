@@ -517,6 +517,7 @@ cPhs_State daNpc_Bms1_c::_create() {
 
 /* 00003CE8-000043B8       .text CreateHeap__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::CreateHeap() {
+    /* Nonmatching */
     J3DModelData* modelData;
     J3DAnmTransform* anmTransform;
     if (mShopIdx == 0) {
