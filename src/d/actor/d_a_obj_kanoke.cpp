@@ -305,12 +305,9 @@ void daObjKanoke_c::executeNormal() {
     } else {
         m888 = 0;
         if (m88C != 0) {
-            cXyz* playerPos = &dComIfGp_getPlayer(0)->current.pos;
-            cXyz diff = home.pos - *playerPos;
+            cXyz diff = home.pos - dComIfGp_getPlayer(0)->current.pos;
             f32 dist = PSVECSquareMag((Vec*)&diff);
-            if (dist > 0.0f) {
-                dist = std::sqrtf(dist);
-            }
+            dist = std::sqrtf(dist);
             if (dist < 100.0f * m88C) {
                 triggered = true;
             }
