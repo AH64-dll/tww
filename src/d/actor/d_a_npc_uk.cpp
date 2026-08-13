@@ -308,7 +308,6 @@ BOOL daNpc_Uk_c::runawayInit() {
         }
         break;
     }
-    return TRUE;
 }
 
 /* 00000D88-00000F48       .text nodeCallBack_Uk__FP7J3DNodei */
