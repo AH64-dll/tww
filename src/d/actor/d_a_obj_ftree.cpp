@@ -430,7 +430,6 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
 BOOL daObjFtree::is_broughtID(int i_id) {
-    /* Nonmatching */
     u8 ret = TRUE;
     dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
     u8 reg = event->getEventReg(dSv_event_flag_c::UNK_9EFF);
@@ -590,7 +589,6 @@ s32 daObjFtree::Act_c::action_waitM_init(s16) {
 
 /* 0000173C-00001878       .text action_waitM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_waitM_main() {
-    /* Nonmatching */
     if (dComIfGs_getFwaterTimer() == 0) {
         _ftree_seach_info_ info;
         get_ftree_info(&info);
@@ -726,7 +724,6 @@ void daObjFtree::Act_c::action_pikupikuL_main() {
 
 /* 00001D94-00001EAC       .text action_changeSL_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_changeSL_init(s16) {
-    /* Nonmatching */
     m2A6 = 1;
     m2A7 = 0;
 
