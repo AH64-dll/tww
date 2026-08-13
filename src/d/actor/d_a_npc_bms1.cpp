@@ -10,6 +10,7 @@
 #include "d/d_vibration.h"
 #include "d/d_a_obj.h"
 #include "d/d_item.h"
+#include "d/d_lib.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -405,6 +406,63 @@ u16 daNpc_Bms1_c::talk() {
 /* 00001D68-00002104       .text CreateInit__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::CreateInit() {
     /* Nonmatching */
+    cXyz zero(0.0f, 0.0f, 0.0f);
+    m7C2 = current.angle.x;
+    m7C4 = current.angle.y;
+    m7C6 = current.angle.z;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAD;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAD;
+    gravity = -30.0f;
+
+    switch (mShopIdx) {
+    case 0:
+        setAction(&daNpc_Bms1_c::wait_action, 0);
+        break;
+    case 1:
+        setAction(&daNpc_Bms1_c::wait_action, 0);
+        break;
+    }
+
+    mAttnBasePos = current.pos;
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    m8A2 = 0;
+    m7A4 = 0;
+    mLastMsgNo = 0;
+    m7E8 = 0xFF;
+
+    int stock = (checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE) != 0) + 1;
+
+    if (mShopIdx == 1) {
+        m2B4.set(1.2f, 0.9f, 0.9f);
+        m2C0.set(0.7f, 0.6f, 0.6f);
+    } else if (checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
+        m2B4.set(0.4f, 0.4f, 0.4f);
+        m2C0.set(0.4f, 0.4f, 0.4f);
+    } else {
+        m2B4.set(1.2f, 0.9f, 0.9f);
+        m2C0.set(0.7f, 0.6f, 0.6f);
+    }
+
+    m2CC = 1.0f;
+    m2D0 = 1.0f;
+    m304 = ZeroQuat;
+    m314 = ZeroQuat;
+
+    mShopCam.setCamDataIdx(stock);
+    mShopItems.setItemDataIdx(stock);
+    mShopCam.mCurrActionFunc = NULL;
+    mShopItems.setItemSetDataList();
+    mShopItems.createItem(3, current.roomNo);
+    m7E9 = 0;
+    m7D4 = current.pos.y;
+    mEventCut.setActorInfo("BMS_LAND_DEMO", this);
+    mEventCut.setJntCtrlPtr(&mJntCtrl);
+    mpMorf->calc();
+    set_mtx();
+    return TRUE;
 }
 
 /* 00002104-00002144       .text setAttention__12daNpc_Bms1_cFb */
