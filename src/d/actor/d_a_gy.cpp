@@ -760,6 +760,32 @@ void daGy_c::modeWithAttack() {
 /* 00001D60-00001F20       .text modeAttack__6daGy_cFv */
 void daGy_c::modeAttack() {
     /* Nonmatching */
+    if (mpCtrl->m320 == 0) {
+        modeCircleInit();
+        return;
+    }
+    m4E8 = l_HIO.mB0;
+    m4EC = l_HIO.mC4;
+    if (cLib_calcTimer(&m914) == 0) {
+        modeCircleInit();
+    }
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 player_dist = fopAcM_searchActorDistance(this, player);
+    if (player_dist < l_HIO.m148) {
+        m4F0 = 0.0f;
+    } else {
+        m4F0 = l_HIO.m64;
+        cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &player->current.pos), 8, 0x400);
+    }
+    if (m50C.ChkCoHit()) {
+        fopAc_ac_c* hit_ac = m50C.GetCoHitAc();
+        if (fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
+            dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            mDoAud_monsSeStart(JA_SE_CV_GY_ATTACK, &eyePos, fopAcM_GetID(this), 0, dComIfGp_getReverb(current.roomNo));
+            modeAttackBackInit();
+        }
+    }
 }
 
 /* 00001F20-00001F40       .text modeAttackPlayerInit__6daGy_cFv */
