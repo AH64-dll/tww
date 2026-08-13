@@ -48,17 +48,15 @@ void hand_mtx_set(sitem_class* i_this) {
     cXyz pos(0.0f, -60.0f + REG12_F(4), 0.0f);
     MtxPosition(&pos, &i_this->mB00);
     MtxTrans(0.0f, -50.0f + REG12_F(3), 0.0f, 1);
-    PSMTXCopy(*calc_mtx, i_this->mpModel->getBaseTRMtx());
+    i_this->mpModel->setBaseTRMtx(*calc_mtx);
 }
 
 /* 00000388-00000410       .text control3__FP11sitem_class */
-/* Nonmatching */
 void control3(sitem_class* i_this) {
     sitem_s* item = i_this->mSitem1;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++, item++) {
         f32 scale = 0.8f + 0.1f * cM_ssin(i_this->m2BC * 0x1F4 + i * 0x64);
         item->m18 = scale * size_d[i];
-        item++;
     }
 }
 
@@ -509,7 +507,6 @@ static BOOL daSitem_Delete(sitem_class* i_this) {
 }
 
 /* 00002760-00002824       .text useHeapInit__FP11sitem_class */
-/* Nonmatching */
 static BOOL useHeapInit(sitem_class* i_this) {
     i_this->mpModel = mDoExt_J3DModel__create(
         (J3DModelData*)dComIfG_getObjectRes("Sitem", bmd_data[i_this->mType]), 0, 0x11020203);
