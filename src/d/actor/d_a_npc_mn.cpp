@@ -806,12 +806,11 @@ void daNpcMn_c::executeWalk() {
 }
 
 /* 00001BD4-00001D18       .text executeTurnInit__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::executeTurnInit() {
     cXyz point = mPathRun.getPoint(mPathRun.getIdx());
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
-    if (angle == shape_angle.y) {
+    if (angle == current.angle.y) {
         setAnmTbl(l_npc_anm_walk);
         mTimer = (s16)((f32)l_npc_dat[mNpcNo].field_0x44 + cM_rndF((f32)(l_npc_dat[mNpcNo].field_0x46 - l_npc_dat[mNpcNo].field_0x44)));
         return 2;
