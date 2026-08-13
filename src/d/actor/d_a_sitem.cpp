@@ -375,8 +375,11 @@ void hand_move(sitem_class* i_this) {
         cXyz* dst = i_this->mLineMat2.getPos(0);
         u8* dstSize = i_this->mLineMat2.getSize(0);
         for (int i = 0; i < 5; i++) {
-            dst[i] = src[i].mPos;
-            dstSize[i] = (u8)src[i].m18;
+            *dst = src->mPos;
+            *dstSize = (u8)src->m18;
+            src++;
+            dst++;
+            dstSize++;
         }
         cLib_addCalc0(&i_this->mHandPos.z, 1.0f, 1.0f + REG0_F(1));
     }
@@ -387,8 +390,11 @@ void hand_move(sitem_class* i_this) {
     cXyz* dst = i_this->mLineMat1.getPos(0);
     u8* dstSize = i_this->mLineMat1.getSize(0);
     for (int i = 0; i < 10; i++) {
-        dst[i] = src[i].mPos;
-        dstSize[i] = (u8)src[i].m18;
+        *dst = src->mPos;
+        *dstSize = (u8)src->m18;
+        src++;
+        dst++;
+        dstSize++;
     }
 
     cXyz* pPos = i_this->mLineMat1.getPos(0);
@@ -473,15 +479,18 @@ void hand_move(sitem_class* i_this) {
         sitem_s* dst = &i_this->mSitem2[0];
         sitem_s* src = &i_this->mSitem1[0];
         for (int i = 0; i < 5; i++) {
-            dst[i] = src[i];
+            dst->mPos = src->mPos;
+            dst->m18 = src->m18;
             if (i == 4) {
-                cXyz sp1C = dst[i].mPos - src[i].mPos;
+                cXyz sp1C = dst->mPos - src->mPos;
                 f32 mag = PSVECSquareMag(&sp1C);
                 if (mag > 0.0f) {
                     mag = std::sqrtf(mag);
                 }
                 i_this->mHandPos.z = (1.5f + REG0_F(5)) * mag;
             }
+            src++;
+            dst++;
         }
     }
 }
