@@ -34,7 +34,7 @@
 /* Nonmatching */static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        u16 jnt_no = joint->getJntNo();
+        int jnt_no = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daObjHami2::Act_c* i_this = (daObjHami2::Act_c*)model->getUserArea();
         if (i_this != NULL) {
@@ -157,7 +157,7 @@
 
 /* 000006B4-00000730       .text daObjHami2_close_stop__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_close_stop() {
+void daObjHami2::Act_c::daObjHami2_close_stop() {
     int sw = daObj::PrmAbstract(this, PRM_SWSAVE_W_e, PRM_SWSAVE_S_e);
     if (dComIfGs_isSwitch(sw, home.roomNo)) {
         fopAcM_orderOtherEventId(this, mOpenEventIdx, 0xFF, 0xFFFF, 0, 1);
@@ -191,7 +191,7 @@
 
 /* 000008A0-0000091C       .text daObjHami2_open_stop__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_open_stop() {
+void daObjHami2::Act_c::daObjHami2_open_stop() {
     int sw = daObj::PrmAbstract(this, PRM_SWSAVE_W_e, PRM_SWSAVE_S_e);
     if (!dComIfGs_isSwitch(sw, home.roomNo)) {
         fopAcM_orderOtherEventId(this, mCloseEventIdx, 0xFF, 0xFFFF, 0, 1);
