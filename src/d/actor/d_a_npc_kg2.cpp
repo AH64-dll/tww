@@ -115,7 +115,6 @@ static BOOL daNpc_Kg2_nodeCallBack(J3DNode* node, int param) {
 
 /* 000003A4-0000048C       .text set_mtx__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::set_mtx() {
-    /* Nonmatching */
     J3DModel* model = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -131,7 +130,6 @@ void daNpc_Kg2_c::set_mtx() {
 
 /* 0000048C-000005A0       .text initTexPatternAnm__11daNpc_Kg2_cFb */
 BOOL daNpc_Kg2_c::initTexPatternAnm(bool param) {
-    /* Nonmatching */
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Kg", l_btp_ix_tbl[m748]);
     JUT_ASSERT(0x12B, m_btp != 0);
@@ -256,7 +254,7 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
         max_attn_dist += 40.0f;
     }
     s32 ret = 0;
-    if (max_attn_angle > abs(angle - i_angleY) && max_attn_dist > dist) {
+    if (max_attn_angle > abs((s16)(cM_atan2s(spC.x, spC.z) - i_angleY)) && max_attn_dist > dist) {
         ret = 1;
     }
     return ret;
@@ -264,7 +262,6 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
 
 /* 00000B3C-00000BC0       .text eventOrder__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::eventOrder() {
-    /* Nonmatching */
     s8 event_no = m750;
     if (event_no == 1 || event_no == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -278,7 +275,6 @@ void daNpc_Kg2_c::eventOrder() {
 
 /* 00000BC0-00000CC4       .text checkOrder__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::checkOrder() {
-    /* Nonmatching */
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(&daNpc_Kg2_c::event_wait_action, 0);
         m750 = 0;
@@ -622,16 +618,16 @@ BOOL daNpc_Kg2_c::CreateInit() {
 /* 00001A9C-00001BDC       .text wait01__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::wait01() {
     /* Nonmatching */
-    if (dComIfGs_getTime() >= 0.0f && dComIfGs_getTime() < 300.0f) {
+    if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
         if (m738 == 1) {
             m738 = 0;
-            setAnm(0xC, 150.0f);
+            setAnm(0xC, -1.0f);
             m748 = 0;
             initTexPatternAnm(true);
         }
     } else if (m738 == 0) {
         m738 = 1;
-        setAnm(0xD, 150.0f);
+        setAnm(0xD, -1.0f);
         m748 = 0;
         initTexPatternAnm(true);
     }
@@ -688,7 +684,6 @@ int daNpc_Kg2_c::evn_setAnm_init(int i_staffId) {
 
 /* 00001D88-00001E4C       .text evn_setAnm__11daNpc_Kg2_cFv */
 int daNpc_Kg2_c::evn_setAnm() {
-    /* Nonmatching */
     if (m749 == 0xC) {
         if (mpMorf->checkFrame(1.0f)) {
             m739--;
@@ -706,7 +701,6 @@ int daNpc_Kg2_c::evn_setAnm() {
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_jnt_lock_init(int i_staffId) {
-    /* Nonmatching */
     int* lock = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
     s32 lock_no = 0;
     if (lock != NULL) {
@@ -735,7 +729,6 @@ int daNpc_Kg2_c::evn_jnt_lock_init(int i_staffId) {
 
 /* 00001F14-00001F88       .text evn_talk_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_talk_init(int i_staffId) {
-    /* Nonmatching */
     int* msg_no = dComIfGp_evmng_getMyIntegerP(i_staffId, "msg_num");
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = NULL;
@@ -828,7 +821,6 @@ int daNpc_Kg2_c::privateCut() {
 
 /* 000021EC-00002250       .text processMove__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::processMove() {
-    /* Nonmatching */
     (this->*mAction)(0);
     if (mEventCut.cutProc() || privateCut()) {
         return 1;
@@ -838,7 +830,6 @@ BOOL daNpc_Kg2_c::processMove() {
 
 /* 00002250-00002334       .text wait_action__11daNpc_Kg2_cFPv */
 int daNpc_Kg2_c::wait_action(void*) {
-    /* Nonmatching */
     if (m763 == 0) {
         m760 = 1;
         m763++;
@@ -889,7 +880,9 @@ int daNpc_Kg2_c::event_wait_action(void*) {
                 m754 = 2;
                 u8 reg = dComIfGs_getEventReg(0xB703);
                 s32 new_reg = reg + 1;
-                new_reg = new_reg > 3 ? 3 : new_reg;
+                if (new_reg > 3) {
+                    new_reg = 3;
+                }
                 dComIfGs_setEventReg(0xB703, (u8)new_reg);
             } else if (m754 == 2) {
                 m750 = 1;
@@ -929,7 +922,6 @@ cPhs_State daNpc_Kg2_c::_create() {
 
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_delete() {
-    /* Nonmatching */
     dComIfG_resDelete(&mPhs, "Kg");
     if (heap && mpMorf) {
         mpMorf->stopZelAnime();
