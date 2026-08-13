@@ -718,8 +718,18 @@ void daObjTry::Act_c::damaged() {
 }
 
 /* 00001BE8-00001CD8       .text damage_cc_proc__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::damage_cc_proc() {
-    /* Nonmatching */
+bool daObjTry::Act_c::damage_cc_proc() {
+    if (mCyl.ChkAtHit()) {
+        mCyl.ClrAtHit();
+        speedF *= 0.3f;
+    } else if (mCyl.ChkTgHit()) {
+        mCyl.GetTgHitObj();
+        daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, attr().m5C);
+        set_senv(attr().m42, attr().m43);
+        daObj::HitEff_hibana(this, &mCyl);
+        mCyl.ClrTgHit();
+    }
+    return false;
 }
 
 /* 00001CD8-00001E98       .text damage_bg_proc__Q28daObjTry5Act_cFv */

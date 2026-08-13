@@ -136,7 +136,7 @@ namespace daObjTry {
         void cull_set_draw();
         void cull_set_move();
         void damaged();
-        void damage_cc_proc();
+        bool damage_cc_proc();
         void damage_bg_proc();
         void damage_bg_proc_directly();
         bool chk_sink_water();
