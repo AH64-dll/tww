@@ -98,6 +98,7 @@ daNpc_Bms1_HIO_c::daNpc_Bms1_HIO_c() {
 
 /* 00000300-000004C4       .text nodeCallBack_Bms__FP7J3DNodei */
 static BOOL nodeCallBack_Bms(J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     if (calcTiming == 0) {
         J3DModel* pModel = j3dSys.getModel();
         daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
@@ -130,6 +131,7 @@ static BOOL nodeCallBack_Bms(J3DNode* node, int calcTiming) {
 
 /* 000004C4-00000A00       .text nodeCallBack_BmsHead__FP7J3DNodei */
 static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     if (calcTiming == 0) {
         J3DModel* pModel = j3dSys.getModel();
         daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
@@ -225,6 +227,7 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
 
 /* 00000A00-00000C4C       .text set_mtx__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::set_mtx() {
+    /* Nonmatching */
     J3DModel* pModel = mpMorf->getModel();
     if (mShopIdx == 0) {
         cXyz offset(0.0f, 100.0f, 35.0f);
