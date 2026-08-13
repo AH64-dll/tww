@@ -66,7 +66,6 @@ void daObjMagmarock::Act_c::demo_move() {
 
 /* 00000258-00000410       .text ControlEffect__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::ControlEffect() {
-    /* Nonmatching */
     if (m45C != 0) {
         if (m45E != 0) {
             if (mpEffectA == NULL) {
