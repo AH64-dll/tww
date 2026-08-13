@@ -980,7 +980,7 @@ void daNpc_Aj1_c::event_proc(int i_eventNo) {
 void daNpc_Aj1_c::set_pa_pun() {
     s8 roomNo = current.roomNo;
     mPunEmitter = dComIfGp_particle_set(0x8113, &current.pos, NULL, NULL, 0xFF, NULL,
-                                        current.roomNo, NULL, NULL, NULL);
+                                        roomNo, NULL, NULL, NULL);
     if (mPunEmitter != NULL) {
         mPunTimer = 0;
     }
@@ -1634,7 +1634,7 @@ actor_process_profile_definition g_profile_NPC_AJ1 = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Draw Prio    */ fpcDwPi_NPC_AJ1_e,
     /* Actor SubMtd */ &l_daNpc_Aj1_Method,
-    /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    /* Group        */ fopAc_NPC_e,
+    /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
     /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
