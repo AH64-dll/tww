@@ -77,20 +77,23 @@ daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
     mNo = -1;
 }
 
-static BOOL daNpc_Kg2_nodeCallBack(J3DNode* node, int param) {
+static BOOL nodeCallBack(J3DNode* node, int param) {
     /* Nonmatching */
     if (param == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Kg2_c* actor = (daNpc_Kg2_c*)model->getUserArea();
+        if (actor == NULL) {
+            return 1;
+        }
         u16 jnt_no_raw = ((J3DJoint*)node)->getJntNo();
         int jnt_no = jnt_no_raw;
         mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
         if (jnt_no == actor->m_jnt.getHeadJntNum()) {
             cXyz sp8;
-            static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
             sp8.x = 24.0f + REG10_F(0);
             sp8.y = 5.0f + REG10_F(1);
             sp8.z = REG10_F(2);
+            static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
             mDoMtx_stack_c::multVec(&sp8, &actor->getAttentionBasePos());
             mDoMtx_XrotM(mDoMtx_stack_c::now, actor->m_jnt.getHead_y());
             mDoMtx_ZrotM(mDoMtx_stack_c::now, -actor->m_jnt.getHead_x());
@@ -102,13 +105,8 @@ static BOOL daNpc_Kg2_nodeCallBack(J3DNode* node, int param) {
             mDoMtx_XrotM(mDoMtx_stack_c::now, actor->m_jnt.getBackbone_y());
             mDoMtx_ZrotM(mDoMtx_stack_c::now, -actor->m_jnt.getBackbone_x());
         }
-        model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
-        if (jnt_no == actor->m_handL_num) {
-            mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
-            mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
-            actor->m6D4->setBaseTRMtx(mDoMtx_stack_c::get());
-        }
+        model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
     }
     return 1;
 }
@@ -122,7 +120,7 @@ void daNpc_Kg2_c::set_mtx() {
     mpMorf->calc();
     if (m736) {
         mDoMtx_stack_c::copy(model->getAnmMtx(m_handL_num));
-        mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
+        mDoMtx_stack_c::transM(23.46f, -22.26f, -47.05f);
         mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
         m6D4->setBaseTRMtx(mDoMtx_stack_c::get());
     }
@@ -570,8 +568,8 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     }
     J3DModel* model = mpMorf->getModel();
     J3DModelData* data = model->getModelData();
-    model->getModelData()->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(daNpc_Kg2_nodeCallBack);
-    model->getModelData()->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(daNpc_Kg2_nodeCallBack);
+    model->getModelData()->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
+    model->getModelData()->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
     model->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 1.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, 0, 0);
