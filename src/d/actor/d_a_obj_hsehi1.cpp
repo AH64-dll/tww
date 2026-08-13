@@ -97,22 +97,29 @@ void daObj_hsh_c::setAttention(bool i_param) {
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::onOffDraw() {
-    /* Nonmatching */
+    m504 |= 8;
+    if(m4D4 != NULL) {
+        dComIfG_Bgsp()->Release(m4D4);
+    }
 }
 
 /* 000005AC-000005F4       .text offOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::offOffDraw() {
-    /* Nonmatching */
+    m504 &= ~8;
+    if(m4D4 != NULL) {
+        dComIfG_Bgsp()->Regist(m4D4, this);
+    }
 }
 
 /* 000005F4-0000062C       .text drawStop__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStop() {
-    /* Nonmatching */
+    onOffDraw();
+    emitterDelete(&m4A0);
 }
 
 /* 0000062C-0000064C       .text drawStart__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStart() {
-    /* Nonmatching */
+    offOffDraw();
 }
 
 /* 0000064C-000006C8       .text setBaseMtx__11daObj_hsh_cFv */
