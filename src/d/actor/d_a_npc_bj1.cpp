@@ -447,18 +447,58 @@ void daNpc_Bj1_c::lookBack() {
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
-bool daNpc_Bj1_c::getMaskInf(unsigned char*) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::getMaskInf(unsigned char* i_mask) {
+    bool ret = i_mask != NULL;
+    if (ret) {
+        switch (mSpecificType) {
+        case 0:
+            *i_mask = 0x1;
+            break;
+        case 1:
+            *i_mask = 0x2;
+            break;
+        case 2:
+            *i_mask = 0x4;
+            break;
+        case 3:
+            *i_mask = 0x8;
+            break;
+        case 4:
+            *i_mask = 0x10;
+            break;
+        case 5:
+            *i_mask = 0x20;
+            break;
+        case 6:
+            *i_mask = 0x40;
+            break;
+        case 7:
+            *i_mask = 0x80;
+            break;
+        default:
+            ret = false;
+            break;
+        }
+    }
+    return ret;
 }
 
 /* 00001A44-00001AA8       .text chkReg__11daNpc_Bj1_cFUs */
-bool daNpc_Bj1_c::chkReg(unsigned short) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::chkReg(unsigned short i_reg) {
+    u8 mask;
+    if (getMaskInf(&mask) == false) {
+        return false;
+    }
+    u8 reg = dComIfGs_getEventReg(i_reg);
+    return (reg & mask) != 0;
 }
 
 /* 00001AA8-00001B14       .text setReg__11daNpc_Bj1_cFUs */
-void daNpc_Bj1_c::setReg(unsigned short) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setReg(unsigned short i_reg) {
+    u8 mask;
+    if (getMaskInf(&mask)) {
+        dComIfGs_setEventReg(i_reg, dComIfGs_getEventReg(i_reg) | mask);
+    }
 }
 
 /* 00001B14-00001E84       .text next_msgStatus__11daNpc_Bj1_cFPUl */
@@ -856,7 +896,18 @@ BOOL daNpc_Bj1_c::_execute() {
 
 /* 00006128-000061A4       .text _delete__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Bj");
+    if (heap != NULL) {
+        if (mpMorf != NULL) {
+            mpMorf->stopZelAnime();
+        }
+        if (mpPrpMorf != NULL) {
+            mpPrpMorf->stopZelAnime();
+        }
+    }
+    delPrtcl_drugPot();
+    delPrtcl_danceLR();
+    return TRUE;
 }
 
 /* 000061A4-000061C4       .text CheckCreateHeap__FP10fopAc_ac_c */
