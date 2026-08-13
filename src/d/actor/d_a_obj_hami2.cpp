@@ -38,7 +38,7 @@
         J3DModel* model = j3dSys.getModel();
         daObjHami2::Act_c* i_this = (daObjHami2::Act_c*)model->getUserArea();
         if (i_this != NULL) {
-            PSMTXCopy(*calc_mtx, model->getAnmMtx(jnt_no));
+            PSMTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
             mDoMtx_YrotM(*calc_mtx, i_this->mSpinAngle);
             PSMTXCopy(*calc_mtx, model->getAnmMtx(jnt_no));
             PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
