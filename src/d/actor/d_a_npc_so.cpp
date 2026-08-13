@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_esa.h"
+#include "d/actor/d_a_tag_so.h"
 
 const s32 daNpc_So_c::m_heapsize = 0x1C00;
 const char daNpc_So_c::m_arc_name[] = "So";
@@ -146,23 +147,41 @@ void daNpc_So_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 }
 
 /* 000004B0-000004DC       .text searchTagSo_CB__FPvPv */
-void searchTagSo_CB(void*, void*) {
-    /* Nonmatching */
+static void* searchTagSo_CB(void* param_1, void* i_this) {
+    return static_cast<daNpc_So_c*>(i_this)->_searchTagSo((fopAc_ac_c*)param_1);
 }
 
 /* 000004DC-0000054C       .text _searchTagSo__10daNpc_So_cFP10fopAc_ac_c */
-void daNpc_So_c::_searchTagSo(fopAc_ac_c*) {
-    /* Nonmatching */
+fopAc_ac_c* daNpc_So_c::_searchTagSo(fopAc_ac_c* pActor) {
+    if (fopAcM_GetName(pActor) == fpcNm_TAG_SO_e) {
+        daTag_So_c* pTag = static_cast<daTag_So_c*>(pActor);
+        if (field_0xA79 == pTag->m290 && pTag->m298 != 1) {
+            field_0xA7C = pTag->mRadius;
+            field_0xA80 = pTag->current.pos;
+            current.pos = field_0xA80;
+            return pActor;
+        }
+    }
+    return NULL;
 }
 
 /* 0000054C-00000578       .text searchMinigameTagSo_CB__FPvPv */
-void searchMinigameTagSo_CB(void*, void*) {
-    /* Nonmatching */
+static void* searchMinigameTagSo_CB(void* param_1, void* i_this) {
+    return static_cast<daNpc_So_c*>(i_this)->_searchMinigameTagSo((fopAc_ac_c*)param_1);
 }
 
 /* 00000578-000005C8       .text _searchMinigameTagSo__10daNpc_So_cFP10fopAc_ac_c */
-void daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c*) {
-    /* Nonmatching */
+fopAc_ac_c* daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c* pActor) {
+    if (fopAcM_GetName(pActor) == fpcNm_TAG_SO_e) {
+        daTag_So_c* pTag = static_cast<daTag_So_c*>(pActor);
+        if (pTag->m298 == 1) {
+            field_0xB90 = pTag->current.pos;
+            field_0xB9C = pTag->shape_angle.y;
+            field_0xBAE = 1;
+            return pActor;
+        }
+    }
+    return NULL;
 }
 
 /* 000005C8-000005E8       .text daNpc_So_XyCheckCB__FPvi */
