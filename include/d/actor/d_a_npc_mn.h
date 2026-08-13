@@ -186,7 +186,7 @@ public:
     /* 0x7B7 */ u8 mSwFlag;
     /* 0x7B8 */ u8 mAnmNo;
     /* 0x7B9 */ u8 m7B9;
-    /* 0x7BA */ u8 mAnmCnt;
+    /* 0x7BA */ s8 mAnmCnt;
     /* 0x7BB */ u8 mCutActIdx;
     /* 0x7BC */ u8 m7BC;
     /* 0x7BD */ s8 mLookMode;

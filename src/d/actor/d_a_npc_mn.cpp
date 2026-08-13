@@ -1630,8 +1630,8 @@ s32 daNpcMn_c::setAnmTbl(sMnAnmDat* pAnmDat) {
     if (mAnmCnt > 0) {
         loopMode = 0;
     }
-    if (mAnmNo != pAnmDat->mAnmNum || loopMode == 0) {
-        setAnm(pAnmDat->mAnmNum, loopMode, (f32)pAnmDat->mBtpNum);
+    if (mAnmNo != mpAnmDat->mAnmNum || loopMode == 0) {
+        setAnm(mpAnmDat->mAnmNum, loopMode, (f32)mpAnmDat->mBtpNum);
     }
     return 0;
 }
