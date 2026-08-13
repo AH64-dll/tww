@@ -411,8 +411,9 @@ bool daBalancelift_c::_execute() {
                     mSpringPos.y = d;
                     mRightPos.y = d;
 
-                    g_dComIfG_gameInfo.play.getParticle()->set(0, 0xC, hit_pos, NULL, NULL, 0xFF, NULL, -1,
-                                                                NULL, NULL, NULL);
+                    dPa_control_c* part = g_dComIfG_gameInfo.play.getParticle();
+                    part->set(0, 0xC, hit_pos, NULL, NULL, 0xFF, NULL, -1,
+                              NULL, NULL, NULL);
                 }
 
                 JAIZelBasic::zel_basic->seStart(0x6817, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
