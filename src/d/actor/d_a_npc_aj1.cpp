@@ -85,17 +85,6 @@ static char* l_evn_tbl[] = {
     "angry",
 };
 
-static char* a_cut_tbl[] = {
-    "AJ1_TLK",
-    "INI_ANGRY",
-    "VIVRATE",
-    "JMP",
-    "SPPRISE",
-    "LOK",
-    "DAN",
-    "INVITE",
-};
-
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 static BOOL nodeCB_Head(J3DNode* i_node, int i_jntNo) {
     if (i_jntNo == 0) {
@@ -326,17 +315,17 @@ int daNpc_Aj1_c::btpResID(int i_resNo) {
 
 /* 00000B58-00000C64       .text init_texPttrnAnm__11daNpc_Aj1_cFScb */
         /* Nonmatching */
-u8 daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
+bool daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     if (i_btpNo < 0) {
         return 0;
     }
-    J3DAnmTexPattern* btp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Aj", btpResID(i_btpNo));
-    JUT_ASSERT(VERSION_SELECT(531, 530, 531, 531), btp != NULL);
+    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Aj", btpResID(i_btpNo));
+    JUT_ASSERT(VERSION_SELECT(531, 530, 531, 531), a_btp != NULL);
     mBtpNum = i_btpNo;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(modelData, btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
+    return mBtpAnm.init(modelData, a_btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
 }
 
 /* 00000C64-00000CF4       .text play_texPttrnAnm__11daNpc_Aj1_cFv */
@@ -427,15 +416,16 @@ void daNpc_Aj1_c::ctrlAnmTag() {
 }
 
 /* 00000F08-00000F44       .text chngAnmAtr__11daNpc_Aj1_cFUc */
-        /* Nonmatching */
 void daNpc_Aj1_c::chngAnmAtr(u8 i_atr) {
     if (i_atr == mAnmAtr || i_atr > 9) {
         return;
     }
     mAnmAtr = i_atr;
     setAnm_ATR();
-    if (mAnmAtr == 8) {
+    switch (mAnmAtr) {
+    case 8:
         m75C = 3;
+        break;
     }
 }
 
@@ -871,6 +861,16 @@ s32 daNpc_Aj1_c::cut_move_INVIT() {
         /* Nonmatching */
 void daNpc_Aj1_c::privateCut(int i_staffIdx) {
     if (i_staffIdx != -1) {
+        static char* a_cut_tbl[] = {
+            "AJ1_TLK",
+            "INI_ANGRY",
+            "VIVRATE",
+            "JMP",
+            "SPPRISE",
+            "LOK",
+            "DAN",
+            "INVITE",
+        };
         dEvent_manager_c* evtmgr = dComIfGp_getPEvtManager();
         m7B5 = evtmgr->getMyActIdx(i_staffIdx, a_cut_tbl, 8, TRUE, 0);
         if (m7B5 == -1) {
