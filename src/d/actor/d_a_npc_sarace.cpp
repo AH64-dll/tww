@@ -373,7 +373,7 @@ void daNpc_Sarace_c::setAttention() {
 /* 00000E68-00000FF4       .text lookBack__14daNpc_Sarace_cFv */
 
     /* Nonmatching */void daNpc_Sarace_c::lookBack() {
-    cXyz srcPos = cXyz::Zero;
+    cXyz srcPos(0.0f, 0.0f, 0.0f);
     cXyz* pDstPos = NULL;
     s16 defaultY = current.angle.y;
     bool param_6 = true;
