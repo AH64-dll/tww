@@ -831,7 +831,20 @@ void daNpc_So_c::modeEventTriForceInit() {
 
 /* 00002CC0-00002D80       .text modeEventTriForce__10daNpc_So_cFv */
 void daNpc_So_c::modeEventTriForce() {
+    if (eventInfo.getCommand() == 2) {
+        if (!mEventCut.cutProc()) {
     /* Nonmatching */
+            cutProc();
+        }
+        if (dComIfGp_evmng_endCheck("SO_TRIFORCE_CHECK")) {
+            attention_info.flags = fopAc_Attn_TALKFLAG_NOTALK_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+            dComIfGp_event_onEventFlag(8);
+            modeProc(PROC_INIT_e, 0xC);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A20);
+        }
+    } else {
+        field_0xB70 = 8;
+    }
 }
 
 /* 00002D80-00003110       .text modeProc__10daNpc_So_cFQ210daNpc_So_c6Proc_ei */
