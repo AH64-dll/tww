@@ -274,14 +274,14 @@ bool daNpc_So_c::jntHitCreateHeap() {
     };
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 4,
-            /* mJointIndex */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
+            /* mJointIndex */ 4,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ cyl_offset_B,
         },
         {
-            /* mShapeType  */ 8,
-            /* mJointIndex */ 0,
+            /* mShapeType  */ JntHitType_CYL_e,
+            /* mJointIndex */ 8,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ cyl_offset_B,
         },
@@ -290,10 +290,9 @@ bool daNpc_So_c::jntHitCreateHeap() {
     field_0xAA8 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (field_0xAA8 != NULL) {
         jntHit = field_0xAA8;
-    } else {
-        return FALSE;
+        return TRUE;
     }
-    return TRUE;
+    return FALSE;
 }
 
 /* 00000A84-00000C8C       .text checkTgHit__10daNpc_So_cFv */
@@ -303,22 +302,30 @@ void daNpc_So_c::checkTgHit() {
 
 /* 00000C8C-00000CB0       .text offsetZero__10daNpc_So_cFv */
 void daNpc_So_c::offsetZero() {
-    /* Nonmatching */
+    field_0xB38.z = 0.1f;
+    field_0xB38.y = 20.0f;
+    field_0xB38.x = -1.0f;
 }
 
 /* 00000CB0-00000CD4       .text offsetDive__10daNpc_So_cFv */
 void daNpc_So_c::offsetDive() {
-    /* Nonmatching */
+    field_0xB38.z = 0.3f;
+    field_0xB38.y = 10.0f;
+    field_0xB38.x = -150.0f;
 }
 
 /* 00000CD4-00000CF8       .text offsetSwim__10daNpc_So_cFv */
 void daNpc_So_c::offsetSwim() {
-    /* Nonmatching */
+    field_0xB38.z = 0.3f;
+    field_0xB38.y = 10.0f;
+    field_0xB38.x = -40.0f;
 }
 
 /* 00000CF8-00000D1C       .text offsetAppear__10daNpc_So_cFv */
 void daNpc_So_c::offsetAppear() {
-    /* Nonmatching */
+    field_0xB38.z = 0.4f;
+    field_0xB38.y = 22.0f;
+    field_0xB38.x = 110.0f;
 }
 
 /* 00000D1C-00000E40       .text getMsg__10daNpc_So_cFv */
@@ -363,7 +370,7 @@ void daNpc_So_c::modeWaitInit() {
 
 /* 00001718-0000171C       .text modeWait__10daNpc_So_cFv */
 void daNpc_So_c::modeWait() {
-    /* Nonmatching */
+    
 }
 
 /* 0000171C-0000175C       .text modeHideInit__10daNpc_So_cFv */
@@ -493,12 +500,12 @@ void daNpc_So_c::modeDebugInit() {
 
 /* 00002B60-00002B64       .text modeDebug__10daNpc_So_cFv */
 void daNpc_So_c::modeDebug() {
-    /* Nonmatching */
+    
 }
 
 /* 00002B64-00002B68       .text modeGetRupeeInit__10daNpc_So_cFv */
 void daNpc_So_c::modeGetRupeeInit() {
-    /* Nonmatching */
+    
 }
 
 /* 00002B68-00002C6C       .text modeGetRupee__10daNpc_So_cFv */
