@@ -52,7 +52,7 @@ static const int l_btp_ix_tbl[] = {9, 11, 13, 12, 14};
 
 static daNpc_Kg2_HIO_c l_HIO;
 
-s8 daNpc_Kg2_c::canon_game_result = 0;
+u8 daNpc_Kg2_c::canon_game_result = 0;
 daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer = NULL;
 
 /* 000000EC-00000194       .text __ct__15daNpc_Kg2_HIO_cFv */
@@ -489,8 +489,7 @@ void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
 
 /* 000012EC-00001308       .text setAttention__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::setAttention() {
-    /* Nonmatching */
-    attention_info.position.set(m708.x, m708.y, m708.z);
+    eyePos.set(m708.x, m708.y, m708.z);
 }
 
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
@@ -586,13 +585,13 @@ BOOL daNpc_Kg2_c::CreateInit() {
     attention_info.flags = 0xA;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6E;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6E;
-    gravity = 0.0f;
+    gravity = -30.0f;
     setAction(&daNpc_Kg2_c::wait_action, 0);
     m708 = current.pos;
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(30.0f, 80.0f);
+    setCollision(60.0f, 150.0f);
     mEventCut.setActorInfo2("Kg2", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
     m734 = 0;
@@ -609,12 +608,12 @@ BOOL daNpc_Kg2_c::CreateInit() {
     m758[2] = dComIfGp_evmng_getEventIdx("KG2_GETDEMO", 0xFF);
     m758[3] = dComIfGp_evmng_getEventIdx("CANON_GAME", 0xFF);
     set_mtx();
-    if (dComIfGs_getTime() >= 0.0f && dComIfGs_getTime() < 300.0f) {
+    if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
         m738 = 0;
-        setAnm(1, 150.0f);
+        setAnm(1, -1.0f);
     } else {
         m738 = 1;
-        setAnm(0xD, 1.0f);
+        setAnm(0xD, 0.0f);
     }
     l_kg2_pointer = this;
     return TRUE;
@@ -889,11 +888,9 @@ int daNpc_Kg2_c::event_wait_action(void*) {
                 m750 = 3;
                 m754 = 2;
                 u8 reg = dComIfGs_getEventReg(0xB703);
-                u8 new_reg = reg + 1;
-                if (new_reg > 3) {
-                    new_reg = 3;
-                }
-                dComIfGs_setEventReg(0xB703, new_reg);
+                s32 new_reg = reg + 1;
+                new_reg = new_reg > 3 ? 3 : new_reg;
+                dComIfGs_setEventReg(0xB703, (u8)new_reg);
             } else if (m754 == 2) {
                 m750 = 1;
                 m74C = 0x315A;
