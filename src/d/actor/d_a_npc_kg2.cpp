@@ -240,7 +240,7 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
     /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 max_attn_dist = l_HIO.mHio.mMaxAttnDistXZ;
-    s16 max_attn_angle = l_HIO.mHio.mMaxAttnAngleY;
+    s32 max_attn_angle = l_HIO.mHio.mMaxAttnAngleY;
     cXyz spC;
     spC.x = player->current.pos.x - i_pos.x;
     spC.z = player->current.pos.z - i_pos.z;
