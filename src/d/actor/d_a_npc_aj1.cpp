@@ -55,14 +55,14 @@ public:
         /* Nonmatching */
 daNpc_Aj1_HIO_c::daNpc_Aj1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        /* mMaxHeadX         */ 0x1F40,
-        /* mMaxHeadY         */ 0x2000,
-        /* mMinHeadX         */ 0xCD38,
-        /* mMinHeadY         */ 0x01F4,
-        /* mMaxBackboneX     */ 0x1C70,
-        /* mMaxBackboneY     */ 0x0000,
-        /* mMinBackboneX     */ 0xFF6A,
-        /* mMinBackboneY     */ 0xFA24,
+        /* mMaxHeadX         */ 0x2000,
+        /* mMaxHeadY         */ 0x1F40,
+        /* mMinHeadX         */ 0x01F4,
+        /* mMinHeadY         */ 0xCD38,
+        /* mMaxBackboneX     */ 0x0000,
+        /* mMaxBackboneY     */ 0x1C70,
+        /* mMinBackboneX     */ 0xFA24,
+        /* mMinBackboneY     */ 0xFF6A,
         /* mMaxTurnStep      */ 0x0400,
         /* mCalcAngleTarget  */ 0x0400,
         /* mAttPosOffsetY    */ 150.0f,
@@ -307,9 +307,8 @@ void daNpc_Aj1_c::setMtx(bool i_setMtx) {
 }
 
 /* 00000B30-00000B44       .text bckResID__11daNpc_Aj1_cFi */
-        /* Nonmatching */
 int daNpc_Aj1_c::bckResID(int i_resNo) {
-    static int a_res_id_tbl[9] = {
+    static const int a_res_id_tbl[9] = {
         dRes_ID_AJ_BCK_WAIT01_e, dRes_ID_AJ_BCK_WAIT02_e, dRes_ID_AJ_BCK_ANGRY_e,
         dRes_ID_AJ_BCK_JAMP_e, dRes_ID_AJ_BCK_SHOCK_e, dRes_ID_AJ_BCK_LOOK_e,
         dRes_ID_AJ_BCK_TIRE_e, dRes_ID_AJ_BCK_CALL_e, dRes_ID_AJ_BCK_NOBI_e,
@@ -318,9 +317,8 @@ int daNpc_Aj1_c::bckResID(int i_resNo) {
 }
 
 /* 00000B44-00000B58       .text btpResID__11daNpc_Aj1_cFi */
-        /* Nonmatching */
 int daNpc_Aj1_c::btpResID(int i_resNo) {
-    static int a_res_id_tbl[1] = {
+    static const int a_res_id_tbl[1] = {
         dRes_ID_AJ_BTP_MABA_e,
     };
     return a_res_id_tbl[i_resNo];
@@ -774,7 +772,6 @@ s32 daNpc_Aj1_c::cut_move_AJ1_TLK() {
 }
 
 /* 000019A8-000019C8       .text cut_init_INI_ANGRY__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::cut_init_INI_ANGRY() {
     setAnm_NUM(0, 1);
     mpMorf->setMorf(8.0f);
@@ -790,7 +787,6 @@ void daNpc_Aj1_c::cut_init_VIVRATE() {
 }
 
 /* 00001A08-00001A84       .text cut_move_VIVRATE__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::cut_move_VIVRATE() {
     if (mbMorfAnimStopped) {
         mDoAud_seStart(0x58A2, NULL, 0, dComIfGp_getReverb(current.roomNo));
@@ -834,7 +830,6 @@ void daNpc_Aj1_c::cut_init_LOK() {
 }
 
 /* 00001B80-00001BE4       .text cut_move_LOK__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::cut_move_LOK() {
     if (mbMorfAnimStopped && cLib_calcTimer(&mCutTimer) == 0) {
         setAnm_NUM(5, 1);
@@ -859,7 +854,6 @@ s32 daNpc_Aj1_c::cut_move_DAN() {
 }
 
 /* 00001C44-00001C64       .text cut_init_INVIT__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::cut_init_INVIT() {
     mDoAud_seStart(0x4893, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
 }
@@ -1033,7 +1027,6 @@ void daNpc_Aj1_c::set_pa_smk() {
 }
 
 /* 00002404-0000247C       .text flw_pa_pun__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::flw_pa_pun() {
     if (mPunEmitter != NULL) {
         mPunEmitter->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
@@ -1080,7 +1073,6 @@ void daNpc_Aj1_c::del_pa(JPABaseEmitter** i_ppEmitter) {
 }
 
 /* 00002530-000025F8       .text setSmoke__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::setSmoke() {
     if (mAnmNum == 2) {
         if (mpMorf->checkFrame(0.0f) || mpMorf->checkFrame(9.0f)) {
@@ -1164,7 +1156,6 @@ u8 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
 }
 
 /* 00002984-00002A14       .text FARwai__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::FARwai() {
     if (chk_areaIN(l_HIO.mPrmTbl.mAreaRadius, l_HIO.mPrmTbl.mAreaAngle, current.pos)) {
         setStt(2);
@@ -1188,7 +1179,6 @@ s32 daNpc_Aj1_c::FARwai() {
 }
 
 /* 00002A14-00002AC8       .text call_1__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::call_1() {
     if (m769 != 0) {
         if (chk_talk()) {
@@ -1392,7 +1382,6 @@ u8 daNpc_Aj1_c::demo() {
 }
 
 /* 0000319C-00003254       .text shadowDraw__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::shadowDraw() {
     cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowID = dComIfGd_setShadow(mShadowID, 1, mpMorf->getModel(), &temp, 800.0f, 40.0f,
@@ -1406,7 +1395,6 @@ void daNpc_Aj1_c::shadowDraw() {
 }
 
 /* 00003254-00003378       .text _draw__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 BOOL daNpc_Aj1_c::_draw() {
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
