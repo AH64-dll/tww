@@ -129,8 +129,8 @@ void daBalancelift_c::calc_quat() {
 
     cXyz left = mLeftPos;
     cXyz cur = current.pos;
-    PSVECSubtract(&left, &mLeftPos, &mOldPos);
-    PSVECSubtract(&cur, &current.pos, &mOldPos);
+    PSVECSubtract(&left, &mOldPos, &left);
+    PSVECSubtract(&cur, &mOldPos, &cur);
 
     Quaternion quat1;
     daObj::quat_rotBaseY2(&quat1, cur);
