@@ -91,7 +91,7 @@ BOOL daObjHami2::Act_c::CreateHeap() {
 
 /* 0000032C-0000042C       .text Create__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::Create() {
+BOOL daObjHami2::Act_c::Create() {
     cullMtx = mpModel->getBaseTRMtx();
 
     int prm = daObj::PrmAbstract(this, PRM_SWSAVE_W_e, PRM_SWSAVE_S_e);
@@ -112,7 +112,7 @@ BOOL daObjHami2::Act_c::CreateHeap() {
 
 /* 0000042C-00000540       .text Mthd_Create__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */cPhs_State daObjHami2::Act_c::Mthd_Create() {
+cPhs_State daObjHami2::Act_c::Mthd_Create() {
     if (!(actor_condition & 8)) {
         new (this) daObjHami2::Act_c();
         actor_condition |= 8;
@@ -129,13 +129,13 @@ BOOL daObjHami2::Act_c::CreateHeap() {
 
 /* 00000540-00000548       .text Delete__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::Delete() {
+BOOL daObjHami2::Act_c::Delete() {
     return TRUE;
 }
 
 /* 00000548-000005E8       .text Mthd_Delete__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::Mthd_Delete() {
+BOOL daObjHami2::Act_c::Mthd_Delete() {
     if (heap != NULL) {
         if (mpBgW != NULL && mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
@@ -160,7 +160,7 @@ void daObjHami2::Act_c::set_mtx() {
 
 /* 00000678-000006B4       .text init_mtx__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::init_mtx() {
+void daObjHami2::Act_c::init_mtx() {
     mpModel->setBaseScale(scale);
     set_mtx();
 }
@@ -177,7 +177,7 @@ void daObjHami2::Act_c::daObjHami2_close_stop() {
 
 /* 00000730-00000810       .text daObjHami2_open_demo_wait__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_open_demo_wait() {
+void daObjHami2::Act_c::daObjHami2_open_demo_wait() {
     if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
         mState = 2;
         JAIZelBasic::zel_basic->seStart(0x69C4, &current.pos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -189,7 +189,7 @@ void daObjHami2::Act_c::daObjHami2_close_stop() {
 
 /* 00000810-000008A0       .text daObjHami2_open_demo__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_open_demo() {
+void daObjHami2::Act_c::daObjHami2_open_demo() {
     mSpinAngle += 0x100;
     if (mSpinAngle >= 0x4000) {
         mSpinAngle = 0x4000;
@@ -211,7 +211,7 @@ void daObjHami2::Act_c::daObjHami2_open_stop() {
 
 /* 0000091C-0000096C       .text daObjHami2_close_demo_wait__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_close_demo_wait() {
+void daObjHami2::Act_c::daObjHami2_close_demo_wait() {
     if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
         mState = 5;
     } else {
@@ -221,7 +221,7 @@ void daObjHami2::Act_c::daObjHami2_open_stop() {
 
 /* 0000096C-00000A08       .text daObjHami2_close_demo__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::daObjHami2_close_demo() {
+void daObjHami2::Act_c::daObjHami2_close_demo() {
     mSpinAngle -= 0x100;
     if (mSpinAngle <= 0) {
         mSpinAngle = 0;
@@ -233,7 +233,7 @@ void daObjHami2::Act_c::daObjHami2_open_stop() {
 
 /* 00000A08-00000AB8       .text Execute__Q210daObjHami25Act_cFPPA3_A4_f */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::Execute(Mtx** i_mtx) {
+BOOL daObjHami2::Act_c::Execute(Mtx** i_mtx) {
     switch (mState) {
     case 0:
         daObjHami2_close_stop();
@@ -262,7 +262,7 @@ void daObjHami2::Act_c::daObjHami2_open_stop() {
 
 /* 00000AB8-00000B58       .text Draw__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */BOOL daObjHami2::Act_c::Draw() {
+BOOL daObjHami2::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
