@@ -1366,6 +1366,7 @@ void daNpcBmcon_c::setMtx() {
 
 /* 0000322C-0000356C       .text chkAttention__12daNpcBmcon_cFv */
 void daNpcBmcon_c::chkAttention() {
+    /* Nonmatching */
     m7C1 = 0;
 
     if(mEventCut.getAttnFlag()) {
@@ -1588,6 +1589,7 @@ cXyz daNpcBmcon_c::calcFlyDist() {
 
 /* 00003A7C-00003AE8       .text getFlyDistMax__12daNpcBmcon_cFv */
 s16 daNpcBmcon_c::getFlyDistMax() {
+    /* Nonmatching */
     return dComIfGs_getEventReg(dSv_event_flag_c::UNK_A8FF) + (dComIfGs_getEventReg(dSv_event_flag_c::UNK_A7FF) << 8);
 }
 
@@ -1599,6 +1601,7 @@ void daNpcBmcon_c::setFlyDistMax(s16 dist) {
 
 /* 00003B6C-00003BD8       .text getFlyDistNow__12daNpcBmcon_cFv */
 s16 daNpcBmcon_c::getFlyDistNow() {
+    /* Nonmatching */
     return dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_FAFF) + (dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_FBFF) << 8);
 }
 
