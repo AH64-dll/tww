@@ -711,7 +711,7 @@ void daObjTry::Act_c::mode_sink() {
 }
 
 /* 0000177C-00001B58       .text mode_proc_call__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::mode_proc_call() {
+bool daObjTry::Act_c::mode_proc_call() {
     /* Nonmatching */
 }
 
@@ -1012,7 +1012,51 @@ f32 daObjTry::Act_c::get_water_h() {
 
 /* 00002BB4-00002DA8       .text _execute__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_execute() {
-    /* Nonmatching */
+    cull_set_move();
+
+    if (m635 == 0 && mMode == 1 && mAcch.ChkGroundHit() && !mAcch.ChkGroundLanding() &&
+            attr().m75 == 0 && fopAcM_cullingCheck(this) != 0) {
+        goto skip;
+    }
+
+    m635 = 0;
+    bool deleteFlag = true;
+    if (!damage_cc_proc()) {
+        if (!damage_bg_proc()) {
+            if (m636 > 0) {
+                m636--;
+            }
+        }
+    }
+    m64E = 0;
+    if (mode_proc_call()) {
+        deleteFlag = false;
+        set_mtx();
+        mStts.SetRoomId(current.roomNo);
+        mCyl.MoveCAtTg(current.pos);
+        g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+        if (mMode == 3 || mMode == 4 || m636 != 0) {
+            g_dComIfG_gameInfo.play.mCcS.SetMass(&mCyl, 3);
+        }
+        attention_info.position.x = current.pos.x;
+        attention_info.position.y = current.pos.y + attr().m08;
+        attention_info.position.z = current.pos.z;
+        eyePos.x = attention_info.position.x;
+        eyePos.y = attention_info.position.y;
+        eyePos.z = attention_info.position.z;
+        m62C = mMode;
+    }
+    if (deleteFlag) {
+        fopAcM_delete(this);
+    }
+
+skip:
+    if (attr().m74 == 0) {
+        m64C = 0;
+    }
+    m64D = 0;
+    cull_set_draw();
+    return true;
 }
 
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */

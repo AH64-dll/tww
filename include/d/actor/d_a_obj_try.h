@@ -132,7 +132,7 @@ namespace daObjTry {
         void mode_drop();
         void mode_sink_init();
         void mode_sink();
-        void mode_proc_call();
+        bool mode_proc_call();
         void cull_set_draw();
         void cull_set_move();
         void damaged();
