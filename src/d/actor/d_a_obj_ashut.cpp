@@ -42,7 +42,6 @@ namespace daObjAshut {
     }
 
     /* 0000012C-00000224       .text Create__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     BOOL Act_c::Create() {
         mpBgW->SetPriority((cBgW::PRIORITY)1);
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -60,7 +59,6 @@ namespace daObjAshut {
     }
 
     /* 00000224-00000388       .text Mthd_Create__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     cPhs_State Act_c::Mthd_Create() {
         fopAcM_ct(this, daObjAshut::Act_c);
         cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
@@ -130,7 +128,6 @@ namespace daObjAshut {
     }
 
     /* 000005BC-0000066C       .text mode_upper__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     void Act_c::mode_upper() {
         if (!is_switch()) {
             if (!chk_safe_area()) {
@@ -176,7 +173,6 @@ namespace daObjAshut {
     }
 
     /* 000007D8-00000838       .text mode_lower__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     void Act_c::mode_lower() {
         if (is_switch()) {
             mode_demoreq_init(Mode_L_U);
@@ -241,7 +237,6 @@ namespace daObjAshut {
     }
 
     /* 00000B0C-00000BE4       .text mode_demoreq__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     void Act_c::mode_demoreq() {
         u8 done = FALSE;
         if (dComIfGp_evmng_existence(mEvtIdx)) {
@@ -283,7 +278,6 @@ namespace daObjAshut {
     }
 
     /* 00000D0C-00000D6C       .text Draw__Q210daObjAshut5Act_cFv */
-    /* Nonmatching */
     BOOL Act_c::Draw() {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
