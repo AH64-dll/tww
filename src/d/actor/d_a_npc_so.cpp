@@ -681,7 +681,15 @@ void daNpc_So_c::modeEventEsaInit() {
 
 /* 00002504-00002594       .text modeEventEsa__10daNpc_So_cFv */
 void daNpc_So_c::modeEventEsa() {
-    /* Nonmatching */
+    if (!mEventCut.cutProc()) {
+        cutProc();
+    }
+    if (dComIfGp_evmng_endCheck(field_0xBDC)) {
+        dComIfGp_event_onEventFlag(8);
+        field_0xBDC = -1;
+        field_0xB70 = 1;
+        modeProc(PROC_INIT_e, 0xB);
+    }
 }
 
 /* 00002594-000025B0       .text modeEventMapopenInit__10daNpc_So_cFv */
