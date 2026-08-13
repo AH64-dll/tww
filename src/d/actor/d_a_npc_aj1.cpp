@@ -620,15 +620,19 @@ u32 daNpc_Aj1_c::getMsg_AJ1_2() {
 /* 00001460-0000146C       .text getMsg__11daNpc_Aj1_cFv */
         /* Nonmatching */
 u32 daNpc_Aj1_c::getMsg() {
+    u32 result = 0;
     switch (mSpecificType) {
         case 0:
-            return getMsg_AJ1_0();
+            result = getMsg_AJ1_0();
+            break;
         case 1:
-            return getMsg_AJ1_1();
+            result = getMsg_AJ1_1();
+            break;
         case 2:
-            return getMsg_AJ1_2();
+            result = getMsg_AJ1_2();
+            break;
     }
-    return 0;
+    return result;
 }
 
 /* 0000146C-000014E8       .text eventOrder__11daNpc_Aj1_cFv */
