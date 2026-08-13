@@ -61,7 +61,7 @@ public:
     BOOL endEvent_check();
     BOOL startEvent_check();
     void set_pthPoint(unsigned char);
-    BOOL chk_attn();
+    bool chk_attn();
     void setBikon(cXyz);
     void delBikon();
     BOOL wait_1();

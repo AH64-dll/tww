@@ -829,23 +829,18 @@ void daNpc_Pf1_c::set_pthPoint(u8 i_param_1) {
 }
 
 /* 00001C94-00001EAC       .text chk_attn__11daNpc_Pf1_cFv */
-BOOL daNpc_Pf1_c::chk_attn() {
-    /* Nonmatching */
-    cXyz diff = current.pos - dComIfGp_getLinkPlayer()->current.pos;
-    f32 dist = std::sqrtf(diff.abs2XZ());
+bool daNpc_Pf1_c::chk_attn() {
+    f32 dist = std::sqrtf((current.pos - dComIfGp_getLinkPlayer()->current.pos).abs2XZ());
     f32 height_diff = current.pos.y - dComIfGp_getLinkPlayer()->current.pos.y;
     s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getLinkPlayer()->current.pos);
-    s32 angle_diff = abs(target_angle - current.angle.y);
+    s16 angle_diff = target_angle - current.angle.y;
     if (m7BA == 1) {
-        if (dist < 200.0f && (f32)angle_diff / 182.04444f < 90.0f && std::fabsf(height_diff) < 300.0f) {
-            return TRUE;
-        }
-        return FALSE;
+        return dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 90.0f &&
+               std::fabsf(height_diff) < 300.0f;
+    } else {
+        return dist < 200.0f && (f32)abs(angle_diff) / DEG2S_CONSTANT < 60.0f &&
+               std::fabsf(height_diff) < 300.0f;
     }
-    if (dist < 200.0f && (f32)angle_diff / 182.04444f < 60.0f && std::fabsf(height_diff) < 300.0f) {
-        return TRUE;
-    }
-    return FALSE;
 }
 
 /* 00001EAC-00001F68       .text setBikon__11daNpc_Pf1_cF4cXyz */
