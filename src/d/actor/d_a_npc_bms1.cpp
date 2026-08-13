@@ -301,6 +301,7 @@ void daNpc_Bms1_c::playTexPatternAnm() {
 
 /* 00000DE0-00000E78       .text setAnm__12daNpc_Bms1_cFScf */
 void daNpc_Bms1_c::setAnm(s8 index, f32 morfFrame) {
+    /* Nonmatching */
     static u32 play_mode_tbl[7] = {
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
@@ -593,7 +594,36 @@ BOOL daNpc_Bms1_c::_draw() {
 
 /* 00003314-00003474       .text _execute__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::_execute() {
-    /* Nonmatching */
+    mJntCtrl.setParam(
+        l_HIO.mChild[0].mNpc.mMaxBackboneX, l_HIO.mChild[0].mNpc.mMaxBackboneY,
+        l_HIO.mChild[0].mNpc.mMinBackboneX, l_HIO.mChild[0].mNpc.mMinBackboneY,
+        l_HIO.mChild[0].mNpc.mMaxHeadX, l_HIO.mChild[0].mNpc.mMaxHeadY,
+        l_HIO.mChild[0].mNpc.mMinHeadX, l_HIO.mChild[0].mNpc.mMinHeadY,
+        l_HIO.mChild[0].mNpc.mMaxTurnStep);
+    playTexPatternAnm();
+    mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
+    mpMorf->calc();
+    if (mpMorf->getFrame() < mMorfPrevFrame) {
+        mMorfIsStop = 1;
+    }
+    mMorfPrevFrame = mpMorf->getFrame();
+
+    if (!demo_move()) {
+        checkOrder();
+        (this->*mCurrActionFunc)(NULL);
+        mShopCam.move();
+        mShopItems.Item_Move();
+        eventOrder();
+    }
+
+    mHeadAnm.move();
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+    set_mtx();
+    setCollision();
+    return TRUE;
 }
 
 /* 00003474-00003514       .text _delete__12daNpc_Bms1_cFv */
