@@ -150,25 +150,29 @@ void daNpc_Sarace_c::playTexPatternAnm() {
 /* 0000060C-00000760       .text chkAttention__14daNpc_Sarace_cF4cXyzs */
 
     /* Nonmatching */BOOL daNpc_Sarace_c::chkAttention(cXyz pos, s16 angle) {
+    cXyz sp10;
     f32 distXZ;
-    s16 angleDiff;
 
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 maxDist = l_HIO.mNpc.mMaxAttnDistXZ;
     s16 maxAngle = l_HIO.mNpc.mMaxAttnAngleY;
-    f32 dx = dComIfGp_getPlayer(0)->current.pos.x - pos.x;
-    f32 dz = dComIfGp_getPlayer(0)->current.pos.z - pos.z;
-    distXZ = dx * dx + dz * dz;
-    if (distXZ > 0.0f)
+    sp10.x = player->current.pos.x - pos.x;
+    sp10.z = player->current.pos.z - pos.z;
+    distXZ = sp10.x * sp10.x + sp10.z * sp10.z;
+    if (distXZ > 0.0f) {
         distXZ = std::sqrtf(distXZ);
-    s16 atanAngle = cM_atan2s(dx, dz);
+    }
+    s16 atanAngle = cM_atan2s(sp10.x, sp10.z);
     if (m728 != 0) {
         maxDist += 40.0f;
         maxAngle += 0x71C;
     }
-    angleDiff = abs(atanAngle - angle);
+    s16 diff = atanAngle - angle;
+    BOOL ret = FALSE;
+    s16 angleDiff = abs(diff);
     if (maxAngle > angleDiff && maxDist > distXZ)
-        return TRUE;
-    return FALSE;
+        ret = TRUE;
+    return ret;
 }
 
 /* 00000760-000007D8       .text eventOrder__14daNpc_Sarace_cFv */
