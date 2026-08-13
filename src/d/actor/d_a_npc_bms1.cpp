@@ -151,25 +151,27 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
         mDoMtx_stack_c::quatM(&pBms->m304);
         PSMTXConcat(mDoMtx_stack_c::now, local, mDoMtx_stack_c::now);
-        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &pBms->m2D4);
-        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &pBms->m2E0);
+        cXyz v1;
+        cXyz v2;
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &v1);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &v2);
         PSMTXCopy(mDoMtx_stack_c::now, pModel->getAnmMtx(jntNo));
 
         if (pBms->m2D4.isZero()) {
-            pBms->m2D4 = pBms->m2E0;
+            pBms->m2D4 = v1;
         }
-        cXyz diff = pBms->m2E0 - pBms->m2D4;
+        cXyz diff = v1 - pBms->m2D4;
         cXyz scaled = diff * l_HIO.mChild[0].m40;
         pBms->m2EC = pBms->m2EC + scaled;
         pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
         pBms->m2D4 = pBms->m2D4 + pBms->m2EC;
 
-        cXyz v1 = pBms->m2E0 - pBms->m2D4;
-        cXyz v2 = pBms->m2E0 - pBms->m2D4;
+        cXyz d1 = v1 - v2;
+        cXyz d2 = pBms->m2D4 - v2;
         Quaternion rot;
-        daObj::quat_rotVec(&rot, v1, v2);
+        daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m304, &rot, &pBms->m304, l_HIO.mChild[0].m48);
-        f32 dot = PSVECDotProduct(&pBms->m2EC, &pBms->m2EC);
+        f32 dot = PSVECDotProduct(&d2, &pBms->m2EC);
         pBms->m2CC = 1.0f - l_HIO.mChild[0].m4C * dot;
         if (pBms->m2CC < 0.5f) {
             pBms->m2CC = 0.5f;
@@ -187,25 +189,27 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
         mDoMtx_stack_c::quatM(&pBms->m314);
         PSMTXConcat(mDoMtx_stack_c::now, local, mDoMtx_stack_c::now);
-        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &pBms->m2E0);
-        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &pBms->m2F8);
+        cXyz v1;
+        cXyz v2;
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_ten, &v1);
+        PSMTXMultVec(mDoMtx_stack_c::now, &l_zero, &v2);
         PSMTXCopy(mDoMtx_stack_c::now, pModel->getAnmMtx(jntNo));
 
         if (pBms->m2E0.isZero()) {
-            pBms->m2E0 = pBms->m2F8;
+            pBms->m2E0 = v1;
         }
-        cXyz diff = pBms->m2F8 - pBms->m2E0;
+        cXyz diff = v1 - pBms->m2E0;
         cXyz scaled = diff * l_HIO.mChild[0].m40;
         pBms->m2EC = pBms->m2EC + scaled;
         pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
         pBms->m2E0 = pBms->m2E0 + pBms->m2EC;
 
-        cXyz v1 = pBms->m2F8 - pBms->m2E0;
-        cXyz v2 = pBms->m2F8 - pBms->m2E0;
+        cXyz d1 = v1 - v2;
+        cXyz d2 = pBms->m2E0 - v2;
         Quaternion rot;
-        daObj::quat_rotVec(&rot, v1, v2);
+        daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m314, &rot, &pBms->m314, l_HIO.mChild[0].m48);
-        f32 dot = PSVECDotProduct(&pBms->m2EC, &pBms->m2EC);
+        f32 dot = PSVECDotProduct(&d2, &pBms->m2EC);
         pBms->m2D0 = 1.0f - l_HIO.mChild[0].m4C * dot;
         if (pBms->m2D0 < 0.5f) {
             pBms->m2D0 = 0.5f;
