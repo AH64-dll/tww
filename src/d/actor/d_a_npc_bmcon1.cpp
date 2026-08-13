@@ -537,7 +537,7 @@ cPhs_State daNpcBmcon_c::createInit() {
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_tbl[mBckNo]);
 
-    switch (mNpcNo) {
+    switch (getNpcNo()) {
     case 0:
         mEventIdx1 = dComIfGp_evmng_getEventIdx("BMCON_RESULT", 0xff);
         mEventIdx2 = dComIfGp_evmng_getEventIdx("BMCON_GET_ITEM", 0xff);
@@ -640,7 +640,7 @@ bool daNpcBmcon_c::_draw() {
         dComIfGd_addRealShadow(mShadowID, armModel);
     }
 
-    switch (mNpcNo) {
+    switch (getNpcNo()) {
     case 0:
         dSnap_RegistFig(DSNAP_TYPE_UNK95, this, 1.0f, 1.0f, 1.0f);
         break;
@@ -1617,25 +1617,26 @@ void daNpcBmcon_c::setFlyDistNow(s16 dist) {
 
 /* 00003C5C-00003DC4       .text chkEndEvent__12daNpcBmcon_cFv */
 BOOL daNpcBmcon_c::chkEndEvent() {
-    /* Nonmatching */
-    if (mNpcNo == 0) {
+    switch (getNpcNo()) {
+    case 0:
         if (dComIfGp_evmng_endCheck(mEventIdx1) && dComIfGs_getTmpReg(dSv_event_tmp_flag_c::UNK_F903) != 0) {
             g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
-            m7C0 = l_npc_dat[mNpcNo].field_0x4B;
+            m7C0 = l_npc_dat[getNpcNo()].field_0x4B;
             return TRUE;
         }
-        else if (dComIfGp_evmng_endCheck(mEventIdx2)) {
+        if (dComIfGp_evmng_endCheck(mEventIdx2)) {
             g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
-            m7C0 = l_npc_dat[mNpcNo].field_0x4B;
+            m7C0 = l_npc_dat[getNpcNo()].field_0x4B;
             return TRUE;
         }
-    }
-    else if (mNpcNo == 1) {
+        break;
+    case 1:
         if (dComIfGp_evmng_endCheck(mEventIdx1) || dComIfGp_evmng_endCheck(mEventIdx2)) {
             g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
-            m7C0 = l_npc_dat[mNpcNo].field_0x4B;
+            m7C0 = l_npc_dat[getNpcNo()].field_0x4B;
             return TRUE;
         }
+        break;
     }
     return FALSE;
 }
