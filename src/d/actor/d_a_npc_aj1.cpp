@@ -1149,12 +1149,7 @@ u8 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
     diffXZ.y = 0.0f;
     diffXZ.z = diff.z;
     f32 distSq = PSVECSquareMag(&diffXZ);
-    f32 dist;
-    if (distSq > 0.0f) {
-        dist = std::sqrtf(distSq);
-    } else {
-        dist = distSq;
-    }
+    f32 dist = std::sqrtf(distSq);
     f32 yDiff = dComIfGp_getPlayer(0)->current.pos.y - i_pos.y;
     s16 targetAngle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     s16 angleDiff = targetAngle - m708.y;
