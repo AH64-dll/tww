@@ -382,7 +382,6 @@ cPhs_State daNpcMn_c::_create() {
 }
 
 /* 00000904-00000BE0       .text createHeap__9daNpcMn_cFv */
-    /* Nonmatching */
 BOOL daNpcMn_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bmd_ix_tbl[0]);
     mpMorf = new mDoExt_McaMorf(
@@ -418,8 +417,8 @@ BOOL daNpcMn_c::createHeap() {
         1,
         &mAcchCir,
         fopAcM_GetSpeed_p(this),
-        NULL,
-        NULL
+        fopAcM_GetAngle_p(this),
+        fopAcM_GetShapeAngle_p(this)
     );
 
     m734 = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_etc_bmd_ix_tbl[0]), 0x80000, 0x11000002);
@@ -1008,7 +1007,6 @@ void daNpcMn_c::eventMesSetInit(int staffIdx) {
 }
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventMesSet() {
     return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
@@ -1032,7 +1030,6 @@ void daNpcMn_c::eventWaitInit(int staffIdx) {
 }
 
 /* 00002358-000023E8       .text eventWait__9daNpcMn_cFi */
-    /* Nonmatching */
 s32 daNpcMn_c::eventWait(int staffIdx) {
     if (mEvTimer != 0) {
         mEvTimer--;
@@ -1055,7 +1052,6 @@ void daNpcMn_c::eventSwOnInit(int staffIdx) {
 }
 
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventSwOn() {
     if (mEvTimer != 0) {
         mEvTimer--;
@@ -1077,7 +1073,6 @@ void daNpcMn_c::eventHatchInit() {
 }
 
 /* 00002540-00002578       .text eventHatch__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventHatch() {
     m7AE = m7A0;
     m794 = 0;
@@ -1155,7 +1150,6 @@ void daNpcMn_c::eventWalkInit() {
 }
 
 /* 000027DC-0000293C       .text eventWalk__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventWalk() {
     u8 turnFlag = 0;
     cXyz myPos = current.pos;
@@ -1191,7 +1185,6 @@ s32 daNpcMn_c::eventLook() {
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventJumpInit(int staffIdx) {
     f32* pSpeedX = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedX");
     f32* pSpeedY = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedY");
@@ -1440,12 +1433,12 @@ void daNpcMn_c::setMtx() {
 void daNpcMn_c::chkAttention() {
     m7C0 = 0;
     if (mEventCut.getAttnFlag()) {
-        cXyz attnPos = mEventCut.getAttnPos();
+        const cXyz& attnPos = mEventCut.getAttnPos();
         mLookAtX = attnPos.x;
         mLookAtY = attnPos.y;
         mLookAtZ = attnPos.z;
         mLookMode = 1;
-        if (m794 != 0) {
+        if (m7BE != 0) {
             m794 = 0;
             m_jnt.setTrn();
         } else {
@@ -1455,25 +1448,24 @@ void daNpcMn_c::chkAttention() {
             mAttnFlag = 1;
         }
     } else {
-        f32 attnDist = mAttnDist;
-        s16 turnSpeed = mTurnSpeed;
-        cXyz myPos = current.pos;
-        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
         f32 distXZ;
         s16 angle;
-        dNpc_calc_DisXZ_AngY(myPos, player->current.pos, &distXZ, &angle);
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        f32 attnDist = mAttnDist;
+        int turnSpeed = mTurnSpeed;
+        dNpc_calc_DisXZ_AngY(current.pos, player->current.pos, &distXZ, &angle);
         if (mAttnFlag) {
             attnDist += 40.0f;
             turnSpeed += 0x71C;
         }
-        s16 diffAngle = angle - shape_angle.y;
-        if (attnDist > distXZ && turnSpeed > abs(diffAngle)) {
-            cXyz eyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+        angle -= shape_angle.y;
+        if (attnDist > distXZ && turnSpeed > abs(angle)) {
+            const cXyz& eyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
             mLookAtX = eyePos.x;
             mLookAtY = eyePos.y;
             mLookAtZ = eyePos.z;
             mLookMode = 1;
-            if (m794 != 0) {
+            if (m7BE != 0) {
                 m794 = 0;
             } else {
                 m794 = 1;
@@ -1493,12 +1485,12 @@ void daNpcMn_c::chkAttention() {
                 mLookTimer = l_npc_dat[mNpcNo].field_0x48;
             }
             if (l_npc_dat[mNpcNo].field_0x24 > distXZ) {
-                cXyz eyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+                const cXyz& eyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
                 mLookAtX = eyePos.x;
                 mLookAtY = eyePos.y;
                 mLookAtZ = eyePos.z;
                 mLookMode = 1;
-                if (m794 != 0) {
+                if (m7BE != 0) {
                     m794 = 0;
                 } else {
                     m794 = 1;
