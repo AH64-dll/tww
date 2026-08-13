@@ -382,11 +382,11 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000008A8-00000AAC       .text _createHeap__6daGy_cFv */
 BOOL daGy_c::_createHeap() {
     /* Nonmatching */
-    J3DModelData* mdl = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 0xF);
-    JUT_ASSERT(0x377, mdl != NULL);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 0xF);
+    JUT_ASSERT(0x377, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
-        mdl, NULL, NULL,
+        modelData, NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, 0xB),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
@@ -402,7 +402,7 @@ BOOL daGy_c::_createHeap() {
         return FALSE;
     }
 
-    for (u16 i = 0; i < mdl->getJointNum(); i++) {
+    for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
         case 2:
         case 5:
@@ -849,7 +849,7 @@ void daGy_c::modeDeleteInit() {
     m4F0 = 0.0f;
     speedF = 0.0f;
     speed.y = l_HIO.m15C;
-    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
 
     cXyz sp18(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
               2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
@@ -886,7 +886,7 @@ void daGy_c::modeDeleteBombInit() {
     speedF = 0.0f;
     m4E4 = 0.0f;
     speed.y = l_HIO.m15C;
-    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     m4EC = 10.0f * l_HIO.mC8;
 }
 
