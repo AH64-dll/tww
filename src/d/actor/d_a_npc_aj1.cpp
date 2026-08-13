@@ -1423,7 +1423,7 @@ BOOL daNpc_Aj1_c::_draw() {
     g_env_light.setLightTevColorType(model, &tevStr);
     mBtpAnm.entry(modelData, mBlinkFrame);
     mpMorf->entryDL();
-    modelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    mBtpAnm.remove(modelData);
     if (mpItemModel != NULL) {
         g_env_light.setLightTevColorType(mpItemModel, &tevStr);
         mDoExt_modelEntryDL(mpItemModel);
