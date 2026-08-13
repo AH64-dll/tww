@@ -796,7 +796,6 @@ void daNpc_Uk_c::lookBack() {
 }
 
 /* 0000218C-00002254       .text getStaffName__10daNpc_Uk_cFv */
-    /* Nonmatching */
 char* daNpc_Uk_c::getStaffName() {
     if (mType == TYPE_MINIGAME) {
         switch (getShapeType()) {
