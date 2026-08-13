@@ -84,10 +84,10 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void bodyCreateHeap();
-    void headCreateHeap();
-    void itemCreateHeap();
-    void CreateHeap();
+    BOOL bodyCreateHeap();
+    BOOL headCreateHeap();
+    BOOL itemCreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
@@ -118,7 +118,11 @@ public:
     /* 0x8A1 */ u8 m8A1[0x8A4 - 0x8A1];
     /* 0x8A4 */ u8 m8A4;
     /* 0x8A5 */ u8 m8A5;
-    /* 0x8A6 */ u8 m8A6[0x8AB - 0x8A6];
+    /* 0x8A6 */ u8 m8A6;
+    /* 0x8A7 */ u8 m8A7;
+    /* 0x8A8 */ u8 m8A8;
+    /* 0x8A9 */ u8 m8A9;
+    /* 0x8AA */ u8 m8AA;
     /* 0x8AB */ u8 m8AB;
     /* 0x8AC */ u8 m8AC[0x8AD - 0x8AC];
     /* 0x8AD */ u8 m8AD;

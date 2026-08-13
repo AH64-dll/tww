@@ -48,8 +48,8 @@ void daNpc_Ym1_c::_nodeCB_BackBone(J3DNode*, J3DModel*) {
 }
 
 /* 00000520-00000540       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* ac) {
+    return ((daNpc_Ym1_c*)ac)->CreateHeap();
 }
 
 /* 00000540-000005C0       .text init_YM1_0__11daNpc_Ym1_cFv */
@@ -294,7 +294,9 @@ void daNpc_Ym1_c::privateCut(int) {
 
 /* 00002128-0000214C       .text endEvent__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::endEvent() {
-    /* Nonmatching */
+    g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+    m8A8 = 0xFF;
+    m8A9 = 0xFF;
 }
 
 /* 0000214C-00002184       .text isEventEntry__11daNpc_Ym1_cFv */
@@ -413,23 +415,37 @@ cPhs_State daNpc_Ym1_c::_create() {
 }
 
 /* 0000405C-00004360       .text bodyCreateHeap__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::bodyCreateHeap() {
+BOOL daNpc_Ym1_c::bodyCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00004360-00004460       .text headCreateHeap__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::headCreateHeap() {
+BOOL daNpc_Ym1_c::headCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00004460-00004534       .text itemCreateHeap__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::itemCreateHeap() {
+BOOL daNpc_Ym1_c::itemCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00004534-000045F8       .text CreateHeap__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::CreateHeap() {
+BOOL daNpc_Ym1_c::CreateHeap() {
     /* Nonmatching */
+    if (!bodyCreateHeap()) {
+        return FALSE;
+    }
+    if (!headCreateHeap()) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    if (!itemCreateHeap()) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    mAcchCir.SetWall(10.0f, 5.0f);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    return TRUE;
 }
 
 /* 000045F8-00004618       .text daNpc_Ym1_Create__FP10fopAc_ac_c */
