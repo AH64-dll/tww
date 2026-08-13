@@ -153,7 +153,7 @@ u8 daNpc_Aj1_c::_XyCheckCB(int i_itemBtn) {
         /* Nonmatching */
 u8 daNpc_Aj1_c::init_AJ1_0() {
     if (dComIfGs_isEventBit(0xE20) == 0 && dComIfGs_isEventBit(0x502) == 0) {
-        max_health = 0x1A;
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x1A;
         set_action(&daNpc_Aj1_c::wait_action1, NULL);
         return 1;
     }
