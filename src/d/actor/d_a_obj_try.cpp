@@ -309,11 +309,14 @@ u8 Act_c::M_restart;
 
 /* 00000078-00000090       .text prm_set_swSave__Q28daObjTry5Act_cFi */
 void Act_c::prm_set_swSave(int i_swSave) {
-    fopAcM_SetParam(this, (fopAcM_GetParam(this) & 0xFFFF00FF) | ((i_swSave << 8) & 0xFF00));
+    u32 p = fopAcM_GetParam(this);
+    p &= 0xFFFF00FF;
+    p |= (u8)i_swSave << 8;
+    fopAcM_SetParam(this, p);
 }
 
 /* 00000090-000000B4       .text solidHeapCB__Q28daObjTry5Act_cFP10fopAc_ac_c */
-s32 Act_c::solidHeapCB(fopAc_ac_c*) {
+u8 Act_c::solidHeapCB(fopAc_ac_c*) {
     return create_heap();
 }
 
