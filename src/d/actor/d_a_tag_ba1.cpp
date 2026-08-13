@@ -24,7 +24,6 @@ public:
 static daTag_Ba1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
-    /* Nonmatching */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
     static u8 a_prm_tbl[] = { 0 };
     memcpy(&mPrm, a_prm_tbl, 1);
