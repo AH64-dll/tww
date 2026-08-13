@@ -335,7 +335,7 @@ BOOL daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c* i_anmPrmP) {
                      anmNum_toResID(m8AF), -1, "Bj");
     if (m8AF == 7) {
         setPrtcl_danceLR();
-        m888 = 0;
+        mpPrtclPot2 = NULL;
         m894 = 0x1E;
     } else {
         delPrtcl_danceLR();
@@ -899,12 +899,32 @@ void daNpc_Bj1_c::bj_nMove() {
 
 /* 000030A4-000031F4       .text setPrtcl_drugPot_1__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_1() {
-    /* Nonmatching */
+    f32 transX, transZ;
+    s16 angleY;
+    if (dComIfGp_getMapTrans(current.roomNo, &transX, &transZ, &angleY)) {
+        mPrtclAngle.set(0, angleY, 0);
+        mPrtclPos.set(transX, 0.0f, transZ);
+        dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+        mpPrtcl1 = particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_IT_SN_O_KINDANKUSA_KEN,
+                                 &mPrtclPos, &mPrtclAngle, NULL, 0xFF, NULL, current.roomNo, NULL, NULL, NULL);
+        mpPrtcl2 = particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_IT_SN_O_KINDANKUSA_RUN,
+                                 &mPrtclPos, &mPrtclAngle, NULL, 0xFF, NULL, current.roomNo, NULL, NULL, NULL);
+        mpPrtcl3 = particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_IT_SN_O_KINDANKUSA_KEN,
+                                 &mPrtclPos, &mPrtclAngle, NULL, 0xFF, NULL, current.roomNo, NULL, NULL, NULL);
+    }
 }
 
 /* 000031F4-000032B4       .text setPrtcl_drugPot_2__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_2() {
-    /* Nonmatching */
+    f32 transX, transZ;
+    s16 angleY;
+    if (dComIfGp_getMapTrans(current.roomNo, &transX, &transZ, &angleY)) {
+        mPrtclAngle.set(0, angleY, 0);
+        mPrtclPos.set(transX, 0.0f, transZ);
+        mpPrtclPot2 = g_dComIfG_gameInfo.play.getParticle()->set(
+            dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_IT_SN_O_KINDANKUSA_RUN,
+            &mPrtclPos, &mPrtclAngle, NULL, 0xFF, NULL, current.roomNo, NULL, NULL, NULL);
+    }
 }
 
 /* 000032B4-00003330       .text delPrtcl_drugPot__11daNpc_Bj1_cFv */
@@ -943,7 +963,14 @@ void daNpc_Bj1_c::setPrtcl_danceLR() {
 
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::flwPrtcl_danceLR() {
-    /* Nonmatching */
+    if (mpPrtclDance1 != NULL) {
+        JPASetRMtxTVecfromMtx(mpMorf->getModel()->getAnmMtx(m_armL2_jnt_num), mpPrtclDance1->mGlobalRotation,
+                              mpPrtclDance1->mGlobalTranslation);
+    }
+    if (mpPrtclDance2 != NULL) {
+        JPASetRMtxTVecfromMtx(mpMorf->getModel()->getAnmMtx(m_armR2_jnt_num), mpPrtclDance2->mGlobalRotation,
+                              mpPrtclDance2->mGlobalTranslation);
+    }
 }
 
 /* 00003484-000034D8       .text delPrtcl_danceLR__11daNpc_Bj1_cFv */
@@ -964,7 +991,13 @@ void daNpc_Bj1_c::delPrtcl_danceLR() {
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_peraProOpen() {
-    /* Nonmatching */
+    PSMTXCopy(mpPrpMorf->getModel()->getAnmMtx(m_prp_jnt_num_1), mDoMtx_stack_c::now);
+    m86C = mDoMtx_stack_c::now[0][3];
+    m870 = mDoMtx_stack_c::now[1][3];
+    m874 = mDoMtx_stack_c::now[2][3];
+    mpPrtclPera = g_dComIfG_gameInfo.play.getParticle()->set(
+        dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_PERAPROOPEN00,
+        (cXyz*)&m86C, &current.angle, NULL, 0xFF, NULL, current.roomNo, NULL, NULL, NULL);
 }
 
 /* 00003594-00003774       .text createSeed__11daNpc_Bj1_cFv */
