@@ -316,7 +316,8 @@ bool daNpc_So_c::checkTgHit() {
             return false;
         }
 
-        if (hitObj->GetAtType() == 0x4000) {
+        switch (hitObj->GetAtType()) {
+        case 0x4000:
             fopAcM_seStart(this, 0x2879, 0x20);
             fopAcM_monsSeStart(this, 0x4991, 0);
             dComIfGp_particle_set(0x10, hitPos);
