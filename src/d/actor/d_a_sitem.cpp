@@ -63,15 +63,17 @@ void control3(sitem_class* i_this) {
 /* Nonmatching */
 void control1(sitem_class* i_this) {
     i_this->mSitem1[0].mPos = i_this->current.pos;
-    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
+    sitem_s* cur = &i_this->mSitem1[1];
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     cXyz sp3C(0.0f, 0.0f, i_this->m2FC);
     cXyz sp24;
     MtxPosition(&sp3C, &sp24);
     sp3C.z = i_this->m2F4;
     f32 f27 = i_this->mHandPos.x;
+    f32 f30 = 1.0f;
+    f32 f31 = 0.0f;
 
-    sitem_s* cur = &i_this->mSitem1[1];
     for (int i = 1; i < 9; i++) {
         cXyz sp30;
         sp30.x = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x44C) + i * (REG0_S(6) + 0xFA0));
@@ -79,9 +81,9 @@ void control1(sitem_class* i_this) {
         sp30.z = f27 * cM_scos(i_this->m2BC * (REG0_S(7) + 0x320) + i * (REG0_S(8) + 0xFA0));
         cXyz sp18;
         MtxPosition(&sp30, &sp18);
-        f32 f29 = sp18.x * 1.0f + ((cur->mPos.x - (cur - 1)->mPos.x) + sp24.x * 1.0f);
-        f32 f28 = sp18.y * 1.0f + ((cur->mPos.y - (cur - 1)->mPos.y) + sp24.y * 1.0f);
-        f32 f26 = sp18.z * 1.0f + ((cur->mPos.z - (cur - 1)->mPos.z) + sp24.z * 1.0f);
+        f32 f29 = sp18.x * f30 + ((cur->mPos.x - (cur - 1)->mPos.x) + sp24.x * f30);
+        f32 f28 = sp18.y * f30 + ((cur->mPos.y - (cur - 1)->mPos.y) + sp24.y * f30);
+        f32 f26 = sp18.z * f30 + ((cur->mPos.z - (cur - 1)->mPos.z) + sp24.z * f30);
         s16 yrot = cM_atan2s(f29, f26);
         f32 dist = std::sqrtf(f29 * f29 + f26 * f26);
         s16 xrot = (s16)-cM_atan2s(f28, dist);
@@ -90,8 +92,7 @@ void control1(sitem_class* i_this) {
         mDoMtx_XrotM(*calc_mtx, xrot);
         MtxPosition(&sp3C, &sp30);
         MtxPull();
-        cXyz spC = (cur - 1)->mPos + sp30;
-        cur->mPos = spC;
+        cur->mPos = (cur - 1)->mPos + sp30;
         cur++;
     }
 }
@@ -132,7 +133,7 @@ void control2(sitem_class* i_this) {
 /* Nonmatching */
 void cut_control1(sitem_class* i_this) {
     i_this->mSitem2[0].mPos = i_this->current.pos;
-    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.z);
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     cXyz sp50(0.0f, 0.0f, i_this->mHandPos.z);
     f32 f28 = 50.0f + REG0_F(18);
