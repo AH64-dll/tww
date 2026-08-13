@@ -683,10 +683,8 @@ void daObjFtree::Act_c::action_pikupikuM_main() {
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
-        f32 sin = jmaSinTable[(u16)m694 >> jmaSinShift];
-        m696 = (s16)(100.0f * sin);
-        sin = jmaSinTable[(u16)m694 >> jmaSinShift];
-        m698 = (s16)(300.0f * sin);
+        m696 = (s16)(100.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
+        m698 = (s16)(300.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
         m694 += 0xFA0;
     } else if (cnt >= max) {
         process_init(2, 0);
