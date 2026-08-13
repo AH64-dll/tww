@@ -71,6 +71,7 @@ static dCcD_SrcCps l_cps_src_huta = {
 };
 
 static cXyz daObjKanoke_Yoko_pfs;
+static cXyz daObjKanoke_Tate_pfs[3][2];
 
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */
@@ -239,7 +240,18 @@ BOOL daObjKanoke_c::_delete() {
 
 /* 00000C0C-00000CE0       .text _draw__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    g_env_light.setLightTevColorType(mpModel2, &tevStr);
+    dComIfGd_setListBG();
+    if (!(m88F & 1)) {
+        mDoExt_modelUpdateDL(mpModel);
+    }
+    if (!(m88F & 2)) {
+        mDoExt_modelUpdateDL(mpModel2);
+    }
+    dComIfGd_setList();
+    return TRUE;
 }
 
 typedef void (daObjKanoke_c::*MoveProc_t)();
@@ -386,7 +398,7 @@ void daObjKanoke_c::executeOpenYoko() {
             PSMTXMultVec(mtx, (Vec*)&pos, (Vec*)&sp30);
             m84C = sp30 + current.pos;
             if (mSmokeCb.getEmitter() == NULL) {
-                dComIfGp_particle_set(0xA181, &m84C, &m858, NULL, (u8)m878, &mSmokeCb, -1);
+                dComIfGp_particle_setToon(0xA181, &m84C, &m858, NULL, (u8)m878, &mSmokeCb, -1);
             }
             if (mSmokeCb.getEmitter() != NULL) {
                 mSmokeCb.getEmitter()->mFlags |= 0x40;
@@ -440,6 +452,47 @@ void daObjKanoke_c::executeYureTate() {
 /* 00001764-00001A6C       .text executeOpenTate__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenTate() {
     /* Nonmatching */
+    m87C += m882;
+    m882 += 0x64;
+    if (m87C >= 0x4000) {
+        dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        m87C = 0x4000;
+        m88B = 6;
+        m88F |= 2;
+        m84C.x = m2D8[0][3];
+        m84C.y = m2D8[1][3];
+        m84C.z = m2D8[2][3];
+        m858.x = 0;
+        m858.y = shape_angle.y;
+        m858.z = 0;
+        m824[0] = (s32)dComIfGp_particle_set(0x817F, &m84C, &m858, NULL, 0xFF, NULL, -1,
+                                             &tevStr.mColorK0, &tevStr.mColorK0, NULL);
+        m878 = 180.0f;
+        if (mSmokeCb.getEmitter() == NULL) {
+            dComIfGp_particle_setToon(0xA180, &m84C, &m858, NULL, (u8)m878, &mSmokeCb, -1);
+        }
+        if (mSmokeCb.getEmitter() != NULL) {
+            mSmokeCb.getEmitter()->mFlags |= 0x40;
+        }
+        m884 = 0x3C;
+    } else {
+        mDoMtx_stack_c::YrotS(shape_angle.y);
+        mDoMtx_stack_c::XrotM(shape_angle.x);
+        mDoMtx_stack_c::transM(0.0f, 110.0f, 200.0f);
+        mDoMtx_stack_c::XrotM(m87C);
+        mDoMtx_stack_c::transM(0.0f, -110.0f, -200.0f);
+        for (int i = 0; i < 3; i++) {
+            cXyz sp48 = daObjKanoke_Tate_pfs[i][0] + m860;
+            cXyz sp3C = daObjKanoke_Tate_pfs[i][1] + m860;
+            PSMTXMultVec(mDoMtx_stack_c::get(), &sp48, &sp48);
+            PSMTXMultVec(mDoMtx_stack_c::get(), &sp3C, &sp3C);
+            PSVECAdd(&sp48, &current.pos, &sp48);
+            PSVECAdd(&sp3C, &current.pos, &sp3C);
+            *mCps[i].GetStartP() = sp48;
+            *mCps[i].GetEndP() = sp3C;
+            dComIfG_Ccsp()->Set(&mCps[i]);
+        }
+    }
 }
 
 /* Nonmatching */
@@ -489,9 +542,9 @@ u8 daObjKanoke_c::getPrmSwNo2() {
     return daObj::PrmAbstract(this, 0x8, 0x10);
 }
 
-/* Nonmatching */
 /* 00001C04-00001C9C       .text setMtx__13daObjKanoke_cFv */
 void daObjKanoke_c::setMtx() {
+    /* Nonmatching */
     if (!(m88F & 1)) {
         setMtxHontai();
         PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
