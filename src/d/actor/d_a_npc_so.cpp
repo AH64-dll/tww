@@ -303,6 +303,7 @@ bool daNpc_So_c::jntHitCreateHeap() {
 
 /* 00000A84-00000C8C       .text checkTgHit__10daNpc_So_cFv */
 bool daNpc_So_c::checkTgHit() {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     mStts.Move();
 
@@ -391,6 +392,7 @@ u16 daNpc_So_c::next_msgStatus(u32*) {
 
 /* 00001214-000013A0       .text lookBack__10daNpc_So_cFv */
 void daNpc_So_c::lookBack() {
+    /* Nonmatching */
     if (dComIfGp_event_getMode() != 0) {
         if (mEventCut.getAttnFlag()) {
             if (field_0x6D3 == 4) {
