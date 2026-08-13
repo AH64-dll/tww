@@ -782,7 +782,7 @@ void daNpc_Pf1_c::createTama(f32 i_param_1) {
 }
 
 /* 00001958-00001A80       .text chk_areaIN__11daNpc_Pf1_cFf4cXyz */
-BOOL daNpc_Pf1_c::chk_areaIN(f32 i_param_1, cXyz i_param_2) {
+bool daNpc_Pf1_c::chk_areaIN(f32 i_param_1, cXyz i_param_2) {
     /* Nonmatching */
     cXyz diff = dComIfGp_getLinkPlayer()->current.pos - i_param_2;
     f32 mag = std::sqrtf(diff.abs2XZ());
@@ -808,7 +808,7 @@ BOOL daNpc_Pf1_c::startEvent_check() {
     cXyz pos = mHomePos;
     pos.y += 100.0f;
     if (chk_areaIN(l_HIO.mPrmTbl.m38, pos)) {
-        f32 dist = std::sqrtf((dComIfGp_getLinkPlayer()->current.pos - current.pos).abs2());
+        f32 dist = std::sqrtf(current.pos.abs2(dComIfGp_getLinkPlayer()->current.pos));
         if (dist < 210.0f || field_0x6ba != 0) {
             return TRUE;
         }

@@ -57,7 +57,7 @@ public:
     void set_action(int (daNpc_Pf1_c::*)(void*), void*);
     void setStt(signed char);
     void createTama(float);
-    BOOL chk_areaIN(float, cXyz);
+    bool chk_areaIN(float, cXyz);
     BOOL endEvent_check();
     BOOL startEvent_check();
     void set_pthPoint(unsigned char);
