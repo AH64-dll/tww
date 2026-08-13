@@ -1700,6 +1700,123 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
         }},
     };
     fopAcM_ct(i_actor, pw_class);
+    pw_class* i_this = (pw_class*)i_actor;
+
+    static const s8 fire_j[10] = {1, 2, 3, 5, 7, 8, 9, 11, 18, 22};
+    static const f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "PW");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        i_this->mBehaviorType = fopAcM_GetParam(i_actor);
+        i_this->mHoversAtInitialYPos = (fopAcM_GetParam(i_actor) >> 8) & 1;
+        i_this->mNoticeRangeParam = (fopAcM_GetParam(i_actor) >> 16) & 0xFF;
+        i_this->mColorIndex = (fopAcM_GetParam(i_actor) >> 9) & 0x7F;
+        i_this->mPathIndex = fopAcM_GetParam(i_actor) >> 24;
+        if (i_this->mBehaviorType == 0xFF) {
+            i_this->mBehaviorType = 0;
+        }
+        if (i_this->mNoticeRangeParam == 0xFF) {
+            i_this->mNoticeRange = 1000.0f;
+        } else {
+            i_this->mNoticeRange = 10.0f * i_this->mNoticeRangeParam;
+        }
+        if (i_this->mColorIndex == 0x7F) {
+            i_this->mColorIndex = 0;
+        }
+        if (!fopAcM_entrySolidHeap(i_actor, useHeapInit, 0x2540)) {
+            return cPhs_ERROR_e;
+        }
+        i_actor->gbaName = 0xD;
+        i_this->m3AC = 5000.0f + i_this->mNoticeRange;
+        if (REG8_S(9) != 0) {
+            i_this->mBehaviorType = REG8_S(9) - 1;
+        }
+        if (i_this->mPathIndex != 0xFF) {
+            i_this->mpPath = dPath_GetRoomPath(i_this->mPathIndex, i_this->current.roomNo);
+        }
+        if (i_this->mColorIndex > 5) {
+            i_this->mColorIndex = 0;
+        }
+        i_this->m2CC = i_actor->current.pos;
+        i_this->itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("PW", 0);
+        i_this->max_health = 4;
+        i_this->health = 4;
+        i_this->m398 = 4;
+        i_this->m2F0 = i_actor->current.pos;
+        i_this->m39E = 0x1000;
+        fopAcM_SetMtx(i_actor, i_this->mpMorf->getModel()->getBaseTRMtx());
+        fopAcM_setCullSizeBox(i_actor, -100.0f, -50.0f, -50.0f, 100.0f, 200.0f, 100.0f);
+        i_this->attention_info.flags = 4;
+        i_this->mAcch.Set(&i_actor->current.pos, &i_actor->old.pos, i_actor, 1, &i_this->mAcchCir, &i_actor->speed, NULL, NULL);
+        i_this->mStts.Init(0, 1, i_actor);
+        i_this->mEnemyIce.mpActor = i_actor;
+        i_this->mEnemyIce.mWallRadius = 50.0f;
+        i_this->mEnemyIce.mCylHeight = 200.0f;
+        i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
+        i_this->mEnemyFire.mpActor = i_actor;
+        for (int i = 0; i < 10; i++) {
+            i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+            i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
+        }
+        i_this->mCyl.Set(body_co_cyl_src);
+        i_this->mCyl.SetStts(&i_this->mStts);
+        i_this->mSph.Set(kantera_co_sph_src);
+        i_this->mSph.SetStts(&i_this->mStts);
+        i_this->mSph.OffAtSetBit();
+        i_this->mSph.OffAtSetBit();
+        i_this->m38C = i_actor->current.angle.y;
+        i_this->stealItemLeft = 1;
+        i_this->mAction = 0;
+        i_this->mMode = 0xA;
+        i_this->mJalhallaID = fpcM_ERROR_PROCESS_ID_e;
+        i_this->mKanteraID = fpcM_ERROR_PROCESS_ID_e;
+        i_this->mCyl.OffTgNoConHit();
+        i_this->m2D8 = i_actor->current.pos;
+        i_this->m346 = -1;
+        switch (i_this->mBehaviorType) {
+        case 0:
+            break;
+        case 1:
+            i_this->attention_info.flags = 0;
+            i_actor->actor_status &= ~0x20;
+            i_this->mMode = 0;
+            break;
+        case 2:
+            i_this->attention_info.flags = 0;
+            i_actor->actor_status &= ~0x20;
+            i_this->mMode = 9;
+            break;
+        case 3:
+        case 4:
+            i_this->mJalhallaID = i_actor->parentActorID;
+            if (i_this->mJalhallaID == fpcM_ERROR_PROCESS_ID_e) {
+                return cPhs_ERROR_e;
+            }
+            i_this->mCyl.OnTgNoConHit();
+            i_this->mCyl.SetTgType(0xFF3DFEFF);
+            i_this->m39A = 0xFF;
+            i_this->m38E = 0;
+            i_this->max_health = 4;
+            i_this->health = 4;
+            i_this->m346 = 0;
+            if (i_this->mBehaviorType == 3) {
+                i_this->m33E = 1;
+                i_this->mAction = 0;
+                i_this->mMode = 0x6E;
+            } else {
+                i_actor->actor_status |= 0x4000;
+                i_this->m390 = (s16)cM_rndFX(16384.0f);
+                i_actor->current.pos.x += cM_rndFX(150.0f);
+                i_actor->current.pos.z += cM_rndFX(150.0f);
+                i_this->mAction = 5;
+                i_this->mMode = 0x96;
+            }
+            break;
+        }
+        BG_check(i_this);
+        draw_SUB(i_this);
+    }
+    return phase_state;
 }
 
 static actor_method_class l_daPW_Method = {
