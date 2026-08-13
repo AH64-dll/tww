@@ -1015,9 +1015,12 @@ void daNpc_Aj1_c::set_pa_don() {
 /* 00002284-00002404       .text set_pa_smk__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_smk() {
-    static const GXColor l_color = { 0xC8, 0x80, 0xA0, 0xA0 };
+    GXColor col = { 0xC8, 0x80, 0xA0, 0xA0 };
     PSMTXCopy(mpMorf->getModel()->getAnmMtx(m_fot_L_jnt_num), mDoMtx_stack_c::get());
-    m79C.set(mDoMtx_stack_c::get()[0][3], mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+    MtxP mtx = mDoMtx_stack_c::get();
+    m79C.x = mtx[0][3];
+    m79C.y = mtx[1][3];
+    m79C.z = mtx[2][3];
     mSmokeEcallBack.end();
     mSmokeEmitter = dComIfGp_particle_set(0x2027, &m79C, &current.angle, NULL, 0xC8, &mSmokeEcallBack,
                                           current.roomNo, NULL, NULL, NULL);
@@ -1029,7 +1032,7 @@ void daNpc_Aj1_c::set_pa_smk() {
         mSmokeEmitter->setMaxFrame(1);
         mSmokeEmitter->setDirectionalSpeed(120.0f);
         mSmokeEmitter->setEmitterScale(JGeometry::TVec3<f32>(1.0f, 0.1f, 1.0f));
-        mSmokeEcallBack.setColor(l_color);
+        mSmokeEcallBack.setColor(col);
     }
 }
 
