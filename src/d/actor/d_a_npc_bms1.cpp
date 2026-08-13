@@ -952,7 +952,24 @@ BOOL daNpc_Bms1_c::wait_action(void*) {
 
 /* 00002918-00002A98       .text event_action__12daNpc_Bms1_cFPv */
 BOOL daNpc_Bms1_c::event_action(void*) {
-    /* Nonmatching */
+    if (mActionStatus == 0) {
+        if (mShopIdx != 1) {
+            if (dComIfGs_isEventBit(0xA02)) {
+                setAnm(1, -1.0f);
+            } else {
+                setAnm(0, -1.0f);
+            }
+        }
+        mActionStatus += 1;
+    } else if (mActionStatus != -1) {
+        privateCut();
+        if (dComIfGp_evmng_endCheck("BMS_LAND_DEMO")) {
+            m89B = 0;
+            dComIfGp_event_onEventFlag(8);
+            setAction(&daNpc_Bms1_c::wait_action, NULL);
+        }
+    }
+    return TRUE;
 }
 
 /* 00002A98-00002B94       .text evn_talk_init__12daNpc_Bms1_cFi */
