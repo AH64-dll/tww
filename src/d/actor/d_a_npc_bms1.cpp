@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_vibration.h"
 #include "d/d_a_obj.h"
+#include "d/d_item.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -42,6 +43,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 static daNpc_Bms1_HIO_c l_HIO;
+char daNpc_Bms1_c::m_arcname[] = "Bms1";
 
 /* 000000EC-00000108       .text __ct__21daNpc_Bms1_childHIO_cFv */
 daNpc_Bms1_childHIO_c::daNpc_Bms1_childHIO_c() {
@@ -515,7 +517,125 @@ cPhs_State daNpc_Bms1_c::_create() {
 
 /* 00003CE8-000043B8       .text CreateHeap__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData;
+    J3DAnmTransform* anmTransform;
+    if (mShopIdx == 0) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1D);
+        if (!checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
+            anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, 0x13);
+        } else {
+            anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, 0x14);
+        }
+    } else {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1A);
+        anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, 0x12);
+        m89A = 3;
+    }
+
+    mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL, NULL,
+        anmTransform,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+        NULL,
+        0x00000000,
+        0x110203
+    );
+
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+
+    m_head_jnt_num = modelData->getJointName()->getIndex("head");
+    JUT_ASSERT(0x823, m_head_jnt_num >= 0);
+
+    m_backbone_jnt_num = modelData->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x826, m_backbone_jnt_num >= 0);
+
+    if (mShopIdx == 0) {
+        m_leg_jnt_num = modelData->getJointName()->getIndex("center");
+        JUT_ASSERT(0x82B, m_leg_jnt_num >= 0);
+    }
+
+    J3DModelData* headModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x23);
+    mpModel = mDoExt_J3DModel__create(headModelData, 0x80000, 0x110202);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    m_hairL_jnt_num = headModelData->getJointName()->getIndex("hairL");
+    JUT_ASSERT(0x83E, m_hairL_jnt_num >= 0);
+
+    m_hairR_jnt_num = headModelData->getJointName()->getIndex("hairR");
+    JUT_ASSERT(0x841, m_hairR_jnt_num >= 0);
+
+    mBtpIdx = 1;
+    if (!initTexPatternAnm(FALSE)) {
+        return FALSE;
+    }
+
+    switch (mShopIdx) {
+    case 0:
+        if (dComIfGs_isEventBit(0xA02)) {
+            setTexAnm(1);
+        } else {
+            setTexAnm(0);
+        }
+        break;
+    case 1:
+        setTexAnm(1);
+        break;
+    }
+
+    mpModel2 = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1B), 0, 0x110203);
+    if (mpModel2 == NULL) {
+        return FALSE;
+    }
+
+    mpModel3 = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1C), 0, 0x110203);
+
+    if (mShopIdx == 0) {
+        J3DModelData* resData;
+        if (dComIfGs_isEventBit(0xA02)) {
+            resData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1F);
+        } else {
+            resData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x1E);
+        }
+        mpModel4 = mDoExt_J3DModel__create(resData, 0, 0x110203);
+        if (mpModel4 == NULL) {
+            return FALSE;
+        }
+        mpModel5 = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x20), 0, 0x110203);
+        if (mpModel5 == NULL) {
+            return FALSE;
+        }
+    } else {
+        mpModel4 = NULL;
+    }
+
+    for (u16 i = 0; i < modelData->getJointNum(); i++) {
+        if (i == m_head_jnt_num || i == m_backbone_jnt_num) {
+            mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Bms);
+        }
+    }
+    mpMorf->getModel()->setUserArea((u32)this);
+
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (i == m_hairL_jnt_num || i == m_hairR_jnt_num) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_BmsHead);
+        }
+    }
+    mpModel->setUserArea((u32)this);
+
+    mAcchCir.SetWall(30.0f, 0.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+
+    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, 0x0B);
+    J3DModelData* cursorModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x08);
+    mpShopCursor = ShopCursor_create(cursorModelData, tevRegKey, l_HIO.mChild[0].m2C);
+
+    return mpShopCursor != NULL ? TRUE : FALSE;
 }
 
 /* 000043B8-000043D8       .text daNpc_Bms1_Create__FP10fopAc_ac_c */
