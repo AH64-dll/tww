@@ -970,10 +970,10 @@ BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode* i_node, int i_param) {
     /* Nonmatching */
     if (m2A4 == 1 && i_param == 0) {
         J3DJoint* joint = (J3DJoint*)i_node;
-        J3DModel* model = j3dSys.getModel();
         Mtx mtx;
         cXyz pos(0.0f, 0.0f, 0.0f);
         cXyz out;
+        J3DModel* model = j3dSys.getModel();
         mDoMtx_stack_c::copy(model->getAnmMtx(joint->getJntNo()));
         PSMTXCopy(mDoMtx_stack_c::now, mtx);
         PSMTXMultVec(mtx, &pos, &out);
@@ -992,9 +992,9 @@ BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode* i_node, int i_param) {
 /* 00002D94-00002DDC       .text Ftree_NodeCallBack_Effect__10daObjFtreeFP7J3DNodei */
 BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
     /* Nonmatching */
-    if (i_param == 0) {
+    if (!i_param) {
         J3DModel* model = j3dSys.getModel();
-        return ((daObjFtree::Act_c*)model->getUserArea())->NodeCallBack_Effect(i_node, 0);
+        return ((daObjFtree::Act_c*)model->getUserArea())->NodeCallBack_Effect(i_node, i_param);
     }
     return TRUE;
 }
