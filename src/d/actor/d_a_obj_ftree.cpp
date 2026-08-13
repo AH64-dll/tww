@@ -967,7 +967,6 @@ BOOL daObjFtree::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00002C14-00002D94       .text NodeCallBack_Effect__Q210daObjFtree5Act_cFP7J3DNodei */
 BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode* i_node, int i_param) {
-    /* Nonmatching */
     if (m2A4 == 1 && i_param == 0) {
         J3DJoint* joint = (J3DJoint*)i_node;
         Mtx mtx;
@@ -991,7 +990,6 @@ BOOL daObjFtree::Act_c::NodeCallBack_Effect(J3DNode* i_node, int i_param) {
 
 /* 00002D94-00002DDC       .text Ftree_NodeCallBack_Effect__10daObjFtreeFP7J3DNodei */
 BOOL daObjFtree::Ftree_NodeCallBack_Effect(J3DNode* i_node, int i_param) {
-    /* Nonmatching */
     if (!i_param) {
         J3DModel* model = j3dSys.getModel();
         return ((daObjFtree::Act_c*)model->getUserArea())->NodeCallBack_Effect(i_node, i_param);
