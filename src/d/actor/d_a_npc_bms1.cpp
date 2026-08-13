@@ -544,13 +544,57 @@ BOOL daNpc_Bms1_c::_delete() {
 }
 
 /* 00003514-00003534       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpc_Bms1_c*)i_this)->CreateHeap();
 }
 
 /* 00003534-00003718       .text _create__12daNpc_Bms1_cFv */
 cPhs_State daNpc_Bms1_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct_Retail(this, daNpc_Bms1_c);
+
+    mShopIdx = fopAcM_GetParam(this) >> 24;
+    if (mShopIdx == 0) {
+        if (dComIfGs_isEventBit(0xA02) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
+            m8A5 = 1;
+            return cPhs_ERROR_e;
+        }
+        m8A5 = 0;
+    } else {
+        if (dComIfGs_isEventBit(0xA02) && !checkItemGet(dItemNo_PEARL_NAYRU_e, TRUE)) {
+            m8A5 = 0;
+        } else {
+            m8A5 = 1;
+            return cPhs_ERROR_e;
+        }
+    }
+
+    cPhs_State phase = (cPhs_State)dComIfG_resLoad(&mPhs, m_arcname);
+    if (phase == cPhs_COMPLEATE_e) {
+        switch (mShopIdx) {
+        case 0:
+            mShopIdx = 0;
+            break;
+        default:
+            mShopIdx = 1;
+            break;
+        }
+
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x28000)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+
+        if (l_HIO.m8 < 0) {
+            l_HIO.mNo = mDoHIO_createChild("Bms", &l_HIO);
+        }
+        l_HIO.m8 += 1;
+
+        if (!CreateInit()) {
+            return cPhs_ERROR_e;
+        }
+    }
+    return phase;
 }
 
 /* 00003CE8-000043B8       .text CreateHeap__12daNpc_Bms1_cFv */
