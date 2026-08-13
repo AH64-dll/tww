@@ -966,7 +966,7 @@ void daNpc_Aj1_c::endEvent() {
 /* 00001E10-00001E2C       .text isEventEntry__11daNpc_Aj1_cFv */
         /* Nonmatching */
 s32 daNpc_Aj1_c::isEventEntry() {
-    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), this, 0);
+    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
 }
 
 /* 00001E2C-00001EB4       .text event_proc__11daNpc_Aj1_cFi */
