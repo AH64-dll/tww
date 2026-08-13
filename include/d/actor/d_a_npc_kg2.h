@@ -61,17 +61,16 @@ public:
         canon_game_result = 0;
     }
 
-    static const char M_arcname[];
     static s8 canon_game_result;
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
-    /* 0x6C4 */ s8 m6C4;
+    /* 0x6C4 */ s8 m_handL_num;
     /* 0x6C8 */ request_of_phase_process_class mPhs;
     /* 0x6D0 */ u32 m6D0;
     /* 0x6D4 */ J3DModel* m6D4;
     /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6EC */ J3DAnmTexPattern* m_eye_tex_pattern;
+    /* 0x6EC */ J3DAnmTexPattern* m_btp;
     /* 0x6F0 */ mDoExt_btpAnm m6F0;
     /* 0x704 */ u8 m704;
     /* 0x705 */ u8 field_0x705[0x706 - 0x705];
@@ -99,11 +98,11 @@ public:
     /* 0x749 */ s8 m749;
     /* 0x74A */ u8 field_0x74a[0x74c - 0x74a];
     /* 0x74C */ u32 m74C;
-    /* 0x750 */ u8 m750;
+    /* 0x750 */ s8 m750;
     /* 0x751 */ u8 field_0x751[0x754 - 0x751];
     /* 0x754 */ u32 m754;
     /* 0x758 */ s16 m758[4];
-    /* 0x760 */ u8 m760;
+    /* 0x760 */ s8 m760;
     /* 0x761 */ u8 field_0x761[0x763 - 0x761];
     /* 0x763 */ s8 m763;
 }; // Size: 0x764
