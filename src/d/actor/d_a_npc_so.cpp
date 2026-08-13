@@ -954,6 +954,10 @@ void daNpc_So_c::debugDraw() {
 /* 000038E0-00003954       .text hudeDraw__10daNpc_So_cFv */
 void daNpc_So_c::hudeDraw() {
     /* Nonmatching */
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(11));
+    mDoMtx_copy(mDoMtx_stack_c::now, mpModel->getBaseTRMtx());
+    mDoExt_modelUpdateDL(mpModel);
 }
 
 /* 00003954-00003B00       .text _draw__10daNpc_So_cFv */
