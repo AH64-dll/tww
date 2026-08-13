@@ -255,7 +255,7 @@ BOOL daObjMagmarock::Act_c::CreateHeap() {
     s32 bckInit = mBckAnm.init(modelData, M_bck, 0, 2, 1.0f, 0, -1, false);
 
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
@@ -380,10 +380,11 @@ bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz& i_pos) {
         mLiftPos.y = home.pos.y + 25.0f;
     }
 
-    if (mProcFunc == &Act_c::wait_proc) {
+    void (Act_c::*waitProc)() = &Act_c::wait_proc;
+    int isWait = mProcFunc == waitProc;
+    if (isWait) {
         return FALSE;
     }
-
     cLib_addCalcPos2(&current.pos, mLiftPos, 0.05f, 5.0f);
     cLib_addCalc2(&mQuakeAngle, 500.0f, 0.25f, 20.0f);
     cLib_addCalcAngleS2(&mAngleAdd, 0xA00, 8, 0x100);
