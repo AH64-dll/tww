@@ -290,8 +290,8 @@ static u32 l_msg_bmcon1_goal[] = {
     0x0000,
 };
 
-static u32 l_msg_bmcon2_talk[] = {
-    0x2AFA,
+static u32 l_msg_bmcon2_2st_talk[] = {
+    0x2AF9,
     0x0000,
 };
 
@@ -307,8 +307,8 @@ static u32 l_msg_bmcon2_appear[] = {
     0x0000,
 };
 
-static u32 l_msg_bmcon2_2st_talk[] = {
-    0x2AF9,
+static u32 l_msg_bmcon2_talk[] = {
+    0x2AFA,
     0x0000,
 };
 
@@ -1182,16 +1182,15 @@ u16 daNpcBmcon_c::talk2(int i_param) {
 
 /* 00002C8C-00002E58       .text next_msgStatus__12daNpcBmcon_cFPUl */
 u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
     u16 status = fopMsgStts_MSG_CONTINUES_e;
-    if (*pMsgNo == 0x2AB4) {
+    switch (*pMsgNo) {
+    case 0x2AB4:
         *pMsgNo = 0x2AFF;
-        return status;
-    }
-
-    if (mpMsgTbl) {
-        mpMsgTbl++;
-        switch(*mpMsgTbl) {
+        break;
+    default:
+        if (mpMsgTbl) {
+            mpMsgTbl++;
+            switch (*mpMsgTbl) {
             case 0:
                 mpMsgTbl = NULL;
                 status = fopMsgStts_MSG_ENDS_e;
@@ -1199,20 +1198,20 @@ u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
             case 1:
                 if (mpCurrMsg->mSelectNum == 0) {
                     if (dComIfGs_getRupee() < dComIfGp_getMessageRupee()) {
-                        mpMsgTbl = l_msg_bmcon1_not_appear;
+                        mpMsgTbl = l_msg_bmcon1_not_rupee;
                     } else {
                         mpMsgTbl = l_msg_bmcon1_appear;
                         dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
                     }
                 } else {
-                    mpMsgTbl = l_msg_bmcon1_not_appear2;
+                    mpMsgTbl = l_msg_bmcon1_not_appear;
                 }
                 *pMsgNo = *mpMsgTbl;
                 break;
             case 2:
                 if (mpCurrMsg->mSelectNum == 0) {
                     if (dComIfGs_getRupee() < dComIfGp_getMessageRupee()) {
-                        mpMsgTbl = l_msg_bmcon1_not_appear;
+                        mpMsgTbl = l_msg_bmcon1_not_rupee;
                     } else {
                         mpMsgTbl = l_msg_bmcon1_appear2;
                         dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
@@ -1239,10 +1238,12 @@ u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
             default:
                 *pMsgNo = *mpMsgTbl;
                 break;
+            }
         }
-    }
-    else {
-        status = fopMsgStts_MSG_ENDS_e;
+        else {
+            status = fopMsgStts_MSG_ENDS_e;
+        }
+        break;
     }
 
     return status;
@@ -1276,7 +1277,7 @@ u32 daNpcBmcon_c::getMsg() {
             break;
         case 1:
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
-                mpMsgTbl = l_msg_bmcon2_talk;
+                mpMsgTbl = l_msg_bmcon2_2st_talk;
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A40);
             }
             else if (isClear()) {
@@ -1287,7 +1288,7 @@ u32 daNpcBmcon_c::getMsg() {
                 mpMsgTbl = l_msg_bmcon2_appear;
             }
             else {
-                mpMsgTbl = l_msg_bmcon2_2st_talk;
+                mpMsgTbl = l_msg_bmcon2_talk;
             }
             break;
         }
