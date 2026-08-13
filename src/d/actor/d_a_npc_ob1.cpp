@@ -280,10 +280,9 @@ BOOL daNpc_Ob1_c::setAnm_anm(anm_prm_c* i_anm) {
     mAnmNum = i_anm->mAnmNum;
     int anmResID = anmNum_toResID(mAnmNum);
     dNpc_setAnmIDRes(mpMorf, i_anm->mLoopMode, i_anm->mMorf, i_anm->mSpeed, anmResID, -1, "Ob");
-    int zero = 0;
-    mbMorfAnimStopped = zero;
-    m7E5 = zero;
-    mPrevMorfFrame = zero;
+    mbMorfAnimStopped = 0;
+    m7E5 = 0;
+    mPrevMorfFrame = m7E5;
     return TRUE;
 }
 
@@ -998,8 +997,7 @@ void daNpc_Ob1_c::endEvent() {
 
 /* 000020EC-00002124       .text isEventEntry__11daNpc_Ob1_cFv */
 int daNpc_Ob1_c::isEventEntry() {
-/* Nonmatching */
-    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), this, 0);
+    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
 }
 
 /* 00002124-000021B8       .text event_proc__11daNpc_Ob1_cFi */
@@ -1401,7 +1399,6 @@ BOOL daNpc_Ob1_c::demo() {
 
 /* 00002E68-00002F18       .text shadowDraw__11daNpc_Ob1_cFv */
 void daNpc_Ob1_c::shadowDraw() {
-/* Nonmatching */
     cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     mShadowID = dComIfGd_setShadow(mShadowID, 1, mpMorf->getModel(), &temp, 800.0f, 40.0f,
                                    current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0,
