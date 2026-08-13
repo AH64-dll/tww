@@ -851,7 +851,7 @@ BOOL daObjFlame::Method::Delete(void* i_this) {
 BOOL daObjFlame::Method::Execute(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
     a_this->scale.x = a_this->mOrigScale.x * flameAttr(a_this)->mF08;
-    a_this->scale.y = a_this->mScaleY * a_this->mOrigScale.y * flameAttr(a_this)->mF0C;
+    a_this->scale.y = a_this->mScaleY * (a_this->mOrigScale.y * flameAttr(a_this)->mF0C);
     a_this->scale.z = a_this->mOrigScale.z * flameAttr(a_this)->mF08;
     a_this->mode_proc_call();
     a_this->ki_make();
@@ -869,7 +869,9 @@ BOOL daObjFlame::Method::Execute(void* i_this) {
     }
 
     a_this->mbLiftup = 0;
-    if (a_this->mModeProc >= 1 && a_this->mModeProc <= 4) {
+    if (a_this->mModeProc == 1 || a_this->mModeProc == 2 || a_this->mModeProc == 3 ||
+        a_this->mModeProc == 4)
+    {
         fopAcIt_Judge(&Act_c::liftup_magmarock, a_this);
         if (a_this->mType == 1) {
             fopAcIt_Judge(&Act_c::liftup_mflft, a_this);
