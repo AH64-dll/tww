@@ -580,6 +580,47 @@ void daNpc_So_c::modeSwimInit() {
 /* 00001A6C-00001DB8       .text modeSwim__10daNpc_So_cFv */
 void daNpc_So_c::modeSwim() {
     /* Nonmatching */
+    field_0xBDB = 0;
+
+    const cXyz& diff = dComIfGp_getPlayer(0)->current.pos - field_0xA80;
+    cXyz flat;
+    flat.x = diff.x;
+    flat.y = 0.0f;
+    flat.z = diff.z;
+    f32 dist = std::sqrtf(PSVECSquareMag(&flat));
+
+    daShip_c* ship = dComIfGp_getShipActor();
+    if (ship != NULL) {
+        cLib_addCalc2(&mCirclePath.mRadius, 1.0f, 0.1f, 10.0f);
+        mCirclePath.mWobbleAmplitude = 1.2f;
+        mCirclePath.mAngleSpeed = 0x150;
+        mCirclePath.mTranslation = field_0xA80;
+        mCirclePath.mTranslation.y = dLib_getWaterY(mCirclePath.mTranslation, mObjAcch);
+        dLib_setCirclePath(&mCirclePath);
+        mCirclePath.mPos.y = dLib_getWaterY(mCirclePath.mPos, mObjAcch);
+        mCirclePath.mPos.y += field_0xB34;
+
+        cXyz diff2 = current.pos - mCirclePath.mPos;
+        cXyz flat2(diff2.x, 0.0f, diff2.z);
+        f32 dist2 = std::sqrtf(PSVECSquareMag(&flat2));
+
+        if (dist2 > 20.0f || ship->speedF > 10.0f) {
+            field_0xAFC = 1.0f;
+            cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mCirclePath.mPos), 8, 0x400);
+            field_0xB04 = 0.0f;
+        } else {
+            cLib_addCalc2(&field_0xB04, 1.0f, 1.0f, 3.0f);
+            cXyz move = (mCirclePath.mPos - current.pos) * field_0xB04;
+            current.pos += move;
+            cLib_addCalcAngleS2(&shape_angle.y, mCirclePath.mAngle + 0x8000, 4, 0x400);
+        }
+
+        if (dist < field_0xA7C && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+            modeProc(PROC_INIT_e, 4);
+        } else if (cLib_calcTimer(&field_0xA90) == 0) {
+            modeProc(PROC_INIT_e, 2);
+        }
+    }
 }
 
 /* 00001DB8-00001DFC       .text modeNearSwimInit__10daNpc_So_cFv */

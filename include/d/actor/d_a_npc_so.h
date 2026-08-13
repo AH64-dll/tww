@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
 #include "d/d_jnt_hit.h"
+#include "d/d_lib.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
@@ -174,10 +175,11 @@ public:
     /* 0xAE8 */ dPa_rippleEcallBack mRipple;
     /* 0xAFC */ f32 field_0xAFC;
     /* 0xB00 */ f32 field_0xB00;
-    /* 0xB04 */ u8 field_0xB04[0xB08 - 0xB04];
+    /* 0xB04 */ f32 field_0xB04;
     /* 0xB08 */ f32 field_0xB08;
     /* 0xB0C */ u8 field_0xB0C;
-    /* 0xB0D */ u8 field_0xB0D[0xB34 - 0xB0D];
+    /* 0xB0D */ u8 field_0xB0D[0xB10 - 0xB0D];
+    /* 0xB10 */ dLib_circle_path_c mCirclePath;
     /* 0xB34 */ f32 field_0xB34;
     /* 0xB38 */ cXyz field_0xB38;
     /* 0xB44 */ cXyz field_0xB44;
