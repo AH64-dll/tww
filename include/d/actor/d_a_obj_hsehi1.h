@@ -77,9 +77,15 @@ public:
 class daObj_hsh_HIO_c {
 public:
     daObj_hsh_HIO_c();
+    virtual ~daObj_hsh_HIO_c() {}
 
 public:
-    /* Place member variables here */
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ s16 m14;
+    /* 0x16 */ u8 m16;
 };
 
 #endif /* D_A_OBJ_HSEHI1_H */

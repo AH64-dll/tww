@@ -8,8 +8,23 @@
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
-    /* Nonmatching */
+    static const struct init_data_t {
+        f32 m0;
+        f32 m4;
+        f32 m8;
+        s16 mC;
+        u8 mE;
+    } init_data = {250.0f, 0.0f, 0.0f, 0x4000, 0};
+
+    mNo = -1;
+    m08 = init_data.m0;
+    m0C = init_data.m4;
+    m10 = init_data.m8;
+    m14 = init_data.mC;
+    m16 = init_data.mE;
 }
+
+static daObj_hsh_HIO_c l_HIO;
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
@@ -63,8 +78,21 @@ void daObj_hsh_c::emitterDelete(JPABaseEmitter** pEmitter) {
 }
 
 /* 000004C4-00000568       .text setAttention__11daObj_hsh_cFb */
-void daObj_hsh_c::setAttention(bool) {
-    /* Nonmatching */
+void daObj_hsh_c::setAttention(bool i_param) {
+    if(!i_param) {
+        return;
+    }
+    f32 eye_y;
+    f32 attn_y;
+    if(argument == 0) {
+        eye_y = current.pos.y + 90.0f + l_HIO.m10;
+        attn_y = current.pos.y + 180.0f + l_HIO.m0C;
+    } else {
+        eye_y = current.pos.y + 80.0f + l_HIO.m10;
+        attn_y = current.pos.y + 120.0f + l_HIO.m0C;
+    }
+    eyePos.set(current.pos.x, eye_y, current.pos.z);
+    attention_info.position.set(current.pos.x, attn_y, current.pos.z);
 }
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
