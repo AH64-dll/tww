@@ -541,9 +541,9 @@ void daGy_c::modeDive() {
             modeCircleInit();
             return;
         }
-        fopAc_ac_c* cb1_player = dComIfGp_getCb1Player();
-        const cXyz& sp3C = current.pos - m2BC;
+        fopAc_ac_c* cb1_player = dComIfGp_getShipActor();
         Vec spC;
+        const cXyz& sp3C = current.pos - m2BC;
         spC.x = sp3C.x;
         spC.y = 0.0f;
         spC.z = sp3C.z;
@@ -579,6 +579,53 @@ void daGy_c::modeCircleInit() {
 /* 0000141C-000016E4       .text modeCircle__6daGy_cFv */
 void daGy_c::modeCircle() {
     /* Nonmatching */
+    if (mD15 != 5) {
+        mD15 = 1;
+        m4E8 = l_HIO.mAC;
+        m4EC = l_HIO.mC4;
+        daGy_Ctrl_c* ctrl = mpCtrl;
+        if (ctrl->m312[m2AC] == 0) {
+            modeDiveInit();
+            return;
+        }
+        fopAc_ac_c* cb1_player = dComIfGp_getShipActor();
+        Vec spC;
+        const cXyz& sp3C = current.pos - m2BC;
+        spC.x = sp3C.x;
+        spC.y = 0.0f;
+        spC.z = sp3C.z;
+        f32 dist = std::sqrtf(PSVECSquareMag(&spC));
+        if (cb1_player != NULL) {
+            if (dist > l_HIO.m144 || cb1_player->speedF > l_HIO.m6C) {
+                setAimSpeedF();
+                if (fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0)) < l_HIO.m148) {
+                    modeDiveInit();
+                    return;
+                }
+                if (cb1_player->speedF > l_HIO.m70) {
+                    modeWithCircleInit();
+                    return;
+                }
+                cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &m2BC), 8, 0x400);
+                m508 = 0.0f;
+            } else {
+                m4F0 = 0.0f;
+                cXyz sp48 = m2BC - current.pos;
+                cLib_addCalc2(&m508, 1.0f, 0.01f, 0.05f);
+                current.pos = current.pos + sp48 * m508;
+                cLib_addCalcAngleS2(&current.angle.y, (s16)(ctrl->m308[m2AC] + 0x8000), 4, 0x400);
+                if (cLib_calcTimer(&m914) == 0) {
+                    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK1000000_e) == 0) {
+                        if (ctrl->m320 == 0) {
+                            modeAttackPlayerInit();
+                        } else if (ctrl->m320 == 1) {
+                            modeAttackInit();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* 000016E4-00001788       .text modeWithCircleInit__6daGy_cFv */
