@@ -39,6 +39,7 @@ void daObjMagmarock::Act_c::set_mtx() {
 
 /* 00000128-00000258       .text demo_move__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::demo_move() {
+    /* Nonmatching */
     if (dComIfGs_isEventBit(0x380)) {
         return;
     }
