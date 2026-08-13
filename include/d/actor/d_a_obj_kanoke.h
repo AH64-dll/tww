@@ -49,7 +49,10 @@ public:
     void setMtxHuta(cXyz*);
 
 public:
-    /* 0x290 */ u8 m290[0x2A8 - 0x290];
+    /* 0x290 */ u8 m290[0x298 - 0x290];
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ J3DModel* mpModel2;
+    /* 0x2A0 */ u8 m2A0[0x2A8 - 0x2A0];
     /* 0x2A8 */ Mtx mMtx;
     /* 0x2D8 */ Mtx m2D8;
     /* 0x308 */ dCcD_Stts mStts;

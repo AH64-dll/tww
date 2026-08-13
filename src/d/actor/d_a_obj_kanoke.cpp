@@ -209,17 +209,42 @@ u8 daObjKanoke_c::getPrmSwNo2() {
 
 /* 00001C04-00001C9C       .text setMtx__13daObjKanoke_cFv */
 void daObjKanoke_c::setMtx() {
-    /* Nonmatching */
+    if (!(m88F & 1)) {
+        setMtxHontai();
+        PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+        PSMTXCopy(mDoMtx_stack_c::get(), mMtx);
+    }
+    if (!(m88F & 2)) {
+        setMtxHuta(&current.pos);
+        PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
+        PSMTXCopy(mDoMtx_stack_c::get(), m2D8);
+    }
 }
 
 /* 00001C9C-00001D38       .text setMtxHontai__13daObjKanoke_cFv */
 void daObjKanoke_c::setMtxHontai() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::XrotM(shape_angle.x);
+    mDoMtx_stack_c::transM(m86C, m870, m874);
+    mDoMtx_stack_c::YrotM(m87E);
+    mDoMtx_stack_c::transM(-m86C, -m870, -m874);
 }
 
 /* 00001D38-00001E4C       .text setMtxHuta__13daObjKanoke_cFP4cXyz */
-void daObjKanoke_c::setMtxHuta(cXyz*) {
-    /* Nonmatching */
+void daObjKanoke_c::setMtxHuta(cXyz* param_0) {
+    mDoMtx_stack_c::YrotS(shape_angle.y);
+    mDoMtx_stack_c::XrotM(shape_angle.x);
+    cXyz sp08;
+    PSMTXMultVec(mDoMtx_stack_c::get(), (Vec*)&m860, (Vec*)&sp08);
+    mDoMtx_stack_c::transS(param_0->x + sp08.x, param_0->y + sp08.y, param_0->z + sp08.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::XrotM(shape_angle.x);
+    mDoMtx_stack_c::transM(m86C, m870, m874);
+    mDoMtx_stack_c::XrotM(m87C);
+    mDoMtx_stack_c::YrotM(m87E);
+    mDoMtx_stack_c::ZrotM(m880);
+    mDoMtx_stack_c::transM(-m86C, -m870, -m874);
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
