@@ -1020,7 +1020,6 @@ void daNpcMn_c::eventWaitInit(int staffIdx) {
 }
 
 /* 00002358-000023E8       .text eventWait__9daNpcMn_cFi */
-    /* Nonmatching */
 s32 daNpcMn_c::eventWait(int staffIdx) {
     if (mEvTimer != 0) {
         mEvTimer--;
@@ -1028,7 +1027,7 @@ s32 daNpcMn_c::eventWait(int staffIdx) {
     }
     if (dComIfGp_evmng_getMyIntegerP(staffIdx, "SwOn") != NULL) {
         int swBit = getPrmSwitchBit2();
-        dComIfGs_onSwitch(swBit, (s8)home.roomNo);
+        dComIfGs_onSwitch(swBit, home.roomNo);
     }
     return 1;
 }
@@ -1043,14 +1042,13 @@ void daNpcMn_c::eventSwOnInit(int staffIdx) {
 }
 
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventSwOn() {
     if (mEvTimer != 0) {
         mEvTimer--;
         return 0;
     }
     int swBit = getPrmSwitchBit2();
-    dComIfGs_onSwitch(swBit, (s8)home.roomNo);
+    dComIfGs_onSwitch(swBit, home.roomNo);
     return 1;
 }
 
