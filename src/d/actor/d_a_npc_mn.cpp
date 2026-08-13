@@ -1580,12 +1580,11 @@ void daNpcMn_c::playTexPatternAnm() {
 }
 
 /* 0000373C-000037F8       .text playAnm__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::playAnm() {
     if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && mAnmCnt > 0) {
         mAnmCnt--;
         if (mAnmCnt == 0) {
-            mpAnmDat = (sMnAnmDat*)&mpAnmDat->mBtpNum + 1;
+            mpAnmDat = mpAnmDat + 1;
             if (setAnmTbl(mpAnmDat)) {
                 m7B9 |= 1;
             }
@@ -1599,7 +1598,7 @@ void daNpcMn_c::playAnm() {
     /* Nonmatching */
 void daNpcMn_c::setAnm(u8 anmNum, int loopMode, f32 morf) {
     f32 morfLocal = morf;
-    if (m780 <= 0.0f) {
+    if (m780 >= 0.0f) {
         morfLocal = m780;
         m780 = -1.0f;
     }
