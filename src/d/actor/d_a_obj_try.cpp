@@ -322,7 +322,6 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
     return (u8)static_cast<Act_c*>(i_actor)->create_heap();
 }
 
-/* Nonmatching */
 /* 000000B4-0000026C       .text create_heap__Q28daObjTry5Act_cFv */
 s32 Act_c::create_heap() {
     /* Nonmatching */
@@ -365,7 +364,6 @@ void daObjTry::Act_c::init_cc() {
     mCyl.OnTgShield();
 }
 
-/* Nonmatching */
 /* 0000038C-00000428       .text search_sameType__Q28daObjTry5Act_cFPvPv */
 void* daObjTry::Act_c::search_sameType(void* pActor, void* pSelf) {
     /* Nonmatching */
@@ -456,7 +454,6 @@ cPhs_State daObjTry::Act_c::_create() {
     return phase;
 }
 
-/* Nonmatching */
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_delete() {
     /* Nonmatching */
@@ -477,7 +474,6 @@ bool daObjTry::Act_c::_delete() {
     return true;
 }
 
-/* Nonmatching */
 /* 00000D5C-00000EA8       .text mode_restart_init__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_restart_init() {
     /* Nonmatching */
@@ -507,6 +503,25 @@ void daObjTry::Act_c::mode_restart_init() {
 /* 00000EA8-00000FFC       .text mode_restart__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_restart() {
     /* Nonmatching */
+    m630--;
+    if (m630 < 0x50) {
+        M_restart = 1;
+    }
+    m632 = 0x14;
+    m634 = 1;
+    if (m630 == 0) {
+        shape_angle.y = home.angle.y;
+        current.angle.y = shape_angle.y;
+        current.pos.y = home.pos.y;
+        mode_wait_init();
+        return;
+    }
+    if (m630 < 0x32) {
+        f32 f4 = 0.5f * (0.0f - jmaCosTable[(u16)(655.36f * m630) >> jmaSinShift]);
+        current.pos.y = home.pos.y + f4 * (-10.0f - (f32)attr().m4D);
+        shape_angle.y = home.angle.y + (s16)(-32768.0f * f4);
+        current.angle.y = shape_angle.y;
+    }
 }
 
 /* 00000FFC-00001074       .text mode_wait_init__Q28daObjTry5Act_cFv */
@@ -700,14 +715,12 @@ void daObjTry::Act_c::mode_proc_call() {
     /* Nonmatching */
 }
 
-/* Nonmatching */
 /* 00001B58-00001B90       .text cull_set_draw__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_draw() {
     /* Nonmatching */
     fopAcM_setCullSizeSphere(this, 0.0f, 65.0f, 0.0f, 100.0f);
 }
 
-/* Nonmatching */
 /* 00001B90-00001BC8       .text cull_set_move__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_move() {
     /* Nonmatching */
@@ -792,8 +805,35 @@ bool daObjTry::Act_c::damage_bg_proc() {
 }
 
 /* 00001E98-00001FEC       .text damage_bg_proc_directly__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::damage_bg_proc_directly() {
+bool daObjTry::Act_c::damage_bg_proc_directly() {
     /* Nonmatching */
+    bool groundHit = mAcch.ChkGroundHit();
+    if (mMode == 3 && (mAcch.ChkRoofHit() || chk_sink_water() || groundHit)) {
+        cam_lockoff();
+    }
+
+    if (m632 > 0) {
+        m632--;
+        return false;
+    }
+
+    if (groundHit && m634 == 0) {
+        if (mMode == 1 || mMode == 3) {
+            u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
+            JAIZelBasic::zel_basic->seStart(attr().m54, &eyePos, mtrlSndId,
+                                            dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f, -1.0f,
+                                            -1.0f, 0);
+            if (m62C != 4) {
+                eff_land_smoke();
+            }
+            m634 = 1;
+            m632 = 0x14;
+            make_vib();
+        }
+    } else {
+        m634 = 0;
+    }
+    return false;
 }
 
 /* 00001FEC-00002034       .text chk_sink_water__Q28daObjTry5Act_cFv */
@@ -805,10 +845,8 @@ bool daObjTry::Act_c::chk_sink_water() {
     return ret;
 }
 
-/* Nonmatching */
 /* 00002034-000020AC       .text chk_sinkdown_water__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::chk_sinkdown_water() {
-    /* Nonmatching */
     bool ret = false;
     if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + (f32)attr().m4D + 50.0f) {
         ret = true;
@@ -821,7 +859,6 @@ void daObjTry::Act_c::calc_drop_param(float*, float*, float*) const {
     /* Nonmatching */
 }
 
-/* Nonmatching */
 /* 00002218-000022F4       .text bound__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::bound() {
     /* Nonmatching */
@@ -846,7 +883,6 @@ bool daObjTry::Act_c::bound() {
     return ret;
 }
 
-/* Nonmatching */
 /* 000022F4-0000240C       .text se_fall_water__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::se_fall_water() {
     /* Nonmatching */
@@ -897,7 +933,6 @@ void daObjTry::Act_c::eff_set_bingo(bool, bool) {
     /* Nonmatching */
 }
 
-/* Nonmatching */
 /* 00002718-00002790       .text eff_clr_bingo__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_clr_bingo() {
     /* Nonmatching */
@@ -912,14 +947,12 @@ void daObjTry::Act_c::eff_clr_bingo() {
     }
 }
 
-/* Nonmatching */
 /* 00002790-000027BC       .text eff_land_smoke__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_land_smoke() {
     /* Nonmatching */
     daObj::make_land_effect(this, &mAcch.m_gnd, 0.0f);
 }
 
-/* Nonmatching */
 /* 000027BC-0000280C       .text eff_hit_water_splash__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_hit_water_splash() {
     /* Nonmatching */
@@ -927,7 +960,6 @@ void daObjTry::Act_c::eff_hit_water_splash() {
     fopKyM_createWpillar(&pos, 0.0f, 0.75f, 0);
 }
 
-/* Nonmatching */
 /* 0000280C-00002868       .text make_vib__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::make_vib() {
     /* Nonmatching */
@@ -935,10 +967,8 @@ void daObjTry::Act_c::make_vib() {
     g_dComIfG_gameInfo.play.mVibration.StartShock(ret + 1, 1, cXyz(0.0f, 0.0f, 0.0f));
 }
 
-/* Nonmatching */
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::check_circle() {
-    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz diff = player->current.pos - current.pos;
     f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
@@ -950,7 +980,6 @@ bool daObjTry::Act_c::check_circle() {
     return ret;
 }
 
-/* Nonmatching */
 /* 00002960-00002A90       .text get_water_h__Q28daObjTry5Act_cFv */
 f32 daObjTry::Act_c::get_water_h() {
     /* Nonmatching */
