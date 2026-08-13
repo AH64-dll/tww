@@ -221,9 +221,53 @@ void daNpc_So_c::cutMiniGamePlUpProc() {
 /* 00007CBC-00007E74       .text initCam__10daNpc_So_cFv */
 void daNpc_So_c::initCam() {
     /* Nonmatching */
+    if (field_0xBDE == 1) {
+        return;
+    }
+    field_0xBDE = 1;
+
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    if (REG8_S(1) != 0) {
+        return;
+    }
+
+    cam->mCamera.Stop();
+    cam->mCamera.SetTrimSize(1);
+
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    field_0xBCC = player->current.pos;
+    field_0xBCC.x += 100.0f * cM_ssin(player->shape_angle.y);
+    field_0xBCC.z += 100.0f * cM_scos(player->shape_angle.y);
+    field_0xBCC.y += 50.0f;
+
+    field_0xBC0 = player->current.pos;
+    field_0xBC0.x += -200.0f * cM_ssin(player->shape_angle.y);
+    field_0xBC0.z += -200.0f * cM_scos(player->shape_angle.y);
+    field_0xBC0.y += 100.0f;
 }
 
 /* 00007E74-00008010       .text moveCam__10daNpc_So_cFv */
 void daNpc_So_c::moveCam() {
     /* Nonmatching */
+    if (REG8_S(1) != 0) {
+        return;
+    }
+
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+
+    cXyz pos = player->current.pos;
+    pos.x += 150.0f * cM_ssin(player->shape_angle.y);
+    pos.z += 150.0f * cM_scos(player->shape_angle.y);
+    pos.y += 100.0f;
+
+    cXyz pos2 = player->current.pos;
+    pos2.x += -400.0f * cM_ssin(player->shape_angle.y);
+    pos2.z += -400.0f * cM_scos(player->shape_angle.y);
+    pos2.y += 300.0f;
+
+    cLib_addCalcPos2(&field_0xBC0, pos2, 0.05f, 5.0f);
+    cLib_addCalcPos2(&field_0xBCC, pos, 0.05f, 5.0f);
+
+    cam->mCamera.Set(field_0xBCC, field_0xBC0);
 }
