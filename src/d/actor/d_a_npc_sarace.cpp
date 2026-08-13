@@ -217,12 +217,18 @@ void daNpc_Sarace_c::checkOrder() {
         case 0xFB7:
             (*pMsgNo)++;
             break;
+        case 0xFB8:
+            *pMsgNo = 0xFB3;
+            break;
+        case 0xFB3:
+            *pMsgNo = 0xFA3;
+            break;
         case 0xFA3:
-            if (mpCurrMsg->mStatus == 0) {
+            if (mpCurrMsg->mSelectNum == 0) {
                 *pMsgNo = 0xFA4;
             }
-            else if (mpCurrMsg->mStatus == 1) {
-                if (dComIfGs_getRupee() < 0x1E) {
+            else if (mpCurrMsg->mSelectNum == 1) {
+                if ((u16)dComIfGs_getRupee() < 0x1E) {
                     *pMsgNo = 0xFAF;
                 }
                 else {
@@ -254,12 +260,6 @@ void daNpc_Sarace_c::checkOrder() {
             break;
         case 0xFAA:
             *pMsgNo = 0xFA9;
-            break;
-        case 0xFB3:
-            *pMsgNo = 0xFA3;
-            break;
-        case 0xFB8:
-            *pMsgNo = 0xFB3;
             break;
         case 0xFA4:
         case 0xFA6:
