@@ -1676,7 +1676,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_kamome"),
     ActorRel(NonMatching, "d_a_npc_kf1"),
     ActorRel(NonMatching, "d_a_npc_kg1"),
-    ActorRel(NonMatching, "d_a_npc_kg2"),
+    ActorRel(Equivalent, "d_a_npc_kg2"),  # regalloc/anchor: 4 sub-100 all 0-one-sided accept (nodeCallBack 98.50/CreateHeap 99.29/wait01 99.88/privateCut 99.95); +8B extra-weak non-blocking
     ActorRel(NonMatching, "d_a_npc_kk1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_km1"),
     ActorRel(NonMatching, "d_a_npc_ko1"),
