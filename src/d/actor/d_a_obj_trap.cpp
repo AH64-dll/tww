@@ -405,7 +405,6 @@ void daObjTrap_c::vibrate() {
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
 void daObjTrap_c::bound() {
-    /* Nonmatching */
     cXyz sp14 = mDir * -1.0f;
     PSVECSubtract(&mCurPos, &mVibPos, &mCurPos);
     f32 vibF = mVibF;
