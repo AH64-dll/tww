@@ -45,7 +45,7 @@ void daObjMagmarock::Act_c::demo_move() {
     if (m29F == 0) {
         if (m45A == 0) {
             if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
-                m45A = 1;
+                m45A++;
             } else {
                 fopAcM_orderOtherEvent2(this, "magma_cam", dEvtFlag_NOPARTNER_e, 0xFFFF);
                 eventInfo.mCondition |= dEvtCnd_UNK2_e;
@@ -348,7 +348,7 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     mLiftPos = i_pos;
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
     int isWait = mProcFunc == waitProc;
-    if (isWait) {
+    if (!isWait) {
         cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
         cLib_addCalc2(&mQuakeAngle, 750.0f, 0.5f, 40.0f);
         cLib_addCalcAngleS2(&mAngleAdd, 0x1200, 4, 0x100);
@@ -359,16 +359,15 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     }
     void (Act_c::*appearProc)() = &Act_c::appear_proc;
     int isAppear = mProcFunc == appearProc;
-    if (isAppear) {
-        return FALSE;
+    if (!isAppear) {
+        cXyz sp2C = current.pos - mLiftPos;
+        sp2C.y = 0.0f;
+        if (!sp2C.normalizeRS()) {
+            sp2C.set(0.0f, 0.0f, 1.0f);
+        }
+        PSVECScale(&sp2C, &sp2C, 10.0f);
+        PSVECAdd(&current.pos, &sp2C, &current.pos);
     }
-    cXyz sp2C = current.pos - mLiftPos;
-    sp2C.y = 0.0f;
-    if (!sp2C.normalizeRS()) {
-        sp2C.set(0.0f, 0.0f, 1.0f);
-    }
-    PSVECScale(&sp2C, &sp2C, 10.0f);
-    PSVECAdd(&current.pos, &sp2C, &current.pos);
     return FALSE;
 }
 
