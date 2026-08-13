@@ -474,53 +474,47 @@ BOOL daNpc_Sarace_c::dummy_action(void*) {
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
 
-    /* Nonmatching */BOOL daNpc_Sarace_c::wait_action(void*) {
+    BOOL daNpc_Sarace_c::wait_action(void*) {
     if (m746 == 0) {
         m743 = 1;
         m746++;
-        return TRUE;
+    } else if (m746 != -1) {
+        s16 angle = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
+        m728 = chkAttention(current.pos, angle);
+        switch (m743) {
+            case 1:
+                wait01();
+                break;
+            case 2:
+                talk01();
+                break;
+        }
+        lookBack();
+        setAttention();
     }
-    if (m746 == -1)
-        return TRUE;
-
-    s16 angle = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
-    m728 = chkAttention(current.pos, angle);
-    switch (m743) {
-        case 1:
-            wait01();
-            break;
-        case 2:
-            talk01();
-            break;
-    }
-    lookBack();
-    setAttention();
     return TRUE;
 }
 
 /* 000015BC-0000173C       .text event_endCheck_action__14daNpc_Sarace_cFPv */
 
-    /* Nonmatching */BOOL daNpc_Sarace_c::event_endCheck_action(void*) {
+    BOOL daNpc_Sarace_c::event_endCheck_action(void*) {
     if (m746 == 0) {
         m746++;
-        return TRUE;
-    }
-    if (m746 == -1)
-        return TRUE;
+    } else if (m746 != -1) {
+        if (dComIfGp_evmng_endCheck("SARACE_EXPCAM")) {
+            mMsgNo = 0xFA7;
+            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+            m742 = 1;
+            setAction(&daNpc_Sarace_c::wait_action, NULL);
 
-    if (dComIfGp_evmng_endCheck("SARACE_EXPCAM")) {
-        mMsgNo = 0xFA7;
-        dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
-        m742 = 1;
-        setAction(&daNpc_Sarace_c::wait_action, NULL);
-
-        fopAc_ac_c* actorA = fopAcM_SearchByID(mBarrelAId);
-        fopAc_ac_c* actorB = fopAcM_SearchByID(mBarrelBId);
-        if (actorA != NULL) {
-            ((daObjBarrel2::Act_c*)actorA)->m475 = 1;
-        }
-        if (actorB != NULL) {
-            ((daObjBarrel2::Act_c*)actorB)->m475 = 1;
+            fopAc_ac_c* actorA = fopAcM_SearchByID(mBarrelAId);
+            fopAc_ac_c* actorB = fopAcM_SearchByID(mBarrelBId);
+            if (actorA != NULL) {
+                ((daObjBarrel2::Act_c*)actorA)->m475 = 1;
+            }
+            if (actorB != NULL) {
+                ((daObjBarrel2::Act_c*)actorB)->m475 = 1;
+            }
         }
     }
     return TRUE;
