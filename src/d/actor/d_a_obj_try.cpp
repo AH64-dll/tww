@@ -34,7 +34,7 @@ namespace {
         &Act_c::mode_sink,
     };
     static ModeFunc mode_proc[5];
-    static u8 mode_proc_ready;
+    static s8 mode_proc_ready;
 
     static GXColor L_bingoPrmClr[2] = {
         {12, 24, 72, 0},
@@ -343,12 +343,12 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
 s32 Act_c::create_heap() {
     /* Nonmatching */
     s32 ret = 0;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().m46);
-    if (modelData == NULL) {
-        JUT_ASSERT(1009, modelData != NULL);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().m46);
+    if (mdl_data == NULL) {
+        JUT_ASSERT(1009, mdl_data != NULL);
     }
 
-    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
 
     BOOL brkOk = TRUE;
     if (attr().m48 >= 0) {
@@ -356,7 +356,7 @@ s32 Act_c::create_heap() {
         if (brk == NULL) {
             JUT_ASSERT(1019, brk != NULL);
         }
-        brkOk = mBrkAnm.init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+        brkOk = mBrkAnm.init(mdl_data, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
     }
 
     if (daObj::PrmAbstract(this, 1, 0x1f) == 0) {
@@ -915,7 +915,8 @@ bool daObjTry::Act_c::damage_bg_proc_directly() {
     if (groundHit && m634 == 0) {
         if (mMode == 1 || mMode == 3) {
             u32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
-            JAIZelBasic::zel_basic->seStart(attr().m54, &eyePos, mtrlSndId,
+            u32 se = attr().m54;
+            JAIZelBasic::zel_basic->seStart(se, &eyePos, mtrlSndId,
                                             dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f, -1.0f,
                                             -1.0f, 0);
             if (m62C != 4) {
@@ -1047,14 +1048,15 @@ void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
     /* Nonmatching */
     if (m651 == 0) {
         u32 idx = (u32)(5 - mType) > 0;
-        g_dComIfG_gameInfo.play.getParticle()->set(
-            dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY00, &current.pos, &shape_angle, NULL,
-            0xFF, &mFollowCb, -1, &L_bingoPrmClr[idx], &L_bingoEnvClr[idx], NULL);
+        dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+        particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY00, &current.pos,
+                      &shape_angle, NULL, 0xFF, &mFollowCb, -1, &L_bingoPrmClr[idx], &L_bingoEnvClr[idx],
+                      NULL);
         const cXyz* pos = param_2 ? &home.pos : &current.pos;
         csXyz angle(0, m64A, 0);
-        m668 = (u32)g_dComIfG_gameInfo.play.getParticle()->set(
-            dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos, &angle, NULL, 0xFF, NULL, -1,
-            &L_bingoPrmClr2[idx], &L_bingoEnvClr2[idx], NULL);
+        m668 = (u32)particle->set(dPa_control_c::dPtclGroup_Normal_e, dPa_name::ID_AK_SN_SIRENKEY01, pos,
+                                  &angle, NULL, 0xFF, NULL, -1, &L_bingoPrmClr2[idx], &L_bingoEnvClr2[idx],
+                                  NULL);
         if (param_1) {
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KEY_STATUE_SET, &eyePos, 0,
                                             dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
