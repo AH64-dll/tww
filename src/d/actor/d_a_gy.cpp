@@ -713,7 +713,16 @@ void daGy_c::modeDelete() {
 
 /* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
 void daGy_c::modeDeleteBombInit() {
-    /* Nonmatching */
+    actor_status &= ~0x20;
+    attention_info.flags &= ~0x4;
+    m2B0 = 9;
+    mD15 = 7;
+    m4F0 = 0.0f;
+    speedF = 0.0f;
+    m4E4 = 0.0f;
+    speed.y = l_HIO.m15C;
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_JUMP_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    m4EC = 10.0f * l_HIO.mC8;
 }
 
 /* 00002A70-00002CBC       .text modeDeleteBomb__6daGy_cFv */
