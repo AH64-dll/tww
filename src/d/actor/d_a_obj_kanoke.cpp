@@ -70,8 +70,12 @@ static dCcD_SrcCps l_cps_src_huta = {
     }},
 };
 
-static cXyz daObjKanoke_Yoko_pfs;
-static cXyz daObjKanoke_Tate_pfs[3][2];
+static cXyz daObjKanoke_Yoko_pfs = cXyz(100.0f, 0.0f, 0.0f);
+static cXyz daObjKanoke_Tate_pfs[3][2] = {
+    {cXyz(50.0f, 0.0f, -175.0f), cXyz(50.0f, 0.0f, 175.0f)},
+    {cXyz(0.0f, 0.0f, -175.0f), cXyz(0.0f, 0.0f, 175.0f)},
+    {cXyz(-50.0f, 0.0f, -175.0f), cXyz(-50.0f, 0.0f, 175.0f)},
+};
 
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */
