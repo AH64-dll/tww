@@ -253,7 +253,7 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
         max_attn_dist += 40.0f;
     }
     s32 ret = 0;
-    if (max_attn_angle > abs((s16)(cM_atan2s(spC.x, spC.z) - i_angleY)) && max_attn_dist > dist) {
+    if (max_attn_angle > abs((s16)(angle - i_angleY)) && max_attn_dist > dist) {
         ret = 1;
     }
     return ret;
