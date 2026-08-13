@@ -1319,12 +1319,12 @@ BOOL daNpc_Kf1_c::orderTsuboEvent() { /* Nonmatching */
         return FALSE;
     }
     if (!dComIfGs_isEventBit(0x2780)) {
-        if (chk_tsubo() < mTsuboCnt) {
+        if (mTsuboCnt > chk_tsubo()) {
             mOrder = 3;
             return TRUE;
         }
     } else if (m79F != 0xFF && dComIfGs_isSwitch(m79F, current.roomNo)) {
-        if (chk_tsubo() < mTsuboCnt) {
+        if (mTsuboCnt > chk_tsubo()) {
             mOrder = 5;
             return TRUE;
         }
