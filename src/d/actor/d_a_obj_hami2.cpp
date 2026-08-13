@@ -31,6 +31,13 @@
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */
 
+
+namespace daObjHami2 {
+const char Act_c::M_arcname[] = "Hami2";
+const char Act_c::M_evname[] = "ami_cam";
+Mtx Act_c::M_tmp_mtx;
+}; // namespace daObjHami2
+
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
@@ -67,6 +74,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     }
     mpModel->setUserArea((u32)this);
 
+    BOOL ok = TRUE;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale);
@@ -74,9 +82,9 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
     mpBgW = new dBgW();
     if (mpBgW == NULL || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, 7), 1, &mMtx) != 0) {
-        return FALSE;
+        ok = FALSE;
     }
-    return TRUE;
+    return ok;
 }
 
 /* 0000032C-0000042C       .text Create__Q210daObjHami25Act_cFv */
@@ -263,12 +271,6 @@ void daObjHami2::Act_c::daObjHami2_open_stop() {
     dComIfGd_setList();
     return TRUE;
 }
-
-namespace daObjHami2 {
-const char Act_c::M_arcname[] = "Hami2";
-const char Act_c::M_evname[] = "ami_cam";
-Mtx Act_c::M_tmp_mtx;
-}; // namespace daObjHami2
 
 namespace daObjHami2 {
 namespace {
