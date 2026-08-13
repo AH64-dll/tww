@@ -560,9 +560,9 @@ void daObjTry::Act_c::mode_wait_init() {
 /* 00001074-000012C4       .text mode_wait__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_wait() {
     /* Nonmatching */
-    int bingo = 0;
+    bool bingo = false;
     if (attr().m74 != 0 && (u8)m64C != 0) {
-        bingo = 1;
+        bingo = true;
     }
 
     if (attr().m73 != 0 && (u8)m64D != 0) {
