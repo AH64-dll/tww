@@ -122,7 +122,7 @@ public:
     /* 0x79A */ u8 field_0x79A[0x79E - 0x79A];
     /* 0x79E */ s16 m79E;
     /* 0x7A0 */ s8 m7A0;
-    /* 0x7A1 */ u8 m7A1;
+    /* 0x7A1 */ s8 m7A1;
     /* 0x7A2 */ u8 m7A2;
     /* 0x7A3 */ u8 m7A3;
     /* 0x7A4 */ u8 m7A4;

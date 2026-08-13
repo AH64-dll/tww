@@ -382,13 +382,19 @@ void daNpc_Pf1_c::chngAnmAtr(u8 i_param_1) {
 /* 00000BDC-00000C48       .text ctrlAnmAtr__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::ctrlAnmAtr() {
     /* Nonmatching */
-    s32 anm_atr = m7B3;
-    switch (anm_atr) {
+    switch (m7B3) {
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
         case 4:
             if (m7A0 != 0) {
-                s8 counter = m7A1 + 1;
-                m7A1 = counter;
-                if (counter > 2) {
+                m7A1++;
+                if (m7A1 > 2) {
                     m7B3 = 6;
                     setAnm_NUM(0, 1);
                 }
@@ -804,11 +810,10 @@ BOOL daNpc_Pf1_c::endEvent_check() {
 
 /* 00001ACC-00001BEC       .text startEvent_check__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::startEvent_check() {
-    /* Nonmatching */
-    cXyz pos = mHomePos;
-    pos.y += 100.0f;
+    cXyz pos(mHomePos.x, mHomePos.y + 100.0f, mHomePos.z);
     if (chk_areaIN(l_HIO.mPrmTbl.m38, pos)) {
-        f32 dist = std::sqrtf(current.pos.abs2(dComIfGp_getLinkPlayer()->current.pos));
+        cXyz* playerPos = &dComIfGp_getLinkPlayer()->current.pos;
+        f32 dist = std::sqrtf(current.pos.abs2(*playerPos));
         if (dist < 210.0f || field_0x6ba != 0) {
             return TRUE;
         }
