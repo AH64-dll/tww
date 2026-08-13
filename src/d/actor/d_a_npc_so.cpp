@@ -753,7 +753,10 @@ void daNpc_So_c::modeTalkInit() {
 
 /* 0000283C-0000289C       .text modeTalk__10daNpc_So_cFv */
 void daNpc_So_c::modeTalk() {
-    /* Nonmatching */
+    if (talk(1) == 0x12) {
+        dComIfGp_event_onEventFlag(8);
+        modeProc(PROC_INIT_e, 0xC);
+    }
 }
 
 /* 0000289C-0000296C       .text modeDisappearInit__10daNpc_So_cFv */
