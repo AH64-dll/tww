@@ -429,6 +429,7 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 }
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
+/* Nonmatching */
 BOOL daObjFtree::is_broughtID(int i_id) {
     u8 ret = TRUE;
     dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
