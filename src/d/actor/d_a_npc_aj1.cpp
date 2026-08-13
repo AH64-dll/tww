@@ -1144,7 +1144,7 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
 /* 0000280C-00002984       .text chk_areaIN__11daNpc_Aj1_cFfs4cXyz */
         /* Nonmatching */
 s32 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
-    cXyz diff = i_pos - dComIfGp_getPlayer(0)->current.pos;
+    const cXyz& diff = i_pos - dComIfGp_getPlayer(0)->current.pos;
     cXyz diffXZ;
     diffXZ.x = diff.x;
     diffXZ.y = 0.0f;
@@ -1157,7 +1157,8 @@ s32 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
         dist = distSq;
     }
     f32 yDiff = dComIfGp_getPlayer(0)->current.pos.y - i_pos.y;
-    s16 angleDiff = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos) - m708.y;
+    s16 targetAngle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    s16 angleDiff = targetAngle - m708.y;
     if (dist < i_radius && std::fabsf(yDiff) < 500.0f && abs(angleDiff) < i_angle) {
         return 1;
     }
