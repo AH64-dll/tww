@@ -605,8 +605,8 @@ void daObjFtree::Act_c::action_waitM_main() {
             process_init(0xB, -1);
         } else if (m67C == 0 && hit == 1 && process_init(0xB, 0x78)) {
             hit = 0;
-        } else if ((s32)cM_rndF(195.0f) == 0) {
-            process_init(0xB, 30.0f + 195.0f * cM_rndF(1.0f));
+        } else if ((s32)cM_rndF(90.0f) == 0) {
+            process_init(0xB, 30.0f + 90.0f * cM_rndF(1.0f));
         }
         m67C = hit;
     }
@@ -732,10 +732,10 @@ s32 daObjFtree::Act_c::action_changeSL_init(s16) {
 
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMR_BRK_VMRMZ_e));
     if (brk != NULL) {
-        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 61.0f, 0, -1, 1, FALSE) != 0
-            && SetJointAnimation(5, 61.0f, 950.0f, 0) != 0) {
+        if (mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, TRUE, 0, 1.0f, 0, -1, 1, FALSE) != 0
+            && SetJointAnimation(5, 1.0f, 10.0f, 0) != 0) {
             set_brought();
-            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, 0.0f, 0.0f, 0);
+            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DK_TREE_RECOVER, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             return 1;
         }
     }
