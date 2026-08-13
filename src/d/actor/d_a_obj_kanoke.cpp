@@ -232,9 +232,42 @@ BOOL daObjKanoke_c::_draw() {
     /* Nonmatching */
 }
 
+typedef void (daObjKanoke_c::*MoveProc_t)();
+static MoveProc_t moveProc[] = {
+    &daObjKanoke_c::executeWait,
+    &daObjKanoke_c::executeNormal,
+    &daObjKanoke_c::executeYureYoko,
+    &daObjKanoke_c::executeOpenYoko,
+    &daObjKanoke_c::executeEffectYoko,
+    &daObjKanoke_c::executeYureTate,
+    &daObjKanoke_c::executeOpenTate,
+    &daObjKanoke_c::executeEffectTate,
+};
+
 /* 00000CE0-00000E7C       .text _execute__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::_execute() {
-    /* Nonmatching */
+    cXyz sp14(0.0f, 0.0f, -100.0f);
+    cXyz sp08(0.0f, 0.0f, 100.0f);
+
+    mDoMtx_stack_c::YrotS(shape_angle.y);
+    mDoMtx_stack_c::XrotM(shape_angle.x);
+    PSMTXMultVec(mDoMtx_stack_c::get(), &sp14, &sp14);
+    PSMTXMultVec(mDoMtx_stack_c::get(), &sp08, &sp08);
+    PSVECAdd(&sp14, &current.pos, &sp14);
+    PSVECAdd(&sp08, &current.pos, &sp08);
+    *mCps0.GetStartP() = sp14;
+    *mCps0.GetEndP() = sp08;
+    mCps0.SetR(140.0f);
+    dComIfG_Ccsp()->Set(&mCps0);
+    (this->*moveProc[m88B])();
+    setMtx();
+    if (m2A0->ChkUsed()) {
+        m2A0->Move();
+    }
+    if (m2A4->ChkUsed()) {
+        m2A4->Move();
+    }
+    return TRUE;
 }
 
 /* 00000E7C-0000122C       .text executeNormal__13daObjKanoke_cFv */
