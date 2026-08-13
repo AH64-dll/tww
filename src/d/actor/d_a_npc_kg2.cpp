@@ -215,18 +215,24 @@ void daNpc_Kg2_c::subAnm() {
             } else {
                 m737 = 4;
             }
+            return;
         }
-    } else if (m749 == 9) {
+    }
+    if (m749 == 9) {
         if (mpMorf->checkFrame(30.0f)) {
             m736 = 1;
             m737 = 2;
+            return;
         }
-    } else if (m749 == 0xC) {
+    }
+    if (m749 == 0xC) {
         if (mpMorf->checkFrame(1.0f)) {
             m736 = 0;
             setAnm(1, -1.0f);
+            return;
         }
-    } else if (m749 == 0xD) {
+    }
+    if (m749 == 0xD) {
         if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
             setAnm(4, -1.0f);
         }
