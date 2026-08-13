@@ -1001,8 +1001,7 @@ void daNpcMn_c::eventMesSetInit(int staffIdx) {
 }
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
-    /* Nonmatching */
-BOOL daNpcMn_c::eventMesSet() {
+bool daNpcMn_c::eventMesSet() {
     return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
@@ -1321,7 +1320,6 @@ u16 daNpcMn_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
-    /* Nonmatching */
 u32 daNpcMn_c::getMsg() {
     u32 msgNo = 0;
     mpMsgTbl = NULL;
@@ -1354,10 +1352,10 @@ u32 daNpcMn_c::getMsg() {
                 mpMsgTbl = l_msg_mn_3rd_talk_in;
             }
         }
+    }
 
-        if (mpMsgTbl != NULL) {
-            msgNo = *mpMsgTbl;
-        }
+    if (mpMsgTbl != NULL) {
+        msgNo = *mpMsgTbl;
     }
     return msgNo;
 }

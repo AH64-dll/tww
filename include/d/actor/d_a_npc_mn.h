@@ -94,7 +94,7 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    s32 eventMesSet();
+    bool eventMesSet();
     void eventGetItemInit();
     void eventWaitInit(int);
     s32 eventWait(int);
