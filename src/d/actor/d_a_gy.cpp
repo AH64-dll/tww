@@ -698,6 +698,63 @@ void daGy_c::modeWithAttackInit() {
 /* 00001A74-00001D60       .text modeWithAttack__6daGy_cFv */
 void daGy_c::modeWithAttack() {
     /* Nonmatching */
+    if (mD15 != 5) {
+        mD15 = 3;
+    }
+    if (mpCtrl->m320 == 0) {
+        modeCircleInit();
+        return;
+    }
+    s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    f32 player_dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
+    switch (m928) {
+    case 0:
+        m4E8 = l_HIO.mAC;
+        m4EC = l_HIO.mC4;
+        cLib_addCalcAngleS2(&current.angle.y, target_angle, 8, 0x400);        m4F0 = l_HIO.m68;
+        if (player_dist < l_HIO.m44) {
+            m928++;
+            m914 = l_HIO.m10E;
+        }
+        if (cLib_calcTimer(&m914) == 0) {
+            if (l_HIO.m99 == 0) {
+                modeWithCircleInit();
+                return;
+            }
+            m928++;
+        }
+        break;
+    case 1:
+        m4E8 = l_HIO.mB0;
+        m4EC = l_HIO.mC4;
+        m4F0 = l_HIO.m68;
+        if (m50C.ChkCoHit()) {
+            fopAc_ac_c* hit_ac = m50C.GetCoHitAc();
+            if (fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
+                dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                Vec* eye = &eyePos;
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, eye, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                mDoAud_monsSeStart(JA_SE_CV_GY_ATTACK, eye, fopAcM_GetID(this), 0, dComIfGp_getReverb(current.roomNo));
+                modeAttackBackInit();
+                return;
+            }
+        }
+        if (cLib_calcTimer(&m914) == 0) {
+            if (l_HIO.m99 == 0) {
+                modeWithCircleInit();
+                return;
+            }
+            m928++;
+        }
+        break;
+    case 2:
+        m4E8 = l_HIO.mA0;
+        m4EC = l_HIO.mC4;
+        if (std::fabsf(m4E4 - m4E8) < 10.0f) {
+            fopAcM_delete(this);
+        }
+        break;
+    }
 }
 
 /* 00001D60-00001F20       .text modeAttack__6daGy_cFv */
