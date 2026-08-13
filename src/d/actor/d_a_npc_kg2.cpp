@@ -569,7 +569,7 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     J3DModelData* data = model->getModelData();
     model->getModelData()->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
     model->getModelData()->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
-    model->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 1.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, 0, 0);
     return TRUE;
