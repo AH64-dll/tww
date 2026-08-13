@@ -104,12 +104,14 @@ namespace daObjAshut {
     /* 000004A8-000005A4       .text chk_safe_area__Q210daObjAshut5Act_cCFv */
     /* Nonmatching */
     u8 Act_c::chk_safe_area() const {
+        u8 result;
         s16 angle = -shape_angle.y;
-        cXyz sp20 = dComIfGp_getPlayer(0)->current.pos - current.pos;
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        cXyz sp20 = player->current.pos - current.pos;
         mDoMtx_stack_c::YrotS(angle);
         cXyz sp14;
         mDoMtx_stack_c::multVecSR(&sp20, &sp14);
-        u8 result = FALSE;
+        result = FALSE;
         if (std::fabsf(sp14.y) < 100.0f && std::fabsf(sp14.z) < 55.0f) {
             result = TRUE;
         }
