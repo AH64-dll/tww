@@ -148,7 +148,7 @@ bool daNpc_Gp1_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
     gravity = -4.5f;
     m79C = current.pos;
-    int path_idx = fopAcM_GetParam(this) >> 8 & 0xFF;
+    u8 path_idx = fopAcM_GetParam(this) >> 16 & 0xFF;
     if(path_idx != 0xFF) {
         mPathRun.setInf(path_idx, current.roomNo, 1);
         if(mPathRun.isPath()) {
@@ -175,6 +175,7 @@ bool daNpc_Gp1_c::createInit() {
         return false;
     }
     mStts.Init(path_idx, 0xFF, this);
+    mCyl.SetStts(&mStts);
     mCyl.Set(dNpc_cyl_src);
     mpMorf->setMorf(0.0f);
     setMtx(true);
