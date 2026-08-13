@@ -1431,7 +1431,7 @@ BOOL daNpc_Aj1_c::_draw() {
     }
     shadowDraw();
     if (l_HIO.mPrmTbl.m24 != 0) {
-        cXyz pos(current.pos.x, current.pos.y, current.pos.z);
+        cXyz pos = current.pos;
         pos.y = eyePos.y;
     }
     dSnap_RegistFig(DSNAP_TYPE_UNK4C, this, 1.0f, 1.0f, 1.0f);
