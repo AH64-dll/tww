@@ -1696,16 +1696,20 @@ u8 daNpcMn_c::chkPosNo() {
 }
 
 /* 00003B38-00003CD8       .text getPosNo__9daNpcMn_cFv */
-    /* Nonmatching */
 u8 daNpcMn_c::getPosNo() {
     dSv_event_c* pEvent = dComIfGs_getPEvent();
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
         return 1;
     }
-    u32 count[8] = {1};
+    int count[8];
+    count[0] = 1;
+    for (int i = 1; i < 8; i++) {
+        count[i] = 0;
+    }
     for (int i = 0; i < 0x86; i++) {
         if (i / 8 < 0x11) {
-            if (dComIfGs_getEventReg(l_figure_comp[i / 8]) & (1 << (i & 7))) {
+            u8 reg = dComIfGs_getEventReg(l_figure_comp[i / 8]);
+            if (reg & (1 << (i % 8))) {
                 int roomId = dSnap_GetFigRoomId(i);
                 if (roomId != 0xFF && roomId < 8) {
                     count[roomId]++;
