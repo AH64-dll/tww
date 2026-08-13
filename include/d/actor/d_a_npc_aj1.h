@@ -28,7 +28,7 @@ public:
     u8 init_AJ1_0();
     u8 init_AJ1_1();
     u8 init_AJ1_2();
-    s32 createInit();
+    u8 createInit();
     void play_animation();
     void ctrl_WAITanm();
     void ctrl_TIREanm();

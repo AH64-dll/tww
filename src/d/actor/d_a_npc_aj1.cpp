@@ -243,7 +243,7 @@ u8 daNpc_Aj1_c::init_AJ1_2() {
 
 /* 000006B0-00000868       .text createInit__11daNpc_Aj1_cFv */
         /* Nonmatching */
-s32 daNpc_Aj1_c::createInit() {
+u8 daNpc_Aj1_c::createInit() {
     m75B = (fopAcM_GetParam(this) >> 8) & 0xFF;
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xFF);
     mEventCut.setActorInfo2("Aj1", this);
