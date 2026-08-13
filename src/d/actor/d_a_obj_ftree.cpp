@@ -645,16 +645,12 @@ void daObjFtree::Act_c::action_waitL_main() {
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
     /* Nonmatching */
-    s16 cnt = 1;
-    if (i_cnt > 0) {
-        cnt = i_cnt;
-    }
+    s32 cnt = i_cnt > 0 ? i_cnt : 1;
     m2A6 = 1;
     m2A7 = 0;
     m688 = cnt;
     m68C = 0;
-    SetJointAnimation(6, 0.7f + 0.5f * cM_rndF(1.0f), 10.0f, 0);
-    return 1;
+    return SetJointAnimation(6, 0.7f + 0.5f * cM_rndF(1.0f), 10.0f, 0);
 }
 
 /* 00001A4C-00001AF4       .text action_pikupikuS_main__Q210daObjFtree5Act_cFv */
