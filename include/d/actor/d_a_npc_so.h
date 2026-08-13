@@ -9,7 +9,7 @@
 class J3DNode;
 class dCcD_SrcSph;
 
-class daNpc_So_c : public fopAc_ac_c {
+class daNpc_So_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
         
@@ -27,13 +27,13 @@ public:
     s16 XyEventCB(int);
     BOOL _createHeap();
     bool jntHitCreateHeap();
-    void checkTgHit();
+    bool checkTgHit();
     void offsetZero();
     void offsetDive();
     void offsetSwim();
     void offsetAppear();
     u32 getMsg();
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     void lookBack();
     void setAttention();
     void setAnm(signed char, bool);
@@ -137,37 +137,40 @@ public:
 public:
     /* Place member variables here */
 #if VERSION == VERSION_DEMO
-    /* 0x290 */ u8 m290[0xB70 - 0x290];
+    /* 0x6C4 */ u8 m6C4[0xB70 - 0x6C4];
 #else
-    /* 0x290 */ s16 field_0x290;
-    /* 0x292 */ s16 field_0x292;
-    /* 0x294 */ s16 field_0x294;
-    /* 0x296 */ s16 field_0x296;
-    /* 0x298 */ s8 field_0x298;
-    /* 0x299 */ s8 field_0x299;
-    /* 0x29A */ u8 field_0x29A[0x2A0 - 0x29A];
-    /* 0x2A0 */ u8 field_0x2A0[0x6D0 - 0x2A0];
+    /* 0x6C4 */ u8 field_0x6C4[0x6D0 - 0x6C4];
     /* 0x6D0 */ s16 field_0x6D0;
     /* 0x6D2 */ u8 field_0x6D2[0x6D3 - 0x6D2];
     /* 0x6D3 */ s8 field_0x6D3;
-    /* 0x6D4 */ u8 field_0x6D4[0x84C - 0x6D4];
+    /* 0x6D4 */ u8 field_0x6D4[0x6D8 - 0x6D4];
+    /* 0x6D8 */ int field_0x6D8;
+    /* 0x6DC */ u8 field_0x6DC[0x6F8 - 0x6DC];
+    /* 0x6F8 */ dCcD_GStts mStts;
+    /* 0x718 */ dCcD_Sph mSph;
+    /* 0x844 */ u8 field_0x844[0x84C - 0x844];
     /* 0x84C */ mDoExt_McaMorf* mpMorf;
     /* 0x850 */ J3DModel* mpModel;
     /* 0x854 */ mDoExt_btpAnm mBtpAnm;
     /* 0x868 */ u8 field_0x868[0x870 - 0x868];
-    /* 0x870 */ u8 field_0x870[0xA70 - 0x870];
-    /* 0xA70 */ u8 field_0xA70[0xA79 - 0xA70];
+    /* 0x870 */ dBgS_ObjAcch mObjAcch;
+    /* 0xA34 */ dBgS_AcchCir mAcchCir;
+    /* 0xA74 */ u8 field_0xA74[0xA79 - 0xA74];
     /* 0xA79 */ u8 field_0xA79;
     /* 0xA7A */ u8 field_0xA7A[0xA7C - 0xA7A];
     /* 0xA7C */ f32 field_0xA7C;
     /* 0xA80 */ cXyz field_0xA80;
     /* 0xA8C */ u8 field_0xA8C[0xAA8 - 0xA8C];
     /* 0xAA8 */ JntHit_c* field_0xAA8;
-    /* 0xAAC */ u8 field_0xAAC[0xB0C - 0xAAC];
+    /* 0xAAC */ u8 field_0xAAC[0xAE8 - 0xAAC];
+    /* 0xAE8 */ dPa_rippleEcallBack mRipple;
+    /* 0xAFC */ u8 field_0xAFC[0xB0C - 0xAFC];
     /* 0xB0C */ u8 field_0xB0C;
     /* 0xB0D */ u8 field_0xB0D[0xB38 - 0xB0D];
     /* 0xB38 */ cXyz field_0xB38;
-    /* 0xB44 */ u8 field_0xB44[0xB54 - 0xB44];
+    /* 0xB44 */ cXyz field_0xB44;
+    /* 0xB50 */ s16 field_0xB50;
+    /* 0xB52 */ u8 field_0xB52[0xB54 - 0xB52];
     /* 0xB54 */ cXyz field_0xB54;
     /* 0xB60 */ cXyz field_0xB60;
     /* 0xB6C */ u8 field_0xB6C[0xB70 - 0xB6C];
@@ -198,7 +201,7 @@ public:
     /* 0xBD4 */ f32 field_0xBD4;
     /* 0xBD8 */ u8 field_0xBD8;
     /* 0xBD9 */ u8 field_0xBD9;
-    /* 0xBDA */ u8 field_0xBDA;
+    /* 0xBDA */ bool field_0xBDA;
     /* 0xBDB */ u8 field_0xBDB;
     /* 0xBDC */ s16 field_0xBDC;
     /* 0xBDE */ u8 field_0xBDE;

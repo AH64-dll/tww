@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_esa.h"
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "m_Do/m_Do_ext.h"
 #include "res/Object/So.h"
@@ -134,16 +135,16 @@ void daNpc_So_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 
     mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jntNo));
 
-    if (jntNo == field_0x298) {
+    if (jntNo == m_jnt.getHeadJntNum()) {
         cXyz pos(0.0f, 0.0f, 0.0f);
         cXyz off(24.0f, -12.0f, 0.0f);
         mDoMtx_stack_c::multVec(&pos, &field_0xB60);
-        mDoMtx_stack_c::YrotM(field_0x292);
-        mDoMtx_stack_c::ZrotM(field_0x290);
+        mDoMtx_stack_c::YrotM(m_jnt.mAngles[0][1]);
+        mDoMtx_stack_c::ZrotM(m_jnt.mAngles[0][0]);
         mDoMtx_stack_c::multVec(&off, &field_0xB54);
-    } else if (jntNo == field_0x299) {
-        mDoMtx_stack_c::XrotM(field_0x296);
-        mDoMtx_stack_c::ZrotM(field_0x294);
+    } else if (jntNo == m_jnt.getBackboneJntNum()) {
+        mDoMtx_stack_c::XrotM(m_jnt.mAngles[1][1]);
+        mDoMtx_stack_c::ZrotM(m_jnt.mAngles[1][0]);
     }
 
     mDoMtx_copy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
@@ -249,11 +250,11 @@ BOOL daNpc_So_c::_createHeap() {
         return false;
     }
 
-    field_0x298 = 0xB;
-    JUT_ASSERT(0x215, field_0x298 >= 0);
+    m_jnt.setHeadJntNum(0xB);
+    JUT_ASSERT(0x215, m_jnt.getHeadJntNum() >= 0);
 
-    field_0x299 = 1;
-    JUT_ASSERT(0x217, field_0x299 >= 0);
+    m_jnt.setBackboneJntNum(1);
+    JUT_ASSERT(0x217, m_jnt.getBackboneJntNum() >= 0);
 
     modelData->getJointNodePointer(0xB)->setCallBack(nodeControl_CB);
     modelData->getJointNodePointer(1)->setCallBack(nodeControl_CB);
@@ -301,8 +302,28 @@ bool daNpc_So_c::jntHitCreateHeap() {
 }
 
 /* 00000A84-00000C8C       .text checkTgHit__10daNpc_So_cFv */
-void daNpc_So_c::checkTgHit() {
-    /* Nonmatching */
+bool daNpc_So_c::checkTgHit() {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    mStts.Move();
+
+    if (cLib_calcTimer(&field_0x6D8) == 0 && mSph.ChkTgHit()) {
+        cXyz* hitPos = mSph.GetTgHitPosP();
+        cCcD_Obj* hitObj = mSph.GetTgHitObj();
+        field_0x6D8 = l_HIO.field_0x7C;
+
+        if (hitObj != NULL) {
+            if (hitObj->GetAtType() == 0x4000) {
+                fopAcM_seStart(this, 0x2879, 0x20);
+            }
+            fopAcM_monsSeStart(this, 0x4991, 0);
+            dComIfGp_particle_set(0x10, hitPos);
+            cXyz scale(2.0f, 2.0f, 2.0f);
+            dComIfGp_particle_set(0xf, hitPos, &player->shape_angle, &scale);
+            fopAcM_seStart(this, 0x2828, 0);
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 00000C8C-00000CB0       .text offsetZero__10daNpc_So_cFv */
@@ -364,13 +385,41 @@ u32 daNpc_So_c::getMsg() {
 }
 
 /* 00000E40-00001214       .text next_msgStatus__10daNpc_So_cFPUl */
-void daNpc_So_c::next_msgStatus(unsigned long*) {
+u16 daNpc_So_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 00001214-000013A0       .text lookBack__10daNpc_So_cFv */
 void daNpc_So_c::lookBack() {
-    /* Nonmatching */
+    if (dComIfGp_event_getMode() != 0) {
+        if (mEventCut.getAttnFlag()) {
+            if (field_0x6D3 == 4) {
+                m_jnt.mbTrn = false;
+            } else {
+                m_jnt.mbTrn = true;
+                field_0xB44 = mEventCut.getAttnPos();
+            }
+        } else {
+            field_0xB44 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+        }
+    } else {
+        m_jnt.mbTrn = false;
+        field_0xB44 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+    }
+
+    if (m_jnt.mbTrn) {
+        s16 speed = l_HIO.mNpc.mMaxHeadTurnVel;
+        if (mEventCut.getTurnSpeed() != 0) {
+            speed = mEventCut.getTurnSpeed();
+        }
+        cLib_addCalcAngleS2(&field_0xB50, speed, 4, 0x800);
+    } else {
+        field_0xB50 = 0;
+    }
+
+    cXyz pos = field_0xB54;
+    pos.y += 12.0f;
+    m_jnt.lookAtTarget(&shape_angle.y, &field_0xB44, pos, shape_angle.y, field_0xB50, field_0xBDA);
 }
 
 /* 000013A0-00001430       .text setAttention__10daNpc_So_cFv */
