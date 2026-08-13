@@ -577,9 +577,9 @@ BOOL daNpc_Kg2_c::CreateHeap() {
 /* 0000180C-00001A9C       .text CreateInit__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::CreateInit() {
     /* Nonmatching */
-    m724 = shape_angle.x;
-    m726 = shape_angle.y;
-    m728 = shape_angle.z;
+    m724 = current.angle.x;
+    m726 = current.angle.y;
+    m728 = current.angle.z;
     attention_info.flags = 0xA;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6E;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6E;
@@ -692,11 +692,14 @@ int daNpc_Kg2_c::evn_setAnm() {
             m739--;
         }
     } else {
-        if (mpMorf->checkFrame(mpMorf->getFrame() - 1.0f)) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
             m739--;
         }
     }
-    return m739 == 0;
+    if (m739 == 0) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
