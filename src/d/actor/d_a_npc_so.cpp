@@ -7,6 +7,8 @@
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_tag_so.h"
+#include "m_Do/m_Do_ext.h"
+#include "res/Object/So.h"
 
 const s32 daNpc_So_c::m_heapsize = 0x1C00;
 const char daNpc_So_c::m_arc_name[] = "So";
@@ -215,18 +217,83 @@ s16 daNpc_So_c::XyEventCB(int i_itemBtn) {
 }
 
 /* 000006EC-0000070C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_So_c*>(i_this)->_createHeap();
 }
 
 /* 0000070C-00000A20       .text _createHeap__10daNpc_So_cFv */
-void daNpc_So_c::_createHeap() {
-    /* Nonmatching */
+BOOL daNpc_So_c::_createHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_e));
+    JUT_ASSERT(0x1FD, modelData != NULL);
+
+    mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL, NULL, NULL,
+        J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, 1, NULL,
+        0x00080000, 0x11020022
+    );
+
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return false;
+    }
+
+    mpMorf->getModel()->setUserArea((u32)this);
+
+    J3DAnmTexPattern* btpData = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BTP_SO_e));
+    JUT_ASSERT(0x210, btpData != NULL);
+
+    if (!mBtpAnm.init(modelData, btpData, 1, 0, 1.0f, 0, -1, 0)) {
+        return false;
+    }
+
+    field_0x298 = 0xB;
+    JUT_ASSERT(0x215, field_0x298 >= 0);
+
+    field_0x299 = 1;
+    JUT_ASSERT(0x217, field_0x299 >= 0);
+
+    modelData->getJointNodePointer(0xB)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(1)->setCallBack(nodeControl_CB);
+
+    J3DModelData* fudeData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_FUDE_e));
+    JUT_ASSERT(0x221, fudeData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(fudeData, 0x00080000, 0x11000022);
+    if (mpModel == NULL) {
+        return false;
+    }
+
+    return jntHitCreateHeap() ? TRUE : FALSE;
 }
 
 /* 00000A20-00000A84       .text jntHitCreateHeap__10daNpc_So_cFv */
-void daNpc_So_c::jntHitCreateHeap() {
-    /* Nonmatching */
+bool daNpc_So_c::jntHitCreateHeap() {
+    static Vec cyl_offset_B[] = {
+        {15.0f, 0.0f, 0.0f},
+        {-15.0f, 0.0f, 0.0f},
+    };
+    static __jnt_hit_data_c search_data[] = {
+        {
+            /* mShapeType  */ 4,
+            /* mJointIndex */ 0,
+            /* mRadius     */ 2.0f,
+            /* mpOffsets   */ cyl_offset_B,
+        },
+        {
+            /* mShapeType  */ 8,
+            /* mJointIndex */ 0,
+            /* mRadius     */ 2.0f,
+            /* mpOffsets   */ cyl_offset_B,
+        },
+    };
+
+    field_0xAA8 = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
+    if (field_0xAA8 != NULL) {
+        jntHit = field_0xAA8;
+    } else {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000A84-00000C8C       .text checkTgHit__10daNpc_So_cFv */
