@@ -375,7 +375,6 @@ static BOOL daNpc_Arm_nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000834-000008E4       .text nodeArmControl__12daNpcBmcon_cFP7J3DNodeP8J3DModel */
 void daNpcBmcon_c::nodeArmControl(J3DNode* node, J3DModel* model) {
-    /* Nonmatching */
     J3DJoint* joint = (J3DJoint*)node;
     s32 jntNo = joint->getJntNo();
 
@@ -386,7 +385,7 @@ void daNpcBmcon_c::nodeArmControl(J3DNode* node, J3DModel* model) {
         MTXCopy(mLeftArmMtx, model->getAnmMtx(jntNo));
     }
 
-    else if(jntNo == m_armR1_jnt_num) {
+    if(jntNo == m_armR1_jnt_num) {
         MTXCopy(mRightArmMtx, J3DSys::mCurrentMtx);
         MTXCopy(mRightArmMtx, model->getAnmMtx(jntNo));
     }
