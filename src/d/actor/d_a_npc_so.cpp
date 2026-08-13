@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "d/actor/d_a_ship.h"
+#include "f_op/f_op_camera.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_ext.h"
@@ -685,7 +686,22 @@ void daNpc_So_c::modeEventMapopenInit() {
 
 /* 000025B0-00002670       .text modeEventMapopen__10daNpc_So_cFv */
 void daNpc_So_c::modeEventMapopen() {
+    if (eventInfo.getCommand() == 2) {
+        if (!mEventCut.cutProc()) {
     /* Nonmatching */
+            cutProc();
+        }
+        if (dComIfGp_evmng_endCheck("SO_MAPOPEN")) {
+            dComIfGp_event_onEventFlag(8);
+            field_0xB70 = 1;
+            field_0xBD8 = 1;
+            modeProc(PROC_INIT_e, 0xB);
+        }
+    } else {
+        if (talk(1) == 0x12) {
+            field_0xB70 = 5;
+        }
+    }
 }
 
 /* 00002670-000026B4       .text modeEventBowInit__10daNpc_So_cFv */
@@ -698,7 +714,27 @@ void daNpc_So_c::modeEventBowInit() {
 
 /* 000026B4-000027F8       .text modeEventBow__10daNpc_So_cFv */
 void daNpc_So_c::modeEventBow() {
+    if (eventInfo.getCommand() == 2) {
+        if (!mEventCut.cutProc()) {
     /* Nonmatching */
+            cutProc();
+        }
+        if (dComIfGp_evmng_endCheck("SO_BOW")) {
+            field_0xB0C = 1;
+            dComIfGp_event_onEventFlag(8);
+            field_0xBDB = 0;
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A10);
+            camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            cam->mCamera.Reset(field_0xBCC, field_0xBC0);
+            cam->mCamera.Start();
+            field_0xB70 = 1;
+            modeProc(PROC_INIT_e, 0xB);
+        }
+    } else {
+        if (talk(1) == 0x12) {
+            field_0xB70 = 6;
+        }
+    }
 }
 
 /* 000027F8-0000283C       .text modeTalkInit__10daNpc_So_cFv */
