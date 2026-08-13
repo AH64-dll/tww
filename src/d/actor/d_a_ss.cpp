@@ -253,19 +253,24 @@ void hand_1_move(ss_class* i_this, ss_s* hand) {
 /* 0000152C-00001D30       .text hand_1_cut__FP8ss_classP4ss_s */
 /* Nonmatching */
 void hand_1_cut(ss_class* i_this, ss_s* hand) {
-    cXyz sp58(0.0f, 0.0f, 15.0f + REG8_F(11));
+    cXyz sp58;
     cXyz sp4C;
     cXyz sp40;
     cXyz sp1C;
     cXyz sp10;
+    sp58.y = 0.0f;
+    sp58.x = 0.0f;
+    sp58.z = 15.0f + REG8_F(11);
 
     if (hand->m36 != 0) {
         hand->m36--;
         hand->mSss[0].mPos = i_this->home.pos;
+        int i = 1;
         ss_s_s* cur = &hand->mSss[1];
-        for (int i = 1; i < 20; i++) {
+        for (; i < 20; i++) {
             sp4C = cur->mPos - (cur - 1)->mPos;
-            mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp4C.x, sp4C.z));
+            int ang = cM_atan2s(sp4C.x, sp4C.z);
+            mDoMtx_YrotS(*calc_mtx, ang);
             f32 dist = std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp4C.y, dist));
             MtxPosition(&sp58, &sp4C);
@@ -279,17 +284,18 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 
     hand->mSss[19].mPos = hand->mPos;
 
-    dBgS_GndChk gndChk;
-
     ss_s_s* cur = &hand->mSss[18];
-    s32 idx = 0x12;
+
+    dBgS_GndChk gndChk;
 
     cLib_addCalc2(&hand->m24, -20.0f + REG8_F(2), 1.0f, 1.0f + REG8_F(4));
     cXyz sp34v;
     sp34v.y = 0.0f;
+    s32 idx = 0x12;
+    f32 f50 = 50.0f;
 
     do {
-        gndChk.m_pos.set(cur->mPos.x, cur->mPos.y + 50.0f, cur->mPos.z);
+        gndChk.m_pos.set(cur->mPos.x, cur->mPos.y + f50, cur->mPos.z);
         f32 groundY = 5.0f + dComIfG_Bgsp()->GroundCross(&gndChk);
         f32 curY = cur->mPos.y + hand->m24;
         if (curY < groundY + hand->m2C) {
@@ -302,7 +308,8 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
         sp4C.x = sp40.x + (cur->mPos.x - (cur + 1)->mPos.x);
         sp4C.y = curY - (cur + 1)->mPos.y;
         sp4C.z = sp40.z + (cur->mPos.z - (cur + 1)->mPos.z);
-        mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp4C.x, sp4C.z));
+        int ang = cM_atan2s(sp4C.x, sp4C.z);
+        mDoMtx_YrotS(*calc_mtx, ang);
         f32 dist = std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z);
         mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp4C.y, dist));
         MtxPosition(&sp58, &sp4C);
@@ -359,56 +366,58 @@ void hand_1_cut(ss_class* i_this, ss_s* hand) {
 /* Nonmatching */
 void hand_move(ss_class* i_this) {
     dBgS_LinChk linChk;
+    cXyz sp14;
     cXyz sp8;
-    s16 angle = 0;
 
     non_pos.set(0.0f, -10000.0f, 0.0f);
+    s16 angle = 0;
 
     for (int i = 0; i < 10; i++) {
-        ss_s* hand = &i_this->mHand[i];
         for (int j = 0; j < 4; j++) {
-            hand->mSph[j].SetC(non_pos);
-            dComIfG_Ccsp()->Set(&hand->mSph[j]);
+            i_this->mHand[i].mSph[j].SetC(non_pos);
+            dComIfG_Ccsp()->Set(&i_this->mHand[i].mSph[j]);
         }
 
-        switch (hand->mState) {
+        switch (i_this->mHand[i].mState) {
         case 0:
             if (i_this->mFlag == 1) {
-                hand->mAngleY = (s16)(i_this->current.angle.y + 0x8000);
-                mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
-                cXyz sp14(0.0f, 0.0f, -1000.0f);
+                i_this->mHand[i].mAngleY = (s16)(i_this->current.angle.y + 0x8000);
+                mDoMtx_YrotS(*calc_mtx, i_this->mHand[i].mAngleY);
+                sp14.set(0.0f, 0.0f, -1000.0f);
                 MtxPosition(&sp14, &sp8);
                 sp8 += i_this->current.pos;
                 linChk.Set(&i_this->current.pos, &sp8, i_this);
                 if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                    hand->mPos = linChk.GetCross();
-                    i_this->home.pos = hand->mPos;
+                    i_this->mHand[i].mPos = linChk.GetCross();
+                    i_this->home.pos = i_this->mHand[i].mPos;
                     sp14.z = 200.0f + REG12_F(12);
                     MtxPosition(&sp14, &sp8);
-                    hand->mPos += sp8;
+                    i_this->mHand[i].mPos += sp8;
                 }
-                hand->mAngleZ = angle;
-                hand_1_set_2(i_this, hand);
+                i_this->mHand[i].mAngleZ = angle;
+                hand_1_set_2(i_this, &i_this->mHand[i]);
             } else {
-                hand->mPos = i_this->current.pos;
+                i_this->mHand[i].mPos = i_this->current.pos;
                 sp8 = i_this->current.pos;
                 sp8.y -= 1000.0f;
-                linChk.Set(&hand->mPos, &sp8, i_this);
+                linChk.Set(&i_this->mHand[i].mPos, &sp8, i_this);
                 if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                    hand->mPos = linChk.GetCross();
-                    i_this->home.pos = hand->mPos;
-                    hand->mPos.y += 50.0f;
+                    i_this->mHand[i].mPos = linChk.GetCross();
+                    i_this->home.pos = i_this->mHand[i].mPos;
+                    i_this->mHand[i].mPos.y += 50.0f;
                 }
-                hand->mAngleZ = angle;
-                hand_1_set(i_this, hand);
+                i_this->mHand[i].mAngleY = angle;
+                hand_1_set(i_this, &i_this->mHand[i]);
             }
-            hand->mState += 1;
+            i_this->mHand[i].mState += 1;
             break;
         case 1:
-            hand_1_move(i_this, hand);
+            hand_1_move(i_this, &i_this->mHand[i]);
             break;
         case 2:
-            hand_1_cut(i_this, hand);
+            hand_1_cut(i_this, &i_this->mHand[i]);
+            break;
+        case 3:
             break;
         }
         angle += 0x1999;
