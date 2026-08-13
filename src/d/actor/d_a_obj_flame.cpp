@@ -560,7 +560,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
             if (flame->mHeight < 0.1f) {
                 f4 = M_attr_base.mF0E;
                 f3 = 10.0f * M_attr_base.mF10 * flame->mHeight;
-            } else if (flame->mHeight <= 0.9f) {
+            } else if (flame->mHeight > 0.9f) {
                 f3 = 1.0f - flame->mHeight;
                 f4 = 10.0f * M_attr_base.mF0E * f3;
                 f3 = 10.0f * M_attr_base.mF10 * f3;
