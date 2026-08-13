@@ -855,8 +855,27 @@ bool daObjTry::Act_c::chk_sinkdown_water() {
 }
 
 /* 000020AC-00002218       .text calc_drop_param__Q28daObjTry5Act_cCFPfPfPf */
-void daObjTry::Act_c::calc_drop_param(float*, float*, float*) const {
-    /* Nonmatching */
+/* Nonmatching */
+void daObjTry::Act_c::calc_drop_param(f32* pGravity, f32* pViscous, f32* pInert) const {
+    dBgS_ObjAcch& acch = const_cast<dBgS_ObjAcch&>(mAcch);
+    if (acch.ChkWaterHit()) {
+        f32 f2 = current.pos.y - acch.m_wtr.GetHeight();
+        if (f2 <= 0.0f) {
+            f2 = 0.0f;
+        } else if (f2 <= (f32)(-attr().m4D)) {
+            f2 = 0.5f;
+        } else {
+            f2 = -f2 * (0.5f / (f32)attr().m4D);
+        }
+        f32 f3 = 0.0f - f2;
+        *pViscous = f2 * attr().m28 + f3 * attr().m1C;
+        *pInert = f2 * attr().m2C + f3 * attr().m20;
+        *pGravity = f2 * attr().m24 + attr().mGravity;
+    } else {
+        *pViscous = attr().m1C;
+        *pInert = attr().m20;
+        *pGravity = attr().mGravity;
+    }
 }
 
 /* 00002218-000022F4       .text bound__Q28daObjTry5Act_cFv */
