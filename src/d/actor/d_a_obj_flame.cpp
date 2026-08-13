@@ -261,8 +261,9 @@ void daObjFlame::Act_c::create_mode_init() {
             bit <<= 1;
             idx++;
         }
-        f32 f3 = (f32)(timer + cycle * idx) * flameAttr(this)->mF24;
-        if (mType != 1) {
+        s32 type = mType;
+        f32 f3 = (f32)(timer + cycle * idx) * flameAttrIdx(type)->mF24;
+        if (type != 1) {
             f3 -= 127.0f;
         }
 
