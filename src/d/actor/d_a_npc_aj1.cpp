@@ -612,10 +612,7 @@ u32 daNpc_Aj1_c::getMsg_AJ1_2() {
     if (!dComIfGs_isEventBit(0x2A20)) {
         return 0x9D4;
     }
-    if (dKy_daynight_check()) {
-        return 0x9D6;
-    }
-    return 0x9D7;
+    return dKy_daynight_check() ? 0x9D6 : 0x9D5;
 }
 
 /* 00001460-0000146C       .text getMsg__11daNpc_Aj1_cFv */
