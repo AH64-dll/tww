@@ -104,7 +104,7 @@ public:
     int getShapeType();
     u16 getCaughtFlag();
     u16 getFoundFlag();
-    u32 getFirstTalk();
+    u16 getFirstTalk();
     BOOL chkGameStart();
     BOOL chkPositioning(f32, f32, f32, s16, s16);
     u8 nextVisitMode();

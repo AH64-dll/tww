@@ -56,7 +56,7 @@ u16 daNpc_Uk_c::getFoundFlag() {
 }
 
 /* 000001A8-000001F4       .text getFirstTalk__10daNpc_Uk_cFv */
-u32 daNpc_Uk_c::getFirstTalk() {
+u16 daNpc_Uk_c::getFirstTalk() {
     switch (getShapeType()) {
     case 0:
         return 0x1202;
@@ -526,7 +526,6 @@ u16 daNpc_Uk_c::next_msgStatus(u32* pMsgNo) {
     /* Nonmatching */
 u32 daNpc_Uk_c::getMsg() {
     u32 msgNo = 0;
-    clrFlag(0x8);
     switch (mType) {
     case TYPE_NORMAL:
         if (mState == STATE_DEMO01 || mState == STATE_DEMO02) {
