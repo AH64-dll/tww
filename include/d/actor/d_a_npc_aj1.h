@@ -54,7 +54,7 @@ public:
     void eventOrder();
     void checkOrder();
     u8 chk_talk();
-    s32 chk_parts_notMov();
+    u8 chk_parts_notMov();
     void lookBack();
     s32 chkAttention();
     void setAttention(bool);

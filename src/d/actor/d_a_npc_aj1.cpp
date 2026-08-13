@@ -680,8 +680,8 @@ u8 daNpc_Aj1_c::chk_talk() {
 }
 
 /* 000016B8-000016D8       .text chk_parts_notMov__11daNpc_Aj1_cFv */
-s32 daNpc_Aj1_c::chk_parts_notMov() {
-    s32 result = 0;
+u8 daNpc_Aj1_c::chk_parts_notMov() {
+    u8 result = 0;
     if (mJointHeadY == m_jnt.getHead_y() && mJointBackboneY == m_jnt.getBackbone_y() &&
         mActorAngleY == current.angle.y) {
         result = 1;
