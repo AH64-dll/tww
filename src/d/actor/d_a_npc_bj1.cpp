@@ -576,8 +576,193 @@ void daNpc_Bj1_c::setReg(unsigned short i_reg) {
 }
 
 /* 00001B14-00001E84       .text next_msgStatus__11daNpc_Bj1_cFPUl */
-u16 daNpc_Bj1_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daNpc_Bj1_c::next_msgStatus(u32* pMsgNo) {
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
+    switch (*pMsgNo) {
+    case 0x13ED:
+        *pMsgNo = 0x13EE;
+        break;
+    case 0x13EE:
+        *pMsgNo = 0x13EF;
+        break;
+    case 0x13F0:
+        *pMsgNo = 0x13F1;
+        break;
+    case 0x13F2:
+        *pMsgNo = 0x13F3;
+        break;
+    case 0x13F5:
+        *pMsgNo = 0x13F6;
+        break;
+    case 0x13F8:
+        *pMsgNo = 0x13F9;
+        break;
+    case 0x13FB:
+        *pMsgNo = 0x13FC;
+        break;
+    case 0x13FD:
+        *pMsgNo = 0x13FE;
+        break;
+    case 0x13FF:
+        *pMsgNo = 0x1400;
+        break;
+    case 0x1400:
+        *pMsgNo = 0x1401;
+        break;
+    case 0x1402:
+        *pMsgNo = 0x1403;
+        break;
+    case 0x1403:
+        *pMsgNo = 0x1404;
+        break;
+    case 0x1406:
+        *pMsgNo = 0x1407;
+        break;
+    case 0x1407:
+        *pMsgNo = 0x1408;
+        break;
+    case 0x140B:
+        *pMsgNo = 0x140C;
+        break;
+    case 0x140E:
+        *pMsgNo = 0x140F;
+        break;
+    case 0x1412:
+        *pMsgNo = 0x1413;
+        break;
+    case 0x1414:
+        *pMsgNo = 0x1415;
+        break;
+    case 0x1416:
+        *pMsgNo = 0x1417;
+        break;
+    case 0x1417:
+        *pMsgNo = 0x1418;
+        break;
+    case 0x1418:
+        *pMsgNo = 0x1419;
+        break;
+    case 0x1419:
+        *pMsgNo = 0x141A;
+        break;
+    case 0x141A:
+        *pMsgNo = 0x141B;
+        break;
+    case 0x141B:
+        *pMsgNo = 0x141C;
+        break;
+    case 0x141C:
+        *pMsgNo = 0x141D;
+        break;
+    case 0x141F:
+        *pMsgNo = 0x1420;
+        break;
+    case 0x142C:
+        *pMsgNo = 0x142D;
+        break;
+    case 0x1431:
+        *pMsgNo = 0x1432;
+        break;
+    case 0x1433:
+        *pMsgNo = 0x1417;
+        break;
+    case 0x1422:
+        *pMsgNo = 0x1423;
+        break;
+    case 0x1423:
+        dComIfGs_onEventBit(0x1B80);
+        /* fallthrough */
+    case 0x1424:
+        if (g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(1) < 4) {
+            if ((u8)m840 != 0) {
+                *pMsgNo = 0x1427;
+            } else {
+                *pMsgNo = 0x1425;
+            }
+        } else {
+            if (dComIfGs_checkEmptyBottle()) {
+                *pMsgNo = 0x1428;
+            } else if ((u8)m841 != 0) {
+                *pMsgNo = 0x1430;
+            } else {
+                *pMsgNo = 0x142E;
+            }
+        }
+        break;
+    case 0x1425:
+        *pMsgNo = 0x1426;
+        break;
+    case 0x1428:
+        *pMsgNo = 0x1429;
+        break;
+    case 0x142E:
+        *pMsgNo = 0x142F;
+        break;
+    case 0x1487:
+        *pMsgNo = 0x1488;
+        break;
+    case 0x1488:
+        *pMsgNo = 0x1489;
+        break;
+    case 0x1482:
+        *pMsgNo = 0x1483;
+        break;
+    case 0x148A:
+        *pMsgNo = 0x148B;
+        break;
+    case 0x148B:
+        *pMsgNo = 0x148C;
+        break;
+    case 0x148C:
+        *pMsgNo = 0x148D;
+        break;
+    case 0x148D:
+        *pMsgNo = 0x148E;
+        break;
+    case 0x148E:
+        *pMsgNo = 0x148F;
+        break;
+    case 0x148F:
+        *pMsgNo = 0x1490;
+        break;
+    case 0x1490:
+        *pMsgNo = 0x1491;
+        break;
+    case 0x1491:
+        *pMsgNo = 0x1492;
+        break;
+    case 0x1492:
+        *pMsgNo = 0x1493;
+        break;
+    case 0x1497:
+        *pMsgNo = 0x1498;
+        break;
+    case 0x1498:
+        *pMsgNo = 0x1499;
+        break;
+    case 0x1499:
+        *pMsgNo = 0x149A;
+        break;
+    case 0x149A:
+        *pMsgNo = 0x149B;
+        break;
+    case 0x149B:
+        *pMsgNo = 0x149C;
+        break;
+    case 0x149C:
+        *pMsgNo = 0x149D;
+        break;
+    case 0x1494:
+        *pMsgNo = 0x1495;
+        break;
+    case 0x1495:
+        *pMsgNo = 0x1496;
+        break;
+    default:
+        status = fopMsgStts_MSG_ENDS_e;
+        break;
+    }
+    return status;
 }
 
 /* 00001E84-00001F14       .text getMsg_BJ1_0__11daNpc_Bj1_cFv */
