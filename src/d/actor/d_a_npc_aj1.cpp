@@ -313,8 +313,8 @@ int daNpc_Aj1_c::btpResID(int i_resNo) {
 }
 
 /* 00000B58-00000C64       .text init_texPttrnAnm__11daNpc_Aj1_cFScb */
-        /* Nonmatching */
 bool daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
+    J3DModel* mdl = mpMorf->getModel();
     if (i_btpNo < 0) {
         return 0;
     }
@@ -323,7 +323,7 @@ bool daNpc_Aj1_c::init_texPttrnAnm(s8 i_btpNo, bool i_entry) {
     mBtpNum = i_btpNo;
     mBlinkFrame = 0;
     mBlinkTimer = 0;
-    return mBtpAnm.init(mpMorf->getModel()->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
+    return mBtpAnm.init(mdl->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_entry, FALSE) != 0;
 }
 
 /* 00000C64-00000CF4       .text play_texPttrnAnm__11daNpc_Aj1_cFv */
@@ -974,8 +974,9 @@ void daNpc_Aj1_c::event_proc(int i_eventNo) {
 /* 00002098-00002118       .text set_pa_pun__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_pun() {
+    s8 roomNo = current.roomNo;
     mPunEmitter = dComIfGp_particle_set(0x8113, &current.pos, NULL, NULL, 0xFF, NULL,
-                                        current.roomNo, NULL, NULL, NULL);
+                                        roomNo, NULL, NULL, NULL);
     if (mPunEmitter != NULL) {
         mPunTimer = 0;
     }
