@@ -103,3 +103,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T11:34Z — M9: flip #30 d_a_obj_aygr → ActorRel(Matching) — FIRST Matching-class flip this session (18/18 fns 100.0, 4 real fixes: set_mtx arg-eval order, JUT_ASSERT local-name string pool, Draw TEV_TYPE_BG0 lighting bug, CreateHeap assert-string); 416-OK gate at 5153b694a 14:34:11, rel sha1 byte-perfect vs pin. Ledger: 75 ActorRel NonMatching / 28 Equivalent / 312 Matching + 84 DOL Object rows (taxonomy written — JSystem/TRK/dolphin framework tier + 3 actor-adjacent claimable). Bench cycle: 8 preverifies all correct (trap #27 post-flip QA stands; aj1/sarace/bms1/kg2/pw/so/sitem/gy/kantera NOT-flip-ready with fix lists; R2 hidden branch-target catch; R4/R5/R9/R10 value-bug catches — 10+ real bugs pre-blocked). 4-version cycle green at e8aafa15d.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T11:53Z — M10: 3-flip wave — #30 aygr Matching (first Matching-class, byte-perfect rel), #31 kg2 Equivalent (full approval trail), #32 sarace Equivalent (ratified by arbiter R2-7-2, bgt byte-identical proof). Ledger 74 NonMatching / 30 Equivalent / 313 Matching. Flip-discipline codified after 2 stale-incarnation violations (B9-3 stood down): flips only after RLead consensus + Main approval + BLead gate; valid-evidence flips stand gated never reverted. Bench caught 12+ real value bugs pre-flip this session. 4-version cycle green at e8aafa15d.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
