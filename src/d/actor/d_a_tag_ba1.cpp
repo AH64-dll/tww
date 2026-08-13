@@ -61,8 +61,7 @@ s16 daTag_Ba1_c::XyEvent_cB(int param_1) {
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
-    /* Nonmatching */
-BOOL daTag_Ba1_c::createInit() {
+bool daTag_Ba1_c::createInit() {
     bool ret = dComIfGs_isEventBit(0x520);
     if (!ret) {
         return ret;
@@ -84,15 +83,15 @@ BOOL daTag_Ba1_c::_draw() {
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
-    /* Nonmatching */
 BOOL daTag_Ba1_c::_execute() {
     int staffId = -1;
-    if (dComIfGp_event_getMode() != 0 && eventInfo.getCommand() != dEvtCmd_INTALK_e) {
-        staffId = dComIfGp_evmng_getMyStaffId("TagBa1");
+    dComIfG_inf_c* gameInfo = &g_dComIfG_gameInfo;
+    if (gameInfo->play.mEvtCtrl.mMode != 0 && eventInfo.getCommand() != dEvtCmd_INTALK_e) {
+        staffId = gameInfo->play.mEvtManager.getMyStaffId("TagBa1", NULL, 0);
     }
     if (staffId >= 0) {
-        if (dComIfGp_evmng_endCheck(mEventTbl[mEventIdx])) {
-            g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+        if (gameInfo->play.mEvtManager.endCheck(mEventTbl[mEventIdx])) {
+            gameInfo->play.mEvtCtrl.mEventFlag |= 8;
             fopAcM_delete(this);
         }
     }
@@ -110,17 +109,16 @@ BOOL daTag_Ba1_c::_delete() {
 }
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
-    /* Nonmatching */
 cPhs_State daTag_Ba1_c::_create() {
     if (l_HIO.field_0x8 < 0) {
         l_HIO.mNo = mDoHIO_createChild("おばあちゃんタグ", &l_HIO);
     }
     l_HIO.field_0x8++;
     fopAcM_ct(this, daTag_Ba1_c);
-    if (createInit()) {
-        return cPhs_COMPLEATE_e;
+    if (!createInit()) {
+        return cPhs_ERROR_e;
     }
-    return cPhs_ERROR_e;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
