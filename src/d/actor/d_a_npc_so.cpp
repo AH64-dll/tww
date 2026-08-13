@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -809,6 +810,33 @@ void daNpc_So_c::modeProc(daNpc_So_c::Proc_e, int) {
 /* 00003110-00003264       .text eventOrder__10daNpc_So_cFv */
 void daNpc_So_c::eventOrder() {
     /* Nonmatching */
+    static char* a_demo_name_tbl[] = {
+        "SO_1ST_MEET",
+        "SO_1ST_MEET_END",
+        "SO_MAPOPEN",
+        "SO_BOW",
+        "SO_GET_RUPEE",
+        "SO_TRIFORCE_CHECK",
+    };
+
+    if (field_0xB70 == 1 || field_0xB70 == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+        if (field_0xB70 == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (field_0xB70 == 5 || field_0xB70 == 4 || field_0xB70 == 6) {
+        fopAcM_orderChangeEvent(this, a_demo_name_tbl[field_0xB70 - 3], 0, 0xFFFF);
+    } else if (field_0xB70 == 7) {
+        if (REG12_S(9) == 0) {
+            fopAcM_orderChangeEvent(this, a_demo_name_tbl[field_0xB70 - 3], 0, 0xFFFF);
+            eventInfo.onCondition(8);
+        } else {
+            fopAcM_orderOtherEvent2(this, a_demo_name_tbl[field_0xB70 - 3], 1, 0xFFFF);
+        }
+    } else if (field_0xB70 >= 3) {
+        fopAcM_orderOtherEvent2(this, a_demo_name_tbl[field_0xB70 - 3], 1, 0xFFFF);
+    }
 }
 
 /* 00003264-0000330C       .text checkOrder__10daNpc_So_cFv */
