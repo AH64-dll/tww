@@ -639,12 +639,21 @@ void daObjTry::Act_c::eff_hit_water_splash() {
 
 /* 0000280C-00002868       .text make_vib__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::make_vib() {
-    g_dComIfG_gameInfo.play.mVibration.StartShock(check_circle() + 1, 1, cXyz(0.0f, 0.0f, 0.0f));
+    int ret = check_circle();
+    g_dComIfG_gameInfo.play.mVibration.StartShock(ret + 1, 1, cXyz(0.0f, 0.0f, 0.0f));
 }
 
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::check_circle() {
-    /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz diff = player->current.pos - current.pos;
+    f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
+    dist = std::sqrtf(dist);
+    bool ret = false;
+    if (dist <= 190.0f) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00002960-00002A90       .text get_water_h__Q28daObjTry5Act_cFv */
