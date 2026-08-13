@@ -535,7 +535,7 @@ u32 daNpc_Kf1_c::getMsg() { /* Nonmatching */
 void daNpc_Kf1_c::eventOrder() { /* Nonmatching */
     s8 order = mOrder;
     if (order == 1 || order == 2) {
-        eventInfo.mCommand |= 1;
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
         if (mOrder == 1) {
             fopAcM_orderSpeakEvent(this);
         }
