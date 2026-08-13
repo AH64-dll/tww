@@ -431,8 +431,9 @@ bool daBalancelift_c::_execute() {
 static BOOL daBalanceliftDraw(void* i_this) {
     /* Nonmatching */
     daBalancelift_c* a_this = (daBalancelift_c*)i_this;
-    g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.setLightTevColorType(a_this->M_mdl, &a_this->tevStr);
+    dKy_tevstr_c* tev = &a_this->tevStr;
+    g_env_light.settingTevStruct(0, &a_this->current.pos, tev);
+    g_env_light.setLightTevColorType(a_this->M_mdl, tev);
     mDoExt_modelUpdateDL(a_this->M_mdl);
     j3dSys.getDrawBuffer(0)->entryImm(a_this->m_chain, 0);
     return TRUE;
