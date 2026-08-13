@@ -1190,8 +1190,9 @@ void daNpcMn_c::eventJumpInit(int staffIdx) {
     f32* pSpeedY = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedY");
     f32* pGravity = dComIfGp_evmng_getMyFloatP(staffIdx, "Gravity");
     if (pSpeedX != NULL) {
-        speedF = *pSpeedX;
-        m77C = *pSpeedX;
+        f32 speedX = *pSpeedX;
+        speedF = speedX;
+        m77C = speedX;
     } else {
         speedF = 3.0f;
         m77C = 3.0f;
@@ -1202,11 +1203,11 @@ void daNpcMn_c::eventJumpInit(int staffIdx) {
         m788 = 200.0f;
     }
     if (pGravity != NULL) {
-        maxFallSpeed = *pGravity;
+        gravity = *pGravity;
     }
     m77C = 40.0f;
     m788 = 25.0f;
-    maxFallSpeed = -1.0f;
+    gravity = -1.0f;
 }
 
 /* 00002A90-00002AE8       .text eventJump__9daNpcMn_cFv */
