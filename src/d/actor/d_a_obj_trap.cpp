@@ -201,7 +201,11 @@ int daObjTrap_c::circle_search() {
     cXyz diff = player->current.pos - current.pos;
     f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
     dist = std::sqrtf(dist);
-    return dist <= 400.0f && mDirValid == 1 && mDir.x * diff.x + mDir.z * diff.z >= 0.0f;
+    int ret = 0;
+    if (dist <= 400.0f && mDirValid == 1 && mDir.x * diff.x + mDir.z * diff.z >= 0.0f) {
+        ret = 1;
+    }
+    return ret;
 }
 
 /* 0000112C-0000122C       .text set_move_info__11daObjTrap_cFv */
