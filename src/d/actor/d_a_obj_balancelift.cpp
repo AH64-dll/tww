@@ -65,8 +65,8 @@ daBalancelift_HIO_c::daBalancelift_HIO_c() {
     mFloat0x14 = 0.9f;
     mFloat0x18 = 25.0f;
     mFloat0x1C = 0.65f;
-    mFloat0x20 = 440.0f;
-    mFloat0x24 = 0.9f;
+    mFloat0x20 = 0.9f;
+    mFloat0x24 = 440.0f;
     mFloat0x28 = 1800.0f;
     mFloat0x2C = 2.0f;
     mFloat0x30 = 0.1f;
@@ -78,28 +78,25 @@ const char daBalancelift_c::M_arcname[] = "Hten1";
 /* 0000019C-00000264       .text daObjBlift_ride_actor_check__FP10fopAc_ac_c */
 s32 daObjBlift_ride_actor_check(fopAc_ac_c* actor) {
     /* Nonmatching */
+    s32 result = 0;
     if (fopAc_IsActor(actor)) {
         if (fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
-            return 1;
-        }
-
-        if (fopAcM_GetName(actor) == fpcNm_PLAYER_e) {
+            result = 1;
+        } else if (fopAcM_GetName(actor) == fpcNm_PLAYER_e) {
+            result = 1;
             fpc_ProcID grab_id = ((daPy_py_c*)actor)->getGrabActorID();
             if (grab_id != fpcM_ERROR_PROCESS_ID_e) {
                 fopAc_ac_c* grab_actor = fopAcM_SearchByID(grab_id);
                 if (grab_actor != NULL) {
-                    return daObjBlift_ride_actor_check(grab_actor) + 1;
+                    result = daObjBlift_ride_actor_check(grab_actor) + 1;
                 }
             }
-            return 1;
-        }
-
-        if (fopAcM_GetName(actor) == fpcNm_AM2_e || fopAcM_GetName(actor) == fpcNm_NPC_OS_e ||
-            fopAcM_GetName(actor) == fpcNm_NPC_CB1_e) {
-            return 1;
+        } else if (fopAcM_GetName(actor) == fpcNm_AM2_e || fopAcM_GetName(actor) == fpcNm_NPC_OS_e ||
+                   fopAcM_GetName(actor) == fpcNm_NPC_CB1_e) {
+            result = 1;
         }
     }
-    return 0;
+    return result;
 }
 
 /* 00000264-0000033C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
@@ -166,12 +163,13 @@ void daBalancelift_c::set_mtx() {
 
     mDoMtx_stack_c::quatM(&mQuatR);
     mDoMtx_stack_c::scaleM(l_HIO.mFloat0x2C, l_HIO.mFloat0x30, l_HIO.mFloat0x34);
-    PSMTXCopy(mDoMtx_stack_c::get(), mMdl->getBaseTRMtx());
+    PSMTXCopy(mDoMtx_stack_c::get(), M_mdl->getBaseTRMtx());
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 
-    mChain->mPt[0] = mPos;
-    mChain->mPt[1] = mChainPos;
-    mChain->mPt[2] = current.pos;
+    cXyz* pt = m_chain->mPt;
+    pt[0] = mPos;
+    pt[1] = mChainPos;
+    pt[2] = current.pos;
 }
 
 /* 00000670-00000984       .text calc_weight__15daBalancelift_cFv */
@@ -232,22 +230,21 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000009A4-00000BA0       .text CreateHeap__15daBalancelift_cFv */
 BOOL daBalancelift_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
     JUT_ASSERT(419, modelData != 0);
 
-    mMdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    JUT_ASSERT(421, mMdl != 0);
+    M_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    JUT_ASSERT(421, M_mdl != 0);
 
-    mChain = dChain_packet_create(3, &tevStr, 2.0f);
-    JUT_ASSERT(423, mChain != 0);
+    m_chain = dChain_packet_create(3, &tevStr, 2.0f);
+    JUT_ASSERT(423, m_chain != 0);
 
     pm_bgw = new dBgW();
     pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, 7), cBgW::MOVE_BG_e, &mBgMtx);
     pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
     JUT_ASSERT(432, pm_bgw != 0);
 
-    return mMdl != 0 && mChain != 0 && pm_bgw != 0;
+    return M_mdl != 0 && m_chain != 0 && pm_bgw != 0;
 }
 
 /* 00000BA0-00000F34       .text CreateInit__15daBalancelift_cFv */
@@ -336,9 +333,9 @@ static cPhs_State daBalanceliftCreate(void* i_this) {
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0xE40)) {
             phase_state = a_this->CreateInit();
-            fopAcM_SetMtx(a_this, a_this->mMdl->getBaseTRMtx());
+            fopAcM_SetMtx(a_this, a_this->M_mdl->getBaseTRMtx());
             fopAcM_setCullSizeBox(a_this, -150.0f, -150.0f, -150.0f, 150.0f, 1000.0f, 150.0f);
-            PSMTXCopy(a_this->mMdl->getBaseTRMtx(), a_this->mBgMtx);
+            PSMTXCopy(a_this->M_mdl->getBaseTRMtx(), a_this->mBgMtx);
         } else {
             phase_state = cPhs_ERROR_e;
         }
@@ -435,9 +432,9 @@ static BOOL daBalanceliftDraw(void* i_this) {
     /* Nonmatching */
     daBalancelift_c* a_this = (daBalancelift_c*)i_this;
     g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.setLightTevColorType(a_this->mMdl, &a_this->tevStr);
-    mDoExt_modelUpdateDL(a_this->mMdl);
-    j3dSys.getDrawBuffer(0)->entryImm(a_this->mChain, 0);
+    g_env_light.setLightTevColorType(a_this->M_mdl, &a_this->tevStr);
+    mDoExt_modelUpdateDL(a_this->M_mdl);
+    j3dSys.getDrawBuffer(0)->entryImm(a_this->m_chain, 0);
     return TRUE;
 }
 

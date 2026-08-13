@@ -40,14 +40,14 @@ public:
     /* 0x31E */ s16 mRightWeight;
     /* 0x320 */ s16* mWeightPtr2;
     /* 0x324 */ request_of_phase_process_class mPhase;
-    /* 0x32C */ J3DModel* mMdl;
+    /* 0x32C */ J3DModel* M_mdl;
     /* 0x330 */ Mtx mBgMtx;
     /* 0x360 */ dPath* mPath;
     /* 0x364 */ dBgW* pm_bgw;
     /* 0x368 */ f32 mVelocity;
     /* 0x36C */ cXyz mLine[4];
     /* 0x39C */ mDoExt_3DlineMat0_c m3Dline;
-    /* 0x3B8 */ dChain_packet_c* mChain;
+    /* 0x3B8 */ dChain_packet_c* m_chain;
     /* 0x3BC */ dCcD_Stts mStts;
     /* 0x3F8 */ dCcD_Cyl mCyl;
 };  // Size: 0x528
