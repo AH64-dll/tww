@@ -117,12 +117,13 @@ static BOOL daNpc_Kg2_nodeCallBack(J3DNode* node, int param) {
 /* 000003A4-0000048C       .text set_mtx__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::set_mtx() {
     /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (m736) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m6C4));
+        mDoMtx_stack_c::copy(model->getAnmMtx(m6C4));
         mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
         mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
         m6D4->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -270,8 +271,8 @@ void daNpc_Kg2_c::eventOrder() {
     /* Nonmatching */
     s8 event_no = m750;
     if (event_no == 1 || event_no == 2) {
-        attention_info.flags |= 1;
-        if (event_no == 1) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (m750 == 1) {
             fopAcM_orderSpeakEvent(this);
         }
     } else if (event_no == 3) {
@@ -733,7 +734,11 @@ int daNpc_Kg2_c::evn_talk_init(int i_staffId) {
     int* msg_no = dComIfGp_evmng_getMyIntegerP(i_staffId, "KGTALK");
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = NULL;
-    m74C = (msg_no != NULL) ? *msg_no : 0;
+    if (msg_no != NULL) {
+        m74C = *msg_no;
+    } else {
+        m74C = 0;
+    }
     return 1;
 }
 
