@@ -1057,10 +1057,11 @@ void daNpc_Aj1_c::flw_pa_aka() {
         /* Nonmatching */
 void daNpc_Aj1_c::del_pa_aka() {
     if (m7B4 != 0) {
-        if (mAkaEmitter != NULL) {
-            if (mAkaEmitter->getParticleNumber() == 0) {
-                mAkaEmitter->setMaxFrame(-1);
-                mAkaEmitter->setStatus(1);
+        JPABaseEmitter* emitter = mAkaEmitter;
+        if (emitter != NULL) {
+            if (emitter->getParticleNumber() == 0) {
+                emitter->setMaxFrame(-1);
+                emitter->setStatus(1);
                 m7B4 = 0;
                 mAkaEmitter = NULL;
             }
