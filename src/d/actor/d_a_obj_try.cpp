@@ -639,7 +639,6 @@ void daObjTry::Act_c::mode_carry_init() {
 
 /* 00001344-000013D4       .text mode_carry__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_carry() {
-    /* Nonmatching */
     if (m630 > 0) {
         m630--;
     }
@@ -966,6 +965,7 @@ void daObjTry::Act_c::init_mtx() {
 
 /* 00002540-00002718       .text eff_set_bingo__Q28daObjTry5Act_cFbb */
 void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
+    /* Nonmatching */
     if (m651 == 0) {
         u32 idx = (u32)(5 - mType) > 0;
         g_dComIfG_gameInfo.play.getParticle()->set(
@@ -1005,13 +1005,11 @@ void daObjTry::Act_c::eff_clr_bingo() {
 
 /* 00002790-000027BC       .text eff_land_smoke__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_land_smoke() {
-    /* Nonmatching */
     daObj::make_land_effect(this, &mAcch.m_gnd, 1.0f);
 }
 
 /* 000027BC-0000280C       .text eff_hit_water_splash__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_hit_water_splash() {
-    /* Nonmatching */
     cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
     fopKyM_createWpillar(&pos, 1.0f, 0.75f, 0);
 }
@@ -1099,6 +1097,7 @@ skip:
 
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_draw() {
+    /* Nonmatching */
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
