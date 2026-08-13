@@ -779,7 +779,7 @@ int daNpc_Kg2_c::privateCut() {
         "KGTALK",
         "CREATEITEM",
     };
-    int staff_id = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), this, 0);
+    int staff_id = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
     if (staff_id == -1) {
         return 0;
     }
@@ -803,15 +803,19 @@ int daNpc_Kg2_c::privateCut() {
         }
     }
     int ret = 1;
-    if (act_idx != -1 && act_idx != 2) {
-        switch (act_idx) {
-        case 0:
-            ret = evn_setAnm();
-            break;
-        case 3:
-            ret = evn_talk();
-            break;
-        }
+    switch (act_idx) {
+    case 0:
+        ret = evn_setAnm();
+        break;
+    case 2:
+        ret = 1;
+        break;
+    case 3:
+        ret = evn_talk();
+        break;
+    default:
+        ret = 1;
+        break;
     }
     if (ret) {
         dComIfGp_evmng_cutEnd(staff_id);
