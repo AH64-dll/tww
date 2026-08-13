@@ -650,7 +650,7 @@ s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
     m2A7 = 0;
     m688 = cnt;
     m68C = 0;
-    return SetJointAnimation(6, 0.7f + 0.5f * cM_rndF(1.0f), 10.0f, 0);
+    return SetJointAnimation(6, 0.7f + 0.50000006f * cM_rndF(1.0f), 10.0f, 0);
 }
 
 /* 00001A4C-00001AF4       .text action_pikupikuS_main__Q210daObjFtree5Act_cFv */
@@ -683,8 +683,10 @@ void daObjFtree::Act_c::action_pikupikuM_main() {
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
-        m696 = (s16)(100.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
-        m698 = (s16)(300.0f * jmaSinTable[(u16)m694 >> jmaSinShift]);
+        f32 sin = jmaSinTable[(u16)m694 >> jmaSinShift];
+        m696 = (s16)(100.0f * sin);
+        sin = jmaSinTable[(u16)m694 >> jmaSinShift];
+        m698 = (s16)(300.0f * sin);
         m694 += 0xFA0;
     } else if (cnt >= max) {
         process_init(2, 0);
@@ -1234,7 +1236,7 @@ bool daObjFtree::Act_c::_draw() {
         dComIfGd_setList();
 
         cXyz pos = current.pos;
-        dComIfGd_setSimpleShadow2(&pos, m34C, 74.0f, mGndChk, shape_angle.y, 1.0f,
+        dComIfGd_setSimpleShadow2(&pos, m34C, 75.0f, mGndChk, shape_angle.y, 1.0f,
                                   &dDlst_shadowControl_c::mSimpleTexObj);
     }
 
@@ -1256,7 +1258,7 @@ bool daObjFtree::Act_c::_draw() {
             ratio = (m63C - 0.2f) / 0.8f;
         }
         cXyz pos = current.pos;
-        dComIfGd_setSimpleShadow2(&pos, m34C, 74.0f * (1.0f + 2.5f * ratio), mGndChk,
+        dComIfGd_setSimpleShadow2(&pos, m34C, 75.0f * (1.0f + 2.5f * ratio), mGndChk,
                                   shape_angle.y, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
     }
     return true;
