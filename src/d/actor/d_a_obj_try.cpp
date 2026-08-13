@@ -454,7 +454,21 @@ cPhs_State daObjTry::Act_c::_create() {
 
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_delete() {
-    /* Nonmatching */
+    if (m650 != 0) {
+        mFollowCb.remove();
+        if (m668 != 0) {
+            ((JPABaseEmitter*)m668)->mMaxFrame = -1;
+            ((JPABaseEmitter*)m668)->setStatus(JPAEmtrStts_StopEmit);
+        }
+        if (mType == 5) {
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0108);
+        } else if (mType == 6) {
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0110);
+        }
+        model = NULL;
+        dComIfG_deleteObjectRes(M_arcname);
+    }
+    return true;
 }
 
 /* 00000D5C-00000EA8       .text mode_restart_init__Q28daObjTry5Act_cFv */
