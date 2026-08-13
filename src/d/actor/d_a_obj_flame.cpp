@@ -383,11 +383,8 @@ void daObjFlame::Act_c::em_simple_set() {
     }
 
     if (mEm0State == 1 && flag) {
-        Vec pos;
-        pos.z = eyePos.z;
-        pos.y = eyePos.y + mScaleY * (-300.0f * attr->mF04);
-        pos.x = eyePos.x;
-        dComIfGp_particle_setSimple(0x805A, (cXyz*)&pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        cXyz pos(eyePos.x, eyePos.y + mScaleY * (-300.0f * attr->mF04), eyePos.z);
+        dComIfGp_particle_setSimple(0x805A, &pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
 
     if (mEm1State == 1) {
