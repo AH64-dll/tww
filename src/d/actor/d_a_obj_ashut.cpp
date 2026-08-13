@@ -213,9 +213,9 @@ namespace daObjAshut {
                 mode_upper_init();
             } else {
                 mTimer--;
-                f32 damp = L_attr.mDamp;
-                mOffset = L_attr.mUpper + (mOffset - L_attr.mUpper) * damp;
-                mSpeed *= damp;
+                f32 delta = mOffset - L_attr.mUpper;
+                mOffset = L_attr.mUpper + delta * L_attr.mDamp;
+                mSpeed *= L_attr.mDamp;
                 if (mSpeed < L_attr.mDampMin) {
                     mSpeed = L_attr.mDampMin;
                 }
