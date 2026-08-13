@@ -235,9 +235,9 @@ public:
     /* 0x8AC */ u8 m8AC;
     /* 0x8AD */ u8 m8AD;
     /* 0x8AE */ u8 m8AE;
-    /* 0x8AF */ u8 m8AF;
+    /* 0x8AF */ s8 m8AF;
     /* 0x8B0 */ u8 mStatus;
-    /* 0x8B1 */ u8 mPrevStatus;
+    /* 0x8B1 */ s8 mPrevStatus;
     /* 0x8B2 */ s8 m8B2;
     /* 0x8B3 */ s8 m8B3;
     /* 0x8B4 */ s8 mType;
