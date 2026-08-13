@@ -396,6 +396,7 @@ u32 daNpc_So_c::getMsg() {
 
 /* 00000E40-00001214       .text next_msgStatus__10daNpc_So_cFPUl */
 u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
+    /* Nonmatching */
     u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
 
     if (*pMsgNo == field_0x6D0) {
@@ -425,9 +426,6 @@ u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
     case 0x32CE:
         msg_status = fopMsgStts_MSG_ENDS_e;
         modeProc(PROC_INIT_e, 7);
-        break;
-    case 0x32CF:
-        msg_status = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x32D0:
         if (g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid((s8)current.roomNo - 1) != 0 ||
@@ -1251,11 +1249,11 @@ bool daNpc_So_c::_execute() {
     s16 target_angle = 0;
     if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
         current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
-        if (field_0xB34 > 0.0f && field_0xAEC == 0) {
+        if (field_0xB34 > 0.0f && mRipple.mpBaseEmitter == NULL) {
             static cXyz ripple_pos(0.8f, 0.8f, 0.8f);
             g_dComIfG_gameInfo.play.getParticle()->set(5, 0x33, &current.pos, NULL, &ripple_pos, 0xFF, &mRipple, -1, NULL, NULL, NULL);
-            if (field_0xAEC != 0) {
-                field_0xAF8 = 0.0f;
+            if (mRipple.mpBaseEmitter != NULL) {
+                mRipple.mRate = 0.0f;
             }
         }
     } else {
