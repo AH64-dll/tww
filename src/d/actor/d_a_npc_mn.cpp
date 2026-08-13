@@ -850,7 +850,6 @@ void daNpcMn_c::checkOrder() {
 }
 
 /* 00001E80-00001F00       .text eventOrder__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventOrder() {
     if (mOrderMode == 2 || mOrderMode == 1) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -1003,12 +1002,11 @@ void daNpcMn_c::eventMesSetInit(int staffIdx) {
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
     /* Nonmatching */
-s32 daNpcMn_c::eventMesSet() {
+BOOL daNpcMn_c::eventMesSet() {
     return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventGetItemInit() {
     fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, mItemId, 0, -1, -1);
     if (itemID != fpcM_ERROR_PROCESS_ID_e) {
