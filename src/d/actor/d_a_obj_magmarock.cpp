@@ -314,24 +314,7 @@ void daObjMagmarock::Act_c::CreateInit() {
         JAIZelBasic::getInterface()->seStart(0x380E, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
 
-        mTevStr.mLightObj.mInfo = tevStr.mLightObj.mInfo;
-        mTevStr.mLightPosWorld = tevStr.mLightPosWorld;
-        mTevStr.mColorC0 = tevStr.mColorC0;
-        mTevStr.mColorK0 = tevStr.mColorK0;
-        mTevStr.mColorK1 = tevStr.mColorK1;
-        mTevStr.mFogColor = tevStr.mFogColor;
-        mTevStr.mFogStartZ = tevStr.mFogStartZ;
-        mTevStr.mFogEndZ = tevStr.mFogEndZ;
-        mTevStr.mColpatBlend = tevStr.mColpatBlend;
-        mTevStr.mInitTimer = tevStr.mInitTimer;
-        mTevStr.mEnvrIdxCurr = tevStr.mEnvrIdxCurr;
-        mTevStr.mEnvrIdxPrev = tevStr.mEnvrIdxPrev;
-        mTevStr.mColpatCurr = tevStr.mColpatCurr;
-        mTevStr.mColpatPrev = tevStr.mColpatPrev;
-        mTevStr.mRoomNo = tevStr.mRoomNo;
-        mTevStr.mEnvrIdxOverride = tevStr.mEnvrIdxOverride;
-        mTevStr.mLightMode = tevStr.mLightMode;
-        mTevStr.mInitType = tevStr.mInitType;
+        mTevStr = tevStr;
 
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
         mTevStr.mColorC0.r = (u8)(mTevStr.mColorC0.r + (s32)(0.12f * (255 - mTevStr.mColorC0.r)));
@@ -364,18 +347,19 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     /* Nonmatching */
     mLiftPos = i_pos;
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
-    if (mProcFunc == waitProc) {
+    int isWait = mProcFunc == waitProc;
+    if (isWait) {
         void (Act_c::*appearProc)() = &Act_c::appear_proc;
-        if (mProcFunc == appearProc) {
-            return FALSE;
+        int isAppear = mProcFunc == appearProc;
+        if (!isAppear) {
+            cXyz sp2C = current.pos - mLiftPos;
+            sp2C.y = 0.0f;
+            if (!sp2C.normalizeRS()) {
+                sp2C.set(0.0f, 0.0f, 1.0f);
+            }
+            PSVECScale(&sp2C, &sp2C, 10.0f);
+            PSVECAdd(&current.pos, &sp2C, &current.pos);
         }
-        cXyz sp2C = current.pos - mLiftPos;
-        sp2C.y = 0.0f;
-        if (!sp2C.normalizeRS()) {
-            sp2C.set(0.0f, 0.0f, 1.0f);
-        }
-        PSVECScale(&sp2C, &sp2C, 10.0f);
-        PSVECAdd(&current.pos, &sp2C, &current.pos);
         return FALSE;
     }
     cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
