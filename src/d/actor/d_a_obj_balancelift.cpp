@@ -57,7 +57,6 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-00000160       .text __ct__19daBalancelift_HIO_cFv */
 daBalancelift_HIO_c::daBalancelift_HIO_c() {
-    /* Nonmatching */
     mChildIdx = -1;
     mFloat0x08 = 45.0f;
     mFloat0x0C = 0.05f;
