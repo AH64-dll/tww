@@ -498,7 +498,25 @@ void daObjTry::Act_c::mode_restart_init() {
 
 /* 00000EA8-00000FFC       .text mode_restart__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::mode_restart() {
-    /* Nonmatching */
+    m630--;
+    if (m630 < 0x50) {
+        M_restart = 1;
+    }
+    m632 = 0x14;
+    m634 = 1;
+    if (m630 == 0) {
+        shape_angle.y = home.angle.y;
+        current.angle.y = shape_angle.y;
+        current.pos.y = home.pos.y;
+        mode_wait_init();
+        return;
+    }
+    if (m630 < 0x32) {
+        f32 f4 = 0.5f * (0.0f - jmaCosTable[(u16)(655.36f * m630) >> jmaSinShift]);
+        current.pos.y = home.pos.y + f4 * (-10.0f - (f32)attr().m4D);
+        shape_angle.y = home.angle.y + (s16)(-32768.0f * f4);
+        current.angle.y = shape_angle.y;
+    }
 }
 
 /* 00000FFC-00001074       .text mode_wait_init__Q28daObjTry5Act_cFv */
