@@ -381,7 +381,6 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000008A8-00000AAC       .text _createHeap__6daGy_cFv */
 BOOL daGy_c::_createHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 0xF);
     JUT_ASSERT(0x377, modelData != NULL);
 
@@ -877,7 +876,6 @@ void daGy_c::modeDelete() {
 
 /* 00002998-00002A70       .text modeDeleteBombInit__6daGy_cFv */
 void daGy_c::modeDeleteBombInit() {
-    /* Nonmatching */
     actor_status &= ~0x20;
     attention_info.flags &= ~0x4;
     m2B0 = 9;
