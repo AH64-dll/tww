@@ -76,12 +76,12 @@ const char daBalancelift_c::M_arcname[] = "Hten1";
 
 /* 0000019C-00000264       .text daObjBlift_ride_actor_check__FP10fopAc_ac_c */
 s32 daObjBlift_ride_actor_check(fopAc_ac_c* actor) {
-    /* Nonmatching */
     s32 result = 0;
     if (fopAc_IsActor(actor)) {
-        if (fopAcM_GetName(actor) == fpcNm_Obj_Try_e) {
+        s16 procName = fopAcM_GetName(actor);
+        if (procName == fpcNm_Obj_Try_e) {
             result = 1;
-        } else if (fopAcM_GetName(actor) == fpcNm_PLAYER_e) {
+        } else if (procName == fpcNm_PLAYER_e) {
             result = 1;
             fpc_ProcID grab_id = ((daPy_py_c*)actor)->getGrabActorID();
             if (grab_id != fpcM_ERROR_PROCESS_ID_e) {
@@ -90,8 +90,8 @@ s32 daObjBlift_ride_actor_check(fopAc_ac_c* actor) {
                     result = daObjBlift_ride_actor_check(grab_actor) + 1;
                 }
             }
-        } else if (fopAcM_GetName(actor) == fpcNm_AM2_e || fopAcM_GetName(actor) == fpcNm_NPC_OS_e ||
-                   fopAcM_GetName(actor) == fpcNm_NPC_CB1_e) {
+        } else if (procName == fpcNm_AM2_e || procName == fpcNm_NPC_OS_e ||
+                   procName == fpcNm_NPC_CB1_e) {
             result = 1;
         }
     }
@@ -330,14 +330,14 @@ static cPhs_State daBalanceliftCreate(void* i_this) {
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0xE40)) {
             phase_state = a_this->CreateInit();
-            fopAcM_SetMtx(a_this, a_this->M_mdl->getBaseTRMtx());
-            fopAcM_setCullSizeBox(a_this, -150.0f, -150.0f, -150.0f, 150.0f, 1000.0f, 150.0f);
-            PSMTXCopy(a_this->M_mdl->getBaseTRMtx(), a_this->mBgMtx);
         } else {
             phase_state = cPhs_ERROR_e;
+            return phase_state;
         }
+        fopAcM_SetMtx(a_this, a_this->M_mdl->getBaseTRMtx());
+        fopAcM_setCullSizeBox(a_this, -150.0f, -150.0f, -150.0f, 150.0f, 1000.0f, 150.0f);
+        PSMTXCopy(a_this->M_mdl->getBaseTRMtx(), a_this->mBgMtx);
     }
-
     return phase_state;
 }
 
