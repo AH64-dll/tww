@@ -868,6 +868,41 @@ void daNpc_So_c::modeDisappearInit() {
 /* 0000296C-00002A90       .text modeDisappear__10daNpc_So_cFv */
 void daNpc_So_c::modeDisappear() {
     /* Nonmatching */
+    f32 diff = field_0xB34 - field_0xB38.x;
+    if (std::fabsf(diff) < 10.0f) {
+        u8 oldTag = field_0xA79;
+        fopAc_ac_c* pTag;
+        do {
+            field_0xA79 = (u8)cM_rndF(4.9f);
+            if (field_0xA79 == oldTag) {
+                continue;
+            }
+            pTag = (fopAc_ac_c*)fopAcIt_Judge(searchTagSo_CB, this);
+        } while (pTag == NULL);
+
+        current.pos = pTag->current.pos;
+        field_0xB74 = 0;
+        mB78 = 0;
+        field_0xB7C = 0;
+        field_0xB80 = 0;
+        field_0xB84 = 0;
+        field_0xB88 = 0.0f;
+        field_0xB8C = 0.0f;
+        field_0xB90.x = 0.0f;
+        field_0xB90.y = 0.0f;
+        field_0xB90.z = 0.0f;
+        field_0xB9C = 0;
+        field_0xBA0 = 0.0f;
+        field_0xBA4 = 0.0f;
+        field_0xBA8 = 0.0f;
+        field_0xBAC = 0;
+        field_0xB0C = 0;
+        field_0xBD9 = 0;
+        field_0xBD8 = 0;
+        field_0xBDB = 1;
+        modeProc(PROC_INIT_e, 1);
+        gravity = 176.0f;
+    }
 }
 
 /* 00002A90-00002B60       .text modeDebugInit__10daNpc_So_cFv */
@@ -1095,7 +1130,7 @@ void daNpc_So_c::createInit() {
     field_0xAAC = current.pos;
     offsetZero();
     setAnm(1, 0);
-    field_0xA79 = (s8)cM_rndF(4.9f);
+    field_0xA79 = (u8)cM_rndF(4.9f);
 
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0901) &&
         strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 0xD &&
