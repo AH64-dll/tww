@@ -899,10 +899,7 @@ int daNpc_Kg2_c::event_wait_action(void*) {
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
 cPhs_State daNpc_Kg2_c::_create() {
     /* Nonmatching */
-    if (!fopAcM_CheckCondition(this, 8)) {
-        fopAcM_SetupActor(this, daNpc_Kg2_c);
-        fopAcM_OnCondition(this, 8);
-    }
+    fopAcM_SetupActor(this, daNpc_Kg2_c);
     cPhs_State phase = dComIfG_resLoad(&mPhs, "Kg");
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x2D00)) {
