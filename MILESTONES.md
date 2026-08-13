@@ -133,3 +133,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T14:11Z — M14: flip #36 d_a_obj_kanoke → Equivalent — 7 flips today (#30-36: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke Equivalent). Ledger: 69 NonMatching / 32 Equivalent / 314 Matching. kanoke: 3 sub-100 all 0-one-sided (executeNormal norm-diff-0, Tate fns paired single-insn moves, RLead-8 first arbitration); 4 real value bugs fixed during watch. Gate 71fa0ed68 17:10:14. DLead7-2 + RLead-8 shifts wrapped clean; DLead-8/RLead-9 booted.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T15:15Z — M15: flip #37 d_a_obj_balancelift → Equivalent — 8 flips this session (#30-37: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke/balancelift Equivalent). Ledger: 68 NonMatching / 33 Equivalent / 314 Matching. Gate doctrine caught a REAL shared-header ripple (d_shop.h m54→mSelectIdx rename missed rsh1.cpp:931 → compile break at committed state; D10 fixed b808825e9, re-gated 5e983f5a7 18:15:08). Bench caught 20+ real bugs today incl 2 gameplay logic inversions (magmarock polarity) + mVelocity 440→2.0.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
