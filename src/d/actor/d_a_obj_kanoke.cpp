@@ -114,19 +114,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjKanoke_c*)i_this)->createHeap();
 }
 
-/* Nonmatching */
 /* 00000664-00000700       .text _create__13daObjKanoke_cFv */
 cPhs_State daObjKanoke_c::_create() {
-    if (!(actor_condition & 8)) {
-        if (this != NULL) {
-            new (this) daObjKanoke_c();
-        }
-        actor_condition |= 8;
-    }
+    fopAcM_ct(this, daObjKanoke_c);
     cPhs_State phs = dComIfG_resLoad(&mPhs, "Mkanoke");
     if (phs == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
-            createInit();
+            return createInit();
         } else {
             m2A4 = 0;
             m2A0 = 0;
@@ -307,7 +301,8 @@ void daObjKanoke_c::executeNormal() {
     } else {
         m888 = 0;
         if (m88C != 0) {
-            cXyz diff = home.pos - dComIfGp_getPlayer(0)->current.pos;
+            cXyz* playerPos = &dComIfGp_getPlayer(0)->current.pos;
+            cXyz diff = home.pos - *playerPos;
             f32 dist = PSVECSquareMag((Vec*)&diff);
             if (dist > 0.0f) {
                 dist = std::sqrtf(dist);
@@ -372,7 +367,6 @@ void daObjKanoke_c::executeYureYoko() {
     }
 }
 
-/* Nonmatching */
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenYoko() {
     m860.x += 4.0f;
@@ -389,14 +383,14 @@ void daObjKanoke_c::executeOpenYoko() {
             mDoMtx_stack_c::transM(-100.0f, -75.0f, 0.0f);
             Mtx mtx;
             PSMTXCopy(mDoMtx_stack_c::get(), mtx);
+            s16 yAngle = shape_angle.y;
             m858.x = 0;
-            m858.y = shape_angle.y;
+            m858.y = yAngle;
             m858.z = 0;
             m878 = 180.0f;
             cXyz pos = m860 + daObjKanoke_Yoko_pfs;
-            cXyz sp30;
-            PSMTXMultVec(mtx, (Vec*)&pos, (Vec*)&sp30);
-            m84C = sp30 + current.pos;
+            PSMTXMultVec(mtx, (Vec*)&pos, (Vec*)&pos);
+            m84C = pos + current.pos;
             if (mSmokeCb.getEmitter() == NULL) {
                 dComIfGp_particle_setToon(0xA181, &m84C, &m858, NULL, (u8)m878, &mSmokeCb, -1);
             }
@@ -462,8 +456,9 @@ void daObjKanoke_c::executeOpenTate() {
         m84C.x = m2D8[0][3];
         m84C.y = m2D8[1][3];
         m84C.z = m2D8[2][3];
+        s16 yAngle = shape_angle.y;
         m858.x = 0;
-        m858.y = shape_angle.y;
+        m858.y = yAngle;
         m858.z = 0;
         m824[0] = (s32)dComIfGp_particle_set(0x817F, &m84C, &m858, NULL, 0xFF, NULL, -1,
                                              &tevStr.mColorK0, &tevStr.mColorK0, NULL);
@@ -544,15 +539,14 @@ u8 daObjKanoke_c::getPrmSwNo2() {
 
 /* 00001C04-00001C9C       .text setMtx__13daObjKanoke_cFv */
 void daObjKanoke_c::setMtx() {
-    /* Nonmatching */
     if (!(m88F & 1)) {
         setMtxHontai();
-        PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         PSMTXCopy(mDoMtx_stack_c::get(), mMtx);
     }
     if (!(m88F & 2)) {
         setMtxHuta(&current.pos);
-        PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
+        mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
         PSMTXCopy(mDoMtx_stack_c::get(), m2D8);
     }
 }
