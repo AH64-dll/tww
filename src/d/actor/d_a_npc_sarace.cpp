@@ -159,9 +159,7 @@ void daNpc_Sarace_c::playTexPatternAnm() {
     sp10.x = player->current.pos.x - pos.x;
     sp10.z = player->current.pos.z - pos.z;
     distXZ = sp10.x * sp10.x + sp10.z * sp10.z;
-    if (distXZ > 0.0f) {
-        distXZ = std::sqrtf(distXZ);
-    }
+    distXZ = std::sqrtf(distXZ);
     s16 atanAngle = cM_atan2s(sp10.x, sp10.z);
     if (m728 != 0) {
         maxDist += 40.0f;
