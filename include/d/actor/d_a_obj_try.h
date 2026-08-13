@@ -114,7 +114,8 @@ namespace daObjTry {
         static u8 M_restart;
 
         void prm_set_swSave(int);
-        u8 solidHeapCB(fopAc_ac_c*);
+        Act_c() : mFollowCb(0, 0) { m668 = 0; }
+        static BOOL solidHeapCB(fopAc_ac_c*);
         s32 create_heap();
         void init_cc();
         static void* search_sameType(void*, void*);
@@ -161,7 +162,7 @@ namespace daObjTry {
         /* 0x290 */ request_of_phase_process_class mPhase;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ mDoExt_brkAnm mBrkAnm;
-        /* 0x2B4 */ dBgS_Acch mAcch;
+        /* 0x2B4 */ dBgS_ObjAcch mAcch;
         /* 0x478 */ dBgS_AcchCir mAcchCir;
         /* 0x4B8 */ dCcD_Stts mStts;
         /* 0x4F4 */ dCcD_Cyl mCyl;

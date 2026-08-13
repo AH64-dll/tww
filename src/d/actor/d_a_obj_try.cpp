@@ -10,6 +10,7 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_kankyo_mng.h"
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -316,8 +317,8 @@ void Act_c::prm_set_swSave(int i_swSave) {
 }
 
 /* 00000090-000000B4       .text solidHeapCB__Q28daObjTry5Act_cFP10fopAc_ac_c */
-u8 Act_c::solidHeapCB(fopAc_ac_c*) {
-    return create_heap();
+BOOL Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
+    return (u8)static_cast<Act_c*>(i_actor)->create_heap();
 }
 
 /* 000000B4-0000026C       .text create_heap__Q28daObjTry5Act_cFv */
@@ -395,7 +396,59 @@ bool daObjTry::Act_c::chk_appear() const {
 
 /* 00000528-000008D8       .text _create__Q28daObjTry5Act_cFv */
 cPhs_State daObjTry::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+
+    mType = prm_get_type();
+    m650 = chk_appear();
+
+    cPhs_State phase = cPhs_ERROR_e;
+    if (m650 != 0) {
+        phase = dComIfG_resLoad(&mPhase, M_arcname);
+        if (phase == cPhs_COMPLEATE_e) {
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, attr().m60)) {
+                mAcchCir.SetWall(30.0f, (f32)attr().m4B);
+                mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle,
+                          &shape_angle);
+                mAcch.ClrWaterNone();
+                mAcch.ClrRoofNone();
+                mAcch.SetRoofCrrHeight((f32)attr().m4D);
+                init_cc();
+                cullMtx = mpModel->getBaseTRMtx();
+                cull_set_draw();
+                gravity = attr().mGravity;
+                if (mType == 5 || mType == 6) {
+                    fopAcM_OnStatus(this, fopAcStts_UNK2000000_e);
+                }
+                fopAcM_posMoveF(this, NULL);
+                mAcch.CrrPos(*dComIfG_Bgsp());
+                mAcch.ClrGroundLanding();
+                m634 = 1;
+                m632 = 0x14;
+                attention_info.flags |= 0x10;
+                attention_info.distances[4] = 0x17;
+                attention_info.position.x = current.pos.x;
+                attention_info.position.y = current.pos.y + attr().m08;
+                attention_info.position.z = current.pos.z;
+                m635 = 1;
+                m636 = 0;
+                m638 = 0.0f;
+                m630 = 0;
+                m64A = 0;
+                init_mtx();
+                m651 = 0;
+                m64C = 0;
+                m64D = 0;
+                m64E = 1;
+                m64F = 0;
+                m652 = 0;
+                mode_wait_init();
+                model = mpModel;
+            } else {
+                phase = cPhs_ERROR_e;
+            }
+        }
+    }
+    return phase;
 }
 
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
@@ -562,22 +615,31 @@ void daObjTry::Act_c::eff_set_bingo(bool, bool) {
 
 /* 00002718-00002790       .text eff_clr_bingo__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_clr_bingo() {
-    /* Nonmatching */
+    if (m651 != 0) {
+        mFollowCb.remove();
+        if (m668 != 0) {
+            ((JPABaseEmitter*)m668)->mMaxFrame = -1;
+            ((JPABaseEmitter*)m668)->setStatus(JPAEmtrStts_StopEmit);
+            m668 = 0;
+        }
+        m651 = 0;
+    }
 }
 
 /* 00002790-000027BC       .text eff_land_smoke__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_land_smoke() {
-    /* Nonmatching */
+    daObj::make_land_effect(this, &mAcch.m_gnd, 0.0f);
 }
 
 /* 000027BC-0000280C       .text eff_hit_water_splash__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_hit_water_splash() {
-    /* Nonmatching */
+    cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
+    fopKyM_createWpillar(&pos, 0.0f, 0.75f, 0);
 }
 
 /* 0000280C-00002868       .text make_vib__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::make_vib() {
-    /* Nonmatching */
+    g_dComIfG_gameInfo.play.mVibration.StartShock(check_circle() + 1, 1, cXyz(0.0f, 0.0f, 0.0f));
 }
 
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
