@@ -116,7 +116,7 @@ public:
     /* 0x7A4 */ u8 m7A4;
     /* 0x7A5 */ u8 m7A5[0x7B4 - 0x7A5];
     /* 0x7B4 */ cXyz mAttnBasePos;
-    /* 0x7C0 */ u8 m7C0[0x7C2 - 0x7C0];
+    /* 0x7C0 */ s16 m7C0;
     /* 0x7C2 */ s16 m7C2;
     /* 0x7C4 */ s16 m7C4;
     /* 0x7C6 */ s16 m7C6;
@@ -144,7 +144,7 @@ public:
     /* 0x899 */ s8 m899;
     /* 0x89A */ u8 m89A;
     /* 0x89B */ s8 m89B;
-    /* 0x89C */ u8 m89C;
+    /* 0x89C */ s8 m89C;
     /* 0x89D */ u8 m89D;
     /* 0x89E */ s8 mShopIdx;
     /* 0x89F */ u8 m89F[0x8A0 - 0x89F];

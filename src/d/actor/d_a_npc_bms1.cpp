@@ -701,62 +701,45 @@ BOOL daNpc_Bms1_c::checkPlayerLanding() {
 /* 000021F4-00002424       .text lookBack__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::lookBack() {
     /* Nonmatching */
-    cXyz target(0.0f, 0.0f, 0.0f);
-    cXyz* pTarget = NULL;
-    s16 angle = shape_angle.y;
+    cXyz sp74;
+    cXyz sp68(0.0f, 0.0f, 0.0f);
+    cXyz* r29 = NULL;
+    s16 desiredYRot = current.angle.y;
 
-    switch (m89C) {
-    case 0:
-        break;
-    case 1:
+    switch ((s32)(s8)m89C) {
+    case 0x1:
         if (m7CC != 0) {
-            cXyz eyePos = dNpc_playerEyePos(l_HIO.field_0x14);
-            target.x = eyePos.x;
-            target.y = eyePos.y;
-            target.z = eyePos.z;
-            pTarget = &target;
-            target.x = current.pos.x;
-            target.y = current.pos.y;
-            target.z = current.pos.z;
-            target.y = eyePos.y;
+            sp74 = dNpc_playerEyePos(l_HIO.mChild[0].mNpc.m04);
+            r29 = &sp74;
+            sp68 = current.pos;
+            sp68.y = eyePos.y;
         } else {
-            pTarget = NULL;
+            r29 = NULL;
         }
         break;
-    case 2:
-        if (mShopItems.mItemId == -1) {
-            cXyz itemPos = mShopCam.getItemZoomPos(1.0f);
-            target.x = itemPos.x;
-            target.y = itemPos.y;
-            target.z = itemPos.z;
+    case 0x2:
+        if (mShopItems.mSelectedItemIdx == -1) {
+            sp74 = mShopCam.getItemZoomPos(100.0f);
         } else {
-            cXyz basePos = mShopItems.getSelectItemBasePos();
-            target.x = basePos.x;
-            target.y = basePos.y;
-            target.z = basePos.z;
-            cXyz itemPos = mShopItems.getSelectItemPos();
-            target.x = itemPos.x;
-            target.y = itemPos.y;
-            target.z = itemPos.z;
-            mpShopCursor->setPos(target);
-            mpShopCursor->setPos(basePos);
+            cXyz selectItemBasePos = mShopItems.getSelectItemBasePos();
+            sp74 = mShopItems.getSelectItemPos();
+            mpShopCursor->setPos(selectItemBasePos);
+            mpShopCursor->setScale(l_HIO.mChild[0].m2C, l_HIO.mChild[0].m30, l_HIO.mChild[0].m34, l_HIO.mChild[0].m38, l_HIO.mChild[0].m3C);
             mpShopCursor->anm_play();
         }
-        pTarget = &target;
-        target.x = current.pos.x;
-        target.y = current.pos.y;
-        target.z = current.pos.z;
-        target.y = eyePos.y;
+        r29 = &sp74;
+        sp68 = current.pos;
+        sp68.y = eyePos.y;
         break;
     }
 
     if (mJntCtrl.mbTrn) {
-        cLib_addCalcAngleS2(&m7C0, l_HIO.field_0x2A, 4, 0x800);
+        cLib_addCalcAngleS2(&m7C0, l_HIO.mChild[0].mNpc.mMaxHeadTurnVel, 4, 0x800);
     } else {
         m7C0 = 0;
     }
 
-    mJntCtrl.lookAtTarget(&shape_angle.y, &target, pTarget, angle, m7C0, true);
+    mJntCtrl.lookAtTarget(&current.angle.y, r29, sp68, desiredYRot, m7C0, true);
 }
 
 /* 00002424-0000249C       .text wait01__12daNpc_Bms1_cFv */
