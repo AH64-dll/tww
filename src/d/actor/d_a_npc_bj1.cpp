@@ -250,10 +250,11 @@ BOOL daNpc_Bj1_c::createInit() {
     mPathNo = pathNo;
     if (pathNo != 0xFF) {
         mPathRun.setInf(pathNo, current.roomNo, 1);
-        if (!mPathRun.isPath()) {
+        if (mPathRun.isPath()) {
+            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+        } else {
             return FALSE;
         }
-        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
     }
 
     static char* a_staff_tbl[0x11] = {"Bj1", "Bj1", "Bj2", "Bj2", "Bj3", "Bj3", "Bj4", "Bj4", "Bj5", "Bj5", "Bj6", "Bj6", "Bj7", "Bj8", "Bj8", "Bj9", "Bj9"};
