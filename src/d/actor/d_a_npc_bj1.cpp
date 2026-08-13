@@ -352,12 +352,11 @@ void daNpc_Bj1_c::control_anmTag() {
 
 /* 00001380-000013C0       .text chg_anmAtr__11daNpc_Bj1_cFUc */
 void daNpc_Bj1_c::chg_anmAtr(unsigned char i_attr) {
-    if (i_attr < 0xB) {
-        if (i_attr != m8AD) {
-            m8AD = i_attr;
-            setAnm_ATR();
-        }
+    if (i_attr >= 0xB || i_attr == m8AD) {
+        return;
     }
+    m8AD = i_attr;
+    setAnm_ATR();
 }
 
 /* 000013C0-0000143C       .text control_anmAtr__11daNpc_Bj1_cFv */
