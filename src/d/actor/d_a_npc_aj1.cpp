@@ -658,8 +658,8 @@ void daNpc_Aj1_c::checkOrder() {
         if (dComIfGp_evmng_startCheck(mEventIdTable[mEventIdx])) {
             if (mEventIdx == 0) {
                 actor_status &= ~0x4000;
+                m812 = 0;
             }
-            m812 = 0;
         }
     } else if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
         if (m812 == 1 || m812 == 2) {
