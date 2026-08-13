@@ -846,7 +846,6 @@ bool daObjTry::Act_c::chk_sink_water() {
 }
 
 /* 00002034-000020AC       .text chk_sinkdown_water__Q28daObjTry5Act_cFv */
-/* Nonmatching */
 bool daObjTry::Act_c::chk_sinkdown_water() {
     bool ret = false;
     if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + (f32)attr().m4D + 50.0f) {
@@ -969,7 +968,6 @@ void daObjTry::Act_c::make_vib() {
 }
 
 /* 00002868-00002960       .text check_circle__Q28daObjTry5Act_cFv */
-/* Nonmatching */
 bool daObjTry::Act_c::check_circle() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz diff = player->current.pos - current.pos;
