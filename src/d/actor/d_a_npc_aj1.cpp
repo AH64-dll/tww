@@ -430,8 +430,6 @@ void daNpc_Aj1_c::chngAnmAtr(u8 i_atr) {
         /* Nonmatching */
 void daNpc_Aj1_c::ctrlAnmAtr() {
     switch (mAnmAtr) {
-        case 6:
-            break;
         case 2:
             ctrl_WAITanm();
             break;
@@ -440,6 +438,8 @@ void daNpc_Aj1_c::ctrlAnmAtr() {
                 mAnmAtr = 0;
                 setAnm_NUM(0, 1);
             }
+            break;
+        case 6:
             break;
     }
     ctrl_TIREanm();
@@ -481,10 +481,10 @@ void daNpc_Aj1_c::anmAtr(u16 i_msgStatus) {
             break;
         case 0xE:
             m7C1 = 0;
-            ctrlAnmAtr();
-            ctrlAnmTag();
             break;
     }
+    ctrlAnmAtr();
+    ctrlAnmTag();
 }
 
 /* 000010E0-000012AC       .text next_msgStatus__11daNpc_Aj1_cFPUl */
@@ -638,9 +638,11 @@ void daNpc_Aj1_c::eventOrder() {
 void daNpc_Aj1_c::checkOrder() {
     if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
         if (dComIfGp_evmng_startCheck(mEventIdTable[mEventIdx])) {
-            if (mEventIdx == 0) {
+            switch (mEventIdx) {
+            case 0:
                 actor_status &= ~0x4000;
                 m812 = 0;
+                break;
             }
         }
     } else if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
@@ -958,9 +960,11 @@ s32 daNpc_Aj1_c::isEventEntry() {
         /* Nonmatching */
 void daNpc_Aj1_c::event_proc(int i_eventNo) {
     if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
-        if (mEventIdx == 0) {
+        switch (mEventIdx) {
+        case 0:
             dComIfGs_onEventBit(0x508);
             dComIfGs_onEventBit(0x504);
+            break;
         }
         endEvent();
         return;
@@ -1141,7 +1145,7 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
 /* 0000280C-00002984       .text chk_areaIN__11daNpc_Aj1_cFfs4cXyz */
         /* Nonmatching */
 u8 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
-    const cXyz& diff = i_pos - dComIfGp_getPlayer(0)->current.pos;
+    const cXyz& diff = dComIfGp_getPlayer(0)->current.pos - i_pos;
     cXyz diffXZ;
     diffXZ.x = diff.x;
     diffXZ.y = 0.0f;
