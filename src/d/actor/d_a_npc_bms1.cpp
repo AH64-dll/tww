@@ -43,7 +43,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 static daNpc_Bms1_HIO_c l_HIO;
-char daNpc_Bms1_c::m_arcname[] = "Bms1";
+char daNpc_Bms1_c::m_arcname[] = "Bms";
 
 /* 000000EC-00000108       .text __ct__21daNpc_Bms1_childHIO_cFv */
 daNpc_Bms1_childHIO_c::daNpc_Bms1_childHIO_c() {
@@ -267,6 +267,7 @@ void daNpc_Bms1_c::set_mtx() {
 }
 
 static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
+static const int l_bck_ix_tbl[] = { 0x13, 0x14, 0x16, 0x17, 0x15, 0x16, 0x17 };
 
 /* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
 /* Nonmatching */
@@ -298,8 +299,24 @@ void daNpc_Bms1_c::playTexPatternAnm() {
 }
 
 /* 00000DE0-00000E78       .text setAnm__12daNpc_Bms1_cFScf */
-void daNpc_Bms1_c::setAnm(s8, f32) {
-    /* Nonmatching */
+void daNpc_Bms1_c::setAnm(s8 index, f32 morfFrame) {
+    static u32 play_mode_tbl[7] = {
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+    };
+    static f32 morf_frame_tbl[7] = {8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f};
+    static f32 play_speed_tbl[7] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+    if (morfFrame < 0.0f) {
+        morfFrame = morf_frame_tbl[index];
+    }
+
+    if (index != m899 || m899 == -1) {
+        m899 = index;
+        dNpc_setAnm_2(mpMorf, play_mode_tbl[index], morfFrame, play_speed_tbl[index],
+                      l_bck_ix_tbl[index], 0, m_arcname);
+    }
 }
 
 /* 00000E78-00000EBC       .text setTexAnm__12daNpc_Bms1_cFSc */

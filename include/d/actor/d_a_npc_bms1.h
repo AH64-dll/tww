@@ -141,7 +141,7 @@ public:
     /* 0x850 */ ShopItems_c mShopItems;
     /* 0x894 */ ShopCursor_c* mpShopCursor;
     /* 0x898 */ s8 mBtpIdx;
-    /* 0x899 */ u8 m899;
+    /* 0x899 */ s8 m899;
     /* 0x89A */ u8 m89A;
     /* 0x89B */ s8 m89B;
     /* 0x89C */ u8 m89C;
