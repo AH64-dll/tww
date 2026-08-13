@@ -1016,7 +1016,8 @@ bool daNpc_Uk_c::talk02() {
 u8 daNpc_Uk_c::visitTalkInit() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02)) {
         mEventIdx = eventInfo.mEventId;
-        fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+        u32 lookId = mLookActorId;
+        fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &lookId);
         dComIfGp_event_setTalkPartner(pActor);
         mState = STATE_DEMO02;
         demo02();
@@ -1025,7 +1026,8 @@ u8 daNpc_Uk_c::visitTalkInit() {
     }
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1208) && !dComIfGs_checkGetItem(dItemNo_PICTO_BOX_e) && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
         mEventIdx = eventInfo.mEventId;
-        fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+        u32 lookId = mLookActorId;
+        fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &lookId);
         dComIfGp_event_setTalkPartner(pActor);
         mState = STATE_DEMO02;
         demo02();
