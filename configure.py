@@ -1564,7 +1564,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_so"),
     ActorRel(Matching,    "d_a_nzg"),
     ActorRel(Matching,    "d_a_obj_aygr"),
-    ActorRel(NonMatching, "d_a_obj_balancelift"),
+    ActorRel(Equivalent, "d_a_obj_balancelift"),  # accept-class 0-one-sided: calc_quat 99.91 frame-fix, Draw 90.12 multiset-identical, ride_actor_check/Create/calc_weight; markers 5/5 keep
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_barrier"),
     ActorRel(Matching,    "d_a_obj_bemos"),
     ActorRel(Matching,    "d_a_obj_canon"),
