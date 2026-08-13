@@ -348,27 +348,27 @@ bool daObjMagmarock::Act_c::LiftUpRequest(cXyz& i_pos) {
     mLiftPos = i_pos;
     void (Act_c::*waitProc)() = &Act_c::wait_proc;
     int isWait = mProcFunc == waitProc;
-    if (!isWait) {
-        cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
-        cLib_addCalc2(&mQuakeAngle, 750.0f, 0.5f, 40.0f);
-        cLib_addCalcAngleS2(&mAngleAdd, 0x1200, 4, 0x100);
-        mAngle += mAngleAdd;
-        cLib_addCalc2(&current.pos.y, i_pos.y, 0.25f, 150.0f);
-        m45C = 1;
-        return TRUE;
-    }
-    void (Act_c::*appearProc)() = &Act_c::appear_proc;
-    int isAppear = mProcFunc == appearProc;
-    if (!isAppear) {
-        cXyz sp2C = current.pos - mLiftPos;
-        sp2C.y = 0.0f;
-        if (!sp2C.normalizeRS()) {
-            sp2C.set(0.0f, 0.0f, 1.0f);
+    if (isWait) {
+        void (Act_c::*appearProc)() = &Act_c::appear_proc;
+        int isAppear = mProcFunc == appearProc;
+        if (!isAppear) {
+            cXyz sp2C = current.pos - mLiftPos;
+            sp2C.y = 0.0f;
+            if (!sp2C.normalizeRS()) {
+                sp2C.set(0.0f, 0.0f, 1.0f);
+            }
+            PSVECScale(&sp2C, &sp2C, 10.0f);
+            PSVECAdd(&current.pos, &sp2C, &current.pos);
         }
-        PSVECScale(&sp2C, &sp2C, 10.0f);
-        PSVECAdd(&current.pos, &sp2C, &current.pos);
+        return FALSE;
     }
-    return FALSE;
+    cLib_addCalcPos2(&current.pos, i_pos, 0.05f, 5.0f);
+    cLib_addCalc2(&mQuakeAngle, 750.0f, 0.5f, 40.0f);
+    cLib_addCalcAngleS2(&mAngleAdd, 0x1200, 4, 0x100);
+    mAngle += mAngleAdd;
+    cLib_addCalc2(&current.pos.y, i_pos.y, 0.25f, 150.0f);
+    m45C = 1;
+    return TRUE;
 }
 
 /* 00001560-0000167C       .text BeforeLiftRequest__Q214daObjMagmarock5Act_cFR4cXyz */
