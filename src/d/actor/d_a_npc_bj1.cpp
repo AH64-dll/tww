@@ -560,18 +560,18 @@ bool daNpc_Bj1_c::getMaskInf(unsigned char* i_mask) {
 /* 00001A44-00001AA8       .text chkReg__11daNpc_Bj1_cFUs */
 bool daNpc_Bj1_c::chkReg(unsigned short i_reg) {
     u8 mask;
-    if (getMaskInf(&mask) == false) {
-        return false;
+    if (getMaskInf(&mask)) {
+        u8 reg = dComIfGs_getEventReg(i_reg);
+        return (reg & mask) != 0;
     }
-    u8 reg = dComIfGs_getEventReg(i_reg);
-    return (reg & mask) != 0;
+    return false;
 }
 
 /* 00001AA8-00001B14       .text setReg__11daNpc_Bj1_cFUs */
 void daNpc_Bj1_c::setReg(unsigned short i_reg) {
     u8 mask;
     if (getMaskInf(&mask)) {
-        dComIfGs_setEventReg(i_reg, dComIfGs_getEventReg(i_reg) | mask);
+        dComIfGs_setEventReg(i_reg, (u8)(dComIfGs_getEventReg(i_reg) | mask));
     }
 }
 
