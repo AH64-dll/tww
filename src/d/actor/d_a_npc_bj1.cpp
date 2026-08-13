@@ -762,12 +762,20 @@ u32 daNpc_Bj1_c::getMsg() {
 
 /* 000024EC-0000256C       .text chkAttention__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::chkAttention() {
-    /* Nonmatching */
+    dAttention_c* attention = &g_dComIfG_gameInfo.play.mAttention;
+    if (attention->LockonTruth()) {
+        return this == attention->LockonTarget(0);
+    }
+    return this == attention->ActionTarget(0);
 }
 
 /* 0000256C-000025D4       .text setAttention__11daNpc_Bj1_cFb */
-void daNpc_Bj1_c::setAttention(bool) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setAttention(bool i_flag) {
+    attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mChild[mType].mPrm.field_0x14, current.pos.z);
+    if (m850 == 0 && i_flag == false) {
+        return;
+    }
+    eyePos.set(mTransformedEyePos.x, mTransformedEyePos.y, mTransformedEyePos.z);
 }
 
 /* 000025D4-00002608       .text searchByID__11daNpc_Bj1_cFUi */
