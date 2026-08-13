@@ -131,7 +131,7 @@ public:
     void playTexPatternAnm();
     void playAnm();
     void setAnm(unsigned char, int, float);
-    s32 setAnmTbl(sMnAnmDat*);
+    bool setAnmTbl(sMnAnmDat*);
     s16 XyCheckCB(int);
     int getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, float, float);

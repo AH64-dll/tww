@@ -1580,7 +1580,6 @@ void daNpcMn_c::playTexPatternAnm() {
 }
 
 /* 0000373C-000037F8       .text playAnm__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::playAnm() {
     if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && mAnmCnt > 0) {
         mAnmCnt--;
@@ -1611,7 +1610,7 @@ void daNpcMn_c::setAnm(u8 anmNum, int loopMode, f32 morf) {
 }
 
 /* 000038C8-00003974       .text setAnmTbl__9daNpcMn_cFP9sMnAnmDat */
-s32 daNpcMn_c::setAnmTbl(sMnAnmDat* pAnmDat) {
+bool daNpcMn_c::setAnmTbl(sMnAnmDat* pAnmDat) {
     m7B9 &= 0xFE;
     if (pAnmDat->mAnmNum == 0xFF) {
         mpAnmDat = NULL;
