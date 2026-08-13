@@ -59,11 +59,11 @@ daNpc_Sarace_HIO_c::daNpc_Sarace_HIO_c() {
     mNpc.mMinBackboneY = -0x1B58;
     mNpc.mMaxTurnStep = 0x3E8;
     mNpc.mMaxHeadTurnVel = 0x640;
-    mNpc.mAttnYOffset = 40.0f;
+    mNpc.mAttnYOffset = 45.0f;
     mNpc.mMaxAttnAngleY = 0x4000;
     mNpc.m22 = 0;
-    mNpc.mMaxAttnDistXZ = 100.0f;
-    m30 = 10.0f;
+    mNpc.mMaxAttnDistXZ = 400.0f;
+    m30 = 11.0f;
     m34 = 8.0f;
     mNo = -1;
 }
@@ -623,7 +623,7 @@ cPhs_State daNpc_Sarace_c::_create() {
 
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         if (l_HIO.mNo < 0) {
-            l_HIO.mNo = mDoHIO_createChild("サラセレーショームセン", &l_HIO);
+            l_HIO.mNo = mDoHIO_createChild("船乗りレースゲーム専用", &l_HIO);
         }
         if (!CreateInit()) {
             return cPhs_ERROR_e;
