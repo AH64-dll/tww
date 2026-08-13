@@ -1122,11 +1122,9 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
         case 1:
             m812 = 0;
             mFARwaiTimer = cLib_getRndValue(0x5A, 0x78);
-            setAnm();
             break;
         case 2:
             m812 = 0;
-            setAnm();
             break;
         case 3:
             m812 = 0;
@@ -1134,7 +1132,6 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
             mMesgAnimeTagInfo = 0xFF;
             m7C1 = 0;
             mPrevStatus = temp;
-            setAnm();
             break;
         case 4:
             m812 = 0;
@@ -1142,12 +1139,11 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
             if (mAnmNum == 1 || mAnmNum == 6) {
                 return;
             }
-            setAnm();
             break;
         default:
-            setAnm();
             break;
     }
+    setAnm();
 }
 
 /* 0000280C-00002984       .text chk_areaIN__11daNpc_Aj1_cFfs4cXyz */
