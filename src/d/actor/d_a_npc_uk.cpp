@@ -1825,6 +1825,10 @@ BOOL daNpc_Uk_c::_execute() {
 
     if (!chkFlag(0x10)) {
         if (chkFlag(0x8)) {
+            speed.y += gravity;
+            if (speed.y < maxFallSpeed) {
+                speed.y = maxFallSpeed;
+            }
             fopAcM_posMove(this, mStts.GetCCMoveP());
         } else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
