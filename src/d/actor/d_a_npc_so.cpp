@@ -449,22 +449,25 @@ void daNpc_So_c::setMtx() {
 
 /* 000016E8-00001718       .text modeWaitInit__10daNpc_So_cFv */
 void daNpc_So_c::modeWaitInit() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    field_0xAFC = 0.0f;
+    offsetAppear();
 }
 
 /* 00001718-0000171C       .text modeWait__10daNpc_So_cFv */
 void daNpc_So_c::modeWait() {
-    
 }
 
 /* 0000171C-0000175C       .text modeHideInit__10daNpc_So_cFv */
 void daNpc_So_c::modeHideInit() {
-    /* Nonmatching */
+    field_0xBDB = 1;
+    offsetDive();
+    field_0xA7C = 0.0f;
 }
 
 /* 0000175C-00001778       .text modeHide__10daNpc_So_cFv */
 void daNpc_So_c::modeHide() {
-    /* Nonmatching */
+    current.pos = field_0xA80;
 }
 
 /* 00001778-00001880       .text modeJumpInit__10daNpc_So_cFv */
@@ -499,7 +502,10 @@ void daNpc_So_c::modeNearSwim() {
 
 /* 00002144-0000217C       .text modeEventFirstWaitInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirstWaitInit() {
-    /* Nonmatching */
+    field_0xA90 = 0x96;
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    offsetDive();
 }
 
 /* 0000217C-000022D0       .text modeEventFirstWait__10daNpc_So_cFv */
@@ -509,7 +515,10 @@ void daNpc_So_c::modeEventFirstWait() {
 
 /* 000022D0-00002314       .text modeEventFirstInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirstInit() {
-    /* Nonmatching */
+    offsetSwim();
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
 }
 
 /* 00002314-000023C8       .text modeEventFirst__10daNpc_So_cFv */
@@ -519,7 +528,10 @@ void daNpc_So_c::modeEventFirst() {
 
 /* 000023C8-0000240C       .text modeEventFirstEndInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirstEndInit() {
-    /* Nonmatching */
+    offsetAppear();
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
 }
 
 /* 0000240C-000024C0       .text modeEventFirstEnd__10daNpc_So_cFv */
@@ -529,7 +541,10 @@ void daNpc_So_c::modeEventFirstEnd() {
 
 /* 000024C0-00002504       .text modeEventEsaInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventEsaInit() {
-    /* Nonmatching */
+    offsetSwim();
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
 }
 
 /* 00002504-00002594       .text modeEventEsa__10daNpc_So_cFv */
@@ -539,7 +554,9 @@ void daNpc_So_c::modeEventEsa() {
 
 /* 00002594-000025B0       .text modeEventMapopenInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventMapopenInit() {
-    /* Nonmatching */
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
 }
 
 /* 000025B0-00002670       .text modeEventMapopen__10daNpc_So_cFv */
@@ -549,7 +566,10 @@ void daNpc_So_c::modeEventMapopen() {
 
 /* 00002670-000026B4       .text modeEventBowInit__10daNpc_So_cFv */
 void daNpc_So_c::modeEventBowInit() {
-    /* Nonmatching */
+    offsetSwim();
+    field_0xAFC = 0.0f;
+    speedF = 0.0f;
+    m_jnt.offBackBoneLock();
 }
 
 /* 000026B4-000027F8       .text modeEventBow__10daNpc_So_cFv */
