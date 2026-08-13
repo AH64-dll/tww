@@ -241,7 +241,6 @@ void daNpc_Kg2_c::subAnm() {
 
 /* 000009E8-00000B3C       .text chkAttention__11daNpc_Kg2_cF4cXyzs */
 s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
-    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 max_attn_dist = l_HIO.mHio.mMaxAttnDistXZ;
     s32 max_attn_angle = l_HIO.mHio.mMaxAttnAngleY;
@@ -254,9 +253,9 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
         max_attn_angle += 0x71C;
         max_attn_dist += 40.0f;
     }
-    s16 angle_diff = (s16)(angle - i_angleY);
+    angle -= i_angleY;
     s32 ret = 0;
-    if (max_attn_angle > abs(angle_diff) && max_attn_dist > dist) {
+    if (max_attn_angle > abs(angle) && max_attn_dist > dist) {
         ret = 1;
     }
     return ret;
