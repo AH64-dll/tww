@@ -539,7 +539,7 @@ void daNpc_Sarace_c::set_mtx() {
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
 
-    /* Nonmatching */BOOL daNpc_Sarace_c::_draw() {
+    BOOL daNpc_Sarace_c::_draw() {
     J3DModel* model1 = mpMorf->getModel();
     J3DModel* model2 = mpMorf2->getModel();
     J3DModelData* modelData = model2->getModelData();
@@ -554,10 +554,10 @@ void daNpc_Sarace_c::set_mtx() {
 
     cXyz shadowPos;
     shadowPos.set(current.pos.x, current.pos.y + 130.0f, current.pos.z);
-    mShadowId = dComIfGd_setShadow(mShadowId, 1, model1, &shadowPos, 800.0f, 20.0f, current.pos.y,
+    mShadowId = dComIfGd_setShadow(mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 20.0f, current.pos.y,
                                     mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr);
     if (mShadowId != 0) {
-        dComIfGd_addRealShadow(mShadowId, model2);
+        dComIfGd_addRealShadow(mShadowId, mpMorf2->getModel());
     }
     dSnap_RegistFig(0x82, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
