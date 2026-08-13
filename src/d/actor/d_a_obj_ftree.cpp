@@ -1162,15 +1162,14 @@ bool daObjFtree::Act_c::_delete() {
 /* 00004004-00004144       .text set_mtx__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::set_mtx() {
     /* Nonmatching */
-    J3DModel* model = mpMorf->getModel();
-    model->setBaseScale(scale);
+    mpMorf->getModel()->setBaseScale(scale);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    PSMTXCopy(mDoMtx_stack_c::now, mpMorf->getModel()->getBaseTRMtx());
     PSMTXCopy(mDoMtx_stack_c::now, m2A8);
 
-    cXyz sp = scale * m63C;
+    cXyz sp(scale.x * m63C, scale.y * m63C, scale.z * m63C);
     mpModel->setBaseScale(sp);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
