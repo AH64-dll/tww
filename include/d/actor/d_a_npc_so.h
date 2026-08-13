@@ -158,7 +158,7 @@ public:
     /* 0x84C */ mDoExt_McaMorf* mpMorf;
     /* 0x850 */ J3DModel* mpModel;
     /* 0x854 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x868 */ u8 field_0x868[0x86C - 0x868];
+    /* 0x868 */ int field_0x868;
     /* 0x86C */ s16 mBtpAnmFrame;
     /* 0x86E */ u8 field_0x86E[0x870 - 0x86E];
     /* 0x870 */ dBgS_ObjAcch mObjAcch;
@@ -176,6 +176,9 @@ public:
     /* 0xAAC */ cXyz field_0xAAC;
     /* 0xAB8 */ u8 field_0xAB8[0xAE8 - 0xAB8];
     /* 0xAE8 */ dPa_rippleEcallBack mRipple;
+    /* 0xAEC */ u32 field_0xAEC;
+    /* 0xAF0 */ u8 field_0xAF0[0xAF8 - 0xAF0];
+    /* 0xAF8 */ f32 field_0xAF8;
     /* 0xAFC */ f32 field_0xAFC;
     /* 0xB00 */ f32 field_0xB00;
     /* 0xB04 */ f32 field_0xB04;

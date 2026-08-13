@@ -412,7 +412,7 @@ u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
         return msg_status;
     }
 
-    switch ((s32)*pMsgNo) {
+    switch (*pMsgNo) {
     case 0x32CA:
         *pMsgNo = 0x32CB;
         break;
@@ -425,6 +425,9 @@ u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
     case 0x32CE:
         msg_status = fopMsgStts_MSG_ENDS_e;
         modeProc(PROC_INIT_e, 7);
+        break;
+    case 0x32CF:
+        msg_status = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x32D0:
         if (g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid((s8)current.roomNo - 1) != 0 ||
@@ -449,7 +452,7 @@ u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
         fopAcIt_Judge(searchMinigameTagSo_CB, this);
         if (l_HIO.field_0x2C[4] != 0 || field_0xBAE != 0) {
             if (dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfG_getTimerPtr() == NULL) {
-                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A10) != 0) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A10) == 0) {
                     *pMsgNo = 0x32DC;
                 } else {
                     *pMsgNo = 0x32D8;
@@ -1198,6 +1201,97 @@ void daNpc_So_c::setScale() {
 /* 000033F4-00003844       .text _execute__10daNpc_So_cFv */
 bool daNpc_So_c::_execute() {
     /* Nonmatching */
+    f32 cull = l_HIO.field_0x50 * scale.x;
+    fopAcM_setCullSizeBox(this, -cull, -cull, -cull, cull, cull, cull);
+
+    if (dComIfGp_event_getMode() == 0 && (mObjAcch.m_flags & 0x20)) {
+        current.pos.y = 0.0f;
+        speedF = 0.0f;
+        field_0xAFC = 0.0f;
+        speed.y = 0.0f;
+        field_0xAFC = 0.0f;
+        modeProc(PROC_INIT_e, 1);
+        return true;
+    }
+
+    m_jnt.setParam(l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY,
+                   l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,
+                   l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY,
+                   l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY,
+                   l_HIO.mNpc.mMaxTurnStep);
+    current.angle.y = shape_angle.y;
+
+    if (field_0x6CC == 1) {
+        if (field_0xA7C == 0.0f) {
+            fopAcIt_Judge(searchTagSo_CB, this);
+        } else {
+            modeProc(PROC_INIT_e, 3);
+        }
+    } else if (field_0xA7C == 0.0f) {
+        fopAcIt_Judge(searchTagSo_CB, this);
+    }
+
+    if (cLib_calcTimer(&field_0x868) == 0) {
+        mBtpAnmFrame++;
+        if ((f32)mBtpAnmFrame > (f32)(s16)mBtpAnm.getBtpAnm()->getFrame()) {
+            field_0x868 = (s16)(l_HIO.field_0x50 + cM_rndF(l_HIO.field_0x50));
+            mBtpAnmFrame = 0;
+        }
+    }
+
+    setScale();
+    setAttention();
+    cLib_addCalc2(&speedF, field_0xAFC, 0.3f, 4.0f);
+    cLib_addCalc2(&field_0xB34, field_0xB38.x, field_0xB38.z, field_0xB38.y);
+    lookBack();
+    checkOrder();
+    modeProc(PROC_EXEC_e, 0x10);
+    eventOrder();
+
+    s16 target_angle = 0;
+    if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
+        current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
+        if (field_0xB34 > 0.0f && field_0xAEC == 0) {
+            static cXyz ripple_pos(0.8f, 0.8f, 0.8f);
+            g_dComIfG_gameInfo.play.getParticle()->set(5, 0x33, &current.pos, NULL, &ripple_pos, 0xFF, &mRipple, -1, NULL, NULL, NULL);
+            if (field_0xAEC != 0) {
+                field_0xAF8 = 0.0f;
+            }
+        }
+    } else {
+        f32 spd = field_0xB00 * 0.25f;
+        if (speed.y < -spd) {
+            if (speed.y < -field_0xB00 * 0.5f) {
+                target_angle = l_HIO.field_0x64;
+            } else {
+                target_angle = l_HIO.field_0x66;
+            }
+        } else if (speed.y > spd) {
+            if (speed.y > field_0xB00 * 0.5f) {
+                target_angle = l_HIO.field_0x68;
+            } else {
+                target_angle = l_HIO.field_0x6A;
+            }
+        } else {
+            target_angle = 0;
+        }
+        mRipple.end();
+    }
+
+    cLib_addCalcAngleS2(&shape_angle.x, target_angle, 4, 0x800);
+
+    if (field_0x6CC != 1 && field_0x6CC != 5 && field_0xBDB == 0 && cLib_calcTimer(&field_0xBE0) == 0) {
+        fopAcM_posMoveF(this, NULL);
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
+    }
+
+    mpMorf->play(NULL, 0, 0);
+    mpMorf->calc();
+    setMtx();
+    setAnm(6, false);
+    setAnmSwimSpeed();
+    current.angle.y = shape_angle.y;
+    return false;
 }
 
 /* 00003844-000038E0       .text debugDraw__10daNpc_So_cFv */
