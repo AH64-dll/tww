@@ -1738,7 +1738,7 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
             i_this->mColorIndex = 0;
         }
         i_this->m2CC = i_actor->current.pos;
-        i_this->itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("PW", 0);
+        i_this->itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("pow", 0);
         i_this->max_health = 4;
         i_this->health = 4;
         i_this->m398 = 4;
@@ -1774,8 +1774,6 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
         i_this->m2D8 = i_actor->current.pos;
         i_this->m346 = -1;
         switch (i_this->mBehaviorType) {
-        case 0:
-            break;
         case 1:
             i_this->attention_info.flags = 0;
             i_actor->actor_status &= ~0x20;
