@@ -49,7 +49,7 @@ public:
     /* 0xB0C */ f32 mB0C;
     /* 0xB10 */ s16 mB10;
     /* 0xB14 */ dBgS_AcchCir mAcchCir;
-    /* 0xB54 */ dBgS_Acch mAcch;
+    /* 0xB54 */ dBgS_ObjAcch mAcch;
     /* 0xD18 */ dPa_followEcallBack mFollow[2];
     /* 0xD40 */ csXyz mCSxyz[2];
     /* 0xD4C */ s8 mD4C;

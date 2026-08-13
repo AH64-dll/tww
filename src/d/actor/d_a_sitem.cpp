@@ -9,7 +9,6 @@
 #include "d/d_s_play.h"
 
 static f32 size_d[10] = { 10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f };
-static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
 static f32 hr_d[4] = { 10.0f, 25.0f, 40.0f, 65.0f };
 static f32 max_d[4] = { 100.0f, 250.0f, 400.0f, 600.0f };
 static u16 bmd_data[3] = { 4, 5, 6 };
@@ -61,12 +60,18 @@ void control3(sitem_class* i_this) {
 /* 00000410-00000748       .text control1__FP11sitem_class */
 /* Nonmatching */
 void control1(sitem_class* i_this) {
+    static f32 g_d[10] = { 50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f };
     i_this->mSitem1[0].mPos = i_this->current.pos;
     sitem_s* cur = &i_this->mSitem1[1];
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    cXyz sp3C(0.0f, 0.0f, i_this->m2FC);
+    cXyz sp30;
+    cXyz sp18;
     cXyz sp24;
+    cXyz sp3C;
+    sp3C.x = 0.0f;
+    sp3C.y = 0.0f;
+    sp3C.z = i_this->m2FC;
     MtxPosition(&sp3C, &sp24);
     sp3C.z = i_this->m2F4;
     f32 f27 = i_this->mHandPos.x;
@@ -74,11 +79,9 @@ void control1(sitem_class* i_this) {
     f32 f31 = 0.0f;
 
     for (int i = 1; i < 9; i++) {
-        cXyz sp30;
         sp30.x = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x44C) + i * (REG0_S(6) + 0xFA0));
         sp30.y = g_d[i];
         sp30.z = f27 * cM_scos(i_this->m2BC * (REG0_S(7) + 0x320) + i * (REG0_S(8) + 0xFA0));
-        cXyz sp18;
         MtxPosition(&sp30, &sp18);
         f32 f29 = sp18.x * f30 + ((cur->mPos.x - (cur - 1)->mPos.x) + sp24.x * f30);
         f32 f28 = sp18.y * f30 + ((cur->mPos.y - (cur - 1)->mPos.y) + sp24.y * f30);
@@ -99,32 +102,35 @@ void control1(sitem_class* i_this) {
 /* 00000748-000009E8       .text control2__FP11sitem_class */
 /* Nonmatching */
 void control2(sitem_class* i_this) {
-    cXyz sp34(0.0f, 0.0f, i_this->m2F4);
+    sitem_s* cur;
+    cXyz sp34;
+    sp34.x = 0.0f;
+    sp34.y = 0.0f;
+    sp34.z = i_this->m2F4;
     i_this->mSitem1[9].mPos = i_this->mHomePos;
 
-    sitem_s* cur = &i_this->mSitem1[8];
+    cur = &i_this->mSitem1[8];
     for (int i = 8; i >= 1; i--) {
-        f32 x = cur->mPos.x - (cur - 1)->mPos.x;
-        f32 y = cur->mPos.y - (cur - 1)->mPos.y;
-        f32 z = cur->mPos.z - (cur - 1)->mPos.z;
-        s16 yrot = cM_atan2s(x, z);
+        f32 x = cur->mPos.x - (cur + 1)->mPos.x;
+        f32 y = cur->mPos.y - (cur + 1)->mPos.y;
+        f32 z = cur->mPos.z - (cur + 1)->mPos.z;
+        int yrot = cM_atan2s(x, z);
         f32 dist = std::sqrtf(x * x + z * z);
         s16 xrot = (s16)-cM_atan2s(y, dist);
-        mDoMtx_YrotS(*calc_mtx, yrot);
+        mDoMtx_YrotS(*calc_mtx, (s16)yrot);
         mDoMtx_XrotM(*calc_mtx, xrot);
         sp34.z = i_this->m2F4;
         cXyz sp28;
         MtxPosition(&sp34, &sp28);
-        cXyz sp1C = (cur - 1)->mPos + sp28;
-        cur->mPos = sp1C;
+        cur->mPos = (cur + 1)->mPos + sp28;
         cur--;
     }
 
     i_this->m2E0 = i_this->mSitem1[9].mPos;
-    cXyz sp10 = i_this->mSitem1[8].mPos - i_this->mSitem1[9].mPos;
-    i_this->m2EC.x = (s16)-cM_atan2s(sp10.y, sp10.z);
-    f32 dist = std::sqrtf(sp10.y * sp10.y + sp10.z * sp10.z);
-    i_this->m2EC.y = cM_atan2s(sp10.x, dist);
+    sp34 = i_this->mSitem1[8].mPos - i_this->mSitem1[9].mPos;
+    i_this->m2EC.x = (s16)-cM_atan2s(sp34.y, sp34.z);
+    f32 tailDist = std::sqrtf(sp34.y * sp34.y + sp34.z * sp34.z);
+    i_this->m2EC.y = cM_atan2s(sp34.x, tailDist);
     hand_mtx_set(i_this);
 }
 
@@ -134,7 +140,8 @@ void cut_control1(sitem_class* i_this) {
     i_this->mSitem2[0].mPos = i_this->current.pos;
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    cXyz sp50(0.0f, 0.0f, i_this->mHandPos.z);
+    cXyz sp50;
+    sp50.z = i_this->mHandPos.z;
     f32 f28 = 50.0f + REG0_F(18);
 
     sitem_s* cur = &i_this->mSitem2[1];
@@ -208,7 +215,11 @@ void my_break(sitem_class* i_this) {
 /* 00001094-000015C0       .text cut_control2__FP11sitem_class */
 /* Nonmatching */
 void cut_control2(sitem_class* i_this) {
-    cXyz sp60(0.0f, 0.0f, i_this->m2F4);
+    cXyz sp54;
+    cXyz sp60;
+    sp60.x = 0.0f;
+    sp60.y = 0.0f;
+    sp60.z = i_this->m2F4;
     i_this->mSitem1[9].mPos = i_this->mHomePos;
 
     sitem_s* cur = &i_this->mSitem1[8];
@@ -217,23 +228,22 @@ void cut_control2(sitem_class* i_this) {
         f32 sin1 = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x9C4) + i * (REG0_S(6) + 0xBB8));
         f32 sin2 = f27 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0xB86) + i * (REG0_S(6) + 0xFA0));
         f32 cos1 = f27 * cM_scos(i_this->m2BC * (REG0_S(7) + 0xAF0) + i * (REG0_S(8) + 0xDAC));
-        f32 x = sin1 + (cur->mPos.x - (cur - 1)->mPos.x);
+        f32 x = sin1 + (cur->mPos.x - (cur + 1)->mPos.x);
         f32 y = (cur->mPos.y - 10.0f) + sin2;
         f32 limit = 5.0f + i_this->mHandPos.y;
         if (y < limit) {
             y = limit;
         }
-        f32 y2 = y - (cur - 1)->mPos.y;
-        f32 z = cos1 + (cur->mPos.z - (cur - 1)->mPos.z);
+        f32 y2 = y - (cur + 1)->mPos.y;
+        f32 z = cos1 + (cur->mPos.z - (cur + 1)->mPos.z);
         s16 yrot = cM_atan2s(x, z);
         f32 dist = std::sqrtf(x * x + z * z);
         s16 xrot = (s16)-cM_atan2s(y2, dist);
         mDoMtx_YrotS(*calc_mtx, yrot);
         mDoMtx_XrotM(*calc_mtx, xrot);
         sp60.z = i_this->m2F4;
-        cXyz sp54;
         MtxPosition(&sp60, &sp54);
-        cXyz sp3C = (cur - 1)->mPos + sp54;
+        cXyz sp3C = (cur + 1)->mPos + sp54;
         cur->mPos = sp3C;
         cur--;
     }
@@ -521,62 +531,6 @@ static BOOL useHeapInit(sitem_class* i_this) {
 static BOOL daSitem_solidHeapCB(fopAc_ac_c* a_this) {
     return useHeapInit((sitem_class*)a_this);
 }
-static dCcD_SrcSph tg_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 20.0f,
-    }},
-};
-static dCcD_SrcSph bm_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_BOOMERANG | AT_TYPE_WIND,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 80.0f,
-    }},
-};
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */
 /* Nonmatching */
@@ -590,22 +544,77 @@ static cPhs_State daSitem_Create(fopAc_ac_c* a_this) {
 
     cPhs_State phase = dComIfG_resLoad(&i_this->mPhs, "Sitem");
     if (phase == cPhs_COMPLEATE_e) {
-        u32 param = fopAcM_GetParam(i_this);
-        i_this->mType = param & 0xFF;
+        i_this->mType = fopAcM_GetParam(i_this) & 0xFF;
         if (i_this->mType == 0xFF) {
             i_this->mType = 0;
         }
-        i_this->m2B9 = (param >> 16) & 0xFF;
+        i_this->m2B9 = fopAcM_GetParam(i_this) >> 16 & 0xFF;
         if (i_this->m2B9 > 3) {
             i_this->m2B9 = 0;
         }
-        i_this->m2BB = param >> 24;
+        i_this->m2BB = fopAcM_GetParam(i_this) >> 24;
         if (i_this->m2BB == 0xFF) {
             i_this->m2BB = 0;
         }
-        i_this->m2BA = (param >> 8) & 0xFF;
+        i_this->m2BA = fopAcM_GetParam(i_this) >> 8 & 0xFF;
 
         if (fopAcM_entrySolidHeap(i_this, daSitem_solidHeapCB, 0x3040)) {
+            static dCcD_SrcSph tg_sph_src = {
+                // dCcD_SrcGObjInf
+                {
+                    /* Flags             */ 0,
+                    /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+                    /* SrcObjAt  Atp     */ 0,
+                    /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+                    /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+                    /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                    /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+                    /* SrcGObjAt Se      */ 0,
+                    /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+                    /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+                    /* SrcGObjAt Mtrl    */ 0,
+                    /* SrcGObjAt SPrm    */ 0,
+                    /* SrcGObjTg Se      */ 0,
+                    /* SrcGObjTg HitMark */ 0,
+                    /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+                    /* SrcGObjTg Mtrl    */ 0,
+                    /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+                    /* SrcGObjCo SPrm    */ 0,
+                },
+                // cM3dGSphS
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
+                    /* Radius */ 20.0f,
+                }},
+            };
+            static dCcD_SrcSph bm_sph_src = {
+                // dCcD_SrcGObjInf
+                {
+                    /* Flags             */ 0,
+                    /* SrcObjAt  Type    */ 0,
+                    /* SrcObjAt  Atp     */ 0,
+                    /* SrcObjAt  SPrm    */ 0,
+                    /* SrcObjTg  Type    */ AT_TYPE_BOOMERANG | AT_TYPE_WIND,
+                    /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+                    /* SrcObjCo  SPrm    */ 0,
+                    /* SrcGObjAt Se      */ 0,
+                    /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+                    /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+                    /* SrcGObjAt Mtrl    */ 0,
+                    /* SrcGObjAt SPrm    */ 0,
+                    /* SrcGObjTg Se      */ 0,
+                    /* SrcGObjTg HitMark */ 0,
+                    /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+                    /* SrcGObjTg Mtrl    */ 0,
+                    /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+                    /* SrcGObjCo SPrm    */ 0,
+                },
+                // cM3dGSphS
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
+                    /* Radius */ 80.0f,
+                }},
+            };
             non_pos.set(0.0f, 30000.0f, -20000.0f);
             i_this->health = 2;
             i_this->m2BC = (s16)cM_rndF(10000.0f);
