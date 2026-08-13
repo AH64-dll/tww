@@ -578,7 +578,6 @@ void kantera_calc(pw_class* i_this) {
 
 /* 000018FC-00001990       .text BG_check__FP8pw_class */
 void BG_check(pw_class* i_this) {
-    /* Nonmatching */
     i_this->mAcchCir.SetWall(70.0f, 140.0f);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
@@ -590,7 +589,6 @@ void BG_check(pw_class* i_this) {
 
 /* 00001990-00001D60       .text Line_check__FP8pw_class4cXyzUc */
 BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
-    /* Nonmatching */
     fopAc_ac_c* actor = i_this;
     dBgS_LinChk linChk;
     i_this->m314 = destPos;
@@ -614,7 +612,6 @@ BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
 void alpha_anime(pw_class* i_this) {
-    /* Nonmatching */
     if (i_this->m33E) {
         return;
     }
@@ -1451,7 +1448,6 @@ block_71:
 
 /* 00004C50-00004FFC       .text action_demo__FP8pw_class */
 void action_demo(pw_class* i_this) {
-    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz local = player->current.pos;
