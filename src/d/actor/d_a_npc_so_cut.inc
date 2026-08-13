@@ -10,7 +10,7 @@ void daNpc_So_c::cutProc() {
 
 /* 000051E8-000051EC       .text cutSwimStart__10daNpc_So_cFv */
 void daNpc_So_c::cutSwimStart() {
-    /* Nonmatching */
+    
 }
 
 /* 000051EC-00005364       .text cutSwimProc__10daNpc_So_cFv */
@@ -80,7 +80,7 @@ void daNpc_So_c::cutEffectProc() {
 
 /* 00005ADC-00005AE0       .text cutEquipStart__10daNpc_So_cFv */
 void daNpc_So_c::cutEquipStart() {
-    /* Nonmatching */
+    
 }
 
 /* 00005AE0-00005B1C       .text cutEquipProc__10daNpc_So_cFv */
@@ -90,7 +90,7 @@ void daNpc_So_c::cutEquipProc() {
 
 /* 00005B1C-00005B20       .text cutUnequipStart__10daNpc_So_cFv */
 void daNpc_So_c::cutUnequipStart() {
-    /* Nonmatching */
+    
 }
 
 /* 00005B20-00005B5C       .text cutUnequipProc__10daNpc_So_cFv */
@@ -170,7 +170,7 @@ void daNpc_So_c::cutMiniGameReturnProc() {
 
 /* 0000781C-00007820       .text cutPartnerShipStart__10daNpc_So_cFv */
 void daNpc_So_c::cutPartnerShipStart() {
-    /* Nonmatching */
+    
 }
 
 /* 00007820-00007878       .text cutPartnerShipProc__10daNpc_So_cFv */

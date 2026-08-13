@@ -500,13 +500,21 @@ void daObjTry::Act_c::damage_bg_proc_directly() {
 }
 
 /* 00001FEC-00002034       .text chk_sink_water__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::chk_sink_water() {
-    /* Nonmatching */
+bool daObjTry::Act_c::chk_sink_water() {
+    bool ret = false;
+    if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + attr().m04) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00002034-000020AC       .text chk_sinkdown_water__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::chk_sinkdown_water() {
-    /* Nonmatching */
+bool daObjTry::Act_c::chk_sinkdown_water() {
+    bool ret = false;
+    if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y + (f32)attr().m4D + 50.0f) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 000020AC-00002218       .text calc_drop_param__Q28daObjTry5Act_cCFPfPfPf */
