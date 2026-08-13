@@ -473,12 +473,12 @@ cPhs_State daObjTry::Act_c::_create() {
 
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::_delete() {
-    /* Nonmatching */
     if (m650 != 0) {
         mFollowCb.remove();
-        if (m668 != 0) {
-            ((JPABaseEmitter*)m668)->mMaxFrame = -1;
-            ((JPABaseEmitter*)m668)->setStatus(JPAEmtrStts_StopEmit);
+        JPABaseEmitter* emitter = (JPABaseEmitter*)m668;
+        if (emitter != 0) {
+            emitter->mMaxFrame = -1;
+            emitter->setStatus(JPAEmtrStts_StopEmit);
         }
         if (mType == 5) {
             dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0108);
@@ -1072,12 +1072,12 @@ void daObjTry::Act_c::eff_set_bingo(bool param_1, bool param_2) {
 
 /* 00002718-00002790       .text eff_clr_bingo__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::eff_clr_bingo() {
-    /* Nonmatching */
     if (m651 != 0) {
         mFollowCb.remove();
-        if (m668 != 0) {
-            ((JPABaseEmitter*)m668)->mMaxFrame = -1;
-            ((JPABaseEmitter*)m668)->setStatus(JPAEmtrStts_StopEmit);
+        JPABaseEmitter* emitter = (JPABaseEmitter*)m668;
+        if (emitter != 0) {
+            emitter->mMaxFrame = -1;
+            emitter->setStatus(JPAEmtrStts_StopEmit);
             m668 = 0;
         }
         m651 = 0;
