@@ -573,7 +573,6 @@ static daNpcMn_c::MoveFunc_t moveProc[] = {
 };
 
 /* 00001154-00001344       .text _execute__9daNpcMn_cFv */
-    /* Nonmatching */
 bool daNpcMn_c::_execute() {
     chkAttention();
     checkOrder();
@@ -589,17 +588,17 @@ bool daNpcMn_c::_execute() {
     playAnm();
 
     if (mAnmNo == 4) {
-        cLib_chaseF(&m788, m77C, 0.3f);
-        f32 speed = m788 * l_npc_dat[mNpcNo].field_0x34;
+        cLib_chaseF(&speedF, m77C, 0.3f);
+        f32 speed = speedF * l_npc_dat[mNpcNo].field_0x34;
         if (speed < 0.5f) {
             speed = 0.5f;
         }
-        mpMorf->getModel()->setBaseScale(cXyz(speed, speed, speed));
+        mpMorf->setPlaySpeed(speed);
     } else {
-        cLib_chaseF(&m788, m77C, 0.1f);
+        cLib_chaseF(&speedF, m77C, 0.1f);
     }
 
-    fopAcM_posMoveF(this, &speed);
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
     setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
@@ -671,8 +670,8 @@ void daNpcMn_c::executeWait() {
                 }
             }
         }
-        if (!(mSwFlag & 1) && dComIfGs_isSwitch(getPrmSwitchBit(), (s8)home.roomNo)) {
-            dComIfGs_onSwitch(getPrmSwitchBit(), (s8)home.roomNo);
+        if (!(mSwFlag & 1) && dComIfGs_isSwitch(getPrmSwitchBit(), home.roomNo)) {
+            dComIfGs_onSwitch(getPrmSwitchBit(), home.roomNo);
             mSwFlag |= 1;
             m7BE = 0;
             m7BF = 0;
@@ -854,7 +853,7 @@ void daNpcMn_c::checkOrder() {
     /* Nonmatching */
 void daNpcMn_c::eventOrder() {
     if (mOrderMode == 2 || mOrderMode == 1) {
-        m7BE |= 1;
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
         if (mOrderMode == 2) {
             fopAcM_orderSpeakEvent(this);
         }
@@ -894,7 +893,7 @@ void daNpcMn_c::privateCut() {
         "SWON",
     };
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[mNpcNo]);
+    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
     if (staffIdx != -1) {
         mCutActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 10, TRUE, 0);
         if (mCutActIdx == -1) {
@@ -1011,7 +1010,7 @@ s32 daNpcMn_c::eventMesSet() {
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
     /* Nonmatching */
 void daNpcMn_c::eventGetItemInit() {
-    fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, m794, 0, -1, -1);
+    fpc_ProcID itemID = fopAcM_createItemForPresentDemo(&current.pos, mItemId, 0, -1, -1);
     if (itemID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemID);
     }
@@ -1191,14 +1190,16 @@ void daNpcMn_c::eventJumpInit(int staffIdx) {
     f32* pSpeedY = dComIfGp_evmng_getMyFloatP(staffIdx, "SpeedY");
     f32* pGravity = dComIfGp_evmng_getMyFloatP(staffIdx, "Gravity");
     if (pSpeedX != NULL) {
-        m788 = *pSpeedX;
+        speedF = *pSpeedX;
+        m77C = *pSpeedX;
     } else {
-        m788 = 3.0f;
+        speedF = 3.0f;
+        m77C = 3.0f;
     }
     if (pSpeedY != NULL) {
-        gravity = *pSpeedY;
+        m788 = *pSpeedY;
     } else {
-        gravity = 200.0f;
+        m788 = 200.0f;
     }
     if (pGravity != NULL) {
         maxFallSpeed = *pGravity;
@@ -1617,7 +1618,6 @@ void daNpcMn_c::setAnm(u8 anmNum, int loopMode, f32 morf) {
 }
 
 /* 000038C8-00003974       .text setAnmTbl__9daNpcMn_cFP9sMnAnmDat */
-    /* Nonmatching */
 s32 daNpcMn_c::setAnmTbl(sMnAnmDat* pAnmDat) {
     m7B9 &= 0xFE;
     if (pAnmDat->mAnmNum == 0xFF) {
