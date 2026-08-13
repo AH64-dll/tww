@@ -395,8 +395,122 @@ u32 daNpc_So_c::getMsg() {
 }
 
 /* 00000E40-00001214       .text next_msgStatus__10daNpc_So_cFPUl */
-u16 daNpc_So_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+u16 daNpc_So_c::next_msgStatus(u32* pMsgNo) {
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
+
+    if (*pMsgNo == field_0x6D0) {
+        if (field_0xBD8) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0901) &&
+                strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 0xD) {
+                *pMsgNo = 0x32CE;
+            } else {
+                *pMsgNo = 0x32D2;
+            }
+        } else {
+            *pMsgNo = 0x32D6;
+        }
+        return msg_status;
+    }
+
+    switch (*pMsgNo) {
+    case 0x32CA:
+        *pMsgNo = 0x32CB;
+        break;
+    case 0x32CB:
+        *pMsgNo = 0x32CC;
+        break;
+    case 0x32CC:
+        *pMsgNo = 0x32CD;
+        break;
+    case 0x32CE:
+        msg_status = fopMsgStts_MSG_ENDS_e;
+        modeProc(PROC_INIT_e, 7);
+        break;
+    case 0x32D0:
+        if (g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid((s8)current.roomNo - 1) != 0 ||
+            l_HIO.field_0x2C[3] != 0) {
+            *pMsgNo = 0x32D4;
+        } else {
+            *pMsgNo = 0x32D1;
+        }
+        break;
+    case 0x32CD:
+    case 0x32D1:
+        msg_status = fopMsgStts_MSG_ENDS_e;
+        modeProc(PROC_INIT_e, 9);
+        break;
+    case 0x32D4:
+        *pMsgNo = field_0x6D0;
+        break;
+    case 0x32D2:
+        *pMsgNo = 0x32D3;
+        break;
+    case 0x32D6:
+        fopAcIt_Judge(searchMinigameTagSo_CB, this);
+        if (l_HIO.field_0x2C[4] != 0 || field_0xBAE != 0) {
+            if (dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_NONE_e && dComIfG_getTimerPtr() == NULL) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A10) != 0) {
+                    *pMsgNo = 0x32DC;
+                } else {
+                    *pMsgNo = 0x32D8;
+                }
+            } else {
+                *pMsgNo = 0x32D7;
+            }
+        } else {
+            *pMsgNo = 0x32D7;
+        }
+        break;
+    case 0x32D8:
+        if (mpCurrMsg->mSelectNum == 0) {
+            *pMsgNo = 0x32DA;
+        } else {
+            *pMsgNo = 0x32D9;
+        }
+        break;
+    case 0x32DC:
+        if (mpCurrMsg->mSelectNum == 0) {
+            *pMsgNo = 0x32DB;
+        } else {
+            *pMsgNo = 0x32D9;
+        }
+        break;
+    case 0x32DA:
+        *pMsgNo = 0x32DB;
+        break;
+    case 0x32DB:
+        msg_status = fopMsgStts_MSG_ENDS_e;
+        modeProc(PROC_INIT_e, 0xA);
+        break;
+    case 0x32DD:
+        *pMsgNo = 0x32DE;
+        break;
+    case 0x32DE:
+        msg_status = fopMsgStts_MSG_ENDS_e;
+        modeProc(PROC_INIT_e, 0xE);
+        break;
+    case 0x32E0:
+        dComIfGp_setItemRupeeCount(field_0xB7C * 0xA);
+        *pMsgNo = 0x32E2;
+        break;
+    case 0x32E1:
+        *pMsgNo = 0x32E2;
+        break;
+    case 0x633:
+        if (dComIfGs_getTriforceNum() == 8) {
+            *pMsgNo = 0x635;
+        } else {
+            *pMsgNo = 0x634;
+        }
+        break;
+    case 0x32D9:
+        *pMsgNo = 0x32D7;
+        break;
+    default:
+        msg_status = fopMsgStts_MSG_ENDS_e;
+        break;
+    }
+    return msg_status;
 }
 
 /* 00001214-000013A0       .text lookBack__10daNpc_So_cFv */
@@ -552,13 +666,10 @@ void daNpc_So_c::modeJump() {
     if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
     /* Nonmatching */
         fopAcM_seStart(this, 0x5939, 0);
-        fopKyM_createWpillar(&current.pos, 45.0f * scale.x, 45.0f, 0);
+        fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
 
-        cXyz diff = field_0xA80 - current.pos;
-        cXyz flat;
-        flat.x = diff.x;
+        cXyz flat = field_0xA80 - current.pos;
         flat.y = 0.0f;
-        flat.z = diff.z;
         f32 dist = std::sqrtf(PSVECSquareMag(&flat));
         if (dist > field_0xA7C) {
             current.pos = field_0xA80;
@@ -861,7 +972,7 @@ void daNpc_So_c::modeDisappearInit() {
     }
     offsetDive();
     fopAcM_seStart(this, 0x593B, 0);
-    fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 45.0f, 0);
+    fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 1.4f, 0);
     m_jnt.offBackBoneLock();
 }
 
