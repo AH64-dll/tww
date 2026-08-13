@@ -383,6 +383,16 @@ u32 daNpc_Bms1_c::getMsg() {
 /* 00001860-0000191C       .text setCollision__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::setCollision() {
     /* Nonmatching */
+    cXyz offset(0.0f, 0.0f, 0.0f);
+    offset.z = -16.0f;
+    cXyz out;
+    MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
+    cMtx_YrotM(*calc_mtx, m7C4);
+    MtxPosition(&offset, &out);
+    mCyl.SetC(out);
+    mCyl.SetR(46.0f);
+    mCyl.SetH(130.0f);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 0000191C-00001928       .text talkInit__12daNpc_Bms1_cFv */
