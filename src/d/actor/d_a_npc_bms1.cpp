@@ -300,6 +300,7 @@ BOOL daNpc_Bms1_c::chkAttention(cXyz, s16) {
 
 /* 000011D8-00001278       .text eventOrder__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::eventOrder() {
+    /* Nonmatching */
     if (m89B == 0x4) {
         fopAcM_orderOtherEvent2(this, "BMS_LAND_DEMO", 1, 0xFFFF);
     } else if (m89B == 0x3) {
@@ -376,6 +377,7 @@ void daNpc_Bms1_c::setAttention(bool i_attn) {
 
 /* 00002144-000021F4       .text checkPlayerLanding__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::checkPlayerLanding() {
+    /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 playerY = player->current.pos.y;
     BOOL landed = FALSE;
@@ -395,6 +397,7 @@ void daNpc_Bms1_c::lookBack() {
 
 /* 00002424-0000249C       .text wait01__12daNpc_Bms1_cFv */
 bool daNpc_Bms1_c::wait01() {
+    /* Nonmatching */
     if (m7CD != 0) {
         m89D = m89C;
         m89C = 2;
@@ -410,6 +413,7 @@ bool daNpc_Bms1_c::wait01() {
 
 /* 0000249C-00002590       .text talk01__12daNpc_Bms1_cFv */
 bool daNpc_Bms1_c::talk01() {
+    /* Nonmatching */
     u16 status = talk();
     if (status == 0x12) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -458,6 +462,7 @@ BOOL daNpc_Bms1_c::evn_talk() {
 
 /* 00002DD8-00002E30       .text evn_viblation_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_viblation_init(int) {
+    /* Nonmatching */
     dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
     return TRUE;
 }
