@@ -203,6 +203,7 @@ BOOL Big_pow_down_check(pw_class* i_this) {
 
 /* 000008B0-0000121C       .text body_atari_check__FP8pw_class */
 s32 body_atari_check(pw_class* i_this) {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     i_this->mStts.Move();
     i_this->mHitByWhat = 0;
@@ -425,6 +426,7 @@ s32 body_atari_check(pw_class* i_this) {
 
 /* 00001258-000016FC       .text kantera_atari_check__FP8pw_class */
 BOOL kantera_atari_check(pw_class* i_this) {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (i_this->m346 <= 0) {
         return FALSE;
@@ -765,7 +767,6 @@ void next_dousa_check(pw_class* i_this) {
 
 /* 000029C8-00002A54       .text move_sound__FP8pw_class */
 void move_sound(pw_class* i_this) {
-    /* Nonmatching */
     u32 volume = (u32)(4.0f * i_this->speedF);
     mDoAud_seStart(JA_SE_CHR_PW_MOVE, &i_this->eyePos, volume,
                    dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -1052,6 +1053,7 @@ void action_dousa(pw_class* i_this) {
 
 /* 00003B08-000042B8       .text action_kougeki__FP8pw_class */
 void action_kougeki(pw_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     switch (i_this->mMode) {
     case 30:
