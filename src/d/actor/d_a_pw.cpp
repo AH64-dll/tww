@@ -1234,6 +1234,7 @@ void action_kougeki(pw_class* i_this) {
 }
 
 /* 000042B8-00004C50       .text action_itai__FP8pw_class */
+    /* Nonmatching */
 void action_itai(pw_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     J3DModel* model = i_this->mpMorf->getModel();
@@ -1591,6 +1592,7 @@ void action_torituku(pw_class* i_this) {
 }
 
 /* 000052B8-00005CA4       .text action_big_demo__FP8pw_class */
+    /* Nonmatching */
 void action_big_demo(pw_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz playerPos = player->current.pos;
