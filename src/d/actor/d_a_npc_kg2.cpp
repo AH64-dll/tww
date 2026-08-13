@@ -105,7 +105,7 @@ static BOOL daNpc_Kg2_nodeCallBack(J3DNode* node, int param) {
         }
         model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
-        if (jnt_no == actor->m6C4) {
+        if (jnt_no == actor->m_handL_num) {
             mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
             mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
             actor->m6D4->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -123,7 +123,7 @@ void daNpc_Kg2_c::set_mtx() {
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (m736) {
-        mDoMtx_stack_c::copy(model->getAnmMtx(m6C4));
+        mDoMtx_stack_c::copy(model->getAnmMtx(m_handL_num));
         mDoMtx_stack_c::transM(23.467f, -22.26f, -47.1f);
         mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
         m6D4->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -134,9 +134,9 @@ void daNpc_Kg2_c::set_mtx() {
 BOOL daNpc_Kg2_c::initTexPatternAnm(bool param) {
     /* Nonmatching */
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    m_eye_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(M_arcname, l_btp_ix_tbl[m748]);
-    JUT_ASSERT(0x12B, m_eye_tex_pattern != 0);
-    BOOL ret = m6F0.init(modelData, m_eye_tex_pattern, 1, 2, 1.0f, 0, -1, param, FALSE);
+    m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes(M_arcname, l_btp_ix_tbl[m748]);
+    JUT_ASSERT(0x12B, m_btp != 0);
+    BOOL ret = m6F0.init(modelData, m_btp, 1, 2, 1.0f, 0, -1, param, FALSE);
     if (ret == FALSE) {
         return FALSE;
     }
@@ -164,8 +164,8 @@ void daNpc_Kg2_c::playTexPatternAnm() {
                 m704 = 0;
                 m706 = (s16)((150.0f + cM_rndF(150.0f)) * 2.0f);
             }
-        } else if (m704 >= m_eye_tex_pattern->getFrameMax()) {
-            m704 -= m_eye_tex_pattern->getFrameMax();
+        } else if (m704 >= m_btp->getFrameMax()) {
+            m704 -= m_btp->getFrameMax();
             m706 = (s16)(30.0f + cM_rndF(100.0f));
         } else {
             m704++;
@@ -247,20 +247,17 @@ s32 daNpc_Kg2_c::chkAttention(cXyz i_pos, s16 i_angleY) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 max_attn_dist = l_HIO.mHio.mMaxAttnDistXZ;
     s16 max_attn_angle = l_HIO.mHio.mMaxAttnAngleY;
-    f32 dx = player->current.pos.x - i_pos.x;
-    f32 dz = player->current.pos.z - i_pos.z;
-    f32 dist_sq = dx * dx + dz * dz;
-    f32 dist = dist_sq;
-    if (dist_sq > 0.0f) {
-        dist = std::sqrtf(dist_sq);
-    }
-    s16 angle = cM_atan2s(dx, dz);
+    cXyz spC;
+    spC.x = player->current.pos.x - i_pos.x;
+    spC.z = player->current.pos.z - i_pos.z;
+    f32 dist = std::sqrtf(spC.x * spC.x + spC.z * spC.z);
+    s16 angle = cM_atan2s(spC.x, spC.z);
     if (m72C) {
         max_attn_angle += 0x71C;
         max_attn_dist += 40.0f;
     }
     s32 ret = 0;
-    if (abs(angle - i_angleY) < max_attn_angle && max_attn_dist > dist) {
+    if (max_attn_angle > abs(angle - i_angleY) && max_attn_dist > dist) {
         ret = 1;
     }
     return ret;
@@ -549,8 +546,8 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     JUT_ASSERT(0x3A1, m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone2"));
     JUT_ASSERT(0x3A6, m_jnt.getBackboneJntNum() >= 0);
-    m6C4 = modelData->getJointName()->getIndex("handL");
-    JUT_ASSERT(0x3AA, m6C4 >= 0);
+    m_handL_num = modelData->getJointName()->getIndex("handL");
+    JUT_ASSERT(0x3AA, m_handL_num >= 0);
     m748 = 0;
     if (!initTexPatternAnm(false)) {
         return FALSE;
@@ -705,8 +702,13 @@ int daNpc_Kg2_c::evn_setAnm() {
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_jnt_lock_init(int i_staffId) {
     /* Nonmatching */
-    int* lock = dComIfGp_evmng_getMyIntegerP(i_staffId, "JNTLOCK");
-    s32 lock_no = (lock != NULL) ? *lock : 0;
+    int* lock = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
+    s32 lock_no;
+    if (lock != NULL) {
+        lock_no = *lock;
+    } else {
+        lock_no = 0;
+    }
     switch (lock_no) {
     case 0:
         m_jnt.mbBackBoneLock = false;
@@ -731,7 +733,7 @@ int daNpc_Kg2_c::evn_jnt_lock_init(int i_staffId) {
 /* 00001F14-00001F88       .text evn_talk_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_talk_init(int i_staffId) {
     /* Nonmatching */
-    int* msg_no = dComIfGp_evmng_getMyIntegerP(i_staffId, "KGTALK");
+    int* msg_no = dComIfGp_evmng_getMyIntegerP(i_staffId, "msg_num");
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = NULL;
     if (msg_no != NULL) {
