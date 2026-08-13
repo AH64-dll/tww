@@ -144,7 +144,6 @@ BOOL daNpc_Kg2_c::initTexPatternAnm(bool param) {
 
 /* 000005A0-000006EC       .text playTexPatternAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::playTexPatternAnm() {
-    /* Nonmatching */
     if (m738 == 1 && m748 == 0 && m704 == 2) {
         m704 = 0;
         m748 = 4;
@@ -332,7 +331,6 @@ u32 daNpc_Kg2_c::getMsg() {
 
 /* 00000E38-00001028       .text next_msgStatus__11daNpc_Kg2_cFPUl */
 u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching */
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
     switch (*pMsgNo) {
     case 0x3140:
@@ -416,7 +414,6 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
 void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
-    /* Nonmatching */
     u8 msg_attr = dComIfGp_getMesgAnimeAttrInfo();
     if (m738 != 1) {
         switch (msg_attr) {
@@ -652,7 +649,6 @@ void daNpc_Kg2_c::wait01() {
 
 /* 00001BDC-00001CA4       .text talk01__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::talk01() {
-    /* Nonmatching */
     if (talk(1) == 0x12) {
         m760 = 1;
         g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
@@ -672,7 +668,6 @@ void daNpc_Kg2_c::talk01() {
 
 /* 00001CA4-00001D88       .text evn_setAnm_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_setAnm_init(int i_staffId) {
-    /* Nonmatching */
     int* anm_no = dComIfGp_evmng_getMyIntegerP(i_staffId, "AnmNo");
     int* count = dComIfGp_evmng_getMyIntegerP(i_staffId, "count");
     f32* morf = dComIfGp_evmng_getMyFloatP(i_staffId, "hokan");
@@ -866,7 +861,6 @@ int daNpc_Kg2_c::wait_action(void*) {
 
 /* 00002334-00002590       .text event_wait_action__11daNpc_Kg2_cFPv */
 int daNpc_Kg2_c::event_wait_action(void*) {
-    /* Nonmatching */
     if (m763 == 0) {
         m760 = 1;
         m763++;
