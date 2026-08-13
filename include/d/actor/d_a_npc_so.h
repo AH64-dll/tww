@@ -2,6 +2,9 @@
 #define D_A_NPC_SO_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
+#include "d/d_jnt_hit.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 class dCcD_SrcSph;
@@ -16,7 +19,7 @@ public:
     void isAnm(signed char) {}
     void modeProcInit(int) {}
 
-    void _searchEsa(fopAc_ac_c*);
+    fopAc_ac_c* _searchEsa(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);
     void _searchTagSo(fopAc_ac_c*);
     void _searchMinigameTagSo(fopAc_ac_c*);
@@ -127,6 +130,8 @@ public:
     void initCam();
     void moveCam();
 
+    static const s32 m_heapsize;
+    static const char m_arc_name[];
     static const dCcD_SrcSph m_sph_src;
 
 public:
@@ -134,17 +139,58 @@ public:
 #if VERSION == VERSION_DEMO
     /* 0x290 */ u8 m290[0xB70 - 0x290];
 #else
-    /* 0x290 */ u8 m290[0xB78 - 0x290];
+    /* 0x290 */ s16 field_0x290;
+    /* 0x292 */ s16 field_0x292;
+    /* 0x294 */ s16 field_0x294;
+    /* 0x296 */ s16 field_0x296;
+    /* 0x298 */ s8 field_0x298;
+    /* 0x299 */ s8 field_0x299;
+    /* 0x29A */ u8 field_0x29A[0x2A0 - 0x29A];
+    /* 0x2A0 */ u8 field_0x2A0[0xB54 - 0x2A0];
+    /* 0xB54 */ cXyz field_0xB54;
+    /* 0xB60 */ cXyz field_0xB60;
+    /* 0xB6C */ u8 field_0xB6C[0xB78 - 0xB6C];
 #endif
     /* 0xB78 */ int mB78;
 };
 
-class daNpc_So_HIO_c {
+class daNpc_So_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_So_HIO_c();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ dNpc_HIO_c mNpc;
+    /* 0x2C */ u8 field_0x2C[6];
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ f32 field_0x40;
+    /* 0x44 */ f32 field_0x44;
+    /* 0x48 */ f32 field_0x48;
+    /* 0x4C */ f32 field_0x4C;
+    /* 0x50 */ f32 field_0x50;
+    /* 0x54 */ f32 field_0x54;
+    /* 0x58 */ f32 field_0x58;
+    /* 0x5C */ f32 field_0x5C;
+    /* 0x60 */ f32 field_0x60;
+    /* 0x64 */ s16 field_0x64;
+    /* 0x66 */ s16 field_0x66;
+    /* 0x68 */ s16 field_0x68;
+    /* 0x6A */ s16 field_0x6A;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ s16 field_0x7C;
+    /* 0x7E */ u8 field_0x7E[0x80 - 0x7E];
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ u8 field_0x94;
+    /* 0x95 */ u8 field_0x95[0x98 - 0x95];
+    /* 0x98 */ JntHit_HIO_c mJntHit;
+};  // Size: 0xC4
 
 #endif /* D_A_NPC_SO_H */

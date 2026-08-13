@@ -5,30 +5,144 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_so.h"
+#include "d/actor/d_a_esa.h"
+
+const s32 daNpc_So_c::m_heapsize = 0x1C00;
+const char daNpc_So_c::m_arc_name[] = "So";
+
+const dCcD_SrcSph daNpc_So_c::m_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_UNK8 & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 60.0f,
+    }},
+};
+
+
+
 
 /* 000000EC-000002A4       .text __ct__14daNpc_So_HIO_cFv */
 daNpc_So_HIO_c::daNpc_So_HIO_c() {
-    /* Nonmatching */
+    field_0x2C[0] = 0;
+    field_0x2C[1] = 0;
+    field_0x2C[2] = 0;
+    field_0x2C[3] = 0;
+    field_0x2C[4] = 0;
+    field_0x2C[5] = 0;
+    field_0x34 = 3.0f;
+    field_0x38 = 1.75f;
+    field_0x3C = 100.0f;
+    field_0x40 = 2000.0f;
+    field_0x54 = 20000.0f;
+    field_0x5C = 30.0f;
+    field_0x44 = 0.7f;
+    field_0x48 = 2000.0f;
+    field_0x4C = 2.0f;
+    field_0x50 = 150.0f;
+    field_0x64 = 0x1F40;
+    field_0x66 = 0x0FA0;
+    field_0x68 = -0x1F40;
+    field_0x6A = -0x0FA0;
+    field_0x6C = 10.0f;
+    mNpc.m04 = -33.0f;
+    mNpc.mMaxHeadX = 0x1FFE;
+    mNpc.mMaxHeadY = 0x1000;
+    mNpc.mMaxBackboneX = 0x1000;
+    mNpc.mMaxBackboneY = 0x2000;
+    mNpc.mMinHeadX = -0xBB8;
+    mNpc.mMinHeadY = -0x1000;
+    mNpc.mMinBackboneX = -0x1000;
+    mNpc.mMinBackboneY = -0x2000;
+    mNpc.mMaxTurnStep = 0x250;
+    mNpc.mMaxHeadTurnVel = 0x150;
+    mNpc.mAttnYOffset = 50.0f;
+    mNpc.mMaxAttnAngleY = 0x7FFF;
+    mNpc.m22 = 0;
+    mNpc.mMaxAttnDistXZ = 400.0f;
+    field_0x58 = 250.0f;
+    field_0x60 = 700.0f;
+    field_0x70 = 600.0f;
+    field_0x74 = 300.0f;
+    field_0x78 = 100.0f;
+    field_0x7C = 5;
+    field_0x80 = -1.4f;
+    field_0x84 = 18.0f;
+    field_0x88 = 120.0f;
+    field_0x8C = 300.0f;
+    field_0x90 = 15.0f;
+    field_0x94 = 0;
 }
 
 /* 000002A4-000002D0       .text searchEsa_CB__FPvPv */
-void searchEsa_CB(void*, void*) {
-    /* Nonmatching */
+static void* searchEsa_CB(void* param_1, void* i_this) {
+    return static_cast<daNpc_So_c*>(i_this)->_searchEsa((fopAc_ac_c*)param_1);
 }
 
 /* 000002D0-000002F8       .text _searchEsa__10daNpc_So_cFP10fopAc_ac_c */
-void daNpc_So_c::_searchEsa(fopAc_ac_c*) {
-    /* Nonmatching */
+fopAc_ac_c* daNpc_So_c::_searchEsa(fopAc_ac_c* pActor) {
+    if (fopAcM_GetName(pActor) == fpcNm_ESA_e) {
+        esa_class* pBait = static_cast<esa_class*>(pActor);
+        if (pBait->field_0x298 == 0) {
+            return pActor;
+        }
+    }
+    return NULL;
 }
 
 /* 000002F8-00000344       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        daNpc_So_c* i_this = (daNpc_So_c*)j3dSys.getModel()->getUserArea();
+        if (i_this != NULL) {
+            i_this->_nodeControl(i_nodeP, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 00000344-00000474       .text _nodeControl__10daNpc_So_cFP7J3DNodeP8J3DModel */
-void daNpc_So_c::_nodeControl(J3DNode*, J3DModel*) {
+void daNpc_So_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     /* Nonmatching */
+    J3DJoint* joint = static_cast<J3DJoint*>(i_nodeP);
+    int jntNo = joint->getJntNo();
+
+    mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jntNo));
+
+    if (jntNo == field_0x298) {
+        cXyz pos(0.0f, 0.0f, 0.0f);
+        cXyz off(24.0f, -12.0f, 0.0f);
+        mDoMtx_stack_c::multVec(&pos, &field_0xB60);
+        mDoMtx_stack_c::YrotM(field_0x292);
+        mDoMtx_stack_c::ZrotM(field_0x290);
+        mDoMtx_stack_c::multVec(&off, &field_0xB54);
+    } else if (jntNo == field_0x299) {
+        mDoMtx_stack_c::XrotM(field_0x296);
+        mDoMtx_stack_c::ZrotM(field_0x294);
+    }
+
+    mDoMtx_copy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::now, i_modelP->getAnmMtx(jntNo));
 }
 
 /* 000004B0-000004DC       .text searchTagSo_CB__FPvPv */
@@ -393,36 +507,6 @@ static BOOL daNpc_SoIsDelete(void*) {
 
 #include "d/actor/d_a_npc_so_cut.inc"
 #include "d/d_cc_d.h"
-
-const dCcD_SrcSph daNpc_So_c::m_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_UNK8 & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 60.0f,
-    }},
-};
-
 
 static actor_method_class daNpc_SoMethodTable = {
     (process_method_func)daNpc_SoCreate,
