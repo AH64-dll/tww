@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -124,7 +125,11 @@ void daObj_hsh_c::drawStart() {
 
 /* 0000064C-000006C8       .text setBaseMtx__11daObj_hsh_cFv */
 void daObj_hsh_c::setBaseMtx() {
-    /* Nonmatching */
+    J3DModel* model = mpModel;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    PSMTXCopy(mDoMtx_stack_c::get(), m4A4);
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
