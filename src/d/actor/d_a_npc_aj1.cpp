@@ -333,6 +333,7 @@ void daNpc_Aj1_c::ctrl_TIREanm() {
 /* 00000A3C-00000B30       .text setMtx__11daNpc_Aj1_cFb */
         /* Nonmatching */
 void daNpc_Aj1_c::setMtx(bool i_setMtx) {
+    mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(m70E.x, m70E.y, m70E.z);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -738,7 +739,7 @@ s32 daNpc_Aj1_c::chkAttention() {
 void daNpc_Aj1_c::setAttention(bool i_flag) {
     attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY, current.pos.z);
     if (mActionResult != 0 || i_flag) {
-        eyePos = attention_info.position;
+        eyePos = mHeadPos;
     }
 }
 
@@ -997,9 +998,10 @@ void daNpc_Aj1_c::set_pa_pun() {
 /* 00002120-000021B0       .text set_pa_aka__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_aka() {
-    if (mAkaEmitter != NULL) {
-        mAkaEmitter->setMaxFrame(-1);
-        mAkaEmitter->setStatus(1);
+    JPABaseEmitter* emitter = mAkaEmitter;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(1);
     }
     mAkaEmitter = dComIfGp_particle_set(0x811F, &current.pos, NULL, NULL, 0xFF, NULL,
                                         current.roomNo, NULL, NULL, NULL);
