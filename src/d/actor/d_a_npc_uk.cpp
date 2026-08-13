@@ -1987,7 +1987,7 @@ BOOL daNpc_Uk_c::CreateHeap() {
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mObjAcch.SetGroundCheckOffset(100.0f);
     fopAcM_SetMaxFallSpeed(this, -90.0f);
-    mVisitMode = 0;
+    mLookActorId = -1;
     return TRUE;
 }
 

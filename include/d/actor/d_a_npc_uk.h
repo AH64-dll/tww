@@ -112,7 +112,6 @@ public:
     void aroundWalk(fopAc_ac_c*);
     void surrender();
     BOOL runawayInit();
-    static BOOL nodeCallBack_Uk(J3DNode*, int);
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(s8, u8);
