@@ -278,7 +278,7 @@ void daObjMagmarock::Act_c::CreateInit() {
     /* Nonmatching */
     scale.set(1.0f, 1.0f, 1.0f);
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -200.0f, -30.0f, -200.0f, 200.0f, 15.0f, 200.0f);
+    fopAcM_setCullSizeBox(this, -200.0f, -30.0f, -200.0f, 200.0f, 30.0f, 200.0f);
     PSMTXCopy(mpModel->getBaseTRMtx(), mMtx);
 
     mQuakeAngle = 0.0f;
@@ -543,8 +543,10 @@ inline bool daObjMagmarock::Act_c::_execute() {
 BOOL daObjMagmarock::Method::Draw(void* i_this) {
     /* Nonmatching */
     Act_c* a_this = (Act_c*)i_this;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &a_this->current.pos, &a_this->mTevStr);
+    cXyz* pos = &a_this->current.pos;
+    dKy_tevstr_c* tev = &a_this->tevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, pos, tev);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, pos, &a_this->mTevStr);
 
     a_this->mTevStr.mColorC0.r = (u8)(a_this->mTevStr.mColorC0.r + (s32)(0.12f * (255 - a_this->mTevStr.mColorC0.r)));
     a_this->mTevStr.mColorC0.g = (u8)(a_this->mTevStr.mColorC0.g + (s32)(0.12f * (255 - a_this->mTevStr.mColorC0.g)));
@@ -553,7 +555,7 @@ BOOL daObjMagmarock::Method::Draw(void* i_this) {
     a_this->mTevStr.mColorK0.g = (u8)(a_this->mTevStr.mColorK0.g + (s32)(0.12f * (255 - a_this->mTevStr.mColorK0.g)));
     a_this->mTevStr.mColorK0.b = (u8)(a_this->mTevStr.mColorK0.b + (s32)(0.12f * (255 - a_this->mTevStr.mColorK0.b)));
 
-    g_env_light.setLightTevColorType(a_this->mpModel, &a_this->tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel, tev);
     a_this->mBrkAnm.entry(a_this->mpModel->getModelData(), (s16)a_this->mBrkFrame);
     a_this->mBckAnm.entry(a_this->mpModel->getModelData(), (s16)a_this->mBckFrame);
     mDoExt_modelUpdateDL(a_this->mpModel);
