@@ -53,7 +53,6 @@ daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer = NULL;
 
 /* 000000EC-00000194       .text __ct__15daNpc_Kg2_HIO_cFv */
 daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
-    /* Nonmatching */
     mHio.m04 = -20.0f;
     mHio.mMaxHeadX = 0x9C4;
     mHio.mMaxHeadY = 0x1B58;
@@ -168,7 +167,6 @@ void daNpc_Kg2_c::playTexPatternAnm() {
 
 /* 000006EC-00000838       .text setAnm__11daNpc_Kg2_cFScf */
 void daNpc_Kg2_c::setAnm(s8 i_anmNo, f32 i_morf) {
-    /* Nonmatching */
     static int a_play_mode_tbl[] = {
         2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 2, 2, 0, 0, 2,
     };
@@ -560,7 +558,7 @@ BOOL daNpc_Kg2_c::CreateHeap() {
     if (!initTexPatternAnm(false)) {
         return FALSE;
     }
-    J3DModelData* const cannonData = (J3DModelData*)dComIfG_getObjectRes("Kg", 6);
+    J3DModelData* cannonData = (J3DModelData*)dComIfG_getObjectRes("Kg", 6);
     m6D4 = mDoExt_J3DModel__create(cannonData, 0x80000, 0x11020002);
     if (m6D4 == NULL) {
         return FALSE;
@@ -901,7 +899,6 @@ int daNpc_Kg2_c::event_wait_action(void*) {
 
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
 cPhs_State daNpc_Kg2_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daNpc_Kg2_c);
     cPhs_State phase = dComIfG_resLoad(&mPhs, "Kg");
     if (phase == cPhs_COMPLEATE_e) {
@@ -956,7 +953,6 @@ BOOL daNpc_Kg2_c::_execute() {
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_draw() {
-    /* Nonmatching */
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
