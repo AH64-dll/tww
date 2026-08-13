@@ -1417,6 +1417,7 @@ J3DModelData* daNpc_Gp1_c::create_Anm() {
     return a_mdl_dat;
 }
 
+/* Nonmatching */
 /* 00003844-000039A0       .text CreateHeap__11daNpc_Gp1_cFv */
 BOOL daNpc_Gp1_c::CreateHeap() {
     J3DModelData* anm_model = create_Anm();
