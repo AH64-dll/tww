@@ -185,23 +185,33 @@ fopAc_ac_c* daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c* pActor) {
 }
 
 /* 000005C8-000005E8       .text daNpc_So_XyCheckCB__FPvi */
-static s16 daNpc_So_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daNpc_So_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daNpc_So_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000005E8-00000680       .text XyCheckCB__10daNpc_So_cFi */
-void daNpc_So_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daNpc_So_c::XyCheckCB(int i_itemBtn) {
+    if (fopAcIt_Judge(searchEsa_CB, this)) {
+        return 0;
+    }
+    if (field_0x6D3 != 2) {
+        return 0;
+    }
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getSelectItem(i_itemBtn) == 0x82) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00000680-000006A0       .text daNpc_So_XyEventCB__FPvi */
-static s16 daNpc_So_XyEventCB(void*, int) {
-    /* Nonmatching */
+static s16 daNpc_So_XyEventCB(void* i_this, int i_itemBtn) {
+    return static_cast<daNpc_So_c*>(i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 000006A0-000006EC       .text XyEventCB__10daNpc_So_cFi */
-void daNpc_So_c::XyEventCB(int) {
-    /* Nonmatching */
+s16 daNpc_So_c::XyEventCB(int i_itemBtn) {
+    field_0xBDC = dComIfGp_evmng_getEventIdx("NpcSo", 0xFF);
+    return field_0xBDC;
 }
 
 /* 000006EC-0000070C       .text createHeap_CB__FP10fopAc_ac_c */

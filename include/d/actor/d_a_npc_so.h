@@ -23,8 +23,8 @@ public:
     void _nodeControl(J3DNode*, J3DModel*);
     fopAc_ac_c* _searchTagSo(fopAc_ac_c*);
     fopAc_ac_c* _searchMinigameTagSo(fopAc_ac_c*);
-    void XyCheckCB(int);
-    void XyEventCB(int);
+    s16 XyCheckCB(int);
+    s16 XyEventCB(int);
     void _createHeap();
     void jntHitCreateHeap();
     void checkTgHit();
@@ -146,7 +146,9 @@ public:
     /* 0x298 */ s8 field_0x298;
     /* 0x299 */ s8 field_0x299;
     /* 0x29A */ u8 field_0x29A[0x2A0 - 0x29A];
-    /* 0x2A0 */ u8 field_0x2A0[0xA70 - 0x2A0];
+    /* 0x2A0 */ u8 field_0x2A0[0x6D3 - 0x2A0];
+    /* 0x6D3 */ s8 field_0x6D3;
+    /* 0x6D4 */ u8 field_0x6D4[0xA70 - 0x6D4];
     /* 0xA70 */ u8 field_0xA70[0xA79 - 0xA70];
     /* 0xA79 */ u8 field_0xA79;
     /* 0xA7A */ u8 field_0xA7A[0xA7C - 0xA7A];
