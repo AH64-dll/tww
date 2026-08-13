@@ -690,8 +690,8 @@ u32 daNpc_Bj1_c::getMsg_Corog() {
         if (chkReg(0x96FF)) {
             return 0x1484;
         }
-        s16 count = 0;
         u8 reg = dComIfGs_getEventReg(0x9EFF);
+        s16 count = 0;
         for (int i = 0; i < 8; i++) {
             if (reg & 1) {
                 count++;
