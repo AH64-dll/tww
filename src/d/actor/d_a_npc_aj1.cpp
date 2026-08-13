@@ -155,7 +155,10 @@ void daNpc_Aj1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_model) {
     static cXyz a_eye_pos_off(24.0f, -16.0f, 0.0f);
     s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
-    m72C.set(mDoMtx_stack_c::get()[0][3], mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
+    MtxP mtx = mDoMtx_stack_c::get();
+    m72C.x = mtx[0][3];
+    m72C.y = mtx[1][3];
+    m72C.z = mtx[2][3];
     mDoMtx_stack_c::YrotM(-m_jnt.getHead_y());
     mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
     mDoMtx_stack_c::multVec(&a_eye_pos_off, &mHeadPos);
