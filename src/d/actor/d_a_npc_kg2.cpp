@@ -739,8 +739,7 @@ int daNpc_Kg2_c::evn_talk_init(int i_staffId) {
 
 /* 00001F88-00001FBC       .text evn_talk__11daNpc_Kg2_cFv */
 int daNpc_Kg2_c::evn_talk() {
-    /* Nonmatching */
-    return talk(1) == 0x12;
+    return (talk(1) == 0x12) ? 1 : 0;
 }
 
 /* 00001FBC-00002070       .text evn_createItem_init__11daNpc_Kg2_cFi */
