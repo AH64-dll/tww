@@ -234,6 +234,8 @@ BOOL daNpc_Bj1_c::createInit() {
         attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x5A;
         attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x5A;
         break;
+    default:
+        return FALSE;
     }
 
     mScaleHead = l_bj1_prm_tbl[mType].mScaleHead;
@@ -243,9 +245,10 @@ BOOL daNpc_Bj1_c::createInit() {
     gravity = -4.5f;
     mHomePos = current.pos;
 
-    mPathNo = (fopAcM_GetParam(this) >> 16) & 0xFF;
-    if (mPathNo != 0xFF) {
-        mPathRun.setInf(mPathNo, current.roomNo, 1);
+    u8 pathNo = (fopAcM_GetParam(this) >> 16) & 0xFF;
+    mPathNo = pathNo;
+    if (pathNo != 0xFF) {
+        mPathRun.setInf(pathNo, current.roomNo, 1);
         if (!mPathRun.isPath()) {
             return FALSE;
         }
@@ -256,7 +259,7 @@ BOOL daNpc_Bj1_c::createInit() {
     mEventCut.setActorInfo2(a_staff_tbl[mSpecificType], this);
     m8AF = 0xB;
 
-    BOOL result;
+    bool result;
     switch (mSpecificType) {
     case 6:
         result = init_BJ4_0();
@@ -286,7 +289,7 @@ BOOL daNpc_Bj1_c::createInit() {
         result = init_BJ7_0();
         break;
     default:
-        result = FALSE;
+        result = 0;
         break;
     }
     if (result) {
