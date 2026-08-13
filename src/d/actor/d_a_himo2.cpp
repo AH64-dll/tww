@@ -1773,6 +1773,7 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
+/* Nonmatching */
 static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
     himo2_class* a_this = (himo2_class*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);

@@ -153,6 +153,7 @@ BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, J
 
 #if VERSION > VERSION_DEMO
 /* 00000738-000008B8       .text createModelData__9daLodbg_cFv */
+/* Nonmatching */
 BOOL daLodbg_c::createModelData() {
     static char resPath[32];
     JUT_ASSERT(0x177, mModelData == NULL);
