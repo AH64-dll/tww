@@ -867,7 +867,7 @@ s32 daNpc_Uk_c::getNowEventAction() {
         "WARP",
         "TURN",
     };
-    return dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+    return dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, 15, FALSE, 0);
 }
 
 /* 0000230C-00002494       .text visitInit__10daNpc_Uk_cFUc */
@@ -1957,7 +1957,7 @@ BOOL daNpc_Uk_c::CreateHeap() {
     JUT_ASSERT(2772, m_jnt.getHeadJntNum() >= 0);
 
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(2775, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(2777, m_jnt.getBackboneJntNum() >= 0);
 
     static int head_bdl_table[] = {
         dRes_INDEX_UK_BDL_UKHEAD_B_e,
