@@ -981,7 +981,7 @@ bool daObjTry::Act_c::bound() {
     /* Nonmatching */
     bool ret = mAcch.ChkGroundHit();
     if (mAcch.ChkWallHit()) {
-        speedF *= L_attrBase[2];
+        speedF *= 0.3f;
         current.angle.y = (s16)(mAcchCir.GetWallAngleY() * 2 - (current.angle.y + 0x8000));
     }
     if (mAcch.ChkGroundLanding()) {
@@ -1017,8 +1017,9 @@ void daObjTry::Act_c::se_fall_water() {
         }
     }
 
-    JAIZelBasic::zel_basic->seStart(attr().m58, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo),
-                                    0.0f, 0.0f, -1.0f, -1.0f, 0);
+    u32 se = attr().m58;
+    JAIZelBasic::zel_basic->seStart(se, &eyePos, mtrlSndId, dComIfGp_getReverb(current.roomNo), 0.0f,
+                                    0.0f, -1.0f, -1.0f, 0);
     set_senv(attr().m44, attr().m45);
 }
 
