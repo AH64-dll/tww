@@ -648,7 +648,6 @@ u16 daNpc_Uk_c::talk() {
 }
 
 /* 000018F0-00001DE4       .text init__10daNpc_Uk_cFv */
-    /* Nonmatching */
 BOOL daNpc_Uk_c::init() {
     cXyz temp(0.0f, 0.0f, 0.0f);
     attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
@@ -847,6 +846,7 @@ BOOL daNpc_Uk_c::checkDemoStart() {
 }
 
 /* 000022C4-0000230C       .text getNowEventAction__10daNpc_Uk_cFv */
+    /* Nonmatching */
 s32 daNpc_Uk_c::getNowEventAction() {
     static char* action_table[] = {
         "WAIT",
@@ -864,12 +864,12 @@ s32 daNpc_Uk_c::getNowEventAction() {
         "JUMP2",
         "TURN",
         "WARP",
+        "TURN",
     };
     return dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 }
 
 /* 0000230C-00002494       .text visitInit__10daNpc_Uk_cFUc */
-    /* Nonmatching */
 void daNpc_Uk_c::visitInit(u8 i_nextVisitMode) {
     switch (i_nextVisitMode) {
     case VISIT_WALK_PATH:
@@ -922,7 +922,6 @@ void daNpc_Uk_c::visitInit(u8 i_nextVisitMode) {
 }
 
 /* 00002494-000025A4       .text visitProc__10daNpc_Uk_cFv */
-    /* Nonmatching */
 void daNpc_Uk_c::visitProc() {
     u32 procId = mLookActorId;
     fopAc_ac_c* pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
@@ -1313,7 +1312,6 @@ void daNpc_Uk_c::demoInitCom() {
 }
 
 /* 00003648-000040E0       .text demoProc__10daNpc_Uk_cFv */
-    /* Nonmatching */
 bool daNpc_Uk_c::demoProc() {
     BOOL temp = FALSE;
     cXyz* a_xyz;
@@ -1570,7 +1568,6 @@ BOOL daNpc_Uk_c::wait_action(void*) {
 
 /* 000041B0-0000440C       .text seek_action__10daNpc_Uk_cFPv */
 BOOL daNpc_Uk_c::seek_action(void*) {
-    /* Nonmatching */
     if (mActionStatus == ACTION_STARTING) {
         if (dComIfGs_isTmpBit(getFoundFlag())) {
             mState = STATE_RUNAWAY;
@@ -1636,7 +1633,6 @@ BOOL daNpc_Uk_c::seek_action(void*) {
 
 /* 0000440C-0000457C       .text hind_action__10daNpc_Uk_cFPv */
 BOOL daNpc_Uk_c::hind_action(void*) {
-    /* Nonmatching */
     if (mActionStatus == ACTION_STARTING) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING) {
@@ -1656,7 +1652,6 @@ BOOL daNpc_Uk_c::hind_action(void*) {
 }
 
 /* 0000457C-00004774       .text visit_action__10daNpc_Uk_cFPv */
-    /* Nonmatching */
 BOOL daNpc_Uk_c::visit_action(void*) {
     if (mActionStatus == ACTION_STARTING) {
         if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0040)) {
@@ -1883,7 +1878,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00004D54-00005028       .text _create__10daNpc_Uk_cFv */
-    /* Nonmatching */
 cPhs_State daNpc_Uk_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Uk_c);
     cPhs_State state = dComIfG_resLoad(&mPhs, "Uk");
