@@ -862,7 +862,12 @@ void daNpc_Bj1_c::bj_flyMove() {
 
 /* 00002EDC-00002F5C       .text bj_clcMovSpd__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_clcMovSpd() {
-    /* Nonmatching */
+    if (m8A9 == 0) {
+        s16 targetY = cLib_targetAngleY(&current.pos, &mPathPoint);
+        cLib_addCalcAngleS(&current.angle.y, targetY, l_HIO.mChild[mType].mPrm.field_0x4E,
+                           l_HIO.mChild[mType].mPrm.field_0x50, 0);
+    }
+    cLib_chaseF(&speedF, m80C, m814);
 }
 
 /* 00002F5C-000030A4       .text bj_nMove__11daNpc_Bj1_cFv */
@@ -911,8 +916,15 @@ void daNpc_Bj1_c::createSeed() {
 }
 
 /* 00003774-000037E4       .text deleteSeed__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::deleteSeed() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::deleteSeed() {
+    for (int i = 0; i < 4; i++) {
+        fopAc_ac_c* seed = searchByID(mSeedProcID[i]);
+        if (seed != NULL) {
+            mSeedProcID[i] = -1;
+            fopAcM_delete(seed);
+        }
+    }
+    return true;
 }
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
@@ -985,8 +997,11 @@ void daNpc_Bj1_c::eInit_MOV_(float*, float*, float*, int*) {
 }
 
 /* 00003F04-00003F74       .text eInit_JMP___11daNpc_Bj1_cFPfPf */
-void daNpc_Bj1_c::eInit_JMP_(float*, float*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_JMP_(float* i_prm1, float* i_prm2) {
+    m8A9 = 1;
+    speed.y = eInit_prmFloat(i_prm1, 0.0f);
+    gravity = eInit_prmFloat(i_prm2, 0.0f);
+    setAnm_NUM(4);
 }
 
 /* 00003F74-0000406C       .text eInit_CHG_PTH___11daNpc_Bj1_cFPiPi */
@@ -996,7 +1011,11 @@ void daNpc_Bj1_c::eInit_CHG_PTH_(int*, int*) {
 
 /* 0000406C-000040BC       .text eInit_END_MOV___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_END_MOV_() {
-    /* Nonmatching */
+    setAnm_NUM(0);
+    m8AA = 0;
+    m80C = 0.0f;
+    speedF = m80C;
+    m814 = 0.0f;
 }
 
 /* 000040BC-000040F4       .text eInit_SET_TNE___11daNpc_Bj1_cFv */
@@ -1124,8 +1143,20 @@ void daNpc_Bj1_c::flyMov() {
 }
 
 /* 000050CC-0000514C       .text fall01__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::fall01() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::fall01() {
+    mStatus = 0;
+    m849 = 0;
+    if (m8A8 == 0) {
+        setStt(5);
+        return true;
+    }
+    if (m8A8 == 1) {
+        if ((int)speedF == 0) {
+            speedF = 0.0f;
+            m8A8 = 2;
+        }
+    }
+    return true;
 }
 
 /* 0000514C-00005510       .text talk_1__11daNpc_Bj1_cFv */
