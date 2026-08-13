@@ -888,7 +888,29 @@ bool daNpc_Bms1_c::talk01() {
 
 /* 00002590-00002764       .text getdemo_action__12daNpc_Bms1_cFPv */
 BOOL daNpc_Bms1_c::getdemo_action(void*) {
-    /* Nonmatching */
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Bms1");
+    if (mActionStatus == 0) {
+        daPy_getPlayerActorClass()->offPlayerNoDraw();
+        m89C = m89D;
+        mShopCam.Reset();
+        u8 itemNo = mShopItems.getSelectItemNo();
+        fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo, NULL, NULL);
+        if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(itemPID);
+        }
+        dComIfGp_evmng_cutEnd(staffIdx);
+        mActionStatus += 1;
+    } else if (mActionStatus != -1) {
+        fopMsgM_demoMsgFlagOn();
+        dComIfGp_evmng_cutEnd(staffIdx);
+        if (dComIfGp_evmng_endCheck("BMS_GET_DEMO")) {
+            m89B = 1;
+            dComIfGp_event_onEventFlag(8);
+            mLastMsgNo = 0x2790;
+            setAction(&daNpc_Bms1_c::wait_action, NULL);
+        }
+    }
+    return TRUE;
 }
 
 /* 00002764-00002918       .text wait_action__12daNpc_Bms1_cFPv */
