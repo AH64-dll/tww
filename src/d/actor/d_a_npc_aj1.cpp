@@ -1105,6 +1105,8 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
     s8 temp = mStatus;
     mStatus = i_status;
     switch (mStatus) {
+        case 0:
+            break;
         case 1:
             m812 = 0;
             mFARwaiTimer = cLib_getRndValue(0x5A, 0x78);
@@ -1614,7 +1616,7 @@ static actor_method_class l_daNpc_Aj1_Method = {
 
 actor_process_profile_definition g_profile_NPC_AJ1 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
-    /* List ID      */ 0x0007FFFD,
+    /* List ID      */ 0x0007,
     /* List Prio    */ fpcPi_CURRENT_e,
     /* Proc Name    */ fpcNm_NPC_AJ1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
