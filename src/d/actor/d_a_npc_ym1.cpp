@@ -164,7 +164,7 @@ void daNpc_Ym1_c::anmAtr(unsigned short) {
 }
 
 /* 0000123C-000014F0       .text next_msgStatus__11daNpc_Ym1_cFPUl */
-void daNpc_Ym1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Ym1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -199,7 +199,7 @@ void daNpc_Ym1_c::getMsg_YM2_3() {
 }
 
 /* 00001738-000017DC       .text getMsg__11daNpc_Ym1_cFv */
-void daNpc_Ym1_c::getMsg() {
+u32 daNpc_Ym1_c::getMsg() {
     /* Nonmatching */
 }
 
