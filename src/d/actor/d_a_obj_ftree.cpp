@@ -1225,10 +1225,12 @@ bool daObjFtree::Act_c::_draw() {
         dComIfGd_setListBG();
 
         if (mMode == 5 || mMode == 6) {
-            mpMorf->getModel()->getModelData()->removeTevRegAnimator(mBrkAnm.getBrkAnm());
+            mBrkAnm.remove(mpMorf->getModel()->getModelData());
             set_tev_color(mpMorf->getModel()->getModelData(), 2, m66C, m66E, m670);
         } else {
-            mBrkAnm.entry(mpMorf->getModel()->getModelData(), mBrkAnm.getFrame());
+            J3DModelData* md = mpMorf->getModel()->getModelData();
+            f32 fr = mBrkAnm.getFrame();
+            mBrkAnm.entry(md, fr);
         }
         mpMorf->updateDL();
         dComIfGd_setList();
