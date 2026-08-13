@@ -149,7 +149,7 @@ public:
     /* 0x89E */ s8 mShopIdx;
     /* 0x89F */ u8 m89F[0x8A0 - 0x89F];
     /* 0x8A0 */ s8 mActionStatus;
-    /* 0x8A1 */ u8 m8A1[0x8A2 - 0x8A1];
+    /* 0x8A1 */ s8 mTalkStatus;
     /* 0x8A2 */ u8 m8A2;
     /* 0x8A3 */ u8 m8A3[0x8A5 - 0x8A3];
     /* 0x8A5 */ u8 m8A5;

@@ -597,7 +597,7 @@ void daNpc_Bms1_c::setCollision() {
 
 /* 0000191C-00001928       .text talkInit__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::talkInit() {
-    m8A1[0] = 0;
+    mTalkStatus = 0;
 }
 
 /* 00001928-00001A34       .text normal_talk__12daNpc_Bms1_cFv */
@@ -613,6 +613,65 @@ u16 daNpc_Bms1_c::shop_talk() {
 /* 00001B88-00001D68       .text talk__12daNpc_Bms1_cFv */
 u16 daNpc_Bms1_c::talk() {
     /* Nonmatching */
+    u16 status = 0xFF;
+
+    if (mTalkStatus == 0) {
+        l_msgId = fpcM_ERROR_PROCESS_ID_e;
+        l_msg = NULL;
+        mMsgNo = getMsg();
+        mMsgNo2 = 0;
+        mTalkStatus = 1;
+        m7E8 = 0xFF;
+    } else if (mTalkStatus != -1) {
+        if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
+            l_msgId = fopMsgM_messageSet(mMsgNo, this);
+        } else {
+            if (l_msg == NULL) {
+                l_msg = fopMsgM_SearchByID(l_msgId);
+                if (l_msg == NULL) {
+                    goto ret;
+                }
+                if (!daNpc_Bms1_shopStickMoveMsgCheck(mMsgNo)) {
+                    mTalkStatus = 2;
+                    goto ret;
+                }
+                mTalkStatus = 3;
+                goto ret;
+            } else {
+                setAnmFromMsgTag();
+                switch (mTalkStatus) {
+                case 3:
+                    status = shop_talk();
+                    break;
+                case 2:
+                    status = normal_talk();
+                    break;
+                }
+
+                if (dComIfGp_checkMesgSendButton()) {
+                    mMsgNo = l_msg->mMsgNo;
+                    if (!daNpc_Bms1_shopStickMoveMsgCheck(mMsgNo)) {
+                        if (!daNpc_Bms1_shopMsgCheck(mMsgNo)) {
+                            mShopItems.mSelectedItemIdx = -1;
+                            mShopItems.showItem();
+                        }
+                        mTalkStatus = 2;
+                    } else {
+                        if (mMsgNo == 0x2776 || mMsgNo == 0x2783) {
+                            mShopItems.mSelectedItemIdx = -1;
+                            mShopItems.showItem();
+                        }
+                        mTalkStatus = 3;
+                    }
+                }
+            }
+        }
+    }
+
+ret:
+    mShopCam.m54 = mShopItems.mSelectedItemIdx;
+
+    return status;
 }
 
 /* 00001D68-00002104       .text CreateInit__12daNpc_Bms1_cFv */
