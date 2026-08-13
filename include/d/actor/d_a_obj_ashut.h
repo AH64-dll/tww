@@ -6,14 +6,25 @@
 namespace daObjAshut {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        enum Mode_e {
-            
+        enum Prm_e {
+            PRM_EV_ID_W = 8,
+            PRM_EV_ID_S = 8,
+            PRM_SW_SAVE_W = 8,
+            PRM_SW_SAVE_S = 0,
         };
-    
-        void is_switch() const {}
-        void prm_get_evId() const {}
-        void prm_get_swSave() const {}
-    
+
+        enum Mode_e {
+            Mode_UPPER = 0,
+            Mode_U_L = 1,
+            Mode_LOWER = 2,
+            Mode_L_U = 3,
+            Mode_DEMOREQ = 4,
+        };
+
+        u8 prm_get_evId() const { return daObj::PrmAbstract(this, PRM_EV_ID_W, PRM_EV_ID_S); }
+        u8 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SW_SAVE_W, PRM_SW_SAVE_S); }
+        BOOL is_switch() const { return fopAcM_isSwitch((fopAc_ac_c*)this, prm_get_swSave()); }
+
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();
@@ -21,7 +32,7 @@ namespace daObjAshut {
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        void chk_safe_area() const;
+        BOOL chk_safe_area() const;
         void mode_upper_init();
         void mode_upper();
         void mode_u_l_init();
@@ -34,9 +45,21 @@ namespace daObjAshut {
         void mode_demoreq();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-    
+
+        static Mtx M_tmp_mtx;
+        static const char M_arcname[];
+
     public:
-        /* Place member variables here */
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mpModel;
+        /* 0x2D4 */ int mMode;
+        /* 0x2D8 */ f32 mOffset;
+        /* 0x2DC */ f32 mSpeed;
+        /* 0x2E0 */ u8 mTimer;
+        /* 0x2E2 */ s16 mTimer2;
+        /* 0x2E4 */ u8 mIsDemo;
+        /* 0x2E6 */ s16 mEvtIdx;
+        /* 0x2E8 */ int mDemoNext;
     };
 };
 
