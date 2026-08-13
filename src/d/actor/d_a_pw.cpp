@@ -565,9 +565,10 @@ void kantera_calc(pw_class* i_this) {
                 break;
             }
             if (i_this->m341 != 2) {
+                kantera_class* k = (kantera_class*)kantera;
                 i_this->m394 += i_this->m396;
-                ((kantera_class*)kantera)->mJointRot[1].x = (s16)(i_this->m3B0 * cM_ssin(i_this->m394));
-                ((kantera_class*)kantera)->mJointRot[1].z = (s16)(i_this->m3B8 * cM_scos(i_this->m394));
+                k->mJointRot[1].x = (s16)(i_this->m3B0 * cM_ssin(i_this->m394));
+                k->mJointRot[1].z = (s16)(i_this->m3B8 * cM_scos(i_this->m394));
                 kantera->attention_info.flags = 0;
             }
             i_this->m2D8 = ((kantera_class*)kantera)->mBonPos;
