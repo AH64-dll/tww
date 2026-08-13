@@ -130,7 +130,7 @@ void daNpc_Sarace_c::playTexPatternAnm() {
 
 /* 00000504-0000060C       .text setAnm__14daNpc_Sarace_cFScf */
 
-    /* Nonmatching */void daNpc_Sarace_c::setAnm(s8 anmIdx, f32 morf) {
+    void daNpc_Sarace_c::setAnm(s8 anmIdx, f32 morf) {
     static u32 a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
     };
@@ -140,7 +140,7 @@ void daNpc_Sarace_c::playTexPatternAnm() {
     if (morf < 0.0f) {
         morf = a_morf_frame_tbl[anmIdx];
     }
-    if (m741 != anmIdx && m741 != -1) {
+    if (anmIdx != m741 && m741 != -1) {
         m741 = anmIdx;
         dNpc_setAnm(mpMorf, a_play_mode_tbl[m741], morf, a_play_speed_tbl[m741], l_bck_ix_tbl[m741], -1, "Sarace");
         dNpc_setAnm(mpMorf2, a_play_mode_tbl[m741], morf, a_play_speed_tbl[m741], l_bck_head_ix_tbl[m741], -1, "Sarace");
