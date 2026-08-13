@@ -47,6 +47,7 @@ static s16 daObj_hsh_XyEventCB(void* i_this, int i_itemBtn) {
     return ((daObj_hsh_c*)i_this)->XyEventCB(i_itemBtn);
 }
 
+/* Nonmatching */
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyEventCB(int) {
     mDoAud_seStart(JA_SE_PRE_TAKT, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
@@ -214,7 +215,6 @@ void daObj_hsh_c::eventEnd() {
 
 /* 000017B0-000017B4       .text initialDefault__11daObj_hsh_cFi */
 void daObj_hsh_c::initialDefault(int) {
-    /* Nonmatching */
 }
 
 /* 000017B4-000017BC       .text actionDefault__11daObj_hsh_cFi */
