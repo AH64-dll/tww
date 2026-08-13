@@ -1382,8 +1382,172 @@ void action_torituku(pw_class* i_this) {
 }
 
 /* 000052B8-00005CA4       .text action_big_demo__FP8pw_class */
-void action_big_demo(pw_class*) {
-    /* Nonmatching */
+void action_big_demo(pw_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz playerPos = player->current.pos;
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mJalhallaID);
+    fopAcM_SearchByID(i_this->mJalhallaID, &actor);
+    bpw_class* jalhalla = (bpw_class*)actor;
+    if (fopAcM_SearchByID(i_this->mJalhallaID, &actor) == 0 ||
+        (actor != NULL && fopAcM_GetName(actor) == fpcNm_BPW_e))
+    {
+        jalhalla = (bpw_class*)actor;
+        switch (i_this->mMode) {
+        case 0x96:
+            for (int i = 0; i < 4; i++) {
+                i_this->m384[i] = 0;
+            }
+            i_this->m39A = 0xFF;
+            i_this->m38E = 0;
+            i_this->speedF = 17.0f + REG0_F(1);
+            anm_init(i_this, 0x1B, 7.0f, 2, 1.0f, 8);
+            i_this->mMode += 1;
+            /* fallthrough */
+        case 0x97:
+            if (i_this->mpMorf->checkFrame(0.0f)) {
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PW_RUN, &i_this->eyePos, 0);
+            }
+            if (i_this->m378[3] == 0) {
+                i_this->m38C += cM_rndFX(16384.0f);
+                i_this->m378[3] = (s16)(15.0f + cM_rndF(15.0f));
+            }
+            if (i_this->m378[1] == 0) {
+                cXyz pos = i_this->current.pos;
+                if (Line_check(i_this, pos, 0)) {
+                    i_this->m378[1] = (s16)(20.0f + cM_rndF(20.0f));
+                    i_this->m378[3] = (s16)(20.0f + cM_rndF(20.0f));
+                } else {
+                    f32 dx = i_this->m2F0.x - i_this->current.pos.x;
+                    f32 dz = i_this->m2FC.z - i_this->current.pos.z;
+                    f32 distSq = (dx * dx) + (dz * dz);
+                    if (distSq > 0.0f) {
+                        distSq = std::sqrtf(distSq);
+                    }
+                    if (distSq > (1000.0f + REG9_F(6))) {
+                        i_this->m38C = cM_atan2s(dx, dz);
+                        i_this->m378[1] = (s16)(20.0f + cM_rndF(20.0f));
+                        i_this->m378[3] = (s16)(20.0f + cM_rndF(20.0f));
+                    }
+                }
+            }
+            if (jalhalla->m3EA != 0) {
+                anm_init(i_this, 0x24, 2.0f + cM_rndF(7.0f), 2, 1.0f, -1);
+                i_this->mMode += 1;
+                return;
+            }
+            break;
+        case 0x98:
+            cLib_addCalc0(&i_this->speedF, 1.0f, 2.0f);
+            if (jalhalla->m3EA == 2) {
+                i_this->m38C = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                i_this->mMode += 1;
+                return;
+            }
+            break;
+        case 0x99:
+            if (jalhalla->m3EA == 3) {
+                anm_init(i_this, 0x19, 2.0f + cM_rndF(7.0f), 0, 1.0f, -1);
+                i_this->mMode += 1;
+                return;
+            }
+            break;
+        case 0x9A:
+            if (jalhalla->m3EA == 4) {
+                anm_init(i_this, 0x1B, 7.0f, 2, 1.0f, 8);
+                i_this->mMode += 1;
+                return;
+            }
+            break;
+        case 0x9B:
+            if (i_this->mpMorf->checkFrame(0.0f)) {
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PW_RUN, &i_this->eyePos, 0);
+            }
+            i_this->speedF = 10.0f + REG9_F(7);
+            i_this->m39A -= 3;
+            if (i_this->m39A < 100) {
+                i_this->m39A = 100;
+            }
+            switch (jalhalla->m3EA) {
+            case 4:
+                cLib_addCalcAngleS2(&i_this->m39E, (s16)(2000.0f + REG9_F(8)), 1,
+                                    (s16)(100.0f + REG9_F(9)));
+                i_this->speedF = 40.0f + REG9_F(10);
+                i_this->m38C = fopAcM_searchActorAngleY(i_this, actor);
+                return;
+            case 5:
+                i_this->m39E = (s16)(1000.0f + REG9_F(11));
+                i_this->m38C = fopAcM_searchActorAngleY(i_this, actor);
+                i_this->m38C -= 0x8000;
+                if (i_this->m384[0] == 0) {
+                    i_this->m384[0] = (s16)cM_rndF(40.0f + REG9_F(13));
+                    return;
+                }
+                break;
+            case 6:
+                if (i_this->m384[0] > 0) {
+                    i_this->m384[0]--;
+                    return;
+                }
+                anm_init(i_this, 0x20, 1.0f, 2, 1.0f, -1);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_PW_RUN, &i_this->eyePos, 0);
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_BECOME_CLEAR, &i_this->eyePos, 0,
+                                                 dComIfGp_getReverb(i_this->current.roomNo));
+                i_this->m39E = (s16)(2000.0f + REG9_F(12));
+                i_this->m38C = fopAcM_searchActorAngleY(i_this, actor);
+                i_this->mMode = 0xAB;
+                return;
+            }
+            break;
+        case 0xAA:
+            anm_init(i_this, 0x20, 4.0f, 2, 1.0f, -1);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_PW_GO_CURSE, &i_this->eyePos, 0);
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_BECOME_CLEAR, &i_this->eyePos, 0,
+                                             dComIfGp_getReverb(i_this->current.roomNo));
+            i_this->m33E = 0;
+            i_this->speedF = 20.0f + REG0_F(7);
+            i_this->mMode += 1;
+            /* fallthrough */
+        case 0xAB:
+            i_this->m39A -= 3;
+            if (i_this->m39A < 100) {
+                i_this->m39A = 100;
+            }
+            if (jalhalla != NULL) {
+                i_this->m38C = fopAcM_searchActorAngleY(i_this, actor);
+                f32 dx = actor->current.pos.x - i_this->current.pos.x;
+                f32 dz = actor->current.pos.z - i_this->current.pos.z;
+                f32 distSq = (dx * dx) + (dz * dz);
+                if (distSq > 0.0f) {
+                    distSq = std::sqrtf(distSq);
+                }
+                if (distSq < (200.0f + REG0_F(8))) {
+                    i_this->speedF = 0.0f;
+                    fopAcM_monsSeStart(i_this, JA_SE_CV_PW_RUN, &i_this->eyePos, 0);
+                    JAIZelBasic::zel_basic->seStart(JA_SE_CM_PW_CURSE_START, &i_this->eyePos, 0,
+                                                     dComIfGp_getReverb(i_this->current.roomNo));
+                    anm_init(i_this, 0x21, 0.0f, 0, 1.0f, -1);
+                    i_this->mMode += 1;
+                    return;
+                }
+            }
+            break;
+        case 0xAC:
+            if (jalhalla != NULL) {
+                cLib_addCalc2(&i_this->current.pos.y, 200.0f + actor->current.pos.y + REG0_F(9),
+                              1.0f, 10.0f);
+                cLib_addCalc2(&i_this->current.pos.x, actor->current.pos.x, 1.0f, 10.0f);
+                cLib_addCalc2(&i_this->current.pos.z, actor->current.pos.z, 1.0f, 10.0f);
+            }
+            if (i_this->mpMorf->isStop()) {
+                if (jalhalla != NULL) {
+                    jalhalla->m464 = 1;
+                    jalhalla->m462++;
+                }
+                fopAcM_delete(i_this);
+            }
+            break;
+        }
+    }
 }
 
 /* 00005CA4-000061FC       .text daPW_Execute__FP8pw_class */
@@ -1702,8 +1866,8 @@ static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
     fopAcM_ct(i_actor, pw_class);
     pw_class* i_this = (pw_class*)i_actor;
 
-    static const s8 fire_j[10] = {1, 2, 3, 5, 7, 8, 9, 11, 18, 22};
-    static const f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    static s8 fire_j[10] = {1, 2, 3, 5, 7, 8, 9, 11, 18, 22};
+    static f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "PW");
     if (phase_state == cPhs_COMPLEATE_e) {
