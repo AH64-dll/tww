@@ -951,6 +951,51 @@ bool daNpc_So_c::_draw() {
 /* 00003B00-00003DF8       .text createInit__10daNpc_So_cFv */
 void daNpc_So_c::createInit() {
     /* Nonmatching */
+    field_0xBDA = 0;
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    mStts2.Init(0xFF, 0xFF, this);
+    mSph.Set(m_sph_src);
+    mSph.SetStts(&mStts2);
+
+    current.pos.y -= 500.0f;
+    setMtx();
+    mpMorf->calc();
+    field_0xAAC = current.pos;
+    offsetZero();
+    setAnm(1, 0);
+    field_0xA79 = (s8)cM_rndF(4.9f);
+
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0901) &&
+        strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 0xD &&
+        dComIfGs_isStageBossEnemy(3)) {
+        modeProc(PROC_INIT_e, 5);
+    } else if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && current.roomNo == 4 &&
+               dComIfGs_isStageBossEnemy(7) && dComIfGs_isCollect(0, 3) &&
+               !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A20)) {
+        modeProc(PROC_INIT_e, 0xF);
+    } else {
+        attention_info.flags = fopAc_Attn_TALKFLAG_NOTALK_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+        modeProc(PROC_INIT_e, 1);
+    }
+
+    field_0xBE0 = 0x1E;
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mObjAcch.SetWallNone();
+    mObjAcch.SetRoofNone();
+
+    cullMtx = mpMorf->getModel()->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, 100.0f * scale.x, 1.0f * scale.x, 1.0f * scale.x, 100.0f * scale.x,
+                          100.0f * scale.x, 100.0f * scale.x);
+    cullSizeFar = 10.0f;
+    gravity = 176.0f;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x22;
+    eventInfo.setXyCheckCB(daNpc_So_XyCheckCB);
+    eventInfo.setXyEventCB(daNpc_So_XyEventCB);
+    mEventCut.setActorInfo2("NpcSo", this);
 }
 
 /* 00003DF8-00003E24       .text getArg__10daNpc_So_cFv */
