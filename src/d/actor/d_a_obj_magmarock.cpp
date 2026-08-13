@@ -265,10 +265,11 @@ BOOL daObjMagmarock::Act_c::CreateHeap() {
     if (mpBgW == NULL) {
         return FALSE;
     }
-    if (mpModel == NULL || brkInit == 0 || bckInit == 0) {
-        return FALSE;
+    BOOL ret = FALSE;
+    if (mpModel != NULL && brkInit != 0 && bckInit != 0) {
+        ret = TRUE;
     }
-    return TRUE;
+    return ret;
 }
 
 /* 00000DA0-000013B4       .text CreateInit__Q214daObjMagmarock5Act_cFv */
