@@ -857,6 +857,7 @@ bool daObjTry::Act_c::chk_sinkdown_water() {
 /* 000020AC-00002218       .text calc_drop_param__Q28daObjTry5Act_cCFPfPfPf */
 /* Nonmatching */
 void daObjTry::Act_c::calc_drop_param(f32* pGravity, f32* pViscous, f32* pInert) const {
+    /* Nonmatching */
     dBgS_ObjAcch& acch = const_cast<dBgS_ObjAcch&>(mAcch);
     if (acch.ChkWaterHit()) {
         f32 f2 = current.pos.y - acch.m_wtr.GetHeight();
