@@ -140,12 +140,14 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000005E8-00000678       .text set_mtx__Q210daObjHami25Act_cFv */
 
-/* Nonmatching */void daObjHami2::Act_c::set_mtx() {
+void daObjHami2::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), mSpinAngle);
-    PSMTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    J3DModel* mdl = mpModel;
+    MtxP now = mDoMtx_stack_c::get();
+    PSMTXCopy(now, mdl->getBaseTRMtx());
+    mDoMtx_YrotM(now, mSpinAngle);
+    PSMTXCopy(now, M_tmp_mtx);
 }
 
 /* 00000678-000006B4       .text init_mtx__Q210daObjHami25Act_cFv */
