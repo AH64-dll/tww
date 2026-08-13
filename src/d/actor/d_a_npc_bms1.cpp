@@ -602,6 +602,7 @@ void daNpc_Bms1_c::talkInit() {
 
 /* 00001928-00001A34       .text normal_talk__12daNpc_Bms1_cFv */
 u16 daNpc_Bms1_c::normal_talk() {
+    /* Nonmatching */
     u16 status = l_msg->mStatus;
     if (status == fopMsgStts_MSG_DISPLAYED_e) {
         l_msg->mStatus = next_msgStatus(&mMsgNo);
@@ -888,6 +889,7 @@ bool daNpc_Bms1_c::talk01() {
 
 /* 00002590-00002764       .text getdemo_action__12daNpc_Bms1_cFPv */
 BOOL daNpc_Bms1_c::getdemo_action(void*) {
+    /* Nonmatching */
     int staffIdx = dComIfGp_evmng_getMyStaffId("Bms1");
     if (mActionStatus == 0) {
         daPy_getPlayerActorClass()->offPlayerNoDraw();
@@ -952,6 +954,7 @@ BOOL daNpc_Bms1_c::wait_action(void*) {
 
 /* 00002918-00002A98       .text event_action__12daNpc_Bms1_cFPv */
 BOOL daNpc_Bms1_c::event_action(void*) {
+    /* Nonmatching */
     if (mActionStatus == 0) {
         if (mShopIdx != 1) {
             if (dComIfGs_isEventBit(0xA02)) {
@@ -974,6 +977,7 @@ BOOL daNpc_Bms1_c::event_action(void*) {
 
 /* 00002A98-00002B94       .text evn_talk_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_talk_init(int actorId) {
+    /* Nonmatching */
     int* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
     int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
@@ -998,6 +1002,7 @@ BOOL daNpc_Bms1_c::evn_talk_init(int actorId) {
 
 /* 00002B94-00002BFC       .text evn_continue_talk_init__12daNpc_Bms1_cFi */
 BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
+    /* Nonmatching */
     int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     if (pEndMsgNo != NULL) {
         m7E0 = *pEndMsgNo;
@@ -1009,6 +1014,7 @@ BOOL daNpc_Bms1_c::evn_continue_talk_init(int actorId) {
 
 /* 00002BFC-00002DD8       .text evn_talk__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::evn_talk() {
+    /* Nonmatching */
     if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
         l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
     } else if (l_msg == NULL) {
@@ -1129,6 +1135,7 @@ BOOL daNpc_Bms1_c::privateCut() {
 
 /* 00002FBC-000030A4       .text demo_move__12daNpc_Bms1_cFv */
 BOOL daNpc_Bms1_c::demo_move() {
+    /* Nonmatching */
     dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
     if (demo_actor == NULL) {
         if (m7E9 == 1) {
@@ -1462,12 +1469,10 @@ static BOOL daNpc_Bms1_IsDelete(daNpc_Bms1_c*) {
 
 // /* 000047AC-000047C8       .text setEyePos__12daNpc_Bms1_cF4cXyz */
 // void daNpc_Bms1_c::setEyePos(cXyz) {
-//     /* Nonmatching */
 // }
 
 // /* 000047C8-000047E4       .text setAttentionBasePos__12daNpc_Bms1_cF4cXyz */
 // void daNpc_Bms1_c::setAttentionBasePos(cXyz) {
-//     /* Nonmatching */
 // }
 
 // /* 00004820-00004900       .text getItemZoomPos__16ShopCam_action_cFf */
