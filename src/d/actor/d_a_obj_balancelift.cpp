@@ -376,7 +376,7 @@ bool daBalancelift_c::_execute() {
         fopAc_ac_c* hit_actor = mCyl.GetTgHitAc();
         cCcD_Obj* hit_obj = mCyl.GetTgHitObj();
 
-        if (hit_actor != NULL && fopAc_IsActor(hit_actor) && fopAcM_GetProfName(hit_actor) == fpcNm_BOMB_e) {
+        if (fopAc_IsActor(hit_actor) && fopAcM_GetProfName(hit_actor) == fpcNm_BOMB_e) {
             cXyz pan_pos = mPos;
             pan_pos.y -= 50.0f;
             cXyz dir = pan_pos - hit_actor->current.pos;
