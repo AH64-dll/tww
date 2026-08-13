@@ -800,7 +800,28 @@ void daNpc_So_c::modeGetRupeeInit() {
 
 /* 00002B68-00002C6C       .text modeGetRupee__10daNpc_So_cFv */
 void daNpc_So_c::modeGetRupee() {
+    if (eventInfo.getCommand() == 2) {
+        if (!mEventCut.cutProc()) {
     /* Nonmatching */
+            cutProc();
+        }
+        if (dComIfGp_evmng_endCheck("SO_GET_RUPEE")) {
+            dComIfGp_event_onEventFlag(8);
+            field_0xB70 = 1;
+            field_0xBD9 = 1;
+            modeProc(PROC_INIT_e, 0xB);
+        }
+    } else {
+        if (talk(1) == 0x12) {
+            if (REG12_S(9) != 0) {
+                dComIfGp_event_onEventFlag(8);
+            }
+            daPy_py_c* player = daPy_getPlayerActorClass();
+            player->mDemo.setDemoType(daPy_demo_c::TYPE_SYSTEM_e);
+            player->mDemo.setDemoMode(1);
+            field_0xB70 = 7;
+        }
+    }
 }
 
 /* 00002C6C-00002CC0       .text modeEventTriForceInit__10daNpc_So_cFv */
