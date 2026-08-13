@@ -91,3 +91,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T00:59Z — M7: ALL FOUR VERSIONS GATED GREEN locally — GZLE01 416 OK (standing), D44J01 417 OK (demo disc), GZLP01 416 OK (PAL ISO, main.dol hash 9395f878 pinned-match), GZLJ01 416 OK (JP RVZ, main.dol 995406d9 pinned-match). 24 Equivalent flips all ancestors of the gated HEAD. 80 NonMatching rows remain (flip pipeline flowing, stub-tier transcription grinding).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T08:15Z — M8: 28 Equivalent flips gated (item #25, uk #26, trap #27, bmcon1 #28) — 416-OK x2 clean gates at fc086df3e/fc045a397 (dual-verified). 77 ActorRel NonMatching remain. TWO shared-header ripple incidents caught by the gate (try.h u8→s8 revert x2 — correct.h Matching rel; so.h inline-ctor weak-emission investigation — clean). Section-scan standard locked: 10+ real value bugs caught (de1/uk×2/ftree×2/magmarock×5/ac1/pw×2/kg2×2). One-sided-insn count = the accept-class discriminator (R4 self-correction). Wave at ~22 agents, D-team fully productive.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
