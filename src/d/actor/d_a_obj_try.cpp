@@ -815,13 +815,11 @@ bool daObjTry::Act_c::mode_proc_call() {
 
 /* 00001B58-00001B90       .text cull_set_draw__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_draw() {
-    /* Nonmatching */
     fopAcM_setCullSizeSphere(this, 0.0f, 65.0f, 0.0f, 100.0f);
 }
 
 /* 00001B90-00001BC8       .text cull_set_move__Q28daObjTry5Act_cFv */
 void daObjTry::Act_c::cull_set_move() {
-    /* Nonmatching */
     fopAcM_setCullSizeSphere(this, 0.0f, 65.0f, 0.0f, 300.0f);
 }
 
@@ -832,7 +830,6 @@ void daObjTry::Act_c::damaged() {
 
 /* 00001BE8-00001CD8       .text damage_cc_proc__Q28daObjTry5Act_cFv */
 bool daObjTry::Act_c::damage_cc_proc() {
-    /* Nonmatching */
     if (mCyl.ChkAtHit()) {
         mCyl.ClrAtHit();
         speedF *= 0.3f;
@@ -1118,7 +1115,6 @@ bool daObjTry::Act_c::check_circle() {
 
 /* 00002960-00002A90       .text get_water_h__Q28daObjTry5Act_cFv */
 f32 daObjTry::Act_c::get_water_h() {
-    /* Nonmatching */
     dBgS_WtrChk waterChk;
     f32 ret = current.pos.y;
     if (dBgS_SplGrpChk_In_ObjGnd(current.pos, &waterChk, 100.0f)) {
