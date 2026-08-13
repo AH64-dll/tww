@@ -16,7 +16,6 @@ static u16 bmd_data[3] = { 4, 5, 6 };
 static cXyz non_pos;
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
-/* Nonmatching */
 void hand_draw(sitem_class* i_this) {
     if (i_this->m2C0 < 6) {
         J3DModel* model = i_this->mpModel;
