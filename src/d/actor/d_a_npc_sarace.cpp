@@ -84,13 +84,13 @@ static const int l_btp_ix_tbl[] = {0x14};
                 static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
                 cXyz pos(24.0f, 14.0f, 0.0f);
                 mDoMtx_stack_c::multVec(&l_offsetAttPos, &i_this->m708);
-                mDoMtx_stack_c::XrotM(i_this->m_jnt.getHead_y());
-                mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
+                mDoMtx_XrotM(mDoMtx_stack_c::now, i_this->m_jnt.getHead_y());
+                mDoMtx_ZrotM(mDoMtx_stack_c::now, -i_this->m_jnt.getHead_x());
                 mDoMtx_stack_c::multVec(&pos, &i_this->m6FC);
             }
             else if (jointNo == i_this->m_jnt.getBackboneJntNum()) {
-                mDoMtx_stack_c::XrotM(i_this->m_jnt.getBackbone_y());
-                mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
+                mDoMtx_XrotM(mDoMtx_stack_c::now, i_this->m_jnt.getBackbone_y());
+                mDoMtx_ZrotM(mDoMtx_stack_c::now, -i_this->m_jnt.getBackbone_x());
             }
             MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
             model->setAnmMtx(jointNo, mDoMtx_stack_c::get());
