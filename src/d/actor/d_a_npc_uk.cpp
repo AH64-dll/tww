@@ -1965,12 +1965,9 @@ BOOL daNpc_Uk_c::CreateHeap() {
         dRes_INDEX_UK_BDL_UKHEAD_C_e,
         dRes_INDEX_UK_BDL_UKHEAD_D_e,
     };
-    mpModel = mDoExt_J3DModel__create(
-        (J3DModelData*)dComIfG_getObjectRes("Uk", head_bdl_table[getShapeType()]),
-        0x80000,
-        0x11020022
-    );
-    JUT_ASSERT(2790, mpModel != NULL);
+    J3DModelData* headData = (J3DModelData*)dComIfG_getObjectRes("Uk", head_bdl_table[getShapeType()]);
+    JUT_ASSERT(2790, headData != NULL);
+    mpModel = mDoExt_J3DModel__create(headData, 0x80000, 0x11020022);
     if (mpModel == NULL) {
         return FALSE;
     }
