@@ -318,7 +318,6 @@ void daNpc_Aj1_c::ctrl_WAITanm() {
 }
 
 /* 000009C0-00000A3C       .text ctrl_TIREanm__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::ctrl_TIREanm() {
     if (mAnmNum == 6) {
         if (mbMorfAnimStopped && cLib_calcTimer(&m75C) == 0) {
@@ -816,7 +815,6 @@ void daNpc_Aj1_c::cut_init_JMP() {
 }
 
 /* 00001AA4-00001AF4       .text cut_move_JMP__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::cut_move_JMP() {
     if (mbMorfAnimStopped) {
         dComIfGp_getDetect().set_quake(NULL);
@@ -861,7 +859,6 @@ void daNpc_Aj1_c::cut_init_DAN() {
 }
 
 /* 00001C04-00001C44       .text cut_move_DAN__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 s32 daNpc_Aj1_c::cut_move_DAN() {
     if (mbMorfAnimStopped && cLib_calcTimer(&mCutTimer) == 0) {
         setAnm_NUM(2, 1);
