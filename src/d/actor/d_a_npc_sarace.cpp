@@ -259,11 +259,11 @@ void daNpc_Sarace_c::checkOrder() {
                 *pMsgNo = 0xFA9;
             }
             break;
-        case 0xFA9:
-            *pMsgNo = 0xFA3;
-            break;
         case 0xFAA:
             *pMsgNo = 0xFA9;
+            break;
+        case 0xFA9:
+            *pMsgNo = 0xFA3;
             break;
         case 0xFA4:
         case 0xFA6:
