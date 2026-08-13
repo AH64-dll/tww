@@ -250,10 +250,13 @@ void daObjFlame::Act_c::create_mode_init() {
     u8 schbit = dKy_get_schbit();
     if (sch != 0 && schbit != 0) {
         s32 timer = dKy_get_schbit_timer();
-        s32 cycle = dComIfGp_getStage().getStagInfo()->mStageTypeAndSchbit * 30;
-        u32 bit = schbit;
+        s32 cycle = dStage_stagInfo_GetSchSec(dComIfGp_getStage().getStagInfo()) * 30;
+        u32 mask = sch << 8;
+        if (sch >= schbit) {
+            mask = sch;
+        }
         s32 idx = 0;
-        u32 mask = sch < schbit ? sch << 8 : sch;
+        u32 bit = schbit;
         while ((mask & bit) == 0) {
             bit <<= 1;
             idx++;
@@ -303,25 +306,12 @@ void daObjFlame::Act_c::create_mode_init() {
             }
         }
 
-        switch (mModeProc) {
-        case 0:
-            break;
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        if (mModeProc != 0 && (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4)) {
             mEm0State = 1;
-            break;
         }
-        switch (mModeProc) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
+        if (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4 || mModeProc == 5) {
             mEm1State = 1;
             mEm2State = 1;
-            break;
         }
         if (flameAttr(this)->mF2C == 0) {
             em_manual_set();
