@@ -85,3 +85,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ---
 
 ## 2026-08-13T00:59Z — M6b: FLIP #20 — d_a_mozo → Equivalent with `mw_version="GC/1.3.2r"` — the FIRST 1.3.2r-override flip in the tree (commit 2e95469a6, gated 416-OK fresh stamp 00:59:23; setAnm per-case loopMode local was the key — shared call + per-case li r5,0x0). 84 NonMatching rows remain. Confirms the M3 mwcc-version discovery end-to-end: mozo was the one real 1.3.2r family member (10/10 'primes' disproven as stub-tier by .o-swap), and its flip proves the per-actor compiler override path works. R-team marker audit + QA sweep enqueued.
+
+---
+
+## 2026-08-13T00:59Z — M7: ALL FOUR VERSIONS GATED GREEN locally — GZLE01 416 OK (standing), D44J01 417 OK (demo disc), GZLP01 416 OK (PAL ISO, main.dol hash 9395f878 pinned-match), GZLJ01 416 OK (JP RVZ, main.dol 995406d9 pinned-match). 24 Equivalent flips all ancestors of the gated HEAD. 80 NonMatching rows remain (flip pipeline flowing, stub-tier transcription grinding).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
