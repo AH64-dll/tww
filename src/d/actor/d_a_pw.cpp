@@ -202,8 +202,225 @@ BOOL Big_pow_down_check(pw_class* i_this) {
 }
 
 /* 000008B0-0000121C       .text body_atari_check__FP8pw_class */
-void body_atari_check(pw_class*) {
-    /* Nonmatching */
+s32 body_atari_check(pw_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    i_this->mStts.Move();
+    i_this->mHitByWhat = 0;
+    if (i_this->health <= 0) {
+        return 0;
+    }
+    if (i_this->mAction == 5) {
+        return 0;
+    }
+    if (dComIfGp_getDetect().chk_light(&i_this->current.pos)) {
+        i_this->mHitByWhat = 9;
+        if (i_this->m39A != 0xFF && i_this->m378[5] == 0 && i_this->m346 != -1) {
+            s16 mode = i_this->mMode;
+            if (mode != 0x37 && mode != 0x3C && mode != 0x3D &&
+                (u32)(i_this->mJalhallaID + 0x10000) == 0xFFFF) {
+                i_this->mAction = 2;
+                i_this->mMode = 0x34;
+                return 1;
+            }
+        }
+    }
+    if (i_this->mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = i_this->mCyl.GetTgHitObj();
+        if (hitObj == NULL) {
+            return 0;
+        }
+        CcAtInfo atInfo;
+        atInfo.pParticlePos = NULL;
+        cXyz hitPos = *i_this->mCyl.GetTgHitPosP();
+        atInfo.mpObj = i_this->mCyl.GetTgHitObj();
+        bool ret = false;
+        if (i_this->m33E == 0) {
+            u32 atType = hitObj->GetAtType();
+            if (atType & AT_TYPE_LIGHT) {
+                i_this->mHitByWhat = 9;
+            } else if (atType & AT_TYPE_LIGHT_ARROW) {
+                i_this->mHitByWhat = 0xA;
+                i_this->m39A = 0xFF;
+                i_this->mEnemyIce.mLightShrinkTimer = 1;
+                i_this->mEnemyIce.mParticleScale = 1.0f;
+                i_this->mEnemyIce.mYOffset = 80.0f;
+                i_this->attention_info.flags = 0;
+                Big_pow_down_check(i_this);
+                kantera_break(i_this);
+            } else {
+                ret = true;
+            }
+        } else {
+            switch (hitObj->GetAtType()) {
+            case AT_TYPE_GRAPPLING_HOOK:
+                if (i_this->stealItemLeft > 0) {
+                    s8 hp = i_this->health;
+                    i_this->health = 10;
+                    atInfo.mpObj = i_this->mCyl.GetTgHitObj();
+                    cc_at_check(i_this, &atInfo);
+                    i_this->health = hp;
+                }
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->attention_info.position);
+                ret = true;
+                i_this->mHitByWhat = 0xC;
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                break;
+            case AT_TYPE_MOBLIN_SPEAR:
+            case AT_TYPE_DARKNUT_SWORD:
+            case AT_TYPE_UNK800:
+            case AT_TYPE_MACHETE:
+            case AT_TYPE_SWORD:
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_SW_HIT_S, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SWORD ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_STICK ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_JUMPCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_CLUB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXA ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXB ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_EXMJ ||
+                    player->getCutType() == daPy_py_c::CUT_TYPE_CUT_KESA)
+                {
+                    i_this->mHitByWhat = 1;
+                }
+                break;
+            case AT_TYPE_HOOKSHOT:
+                ret = true;
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                i_this->mHitByWhat = 0xB;
+                i_this->mMode = 0x1B;
+                break;
+            case AT_TYPE_WIND:
+                i_this->mHitByWhat = 3;
+                i_this->mAction = 2;
+                i_this->mMode = 0x38;
+                return 1;
+            case AT_TYPE_LIGHT:
+                ret = true;
+                break;
+            case AT_TYPE_BOOMERANG:
+                ret = true;
+                i_this->mHitByWhat = 4;
+                dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->attention_info.position);
+                // Fall-through
+            case AT_TYPE_STALFOS_MACE:
+            case AT_TYPE_BOKO_STICK:
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_W_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                break;
+            case AT_TYPE_SKULL_HAMMER:
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_HAMMER_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                i_this->mHitByWhat = 7;
+                if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
+                    i_this->mHitByWhat = 8;
+                }
+                break;
+            case AT_TYPE_BOMB:
+                i_this->mHitByWhat = 6;
+                break;
+            case AT_TYPE_ICE_ARROW:
+                ret = true;
+                i_this->mEnemyIce.mFreezeDuration = 0xC8;
+                enemy_fire_remove(&i_this->mEnemyFire);
+                i_this->mHitByWhat = 5;
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                i_this->health = 0;
+                i_this->attention_info.flags = 0;
+                if (Big_pow_down_check(i_this) == 0) {
+                    i_this->mAction = 2;
+                    i_this->mMode = 0x3C;
+                    return 1;
+                }
+                break;
+            case AT_TYPE_LIGHT_ARROW:
+                ret = true;
+                i_this->mEnemyIce.mLightShrinkTimer = 1;
+                i_this->mEnemyIce.mParticleScale = 1.0f;
+                i_this->mEnemyIce.mYOffset = 80.0f;
+                i_this->attention_info.flags = 0;
+                i_this->mHitByWhat = 5;
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                Big_pow_down_check(i_this);
+                break;
+            case AT_TYPE_FIRE_ARROW:
+            case AT_TYPE_FIRE:
+                i_this->mEnemyFire.mFireDuration = 0x64;
+                // Fall-through
+            case AT_TYPE_NORMAL_ARROW:
+                i_this->mHitByWhat = 5;
+                // Fall-through
+            default:
+                i_this->mHitByWhat = 0;
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &i_this->eyePos, 0x20,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)), 1.0f, 1.0f,
+                                                -1.0f, -1.0f, 0);
+                break;
+            }
+        }
+
+        if (!ret) {
+            if (i_this->m33E == 0) {
+                if (i_this->mMode != 0x35) {
+                    i_this->mAction = 2;
+                    i_this->mMode = 0x34;
+                }
+                return 1;
+            }
+            cc_at_check(i_this, &atInfo);
+            if (i_this->mHitByWhat == 1 || i_this->mHitByWhat == 7 || i_this->mHitByWhat == 8 ||
+                i_this->health <= 0) {
+                if (Big_pow_down_check(i_this) != 0) {
+                    return 0;
+                }
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hitPos);
+                cXyz scale(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, &hitPos, &player->shape_angle,
+                                     &scale);
+                if (i_this->mHitByWhat == 7) {
+                    i_this->mAction = 2;
+                    i_this->mMode = 0x3E;
+                    i_this->speedF = 0.0f;
+                    i_this->gravity = -3.0f;
+                    anm_init(i_this, dRes_INDEX_PW_BCK_PRESS1_e, 3.0f, 0, 1.0f, -1);
+                    return 1;
+                }
+            } else {
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &hitPos, &player->shape_angle);
+            }
+            if (i_this->mMode != 0x37) {
+                i_this->mAction = 2;
+                i_this->mMode = 0x36;
+            }
+            return 1;
+        }
+        if (i_this->mHitByWhat == 4 || i_this->mHitByWhat == 0xC) {
+            i_this->mAction = 2;
+            i_this->mMode = 0x3A;
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 00001258-000016FC       .text kantera_atari_check__FP8pw_class */
