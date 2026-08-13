@@ -88,6 +88,9 @@ namespace daObjTry {
 
             PRM_TYPE_S = 0,
             PRM_TYPE_W = 4,
+
+            PRM_FLAG_S = 0x1F,
+            PRM_FLAG_W = 1,
         };
 
         int prm_get_swSave() const {
@@ -111,11 +114,11 @@ namespace daObjTry {
         static u8 M_restart;
 
         void prm_set_swSave(int);
-        s32 solidHeapCB(fopAc_ac_c*);
+        u8 solidHeapCB(fopAc_ac_c*);
         s32 create_heap();
         void init_cc();
-        void search_sameType(void*, void*);
-        void chk_appear() const;
+        static void* search_sameType(void*, void*);
+        bool chk_appear() const;
         cPhs_State _create();
         bool _delete();
         void mode_restart_init();

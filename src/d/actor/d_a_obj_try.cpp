@@ -364,11 +364,10 @@ void daObjTry::Act_c::init_cc() {
 /* 0000038C-00000428       .text search_sameType__Q28daObjTry5Act_cFPvPv */
 void* daObjTry::Act_c::search_sameType(void* pActor, void* pSelf) {
     // static member: pActor = candidate, pSelf = this-actor data from fopAcIt_Judge
-    void* self = pSelf;
     if (pActor != NULL && fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == fpcNm_Obj_Try_e &&
         pActor != pSelf &&
         daObj::PrmAbstract((fopAc_ac_c*)pActor, PRM_TYPE_W, PRM_TYPE_S) ==
-            daObj::PrmAbstract((fopAc_ac_c*)self, PRM_TYPE_W, PRM_TYPE_S) &&
+            daObj::PrmAbstract((fopAc_ac_c*)pSelf, PRM_TYPE_W, PRM_TYPE_S) &&
         ((Act_c*)pActor)->m650 != 0) {
         return pActor;
     }
@@ -380,9 +379,10 @@ bool daObjTry::Act_c::chk_appear() const {
     bool result = true;
 
     if (attr().m70 != 0) {
-        bool swFlag = daObj::PrmAbstract(this, PRM_FLAG_W, PRM_FLAG_S) != 0;
-        bool sw = dComIfGs_isSwitch(prm_get_swSave(), home.roomNo) != 0;
-        if (swFlag != sw) {
+        u8 swFlag = daObj::PrmAbstract(this, PRM_FLAG_W, PRM_FLAG_S) != 0;
+        int swSave = prm_get_swSave();
+        bool sw = dComIfGs_isSwitch(swSave, home.roomNo) != 0;
+        if ((!sw && swFlag) || (sw && !swFlag)) {
             result = false;
         }
     }
