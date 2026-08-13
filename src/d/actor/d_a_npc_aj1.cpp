@@ -738,7 +738,7 @@ s32 daNpc_Aj1_c::chkAttention() {
 void daNpc_Aj1_c::setAttention(bool i_flag) {
     attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY, current.pos.z);
     if (mActionResult != 0 || i_flag) {
-        eyePos = mHeadPos;
+        eyePos.set(mHeadPos.x, mHeadPos.y, mHeadPos.z);
     }
 }
 
