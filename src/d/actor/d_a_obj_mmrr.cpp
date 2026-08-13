@@ -290,8 +290,8 @@ void daObjMmrr::Act_c::set_cull() {
         cullX = 0.0f;
         cullY = 0.0f;
     }
-    fopAcM_setCullSizeBox(this, L_attr.mFC4, L_attr.mFC8, L_attr.mFCC, L_attr.mFC0,
-                          L_attr.mF84 + cullX, L_attr.mF84 + cullY);
+    fopAcM_setCullSizeBox(this, -160.0f, -1.0f, -160.0f, 160.0f, 680.0f + cullX,
+                          160.0f + cullY);
 }
 
 /* 0000102C-0000122C       .text _create__Q29daObjMmrr5Act_cFv */
@@ -321,12 +321,8 @@ bool daObjMmrr::Act_c::_delete() {
 }
 
 /* 0000126C-0000131C       .text set_mtx__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 void daObjMmrr::Act_c::set_mtx() {
-    Vec scale;
-    scale.x = scale.x;
-    scale.y = scale.y;
-    scale.z = scale.z * mC00;
+    cXyz scale(this->scale.x, this->scale.y, this->scale.z * mC00);
 
     mpModel2->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
