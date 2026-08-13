@@ -789,8 +789,9 @@ void daNpc_Kf1_c::cut_init_ANGRY_START(int i_actIdx) { /* Nonmatching */
     cXyz* pos = (cXyz*)dComIfGp_getPEvtManager()->getMySubstanceP(i_actIdx, "Pos", 1);
     if (pos != NULL) {
         current.pos.set(*pos);
+        mObjAcch.SetOld();
     }
-    mTargetPos.set(0.0f, current.pos.y + eyePos.y, 0.0f);
+    mTargetPos.set(0.0f, eyePos.y, 0.0f);
     mLookMode = 2;
     current.angle.y = cLib_targetAngleY(&current.pos, &mTargetPos);
     speedF = 0.0f;
@@ -905,7 +906,7 @@ BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() { /* Nonmatching */
 
 /* 000020EC-00002168       .text cut_init_START_AGE__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_START_AGE(int i_actIdx) { /* Nonmatching */
-    mTargetPos.set(0.0f, current.pos.y + eyePos.y, 0.0f);
+    mTargetPos.set(0.0f, eyePos.y, 0.0f);
     current.angle.y = cLib_targetAngleY(&current.pos, &mTargetPos);
     mStartAge = 1;
     mLookMode = 3;
