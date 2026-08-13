@@ -159,7 +159,7 @@ void daNpc_Kg2_c::playTexPatternAnm() {
                 m706 = (s16)(150.0f + cM_rndF(150.0f));
             } else {
                 m704 = 0;
-                m706 = (s16)((150.0f + cM_rndF(150.0f)) * 2.0f);
+                m706 = (s16)(150.0f + cM_rndF(150.0f)) * 2;
             }
         } else if (m704 >= m_btp->getFrameMax()) {
             m704 -= m_btp->getFrameMax();
