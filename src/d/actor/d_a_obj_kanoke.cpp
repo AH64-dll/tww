@@ -182,7 +182,7 @@ cPhs_State daObjKanoke_c::createInit() {
                     return cPhs_ERROR_e;
                 }
                 m860.set(148.0f, 75.0f, 0.0f);
-                m86C = 200.0f;
+                m86C = -48.0f;
                 m870 = 0.0f;
                 m874 = 0.0f;
                 m880 = -0x15E0;
@@ -398,7 +398,7 @@ void daObjKanoke_c::executeEffectYoko() {
     m884--;
     if (m884 != 0) {
         if (m884 <= 0x32) {
-            m878 -= 4.0f;
+            m878 -= 3.6f;
             if (m878 < 0.0f) {
                 m878 = 0.0f;
             }
@@ -444,7 +444,7 @@ void daObjKanoke_c::executeEffectTate() {
     m884--;
     if (m884 != 0) {
         if (mSmokeCb.getEmitter() != NULL && m884 <= 0x32) {
-            m878 -= 4.0f;
+            m878 -= 3.6f;
             if (m878 < 0.0f) {
                 m878 = 0.0f;
             }
