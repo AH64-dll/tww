@@ -290,8 +290,8 @@ static u32 l_msg_bmcon1_goal[] = {
     0x0000,
 };
 
-static u32 l_msg_bmcon2_2st_talk[] = {
-    0x2AF9,
+static u32 l_msg_bmcon2_talk[] = {
+    0x2AFA,
     0x0000,
 };
 
@@ -307,8 +307,8 @@ static u32 l_msg_bmcon2_appear[] = {
     0x0000,
 };
 
-static u32 l_msg_bmcon2_talk[] = {
-    0x2AFA,
+static u32 l_msg_bmcon2_2st_talk[] = {
+    0x2AF9,
     0x0000,
 };
 
@@ -1250,43 +1250,46 @@ u16 daNpcBmcon_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00002E58-0000301C       .text getMsg__12daNpcBmcon_cFv */
 u32 daNpcBmcon_c::getMsg() {
-    /* Nonmatching */
     u32 msgNo = 0;
     mpMsgTbl = NULL;
 
     if (dComIfGp_event_chkTalkXY()) {
         /* wait for talk input */
     }
-    else if (mNpcNo == 0) {
-        if (m7C2) {
-            mpMsgTbl = l_msg_bmcon1_talk;
-        }
-        else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2901)) {
-            mpMsgTbl = l_msg_bmcon1_1st_appear;
-        }
-        else if (isClear()) {
-            mpMsgTbl = l_msg_bmcon1_cleared;
-            dComIfGp_setMessageCountNumber(getFlyDistMax());
-        }
-        else {
-            dComIfGp_setMessageCountNumber(getFlyDistMax());
-            mpMsgTbl = l_msg_bmcon1_2nd;
-        }
-    }
-    else if (mNpcNo == 1) {
-        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
-            mpMsgTbl = l_msg_bmcon2_talk;
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A40);
-        }
-        else if (isClear()) {
-            mpMsgTbl = l_msg_bmcon2_cleared;
-        }
-        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2901)) {
-            dComIfGp_setMessageCountNumber(getFlyDistMax());
-            mpMsgTbl = l_msg_bmcon2_appear;
-        }
-        else {
-            mpMsgTbl = l_msg_bmcon2_2st_talk;
+    else {
+        switch (mNpcNo) {
+        case 0:
+            if (m7C2) {
+                mpMsgTbl = l_msg_bmcon1_talk;
+            }
+            else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2901)) {
+                mpMsgTbl = l_msg_bmcon1_1st_appear;
+            }
+            else if (isClear()) {
+                mpMsgTbl = l_msg_bmcon1_cleared;
+                dComIfGp_setMessageCountNumber(getFlyDistMax());
+            }
+            else {
+                dComIfGp_setMessageCountNumber(getFlyDistMax());
+                mpMsgTbl = l_msg_bmcon1_2nd;
+            }
+            break;
+        case 1:
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
+                mpMsgTbl = l_msg_bmcon2_talk;
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A40);
+            }
+            else if (isClear()) {
+                mpMsgTbl = l_msg_bmcon2_cleared;
+            }
+            else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2901)) {
+                dComIfGp_setMessageCountNumber(getFlyDistMax());
+                mpMsgTbl = l_msg_bmcon2_appear;
+            }
+            else {
+                mpMsgTbl = l_msg_bmcon2_2st_talk;
+            }
+            break;
         }
     }
 
