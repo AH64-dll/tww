@@ -337,8 +337,13 @@ void daNpc_Bms1_c::setAnmFromMsgTag() {
 }
 
 /* 00001100-000011D8       .text chkAttention__12daNpc_Bms1_cF4cXyzs */
-BOOL daNpc_Bms1_c::chkAttention(cXyz, s16) {
+BOOL daNpc_Bms1_c::chkAttention(cXyz param, s16) {
     /* Nonmatching */
+    daPy_py_c* pPlayer = daPy_getPlayerActorClass();
+    f32 maxAttnDistXZ = l_HIO.mChild[0].m30;
+    cXyz sp20 = pPlayer->current.pos - param;
+    cXyz sp14(cM_ssin(shape_angle.y), 0.0f, cM_scos(shape_angle.y));
+    return maxAttnDistXZ > sp14.inprod(sp20);
 }
 
 /* 000011D8-00001278       .text eventOrder__12daNpc_Bms1_cFv */
