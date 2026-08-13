@@ -298,6 +298,7 @@ u32 daNpc_Kg2_c::getMsg() {
     /* Nonmatching */
     u32 msgNo;
     if (m74C) {
+        u8 reg = dComIfGs_getEventReg(0xB703);
         if (m74C == 0x3145) {
             if (m735 == 1) {
                 m74C = 0x314B;
@@ -307,11 +308,10 @@ u32 daNpc_Kg2_c::getMsg() {
                 }
             }
         } else if (m74C == 0x3150) {
-            if (dComIfGs_getEventReg(0xB703) != 0) {
+            if (reg != 0) {
                 m74C = 0x3154;
             }
         } else if (m74C == 0x3152) {
-            u8 reg = dComIfGs_getEventReg(0xB703);
             if (reg == 1) {
                 m74C = 0x3156;
             } else if (reg >= 2) {
@@ -745,11 +745,19 @@ int daNpc_Kg2_c::evn_talk() {
 int daNpc_Kg2_c::evn_createItem_init(int i_staffId) {
     /* Nonmatching */
     u8 reg = dComIfGs_getEventReg(0xB703);
-    int item = 6;
-    if (reg == 0) {
+    u8 item = 6;
+    switch (reg) {
+    case 0:
+    case 1:
         item = 7;
-    } else if (reg == 2) {
+        break;
+    case 2:
         item = 0xD7;
+        break;
+    case 3:
+    default:
+        item = 6;
+        break;
     }
     fpc_ProcID proc_id = fopAcM_createItemForPresentDemo(&current.pos, item, 0, -1, current.roomNo, NULL, NULL);
     if (proc_id != fpcM_ERROR_PROCESS_ID_e) {
@@ -931,7 +939,7 @@ BOOL daNpc_Kg2_c::_execute() {
                    l_HIO.mHio.mMinBackboneY, l_HIO.mHio.mMaxHeadX, l_HIO.mHio.mMaxHeadY,
                    l_HIO.mHio.mMinHeadX, l_HIO.mHio.mMinHeadY, l_HIO.mHio.mMaxTurnStep);
     playTexPatternAnm();
-    mpMorf->play(&speed, 0, 0);
+    mpMorf->play(&eyePos, 0, 0);
     mpMorf->calc();
     checkOrder();
     processMove();
