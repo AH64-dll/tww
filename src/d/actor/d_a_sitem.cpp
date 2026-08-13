@@ -519,7 +519,7 @@ static BOOL useHeapInit(sitem_class* i_this) {
     if (i_this->mLineMat1.init(1, 0xA, 1) == 0) {
         return FALSE;
     }
-    return i_this->mLineMat2.init(1, 5, 1) != 0;
+    return i_this->mLineMat2.init(1, 5, 1) != 0 ? TRUE : FALSE;
 }
 
 /* 00002824-00002844       .text daSitem_solidHeapCB__FP10fopAc_ac_c */
