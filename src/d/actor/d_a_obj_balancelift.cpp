@@ -379,35 +379,35 @@ bool daBalancelift_c::_execute() {
             pan_pos.y -= 50.0f;
             cXyz dir = pan_pos - hit_actor->current.pos;
             if (dir.normalizeRS() == 0) {
-                dir = cXyz(0.0f, 0.0f, 1.0f);
+                dir.x = 0.0f;
+                dir.y = 0.0f;
+                dir.z = 1.0f;
             }
 
-            cXyz push = dir * -20.0f;
-            PSVECAdd(&mOffset, &push, &mOffset);
+            PSVECAdd(&mOffset, &(dir * -20.0f), &mOffset);
             mVelocity += 440.0f * -dir.y;
         } else if (hit_obj != NULL) {
             cXyz dir = *mCyl.GetTgRVecP();
             if (dir.normalizeRS() == 0) {
-                dir = cXyz(0.0f, 0.0f, 1.0f);
+                dir.x = 0.0f;
+                dir.y = 0.0f;
+                dir.z = 1.0f;
             }
 
             if (hit_obj->GetObjAt().GetType() & AT_TYPE_WIND) {
-                cXyz push = dir * -12.0f;
-                PSVECAdd(&mOffset, &push, &mOffset);
+                PSVECAdd(&mOffset, &(dir * -12.0f), &mOffset);
                 mVelocity += 440.0f * -dir.y;
             } else if (hit_obj->GetObjAt().GetType() & AT_TYPE_SWORD) {
-                cXyz push = dir * -8.0f;
-                PSVECAdd(&mOffset, &push, &mOffset);
+                PSVECAdd(&mOffset, &(dir * -8.0f), &mOffset);
                 mVelocity += 440.0f * -dir.y;
 
                 cXyz* hit_pos = mCyl.GetTgHitPosP();
                 if (hit_pos != NULL) {
                     cXyz dist = *hit_pos - mPos;
                     f32 dist_mag = PSVECSquareMag(&dist);
-                    f32 d = dist_mag > 0.0f ? std::sqrtf(dist_mag) : dist_mag;
+                    f32 d = std::sqrtf(dist_mag);
 
-                    cXyz push2 = dir * l_HIO.mFloat0x18;
-                    PSVECAdd(&mTarget, &push2, &mTarget);
+                    PSVECAdd(&mTarget, &(dir * l_HIO.mFloat0x18), &mTarget);
                     mSpringPos.y = d;
                     mRightPos.y = d;
 
