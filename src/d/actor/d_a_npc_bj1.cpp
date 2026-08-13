@@ -798,8 +798,10 @@ void daNpc_Bj1_c::setAttention(bool i_flag) {
 }
 
 /* 000025D4-00002608       .text searchByID__11daNpc_Bj1_cFUi */
-fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID) {
-    /* Nonmatching */
+fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID i_id) {
+    fopAc_ac_c* actor = NULL;
+    fopAcM_SearchByID(i_id, &actor);
+    return actor;
 }
 
 /* 00002608-000026B8       .text partner_srch_sub__11daNpc_Bj1_cFPFPvPv_Pv */
@@ -898,13 +900,31 @@ bool daNpc_Bj1_c::charDecide(int) {
 }
 
 /* 00003998-000039DC       .text eInit_setLocFlag__11daNpc_Bj1_cFPi */
-void daNpc_Bj1_c::eInit_setLocFlag(int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setLocFlag(int* i_flag) {
+    m856 = 0;
+    if (i_flag == NULL) {
+        return;
+    }
+    switch (*i_flag) {
+    case 2:
+        m_jnt.setTrn();
+        break;
+    case 1:
+        m856 = 1;
+        break;
+    }
 }
 
 /* 000039DC-00003A14       .text eInit_setShapeAngleY__11daNpc_Bj1_cFPis */
-void daNpc_Bj1_c::eInit_setShapeAngleY(int*, short) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setShapeAngleY(int* i_flag, s16 i_angle) {
+    m846 = 0;
+    if (i_flag == NULL) {
+        return;
+    }
+    m846 = *i_flag == 1;
+    if (m846) {
+        shape_angle.y = i_angle;
+    }
 }
 
 /* 00003A14-00003A30       .text eInit_setEvTimer__11daNpc_Bj1_cFPi */
