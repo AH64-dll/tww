@@ -1258,7 +1258,7 @@ s32 daNpc_Aj1_c::wait_1() {
 /* 00002BC8-00002D08       .text talk_1__11daNpc_Aj1_cFv */
         /* Nonmatching */
 int daNpc_Aj1_c::talk_1() {
-    u8 partsNotMov = chk_parts_notMov();
+    int partsNotMov = chk_parts_notMov();
     talk(1);
     if (mpCurrMsg == NULL) {
         return partsNotMov;
