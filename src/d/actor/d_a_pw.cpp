@@ -1257,16 +1257,7 @@ void action_itai(pw_class* i_this) {
         i_this->speedF = -20.0f;
         anm_init(i_this, 0xF, 3.0f, 0, 1.0f, -1);
         i_this->mMode += 1;
-        /* fallthrough */
-    default:
-    block_71:
-        if (i_this->mMode <= 0x33) {
-            if (i_this->m378[3] == 0) {
-                alpha_anime(i_this);
-            }
-            fuwafuwa_calc(i_this);
-        }
-        return;
+        goto block_71;
     case 0x33:
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->mpMorf->isStop()) {
@@ -1445,6 +1436,14 @@ void action_itai(pw_class* i_this) {
             i_this->mMode = 0x3C;
         }
         goto block_71;
+    }
+
+block_71:
+    if (i_this->mMode <= 0x33) {
+        if (i_this->m378[3] == 0) {
+            alpha_anime(i_this);
+        }
+        fuwafuwa_calc(i_this);
     }
 }
 
