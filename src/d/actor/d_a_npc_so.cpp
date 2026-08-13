@@ -1199,8 +1199,8 @@ void daNpc_So_c::setScale() {
 /* 000033F4-00003844       .text _execute__10daNpc_So_cFv */
 bool daNpc_So_c::_execute() {
     /* Nonmatching */
-    f32 cull = l_HIO.field_0x50 * scale.x;
-    fopAcM_setCullSizeBox(this, -cull, -cull, -cull, cull, cull, cull);
+    fopAcM_setCullSizeBox(this, -100.0f * scale.x, -100.0f * scale.x, -100.0f * scale.x,
+                           100.0f * scale.x, 100.0f * scale.x, 100.0f * scale.x);
 
     if (dComIfGp_event_getMode() == 0 && (mObjAcch.m_flags & 0x20)) {
         current.pos.y = 0.0f;
@@ -1231,8 +1231,8 @@ bool daNpc_So_c::_execute() {
 
     if (cLib_calcTimer(&field_0x868) == 0) {
         mBtpAnmFrame++;
-        if ((f32)mBtpAnmFrame > (f32)(s16)mBtpAnm.getBtpAnm()->getFrame()) {
-            field_0x868 = (s16)(l_HIO.field_0x50 + cM_rndF(l_HIO.field_0x50));
+        if ((f32)mBtpAnmFrame > (f32)mBtpAnm.getFrameCtrl()->getEnd()) {
+            field_0x868 = (s16)(100.0f + cM_rndF(100.0f));
             mBtpAnmFrame = 0;
         }
     }
