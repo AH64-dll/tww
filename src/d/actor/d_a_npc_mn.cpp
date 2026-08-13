@@ -626,10 +626,9 @@ bool daNpcMn_c::executeCommon() {
 }
 
 /* 000013B4-0000140C       .text executeSetMode__9daNpcMn_cFUc */
-    /* Nonmatching */
 void daNpcMn_c::executeSetMode(u8 param_1) {
     m77C = 0.0f;
-    m788 = 0.0f;
+    speedF = 0.0f;
     m7B4 = (this->*l_execute_init[param_1])();
 }
 
