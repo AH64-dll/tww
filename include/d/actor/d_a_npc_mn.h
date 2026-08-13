@@ -189,7 +189,7 @@ public:
     /* 0x7BA */ u8 mAnmCnt;
     /* 0x7BB */ u8 mCutActIdx;
     /* 0x7BC */ u8 m7BC;
-    /* 0x7BD */ u8 mLookMode;
+    /* 0x7BD */ s8 mLookMode;
     /* 0x7BE */ u8 m7BE;
     /* 0x7BF */ u8 m7BF;
     /* 0x7C0 */ u8 m7C0;

@@ -1530,7 +1530,7 @@ void daNpcMn_c::lookBack() {
     cXyz* pTarget = NULL;
     cXyz eyePos = this->eyePos;
     bool attnFlag = m794;
-    u8 lookMode = mLookMode;
+    s8 lookMode = mLookMode;
     switch (lookMode) {
         case 1:
             lookAtPos.set(mLookAtX, mLookAtY, mLookAtZ);
