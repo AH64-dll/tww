@@ -295,7 +295,6 @@ void daNpc_Kg2_c::checkOrder() {
 
 /* 00000CC4-00000E38       .text getMsg__11daNpc_Kg2_cFv */
 u32 daNpc_Kg2_c::getMsg() {
-    /* Nonmatching */
     u32 msgNo;
     if (m74C) {
         u8 reg = dComIfGs_getEventReg(0xB703);
@@ -696,7 +695,10 @@ int daNpc_Kg2_c::evn_setAnm() {
             m739--;
         }
     }
-    return (m739 == 0) ? 1 : 0;
+    if ((s8)m739 <= 0) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
@@ -743,7 +745,6 @@ int daNpc_Kg2_c::evn_talk() {
 
 /* 00001FBC-00002070       .text evn_createItem_init__11daNpc_Kg2_cFi */
 int daNpc_Kg2_c::evn_createItem_init(int i_staffId) {
-    /* Nonmatching */
     u8 reg = dComIfGs_getEventReg(0xB703);
     u8 item = 6;
     switch (reg) {
