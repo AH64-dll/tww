@@ -344,18 +344,14 @@ s32 Act_c::create_heap() {
     /* Nonmatching */
     s32 ret = 0;
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr().m46);
-    if (mdl_data == NULL) {
-        JUT_ASSERT(1009, mdl_data != NULL);
-    }
+    JUT_ASSERT(1009, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
 
     BOOL brkOk = TRUE;
     if (attr().m48 >= 0) {
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, attr().m48);
-        if (brk == NULL) {
-            JUT_ASSERT(1019, brk != NULL);
-        }
+        JUT_ASSERT(1019, brk != NULL);
         brkOk = mBrkAnm.init(mdl_data, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
     }
 
