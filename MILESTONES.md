@@ -115,3 +115,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T12:37Z — M11: flip #33 d_a_tag_ba1 → ActorRel(Matching) — 2nd Matching-class flip, FULL approval trail (D5 fixes b343d9d7b → R9-7 4-step FLIP-READY → RLead-7 concurrence → Main approval → BLead execute+gate 3cd5fae91 15:37:12). Rel re-linked + sha1 byte-perfect vs pin (no Equivalent fallback). Ledger: 73 NonMatching / 30 Equivalent / 314 Matching. Orgctl lock-GC fixed (rmdir logging + status GC pass). Section-scan discipline held: 15+ real value bugs caught today pre-flip.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T12:46Z — M12: flip #34 d_a_obj_hami2 → Matching — stub→Matching in ~40 min (D3 transcription + D6 fixes: nodeCallBack PSMTXCopy arg-order, set_mtx, CreateHeap ret-flag polarity, Mthd_Create ctor-guard; 25/25 fns 100.0; .data extra-weak proven hami3-identical + mwld-GC'd). Triple bench consensus (R4-7/RLead-7/R3-3). Gate 0b764dbe7 15:45:37 sha1 byte-perfect. Ledger: 72 NonMatching / 30 Equivalent / 315 Matching. 2 Matching flips via proper process this wave (#33/#34).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
