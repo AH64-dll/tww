@@ -1147,7 +1147,7 @@ void daNpc_Aj1_c::setStt(s8 i_status) {
 
 /* 0000280C-00002984       .text chk_areaIN__11daNpc_Aj1_cFfs4cXyz */
         /* Nonmatching */
-s32 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
+u8 daNpc_Aj1_c::chk_areaIN(f32 i_radius, s16 i_angle, cXyz i_pos) {
     const cXyz& diff = i_pos - dComIfGp_getPlayer(0)->current.pos;
     cXyz diffXZ;
     diffXZ.x = diff.x;

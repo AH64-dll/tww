@@ -90,7 +90,7 @@ public:
     void setSmoke();
     int set_action(int (daNpc_Aj1_c::*)(void*), void*);
     void setStt(signed char);
-    s32 chk_areaIN(float, short, cXyz);
+    u8 chk_areaIN(float, short, cXyz);
     s32 FARwai();
     s32 call_1();
     s32 wait_1();
