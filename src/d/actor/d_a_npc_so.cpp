@@ -498,6 +498,12 @@ void daNpc_So_c::setAnmSwimSpeed() {
 /* 00001644-000016E8       .text setMtx__10daNpc_So_cFv */
 void daNpc_So_c::setMtx() {
     /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    model->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(1.0f, field_0xB34, 1.0f);
+    mDoMtx_copy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 }
 
 /* 000016E8-00001718       .text modeWaitInit__10daNpc_So_cFv */
