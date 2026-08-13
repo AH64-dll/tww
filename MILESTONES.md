@@ -97,3 +97,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T08:15Z — M8: 28 Equivalent flips gated (item #25, uk #26, trap #27, bmcon1 #28) — 416-OK x2 clean gates at fc086df3e/fc045a397 (dual-verified). 77 ActorRel NonMatching remain. TWO shared-header ripple incidents caught by the gate (try.h u8→s8 revert x2 — correct.h Matching rel; so.h inline-ctor weak-emission investigation — clean). Section-scan standard locked: 10+ real value bugs caught (de1/uk×2/ftree×2/magmarock×5/ac1/pw×2/kg2×2). One-sided-insn count = the accept-class discriminator (R4 self-correction). Wave at ~22 agents, D-team fully productive.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-13T11:34Z — M9: flip #30 d_a_obj_aygr → ActorRel(Matching) — FIRST Matching-class flip this session (18/18 fns 100.0, 4 real fixes: set_mtx arg-eval order, JUT_ASSERT local-name string pool, Draw TEV_TYPE_BG0 lighting bug, CreateHeap assert-string); 416-OK gate at 5153b694a 14:34:11, rel sha1 byte-perfect vs pin. Ledger: 75 ActorRel NonMatching / 28 Equivalent / 312 Matching + 84 DOL Object rows (taxonomy written — JSystem/TRK/dolphin framework tier + 3 actor-adjacent claimable). Bench cycle: 8 preverifies all correct (trap #27 post-flip QA stands; aj1/sarace/bms1/kg2/pw/so/sitem/gy/kantera NOT-flip-ready with fix lists; R2 hidden branch-target catch; R4/R5/R9/R10 value-bug catches — 10+ real bugs pre-blocked). 4-version cycle green at e8aafa15d.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
