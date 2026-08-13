@@ -1104,9 +1104,14 @@ bool daNpc_Uk_c::visit01() {
             }
         }
 
-        pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &mLookActorId);
+        u32 lookId = mLookActorId;
+        pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &lookId);
         if (pActor != NULL) {
-            if (((daNpc_Uk_c*)pActor)->mAnmIdx == 8 || ((daNpc_Uk_c*)pActor)->mAnmIdx == 9) {
+            bool isLookMode = false;
+            if (((daNpc_Mk_c*)pActor)->mVisitMode == 8 || ((daNpc_Mk_c*)pActor)->mVisitMode == 9) {
+                isLookMode = true;
+            }
+            if (isLookMode) {
                 mOrderFlags &= ~0x01;
             }
         }
