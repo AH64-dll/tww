@@ -380,21 +380,20 @@ void daNpc_Sarace_c::setAttention() {
     s16 defaultY = current.angle.y;
     bool param_6 = true;
 
-    switch (m743) {
-        case 2:
+    if (m743 < 3 && m743 >= 1) {
+        if (m743 == 2) {
             m_jnt.setTrn();
             if (m728 == 0) {
                 cXyz eyePosLocal = dNpc_playerEyePos(l_HIO.mNpc.m04);
                 cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &eyePosLocal), 4, 0x1800);
             }
-        case 1:
-            if (m728 != 0) {
-                cXyz eyePosLocal = dNpc_playerEyePos(l_HIO.mNpc.m04);
-                pDstPos = &eyePosLocal;
-                srcPos = current.pos;
-                srcPos.y = eyePos.y;
-            }
-            break;
+        }
+        if (m728 != 0) {
+            cXyz eyePosLocal = dNpc_playerEyePos(l_HIO.mNpc.m04);
+            pDstPos = &eyePosLocal;
+            srcPos = current.pos;
+            srcPos.y = eyePos.y;
+        }
     }
 
     if (m_jnt.trnChk()) {
