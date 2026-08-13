@@ -883,6 +883,7 @@ void action_big_demo(pw_class*) {
 
 /* 00005CA4-000061FC       .text daPW_Execute__FP8pw_class */
 static BOOL daPW_Execute(pw_class* i_this) {
+    /* Nonmatching */
     fopAcM_setGbaName(i_this, 0x3c, 0xd, 0x2d);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
