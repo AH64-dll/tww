@@ -100,8 +100,8 @@ public:
     bool eMove_ATTENTION_();
     bool eMove_MOV_();
     BOOL eMove_JMP_();
-    void eMove_SET_TNE_();
-    void eMove_PTH_MOV_();
+    bool eMove_SET_TNE_();
+    bool eMove_PTH_MOV_();
     void event_action();
     void privateCut(int);
     void endEvent();
@@ -160,7 +160,7 @@ public:
     /* 0x7B8 */ csXyz mInitAngleSave;
     /* 0x7C0 */ cXyz mTransformedEyePos;
     /* 0x7CC */ cXyz mHomePos;
-    /* 0x7D8 */ f32 field_0x7D8[3];
+    /* 0x7D8 */ cXyz mPathPoint;
     /* 0x7E4 */ cXyz mScaleBack;
     /* 0x7F0 */ cXyz mScaleHead;
     /* 0x7FC */ cXyz mScaleArm;
@@ -230,7 +230,7 @@ public:
     /* 0x896 */ u8 field_0x896[0x8A8 - 0x896];
     /* 0x8A8 */ s8 m8A8;
     /* 0x8A9 */ s8 m8A9;
-    /* 0x8AA */ u8 m8AA;
+    /* 0x8AA */ s8 m8AA;
     /* 0x8AB */ u8 m8AB;
     /* 0x8AC */ u8 m8AC;
     /* 0x8AD */ u8 m8AD;

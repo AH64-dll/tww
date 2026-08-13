@@ -1021,13 +1021,24 @@ BOOL daNpc_Bj1_c::eMove_JMP_() {
 }
 
 /* 00004594-000045F0       .text eMove_SET_TNE___11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::eMove_SET_TNE_() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::eMove_SET_TNE_() {
+    if (mpMorf->checkFrame(1.0f)) {
+        createSeed();
+    }
+    return m83C != 0;
 }
 
 /* 000045F0-00004678       .text eMove_PTH_MOV___11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::eMove_PTH_MOV_() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::eMove_PTH_MOV_() {
+    bool ret = m8AA == 0;
+    if (!ret) {
+        if ((u8)m84A != 0) {
+            mPathPoint = mPathRun.getPoint(mPathRun.getIdx());
+
+        }
+        m84A = 0;
+    }
+    return ret;
 }
 
 /* 00004678-000046E8       .text event_action__11daNpc_Bj1_cFv */
