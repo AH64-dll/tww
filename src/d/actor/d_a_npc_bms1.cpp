@@ -225,7 +225,40 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
 
 /* 00000A00-00000C4C       .text set_mtx__12daNpc_Bms1_cFv */
 void daNpc_Bms1_c::set_mtx() {
-    /* Nonmatching */
+    J3DModel* pModel = mpMorf->getModel();
+    if (mShopIdx == 0) {
+        cXyz offset(0.0f, 100.0f, 35.0f);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::transM(offset);
+    } else {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+    }
+
+    PSMTXCopy(mDoMtx_stack_c::now, pModel->getBaseTRMtx());
+    mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
+    PSMTXCopy(mDoMtx_stack_c::now, mpModel->getBaseTRMtx());
+
+    if (mShopIdx == 1) {
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel2->getBaseTRMtx());
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel3->getBaseTRMtx());
+    } else if (dComIfGs_isEventBit(0xA02)) {
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel3->getBaseTRMtx());
+    }
+
+    if (mpModel4 != NULL) {
+        mDoMtx_stack_c::copy(pModel->getAnmMtx(m_leg_jnt_num));
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel4->getBaseTRMtx());
+    }
+
+    if (mpModel5 != NULL) {
+        mDoMtx_stack_c::transS(current.pos);
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel5->getBaseTRMtx());
+    }
 }
 
 /* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
