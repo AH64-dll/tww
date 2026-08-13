@@ -63,6 +63,7 @@ public:
 
 /* 000000EC-00000150       .text __ct__15daNpc_Pf1_HIO_cFv */
 daNpc_Pf1_HIO_c::daNpc_Pf1_HIO_c() {
+    /* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX         */ 0x2000,
         /* mMaxHeadY         */ 0x38E0,
@@ -154,6 +155,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000044C-000004CC       .text init_PF1_0__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::init_PF1_0() {
+    /* Nonmatching */
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         set_action(&daNpc_Pf1_c::wait_action1, NULL);
         return TRUE;
@@ -325,6 +327,7 @@ void daNpc_Pf1_c::setAnm_anm(daNpc_Pf1_c::anm_prm_c* i_anmPrmP) {
 
 /* 00000AB8-00000B28       .text setAnm_NUM__11daNpc_Pf1_cFii */
 void daNpc_Pf1_c::setAnm_NUM(int i_param_1, int i_param_2) {
+    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[8] = {
         {0, 0, 0, 8, 1, 2},
         {1, 0, 0, 8, 1, 2},
@@ -343,6 +346,7 @@ void daNpc_Pf1_c::setAnm_NUM(int i_param_1, int i_param_2) {
 
 /* 00000B28-00000B94       .text setAnm__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::setAnm() {
+    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[8] = {
         {0xFF, 0xFF, 0, 0, 0, -1},
         {0, 0, 0, 8, 1, 2},
@@ -397,6 +401,7 @@ void daNpc_Pf1_c::ctrlAnmAtr() {
 
 /* 00000C48-00000CAC       .text setAnm_ATR__11daNpc_Pf1_cFv */
 void daNpc_Pf1_c::setAnm_ATR() {
+    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[6] = {
         {0, 0, 0, 8, 1, 2},
         {3, 1, 0, 8, 1, 2},
@@ -435,6 +440,7 @@ void daNpc_Pf1_c::anmAtr(u16 i_msgStatus) {
 
 /* 00000D68-00000E60       .text next_msgStatus__11daNpc_Pf1_cFPUl */
 u16 daNpc_Pf1_c::next_msgStatus(u32* i_msg_no) {
+    /* Nonmatching */
     u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
     switch (*i_msg_no) {
         case 0x1B59:
@@ -1331,6 +1337,7 @@ BOOL daNpc_Pf1_c::bodyCreateHeap() {
 
 /* 00003798-0000381C       .text CreateHeap__11daNpc_Pf1_cFv */
 BOOL daNpc_Pf1_c::CreateHeap() {
+    /* Nonmatching */
     if (bodyCreateHeap() == 0) {
         return FALSE;
     }
