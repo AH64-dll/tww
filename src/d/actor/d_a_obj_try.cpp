@@ -728,7 +728,7 @@ bool daObjTry::Act_c::mode_proc_call() {
         }
 
         if (M_bingo != 0 || M_restart != 0 || mMode == 2) {
-            mBrkAnm.getFrameCtrl()->setRate(0.0f);
+            mBrkAnm.getFrameCtrl()->setRate(1.0f);
             mBrkAnm.getFrameCtrl()->setAttribute(2);
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_RES_ST_BLINK, &eyePos, 0,
                                             dComIfGp_getReverb(current.roomNo), 0.0f, 0.0f,
