@@ -413,15 +413,16 @@ void daNpc_Kf1_c::setAnm_ATR() { /* Nonmatching */
 void daNpc_Kf1_c::anmAtr(u16 i_msgStatus) { /* Nonmatching */
     switch (i_msgStatus) {
         case 6:
-            if (m7FE == 0) {
+            if ((s8)m7FE == 0) {
                 chngAnmAtr(g_dComIfG_gameInfo.play.mMesgAnime);
                 m7FE = m7FE + 1;
             }
             if (g_dComIfG_gameInfo.play.mMesgAnimeTagInfo != 0xFF &&
                 g_dComIfG_gameInfo.play.mMesgAnimeTagInfo != mTag)
             {
+                u8 oldTag = g_dComIfG_gameInfo.play.mMesgAnimeTagInfo;
                 g_dComIfG_gameInfo.play.mMesgAnimeTagInfo = 0xFF;
-                mTag = g_dComIfG_gameInfo.play.mMesgAnimeTagInfo;
+                mTag = oldTag;
                 chngAnmTag();
             }
             break;
@@ -907,10 +908,10 @@ BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() { /* Nonmatching */
 /* 000020EC-00002168       .text cut_init_START_AGE__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_START_AGE(int i_actIdx) { /* Nonmatching */
     mTargetPos.set(0.0f, eyePos.y, 0.0f);
-    current.angle.y = cLib_targetAngleY(&current.pos, &mTargetPos);
+    shape_angle.y = cLib_targetAngleY(&current.pos, &mTargetPos);
     mStartAge = 1;
     mLookMode = 3;
-    m79A = current.angle.y;
+    m79A = shape_angle.y;
     m_jnt.setTrn();
     setAnm_NUM(0, TRUE);
 }
@@ -1012,7 +1013,7 @@ BOOL daNpc_Kf1_c::cut_move_RUPEE_SET() { /* Nonmatching */
 
 /* 0000260C-000026B4       .text cut_init_TSUBO_ATN__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_TSUBO_ATN(int i_actIdx) { /* Nonmatching */
-    s32* timer = (s32*)dComIfGp_getPEvtManager()->getMySubstanceP(0, "Timer", 3);
+    s32* timer = (s32*)dComIfGp_getPEvtManager()->getMySubstanceP(i_actIdx, "Timer", 3);
     s32* count = (s32*)dComIfGp_getPEvtManager()->getMySubstanceP(i_actIdx, "Count", 3);
     mCutTimer = 0;
     if (timer != NULL) {
@@ -1602,7 +1603,7 @@ BOOL daNpc_Kf1_c::_execute() { /* Nonmatching */
 /* 00003C20-00003C80       .text _delete__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::_delete() { /* Nonmatching */
     dComIfG_resDelete(&mPhs, mArcName);
-    if (demoActorID != 0 && mpMorf != NULL) {
+    if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
     return TRUE;

@@ -137,7 +137,7 @@ public:
     /* 0x776 */ s16 m776;
     /* 0x778 */ s16 m778;
     /* 0x77A */ u8 field_0x77a[2];
-    /* 0x77C */ u32 m77C;
+    /* 0x77C */ s32 m77C;
     /* 0x780 */ s16 mEvtIdx[3];
     /* 0x786 */ s16 mCurEvtIdx;
     /* 0x788 */ u8 field_0x788[4];
