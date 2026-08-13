@@ -1000,13 +1000,19 @@ void daNpc_Bj1_c::event_actionInit(int) {
 }
 
 /* 000044E4-00004530       .text eMove_ATTENTION___11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::eMove_ATTENTION_() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::eMove_ATTENTION_() {
+    if (m830 >= 0) {
+        return cLib_calcTimer(&m830) == 0;
+    }
+    return !m_jnt.trnChk();
 }
 
 /* 00004530-00004580       .text eMove_MOV___11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::eMove_MOV_() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::eMove_MOV_() {
+    if (m830 >= 0) {
+        return cLib_calcTimer(&m830) == 0;
+    }
+    return (u8)m84A == 1;
 }
 
 /* 00004580-00004594       .text eMove_JMP___11daNpc_Bj1_cFv */

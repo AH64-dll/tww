@@ -97,8 +97,8 @@ public:
     void eInit_DEL_TNE_();
     void eInit_SET_ANM_(int*, f32*);
     void event_actionInit(int);
-    void eMove_ATTENTION_();
-    void eMove_MOV_();
+    bool eMove_ATTENTION_();
+    bool eMove_MOV_();
     BOOL eMove_JMP_();
     void eMove_SET_TNE_();
     void eMove_PTH_MOV_();
