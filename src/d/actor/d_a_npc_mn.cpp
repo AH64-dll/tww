@@ -1068,13 +1068,12 @@ void daNpcMn_c::eventHatchInit() {
 }
 
 /* 00002540-00002578       .text eventHatch__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventHatch() {
     m7AE = m7A0;
     m794 = 0;
     mLookMode = 2;
     m_jnt.setTrn();
-    return shape_angle.y == m7A0;
+    return current.angle.y == m7A0;
 }
 
 /* 00002578-000025EC       .text eventBikkuriInit__9daNpcMn_cFi */
