@@ -1467,7 +1467,6 @@ void daNpcBmcon_c::chkAttention() {
 
 /* 0000356C-000036B8       .text lookBack__12daNpcBmcon_cFv */
 void daNpcBmcon_c::lookBack() {
-    /* Nonmatching */
     short target = m7A6;
     short desiredYRot = current.angle.y;
     cXyz* dstTemp = NULL;

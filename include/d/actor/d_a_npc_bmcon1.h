@@ -141,7 +141,7 @@ private:
     /* 0x784 */ f32 m784;
     /* 0x788 */ f32 mAttnDist;
     /* 0x78C */ u32 mItemNo;
-    /* 0x790 */ u8 m790;
+    /* 0x790 */ bool m790;
     /* 0x791 */ u8 field_0x791;
     /* 0x792 */ s16 mEventIdx1;
     /* 0x794 */ s16 mEventIdx2;
@@ -174,7 +174,7 @@ private:
     /* 0x7BB */ s8 mAnmTimer;
     /* 0x7BC */ s8 mActIdx;
     /* 0x7BD */ u8 field_0x7BD;
-    /* 0x7BE */ u8 m7BE;
+    /* 0x7BE */ s8 m7BE;
     /* 0x7BF */ u8 m7BF;
     /* 0x7C0 */ u8 m7C0;
     /* 0x7C1 */ u8 m7C1;
