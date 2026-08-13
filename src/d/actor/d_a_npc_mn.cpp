@@ -1563,12 +1563,13 @@ BOOL daNpcMn_c::initTexPatternAnm(bool param_1) {
 void daNpcMn_c::playTexPatternAnm() {
     if (cLib_calcTimer<s16>(&mTexTimer) == 0) {
         s16 frameMax = m_head_tex_pattern->getFrameMax();
-        if (mTexPatternNo >= frameMax) {
-            mTexPatternNo = mTexPatternNo - frameMax;
+        s16 texNo = mTexPatternNo;
+        if (texNo >= frameMax) {
+            mTexPatternNo = texNo - frameMax;
             mTexTimer = 0x78;
             return;
         }
-        mTexPatternNo = mTexPatternNo + 1;
+        mTexPatternNo = texNo + 1;
     }
 }
 
