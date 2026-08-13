@@ -636,7 +636,7 @@ void daNpcMn_c::executeSetMode(u8 param_1) {
 /* 0000140C-00001518       .text executeWaitInit__9daNpcMn_cFv */
     /* Nonmatching */
 s32 daNpcMn_c::executeWaitInit() {
-    m788 = 1.0f;
+    speedF = 1.0f;
     if (m7C4 != 0) {
         setAnmTbl(l_npc_anm_wait2);
         mTimer = (s16)(150.0f + cM_rndF(30.0f));
