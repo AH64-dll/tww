@@ -704,7 +704,7 @@ bool daNpcBmcon_c::_execute() {
 }
 
 /* 00001878-00001BC8       .text executeCommon__12daNpcBmcon_cFv */
-BOOL daNpcBmcon_c::executeCommon() {
+u8 daNpcBmcon_c::executeCommon() {
     /* Nonmatching */
     if (m7AD && m7C3 == 0) {
         m7AE = 1;
@@ -807,10 +807,10 @@ s32 daNpcBmcon_c::executeWaitInit() {
 
 /* 00001CC8-00001D38       .text executeWait__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeWait() {
-    /* Nonmatching */
-    executeCommon();
-    if (mNpcNo == 1 && m7AD != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
-        m7AE = 2;
+    if (!executeCommon()) {
+        if (mNpcNo == 1 && m7AD != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A40)) {
+            m7AE = 2;
+        }
     }
 }
 
@@ -848,7 +848,6 @@ s32 daNpcBmcon_c::executeWalkInit() {
 
 /* 00001E6C-00002050       .text executeWalk__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeWalk() {
-    /* Nonmatching */
     if (!executeCommon()) {
         bool passed = false;
         if (mPathRun.chkPointPass(current.pos, (bool)mPathRun.getDir())) {
@@ -860,10 +859,10 @@ void daNpcBmcon_c::executeWalk() {
         if (!passed) {
             cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
-            f32 dist;
-            dNpc_calc_DisXZ_AngY(current.pos, point, &dist, &angle);
-            m79C = angle;
-            m7AA = angle;
+            dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
+            s16 a = angle;
+            m79C = a;
+            m7AA = a;
             m790 = 0;
             m7A6 = l_npc_dat[mNpcNo].field_0x2C;
             m7BE = 2;
@@ -873,8 +872,7 @@ void daNpcBmcon_c::executeWalk() {
             mPathRun.turnDir();
             cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
-            f32 dist;
-            dNpc_calc_DisXZ_AngY(current.pos, point, &dist, &angle);
+            dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
             m79C = angle;
             mPathRun.setInf(0xFF, current.roomNo, 1);
             executeSetMode(0);
@@ -897,12 +895,10 @@ s32 daNpcBmcon_c::executeTurnInit() {
 
 /* 00002194-00002264       .text executeTurn__12daNpcBmcon_cFv */
 void daNpcBmcon_c::executeTurn() {
-    /* Nonmatching */
     if (!executeCommon()) {
         cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         s16 angle;
-        f32 dist;
-        dNpc_calc_DisXZ_AngY(current.pos, point, &dist, &angle);
+        dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
         m7AA = angle;
         m790 = 0;
         m7BE = 2;

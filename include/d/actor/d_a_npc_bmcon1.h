@@ -76,7 +76,7 @@ public:
     bool _delete();
     bool _draw();
     bool _execute();
-    BOOL executeCommon();
+    u8 executeCommon();
     void executeSetMode(u8);
     s32 executeWaitInit();
     void executeWait();
@@ -167,7 +167,7 @@ private:
     /* 0x7B4 */ s8 m_armR1_jnt_num;
     /* 0x7B5 */ u8 mMode;
     /* 0x7B6 */ u8 mResFlag;
-    /* 0x7B7 */ s8 mNpcNo;
+    /* 0x7B7 */ u8 mNpcNo;
     /* 0x7B8 */ u8 mMsgFlags;
     /* 0x7B9 */ u8 mBckNo;
     /* 0x7BA */ u8 mAnmFlag;
