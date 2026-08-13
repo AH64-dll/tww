@@ -372,7 +372,6 @@ static cPhs_State phase_2(daNpcMn_c* i_this) {
 }
 
 /* 000008D4-00000904       .text _create__9daNpcMn_cFv */
-    /* Nonmatching */
 cPhs_State daNpcMn_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
@@ -984,7 +983,6 @@ void daNpcMn_c::privateCut() {
 }
 
 /* 00002194-0000226C       .text eventMesSetInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventMesSetInit(int staffIdx) {
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if (pData) {
@@ -1025,7 +1023,6 @@ void daNpcMn_c::eventGetItemInit() {
 }
 
 /* 000022F8-00002358       .text eventWaitInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventWaitInit(int staffIdx) {
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
     mEvTimer = 0;
@@ -1049,7 +1046,6 @@ s32 daNpcMn_c::eventWait(int staffIdx) {
 }
 
 /* 000023E8-00002448       .text eventSwOnInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventSwOnInit(int staffIdx) {
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
     mEvTimer = 0;
@@ -1071,7 +1067,6 @@ s32 daNpcMn_c::eventSwOn() {
 }
 
 /* 000024AC-00002540       .text eventHatchInit__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::eventHatchInit() {
     fopAc_ac_c* actor = fopAcM_searchFromName("Ohatch", 0, 0);
     if (actor != NULL) {
@@ -1092,7 +1087,6 @@ s32 daNpcMn_c::eventHatch() {
 }
 
 /* 00002578-000025EC       .text eventBikkuriInit__9daNpcMn_cFi */
-    /* Nonmatching */
 void daNpcMn_c::eventBikkuriInit(int staffIdx) {
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
     mEvTimer = 1;
@@ -1122,7 +1116,6 @@ void daNpcMn_c::eventTurnInit() {
 }
 
 /* 0000266C-000027B4       .text eventTurn__9daNpcMn_cFi */
-    /* Nonmatching */
 s32 daNpcMn_c::eventTurn(int staffIdx) {
     int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "TurnMode");
     s32 mode = 0;
@@ -1193,7 +1186,6 @@ void daNpcMn_c::eventLookInit() {
 }
 
 /* 00002964-00002988       .text eventLook__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::eventLook() {
     return mpMorf->getFrame() >= 72.0f;
 }
@@ -1655,7 +1647,6 @@ s16 daNpcMn_c::XyCheckCB(int) {
 }
 
 /* 0000397C-000039E0       .text getRand__9daNpcMn_cFi */
-    /* Nonmatching */
 int daNpcMn_c::getRand(int i_max) {
     int rand = cM_rndF(i_max);
     if (rand == i_max) {
