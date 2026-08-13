@@ -39,11 +39,11 @@ void daObjMagmarock::Act_c::set_mtx() {
 
 /* 00000128-00000258       .text demo_move__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::demo_move() {
-    /* Nonmatching */
     if (dComIfGs_isEventBit(0x380)) {
         return;
     }
-    if (m29F == 0) {
+    switch (m29F) {
+    case 0:
         if (m45A == 0) {
             if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
                 m45A++;
@@ -62,6 +62,7 @@ void daObjMagmarock::Act_c::demo_move() {
                 evtmgr.cutEnd(staff);
             }
         }
+        break;
     }
 }
 
