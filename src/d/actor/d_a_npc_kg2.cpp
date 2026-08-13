@@ -960,13 +960,13 @@ BOOL daNpc_Kg2_c::_draw() {
     g_env_light.setLightTevColorType(model, &tevStr);
     m6F0.entry(modelData, m704);
     mpMorf->entryDL();
-    modelData->removeTexNoAnimator(m6F0.getBtpAnm());
+    modelData->getMaterialTable().removeTexNoAnimator(m6F0.getBtpAnm());
     if (m736) {
         J3DModelData* cannonData = m6D4->getModelData();
         g_env_light.setLightTevColorType(m6D4, &tevStr);
         mBtpAnm.entry(cannonData, m737);
         mDoExt_modelUpdateDL(m6D4);
-        cannonData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+        cannonData->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
     }
     cXyz shadow_pos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     m6D0 = dComIfGd_setShadow(m6D0, 1, mpMorf->getModel(), &shadow_pos, 800.0f, 20.0f,
