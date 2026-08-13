@@ -169,8 +169,57 @@ BOOL daObjKanoke_c::createHeap() {
 }
 
 /* 000008BC-00000B28       .text createInit__13daObjKanoke_cFv */
-void daObjKanoke_c::createInit() {
-    /* Nonmatching */
+cPhs_State daObjKanoke_c::createInit() {
+    if (dComIfG_Bgsp()->Regist(m2A0, this)) {
+        return cPhs_ERROR_e;
+    }
+    if (m88D != 0xFF) {
+        if (dComIfGs_isSwitch(m88D, home.roomNo)) {
+            m88B = 7;
+            if (m88A == 0) {
+                if (dComIfG_Bgsp()->Regist(m2A4, this)) {
+                    return cPhs_ERROR_e;
+                }
+                m860 = 148.0f;
+                m864 = 75.0f;
+                m868 = 0.0f;
+                m86C = 200.0f;
+                m870 = 0.0f;
+                m874 = 0.0f;
+                m880 = -0x15E0;
+            } else {
+                m88F |= 2;
+            }
+        } else {
+            if (dComIfG_Bgsp()->Regist(m2A4, this)) {
+                return cPhs_ERROR_e;
+            }
+        }
+    } else {
+        if (dComIfG_Bgsp()->Regist(m2A4, this)) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    mStts.Init(0xFF, 0xFF, this);
+    mCps0.Set(l_cps_src_body);
+    mCps0.SetStts(&mStts);
+    *mCps0.GetStartP() = current.pos;
+    *mCps0.GetEndP() = current.pos;
+    for (int i = 0; i < 3; i++) {
+        mCps[i].Set(l_cps_src_huta);
+        mCps[i].SetStts(&mStts);
+        *mCps[i].GetStartP() = current.pos;
+        *mCps[i].GetEndP() = current.pos;
+    }
+    cullMtx = mpModel->getBaseTRMtx();
+    setMtx();
+    if (m88A == 0) {
+        fopAcM_setCullSizeBox(this, 120.0f, 0.0f, 210.0f, -48.0f, -110.0f, -210.0f);
+    } else {
+        fopAcM_setCullSizeBox(this, 120.0f, 0.0f, 210.0f, 310.0f, 520.0f, -210.0f);
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
