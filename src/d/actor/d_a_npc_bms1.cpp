@@ -96,8 +96,35 @@ daNpc_Bms1_HIO_c::daNpc_Bms1_HIO_c() {
 }
 
 /* 00000300-000004C4       .text nodeCallBack_Bms__FP7J3DNodei */
-static BOOL nodeCallBack_Bms(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Bms(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DModel* pModel = j3dSys.getModel();
+        daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
+        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        if (pBms != NULL) {
+            PSMTXCopy(pModel->getAnmMtx(jntNo), *calc_mtx);
+
+            if (jntNo == pBms->getHeadJntNum()) {
+                cXyz offset(0.0f, 0.0f, 0.0f);
+                mDoMtx_YrotM(*calc_mtx, -(pBms->getHead_y() + pBms->mHeadAnm.field_0x02));
+                mDoMtx_ZrotM(*calc_mtx, -(pBms->getHead_x() + pBms->mHeadAnm.field_0x00));
+                cXyz result;
+                MtxPosition(&offset, &result);
+                pBms->setAttentionBasePos(result);
+
+                cXyz offset2(28.0f, -20.0f, 0.0f);
+                MtxPosition(&offset2, &result);
+                pBms->setEyePos(result);
+            } else if (jntNo == pBms->getBackboneJntNum()) {
+                mDoMtx_XrotM(*calc_mtx, pBms->getBackbone_y());
+                mDoMtx_ZrotM(*calc_mtx, pBms->getBackbone_x());
+            }
+
+            PSMTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+            PSMTXCopy(*calc_mtx, pModel->getAnmMtx(jntNo));
+        }
+    }
+    return TRUE;
 }
 
 /* 000004C4-00000A00       .text nodeCallBack_BmsHead__FP7J3DNodei */
