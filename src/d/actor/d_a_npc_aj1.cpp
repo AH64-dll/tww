@@ -1457,7 +1457,6 @@ BOOL daNpc_Aj1_c::_execute() {
             staffIdx = isEventEntry();
         }
         if (staffIdx >= 0) {
-            mHeadOnlyFollow = 1;
             event_proc(staffIdx);
         } else {
             (this->*mCurrProcFunc)(NULL);
