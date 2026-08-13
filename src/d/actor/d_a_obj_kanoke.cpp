@@ -223,7 +223,17 @@ cPhs_State daObjKanoke_c::createInit() {
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::_delete() {
-    /* Nonmatching */
+    if (heap != NULL) {
+        if (m2A0 != NULL && m2A0->ChkUsed()) {
+            dComIfG_Bgsp()->Release(m2A0);
+        }
+        if (m2A4 != NULL && m2A4->ChkUsed()) {
+            dComIfG_Bgsp()->Release(m2A4);
+        }
+    }
+    mSmokeCb.remove();
+    dComIfG_resDelete(&mPhs, "Mkanoke");
+    return TRUE;
 }
 
 /* 00000C0C-00000CE0       .text _draw__13daObjKanoke_cFv */
@@ -271,31 +281,31 @@ BOOL daObjKanoke_c::_execute() {
 
 /* 00000E7C-0000122C       .text executeNormal__13daObjKanoke_cFv */
 void daObjKanoke_c::executeNormal() {
-    BOOL triggered = FALSE;
+    bool triggered = false;
     if (m88D != 0xFF && dComIfGs_isSwitch(m88D, home.roomNo)) {
-        triggered = TRUE;
+        triggered = true;
     } else if (dComIfGp_getDetect().chk_light(&current.pos) || mCps0.ChkTgHit()) {
         m888++;
         if (m888 > 0x14) {
-            mCps0.GetObjCo().SetSPrm(0);
-            triggered = TRUE;
+            mCps0.SetTgType(0);
+            triggered = true;
         }
     } else {
         m888 = 0;
         if (m88C != 0) {
-            cXyz diff = dComIfGp_getPlayer(0)->current.pos - home.pos;
+            cXyz diff = home.pos - dComIfGp_getPlayer(0)->current.pos;
             f32 dist = PSVECSquareMag((Vec*)&diff);
             if (dist > 0.0f) {
                 dist = std::sqrtf(dist);
             }
             if (dist < 100.0f * m88C) {
-                triggered = TRUE;
+                triggered = true;
             }
         }
     }
 
     if (triggered) {
-        dComIfG_Ccsp()->Set(&mCps0);
+        mCps0.ClrTgHit();
         if (m88D != 0xFF) {
             dComIfGs_onSwitch(m88D, home.roomNo);
         }
@@ -431,7 +441,19 @@ void daObjKanoke_c::executeOpenTate() {
 
 /* 00001A6C-00001B24       .text executeEffectTate__13daObjKanoke_cFv */
 void daObjKanoke_c::executeEffectTate() {
-    /* Nonmatching */
+    m884--;
+    if (m884 != 0) {
+        if (mSmokeCb.getEmitter() != NULL && m884 <= 0x32) {
+            m878 -= 4.0f;
+            if (m878 < 0.0f) {
+                m878 = 0.0f;
+            }
+            mSmokeCb.getEmitter()->mGlobalPrmColor.a = (u8)m878;
+        }
+    } else {
+        mSmokeCb.remove();
+        m88B = 7;
+    }
 }
 
 /* 00001B24-00001B28       .text executeWait__13daObjKanoke_cFv */
