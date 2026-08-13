@@ -424,12 +424,26 @@ void daNpc_Bj1_c::checkOrder() {
 
 /* 00001690-0000172C       .text chk_talk__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::chk_talk() {
-    /* Nonmatching */
+    bool ret = true;
+    m83E = 0xFF;
+    if (dComIfGp_event_chkTalkXY()) {
+        if (dComIfGp_evmng_ChkPresentEnd()) {
+            m83E = dComIfGp_event_getPreItemNo();
+        } else {
+            ret = false;
+        }
+    }
+    return ret;
 }
 
 /* 0000172C-000017C0       .text chk_drct__11daNpc_Bj1_cFf */
-bool daNpc_Bj1_c::chk_drct(float) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::chk_drct(f32 i_param_1) {
+    s16 target = cLib_targetAngleY(
+        &current.pos,
+        &dComIfGp_getPlayer(0)->current.pos
+    ) - current.angle.y;
+    int cmp = abs(target);
+    return cmp < cM_deg2s(i_param_1);
 }
 
 /* 000017C0-000017F0       .text chk_partsNotMove__11daNpc_Bj1_cFv */
