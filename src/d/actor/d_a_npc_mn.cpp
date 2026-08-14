@@ -646,7 +646,6 @@ s32 daNpcMn_c::executeWaitInit() {
 }
 
 /* 00001518-000017CC       .text executeWait__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::executeWait() {
     if (executeCommon()) {
         return;
@@ -667,8 +666,8 @@ void daNpcMn_c::executeWait() {
                 }
             }
         }
-        if (!(mSwFlag & 1) && dComIfGs_isSwitch(getPrmSwitchBit(), home.roomNo)) {
-            dComIfGs_onSwitch(getPrmSwitchBit(), home.roomNo);
+        if (!(mSwFlag & 1) && fopAcM_isSwitch(this, getPrmSwitchBit())) {
+            fopAcM_onSwitch(this, getPrmSwitchBit());
             mSwFlag |= 1;
             m7BE = 0;
             m7BF = 0;
@@ -755,13 +754,12 @@ s32 daNpcMn_c::executeWalkInit() {
 }
 
 /* 00001948-00001BD4       .text executeWalk__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::executeWalk() {
     if (executeCommon()) {
         return;
     }
     u8 turnFlag = 0;
-    if (mPathRun.chkPointPass(current.pos, mPathRun.getDir() != 0)) {
+    if (mPathRun.chkPointPass(current.pos, (u8)(mPathRun.getDir() != 0))) {
         m790 = mPathRun.pointArg(mPathRun.getIdx());
         if (m790 != 0xFF) {
             fopAc_ac_c* actor = fopAcM_searchFromName("Figure", 0xFF, m790);
@@ -785,8 +783,7 @@ void daNpcMn_c::executeWalk() {
             cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
-            m7A0 = angle;
-            m7AE = angle;
+            m7AE = m7A0 = angle;
             m794 = 0;
             m7AA = l_npc_dat[mNpcNo].field_0x2C;
             mLookMode = 2;
@@ -1138,28 +1135,27 @@ void daNpcMn_c::eventWalkInit() {
 }
 
 /* 000027DC-0000293C       .text eventWalk__9daNpcMn_cFv */
-    /* Nonmatching */
 bool daNpcMn_c::eventWalk() {
     u8 turnFlag = 0;
-    if (mPathRun.chkPointPass(current.pos, mPathRun.getDir() != 0) && !mPathRun.nextIdxAuto()) {
+    if (mPathRun.chkPointPass(current.pos, (u8)(mPathRun.getDir() != 0)) && !mPathRun.nextIdxAuto()) {
         turnFlag = 1;
     }
     if (turnFlag == 0) {
         cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         s16 angle;
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
-        m7A0 = angle;
-        m7AE = angle;
+        m7AE = m7A0 = angle;
         m794 = 0;
         m7AA = l_npc_dat[mNpcNo].field_0x2C;
         mLookMode = 2;
         m_jnt.setTrn();
         m77C = l_npc_dat[mNpcNo].field_0x38;
-        return 0;
+    } else {
+        speedF = 0.0f;
+        m77C = 0.0f;
+        return 1;
     }
-    speedF = 0.0f;
-    m77C = 0.0f;
-    return 1;
+    return 0;
 }
 
 /* 0000293C-00002964       .text eventLookInit__9daNpcMn_cFv */
@@ -1508,7 +1504,6 @@ void daNpcMn_c::chkAttention() {
 }
 
 /* 00003478-000035C4       .text lookBack__9daNpcMn_cFv */
-    /* Nonmatching */
 void daNpcMn_c::lookBack() {
     s16 angAccel = m7AA;
     s16 angle = current.angle.y;
@@ -1518,6 +1513,8 @@ void daNpcMn_c::lookBack() {
     bool attnFlag = m794;
     s8 lookMode = mLookMode;
     switch (lookMode) {
+        case 0:
+            break;
         case 1:
             lookAtPos.x = mLookAtX;
             lookAtPos.y = mLookAtY;
@@ -1526,6 +1523,8 @@ void daNpcMn_c::lookBack() {
             break;
         case 2:
             angle = m7AE;
+            break;
+        default:
             break;
     }
     if (mMode && m7BE) {
