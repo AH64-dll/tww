@@ -442,7 +442,7 @@ void hand_move(sss_class* i_this) {
         f5 = 15.0f;
         f27 = 10.0f;
         f4 = 0.5f;
-        keep_3 = 1;
+        keep_angle = 1;
         pos.x = player->current.pos.x;
         f11 = player->current.pos.y;
         pos.y = f11;
@@ -461,8 +461,10 @@ void hand_move(sss_class* i_this) {
             i_this->m2C0 = 3;
             hand_close(i_this);
             mDoAud_seStart(JA_SE_OBJ_SVINE_GRASP, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            /* fallthrough to case 3 */
+        } else {
+            break;
         }
-        /* fallthrough */
     case 3:
         player->onVineCatch();
         player->setFace(daPy_py_c::daPyFace_TIYAYA);
@@ -562,7 +564,7 @@ void hand_move(sss_class* i_this) {
         cLib_addCalc2(&i_this->m2C8.y, pos.y, f3, actor->speedF);
         cLib_addCalc2(&i_this->m2C8.z, pos.z, f3, actor->speedF);
         cLib_addCalc2(&actor->current.pos.y, actor->home.pos.y + f9, 0.5f, 0.5f);
-        if (keep_3 && actor->current.angle.x == 0) {
+        if (keep_angle && actor->current.angle.x == 0) {
             cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchPlayerAngleY(actor), 0x10, 0x800);
         }
         control1(i_this);
