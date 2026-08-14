@@ -1820,7 +1820,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
     ActorRel(Matching,    "d_a_warpfout"),
     ActorRel(Matching,    "d_a_warpgn"),
-    ActorRel(NonMatching, "d_a_warpls"),
+    ActorRel(Equivalent, "d_a_warpls"),  # 44/47 @100, 3 accept-class holdouts; rel-link proves NOT Matching
     ActorRel(NonMatching, "d_a_warpmj"),
     ActorRel(NonMatching, "d_a_waterfall"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_windmill"),
