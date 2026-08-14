@@ -1381,9 +1381,9 @@ void daGy_c::drawDebug() {
         sp50.x += l_HIO.m184 * cM_ssin(shape_angle.y - l_HIO.m180);
     }
 
-    daShip_c* ship = dComIfGp_getShipActor();
     uVar1 = l_HIO.m140;
-    if ((uVar1 - 0x70000 != 0xFFFF || l_HIO.m140 != 0) && ship != NULL) {
+    if ((uVar1 - 0x70000 != 0xFFFF || l_HIO.m140 != 0) && dComIfGp_getShipActor() != NULL) {
+        daShip_c* ship = dComIfGp_getShipActor();
         s16 sVar1 = ship->shape_angle.y + l_HIO.m140;
 
         cXyz sp44 = ship->current.pos;
@@ -1398,7 +1398,8 @@ void daGy_c::drawDebug() {
     }
 
     uVar1 = l_HIO.m142;
-    if ((uVar1 - 0x70000 != 0xFFFF || l_HIO.m142 != 0) && ship != NULL) {
+    if ((uVar1 - 0x70000 != 0xFFFF || l_HIO.m142 != 0) && dComIfGp_getShipActor() != NULL) {
+        daShip_c* ship = dComIfGp_getShipActor();
         s16 sVar1 = ship->shape_angle.y + l_HIO.m142;
 
         cXyz sp20 = ship->current.pos;
