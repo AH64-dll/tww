@@ -127,8 +127,18 @@ static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
 }
 
 /* 00000638-000006C8       .text nodeCallBack_DW__FP7J3DNodei */
-static BOOL nodeCallBack_DW(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_DW(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        int jntNo = ((J3DJoint*)node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        bo_class* i_this = (bo_class*)model->getUserArea();
+        if (i_this != NULL && jntNo == 9) {
+            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cXyz zero(0.0f, 0.0f, 0.0f);
+            MtxPosition(&zero, &i_this->m304);
+        }
+    }
+    return TRUE;
 }
 
 /* 000006C8-0000079C       .text execute__22yodare_ato_PcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
