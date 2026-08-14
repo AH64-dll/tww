@@ -460,7 +460,7 @@ BOOL daObjTnTrap_c::demo_end_wait_act_proc() {
                 break;
             case 2:
                 if (mSwSave2 != 0xFF) {
-                    dComIfGs_onSwitch(mSwSave2, current.roomNo);
+                    dComIfGs_onSwitch(mSwSave2, home.roomNo);
                 }
                 break;
         }
