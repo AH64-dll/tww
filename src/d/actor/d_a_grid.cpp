@@ -248,11 +248,11 @@ void daHo_packet_c::setNrmMtx(cXyz&) {
 void daHo_packet_c::setNrmVtx(cXyz* out, int col, int row) {
     /* Nonmatching */
     cXyz* nrm = &mNrm[mCount][0];
-    cXyz cur = nrm[row * 7 + col];
     cXyz v1;
     cXyz add;
     cXyz v2;
     cXyz cross;
+    cXyz cur = nrm[row * 7 + col];
     add.set(0.0f, 0.0f, 0.0f);
     if (col != 0) {
         v1 = nrm[row * 7 + col - 1] - cur;
