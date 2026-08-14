@@ -1703,10 +1703,10 @@ config.libs = [
     ActorRel(Equivalent, "d_a_npc_uk"),
     ActorRel(NonMatching, "d_a_npc_ym1"),
     ActorRel(NonMatching, "d_a_npc_yw1"),
-    ActorRel(NonMatching, "d_a_npc_zk1"),
+    ActorRel(Equivalent, "d_a_npc_zk1"),  # 8 sub-100 ALL ARG-only accept 0-one-sided; .rodata 224==224 byte-identical; markers 8==8; weak order; shared-header renames d_save_event_flag.inc + d_snap.h (4-version gate required)
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_zl1"),
     ActorRel(NonMatching, "d_a_nz"),
-    ActorRel(NonMatching, "d_a_obj_Itnak"),
+    ActorRel(Equivalent, "d_a_obj_Itnak"),  # 3 sub-100 accept (set_mtx 90.44 norm-diff-0 arg-eval balancelift #37 class — reconciliation 2026-08-14, R7-8 structural overruled; _draw 99.88 anchor+pool, create_heap 99.90 branch-addr); .rodata 253B byte-identical; .data +48B zero-referenced dead statics (0 relocs); markers 3==3; weak order
     ActorRel(NonMatching, "d_a_obj_Vds"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Vteng"),
     ActorRel(NonMatching, "d_a_obj_YLzou"),
