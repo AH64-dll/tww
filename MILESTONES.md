@@ -265,3 +265,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T07:39Z — M36: flip #57 d_a_obj_htetu1 → Equivalent (CLASS CORRECTED from MatchingFor — cycle 9 gate caught the misclass: source-linked rel failed 3 retail pins; MatchingFor requires 0 sub-100 for byte-identity, htetu1 has 4 accept-class. Reverted → re-classed → re-gated aa0dac8d8 10:39:01). 28 flips this session (#30-57). Ledger: 49 NonMatching / 51 Equivalent / 313 Matching + 7 MatchingFor. THE 4-VERSION GATE CAUGHT A REAL FLIP FAILURE — MatchingFor-relink pin check works as designed.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T07:42Z — M37: cycle 10 ALL GREEN at 26e32c9d3 — htetu1 cycle-9 FAIL rows closed (re-class to Equivalent makes all legs CHECK-only). 10 cycles: 9 green + 1 REAL catch corrected. The MatchingFor-relink pin check proved itself end-to-end: misclass caught by gate → doctrine codified (0 sub-100 required) → re-class → re-gate → closure. Ledger: 49 NonMatching / 51 Equivalent / 313 Matching + 7 MatchingFor. 28 flips (#30-57).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
