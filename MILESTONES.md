@@ -301,3 +301,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T11:24Z — M42: flip #62 d_a_swpropeller → Equivalent — 33 FLIPS THIS SESSION (#30-62). Ledger: 45 NonMatching / 55 Equivalent / 313 Matching + 7 MatchingFor. swpropeller: MOBLIN_SPEAR rlwinm bit28 value bug (triple-ratified R3-9/R1-9/RLead-16), REL-LINK proven rel == pin. Gate d4d0b6f31 14:23:28. BLead-11 first flip. Flip pipeline: kp1 (7-fn list), buoyflag (structural+__dt__ guard), grid, mt, bo in fix loops.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T12:54Z — M43: flip #63 d_a_obj_mmrr → Equivalent — 34 FLIPS THIS SESSION (#30-63). Ledger: 42 NonMatching / 56 Equivalent / 224 Matching / 94 MatchingFor. mmrr: 2 sub-100 both strip-equal accept (create_heap 99.49, set_cc_trans_pos 96.92), markers 2==2. Gate b7e8d521a 15:53:40 + mirror-integrity check PASSED (new pre-gate step). Bench VALUE-DECODE doctrine codified after bigelf 15+ real bugs invisible to strip-only.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
