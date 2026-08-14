@@ -313,3 +313,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T13:55Z — M44: flip #64 d_a_npc_kp1 → Equivalent — 35 FLIPS THIS SESSION (#30-64). Ledger: 41 NonMatching / 57 Equivalent / 224 Matching / 94 MatchingFor. kp1: 11-commit cycle, 7 reviewer catches (setAnm btpNum -1 VALUE BUG — would have shipped wrong tex-pattern selection, privateCut ==1-idiom, 3 false closures); 17/17 accept-class value-delta-scanned. Gate 585a9e079 16:54:22 + mirror-integrity check. The value-decode pass keeps catching accept-band bugs.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T15:36Z — M45: flip #65 d_a_grid → Object(Equivalent) — FIRST FRAMEWORK-EQUIVALENT FLIP (codified class; DOL object, framework-Equivalent exception: value-parity byte-proven, 7-shape allocator experiment documented, pin-safe by construction). 36 flips this session (#30-65). Ledger: 41 NonMatching / 57 Equivalent / 224 Matching / 94 MatchingFor. Gate 433a46cf0 18:34:46. Grid: 6 value bugs caught by value-decode from a '0 real bugs' claim.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
