@@ -325,3 +325,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T15:40Z — M46: flip #66 d_a_warpmj → Equivalent — 37 FLIPS THIS SESSION (#30-66). Ledger: 40 NonMatching / 58 Equivalent / 224 Matching / 94 MatchingFor. warpmj: 32/33 fns 100, _execute 99.90 pure stack-slot permutation (calc_nrm class), .rodata/.data byte-identical cleanest of shift. Gate 8ad8245c4 18:37:47 + mirror check. BLead-11 shift: 5 flips (#62-66 incl first framework-Equivalent #65 grid).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T16:32Z — M47: flip #67 d_a_bigelf → Equivalent — 38 FLIPS THIS SESSION (#30-67). Ledger: 39 NonMatching / 59 Equivalent / 224 Matching / 94 MatchingFor. bigelf: 2 real bugs caught in final re-verify (g_profile status field value bug — profile-data value-decode class; init home.pos.y), 27==27 markers, all values 3-reviewer-ledgered. Gate 73af843ed 19:31:49 + mirror pre-check. BLead-11 shift: 6 flips (#62-67 incl first framework-Equivalent #65).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
