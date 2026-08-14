@@ -604,11 +604,11 @@ bool daObjBuoyflag::Packet_c::M_hasi_nrm_flag;
 
 /* 000000EC-000001BC       .text hasi_nrm_init__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::hasi_nrm_init() {
-    /* Nonmatching */
     if (!M_hasi_nrm_flag) {
         M_hasi_nrm_flag = true;
-        for (int i = 0; i < 10; i++) {
-            M_hasi_nrm[i].set(Khasi::l_pos[i].x, 0.0f, Khasi::l_pos[i].z);
+        const Vec* l_pos = Khasi::l_pos;
+        for (int i = 0; i < 10; i++, l_pos++) {
+            M_hasi_nrm[i].set(l_pos->x, 0.0f, l_pos->z);
             M_hasi_nrm[i].normalize();
         }
         M_hasi_nrm[10].set(0.0f, 1.0f, 0.0f);
