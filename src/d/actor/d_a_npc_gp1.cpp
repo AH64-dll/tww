@@ -68,7 +68,7 @@ daNpc_Gp1_HIO_c::daNpc_Gp1_HIO_c() {
         /* mAttPosOffsetY    */ 233.0f,
         /* m18               */ 0.0f,
         /* m1C               */ 300.0f,
-        /* m20               */ 0x0000,
+        /* m20               */ 0x0006,
         /* m22               */ 0x0400,
         /* m24               */ 0.4f,
         /* m28               */ 3.0f,
@@ -324,9 +324,9 @@ bool daNpc_Gp1_c::setAnm() {
         {-1, -1, 0, 0, 0, -1},
         {0, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
         {-1, -1, 0, 0, 0, -1},
+        {0, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
         {7, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
         {4, 0, 0, 8, 1, J3DFrameCtrl::EMode_NONE},
-        {-1, -1, 0, 0, 0, -1},
     };
     if(a_anm_prm_tbl[mPrevStatus].mBtpNum >= 0) {
         setAnm_tex(a_anm_prm_tbl[mPrevStatus].mBtpNum);
