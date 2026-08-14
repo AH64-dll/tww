@@ -253,3 +253,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T06:44Z — M34: flip #55 d_a_obj_tntrap → Equivalent — 26 flips this session (#30-55). Ledger: 50 NonMatching / 50 Equivalent / 313 Matching + 6 MatchingFor — EQUALITY CROSSED (flipped == non-matching). tntrap: 7 structural → 0 across watch (Move mangling, loop induction, rlwinm mask — all caught post-claim by bench deep-verify). Gate 7d07272c1 09:43:40. 4 flips in BLead-10 shift (#52-55).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T06:53Z — M35: flip #56 d_a_fallrock_tag → MatchingFor — 27 flips this session (#30-56). Ledger: 50 NonMatching / 50 Equivalent / 313 Matching + 7 MatchingFor. fallrock: 7/7 fns + sections byte-identical, weak set exact, D44J01 4B divergence in Delete. Gate 00639d148 09:52:09 + cycle 8 ALL GREEN (8 consecutive). 6 flips in RLead-13 shift (#50-56: Vds/YLzou/firewall/msdan_sub2/light/tntrap/fallrock).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
