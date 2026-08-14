@@ -242,7 +242,7 @@ BOOL daWarpls_c::setStatus() {
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
 BOOL daWarpls_c::demo() {
     /* Nonmatching */
-    BOOL sw = fopAcM_isSwitch(this, mSwNo);
+    u8 sw = fopAcM_isSwitch(this, mSwNo);
     if (m2BE != 0) {
         if (!check_warp_distance()) {
             m2BE = 0;
@@ -254,7 +254,11 @@ BOOL daWarpls_c::demo() {
             mOrder = 1;
         }
     }
-    if (sw == 0 && mSwNo != 0xff) {
+    if (sw != 0 || mSwNo == 0xff) {
+        if (check_warp_link() && mOrder == 0) {
+            mOrder = 2;
+        }
+    } else {
         if (mpBrk != NULL) {
             mpBrk->setPlaySpeed(-1.0f);
         }
@@ -265,10 +269,6 @@ BOOL daWarpls_c::demo() {
             mpEmitter->setStatus(JPAEmtrStts_StopEmit);
         }
         mWarpStart = 0;
-    } else {
-        if (check_warp_link() && mOrder == 0) {
-            mOrder = 2;
-        }
     }
     return TRUE;
 }
