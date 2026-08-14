@@ -158,24 +158,21 @@ void daNpc_Kp1_c::setAnm_tex(s8 i_btpNum) {
 }
 
 /* 00000840-00000970       .text init_btp__11daNpc_Kp1_cFbi */
-bool daNpc_Kp1_c::init_btp(bool i_bModify, int i_btpNum) { /* Nonmatching */
+bool daNpc_Kp1_c::init_btp(bool i_bModify, int i_btpNum) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     if (i_btpNum >= 0) {
         int resID;
         BtpNum2ResID(i_btpNum, &resID);
-        J3DAnmTexPattern* m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Kp", resID);
-        JUT_ASSERT(0x162, m_head_tex_pattern != 0);
-        mpBtpAnm = m_head_tex_pattern;
+        mpBtpAnm = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Kp", resID);
+        JUT_ASSERT(0x162, mpBtpAnm != 0);
         int dummy = 0;
-        if (mBtpAnm.init(modelData, m_head_tex_pattern, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_bModify,
-                         0) != 0) {
-            mBtpFrame = 0;
-            mBtpTimer = 0;
-            if (mBtpNum == 1) {
-                mBtpFrame = 1;
-            }
-        } else {
+        if (mBtpAnm.init(modelData, mpBtpAnm, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_bModify, 0) == 0) {
             return false;
+        }
+        mBtpFrame = 0;
+        mBtpTimer = 0;
+        if (mBtpNum == 1) {
+            mBtpFrame = 1;
         }
     }
     return true;
