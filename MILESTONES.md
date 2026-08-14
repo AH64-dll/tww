@@ -145,3 +145,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T00:10Z — M16: flip #39 d_a_npc_ds1 → Equivalent — 10 flips this session (#30-39: 3 Matching + 7 Equivalent). Ledger: 66 NonMatching / 35 Equivalent / 314 Matching. ds1: 46/47 fns 100 via full stub transcription; marker arbitration settled (nonstandard 'demo' marker dropped per msdan precedent; D44J01 _draw divergence 0x30C-vs-0x2AC recorded + gate-enforced). Double gate 03:09:18/03:09:30; 4-version cycle dispatched for rsh1/bs1 rename verification. Wave respawned after 8.5h gap: 33 agents, integrity gate green at 5d4386add.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T00:14Z — M17: 4-version cycle ALL GREEN at 3ba252876 (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416) — covers flip #39 ds1 + shared-header renames (d_shop.h/d_snap.h). REAL CATCH: kiosk demo ships DIFFERENT code for aygr/hami2/tag_ba1 (verified hami2 demo cf947424 vs retail de364dda) → converted to MatchingFor(GZLJ01,GZLE01,GZLP01) per agbsw0/andsw0/att precedent, D44J01 re-gated 417 OK. Demo-divergence class now documented + handled. Ledger: 66 NonMatching / 35 Equivalent / 314 Matching + 3 MatchingFor.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
