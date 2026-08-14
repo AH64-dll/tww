@@ -311,7 +311,7 @@ bool daNpc_So_c::jntHitCreateHeap() {
 bool daNpc_So_c::checkTgHit() {
     /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    mStts.Move();
+    mStts2.Move();
 
     if (cLib_calcTimer(&field_0x6D8) == 0 && mSph.ChkTgHit()) {
         cXyz* hitPos = mSph.GetTgHitPosP();
