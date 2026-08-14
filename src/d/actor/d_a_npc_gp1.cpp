@@ -764,8 +764,9 @@ int daNpc_Gp1_c::gp_movPass() {
     if(mPathRun.isPath() && dPath_ChkClose(mPathRun.getPath())) {
         if(mPathRun.chkPointPass(current.pos, mPathRun.getDir())) {
             mPathRun.nextIdxAuto();
-            return 1;
+            ret = 1;
         }
+        return ret;
     }
     cXyz diff = m7A8 - current.pos;
     diff.y = 0.0f;
