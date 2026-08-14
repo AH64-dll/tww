@@ -982,16 +982,13 @@ void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
     for (int row = 0; row < 5; row++) {
         f32 rowWeight = 0.25f * (f32)row - 0.5f;
         f32 rowInvWeight = 0.25f * (f32)(4 - row);
-        cXyz* curRow = &cur->mPos[row * 7];
-        cXyz* prevRow = &prev->mPos[row * 7];
-        cXyz* myRow = &mPos[row * 7];
         for (int col = 0; col < 7; col++) {
             if ((row != 0 || col != 0) && (row != 4 || col != 0)) {
                 calc_pos_spring(row, col);
                 calc_pos_gravity(row, col);
                 calc_pos_wave(row, col);
                 calc_pos_spd(row, col);
-                curRow[col] = prevRow[col] + myRow[col];
+                cur->mPos[row * 7 + col] = prev->mPos[row * 7 + col] + mPos[row * 7 + col];
             }
         }
     }
