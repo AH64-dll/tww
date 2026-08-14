@@ -365,6 +365,7 @@ void bound_sound_set(bl_class* i_this) {
 
 /* 00002354-00002458       .text fuwafuwa_keisan__FP8bl_class */
 void fuwafuwa_keisan(bl_class* i_this) {
+    /* Nonmatching */
     f32 f3 = 3.0f;
 
     if (i_this->m2D2 == 1) {
