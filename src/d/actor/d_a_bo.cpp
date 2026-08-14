@@ -309,7 +309,7 @@ static void wait_initial(bo_class* i_this) {
     } else {
         anm_init(i_this, 0x16, 5.0f, 2, 1.0f, -1, 0);
     }
-    i_this->m366 = (s16)(60.0f + cM_rndF(60.0f));
+    i_this->m366[0] = (s16)(60.0f + cM_rndF(60.0f));
     i_this->mSph.ClrAtSet();
     i_this->mSph.ClrAtSet();
     i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
@@ -360,8 +360,157 @@ static void bo5_move(bo_class*) {
 }
 
 /* 000042B8-000048B0       .text daBO_Execute__FP8bo_class */
-static BOOL daBO_Execute(bo_class*) {
+static BOOL daBO_Execute(bo_class* i_this) {
     /* Nonmatching */
+    if (i_this->mType == 0) {
+        if (enemy_ice(&i_this->mEnemyIce)) {
+            if (i_this->mEnemyIce.mLightShrinkTimer != 0) {
+                i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+                i_this->mpMorf->calc();
+            } else {
+                i_this->mSph.SetC(i_this->m2E0);
+                i_this->mSph.SetR(60.0f);
+                dComIfG_Ccsp()->Set(&i_this->mSph);
+            }
+            return 1;
+        }
+    }
+
+    for (int i = 0; i < 5; i++) {
+        if (i_this->m366[i] != 0) {
+            i_this->m366[i]--;
+        }
+    }
+
+    switch (i_this->mAction) {
+    case 0:
+        bo_move(i_this);
+        i_this->shape_angle = i_this->current.angle;
+        break;
+    case 1:
+        bo2_move(i_this);
+        if (i_this->m2CB != 0) {
+            if (i_this->eventInfo.mCommand == 2) {
+                if (i_this->mAction != 1) {
+                    g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+                } else {
+                    i_this->m2C5 = 0xC;
+                    start_bakutsuki_event_camera(i_this);
+                }
+                i_this->m2CB = 0;
+            } else {
+                fopAcM_orderPotentialEvent(i_this, 2, 0xFFFF, 0);
+                i_this->eventInfo.mCondition |= 2;
+            }
+        }
+        break;
+    case 2:
+        bo3_move(i_this);
+        break;
+    case 3:
+        bo4_move(i_this);
+        break;
+    case 4:
+        bo5_move(i_this);
+        break;
+    }
+
+    if (i_this->m2C6 != 0 || (i_this->m2DC != 0x16 && i_this->m2DC != 0x15)) {
+        if (i_this->mpEmitter2 != NULL) {
+            i_this->mpEmitter2->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+            switch (i_this->m2C6) {
+            case 0:
+                i_this->mpEmitter2->setStatus(JPAEmtrStts_StopEmit);
+                i_this->m2C6 = 1;
+                break;
+            case 1:
+                if (i_this->mpEmitter2->getParticleNumber() == 0) {
+                    i_this->mpEmitter2->mpParticleCallBack = NULL;
+                    i_this->mpEmitter2->mMaxFrame = -1;
+                    i_this->mpEmitter2->setStatus(JPAEmtrStts_StopEmit);
+                    i_this->mpEmitter2 = NULL;
+                    i_this->m2C6 = 0;
+                }
+                break;
+            }
+        }
+    }
+
+    if (i_this->m2C7 != 0 || i_this->m2DC != 0xD) {
+        if (i_this->mpEmitter3 != NULL) {
+            i_this->mpEmitter3->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+            switch (i_this->m2C7) {
+            case 0:
+                i_this->mpEmitter3->setStatus(JPAEmtrStts_StopEmit);
+                i_this->m2C7 = 1;
+                break;
+            case 1:
+                if (i_this->mpEmitter3->getParticleNumber() == 0) {
+                    i_this->mpEmitter3->mpParticleCallBack = NULL;
+                    i_this->mpEmitter3->mMaxFrame = -1;
+                    i_this->mpEmitter3->setStatus(JPAEmtrStts_StopEmit);
+                    i_this->mpEmitter3 = NULL;
+                    i_this->m2C7 = 0;
+                }
+                break;
+            }
+        }
+    }
+
+    cLib_addCalc2(&i_this->scale.y, i_this->m398, 1.0f, 0.0875f);
+    i_this->mStts.SetWeight(0xFF);
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cXyz offset(0.0f, 0.0f, i_this->speedF);
+    cXyz out;
+    MtxPosition(&offset, &out);
+    i_this->speed.x = out.x;
+    i_this->speed.y += i_this->gravity;
+    i_this->speed.z = out.z;
+    fopAcM_posMove(i_this, i_this->mStts.GetCCMoveP());
+
+    if (i_this->mType == 0 || i_this->mType == 2) {
+        i_this->mpMorf->play(NULL, 0, 0);
+    }
+    if (i_this->mType == 0 || i_this->mType == 1) {
+        i_this->mpMorf2->play(NULL, 0, 0);
+    }
+
+    if (i_this->mType == 0) {
+        if (i_this->m2C5 != 5) {
+            i_this->attention_info.position = i_this->m2E0;
+            i_this->attention_info.position.y += 60.0f;
+            i_this->eyePos = i_this->m328;
+        } else {
+            i_this->eyePos = i_this->m2F8;
+            i_this->eyePos.y += 60.0f;
+            i_this->attention_info.position = i_this->eyePos;
+        }
+        if (i_this->m2CC != 0 || i_this->m2C5 == 0xC) {
+            i_this->attention_info.position = i_this->current.pos;
+            i_this->attention_info.position.y += 60.0f;
+            i_this->shape_angle.y = i_this->m348;
+        }
+    }
+
+    i_this->mSph.SetC(i_this->m2E0);
+    i_this->mSph.SetR(60.0f);
+    dComIfG_Ccsp()->Set(&i_this->mSph);
+    if (i_this->mAction == 0) {
+        i_this->mCyl.SetC(i_this->m2F8);
+        i_this->mCyl.SetH(160.0f);
+        i_this->mCyl.SetR(15.0f);
+        dComIfG_Ccsp()->Set(&i_this->mCyl);
+    }
+    if (i_this->mType == 0 || i_this->mType == 1) {
+        cXyz pos = i_this->current.pos;
+        pos.y += 10.0f;
+        i_this->mSph2.SetC(pos);
+        i_this->mSph2.SetR(45.0f);
+        dComIfG_Ccsp()->Set(&i_this->mSph2);
+    }
+    draw_SUB(i_this);
+    return 1;
 }
 
 /* 000048B0-000048B8       .text daBO_IsDelete__FP8bo_class */
@@ -595,7 +744,7 @@ static cPhs_State daBO_Create(fopAc_ac_c* i_this) {
         }
 
         if (bo->mType == 1) {
-            bo->m366 = (s16)(15.0f + g_regHIO.mChild[8].mFloatRegs[14]);
+            bo->m366[0] = (s16)(15.0f + g_regHIO.mChild[8].mFloatRegs[14]);
             anm_init(bo, 8, 0.0f, 0, 0.0f, -1, 1);
             bo->mAction = 4;
             bo->m2C5 = 0x33;
