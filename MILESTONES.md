@@ -295,3 +295,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T09:19Z — M41: flip #61 d_a_obj_warpls → Equivalent — 32 FLIPS THIS SESSION (#30-61). Ledger: 45 NonMatching / 55 Equivalent / 313 Matching + 7 MatchingFor. warpls: 3 real structural fixed (TEV_TYPE value bug, demo flow, eventOrder form) + firewall-class _delete reload caught PRE-flip; 44/47 fns 100. Gate 7fa715f35 12:18:33. BLead-10 shift: 10 flips (#52-61) as sole executor, cycle-9 misclass catch corrected.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T11:24Z — M42: flip #62 d_a_swpropeller → Equivalent — 33 FLIPS THIS SESSION (#30-62). Ledger: 45 NonMatching / 55 Equivalent / 313 Matching + 7 MatchingFor. swpropeller: MOBLIN_SPEAR rlwinm bit28 value bug (triple-ratified R3-9/R1-9/RLead-16), REL-LINK proven rel == pin. Gate d4d0b6f31 14:23:28. BLead-11 first flip. Flip pipeline: kp1 (7-fn list), buoyflag (structural+__dt__ guard), grid, mt, bo in fix loops.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
