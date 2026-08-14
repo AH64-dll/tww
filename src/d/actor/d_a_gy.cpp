@@ -924,15 +924,19 @@ void daGy_c::modeAttackBack() {
     m4F0 = 0.0f;
     cLib_addCalcAngleS2(&m8F4, 0, 4, 0x800);
 
-    cXyz sp18 = current.pos - m904;
-    cXyz spC(sp18.x, 0.0f, sp18.z);
+    const cXyz& sp18 = current.pos - m904;
+    Vec spC;
+    spC.x = sp18.x;
+    spC.y = 0.0f;
+    spC.z = sp18.z;
     f32 f1 = PSVECSquareMag(&spC);
     if (f1 > 0.0f) {
         double guess = __frsqrte(f1);
         guess = 0.5 * guess * (3.0 - guess * guess * f1);
         guess = 0.5 * guess * (3.0 - guess * guess * f1);
         guess = 0.5 * guess * (3.0 - guess * guess * f1);
-        f1 = (f32)(f1 * guess);
+        f32 sp8 = (f32)(f1 * guess);
+        f1 = sp8;
     }
 
     if (f1 > l_HIO.m144) {
@@ -1348,7 +1352,46 @@ bool daGy_c::_execute() {
 
 /* 00004264-00004560       .text drawDebug__6daGy_cFv */
 void daGy_c::drawDebug() {
-    /* Nonmatching */
+    if (((u32)(l_HIO.m180 + 0xFFF90000) != -1U) || ((s16)l_HIO.m180 != 0)) {
+        f32 x = current.pos.x;
+        f32 y = current.pos.y;
+        f32 z = current.pos.z;
+        f32 y2 = y + 10.0f;
+        s16 angle = current.angle.y;
+
+        cXyz line1(x + l_HIO.m184 * JMASSin(angle + l_HIO.m180), y2,
+                   z + l_HIO.m184 * JMASCos(angle + l_HIO.m180));
+        cXyz line2(x + l_HIO.m184 * JMASSin(angle - l_HIO.m180), y2,
+                   z + l_HIO.m184 * JMASCos(angle - l_HIO.m180));
+    }
+
+    if ((((u32)(l_HIO.m140 + 0xFFF90000) != -1U) || ((s16)l_HIO.m140 != 0)) && dComIfGp_getPlayer(0) != NULL) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        f32 x = player->current.pos.x;
+        f32 y = player->current.pos.y;
+        f32 z = player->current.pos.z;
+        f32 y2 = y + l_HIO.m68;
+        s16 angle = player->current.angle.y;
+
+        cXyz line1(x + l_HIO.mB0 * JMASSin(angle + l_HIO.m140), y2,
+                   z + l_HIO.mB0 * JMASCos(angle + l_HIO.m140));
+        cXyz line2(x + l_HIO.mB0 * JMASSin(angle - l_HIO.m140), y2,
+                   z + l_HIO.mB0 * JMASCos(angle - l_HIO.m140));
+    }
+
+    if ((((u32)(l_HIO.m142 + 0xFFF90000) != -1U) || ((s16)l_HIO.m142 != 0)) && dComIfGp_getPlayer(0) != NULL) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        f32 x = player->current.pos.x;
+        f32 y = player->current.pos.y;
+        f32 z = player->current.pos.z;
+        f32 y2 = y + l_HIO.m68;
+        s16 angle = player->current.angle.y;
+
+        cXyz line1(x + l_HIO.mB0 * JMASSin(angle + l_HIO.m142), y2,
+                   z + l_HIO.mB0 * JMASCos(angle + l_HIO.m142));
+        cXyz line2(x + l_HIO.mB0 * JMASSin(angle - l_HIO.m142), y2,
+                   z + l_HIO.mB0 * JMASCos(angle - l_HIO.m142));
+    }
 }
 
 /* 00004560-000046C8       .text _draw__6daGy_cFv */
