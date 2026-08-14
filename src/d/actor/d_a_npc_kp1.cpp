@@ -211,7 +211,7 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
 
 /* 00000A80-00000B4C       .text setAnm_anm__11daNpc_Kp1_cFPQ211daNpc_Kp1_c9anm_prm_c */
 BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
-    BOOL ret = FALSE;
+    u32 ret = 0;
     int bck_idx;
     int bas_idx;
 
@@ -223,7 +223,7 @@ BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
                 dNpc_setAnmIDRes(mpMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed,
                                  bck_idx, bas_idx, "Kp");
             }
-            ret = TRUE;
+            ret = 1;
         }
         mMorfFrame = 0.0f;
         mAnmTimer = 0;
