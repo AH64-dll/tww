@@ -277,6 +277,7 @@ bool daGrid_c::_delete() {
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
 bool daGrid_c::_execute() {
+    /* Nonmatching */
     u8 alpha = mPacket.mAlpha;
 
     s32 target;
