@@ -840,15 +840,18 @@ void daNpc_So_c::cutMiniGamePlUpProc() {
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
     player->mDemo.mDemoMode = 6;
 
-    mDoMtx_stack_c::YrotS(player->shape_angle.y);
-    cXyz sp38(100.0f + REG0_F(4), 50.0f + REG0_F(5), 100.0f + REG0_F(6));
-    cXyz sp2C;
-    mDoMtx_stack_c::multVec(&sp38, &sp2C);
+    cXyz sp38(0.0f, 0.0f, 0.0f);
+    cXyz sp2C(0.0f, 0.0f, 0.0f);
+    mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
+    sp38.x = -50.0f + REG0_F(4);
+    sp38.y = 50.0f + REG0_F(5);
+    sp38.z = 100.0f + REG0_F(6);
+    MtxPosition(&sp38, &sp2C);
 
     cXyz sp20 = player->current.pos + sp2C;
     field_0xBC0 = sp20;
     field_0xBCC = player->current.pos;
-    field_0xBCC.y += -50.0f + REG0_F(10);
+    field_0xBCC.y += 90.0f + REG0_F(10);
 
     camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cam->mCamera.Set(field_0xBCC, field_0xBC0);
