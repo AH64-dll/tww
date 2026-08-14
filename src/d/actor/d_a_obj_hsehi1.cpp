@@ -492,8 +492,8 @@ BOOL daObj_hsh_c::chkAttention(cXyz i_pos, short i_angle) {
     }
 
     BOOL ret = 0;
-    s16 diff = angle - i_angle;
-    if (hio_angle > abs(diff) && hio_range > dist) {
+    s16 angleDiff = angle - i_angle;
+    if (hio_angle > abs(angleDiff) && hio_range > dist) {
         ret = 1;
     }
     return ret;
