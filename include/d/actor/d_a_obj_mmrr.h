@@ -28,7 +28,7 @@ namespace daObjMmrr {
         }
 
         static int solidHeapCB(fopAc_ac_c*);
-        int create_heap();
+        bool create_heap();
         void init_cc();
         void set_cc_rec_pos();
         void set_cc_trans_pos();

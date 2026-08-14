@@ -161,7 +161,7 @@ int daObjMmrr::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000110-00000360       .text create_heap__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
-int daObjMmrr::Act_c::create_heap() {
+bool daObjMmrr::Act_c::create_heap() {
     J3DModelData* bdl_Mmrr = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x9);
     JUT_ASSERT(488, bdl_Mmrr != 0);
 
