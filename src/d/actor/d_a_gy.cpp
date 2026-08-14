@@ -1047,7 +1047,111 @@ void daGy_c::lineCheck(cXyz* param_0, cXyz* param_1) {
 
 /* 000032E4-000038EC       .text checkTgHit__6daGy_cFv */
 void daGy_c::checkTgHit() {
-    /* Nonmatching */
+    m8A8.Move();
+
+    cCcD_Obj* hitObj = m764.GetTgHitObj();
+    cXyz hitPos = *m764.GetTgHitPosP();
+    if (hitObj == NULL) {
+        hitObj = m50C.GetTgHitObj();
+        hitPos = *m50C.GetTgHitPosP();
+    }
+    if (hitObj == NULL) {
+        hitObj = m638.GetTgHitObj();
+        hitPos = *m638.GetTgHitPosP();
+    }
+
+    if (hitObj != NULL) {
+        u8 flag = 0;
+        u32 atType = hitObj->GetAtType();
+
+        if (atType & AT_TYPE_BOMB) {
+            health = 0;
+            m920 = l_HIO.m14C;
+            flag = 1;
+        } else if (atType & AT_TYPE_NORMAL_ARROW) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            health -= 2;
+            m920 = l_HIO.m150;
+            flag = 1;
+        } else if (atType & AT_TYPE_ICE_ARROW) {
+            mCE8[0] = 9;
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            m4FC = 0xA;
+            mDE0.remove();
+            mD18.remove();
+            mD7C.remove();
+            flag = 0;
+        } else if (atType & AT_TYPE_FIRE_ARROW) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            health -= 2;
+            m920 = l_HIO.m150;
+            flag = 1;
+        } else if (atType & AT_TYPE_LIGHT_ARROW) {
+            mCE8[0] = 0xB;
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            m500 = 0xA;
+            mDE0.remove();
+            mD18.remove();
+            mD7C.remove();
+            flag = 0;
+        } else if (atType & AT_TYPE_HOOKSHOT) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_MS_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            health -= 2;
+            m920 = l_HIO.m154;
+            flag = 1;
+        } else if (atType & AT_TYPE_BOOMERANG) {
+            JAIZelBasic::zel_basic->seStart(JA_SE_LK_W_WEP_HIT, &eyePos, 0x20,
+                                            dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            health -= 2;
+            m920 = l_HIO.m158;
+            flag = 1;
+        }
+
+        if (flag == 1) {
+            JAIZelBasic::zel_basic->onEnemyDamage();
+            fopAc_ac_c* player = dComIfGp_getPlayer(0);
+            dComIfGp_particle_set(0x10, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+
+            if (mCE8[0] == 0xB) {
+                cXyz scale(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, &eyePos, 0,
+                                                dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                return;
+            }
+
+            if (health <= 0) {
+                cXyz scale(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, &eyePos, 0,
+                                                dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                health = 0;
+                JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DIE, &eyePos, fopAcM_GetID(this), 0,
+                                                    dComIfGp_getReverb(current.roomNo));
+                if (m920 == l_HIO.m14C) {
+                    modeDeleteBombInit();
+                } else {
+                    modeDeleteInit();
+                }
+                return;
+            }
+
+            m2B4 = m2B0;
+            JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DAMAGE, &eyePos, fopAcM_GetID(this), 0,
+                                                dComIfGp_getReverb(current.roomNo));
+            modeDamageInit();
+            return;
+        }
+
+        if (mCE8[0] == 9 || mCE8[0] == 0xB) {
+            modeDeleteInit();
+        }
+    }
 }
 
 /* 000038EC-000039AC       .text getWaterY__6daGy_cFv */
