@@ -955,7 +955,7 @@ void daNpc_Kf1_c::cut_init_RUPEE_SET(int i_actIdx) { /* Nonmatching */
     for (i = 0; i < 3; i++) {
         s32 idx;
         do {
-            idx = (s32)(cM_rndF(32.0f) * 0.5f);
+            idx = (s32)(cM_rndF(32.0f) * 0.25f);
         } while (set[idx] != 0);
         fpc_ProcID procId = mTsuboProcId[idx];
         fopAc_ac_c* a_tsubo_actor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
