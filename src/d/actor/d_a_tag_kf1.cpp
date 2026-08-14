@@ -26,6 +26,7 @@ static s32 l_check_wrk;
 #define STR_HIO_NAME    "\203N\203^\203j\217\304\202\253\212\304\216\213\203^\203O"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
+/* Nonmatching */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
     static const u8 a_prm_tbl[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     m08 = *(const f32*)&a_prm_tbl[0];
@@ -49,6 +50,7 @@ static s32 searchActor_Kutani(void* i_actor, void*) {
 }
 
 /* 000001B0-00000220       .text createInit__11daTag_Kf1_cFv */
+/* Nonmatching */
 s32 daTag_Kf1_c::createInit() {
     mEventCut.setActorInfo(const_cast<char*>(STR_TAGKF1), this);
     set_action(&daTag_Kf1_c::wait_action1, NULL);
@@ -56,6 +58,7 @@ s32 daTag_Kf1_c::createInit() {
 }
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
+/* Nonmatching */
 void daTag_Kf1_c::setStt(signed char param_0) {
     m768 = param_0;
     if (m768 == 3) {
@@ -84,6 +87,7 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* i_msgNo) {
 }
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
+/* Nonmatching */
 void daTag_Kf1_c::eventOrder() {
     static const char* a_demo_name_tbl[] = { STR_BENSYO };
     if (m767 == 1 || m767 == 2) {
@@ -104,6 +108,7 @@ void daTag_Kf1_c::checkOrder() {
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
+/* Nonmatching */
 s32 daTag_Kf1_c::chkAttention(cXyz i_pos) {
     s32 ret = 0;
     f32 dist = PSVECSquareDistance(&i_pos, &dComIfGp_getPlayer(0)->current.pos);
@@ -118,7 +123,9 @@ s32 daTag_Kf1_c::chkAttention(cXyz i_pos) {
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
+/* Nonmatching */
 s32 daTag_Kf1_c::partner_srch() {
+    s32 ret = 0;
     for (int i = 0; i < 8; i++) {
         mPartnerID[i] = -1;
     }
@@ -128,13 +135,14 @@ s32 daTag_Kf1_c::partner_srch() {
     }
     fpcM_Search((fpcLyIt_JudgeFunc)searchActor_Kutani, this);
     if (l_check_wrk <= 8 && l_check_wrk != 0) {
+        mPartnerNum = 0;
         for (int i = 0; i < l_check_wrk; i++) {
-            mPartnerID[i] = l_check_inf[i] != 0 ? fopAcM_GetID((void*)l_check_inf[i]) : -1;
+            mPartnerID[i] = fopAcM_GetID((void*)l_check_inf[i]);
             mPartnerNum++;
         }
-        return 1;
+        ret = 1;
     }
-    return 0;
+    return ret;
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
@@ -150,6 +158,7 @@ s16 daTag_Kf1_c::checkPartner() {
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
+/* Nonmatching */
 void daTag_Kf1_c::goto_nextStage() {
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, -1, -1, 0.0f, 0, 1, 0);
 }
@@ -171,12 +180,12 @@ void daTag_Kf1_c::event_talkInit(int i_actIdx) {
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
 s32 daTag_Kf1_c::event_mesSet() {
     talk(0);
-    return mCurrMsgBsPcId != -1;
+    return mCurrMsgBsPcId != -1 ? 1 : 0;
 }
 
 /* 0000071C-00000750       .text event_mesEnd__11daTag_Kf1_cFv */
 s32 daTag_Kf1_c::event_mesEnd() {
-    return talk(0) == 0x12;
+    return talk(0) == 0x12 ? 1 : 0;
 }
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
@@ -201,6 +210,7 @@ void daTag_Kf1_c::event_cntTsubo() {
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
+/* Nonmatching */
 void daTag_Kf1_c::privateCut() {
     static const char* cut_name_tbl[] = { STR_MES_SET, STR_MES_END, STR_TSUBO_BENSYO, STR_GO_NEXT, STR_CNT_TSUBO };
     dEvent_manager_c* evmng = dComIfGp_getPEvtManager();
