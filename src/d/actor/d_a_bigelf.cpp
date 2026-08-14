@@ -74,6 +74,8 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
     J3DModel* model = j3dSys.getModel();
     u16 jntNo = ((J3DJoint*)i_joint)->getJntNo();
     u32 jointOff = jntNo * 0x30;
+    cXyz pos;
+    cXyz outPos;
 
     PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
     if (jntNo == getHeadJntNum()) {
@@ -83,18 +85,17 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
         }
         cLib_addCalcAngleS(&m350, target, 8, 0x400, 0x100);
         mDoMtx_ZrotM(*calc_mtx, -m350);
-        cXyz pos(0.0f, 0.0f, 0.0f);
-        cXyz outPos;
+        pos.set(0.0f, 0.0f, 0.0f);
         MtxPosition(&pos, &outPos);
         setAttentionBasePos(outPos);
-        cXyz eye(0.4f, 0.7f, 0.0f);
-        MtxPosition(&eye, &outPos);
+        pos.set(20.0f, -20.0f, 0.0f);
+        MtxPosition(&pos, &outPos);
         setEyePos(outPos);
         if (m337 != 0xFF) {
             m337++;
         }
     } else if (jntNo != getBackboneJntNum() && jntNo == m_fl_jnt) {
-        cXyz pos(0.0f, 0.0f, 0.0f);
+        pos.set(0.0f, 0.0f, 0.0f);
         MtxPosition(&pos, &m3D0);
     }
 
@@ -105,11 +106,11 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
 
 /* 00000338-00000384       .text nodeCallBack_Bigelf__FP7J3DNodei */
 static BOOL nodeCallBack_Bigelf(J3DNode* i_joint, int i_flag) {
-    /* Nonmatching */
     if (i_flag == 0) {
         J3DModel* model = j3dSys.getModel();
-        if (model != NULL) {
-            ((daBigelf_c*)model->getUserArea())->nodeCallBack(i_joint);
+        daBigelf_c* i_this = (daBigelf_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->nodeCallBack(i_joint);
         }
     }
     return 1;
@@ -168,7 +169,6 @@ void daBigelf_c::darkEnd() {
 
 /* 000004D0-00000574       .text darkProc__10daBigelf_cFv */
 void daBigelf_c::darkProc() {
-    /* Nonmatching */
     if (mDark != 0) {
         cLib_addCalc2(&m3A0, m3A4, 0.1f, 1.0f);
         dKy_set_actcol_ratio(0.3f + m3A0 * 0.7f);
@@ -222,8 +222,7 @@ BOOL daBigelf_c::demoProcFlDelete() {
 
 /* 00000708-000007E4       .text demoInitFlLink__10daBigelf_cFv */
 void daBigelf_c::demoInitFlLink() {
-    /* Nonmatching */
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     cXyz pos(0.0f, 300.0f, 400.0f);
     cXyz curPos;
     fpoAcM_absolutePos(player, &pos, &curPos);
@@ -241,7 +240,6 @@ BOOL daBigelf_c::demoProcFlLink() {
 
 /* 00000808-000008F0       .text demoInitFlDmAf__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmAf() {
-    /* Nonmatching */
     cXyz pos = m3D0;
     pos.y += 20.0f;
     m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
@@ -270,11 +268,10 @@ BOOL daBigelf_c::demoProcFlDmAf() {
 
 /* 000009C0-00000A20       .text demoInitFlDmMd__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmMd() {
-    /* Nonmatching */
     darkInit();
     m3A0 = 1.0f;
     m3A4 = 1.0f;
-    clrFlag(0x200);
+    clrFlag(0x80);
     setFlag(0x200);
     setFlag(0x400);
 }
@@ -289,14 +286,14 @@ BOOL daBigelf_c::demoProcFlDmMd() {
     }
 
     if (!(f31 < 16.0f)) {
-        if (f31 < 60.0f) {
-            m3A4 = 0.01f * (60.0f - f31);
+        if (f31 < 116.0f) {
+            m3A4 = 0.01f * (116.0f - f31);
         } else {
             m3A4 = 0.0f;
         }
     }
     if (!chkFlag(0x80)) {
-        if (f31 <= 60.0f) {
+        if (f31 >= 116.0f) {
             setFlag(0x80);
             cXyz pos = m3D0;
             pos.x += 850.0f * cM_ssin(shape_angle.y);
@@ -307,22 +304,22 @@ BOOL daBigelf_c::demoProcFlDmMd() {
         }
     }
     if (chkFlag(0x200)) {
-        if (f31 <= 154.0f) {
+        if (f31 >= 126.0f) {
             clrFlag(0x200);
             JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_BREATH_IN, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
     }
     if (chkFlag(0x400)) {
-        if (f31 <= 166.0f) {
+        if (f31 >= 154.0f) {
             clrFlag(0x400);
             JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_BREATH_OUT, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
     }
-    if (f31 <= 167.0f) {
+    if (f31 >= 166.0f) {
         dComIfGp_evmng_cutEnd(mStaffId);
         clrFlag(0x1);
     }
-    if (f31 >= 60.0f && f31 <= 250.0f) {
+    if (f31 >= 116.0f && f31 <= 173.0f) {
         setFlag(0x8);
     }
     return 1;
@@ -372,14 +369,14 @@ BOOL daBigelf_c::demoProcFlDemo() {
     }
     if (m3BC == 2) {
         f32 f2 = mpBckAnimator->getFrame();
-        if (f2 >= 60.0f && f2 <= 250.0f) {
+        if (f2 >= 116.0f && f2 <= 173.0f) {
             setFlag(0x8);
         }
         switch (m3DC) {
         case 0:
             cXyz pos = m3D0;
             pos.y += 20.0f;
-            if (f2 <= 300.0f) {
+            if (f2 <= 167.0f) {
                 m3DC++;
                 m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_HANAFUBUKI, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -436,7 +433,7 @@ BOOL daBigelf_c::demoProcExit() {
         return 1;
     }
     if (m3C0 == 0x46) {
-        JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_BREATH_IN, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        JAIZelBasic::zel_basic->seStart(JA_SE_CM_L_ARROW_PASS_AWAY, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         if (getType() == 6) {
             JAIZelBasic::zel_basic->bgmStop(0x2D, 0);
         }
@@ -517,7 +514,7 @@ BOOL daBigelf_c::demoProcAppear() {
         return 1;
     }
     if (chkFlag(0x100)) {
-        if (mpBckAnimator->getFrame() <= 87.0f) {
+        if (mpBckAnimator->getFrame() >= 87.0f) {
             clrFlag(0x100);
             JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_ENTER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
@@ -526,8 +523,9 @@ BOOL daBigelf_c::demoProcAppear() {
         setAnm(0);
         dComIfGp_evmng_cutEnd(mStaffId);
     }
-    scale.y = scale.x;
-    scale.z = scale.x;
+    f32 sx = scale.x;
+    scale.y = sx;
+    scale.z = sx;
     return 1;
 }
 
@@ -537,7 +535,7 @@ void daBigelf_c::demoInitFa1() {
     daNpc_Fa1_c* fa1 = (daNpc_Fa1_c*)fopAcM_SearchByID(m34C);
     if (fa1 != NULL) {
         fa1->init_bigelf_change();
-        JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_FLOWER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        JAIZelBasic::zel_basic->seStart(JA_SE_CM_DY_ENTER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
 }
 
@@ -701,14 +699,12 @@ u8 daBigelf_c::getType() {
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
 u8 daBigelf_c::getSwbit() {
-    /* Nonmatching */
-    return (fopAcM_GetParam(this) >> 16) & 0xFF;
+    return (fopAcM_GetParam(this) >> 8) & 0xFF;
 }
 
 /* 00001CE4-00001CF0       .text getSwbit2__10daBigelf_cFv */
 u8 daBigelf_c::getSwbit2() {
-    /* Nonmatching */
-    return (fopAcM_GetParam(this) >> 8) & 0xFF;
+    return (fopAcM_GetParam(this) >> 16) & 0xFF;
 }
 
 /* 00001CF0-00001D70       .text getEventFlag__10daBigelf_cFv */
