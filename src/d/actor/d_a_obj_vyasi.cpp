@@ -397,6 +397,7 @@ void daObjVyasi::Act_c::calc_dif_angle() {
 }
 
 /* 000025A8-00002880       .text quaternion_main__Q210daObjVyasi5Act_cFv */
+/* Nonmatching */
 void daObjVyasi::Act_c::quaternion_main() {
     for (int i = 0; i < 14; i++) {
         Quaternion quat;
@@ -444,6 +445,7 @@ void daObjVyasi::Act_c::quaternion_main() {
 }
 
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
+/* Nonmatching */
 void daObjVyasi::Act_c::leaf_scale_main() {
     cXyz scale(1.0f, 1.0f, 1.0f);
     if (mState == 2) {
