@@ -524,7 +524,7 @@ void daNpc_So_c::cutMiniGameProc() {
         field_0xAFC = 12.0f + REG12_F(10);
         const cXyz& diff = current.pos - attn;
         f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
-        f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+        f32 dist = std::sqrtf(sq);
         cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &attn), 8, 0x400);
         if (dist < 150.0f + REG12_F(7)) {
             field_0xAFC = 0.0f;
@@ -556,7 +556,7 @@ void daNpc_So_c::cutMiniGameProc() {
         field_0xAFC = 0.0f;
         const cXyz& diff = current.pos - attn;
         f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
-        f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+        f32 dist = std::sqrtf(sq);
         cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &attn), 8, 0x400);
         if (cLib_calcTimer(&field_0xA9C) == 0) {
             field_0xB74++;
