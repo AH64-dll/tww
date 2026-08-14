@@ -560,9 +560,10 @@ void ho_move(daGrid_c* i_this) {
                 spC = (f32)(f0_3 * guess);
                 f0_3 = spC;
             }
+            f32 d60f03 = (f32)d60 * f0_3;
             f32 f0_2 = i_this->mWind[r22];
             f31_2 *= f0_2;
-            f32 d60f03 = (f32)d60 * f0_3 * f0_2;
+            d60f03 *= f0_2;
             f30_2 *= f0_2;
             f32 f0_4 = f23 < 0.0f ? f23 : 0.0f;
             f32 f1_5 = f0_4 * f0_4 * 0.25f;
