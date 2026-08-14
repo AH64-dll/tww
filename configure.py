@@ -1789,7 +1789,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_vmsms"),
     ActorRel(Matching,    "d_a_obj_volcano"),
     ActorRel(Equivalent, "d_a_obj_vtil"),  # stack-slot/anchor: 2/70 sub-100 0-one-sided accept
-    ActorRel(NonMatching, "d_a_obj_vyasi"),
+    ActorRel(Equivalent, "d_a_obj_vyasi"), # 6 accept-class holdouts (R9-9/RLead-20), .rodata 584==584 .data 972==972
     ActorRel(Matching,    "d_a_obj_xfuta"),
     ActorRel(Matching,    "d_a_obj_zouK"),
     ActorRel(Matching,    "d_a_oship"),
