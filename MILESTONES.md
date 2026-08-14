@@ -181,3 +181,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T01:16Z — M22: flip #44 d_a_obj_magmarock → Equivalent — 15 flips this session (#30-44). Ledger: 62 NonMatching / 39 Equivalent / 314 Matching + 3 MatchingFor. magmarock: 26/32 fns 100, 6 accept-class 0-one-sided (Draw multiset-equal position-shift RLead-11-proven); 8 real bugs fixed en route incl 2 gameplay logic inversions + mVelocity 440→2.0. Gate 6e693b089 04:16:11; 4-version cycle dispatched (Magrock arc D44J01 divergence check, MatchingFor contingency pre-armed).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T01:18Z — M23: 4-version cycle 3 ALL GREEN at 6e693b089 (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416). Magmarock demo-divergence CONFIRMED (D44J01 arc 3ecaa539 12100B vs retail 037485a8 12292B) but #44 Equivalent linked=False → D44J01 assembles original sections, pin matches by construction; NO MatchingFor needed (that class is only for Matching/linked=True — the aygr/hami2/ba1 failure was wrongly-flipped-Matching). 3 consecutive 4-version cycles green today. Ledger: 62 NonMatching / 39 Equivalent / 314 Matching + 3 MatchingFor.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
