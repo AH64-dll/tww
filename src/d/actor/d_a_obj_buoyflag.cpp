@@ -866,19 +866,20 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     cXyz wind = dKyw_get_AllWind_vecpow(&other->mPos[0]);
     wind *= 0.5f * windScale * L_attr.m08;
 
-    cXyz springDelta = (cXyz(i_actor->m10C0[0][3], i_actor->m10C0[1][3], i_actor->m10C0[2][3]) -
-                        cXyz(i_actor->m1090[0][3], i_actor->m1090[1][3], i_actor->m1090[2][3])) *
-                       0.2f;
-    f32 springMag = springDelta.abs2();
+    Vec springDelta;
+    springDelta.x = (i_actor->m10C0[0][3] - i_actor->m1090[0][3]) * 0.2f;
+    springDelta.y = (i_actor->m10C0[1][3] - i_actor->m1090[1][3]) * 0.2f;
+    springDelta.z = (i_actor->m10C0[2][3] - i_actor->m1090[2][3]) * 0.2f;
+    f32 springMag = PSVECSquareMag(&springDelta);
     if (springMag > 625.0f) {
         if (springMag > 0.0f) {
             springMag = std::sqrtf(springMag);
         }
-        springDelta *= 1.0f / springMag;
-        springDelta *= 25.0f;
+        PSVECScale(&springDelta, &springDelta, 1.0f / springMag);
+        PSVECScale(&springDelta, &springDelta, 25.0f);
     }
 
-    wind += springDelta;
+    PSVECAdd(&wind, &springDelta, &wind);
 
     mDoMtx_stack_c::copy(i_actor->m1090);
     mDoMtx_stack_c::inverse();
