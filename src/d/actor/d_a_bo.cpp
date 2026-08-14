@@ -335,8 +335,254 @@ static void end_event_camera(fopAc_ac_c* i_this) {
 }
 
 /* 0000233C-00002FC4       .text bo_move__FP8bo_class */
-static void bo_move(bo_class*) {
+static void bo_move(bo_class* i_this) {
     /* Nonmatching */
+    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
+    fopAc_ac_c* player = play.getPlayer(0);
+
+    switch (i_this->m2C5) {
+    case 0:
+        if (fopAcM_searchActorDistance(i_this, player) < 600.0f) {
+            i_this->mCyl.OnTgSetBit();
+            i_this->mSph.OnTgSetBit();
+            i_this->mSph.OnCoSetBit();
+            JAIZelBasic::zel_basic->seStart(0x5844, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            mDoAud_monsSeStart(0x484D, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            anm_init(i_this, 9, 5.0f, 0, 1.0f, -1, 0);
+            anm_init(i_this, 8, 5.0f, 0, 1.0f, -1, 1);
+            i_this->mSph.OnAtSetBit();
+            i_this->mSph.OnAtHitBit();
+            i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK1);
+            i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_VsOther_e);
+            i_this->attention_info.flags |= 4;
+            i_this->m2C5 = 1;
+        }
+        break;
+    case 3:
+        if (i_this->m2DC == 5) {
+            f32 frame = i_this->mpMorf->getFrame();
+            if (frame < 27.0f || frame > 55.0f) {
+                i_this->m34E = fopAcM_searchActorAngleY(i_this, player);
+            } else {
+                if (frame < 38.0f) {
+                    if (frame == 27.0f) {
+                        i_this->mSph.OnAtSetBit();
+                        i_this->mSph.OnAtHitBit();
+                        JAIZelBasic::zel_basic->seStart(0x5845, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+                    } else {
+                        int flag = 0;
+                        if (i_this->mSph.mGObjAt.mRPrm & cCcD_AtRPrm_Hit_e) {
+                            i_this->m2C5 = 6;
+                            flag = 1;
+                        } else if (i_this->mSph.ChkAtHit() && i_this->mSph.mGObjAt.GetAc() == player) {
+                            flag = 1;
+                        }
+                        if (flag) {
+                            i_this->mSph.OffAtSetBit();
+                            i_this->mSph.OffAtSetBit();
+                            i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
+                            anm_init(i_this, 0xC, 0.0f, 0, 1.0f, -1, 0);
+                        }
+                    }
+                } else {
+                    if (i_this->mpMorf->checkFrame(38.0f)) {
+                        i_this->mSph.OffAtSetBit();
+                        i_this->mSph.OffAtSetBit();
+                        i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
+                    }
+                }
+            }
+        }
+        // falls through to case 6 (shared isStop check)
+    case 6:
+        if (i_this->mpMorf->isStop()) {
+            i_this->m366[1] = (s16)(30.0f + cM_rndF(30.0f));
+            wait_initial(i_this);
+        }
+        break;
+    case 1:
+        i_this->m34E = fopAcM_searchActorAngleY(i_this, player);
+        if (i_this->mpEmitter1 == NULL) {
+            i_this->mpEmitter1 = play.getParticle()->set(
+                dPa_control_c::dPtclGroup_Normal_e, 0x8106, &i_this->current.pos, NULL, NULL, 0xFF, NULL,
+                -1, NULL, NULL, NULL);
+        } else {
+            i_this->mpEmitter1->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+        }
+        if (i_this->mpMorf->getFrame() > 39.0f) {
+            i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
+            i_this->mSph.OffAtSetBit();
+            i_this->mSph.OffAtSetBit();
+        }
+        if (i_this->mpMorf->isStop()) {
+            if (i_this->mpEmitter1 != NULL) {
+                i_this->mpEmitter1->mMaxFrame = -1;
+                i_this->mpEmitter1->setStatus(JPAEmtrStts_StopEmit);
+                i_this->mpEmitter1 = NULL;
+            }
+            wait_initial(i_this);
+        }
+        break;
+    case 2:
+        if (i_this->m366[3] == 0) {
+            if (i_this->mpEmitter2 == NULL) {
+                i_this->mpEmitter2 = play.getParticle()->set(
+                    dPa_control_c::dPtclGroup_Normal_e, 0x8107, &i_this->current.pos, NULL, NULL, 0xFF, NULL,
+                    -1, NULL, NULL, NULL);
+                if (i_this->mpEmitter2 != NULL) {
+                    i_this->mpEmitter2->mpParticleCallBack = &i_this->mYodare;
+                }
+                i_this->m2C6 = 0;
+            } else {
+                i_this->mpEmitter2->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+            }
+            if (i_this->m366[0] == 0) {
+                f32 frame = i_this->mpMorf->getFrame();
+                if (i_this->m2DC == 0x16) {
+                    anm_init(i_this, 0x15, 20.0f, 2, 1.0f, -1, 0);
+                } else {
+                    anm_init(i_this, 0x16, 20.0f, 2, 1.0f, -1, 0);
+                }
+                i_this->mpMorf->setFrame((s16)frame);
+                i_this->m366[0] = (s16)(60.0f + cM_rndF(60.0f));
+            }
+            if (i_this->m366[1] == 0) {
+                if (fopAcM_searchActorDistance(i_this, player) < 380.0f) {
+                    anm_init(i_this, 5, 5.0f, 0, 1.0f, -1, 0);
+                    if (cM_rnd() < 0.5f) {
+                        i_this->mSph.SetAtAtp(0);
+                        i_this->mAction = 1;
+                        i_this->m2C5 = 0xA;
+                    } else {
+                        i_this->mSph.SetAtAtp(1);
+                        i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_VsOther_e);
+                        i_this->mCyl.OnCoSetBit();
+                        mDoAud_monsSeStart(0x484E, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+                        i_this->m2C5 = 3;
+                    }
+                } else if (fopAcM_searchActorDistance(i_this, player) > 900.0f) {
+                    anm_init(i_this, 0x11, 5.0f, 0, 1.0f, -1, 0);
+                    anm_init(i_this, 0x10, 5.0f, 0, 1.0f, -1, 1);
+                    i_this->attention_info.flags &= ~4;
+                    JAIZelBasic::zel_basic->seStart(0x5848, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                                    1.0f, 1.0f, -1.0f, -1.0f, 0);
+                    i_this->mCyl.OffTgSetBit();
+                    i_this->mSph.OffTgSetBit();
+                    i_this->mSph.OffCoSetBit();
+                    i_this->mCyl.ClrTgHit();
+                    i_this->mSph.ClrTgHit();
+                    angle_initial(i_this);
+                    i_this->m2C5 = 0;
+                }
+            }
+            i_this->m34E = fopAcM_searchActorAngleY(i_this, player);
+        }
+        break;
+    case 4:
+        if (player->attention_info.flags == 3) {
+            mDoMtx_YrotS(*calc_mtx, i_this->m37E);
+        } else {
+            mDoMtx_YrotS(*calc_mtx, -i_this->m37E);
+        }
+        {
+            cXyz offset(0.0f, 0.0f, i_this->m388);
+            cXyz out;
+            MtxPosition(&offset, &out);
+            i_this->m334.y = (s16)out.z;
+            i_this->m334.x = (s16)out.y;
+            i_this->m37E += i_this->m380;
+            cLib_addCalc0(&i_this->m388, 1.0f, 250.0f);
+            cLib_addCalcAngleS2(&i_this->m352.x, 0, 1, 0x87);
+            cLib_addCalcAngleS2(&i_this->m352.y, 0, 1, 0x87);
+            if (std::fabsf(i_this->m388) < 1.875f) {
+                i_this->m352.setall(0);
+                i_this->m334.setall(0);
+                i_this->m366[0] = 0;
+                i_this->m2C5 = 2;
+                if (i_this->m364 != 0) {
+                    i_this->m366[3] = 0x2D;
+                }
+            }
+        }
+        break;
+    case 5:
+        if (i_this->m364 != 0) {
+            i_this->m364--;
+        }
+        if (i_this->m364 == 1) {
+            i_this->mAction = 2;
+            i_this->m2C5 = 0x14;
+            break;
+        }
+        if (i_this->m372 < 0x10 && !(i_this->m2C8 & 1)) {
+            if (cLib_distanceAngleS(i_this->m33A.y, i_this->m340.y) < 0x100) {
+                i_this->m340.y ^= 0xFF00;
+                i_this->m340.y = (s16)(i_this->m340.y * 0.1f);
+                i_this->m372++;
+                if (i_this->m372 >= 0x10) {
+                    i_this->m340.y = 0;
+                    i_this->m33A.y = 0;
+                    i_this->m2C8 |= 1;
+                }
+            }
+        }
+        if (i_this->m374 < 0x10 && !(i_this->m2C8 & 2)) {
+            if (cLib_distanceAngleS(i_this->m33A.z, i_this->m340.z) < 0x100) {
+                i_this->m340.z ^= 0xFF00;
+                i_this->m340.z = (s16)(i_this->m340.z * 0.1f);
+                i_this->m374++;
+                if (i_this->m374 >= 0x10) {
+                    i_this->m340.z = 0;
+                    i_this->m33A.z = 0;
+                    i_this->m2C8 |= 2;
+                }
+            }
+        }
+        if (i_this->m340.y == 0 && i_this->m340.z == 0) {
+            i_this->m376++;
+        }
+        if (i_this->m376 > 0x1E) {
+            wait_initial(i_this);
+            i_this->m376 = 0;
+            i_this->m398 = 1.0f;
+        }
+        if (i_this->m2D0 == 0) {
+            body_atari_check(i_this);
+        }
+        break;
+    case 7:
+        if (i_this->mpMorf->isStop()) {
+            i_this->m2C5 = 0;
+        }
+        break;
+    }
+
+    cLib_addCalcAngleS2(&i_this->m348, i_this->m34E, 1, 0x800);
+    cLib_addCalcAngleS2(&i_this->m33A.y, i_this->m340.y, 1, i_this->m37C);
+    cLib_addCalcAngleS2(&i_this->m33A.z, i_this->m340.z, 1, i_this->m37C);
+    if (i_this->m2C5 == 4) {
+        s16 angle = cLib_distanceAngleS(fopAcM_searchActorAngleY(i_this, player), i_this->m348);
+        if (angle > 0x337F) {
+            wait_initial(i_this);
+            anm_init(i_this, 0x11, 5.0f, 0, 1.0f, -1, 0);
+            anm_init(i_this, 0x10, 5.0f, 0, 1.0f, -1, 1);
+            i_this->attention_info.flags &= ~4;
+            JAIZelBasic::zel_basic->seStart(0x5848, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            i_this->mCyl.OffTgSetBit();
+            i_this->mSph.OffTgSetBit();
+            i_this->mSph.OffCoSetBit();
+            i_this->mCyl.ClrTgHit();
+            i_this->mSph.ClrTgHit();
+            angle_initial(i_this);
+            i_this->m2C5 = 7;
+        }
+    }
+    if (i_this->m2C5 != 0 && i_this->m2C5 != 5) {
+        damage_check(i_this);
+    }
 }
 
 /* 00002FC4-0000380C       .text bo2_move__FP8bo_class */
