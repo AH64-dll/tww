@@ -37,7 +37,7 @@ namespace daObjMmrr {
         bool _delete();
         void set_mtx();
         void init_mtx();
-        BOOL chk_light();
+        bool chk_light();
         void eff_start();
         void eff_stop();
         void eff_remove();
@@ -55,7 +55,7 @@ namespace daObjMmrr {
         /* 0xA84 */ dCcD_Cps mCps;
         /* 0xBBC */ dCcD_Stts mStts2;
         /* 0xBF8 */ u8 mBF8;
-        /* 0xBF9 */ u8 mBF9;
+        /* 0xBF9 */ bool mBF9;
         /* 0xBFA */ u8 mBFA[0xBFC - 0xBFA];
         /* 0xBFC */ f32 mBFC;
         /* 0xC00 */ f32 mC00;

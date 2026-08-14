@@ -309,15 +309,15 @@ void daObjMmrr::Act_c::init_mtx() {
 
 /* 00001358-00001418       .text chk_light__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
-BOOL daObjMmrr::Act_c::chk_light() {
-    BOOL light = FALSE;
+bool daObjMmrr::Act_c::chk_light() {
+    bool light = false;
     if (dComIfGp_getDetect().chk_light(&eyePos)) {
-        light = TRUE;
+        light = true;
     } else {
         for (int i = 0; i < 5; i++) {
             if (mTri[i].ChkTgHit()) {
                 if (mTri[i].GetNP()->inprod(*mTri[i].GetTgRVecP()) < 0.0f) {
-                    light = TRUE;
+                    light = true;
                 }
                 mTri[i].ClrTgHit();
             }
@@ -370,13 +370,13 @@ bool daObjMmrr::Act_c::_execute() {
     set_mtx();
     set_cull();
 
-    if (mBF9 != 0) {
-        if (mbf9 == 0) {
+    if (mBF9) {
+        if (!mbf9) {
             fopAcM_seStart(this, 0x6961, 0);
             eff_start();
         }
         fopAcM_seStart(this, 0x7028, 0);
-    } else if (mbf9 != 0) {
+    } else if (mbf9) {
         eff_stop();
     }
 
@@ -398,7 +398,7 @@ bool daObjMmrr::Act_c::_draw() {
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     mpBtkAnm.entry(mpModel->getModelData());
-    if (mbf9 != 0) {
+    if (mbf9) {
         g_env_light.setLightTevColorType(mpModel2, &tevStr);
         mpBtkAnm2.entry(mpModel2->getModelData());
     }
@@ -406,7 +406,7 @@ bool daObjMmrr::Act_c::_draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    if (mbf9 != 0) {
+    if (mbf9) {
         mDoExt_modelUpdateDL(mpModel2);
     }
     return true;
