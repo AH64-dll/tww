@@ -807,8 +807,126 @@ void water_damage_se_set(mt_class* i_this) {
 }
 
 /* 00005C54-0000614C       .text damage_check__FP8mt_class */
-void damage_check(mt_class*) {
+void damage_check(mt_class* i_this) {
     /* Nonmatching */
+    CcAtInfo atInfo;
+    cXyz* pParticlePos = NULL;
+    u8 r29 = 0;
+    s32 start = i_this->mC04 == 1 ? 2 : 0;
+
+    i_this->mStts.Move();
+
+    for (int i = start; i < 8; i++) {
+        if (i_this->mE48[i].ChkTgHit() && i_this->m460 == 0) {
+            atInfo.mpObj = i_this->mE48[i].GetTgHitObj();
+            if (atInfo.mpObj->GetAtType() & AT_TYPE_LIGHT_ARROW) {
+                i_this->m1CBC = 1;
+                i_this->mEnemyIce.mLightShrinkTimer = 1;
+                i_this->mEnemyIce.mYOffset = -20.0f + REG0_F(0);
+                i_this->max_health = 0;
+                return;
+            }
+            at_power_check(&atInfo);
+            if (atInfo.mResultingAttackType == 4 || (atInfo.mpObj->GetAtType() & AT_TYPE_ICE_ARROW)) {
+                r29 = 2;
+                i_this->m18FB = 0;
+                i_this->m460 = 5;
+                water_damage_se_set(i_this);
+                break;
+            }
+            if (i_this->m454 == 2 && (atInfo.mResultingAttackType == 6 || atInfo.mResultingAttackType == 2)) {
+                if (atInfo.mResultingAttackType == 2) {
+                    i_this->m18F8 = 3;
+                } else {
+                    i_this->m18F8 = 2;
+                }
+                i_this->m460 = 5;
+                return;
+            }
+            if (atInfo.mResultingAttackType == 2) {
+                r29 = 1;
+                i_this->m460 = 5;
+                break;
+            }
+            if (atInfo.mResultingAttackType != 6 && i_this->m454 == 1) {
+                i_this->m455 = 0xF;
+                mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+                cXyz offset(0.0f, 60.0f, -120.0f);
+                MtxPosition(&offset, (cXyz*)&i_this->m47C);
+                PSVECAdd((cXyz*)&i_this->m47C, &i_this->current.pos, (cXyz*)&i_this->m47C);
+                i_this->m462 = REG6_S(7) + 6;
+                i_this->m456 = REG6_S(8) + 6;
+                i_this->m460 = 5;
+                def_se_set(i_this, atInfo.mpObj, 0x40);
+                return;
+            }
+            if (i_this->m454 == 2) {
+                i_this->m460 = 5;
+                cc_at_check(i_this, &atInfo);
+                if ((s8)i_this->max_health <= 0) {
+                    i_this->m18F8 = 2;
+                }
+                i_this->m18FC = 0xC;
+                g_dComIfG_gameInfo.play.getParticle()->set(
+                    0, dPa_name::ID_IT_SN_MAGT_HAHEN_C, &i_this->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL,
+                    NULL, NULL);
+            }
+            break;
+        }
+    }
+
+    if (i_this->m460 == 0 && i_this->m17A8.ChkTgHit()) {
+        i_this->m460 = 5;
+        atInfo.mpObj = i_this->m17A8.GetTgHitObj();
+        atInfo.pParticlePos = i_this->m17A8.GetTgHitPosP();
+        if (atInfo.mpObj->GetAtType() & AT_TYPE_LIGHT_ARROW) {
+            i_this->mEnemyIce.mLightShrinkTimer = 1;
+            return;
+        }
+        at_power_check(&atInfo);
+        i_this->m18FB -= atInfo.mDamage;
+        if (atInfo.mResultingAttackType == 6 || atInfo.mResultingAttackType == 3 || atInfo.mResultingAttackType == 4 ||
+            atInfo.mResultingAttackType == 2 || i_this->mC04 == 1)
+        {
+            cc_at_check(i_this, &atInfo);
+            if (atInfo.mResultingAttackType == 6) {
+                i_this->m18F8 = 1;
+                i_this->m18FB = 0;
+            } else if (atInfo.mResultingAttackType == 4 || (atInfo.mpObj->GetAtType() & AT_TYPE_ICE_ARROW)) {
+                r29 = 2;
+                i_this->m18FB = 0;
+                water_damage_se_set(i_this);
+            }
+            if ((s8)i_this->m18FB <= 0) {
+                r29 = 1;
+            } else {
+                i_this->m455 = 0xF;
+                mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+                cXyz offset(0.0f, 60.0f, -120.0f);
+                MtxPosition(&offset, (cXyz*)&i_this->m47C);
+                PSVECAdd((cXyz*)&i_this->m47C, &i_this->current.pos, (cXyz*)&i_this->m47C);
+                i_this->m462 = 0x19;
+                i_this->m456 = 0xA;
+                i_this->current.angle.x = -0x4000;
+            }
+            s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
+            JAIZelBasic::zel_basic->monsSeStart(0x4803, &i_this->eyePos, fopAcM_GetID(i_this), 0, reverb);
+            anm_init(i_this, 0xA, 2.0f, 2, 1.0f, 0);
+            i_this->m18D4 = 0;
+        }
+    }
+
+    if (r29 != 0) {
+        mDoMtx_YrotS(*calc_mtx, atInfo.m0C.y);
+        cXyz offset(0.0f, 40.0f * l_HIO.m4C, -20.0f * l_HIO.m4C);
+        MtxPosition(&offset, &i_this->speed);
+        if (r29 == 2) {
+            i_this->speed.y = 0.0f;
+        }
+        i_this->m454 = 1;
+        i_this->m455 = 0x14;
+        i_this->m2E4 = 1;
+    }
 }
 
 /* 00006188-000074D4       .text daMt_Execute__FP8mt_class */
