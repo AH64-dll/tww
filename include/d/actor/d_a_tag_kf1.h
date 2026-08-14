@@ -9,7 +9,7 @@ class J3DNode;
 
 class daTag_Kf1_c : public fopNpc_npc_c {
 public:
-    typedef s32 (daTag_Kf1_c::*ProcFunc)(void*);
+    typedef int (daTag_Kf1_c::*ProcFunc)(void*);
 
     s32 createInit();
     void setStt(signed char);
@@ -28,10 +28,10 @@ public:
     void event_cntTsubo();
     void privateCut();
     void event_proc();
-    void set_action(ProcFunc, void*);
-    s32 wait01();
-    s32 wait02();
-    s32 wait_action1(void*);
+    int set_action(ProcFunc, void*);
+    int wait01();
+    int wait02();
+    int wait_action1(void*);
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
@@ -46,20 +46,22 @@ public:
     /* 0x73D */ u8 m73D;
     /* 0x73E */ s16 m73E;
     /* 0x740 */ u8 m740[0x742 - 0x740];
-    /* 0x742 */ s16 m742;
+    /* 0x742 */ u16 m742;
     /* 0x744 */ s32 mPartnerID[8];
     /* 0x764 */ s16 mPartnerNum;
     /* 0x766 */ s8 m766;
-    /* 0x767 */ u8 m767;
+    /* 0x767 */ s8 m767;
     /* 0x768 */ s8 m768;
     /* 0x769 */ u8 m769;
     /* 0x76A */ s8 m76A;
     /* 0x76B */ u8 m76B;
 };  // Size: 0x76C
 
-class daTag_Kf1_HIO_c : public mDoHIO_entry_c {
+class daTag_Kf1_HIO_c : public JORReflexible {
 public:
     daTag_Kf1_HIO_c();
+    virtual ~daTag_Kf1_HIO_c() {}
+    virtual void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;
