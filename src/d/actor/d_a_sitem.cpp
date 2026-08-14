@@ -138,13 +138,13 @@ void control2(sitem_class* i_this) {
 /* Nonmatching */
 void cut_control1(sitem_class* i_this) {
     i_this->mSitem2[0].mPos = i_this->current.pos;
+    sitem_s* cur = &i_this->mSitem2[1];
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     cXyz sp50;
     sp50.z = i_this->mHandPos.z;
     f32 f28 = 50.0f + REG0_F(18);
 
-    sitem_s* cur = &i_this->mSitem2[1];
     for (int i = 1; i < 5; i++) {
         cXyz sp44;
         sp44.x = f28 * cM_ssin(i_this->m2BC * (REG0_S(5) + 0x1004) + i * (REG0_S(6) + 0x2710));
@@ -163,8 +163,7 @@ void cut_control1(sitem_class* i_this) {
         mDoMtx_XrotM(*calc_mtx, xrot);
         MtxPosition(&sp50, &sp44);
         MtxPull();
-        cXyz sp2C = (cur - 1)->mPos + sp44;
-        cur->mPos = sp2C;
+        cur->mPos = (cur - 1)->mPos + sp44;
         cur++;
     }
 
@@ -243,8 +242,7 @@ void cut_control2(sitem_class* i_this) {
         mDoMtx_XrotM(*calc_mtx, xrot);
         sp60.z = i_this->m2F4;
         MtxPosition(&sp60, &sp54);
-        cXyz sp3C = (cur + 1)->mPos + sp54;
-        cur->mPos = sp3C;
+        cur->mPos = (cur + 1)->mPos + sp54;
         cur--;
     }
 
