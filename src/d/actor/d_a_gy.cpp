@@ -981,7 +981,45 @@ void daGy_c::modeDeleteBombInit() {
 
 /* 00002A70-00002CBC       .text modeDeleteBomb__6daGy_cFv */
 void daGy_c::modeDeleteBomb() {
-    /* Nonmatching */
+    f32 f1 = m920;
+    if (f1 > 0.01f) {
+        cXyz vec(0.0f, 0.0f, -f1);
+        cXyz out(0.0f, 0.0f, 0.0f);
+        mDoMtx_YrotS(mDoMtx_stack_c::now, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
+        PSMTXMultVec(mDoMtx_stack_c::now, &vec, &out);
+        current.pos.x += out.x;
+        current.pos.y += out.y;
+        current.pos.z += out.z;
+        cLib_addCalc0(&m920, 1.0f, 2.0f);
+    }
+
+    if (mD15 == 7) {
+        m4E8 = l_HIO.m168;
+        if (m4E4 <= 10.0f + l_HIO.m168) {
+            mD15 = 9;
+            m4EC = l_HIO.mC4;
+        }
+    }
+
+    if (mD15 == 9) {
+        if (m4E4 >= l_HIO.m16C - 10.0f) {
+            if (-1.0f == (f32)m8EC) {
+                m8EC = l_HIO.m164;
+            }
+            m4EC = l_HIO.m178;
+            m918 = l_HIO.m17C;
+        }
+        f32 f5 = l_HIO.m16C - l_HIO.m170;
+        if (m4E4 <= 10.0f + f5) {
+            m4E8 = l_HIO.m16C + l_HIO.m170;
+        } else if (m4E4 >= (l_HIO.m16C + l_HIO.m170) - 10.0f) {
+            m4E8 = f5;
+        }
+        if (-1.0f != (f32)m8EC && cLib_calcTimer(&m8EC) == 0) {
+            fopAcM_createDisappear(this, &current.pos, 0xA, 0, 0xFF);
+            fopAcM_delete(this);
+        }
+    }
 }
 
 /* 00002CBC-00002E24       .text modeProcCall__6daGy_cFv */
