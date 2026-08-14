@@ -340,14 +340,18 @@ BOOL daTag_Kf1_c::_delete() {
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
 cPhs_State daTag_Kf1_c::_create() {
-    cPhs_State phase = cPhs_ERROR_e;
+    cPhs_State phase = cPhs_COMPLEATE_e;
     if (!fopAcM_CheckCondition(this, fopAcCnd_INIT_e)) {
-        if (this != NULL) {
-            new (this) daTag_Kf1_c();
-            fopAcM_OnCondition(this, fopAcCnd_INIT_e);
-        }
+        new (this) daTag_Kf1_c();
+        fopAcM_OnCondition(this, fopAcCnd_INIT_e);
     }
-    m769 = 0;
+    switch (fopAcM_GetName(this)) {
+    case fpcNm_TAG_KF1_e:
+        m769 = 0;
+        break;
+    default:
+        return cPhs_ERROR_e;
+    }
     if (l_HIO.mNo < 0) {
         l_HIO.mNo = mDoHIO_createChild(STR_HIO_NAME, &l_HIO);
     }
