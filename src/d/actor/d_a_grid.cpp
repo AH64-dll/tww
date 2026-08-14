@@ -140,8 +140,15 @@ void daHo_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 800E92AC-800E93B8       .text setTopNrmVtx__13daHo_packet_cFP4cXyz */
-void daHo_packet_c::setTopNrmVtx(cXyz*) {
-    /* Nonmatching */
+void daHo_packet_c::setTopNrmVtx(cXyz* out) {
+    cXyz* nrm = mNrm[mCount];
+    cXyz v1 = nrm[0x4D] - nrm[0x54];
+    cXyz v2 = nrm[0x53] - nrm[0x54];
+    cXyz cross = v1.outprod(v2);
+    cross = cross.normZC();
+    cXyz pos;
+    MtxPosition(&cross, &pos);
+    *out = pos.normZC();
 }
 
 /* 800E93B8-800E9BE8       .text draw__13daHo_packet_cFv */
