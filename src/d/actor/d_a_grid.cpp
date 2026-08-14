@@ -118,6 +118,7 @@ daHo_packet_c::~daHo_packet_c() {}
 
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
+    /* Nonmatching */
     cXyz* nrm = mNrm2[mCount];
     cXyz* pos = mPos[mCount];
     for (s32 i = 0; i < 0x55; i++) {
