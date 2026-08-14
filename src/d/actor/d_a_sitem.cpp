@@ -155,9 +155,9 @@ void cut_control1(sitem_class* i_this) {
         f32 x = sp38.x + (cur->mPos.x - (cur - 1)->mPos.x);
         f32 y = sp38.y + (cur->mPos.y - (cur - 1)->mPos.y);
         f32 z = sp38.z + (cur->mPos.z - (cur - 1)->mPos.z);
-        s16 yrot = cM_atan2s(x, z);
+        int yrot = cM_atan2s(x, z);
         f32 dist = std::sqrtf(x * x + z * z);
-        s16 xrot = (s16)-cM_atan2s(y, dist);
+        int xrot = (s16)-cM_atan2s(y, dist);
         MtxPush();
         mDoMtx_YrotS(*calc_mtx, yrot);
         mDoMtx_XrotM(*calc_mtx, xrot);
