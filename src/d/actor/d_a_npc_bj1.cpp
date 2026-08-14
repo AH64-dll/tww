@@ -449,7 +449,26 @@ void daNpc_Bj1_c::eventOrder() {
 
 /* 000015D8-00001690       .text checkOrder__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
+        if (dComIfGp_evmng_startCheck(mEventIdTable[m82C])) {
+            switch (m82C) {
+            case 0:
+            case 1:
+                break;
+            case 2:
+                actor_status &= ~fopAcStts_UNK4000_e;
+                break;
+            default:
+                break;
+            }
+            mStatus = 0;
+        }
+    } else if (eventInfo.getCommand() == dEvtCmd_INTALK_e) {
+        if (mStatus == 1 || mStatus == 2) {
+            mStatus = 0;
+            m855 = 1;
+        }
+    }
 }
 
 /* 00001690-0000172C       .text chk_talk__11daNpc_Bj1_cFv */
