@@ -199,3 +199,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T02:15Z — M25: flip #46 d_a_obj_hcbh → Equivalent — 17 flips this session (#30-46). Ledger: 60 NonMatching / 41 Equivalent / 314 Matching + 3 MatchingFor. hcbh: 15 real bugs fixed (R9-8's 8 + D8-10's 9 incl roomNo member, ClrTgHit-vs-ClrCoHit, X/Y angle swap), 56/64 fns 100, 8 sub-100 all register-strip-equal. Gate 638b767dc 05:15:07. Also this cycle: buoyflag UNBLOCKED (shared-header wall root-caused — m258 layout + mpActor + header-inline static; 5 siblings sha1-verified), ftree held (marker restore + pikupikuS_init).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T03:23Z — M26: 4-version cycle 4 ALL GREEN at 795eacfd5 (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416, 06:21:15-35) — flips #45 ss + #46 hcbh + firewall/tntrap/htetu1/light/buoyflag/hsehi1/kf1 transcribes verified on all 4 versions. 4 consecutive cycles green today. OPERATIONS SYSTEMS LIVE: session-compaction (orgctl compact/resume, 500k-token rule, skills updated) + 30-min design heartbeat (heartbeat-main.py: roster roles / 3-team / wave floor / queue health / ledger). Ledger: 59 NonMatching / 42 Equivalent / 314 Matching + 3 MatchingFor. 17 flips this session (#30-46).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
