@@ -1652,7 +1652,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_mt"),
     ActorRel(Equivalent, "d_a_npc_ac1"), # regalloc: getMsg 89.8 REGALLOC_ACCEPT + 3 anchor-only; weak order
     ActorRel(Matching,    "d_a_npc_ah"),
-    ActorRel(NonMatching, "d_a_npc_aj1"),
+    ActorRel(Equivalent, "d_a_npc_aj1"),  # 21 sub-100 0-structural (5 pure-reorder identical-multiset + 16 anchor-only); markers 21==21; weak order
     ActorRel(NonMatching, "d_a_npc_auction"),
     ActorRel(Matching, "d_a_npc_ba1"),
     ActorRel(NonMatching, "d_a_npc_bj1"),
