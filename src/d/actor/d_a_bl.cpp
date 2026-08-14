@@ -911,7 +911,7 @@ s16 way_check(bl_class* i_this, s16 angle) {
 /* 00003054-000039F0       .text action_dousa__FP8bl_class */
 void action_dousa(bl_class* i_this) {
     /* Nonmatching */
-    s16 angle = 0;
+    s32 angle = 0;
 
     switch (i_this->m306) {
     case 0:
@@ -945,7 +945,7 @@ void action_dousa(bl_class* i_this) {
         i_this->gravity = 0.0f;
         i_this->speed.y = 0.0f;
         i_this->m306++;
-        break;
+        // fall through
     case 2:
         JPABaseEmitter* emitter = i_this->mFollowCB1.getEmitter();
         if (emitter != NULL) {
@@ -978,7 +978,7 @@ void action_dousa(bl_class* i_this) {
         i_this->actor_status |= 0x20;
         i_this->m2F2 = 5;
         i_this->m306 = 5;
-        break;
+        // fall through
     case 5:
         i_this->actor_status |= 0x20;
         if (i_this->m308 != 0x11) {
@@ -996,7 +996,7 @@ void action_dousa(bl_class* i_this) {
             i_this->speedF = i_this->m324;
         } else {
             i_this->m2EC = (s16)(100.0f + cM_rndFX(50.0f));
-            angle = (s16)cM_rndFX(32767.0f);
+            angle = cM_rndFX(32767.0f);
             if (i_this->speedF == 0.0f) {
                 i_this->speedF = 4.0f + cM_rndF(2.0f);
             }
@@ -1009,10 +1009,13 @@ void action_dousa(bl_class* i_this) {
             f32 dx = i_this->mPath->m_points[i_this->m2E8].m_position.x - i_this->current.pos.x;
             f32 dz = i_this->mPath->m_points[i_this->m2E8].m_position.z - i_this->current.pos.z;
             angle = cM_atan2s(dx, dz);
-            f32 distSq = dx * dx + dz * dz;
-            f32 dist = distSq;
+            f32 dist = dx * dx + dz * dz;
             if (dist > 0.0f) {
-                dist = std::sqrtf(distSq);
+                double guess = __frsqrte(dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                dist = (f32)(dist * guess);
             }
             if (dist < 80.0f + REG8_F(3)) {
                 i_this->m2E8++;
@@ -1031,20 +1034,24 @@ void action_dousa(bl_class* i_this) {
         } else {
             f32 dx = i_this->current.pos.x - i_this->m2C4.x;
             f32 dz = i_this->current.pos.z - i_this->m2C4.z;
-            f32 distSq = dx * dx + dz * dz;
-            f32 dist = distSq;
+            f32 dist = dx * dx + dz * dz;
             if (dist > 0.0f) {
-                dist = std::sqrtf(distSq);
+                double guess = __frsqrte(dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                guess = 0.5 * guess * (3.0 - guess * guess * dist);
+                dist = (f32)(dist * guess);
             }
             if (dist < 250.0f) {
                 if (i_this->m2EC == 0) {
                     i_this->m306 = 5;
                 }
+                break;
             } else {
                 i_this->m306 = 7;
             }
         }
-        break;
+        // fall through
     case 7:
         f32 dx = i_this->m2C4.x - i_this->current.pos.x;
         f32 dz = i_this->m2C4.z - i_this->current.pos.z;
@@ -1053,10 +1060,13 @@ void action_dousa(bl_class* i_this) {
         if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
             targetDist = 80.0f;
         }
-        f32 distSq = dx * dx + dz * dz;
-        f32 dist = distSq;
+        f32 dist = dx * dx + dz * dz;
         if (dist > 0.0f) {
-            dist = std::sqrtf(distSq);
+            double guess = __frsqrte(dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            dist = (f32)(dist * guess);
         }
         if (dist < targetDist) {
             i_this->m306 = 5;
@@ -1090,47 +1100,28 @@ void action_dousa(bl_class* i_this) {
     }
 
     if (i_this->m2D0 == 1) {
-        if (!blue_body_atari_check(i_this)) {
-            if (i_this->m306 >= 5) {
-                if (i_this->mSph.ChkAtHit()) {
-                    if (i_this->m2E9 != 0xFF && i_this->mPath != NULL && i_this->m306 == 7) {
-                        return;
-                    }
-                    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
-                    i_this->speedF = 50.0f;
-                    i_this->m2D2 = 1;
-                    i_this->m306 = 0xA;
-                } else if (i_this->m2D3 != 0) {
-                    if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 600.0f) {
-                        cXyz pos = dComIfGp_getPlayer(0)->current.pos;
-                        if (Line_check(i_this, pos)) {
-                            if (i_this->m2E9 == 0xFF || i_this->mPath == NULL || i_this->m306 != 7) {
-                                i_this->m2D2 = 1;
-                                i_this->m306 = 0xA;
-                            }
-                        }
-                    }
-                }
-            }
+        if (blue_body_atari_check(i_this)) {
+            return;
         }
-    } else if (!red_body_atari_check(i_this)) {
-        if (i_this->m306 >= 5) {
-            if (i_this->mSph.ChkAtHit()) {
-                if (i_this->m2E9 != 0xFF && i_this->mPath != NULL && i_this->m306 == 7) {
-                    return;
-                }
-                i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
-                i_this->speedF = 50.0f;
-                i_this->m2D2 = 1;
-                i_this->m306 = 0xA;
-            } else if (i_this->m2D3 != 0) {
-                if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 600.0f) {
-                    cXyz pos = dComIfGp_getPlayer(0)->current.pos;
-                    if (Line_check(i_this, pos)) {
-                        if (i_this->m2E9 == 0xFF || i_this->mPath == NULL || i_this->m306 != 7) {
-                            i_this->m2D2 = 1;
-                            i_this->m306 = 0xA;
-                        }
+    } else if (red_body_atari_check(i_this)) {
+        return;
+    }
+
+    if (i_this->m306 >= 5) {
+        if (i_this->mSph.ChkAtShieldHit()) {
+            if (i_this->m2E9 != 0xFF && i_this->mPath != NULL && i_this->m306 == 7) {
+                return;
+            }
+            i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+            i_this->speedF = 50.0f;
+            i_this->m2D2 = 1;
+            i_this->m306 = 0xA;
+        } else if (i_this->m2D3 != 0) {
+            if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 600.0f) {
+                if (Line_check(i_this, dComIfGp_getPlayer(0)->current.pos)) {
+                    if (i_this->m2E9 == 0xFF || i_this->mPath == NULL || i_this->m306 != 7) {
+                        i_this->m2D2 = 1;
+                        i_this->m306 = 0xA;
                     }
                 }
             }
