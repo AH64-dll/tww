@@ -16,6 +16,16 @@ void daNpc_So_c::cutSwimStart() {
 /* 000051EC-00005364       .text cutSwimProc__10daNpc_So_cFv */
 void daNpc_So_c::cutSwimProc() {
     /* Nonmatching */
+    cXyz pos = mEventCut.getAttnPos();
+    field_0xAFC = 7.0f + REG12_F(10);
+    const cXyz& diff = current.pos - pos;
+    f32 sq = PSVECSquareMag(&cXyz(diff.x, 600.0f, diff.z));
+    f32 dist = sq > 600.0f ? std::sqrtf(sq) : sq;
+    cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &pos), 8, 0x400);
+    if (dist < 150.0f + REG12_F(7)) {
+        field_0xAFC = 600.0f;
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+    }
 }
 
 /* 00005364-000054A4       .text cutJumpStart__10daNpc_So_cFv */
