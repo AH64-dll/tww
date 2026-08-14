@@ -5,6 +5,7 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class mDoExt_McaMorf;
 class J3DAnmTexPattern;
