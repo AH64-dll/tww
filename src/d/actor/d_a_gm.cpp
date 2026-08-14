@@ -13,8 +13,55 @@
 #include "d/d_cc_d.h"
 
 /* 000000EC-0000032C       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* model = j3dSys.getModel();
+        gm_class* i_this = (gm_class*)model->getUserArea();
+        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        if (i_this && i_this->m2CD == 0) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            switch (jntNo) {
+            case 3: {
+                cXyz offset(0.0f, 0.0f, 0.0f);
+                MtxPosition(&offset, &i_this->m3FC);
+                break;
+            }
+            case 4: {
+                cXyz offset(0.0f, 0.0f, 0.0f);
+                MtxPosition(&offset, &i_this->m3F0);
+                mDoMtx_YrotM(*calc_mtx, i_this->m43A);
+                mDoMtx_XrotM(*calc_mtx, i_this->m438);
+                mDoMtx_ZrotM(*calc_mtx, i_this->m43C);
+                break;
+            }
+            case 5: {
+                cXyz offset(0.0f, 0.0f, 0.0f);
+                MtxPosition(&offset, &i_this->m3E4);
+                offset.x = 70.0f;
+                MtxPosition(&offset, &i_this->m3A8);
+                break;
+            }
+            case 12:
+            case 14:
+            case 16:
+            case 18: {
+                s32 idx = (jntNo - 0xC) / 2;
+                mDoMtx_YrotM(*calc_mtx, i_this->m414[idx].y);
+                mDoMtx_XrotM(*calc_mtx, i_this->m414[idx].x);
+                mDoMtx_ZrotM(*calc_mtx, i_this->m414[idx].z);
+                break;
+            }
+            }
+            if (jntNo != 12 && jntNo != 14 && jntNo != 16 && jntNo != 18) {
+                mDoMtx_YrotM(*calc_mtx, i_this->m42E);
+                mDoMtx_XrotM(*calc_mtx, i_this->m42C);
+                mDoMtx_ZrotM(*calc_mtx, i_this->m430);
+            }
+            model->setAnmMtx(jntNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000368-0000048C       .text draw_SUB__FP8gm_class */
@@ -53,8 +100,31 @@ void Line_check(gm_class*, cXyz) {
 }
 
 /* 00001FBC-0000212C       .text ks_set_rtn__FP8gm_class */
-void ks_set_rtn(gm_class*) {
-    /* Nonmatching */
+s32 ks_set_rtn(gm_class* i_this) {
+    s32 type = 4;
+
+    if (i_this->m2CE == 1) {
+        if (i_this->m31E >= 10) {
+            return 1;
+        }
+    } else if (i_this->m31E >= 20) {
+        return 1;
+    }
+
+    if (i_this->mAction == 0x53) {
+        type = 5;
+    }
+
+    JAIZelBasic::zel_basic->seStart(0x58A6, &i_this->eyePos, 0, dComIfGp_getReverb((s8)i_this->current.roomNo), 900.0f, 900.0f, -30.0f, -30.0f, 0);
+
+    csXyz sp10 = i_this->current.angle;
+    sp10.y = (s16)((f32)sp10.y + cM_rndFX(300.0f));
+
+    if ((u32)(fopAcM_createChild(0xCE, fopAcM_GetID(i_this), type, &i_this->m3FC, (s8)i_this->current.roomNo, &sp10, &i_this->scale, 0, NULL) + 0x10000) != 0xFFFF) {
+        i_this->m31E++;
+        return 0;
+    }
+    return 1;
 }
 
 /* 0000212C-00002204       .text wing_ret_set__FP8gm_class */
