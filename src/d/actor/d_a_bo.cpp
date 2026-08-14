@@ -24,10 +24,24 @@
 #include "d/d_particle.h"
 #include "d/d_particle_name.h"
 
+static const GXColor l_smokeColor = {0xA0, 0xA0, 0x80, 0xFF};
+
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */
 static void smoke_set(bo_class* i_this) {
-    /* Nonmatching */
+    GXColor color = l_smokeColor;
+    i_this->mSmokeEcallBack.remove();
+    dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &i_this->m39C, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeEcallBack, i_this->current.roomNo, NULL, NULL, NULL);
+    JPABaseEmitter* emitter = i_this->mSmokeEcallBack.getEmitter();
+    if (emitter != NULL) {
+        emitter->mGlobalParticleScale.set(3.0f, 3.0f, 3.0f);
+        emitter->setRate(30.0f);
+        emitter->setMaxFrame(1);
+        emitter->setAwayFromCenterSpeed(10.0f);
+        emitter->setAwayFromAxisSpeed(10.0f);
+        emitter->setStatus(0x40);
+        i_this->mSmokeEcallBack.setColor(color);
+    }
 }
 
 /* 000001E8-00000638       .text nodeCallBack_UP__FP7J3DNodei */
