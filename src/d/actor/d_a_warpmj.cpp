@@ -129,7 +129,6 @@ cPhs_State daWarpmj_c::_create() {
 
 /* 00000778-0000084C       .text set_mtx__10daWarpmj_cFv */
 void daWarpmj_c::set_mtx() {
-    /* Nonmatching */
     cXyz pos = current.pos;
     pos.y += 2000.0f;
     current.pos.y = getSeaY(pos);
@@ -139,7 +138,7 @@ void daWarpmj_c::set_mtx() {
 
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000084C-00000990       .text _execute__10daWarpmj_cFv */
@@ -165,7 +164,7 @@ bool daWarpmj_c::_execute() {
 
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     return true;
 }
 
@@ -298,11 +297,14 @@ f32 daWarpmj_c::getSeaY(cXyz pos) {
 
 /* 00000EE0-00000FDC       .text check_warp__10daWarpmj_cFv */
 BOOL daWarpmj_c::check_warp() {
-    /* Nonmatching */
     fopAc_ac_c* ship = g_dComIfG_gameInfo.play.getPlayerPtr(2);
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && ship != NULL) {
         const cXyz& diff = ship->current.pos - current.pos;
-        f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
+        cXyz flat;
+        flat.x = diff.x;
+        flat.y = 0.0f;
+        flat.z = diff.z;
+        f32 sq = PSVECSquareMag(&flat);
         f32 dist = std::sqrtf(sq);
         if (dist < m_warp_distance) {
             return TRUE;
@@ -374,7 +376,7 @@ static actor_method_class daWarpmjMethodTable = {
 
 actor_process_profile_definition g_profile_WARPMAJYUU = {
     fpcLy_CURRENT_e,
-    7,
+    0x0003,
     fpcPi_CURRENT_e,
     fpcNm_WARPMAJYUU_e,
     &g_fpcLf_Method.base,
@@ -385,5 +387,6 @@ actor_process_profile_definition g_profile_WARPMAJYUU = {
     fpcDwPi_WARPMAJYUU_e,
     &daWarpmjMethodTable,
     0x44100,
-    0xE,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
 };
