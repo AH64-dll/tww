@@ -99,6 +99,7 @@ void housi_off(bmdfoot_class* i_this) {
 
 /* 00000440-00000840       .text wait__FP13bmdfoot_class */
 void wait(bmdfoot_class* i_this) {
+    /* Nonmatching - anchor-only rodata naming */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_98;
     static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
@@ -325,6 +326,7 @@ int ug_move(bmdfoot_class* i_this) {
 
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
 void attack_2(bmdfoot_class* i_this) {
+    /* Nonmatching - anchor-only rodata naming */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     J3DAnmTransform* pBck;
     cXyz local_3c;
@@ -537,6 +539,7 @@ void end(bmdfoot_class* i_this) {
 
 /* 00001FB8-000021B8       .text move__FP13bmdfoot_class */
 void move(bmdfoot_class* i_this) {
+    /* Nonmatching - anchor-only rodata naming */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_20;
     cXyz cStack_2c;
@@ -751,6 +754,7 @@ static BOOL solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00002A1C-00002E88       .text daBmdfoot_Create__FP10fopAc_ac_c */
 static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
+    /* Nonmatching - anchor-only rodata naming */
     static dCcD_SrcSph cc_sph_src = {
         // dCcD_SrcGObjInf
         {
