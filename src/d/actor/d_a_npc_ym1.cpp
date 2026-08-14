@@ -136,7 +136,7 @@ int daNpc_Ym1_c::btpResID(int idx) {
 }
 
 /* 00000D98-00000E98       .text init_texPttrnAnm__11daNpc_Ym1_cFScb */
-void daNpc_Ym1_c::init_texPttrnAnm(signed char, bool) {
+int daNpc_Ym1_c::init_texPttrnAnm(signed char, bool) {
     /* Nonmatching */
 }
 
@@ -417,16 +417,60 @@ cPhs_State daNpc_Ym1_c::_create() {
 /* 0000405C-00004360       .text bodyCreateHeap__11daNpc_Ym1_cFv */
 BOOL daNpc_Ym1_c::bodyCreateHeap() {
     /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, 0xA);
+    JUT_ASSERT(0x971, modelData != 0);
+    mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
+                                NULL, 0x80000, 0x15021222);
+    if (mpMorf == NULL) {
+        return FALSE;
+    }
+    if (mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    mHeadJointIdx = modelData->getJointName()->getIndex("head");
+    JUT_ASSERT(0x97F, mHeadJointIdx >= 0);
+    mBboneJointIdx = modelData->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x981, mBboneJointIdx >= 0);
+    mHandLJointIndex = modelData->getJointName()->getIndex("handL");
+    JUT_ASSERT(0x983, mHandLJointIndex >= 0);
+    mHandRJointIndex = modelData->getJointName()->getIndex("handR");
+    JUT_ASSERT(0x985, mHandRJointIndex >= 0);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(mHeadJointIdx)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(mBboneJointIdx)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->setUserArea((u32)this);
+    return TRUE;
 }
 
 /* 00004360-00004460       .text headCreateHeap__11daNpc_Ym1_cFv */
 BOOL daNpc_Ym1_c::headCreateHeap() {
     /* Nonmatching */
+    static u32 a_hed_bdl_resID_tbl[] = {0, 0xB, 0xC};
+    static u8 a_tex_pttrn_num_tbl[] = {0, 0, 0};
+
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, (u16)a_hed_bdl_resID_tbl[mSubType]);
+    JUT_ASSERT(0x9A4, modelData != 0);
+    mpHeadModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x15020022);
+    if (mpHeadModel == NULL) {
+        return FALSE;
+    }
+    return init_texPttrnAnm(a_tex_pttrn_num_tbl[mSubType], false);
 }
 
 /* 00004460-00004534       .text itemCreateHeap__11daNpc_Ym1_cFv */
 BOOL daNpc_Ym1_c::itemCreateHeap() {
     /* Nonmatching */
+    if (mStaff == 0) {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, 0x9);
+        JUT_ASSERT(0x9C6, modelData != 0);
+        m6D0 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+        if (m6D0 == NULL) {
+            return FALSE;
+        }
+    } else {
+        m6D0 = NULL;
+    }
+    return TRUE;
 }
 
 /* 00004534-000045F8       .text CreateHeap__11daNpc_Ym1_cFv */
@@ -443,8 +487,8 @@ BOOL daNpc_Ym1_c::CreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
-    mAcchCir.SetWall(10.0f, 5.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcchCir.SetWall(1.5f, 30.0f);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     return TRUE;
 }
 

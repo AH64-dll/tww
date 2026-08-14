@@ -28,7 +28,7 @@ public:
     void setMtx(bool);
     int bckResID(int);
     int btpResID(int);
-    void init_texPttrnAnm(signed char, bool);
+    int init_texPttrnAnm(signed char, bool);
     void play_texPttrnAnm();
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
