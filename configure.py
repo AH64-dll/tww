@@ -1749,7 +1749,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hlift"),
     ActorRel(Matching,    "d_a_obj_homen"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homensmoke"),
-    ActorRel(NonMatching, "d_a_obj_hsehi1"),
+    ActorRel(Equivalent, "d_a_obj_hsehi1"),  # 11/11 accept-class (dispatch-table content-verified 1:1 by symbol+addend)
     ActorRel(Equivalent, "d_a_obj_htetu1"),  # #57 re-classed: 4 accept-class holdouts (unlock 94.20/create_heap 98.52/_execute 99.78/splash_manager 99.93) — MatchingFor would fail retail pin sha1; Equivalent linked=False preserves pins
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland"),
     ActorRel(Matching,    "d_a_obj_jump"),
