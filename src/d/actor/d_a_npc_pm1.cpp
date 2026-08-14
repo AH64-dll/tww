@@ -45,6 +45,7 @@ static daNpc_Pm1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daNpc_Pm1_HIO_cFv */
 daNpc_Pm1_HIO_c::daNpc_Pm1_HIO_c() {
+    /* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX         */ 0x1FFE,
         /* mMaxHeadY         */ 0x38E0,
@@ -95,6 +96,7 @@ static BOOL nodeCallBack_Pm(J3DNode* i_node, int i_calcTiming) {
 
 /* 0000033C-0000044C       .text createInit__11daNpc_Pm1_cFv */
 bool daNpc_Pm1_c::createInit() {
+    /* Nonmatching */
     mEventCut.setActorInfo2("Pm1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
@@ -238,6 +240,7 @@ s32 daNpc_Pm1_c::setAnm_anm(daNpc_Pm1_c::anm_prm_c* i_anm_ptr) {
 
 /* 00000A34-00000A9C       .text setAnm__11daNpc_Pm1_cFv */
 void daNpc_Pm1_c::setAnm() {
+    /* Nonmatching */
     static daNpc_Pm1_c::anm_prm_c a_anm_prm_tbl[3] = {
         {-1, -1, 0, 0.0f, 0.0f, -1},
         {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
@@ -277,6 +280,7 @@ void daNpc_Pm1_c::ctrlAnmAtr() {
 
 /* 00000AF8-00000B60       .text setAnm_ATR__11daNpc_Pm1_cFi */
 void daNpc_Pm1_c::setAnm_ATR(int param_1) {
+    /* Nonmatching */
     static daNpc_Pm1_c::anm_prm_c a_anm_prm_tbl[1] = {
         {0, 0, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
     };
@@ -458,6 +462,7 @@ bool daNpc_Pm1_c::event_action() {
 
 /* 0000104C-00001154       .text privateCut__11daNpc_Pm1_cFv */
 void daNpc_Pm1_c::privateCut() {
+    /* Nonmatching */
     static char* cut_name_tbl[] = {"ACTION"};
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Pm1", NULL, 0);
@@ -693,6 +698,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 000018BC-00001A2C       .text _create__11daNpc_Pm1_cFv */
 cPhs_State daNpc_Pm1_c::_create() {
+    /* Nonmatching */
     static int a_heap_size_tbl[] = {
         0x272E0
     };
@@ -726,6 +732,7 @@ cPhs_State daNpc_Pm1_c::_create() {
 
 /* 00001E5C-00002168       .text CreateHeap__11daNpc_Pm1_cFv */
 BOOL daNpc_Pm1_c::CreateHeap() {
+    /* Nonmatching */
     static u8 a_tex_pattern_num_tbl[1] = {TEXPATTERN_MABA01};
     J3DModelData* a_mdl_data;
 
