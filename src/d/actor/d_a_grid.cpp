@@ -652,8 +652,7 @@ void ho_move(daGrid_c* i_this) {
         }
 
         cXyz* nrm2 = (cXyz*)((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0xB4C);
-        cXyz sp10 = i_this->tevStr.mLightPosWorld - i_this->current.pos;
-        cXyz sp1C = sp10;
+        cXyz sp1C = i_this->tevStr.mLightPosWorld - i_this->current.pos;
         i_this->mPacket.setNrmMtx(sp1C);
         for (s32 j = 0; j < 0xC; j++) {
             for (s32 k = 0; k < 7; k++) {
