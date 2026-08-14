@@ -411,44 +411,47 @@ u16 daNpc_Kp1_c::next_msgStatus(u32* pMsgNo) { /* Nonmatching */
         *pMsgNo = 0x1E8F;
         break;
     case 0x1E8F:
-        if (mpCurrMsg->mStatus == 1) {
-            *pMsgNo = 0x1E90;
-        } else if (mpCurrMsg->mStatus == 0) {
+        switch (mpCurrMsg->mSelectNum) {
+        case 0:
             *pMsgNo = 0x1E91;
+            break;
+        case 1:
+            *pMsgNo = 0x1E90;
+            break;
         }
         break;
-    case 0x1E93:
+    case 0x1E96:
         *pMsgNo = 0x1E97;
         mCancelFlag = 1;
         break;
-    case 0x1E94:
+    case 0x1E97:
         *pMsgNo = 0x1E98;
         break;
-    case 0x1E95:
+    case 0x1E98:
         *pMsgNo = 0x1E99;
         break;
-    case 0x1E96:
+    case 0x1E99:
         *pMsgNo = 0x1E9A;
         break;
-    case 0x1E97:
+    case 0x1E9A:
         *pMsgNo = 0x1E9B;
         break;
-    case 0x1E98:
+    case 0x1E9B:
         *pMsgNo = 0x1E9C;
         break;
-    case 0x1E99:
+    case 0x1E9C:
         *pMsgNo = 0x1E9D;
         break;
-    case 0x1E9A:
+    case 0x1E91:
         mStatus = 3;
-        break;
-    case 0x1E9B:
+        goto msg_ends;
+    case 0x1E9D:
         mStatus = 4;
-        break;
-    case 0x1E9C:
+        goto msg_ends;
+    case 0x1E90:
         mPresentFlag = 1;
-        break;
     default:
+    msg_ends:
         ret = fopMsgStts_MSG_ENDS_e;
         break;
     }
@@ -518,7 +521,7 @@ void daNpc_Kp1_c::lookBack() { /* Nonmatching */
     cXyz player_eye_pos;
     cXyz current_pos;
 
-    current_pos.set(current.pos.x, current.pos.y, current.pos.z);
+    current_pos = current.pos;
     current_pos.y = eyePos.y;
 
     player_eye_pos.set(0.0f, 0.0f, 0.0f);
@@ -528,6 +531,8 @@ void daNpc_Kp1_c::lookBack() { /* Nonmatching */
     bool look_flag = mLookBackFlag;
 
     switch (mLookMode) {
+    case 0:
+        break;
     case 1:
         player_eye_pos = dNpc_playerEyePos(-20.0f);
         player_eye_pos_p = &player_eye_pos;
@@ -535,8 +540,10 @@ void daNpc_Kp1_c::lookBack() { /* Nonmatching */
         current_pos.y = eyePos.y;
         break;
     case 2:
-        player_eye_pos.set(mLookTarget.x, mLookTarget.y, mLookTarget.z);
+        player_eye_pos = mLookTarget;
         player_eye_pos_p = &player_eye_pos;
+        current_pos = current.pos;
+        current_pos.y = eyePos.y;
         break;
     case 3:
         target_y = mLookStartAngle;
@@ -575,12 +582,10 @@ void daNpc_Kp1_c::setAttention() {
 }
 
 /* 00001558-000015F4       .text chk_talk__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::chk_talk() { /* Nonmatching */
-    u32 ret = TRUE;
+BOOL daNpc_Kp1_c::chk_talk() {
+    BOOL ret = TRUE;
     mMsgNo = 0xFF;
-    bool is_talk = dComIfGp_event_getTalkXYBtn() == 1 || dComIfGp_event_getTalkXYBtn() == 2 ||
-                   dComIfGp_event_getTalkXYBtn() == 3;
-    if (is_talk) {
+    if (dComIfGp_event_chkTalkXY()) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
             mMsgNo = dComIfGp_event_getPreItemNo();
         } else {
@@ -642,22 +647,29 @@ void daNpc_Kp1_c::privateCut() { /* Nonmatching */
     static char* cut_name_tbl[] = {
         "ACTION",
     };
-    int staffIdx = dComIfGp_evmng_getMyStaffId("Kp1", this, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Kp1");
     if (staffIdx != -1) {
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 1, 1, 0);
         if (mActIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
-                if (mActIdx == 0) {
+                switch (mActIdx) {
+                case 0:
                     event_actionInit(staffIdx);
+                    break;
                 }
             }
-            if (mActIdx != 0) {
-                if (!event_action()) {
-                    dComIfGp_evmng_cutEnd(staffIdx);
-                }
-            } else if (event_action()) {
+            bool bVar1;
+            switch (mActIdx) {
+            case 0:
+                bVar1 = event_action();
+                break;
+            default:
+                bVar1 = 1;
+                break;
+            }
+            if (bVar1) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
         }

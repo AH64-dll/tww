@@ -103,7 +103,7 @@ public:
     /* 0x7C8 */ s32 mTalkResult;
     /* 0x7CC */ u8 mAttention;
     /* 0x7CD */ u8 mTalkEnd;
-    /* 0x7CE */ u8 mLookBackFlag;
+    /* 0x7CE */ bool mLookBackFlag;
     /* 0x7CF */ u8 mDemoFlag;
     /* 0x7D0 */ u8 mTalkClear;
     /* 0x7D1 */ s8 mActIdx;
