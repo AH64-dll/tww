@@ -387,7 +387,62 @@ void daObj_Search::Act_c::modeToStopInit() {
 
 /* 800FEBB4-800FEECC       .text modeToStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToStop() {
-    /* Nonmatching */
+    bool b1 = false;
+    bool b2 = false;
+
+    if ((!dComIfGs_isEventBit(0x201) || attr()->m42 != 0) && m85C == 0xFF) {
+        if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+            m77E = 0xFF;
+            dEvent_manager_c* evtmgr = &g_dComIfG_gameInfo.play.mEvtManager;
+            int staffId = evtmgr->getMyStaffId("Search", NULL, 0);
+            if (evtmgr->endCheckOld("Search_Light_Up")) {
+                g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+                dComIfGs_onEventBit(0x201);
+                modeProc(PROC_INIT_e, MODE_STOP_e);
+                return;
+            }
+
+            fopAc_ac_c* child = fopAcM_SearchByID(mChildId);
+            if (child != NULL && *(s16*)((u8*)child + 0x302) < 5) {
+                *(s16*)((u8*)child + 0x302) = 5;
+            }
+
+            const char* cutName = evtmgr->getMyNowCutName(staffId);
+            if (strcmp(cutName, "BK_FIND") == 0) {
+                evtmgr->cutEnd(staffId);
+            }
+            if (strcmp(cutName, "LIGHT_UP_SOUND") == 0) {
+                JAIZelBasic::zel_basic->seStart(0x6939, &eyePos, 0,
+                                                dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                evtmgr->cutEnd(staffId);
+            }
+            if (strcmp(cutName, "LIGHT_UP") == 0) {
+                if (abs(cLib_addCalcAngleS(&mAngle[0].x, 0x2300, 0x1E, 0x300, 0x10)) < 0x100) {
+                    b1 = true;
+                }
+                if (abs(cLib_addCalcAngleS(&mAngle[1].x, -0x2300, 0x1E, 0x300, 0x10)) < 0x100) {
+                    b2 = true;
+                }
+                if (b1 && b2) {
+                    smoke_set(5.0f, 0xA);
+                    evtmgr->cutEnd(staffId);
+                }
+            }
+        } else {
+            fopAcM_orderOtherEvent2(this, "Search_Light_Up", 1, 0xFFFF);
+        }
+    } else {
+        if (abs(cLib_addCalcAngleS(&mAngle[0].x, 0x2300, 0x14, 0x200, 0x10)) < 0x100) {
+            b1 = true;
+        }
+        if (abs(cLib_addCalcAngleS(&mAngle[1].x, -0x2300, 0x14, 0x200, 0x10)) < 0x100) {
+            b2 = true;
+        }
+        if (b1 && b2) {
+            smoke_set(5.0f, 0xA);
+            modeProc(PROC_INIT_e, MODE_STOP_e);
+        }
+    }
 }
 
 /* 800FEECC-800FEF80       .text modeFindInit__Q212daObj_Search5Act_cFv */
