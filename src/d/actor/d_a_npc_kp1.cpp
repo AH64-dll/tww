@@ -188,7 +188,7 @@ bool daNpc_Kp1_c::initTexPatternAnm(bool i_bModify) {
 }
 
 /* 000009B4-00000A80       .text playTexPatternAnm__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::playTexPatternAnm() {
+void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
     bool flag = true;
     s8 btp_num = mBtpNum;
     if (btp_num != 1) {
@@ -488,6 +488,7 @@ void daNpc_Kp1_c::eventOrder() { /* Nonmatching */
     };
     if (mStatus == 1 || mStatus == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
         if (mStatus == 1) {
             fopAcM_orderSpeakEvent(this);
         }
@@ -602,7 +603,7 @@ bool daNpc_Kp1_c::decideType(int i_type) { /* Nonmatching */
 }
 
 /* 00001620-000016A8       .text event_actionInit__11daNpc_Kp1_cFi */
-void daNpc_Kp1_c::event_actionInit(int i_staffIdx) {
+void daNpc_Kp1_c::event_actionInit(int i_staffIdx) { /* Nonmatching */
     int* pSubstance = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffIdx, "ActNo", 3);
     dComIfGp_getPEvtManager()->getMySubstanceP(i_staffIdx, "Timer", 3);
     if (pSubstance != NULL) {
@@ -692,6 +693,7 @@ void daNpc_Kp1_c::event_proc() { /* Nonmatching */
         if (!mEvtCut.cutProc()) {
             privateCut();
         }
+        lookBack();
     }
     shape_angle = current.angle;
 }
@@ -984,14 +986,14 @@ BOOL daNpc_Kp1_c::CreateHeap() { /* Nonmatching */
     }
     J3DModelData* a_itm_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Kp", 6);
     JUT_ASSERT(0x655, a_itm_mdl_data != 0);
-    mpModel = mDoExt_J3DModel__create(a_itm_mdl_data, 0x80000, 0x11020002);
+    mpModel = mDoExt_J3DModel__create(a_itm_mdl_data, 0x80000, 0x11000002);
     if (mpModel == NULL) {
         mpMorf = NULL;
         return FALSE;
     }
     J3DModelData* a_itm2_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Kp", 7);
     JUT_ASSERT(0x65F, a_itm2_mdl_data != 0);
-    mpHandLModel = mDoExt_J3DModel__create(a_itm2_mdl_data, 0x80000, 0x11020002);
+    mpHandLModel = mDoExt_J3DModel__create(a_itm2_mdl_data, 0x80000, 0x11000002);
     if (mpHandLModel == NULL) {
         mpMorf = NULL;
         return FALSE;
