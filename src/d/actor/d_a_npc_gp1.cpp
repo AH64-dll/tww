@@ -720,7 +720,8 @@ bool daNpc_Gp1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
 void daNpc_Gp1_c::partner_srch() {
     if(m819 == 1) {
         bool found;
-        if(mPrevStatus == 3) {
+        switch(mPrevStatus) {
+        case 3:
             found = partner_srch_sub(searchActor_Bm);
             if(found) {
                 fopAc_ac_c* partner = searchByID(mPartnerProcID);
@@ -728,8 +729,10 @@ void daNpc_Gp1_c::partner_srch() {
                     current.angle.y = cLib_targetAngleY(&current.pos, &partner->current.pos);
                 }
             }
-        } else {
+            break;
+        default:
             found = true;
+            break;
         }
         if(found) {
             m819++;
@@ -1159,7 +1162,6 @@ BOOL daNpc_Gp1_c::wait_2() {
     return TRUE;
 }
 
-/* Nonmatching */
 /* 00002988-00002B2C       .text wait_action1__11daNpc_Gp1_cFPv */
 BOOL daNpc_Gp1_c::wait_action1(void*) {
     switch(m819) {
@@ -1185,14 +1187,14 @@ BOOL daNpc_Gp1_c::wait_action1(void*) {
                 case 2:
                     mbSetEyePos = talk_1();
                     break;
-                case 3:
-                    mbSetEyePos = wait_2();
-                    break;
                 case 4:
                     mbSetEyePos = walk_1();
                     break;
                 case 5:
                     mbSetEyePos = hair_1();
+                    break;
+                case 3:
+                    mbSetEyePos = wait_2();
                     break;
             }
             if(mStatus != 1 && mStatus < 3) {
