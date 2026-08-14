@@ -633,7 +633,6 @@ void daNpcMn_c::executeSetMode(u8 param_1) {
 }
 
 /* 0000140C-00001518       .text executeWaitInit__9daNpcMn_cFv */
-    /* Nonmatching */
 s32 daNpcMn_c::executeWaitInit() {
     speedF = 0.0f;
     if (m7C4 != 0) {
