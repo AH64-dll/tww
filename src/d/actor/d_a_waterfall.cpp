@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
+#include "d/d_bg_s_func.h"
 #include "SSystem/SComponent/c_math.h"
 
 const char daWfall_c::m_arcname[6] = "Wfall";
@@ -101,7 +102,15 @@ void daWfall_c::set_gate_mtx() {
 
 /* 00000A1C-00000AD0       .text set_minamo_mtx__9daWfall_cFv */
 void daWfall_c::set_minamo_mtx() {
-    /* Nonmatching */
+    getWaterHeight();
+
+    cXyz scale(1.0f, 1.0f, 1.0f);
+    cXyz pos(0.0f, 0.0f, 0.0f);
+    pos.y = 1.0f + dBgS_ObjGndChk_Wtr_Func(pos);
+
+    mpModel3->setBaseScale(scale);
+    mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);
+    PSMTXCopy(mDoMtx_stack_c::get(), mpModel3->getBaseTRMtx());
 }
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
@@ -157,6 +166,17 @@ void daWfall_c::mode_proc_call() {
     };
 
     (this->*mode_proc[mMode])();
+}
+
+/* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
+void daWfall_c::mode_wtr_on() {
+    cLib_addCalc(&m344.y, 176.0f + (30.0f + current.pos.z), 60.0f, 150.0f, 600.0f);
+    scale.y = getWaterScaleFromGatePos();
+    mBtk1.setPlaySpeed(1.0f);
+    mBtk1.play();
+    if (setEmitter00Pos() || setEmitter01Pos()) {
+        set_se();
+    }
 }
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
@@ -289,8 +309,28 @@ static BOOL daWfall_Delete(void* i_this) {
 }
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
-static BOOL daWfall_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWfall_Draw(void* i_this) {
+    daWfall_c* a_this = (daWfall_c*)i_this;
+    cXyz* pos = &a_this->current.pos;
+    dKy_tevstr_c* tevStr = &a_this->tevStr;
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, pos, tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel1, tevStr);
+    a_this->mBtk1.entry(a_this->mpModel1->getModelData(), a_this->mBtk1.getFrame());
+    mDoExt_modelUpdateDL(a_this->mpModel1);
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, pos, tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel2, tevStr);
+    mDoExt_modelUpdateDL(a_this->mpModel2);
+
+    if (a_this->m356 == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG1, pos, tevStr);
+        g_env_light.setLightTevColorType(a_this->mpModel3, tevStr);
+        a_this->mBtk2.entry(a_this->mpModel3->getModelData(), a_this->mBtk2.getFrame());
+        a_this->mBrk.entry(a_this->mpModel3->getModelData(), a_this->mBrk.getFrame());
+        mDoExt_modelUpdateDL(a_this->mpModel3);
+    }
+    return TRUE;
 }
 
 /* 00001550-00001574       .text daWfall_Execute__FPv */
