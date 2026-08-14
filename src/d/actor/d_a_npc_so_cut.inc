@@ -729,12 +729,12 @@ void daNpc_So_c::cutMiniGameReturnProc() {
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
-    shape_angle.y = 0;
+    shape_angle.x = 0;
 
-    cXyz sp3C = field_0xBA0 - current.pos;
+    const cXyz& sp3C = field_0xBA0 - current.pos;
     cXyz sp30(sp3C.x, 0.0f, sp3C.z);
     f32 distSq = PSVECSquareMag(&sp30);
-    f32 dist = distSq > 0.0f ? std::sqrtf(distSq) : distSq;
+    f32 dist = std::sqrtf(distSq);
 
     if (dist < 400.0f) {
         daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
@@ -745,15 +745,14 @@ void daNpc_So_c::cutMiniGameReturnProc() {
 
         cXyz sp54(0.0f, 0.0f, 0.0f);
         cXyz sp48(0.0f, 0.0f, 0.0f);
-        mDoMtx_YrotS(*calc_mtx, ship->shape_angle.y);
+        mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
         sp54.x = -50.0f + REG0_F(4);
         sp54.y = 50.0f + REG0_F(5);
         sp54.z = 100.0f + REG0_F(6);
         MtxPosition(&sp54, &sp48);
 
-        cXyz sp30b = ship->current.pos + sp48;
-        field_0xBC0 = sp30b;
-        field_0xBCC = ship->current.pos;
+        field_0xBC0 = player->current.pos + sp48;
+        field_0xBCC = player->current.pos;
         field_0xBCC.y += 90.0f + REG0_F(10);
 
         camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -854,8 +853,7 @@ void daNpc_So_c::cutMiniGamePlUpProc() {
     sp38.z = 100.0f + REG0_F(6);
     MtxPosition(&sp38, &sp2C);
 
-    cXyz sp20 = player->current.pos + sp2C;
-    field_0xBC0 = sp20;
+    field_0xBC0 = player->current.pos + sp2C;
     field_0xBCC = player->current.pos;
     field_0xBCC.y += 90.0f + REG0_F(10);
 
