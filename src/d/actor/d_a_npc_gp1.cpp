@@ -486,14 +486,11 @@ bool daNpc_Gp1_c::chk_partsNotMove() {
 /* Nonmatching */
 /* 00001048-00001168       .text chk_forceTlkArea__11daNpc_Gp1_cFv */
 bool daNpc_Gp1_c::chk_forceTlkArea() {
-    cXyz diff(dComIfGp_getPlayer(0)->current.pos - current.pos);
+    cXyz diff = dComIfGp_getPlayer(0)->current.pos - current.pos;
     diff.y = 0.0f;
     f32 dist = diff.abs();
     f32 y_diff = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
-    if(-1.0f < y_diff && y_diff <= 100.0f && dist < l_HIO.mPrmTbl.m1C) {
-        return true;
-    }
-    return false;
+    return -1.0f < y_diff && y_diff <= 100.0f && dist < l_HIO.mPrmTbl.m1C;
 }
 
 /* Nonmatching */
