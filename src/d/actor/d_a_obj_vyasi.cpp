@@ -367,8 +367,24 @@ BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
+/* Nonmatching */
 bool daObjVyasi::Act_c::create_heap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 7);
+    JUT_ASSERT(0x47A, modelData != NULL);
+
+    mpBckData = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, 4);
+    JUT_ASSERT(0x47F, mpBckData != NULL);
+
+    if (mpBckData != NULL && modelData != NULL) {
+        mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, mpBckData, J3DFrameCtrl::EMode_LOOP, 1.0f,
+                                    -1, 1, 0, NULL, 0x00000000, 0x11000002);
+    }
+
+    bool ret = mpBckData != NULL && mpMorf != NULL;
+    if (ret) {
+        ret = mpMorf->getModel() != NULL;
+    }
+    return ret;
 }
 
 /* 00001290-000016E0       .text _create__Q210daObjVyasi5Act_cFv */
