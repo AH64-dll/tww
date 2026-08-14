@@ -26,10 +26,10 @@ public:
     void mode_wtr_on();
     void mode_wtr_off_init();
     void mode_wtr_off();
-    void setEmitter00Pos();
-    void setEmitter01Pos();
+    BOOL setEmitter00Pos();
+    BOOL setEmitter01Pos();
     f32 getWaterScaleFromGatePos();
-    void getWaterHeight();
+    f32 getWaterHeight();
     void set_se();
 
 public:

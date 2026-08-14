@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
+#include "SSystem/SComponent/c_math.h"
 
 const char daWfall_c::m_arcname[6] = "Wfall";
 const s16 daWfall_c::m_wait_timer = 0x32;
@@ -56,7 +57,9 @@ void daWfall_c::set_mtx() {
 
 /* 000009B8-00000A1C       .text set_gate_mtx__9daWfall_cFv */
 void daWfall_c::set_gate_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(m344.x, m344.y, m344.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
 }
 
 /* 00000A1C-00000AD0       .text set_minamo_mtx__9daWfall_cFv */
@@ -71,7 +74,13 @@ bool daWfall_c::_execute() {
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
 void daWfall_c::mode_proc_call() {
-    /* Nonmatching */
+    typedef void (daWfall_c::*modeProc)();
+    static modeProc mode_proc[] = {
+        &daWfall_c::mode_wtr_on,
+        &daWfall_c::mode_wtr_off,
+    };
+
+    (this->*mode_proc[mMode])();
 }
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
@@ -82,9 +91,25 @@ void daWfall_c::mode_wtr_on_init() {
     }
 }
 
-/* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
-void daWfall_c::mode_wtr_on() {
-    /* Nonmatching */
+/* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
+void daWfall_c::mode_wtr_off() {
+    cLib_addCalc(&m344.y, current.pos.z, 60.0f, 150.0f, 600.0f);
+    f32 scale = getWaterScaleFromGatePos();
+    m320 = scale;
+    if (scale > 0.0f) {
+        mBtk1.setPlaySpeed(1.0f);
+        mBtk1.play();
+        if (setEmitter00Pos() || setEmitter01Pos()) {
+            set_se();
+        }
+    } else {
+        if (mFollow1.getEmitter() != NULL) {
+            mFollow1.getEmitter()->setStatus(1);
+        }
+        if (mFollow2.getEmitter() != NULL) {
+            mFollow2.getEmitter()->setStatus(1);
+        }
+    }
 }
 
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
@@ -96,13 +121,51 @@ void daWfall_c::mode_wtr_off_init() {
 }
 
 /* 00000EE8-00000FF0       .text setEmitter00Pos__9daWfall_cFv */
-void daWfall_c::setEmitter00Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter00Pos() {
+    BOOL ret = FALSE;
+
+    m314 = current.pos;
+    f32 waterHeight = getWaterHeight();
+    if (waterHeight > m344.y) {
+        if (mFollow1.getEmitter() != NULL) {
+            mFollow1.getEmitter()->setStatus(1);
+        }
+    } else {
+        if (mFollow1.getEmitter() != NULL) {
+            mFollow1.getEmitter()->clearStatus(1);
+        }
+        ret = TRUE;
+    }
+    m314.y = waterHeight;
+
+    f32 t = fabs(waterHeight - current.pos.z) / (m320 * 760.0f);
+    if (t > 1.0f) {
+        t = 1.0f;
+    }
+    if (t < 176.0f) {
+        t = 176.0f;
+    }
+    m314.x = m314.x + m320 * 80.0f * (f32)asin(t);
+    return ret;
 }
 
 /* 00000FF0-00001098       .text setEmitter01Pos__9daWfall_cFv */
-void daWfall_c::setEmitter01Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter01Pos() {
+    BOOL ret = FALSE;
+
+    f32 waterHeight = getWaterHeight();
+    if (waterHeight > m344.y) {
+        if (mFollow2.getEmitter() != NULL) {
+            mFollow2.getEmitter()->setStatus(1);
+        }
+    } else {
+        if (mFollow2.getEmitter() != NULL) {
+            mFollow2.getEmitter()->clearStatus(1);
+        }
+        ret = TRUE;
+    }
+    m324 = current.pos.z - 760.0f * (1.0f - m320);
+    return ret;
 }
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
@@ -119,13 +182,13 @@ f32 daWfall_c::getWaterScaleFromGatePos() {
 }
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
-void daWfall_c::getWaterHeight() {
+f32 daWfall_c::getWaterHeight() {
     /* Nonmatching */
 }
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
-    /* Nonmatching */
+    JAIZelBasic::zel_basic->seStart(0x701F, &m344, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
