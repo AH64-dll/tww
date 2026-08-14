@@ -73,18 +73,18 @@ static const dCcD_SrcSph l_sph_src = {
     }},
 };
 
-static const cXyz l_co_sph_offset[6] = {
-    cXyz(0.0f, 157.0f, 0.0f),
-    cXyz(0.0f, 227.0f, 0.0f),
-    cXyz(0.0f, 296.5f, 0.0f),
-    cXyz(0.0f, 367.0f, 0.0f),
-    cXyz(0.0f, 437.5f, 0.0f),
-    cXyz(0.0f, 508.0f, 0.0f),
+static const Vec l_co_sph_offset[6] = {
+    {0.0f, 157.0f, 0.0f},
+    {0.0f, 227.0f, 0.0f},
+    {0.0f, 297.0f, 0.0f},
+    {0.0f, 367.0f, 0.0f},
+    {0.0f, 437.0f, 0.0f},
+    {0.0f, 507.0f, 0.0f},
 };
 
-static s16 set_anglY[4] = {-0x8000, -0x4000, 0x4000, 0x0000};
-
 static int bdl_table[4] = {4, 5, 6, 7};
+
+static s16 set_anglY[4] = {-0x8000, -0x4000, 0x4000, 0x0000};
 }  // namespace
 
 /* 00000078-000000D8       .text chk_appear__11daObjHcbh_cFv */
@@ -108,7 +108,9 @@ void daObjHcbh_c::set_mtx() {
     mDoMtx_stack_c::transM(0.0f, -f31, 0.0f);
     mDoMtx_stack_c::YrotM(-mDA0);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+    J3DModel* mdl = mpModel;
+    MtxP now = mDoMtx_stack_c::get();
+    PSMTXCopy(now, mdl->getBaseTRMtx());
 
     for (int i = 0; i < 4; i++) {
         mDoMtx_stack_c::transS(mD38[i].x, mD38[i].y, mD38[i].z);
@@ -116,7 +118,9 @@ void daObjHcbh_c::set_mtx() {
         mDoMtx_stack_c::XrotM(mD78[i]);
         mDoMtx_stack_c::YrotM(-mD80[i]);
         mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-        PSMTXCopy(mDoMtx_stack_c::get(), mpModel2[i]->getBaseTRMtx());
+        MtxP now2 = mDoMtx_stack_c::get();
+        J3DModel* mdl2 = mpModel2[i];
+        PSMTXCopy(now2, mdl2->getBaseTRMtx());
     }
 }
 
@@ -141,7 +145,7 @@ int daObjHcbh_c::create_heap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_arcname, 8);
     if (modelData == NULL) {
-        JUT_ASSERT(0x1F3, false);
+        JUT_ASSERT(0x1F3, 0);
         ret = FALSE;
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -160,7 +164,6 @@ int daObjHcbh_c::create_heap() {
         if (mpModel != NULL && mpModel2[0] != NULL && mpModel2[1] != NULL && mpModel2[2] != NULL &&
             mpModel2[3] != NULL && mpBgW != NULL && mpBgW2 != NULL)
         {
-            ret = TRUE;
         } else {
             ret = FALSE;
         }
@@ -172,12 +175,12 @@ int daObjHcbh_c::create_heap() {
 void daObjHcbh_c::setup_break_condition(fopAc_ac_c* i_actor) {
     /* Nonmatching */
     if (i_actor != NULL) {
-        mDA0 = cM_atan2s(i_actor->current.pos.x - current.pos.x, i_actor->current.pos.z - current.pos.z);
+        mDA0 = cM_atan2s(mCyl.GetC().x - i_actor->current.pos.x, mCyl.GetC().z - i_actor->current.pos.z);
         f32 f1 = 15.0f;
         for (int i = 0; i < 4; i++) {
             mD80[i] = set_anglY[i];
             mD78[i] = 0;
-            f32 f0 = fabs(cM_ssin((s16)((set_anglY[i] - mDA0) / 2)));
+            f32 f0 = fabs(cM_ssin((s16)((set_anglY[i] - mDA0) >> 1)));
             mD90[i] = (int)(f1 * f0);
         }
     }
@@ -185,7 +188,6 @@ void daObjHcbh_c::setup_break_condition(fopAc_ac_c* i_actor) {
 
 /* 000005E8-00000724       .text checkCollision__11daObjHcbh_cFv */
 void daObjHcbh_c::checkCollision() {
-    /* Nonmatching */
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj != NULL) {
@@ -198,26 +200,27 @@ void daObjHcbh_c::checkCollision() {
                 mDA4 = 2;
                 setup_break_condition(mCyl.GetTgHitAc());
                 break;
-            case 0x8:
-                if (mCyl.GetTgHitAc() != NULL && fopAcM_GetName(mCyl.GetTgHitAc()) == 0xC0) {
+            case 0x8: {
+                fopAc_ac_c* hitActor = mCyl.GetTgHitAc();
+                if (hitActor != NULL && fopAcM_GetProfName(hitActor) == 0xC0) {
                     mDA4 = 1;
                     setup_break_condition(mCyl.GetTgHitAc());
                 }
                 break;
+            }
             case 0x4000000:
                 mDA4 = 1;
                 setup_break_condition(mCyl.GetTgHitAc());
                 break;
             }
         }
-        mCyl.ClrCoHit();
+        mCyl.ClrTgHit();
     }
 }
 
 /* 00000724-0000077C       .text co_hitCallback__11daObjHcbh_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObjHcbh_c::co_hitCallback(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
-    /* Nonmatching */
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == 0xCB) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == 0xCB) {
         ((daObjHcbh_c*)i_this)->mDA4 = 4;
     }
 }
@@ -225,7 +228,7 @@ void daObjHcbh_c::co_hitCallback(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* 
 /* 0000077C-000008F8       .text particle_set__11daObjHcbh_cFv */
 void daObjHcbh_c::particle_set() {
     /* Nonmatching */
-    csXyz angle(mDA0, 0, 0);
+    csXyz angle(0, mDA0, 0);
     dComIfG_inf_c* gameInfo = &g_dComIfG_gameInfo;
     gameInfo->play.getParticle()->set(0, 0x82DD, &current.pos, NULL, NULL, 0xFF, NULL, -1,
                                       &tevStr.mColorK0, NULL, NULL);
@@ -242,72 +245,75 @@ void daObjHcbh_c::particle_set() {
 
 /* 000008F8-000009E4       .text make_item__11daObjHcbh_cFv */
 void daObjHcbh_c::make_item() {
-    /* Nonmatching */
     s32 itemNo = param_get_itemNo();
     s32 itemSaveBitNo = param_get_itemSaveBitNo();
-    cXyz pos(current.pos.x, current.pos.y, current.pos.z);
+    cXyz pos = current.pos;
     csXyz angle(0, 0, 0);
     pos.y -= 30.0f;
-    fopAcM_createItemFromTable(&pos, itemNo, itemSaveBitNo, fopAcM_GetRoomNo(this), 0, &angle, 1, NULL);
+    fopAcM_createItemFromTable(&pos, itemNo, itemSaveBitNo, home.roomNo, 0, &angle, 1, NULL);
     s32 swSave = param_get_swSave();
     if (swSave != 0xFF) {
-        dComIfGs_onSwitch(swSave, fopAcM_GetRoomNo(this));
+        dComIfGs_onSwitch(swSave, home.roomNo);
     }
 }
 
 /* 00000A20-00000E30       .text _create__11daObjHcbh_cFv */
 cPhs_State daObjHcbh_c::_create() {
     /* Nonmatching */
+    cPhs_State phs = cPhs_ERROR_e;
+
     fopAcM_SetupActor(this, daObjHcbh_c);
 
-    mD2C = current.pos.y;
-    mD34 = 0;
-    for (int i = 0; i < 4; i++) {
-        mD38[i].set(current.pos.x, current.pos.y, current.pos.z);
-        mD78[i] = 0;
-        mD80[i] = 0;
+    if (base.base.mInitState == 0) {
+        mD2C = current.pos.y;
+        mD34 = 0;
+        for (int i = 0; i < 4; i++) {
+            mD38[i] = current.pos;
+            mD78[i] = 0;
+            mD80[i] = 0;
+        }
+        mDC8 = chk_appear();
     }
-    mDC8 = chk_appear();
 
-    cPhs_State phs;
     if (mDC8 == 1) {
         phs = dComIfG_resLoad(&mPhs, l_arcname);
         if (phs == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x2D00)) {
-                return cPhs_ERROR_e;
-            }
-            if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-                return cPhs_ERROR_e;
-            }
-            if (dComIfG_Bgsp()->Regist(mpBgW2, this)) {
-                return cPhs_ERROR_e;
-            }
-            cullMtx = mpModel->getBaseTRMtx();
-            init_mtx();
-            mCir.SetWall(589.0f, 70.0f);
-            mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
-            mAcch.ClrWaterNone();
-            mAcch.ClrRoofNone();
-            mAcch.m_ground_h = 589.0f;
-            mAcch.CrrPos(*dComIfG_Bgsp());
-            mAcch.m_flags &= ~0x80;
-            mStts.Init(0xFF, 0xFF, this);
-            mCyl.Set(l_cyl_src);
-            mCyl.SetStts(&mStts);
-            mCyl.SetC(current.pos);
-            mCyl.SetCoHitCallback(co_hitCallback);
+            if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x2D00)) {
+                if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+                    phs = cPhs_ERROR_e;
+                } else if (dComIfG_Bgsp()->Regist(mpBgW2, this)) {
+                    phs = cPhs_ERROR_e;
+                } else {
+                    cullMtx = mpModel->getBaseTRMtx();
+                    init_mtx();
+                    mCir.SetWall(589.0f, 70.0f);
+                    mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+                    mAcch.ClrWaterNone();
+                    mAcch.ClrRoofNone();
+                    mAcch.m_roof_crr_height = 589.0f;
+                    mAcch.CrrPos(*dComIfG_Bgsp());
+                    mAcch.m_flags &= ~0x80;
+                    mStts.Init(0xFF, 0xFF, this);
+                    mCyl.Set(l_cyl_src);
+                    mCyl.SetStts(&mStts);
+                    mCyl.SetC(current.pos);
+                    mCyl.SetCoHitCallback(co_hitCallback);
 
-            for (int i = 0; i < 6; i++) {
-                mSph[i].Set(l_sph_src);
-                mSph[i].SetStts(&mStts);
-                mSph[i].SetR(70.0f);
-                mSph[i].SetC(cXyz(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z));
+                    for (int i = 0; i < 6; i++) {
+                        mSph[i].Set(l_sph_src);
+                        mSph[i].SetStts(&mStts);
+                        mSph[i].SetR(70.0f);
+                        mSph[i].SetC(cXyz(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z));
+                    }
+                    mSmokeCB.setTevStr(&tevStr);
+                    mSmokeCB.setRateOff(0);
+                    mSmokeCB.setFollowOff();
+                    mProcFunc = &daObjHcbh_c::wait_act_proc;
+                    fopAcM_setCullSizeBox(this, -40.0f, 0.0f, -40.0f, 100.0f, 589.0f, 100.0f);
+                }
+            } else {
+                phs = cPhs_ERROR_e;
             }
-            mProcFunc = &daObjHcbh_c::wait_act_proc;
-            mSmokeCB.setRateOff(0);
-            mSmokeCB.setFollowOff();
-            mSmokeCB.setTevStr(&tevStr);
-            fopAcM_setCullSizeBox(this, -40.0f, 0.0f, -40.0f, 100.0f, 589.0f, 100.0f);
         }
     }
     return phs;
@@ -343,6 +349,7 @@ void daObjHcbh_c::wait_act_proc() {
         particle_set();
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_TN_COLUMN_BREAK, &current.pos, 0,
                                         dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        mCyl.SetCoHitCallback(NULL);
         mProcFunc = &daObjHcbh_c::fall_act_proc;
     }
 }
@@ -365,8 +372,7 @@ void daObjHcbh_c::fall_act_proc() {
 
     if (mD2C < home.pos.y + -10.0f) {
         make_item();
-        cXyz sp8(0.0f, 1.0f, 0.0f);
-        dComIfGp_getVibration().StartShock(8, -0x11, sp8);
+        dComIfGp_getVibration().StartShock(8, -0x11, cXyz(0.0f, 1.0f, 0.0f));
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_TN_COLUMN_SMASH, &current.pos, 0,
                                         dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         fopAcM_delete(this);
@@ -382,7 +388,6 @@ void daObjHcbh_c::fall_act_proc() {
     mDoMtx_stack_c::transM(0.0f, -f31, 0.0f);
     mDoMtx_stack_c::YrotM(-mDA0);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
 
     for (int i = 0; i < 6; i++) {
         cXyz pos(l_co_sph_offset[i]);
@@ -411,7 +416,6 @@ void daObjHcbh_c::fall_act_proc() {
 
 /* 000017D8-000018D8       .text _execute__11daObjHcbh_cFv */
 bool daObjHcbh_c::_execute() {
-    /* Nonmatching */
     set_mtx();
     mStts.Move();
     mAcch.CrrPos(*dComIfG_Bgsp());
@@ -423,7 +427,7 @@ bool daObjHcbh_c::_execute() {
     }
     mD2C += mD30;
     mD34 += mD36;
-    if (mD34 > 0x4000) {
+    if (mD34 >= 0x4000) {
         mD34 = 0x4000;
     }
     (this->*mProcFunc)();
@@ -432,8 +436,7 @@ bool daObjHcbh_c::_execute() {
 
 /* 000018D8-0000197C       .text _draw__11daObjHcbh_cFv */
 bool daObjHcbh_c::_draw() {
-    /* Nonmatching */
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     for (int i = 0; i < 4; i++) {
@@ -489,6 +492,6 @@ actor_process_profile_definition g_profile_Obj_Hcbh = {
     /* Priority  */ 0x005D,
     /* Actor SubMtd*/ &l_daObjHcbh_Method,
     /* Status    */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    /* Unk       */ 0,
-    /* Create    */ NULL,
+    /* Group     */ fopAc_ACTOR_e,
+    /* Cull Type */ fopAc_CULLBOX_CUSTOM_e,
 };
