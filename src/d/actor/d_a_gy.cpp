@@ -1490,7 +1490,8 @@ bool daGy_c::_execute() {
                         if (mD15 == 1) {
                             f32 sp8 = f31 * l_HIO.m04;
                             f32 sp18 = l_HIO.m08;
-                            if (sp8 >= sp18) {
+                            if (sp8 < sp18) {
+                            } else {
                                 sp18 = sp8;
                             }
                             mpMorf->setPlaySpeed(sp18);
