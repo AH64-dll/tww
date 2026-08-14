@@ -223,3 +223,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T05:05Z — M29: flip #50 d_a_obj_Vds → Equivalent — 21 flips this session (#30-50). Ledger: 56 NonMatching / 45 Equivalent / 313 Matching + 4 MatchingFor. Vds: FULL stub transcription (34/37 fns 100, 9c5678470), 3 holdouts strip-equal norm-diff-0, .rodata/.data byte-identical. Gate fea7844bc 08:04:58. Wave respawned (D1-11..D10-11). Bench streak: 8 real bugs caught pre-flip this cycle (firewall ChkUsed no-op, sss 70/20, kf1 0.25, ko1 sig, buoyflag constants).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T05:29Z — M30: flip #51 d_a_obj_YLzou → MatchingFor(retail-3) — 22 flips this session (#30-51). Ledger: 54 NonMatching / 46 Equivalent / 313 Matching + 5 MatchingFor. YLzou: 49/49 fns + all sections 100.0 (full transcription), demo-only HIO class proven (53 demo refs vs 0 retail). Gate 9301769f4 08:27:30 + cycle 6 ALL GREEN. BLead-9 shift: 6 flips, 10 gap-closes, 3 cycles. MatchingFor-family signature: retail legs relink+pin, demo leg CHECK-only.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
