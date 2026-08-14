@@ -147,6 +147,7 @@ static void* searchActor_SWC00(void* i_actor, void* i_this) {
 
 /* 000004EC-00000598       .text init_KK1_0__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::init_KK1_0() {
+    /* Nonmatching */
     if (dComIfGs_isEventBit(0x2D01) && (!dKy_daynight_check() || !dComIfGs_isEventBit(0x0E08))) {
         set_action(&daNpc_Kk1_c::wait_action1, NULL);
         return true;
@@ -339,6 +340,7 @@ void daNpc_Kk1_c::play_btp_anm() {
 
 /* 00000C80-00000CFC       .text play_eff_anm__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::play_eff_anm() {
+    /* Nonmatching */
     m800++;
     if(m800 >= 0x1E) {
         m800 = 0x1D;
