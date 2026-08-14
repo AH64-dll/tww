@@ -1182,7 +1182,7 @@ void action_kougeki(bl_class* i_this) {
         break;
     case 0xE:
         cLib_addCalc0(&i_this->speedF, 0.5f, 1.0f);
-        if (fabs(i_this->speedF) < 0.2f) {
+        if (std::fabsf(i_this->speedF) < 0.2f) {
             i_this->speedF = 0.0f;
             anm_init(i_this, 0x18, 1.0f, 0, 1.0f, -1);
             fopAcM_monsSeStart(i_this, 0x4870, 0);
