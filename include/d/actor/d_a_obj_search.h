@@ -39,7 +39,7 @@ namespace daObj_Search {
         /* 0x3A */ u8 m3A;
         /* 0x3B */ u8 m3B;
         /* 0x3C */ s16 m3C;
-        /* 0x3E */ s16 m3E;
+        /* 0x3E */ u8 m3E;
         /* 0x40 */ f32 m40;
         /* 0x44 */ u8 m44;
         /* 0x45 */ u8 m45;

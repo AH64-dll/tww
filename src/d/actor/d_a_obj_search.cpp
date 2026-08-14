@@ -240,7 +240,109 @@ void daObj_Search::Act_c::modeSearchPathInit() {
 
 /* 800FE244-800FEA6C       .text modeSearchPath__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPath() {
-    /* Nonmatching */
+    s16 name = 0xF3;
+
+    dLib_pathMove(&m838, &m844, mPath, (f32)attr()->m02, NULL, NULL);
+
+    if (m834 != 0) {
+        fopAc_ac_c* found = fopAcM_SearchByName(name);
+        if (m85C != 0xFF && found != NULL) {
+            fopAc_ac_c* child = fopAcM_SearchByID(mChildId);
+            if (child != NULL) {
+                *(s16*)((u8*)child + 0x1224) = m7AC;
+            }
+
+            if (attr()->m39 != 0 || m8D0 == 4) {
+                modeProc(PROC_INIT_e, MODE_TO_STOP_e);
+                return;
+            }
+
+            if (attr()->m3A != 0) {
+                fopAc_ac_c* player = dComIfGp_getPlayer(0);
+                static cXyz l_off1 = cXyz(0.0f, 100.0f, 0.0f);
+                cXyz spBC = l_off1;
+                cXyz sp74 = (spBC + player->current.pos) - m624[0];
+
+                m7B0 = mAngle[0].y;
+                s16 yaw = cM_atan2s(sp74.x, sp74.z) - current.angle.y;
+                f32 dist = std::sqrtf(sp74.x * sp74.x + sp74.z * sp74.z);
+                s32 pitch = cM_atan2s(sp74.y, dist);
+                cLib_addCalcAngleS2(&mAngle[m830].y, yaw, 0xA, 0x400);
+                cLib_addCalcAngleS2(&mAngle[m830].x, pitch, 0xA, 0x400);
+                return;
+            }
+
+            if (m8D0 == 2) {
+                fopAc_ac_c* player = dComIfGp_getPlayer(0);
+                static cXyz l_off2 = cXyz(0.0f, 100.0f, 0.0f);
+                cXyz spB0 = l_off2;
+                cXyz sp50 = (spB0 + player->current.pos) - m624[0];
+
+                m7B0 = mAngle[0].y;
+                s16 yaw = cM_atan2s(sp50.x, sp50.z) - current.angle.y;
+                f32 dist = std::sqrtf(sp50.x * sp50.x + sp50.z * sp50.z);
+                s32 pitch = cM_atan2s(sp50.y, dist);
+                cLib_addCalcAngleS2(&mAngle[m830].y, yaw, 0xA, 0x400);
+                cLib_addCalcAngleS2(&mAngle[m830].x, pitch, 0xA, 0x400);
+                return;
+            }
+
+            if (m8D0 == 3) {
+                fopAc_ac_c* player = dComIfGp_getPlayer(0);
+                static cXyz l_off3 = cXyz(0.0f, 100.0f, 0.0f);
+                cXyz spA4 = l_off3;
+                cXyz sp2C = (spA4 + player->current.pos) - m624[0];
+
+                m7B0 = mAngle[0].y;
+                s16 yaw = cM_atan2s(sp2C.x, sp2C.z) - current.angle.y;
+                f32 dist = std::sqrtf(sp2C.x * sp2C.x + sp2C.z * sp2C.z);
+                s32 pitch = cM_atan2s(sp2C.y, dist);
+                cLib_addCalcAngleS2(&mAngle[m830].y, yaw, 0xA, 0x400);
+                cLib_addCalcAngleS2(&mAngle[m830].x, pitch, 0xA, 0x400);
+                return;
+            }
+        }
+
+        if (attr()->m38 != 0) {
+            if (player_check()) {
+                if (g_dComIfG_gameInfo.play.getDemo()->getMode() != 1) {
+                    m7A0 += 1;
+                    if ((s32)m7A0 > (s16)attr()->m5E) {
+                        modeProc(PROC_INIT_e, MODE_FIND_e);
+                        m7A0 = 0;
+                    }
+                }
+            } else {
+                m7A0 = 0;
+            }
+        }
+    }
+
+    m60C[0] = m838;
+    cXyz sp20 = m60C[0] - m624[0];
+
+    m7B0 = mAngle[0].y;
+    m7B2 = mAngle[0].x;
+    m7B4 = mAngle[1].x;
+    s16 yaw = cM_atan2s(sp20.x, sp20.z) - current.angle.y;
+    f32 dist = std::sqrtf(sp20.x * sp20.x + sp20.z * sp20.z);
+    s32 pitch = cM_atan2s(sp20.y, dist);
+
+    if (attr()->m3E != 0) {
+        cLib_addCalcAngleS2(&mAngle[0].y, yaw, 0x1E, 0x400);
+        cLib_addCalcAngleS2(&mAngle[0].x, pitch, 0x1E, 0x400);
+        mAngle[1].y = mAngle[0].y;
+    } else if (g_regHIO.mChild[12].mShortRegs[4] == 0) {
+        cLib_addCalcAngleS2(&mAngle[0].y, yaw, 0x1E, 0x400);
+        cLib_addCalcAngleS2(&mAngle[0].x, pitch, 0x1E, 0x400);
+        mAngle[1].y = mAngle[0].y;
+    } else {
+        mAngle[0].y = yaw;
+        mAngle[0].x = pitch;
+        mAngle[1].y = mAngle[0].y;
+    }
+
+    mAngle[1].x = (s16)(182.04445f * (f32)attr()->m3C);
 }
 
 /* 800FEA6C-800FEA80       .text modeStopInit__Q212daObj_Search5Act_cFv */
