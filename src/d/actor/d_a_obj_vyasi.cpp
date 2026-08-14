@@ -160,6 +160,7 @@ void daObjVyasi::Act_c::set_first_process() {
 
 /* 0000021C-000005B8       .text set_collision__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_collision() {
+    /* Nonmatching */
     if (mCyl.ChkTgHit()) {
         daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 7);
         daObj::HitEff_kikuzu(this, &mCyl);
@@ -235,6 +236,7 @@ void daObjVyasi::Act_c::process_sag_main() {
 
 /* 00000AD8-00000CC0       .text process_sagWind_init__Q210daObjVyasi5Act_cFv */
 int daObjVyasi::Act_c::process_sagWind_init() {
+    /* Nonmatching */
     if (SetStopJointAnimation(mpBckData, 1.0f, 3.0f)) {
         f32 dist = mEkszsPos.getSquareDistance(current.pos);
         if (dist > 0.0f) {
