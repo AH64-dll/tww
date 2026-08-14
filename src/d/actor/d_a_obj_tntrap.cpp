@@ -72,22 +72,21 @@ static s32 table_idx[12] = {0, 1, 2, 0, 2, 3, 3, 2, 5, 3, 5, 4};
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
     /* Nonmatching */
 BOOL daObjTnTrap_c::chk_appear() {
+    BOOL ret = FALSE;
     mSwSave = param_get_swSave();
     mSwSave2 = param_get_swSave2();
     mArg0 = param_get_arg0();
     mMapType = param_get_mapType();
-
-    BOOL ret = FALSE;
     switch (mMapType) {
         case 0:
-            if (dComIfGs_isEventBit(0x3A04)) {
+            if (dComIfGs_isEventBit(0x3A04) == TRUE) {
                 if (mSwSave != 0xFF) {
-                    if (dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+                    if (dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
                         if (dComIfGs_getTriforceNum() == 8) {
                             if (mArg0 == 0) {
-                                if (dComIfGs_isEventBit(0x2C01)) {
+                                if (dComIfGs_isEventBit(0x2C01) == TRUE) {
                                     if (mSwSave2 != 0xFF) {
-                                        if (!dComIfGs_isSwitch(mSwSave2, current.roomNo)) {
+                                        if (!dComIfGs_isSwitch(mSwSave2, home.roomNo)) {
                                             mAppear = 2;
                                             ret = TRUE;
                                         }
@@ -109,14 +108,14 @@ BOOL daObjTnTrap_c::chk_appear() {
             }
             break;
         case 1:
-            if (mSwSave != 0xFF && !dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+            if (mSwSave != 0xFF && !dComIfGs_isSwitch(mSwSave, home.roomNo)) {
                 mAppear = 3;
                 ret = TRUE;
             }
             break;
         case 2:
             if (mSwSave != 0xFF) {
-                if (!dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+                if (!dComIfGs_isSwitch(mSwSave, home.roomNo)) {
                     mAppear = 5;
                     ret = TRUE;
                 }
@@ -219,12 +218,14 @@ void daObjTnTrap_c::particle_delete(int i_idx) {
 }
 
 /* 000006A4-0000072C       .text set_se__13daObjTnTrap_cFv */
-    /* Nonmatching */
 void daObjTnTrap_c::set_se() {
-    if (mAction < 5) {
-        if (mAction >= 1) {
-            fopAcM_seStartCurrent(this, JA_SE_OBJ_TN_TRAP, 0);
-        }
+    switch (mAction) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_TN_TRAP, 0);
+        break;
     }
 }
 
@@ -252,7 +253,7 @@ BOOL daObjTnTrap_c::chk_event_flg() {
     BOOL ret = TRUE;
     switch (mAppear) {
         case 0:
-            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
                 s32 act = 4;
                 if (mArg0 == 0) {
                     act = 2;
@@ -267,17 +268,17 @@ BOOL daObjTnTrap_c::chk_event_flg() {
             }
             break;
         case 3:
-            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
                 daShip_c* ship = dComIfGp_getShipActor();
                 if (ship != NULL) {
-                    ship->offFantomGanonBattle();
+                    ship->offStateFlg(daShip_c::daSFLG_UNK400000_e);
                     fopAcM_delete(this);
                     ret = FALSE;
                 }
             }
             break;
         case 5:
-            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, current.roomNo)) {
+            if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
                 fopAcM_delete(this);
                 ret = FALSE;
             }
@@ -475,10 +476,10 @@ BOOL daObjTnTrap_c::demo_end_wait_act_proc() {
 /* 000016A8-00001740       .text hide_wait_act_proc__13daObjTnTrap_cFv */
     /* Nonmatching */
 BOOL daObjTnTrap_c::hide_wait_act_proc() {
-    if (mSwSave2 != 0xFF && dComIfGs_isSwitch(mSwSave2, current.roomNo)) {
+    if (mSwSave2 != 0xFF && dComIfGs_isSwitch(mSwSave2, home.roomNo) == TRUE) {
         daShip_c* ship = dComIfGp_getShipActor();
         if (ship != NULL) {
-            ship->onFantomGanonBattle();
+            ship->onStateFlg(daShip_c::daSFLG_UNK800000_e);
             if (!dComIfG_Bgsp()->Regist(mpBgW, this)) {
                 setup_action(0);
             }
