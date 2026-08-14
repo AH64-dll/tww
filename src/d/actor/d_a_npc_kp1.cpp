@@ -296,12 +296,14 @@ void daNpc_Kp1_c::chngAnmAtr(u8 param_1) {
 }
 
 /* 00000CA4-00000D54       .text ctrlAnmAtr__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::ctrlAnmAtr() { /* Nonmatching */
+void daNpc_Kp1_c::ctrlAnmAtr() {
     switch (mAnmAtr) {
+    case 0:
+        break;
     case 1:
         if (mPlayEnd != 0) {
-            mAnmTimer++;
-            if (mAnmTimer >= 2) {
+            s8 timer = ++mAnmTimer;
+            if (timer >= 2) {
                 mAnmAtr = 0;
                 setAnm_NUM(0, 1);
             }
@@ -309,8 +311,8 @@ void daNpc_Kp1_c::ctrlAnmAtr() { /* Nonmatching */
         break;
     case 6:
         if (mPlayEnd != 0) {
-            mAnmTimer++;
-            if (mAnmTimer >= 1) {
+            s8 timer = ++mAnmTimer;
+            if (timer >= 1) {
                 mAnmAtr = 0;
                 setAnm_NUM(0, 1);
             }

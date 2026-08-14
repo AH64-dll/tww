@@ -91,8 +91,8 @@ public:
     /* 0x7B0 */ u8 field_0x7b0[8];
     /* 0x7B8 */ s16 mLookAngle;
     /* 0x7BA */ s16 mLookStartAngle;
-    /* 0x7BC */ u8 mPlayEnd;
-    /* 0x7BD */ u8 mAnmTimer;
+    /* 0x7BC */ s8 mPlayEnd;
+    /* 0x7BD */ s8 mAnmTimer;
     /* 0x7BE */ u8 mMsgNo;
     /* 0x7BF */ u8 mTalkFlag;
     /* 0x7C0 */ u8 mEventFlag;
