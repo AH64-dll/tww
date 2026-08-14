@@ -540,7 +540,209 @@ void daNpc_Ko1_c::clrSpd() { /* Nonmatching */
 }
 
 /* 000044E8-00004B18       .text setStt__11daNpc_Ko1_cFSc */
-void daNpc_Ko1_c::setStt(signed char) { /* Nonmatching */
+void daNpc_Ko1_c::setStt(signed char i_stt) {
+    /* Nonmatching */
+    fopAc_ac_c* actor = searchByID(m7B4[0]);
+    u8 oldStt = m8A3;
+    m84E = 0;
+    m8A3 = i_stt;
+    s8 stt = m8A3;
+
+    switch (stt) {
+    case 1:
+    case 2:
+    case 0xC:
+    case 0x16:
+    case 0x1D:
+        switch (stt) {
+        case 1:
+            m852 = (s16)(90.0f + cM_rndF(90.0f));
+            break;
+        case 2:
+            m854 = (g_Counter.mCounter0 & 3) + 1;
+            break;
+        }
+        if ((s8)oldStt != 3) {
+            m8A5 = 3;
+            m858 = m7D2;
+            m_jnt.mbTrn = 1;
+            m876 = 0;
+        }
+        m8A2 = 0;
+        m898 = 0;
+        clrSpd();
+        break;
+    case 3:
+        m8A5 = 1;
+        m_jnt.mbTrn = 1;
+        m876 = 0;
+        m8A2 = 0;
+        m898 = 0;
+        clrSpd();
+        m89C = 0xFF;
+        m89D = 0xFF;
+        m8A4 = oldStt;
+        break;
+    case 4:
+    case 0xB:
+        switch (stt) {
+        case 4:
+            m852 = (s16)(180.0f + cM_rndF(180.0f));
+            break;
+        case 0xB:
+            if (m744 != 0) {
+                mPath.setInfDrct((dPath*)m744);
+                mPath.setNearPathIndx(&current.pos, 0.0f);
+                m744 = 0;
+            }
+            break;
+        }
+        m7F4 = mPath.getPoint(mPath.getIdx());
+        m8A5 = 0;
+        m876 = 1;
+        m8A2 = 0;
+        m898 = 1;
+        m86B = 0;
+        goto tail_04908;
+    case 5:
+        m8A5 = 0;
+        m876 = 0;
+        m8A2 = 0;
+        m898 = 0;
+        clrSpd();
+        break;
+    case 6:
+    case 0xD:
+    case 0x17:
+        switch (stt) {
+        case 6:
+            if (mPath.getPath() != NULL) {
+                m744 = (u32)mPath.getPath();
+                mPath.setInfDrct(NULL);
+            }
+            break;
+        }
+        m7F4 = g_dComIfG_gameInfo.play.getPlayerPtr(0)->current.pos;
+        m8A5 = 1;
+        m876 = 1;
+        m8A2 = 0;
+        m898 = 2;
+        m86B = 0;
+        goto tail_049FC;
+    case 7:
+        if (mPath.getPath() != NULL) {
+            m744 = (u32)mPath.getPath();
+            mPath.setInfDrct(NULL);
+        }
+        m7F4 = g_dComIfG_gameInfo.play.getPlayerPtr(0)->current.pos;
+        m8A5 = 1;
+        m876 = 1;
+        goto tail_04808;
+    case 8:
+        if (m744 != 0) {
+            mPath.setInfDrct((dPath*)m744);
+            mPath.setNearPathIndx(&current.pos, 0.0f);
+            m744 = 0;
+        }
+        m7F4 = mPath.getPoint(mPath.getIdx());
+        m8A5 = 0;
+        m876 = 1;
+    tail_04808:
+        m8A2 = 0;
+        m898 = 3;
+        m86B = 0;
+        m830 = -4.0f;
+        speed.y = m830;
+        speedF = 0.0f;
+        m834 = 0.0f;
+        m82C = 0.0f;
+        gravity = 0.0f;
+        m83C = *(f32*)&l_HIO.mChild[mCharNo].mPrm[0x40];
+        break;
+    case 9:
+    case 0x10:
+    case 0x12:
+    case 0x19:
+        m8A5 = 0;
+        m876 = 0;
+        m8A2 = 0;
+        m899 = m898;
+        m898 = 4;
+        m86C = 1;
+        speed.y = 10.0f;
+        speedF = -3.0f;
+        gravity = -1.6f;
+        m834 = 0.1f;
+        break;
+    case 0xA:
+    case 0xE:
+    case 0x1A:
+        m8A5 = 1;
+        m876 = 0;
+        m8A2 = 0;
+        m898 = 0;
+        clrSpd();
+        break;
+    case 0xF:
+    case 0x18:
+        m7F4 = m7C4;
+        m8A5 = 0;
+        m876 = 1;
+        m8A2 = 0;
+        m898 = 1;
+        m86B = 0;
+    tail_04908:
+        gravity = -4.5f;
+        {
+            daNpc_Ko1_HIO_c* hio = &l_HIO;
+            m82C = *(f32*)&hio->mChild[mCharNo].mPrm[0x24];
+            m834 = *(f32*)&hio->mChild[mCharNo].mPrm[0x28];
+            m83C = *(f32*)&hio->mChild[mCharNo].mPrm[0x2C];
+        }
+        break;
+    case 0x11:
+        JUT_ASSERT(0xa73, 0 != actor);
+        m7F4 = actor->current.pos;
+        m8A5 = 2;
+        m7E8 = m7F4;
+        m7E8.y = actor->eyePos.y;
+        m876 = 1;
+        m8A2 = 0;
+        m898 = 2;
+        m86B = 0;
+    tail_049FC:
+        gravity = -4.5f;
+        m82C = *(f32*)&l_HIO.mChild[mCharNo].mPrm[0x34];
+        m834 = *(f32*)&l_HIO.mChild[mCharNo].mPrm[0x38];
+        m83C = *(f32*)&l_HIO.mChild[mCharNo].mPrm[0x3C];
+        break;
+    case 0x13:
+        if (actor != NULL) {
+            m8A5 = 2;
+            m7E8 = actor->current.pos;
+            m7E8.y = actor->eyePos.y;
+        } else {
+            m8A5 = 0;
+        }
+        m876 = 0;
+        m8A2 = 0;
+        m898 = 0;
+        clrSpd();
+        break;
+    case 0x14:
+        m89C = 0xFF;
+        m89D = 0xFF;
+        m8A4 = oldStt;
+        break;
+    case 0x1B:
+    case 0x1C:
+        m852 = (s16)(180.0f + cM_rndF(180.0f));
+        m854 = cLib_getRndValue(3, 10);
+        m865 = 0;
+        break;
+    }
+
+    setAnm();
 }
 
 /* 00004B18-00004C70       .text wait_1__11daNpc_Ko1_cFv */

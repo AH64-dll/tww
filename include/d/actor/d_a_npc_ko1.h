@@ -240,7 +240,7 @@ public:
     /* 0x8A3 */ u8 m8A3;
     /* 0x8A4 */ u8 m8A4;
     /* 0x8A5 */ u8 m8A5;
-    /* 0x8A6 */ u8 mCharNo;
+    /* 0x8A6 */ s8 mCharNo;
     /* 0x8A7 */ u8 mStaffNo;
     /* 0x8A8 */ u8 m8A8;
     /* 0x8A9 */ u8 m8A9;
