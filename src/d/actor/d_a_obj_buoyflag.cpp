@@ -865,7 +865,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     f32 sin1 = cM_ssin(mC68[6]);
     f32 sin2 = cM_ssin(mC68[8]);
 
-    f32 windScale = 0.2f + 0.35f * (1.0f + 0.15f * sin2 + 0.5f * sin1 + 0.35f * sin0) + cM_rndF(0.2f);
+    f32 windScale = 0.2f + 0.35f * (1.0f + (0.15f * sin2 + (0.5f * sin1 + 0.35f * sin0))) + cM_rndF(0.2f);
 
     cXyz wind = dKyw_get_AllWind_vecpow(&other->mPos[0]);
     wind *= 0.5f * windScale * L_attr.m08;
