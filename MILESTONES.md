@@ -241,3 +241,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T06:29Z — M32: flip #53 d_a_obj_msdan_sub2 → MatchingFor — 24 flips this session (#30-53). Ledger: 52 NonMatching / 48 Equivalent / 313 Matching + 6 MatchingFor. msdan_sub2: full transcription 9/9 fns + 5 weaks ALL 100.0 (cull ±1500, TEV_TYPE_BG0, Execute arm value bugs fixed). Gate 093cc3222 09:27:52 + cycle 7 ALL GREEN. 7 consecutive 4-version cycles green. Bench: 12+ real bugs caught pre-flip this cycle (ChkUsed no-op, rlwinm mask, TEV_TYPE li-arg, cull extents).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T06:42Z — M33: flip #54 d_a_obj_light → Equivalent — 25 flips this session (#30-54). Ledger: 51 NonMatching / 49 Equivalent / 313 Matching + 6 MatchingFor. light: 58/59 fns 100 after 4-round loop (set_mtx frame-128 pointer-locals + 48B-stride walk, _draw TEV_TYPE_BG0 value bug); set_mtx 80.40 single-regalloc-family arbitrated accept (191-vs-192 insns, zero value deltas). Gate 62e17b9a1 09:41:49. 3 flips in BLead-10's shift (#52/#53/#54).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
