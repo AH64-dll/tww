@@ -379,6 +379,177 @@ void daNpc_So_c::cutMiniGameStart() {
 /* 00006710-00006FE4       .text cutMiniGameProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameProc() {
     /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayer(0);
+    s16 angle = player->shape_angle.y;
+    cXyz pos = player->current.pos;
+    u8 keep = 0;
+
+    fopAc_ac_c* ship = g_dComIfG_gameInfo.play.getPlayerPtr(2);
+    if (ship != NULL) {
+        angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+        pos = ship->current.pos;
+    }
+
+    if (player->checkResetFlg0(daPy_py_c::daPyRFlg0_ARROW_SHOOT)) {
+        mB78++;
+    }
+
+    if (mB78 >= 0xA) {
+        keep = 1;
+        if (field_0xB74 <= 6) {
+            player->mDemo.setDemoMode(6);
+            player->mDemo.setParam0(1);
+            initCam();
+            moveCam();
+            JAIZelBasic::getInterface()->seStart(0x8F1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            g_dComIfG_gameInfo.play.mMiniGameType = 0;
+            g_dComIfG_gameInfo.play.mMinigameFlags ^= 0x80;
+            g_dComIfG_gameInfo.play.mMinigameResult = 0;
+            speedF = 0.0f;
+            field_0xAFC = 0.0f;
+            dComIfGp_evmng_cutEnd(field_0xB6C);
+            return;
+        }
+    }
+
+    switch (field_0xB74) {
+    case 0:
+        setAnm(2, 0);
+        field_0xA9C = 30;
+        field_0xB84 = 0;
+        field_0xB74++;
+        field_0xAFC = 0.0f;
+        speedF = field_0xAFC;
+        offsetSwim();
+        break;
+    case 1:
+        if (cLib_calcTimer(&field_0xA9C) == 0) {
+            field_0xB74++;
+        }
+        break;
+    case 2:
+        setAnm(2, 0);
+        {
+            f32 c = 1000.0f;
+            field_0xB8C = c + cM_rndF(400.0f);
+            field_0xB88 = cM_rndF(c) + (-c) * 0.5f;
+        }
+        {
+            cXyz v(field_0xB88, 0.0f, field_0xB8C);
+            cXyz out(0.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::YrotS(angle);
+            PSMTXMultVec(mDoMtx_stack_c::get(), &v, &out);
+            PSVECAdd(&out, &pos, &out);
+            mEventCut.setAttnPos(out);
+        }
+        field_0xB74++;
+        offsetSwim();
+        break;
+    case 3: {
+        cXyz attn = mEventCut.getAttnPos();
+        field_0xAFC = 12.0f + REG12_F(10);
+        const cXyz& diff = current.pos - attn;
+        f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
+        f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+        cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &attn), 8, 0x400);
+        if (dist < 150.0f + REG12_F(7)) {
+            field_0xAFC = 0.0f;
+            field_0xB74++;
+        }
+        break;
+    }
+    case 4:
+        {
+            f32 c = 300.0f;
+            field_0xB88 += cM_rndF(c) + (-c) * 0.5f;
+        }
+        {
+            cXyz v(field_0xB88, 0.0f, field_0xB8C);
+            cXyz out(0.0f, 0.0f, 0.0f);
+            mDoMtx_stack_c::YrotS(angle);
+            PSMTXMultVec(mDoMtx_stack_c::get(), &v, &out);
+            PSVECAdd(&out, &pos, &out);
+            mEventCut.setAttnPos(out);
+        }
+        field_0xAFC = 0.0f;
+        speedF = field_0xAFC;
+        field_0xA9C = 30;
+        field_0xB74++;
+        offsetSwim();
+        break;
+    case 5: {
+        cXyz attn = mEventCut.getAttnPos();
+        field_0xAFC = 0.0f;
+        const cXyz& diff = current.pos - attn;
+        f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
+        f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+        cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &attn), 8, 0x400);
+        if (cLib_calcTimer(&field_0xA9C) == 0) {
+            field_0xB74++;
+        }
+        break;
+    }
+    case 6:
+        current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
+        field_0xAFC = field_0xB08 * (5.0f + cM_rndF(5.0f));
+        speedF = field_0xAFC;
+        speed.y = 18.0f * field_0xB08 + 4.0f * speedF;
+        if (speed.y > l_HIO.field_0x50) {
+            speed.y = l_HIO.field_0x50;
+        }
+        gravity = -0.8f;
+        setAnm(4, 0);
+        shape_angle.x = l_HIO.field_0x68;
+        offsetZero();
+        field_0xB74++;
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        JAIZelBasic::getInterface()->seStart(0x5938, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        break;
+    case 7:
+        f32 waterY = dLib_getWaterY(current.pos, mObjAcch);
+        if (field_0xB84 == 0 && field_0xB7C < 0xA && field_0x6D8 == 0) {
+            if (current.pos.y >= waterY + 50.0f) {
+                mSph.SetR(l_HIO.field_0x3C);
+                mSph.SetC(current.pos);
+                g_dComIfG_gameInfo.play.mCcS.Set(&mSph);
+            } else {
+                cXyz c(0.0f, 30000.0f, 0.0f);
+                mSph.SetR(0.0f);
+                mSph.SetC(c);
+                g_dComIfG_gameInfo.play.mCcS.Set(&mSph);
+            }
+            if (checkTgHit()) {
+                field_0xB7C++;
+                if (field_0xB7C >= 0xA) {
+                    field_0xB7C = 0xA;
+                }
+            }
+        }
+        if (current.pos.y <= waterY) {
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(0x5939, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
+            field_0xAFC = 0.0f;
+            speedF = field_0xAFC;
+            field_0xB80++;
+            if (field_0xB80 >= 0xA || keep) {
+                player->mDemo.setDemoMode(6);
+                player->mDemo.setParam0(1);
+                initCam();
+                moveCam();
+                JAIZelBasic::getInterface()->seStart(0x8F1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                g_dComIfG_gameInfo.play.mMiniGameType = 0;
+                g_dComIfG_gameInfo.play.mMinigameFlags ^= 0x80;
+                g_dComIfG_gameInfo.play.mMinigameResult = 0;
+                speedF = 0.0f;
+                field_0xAFC = 0.0f;
+                dComIfGp_evmng_cutEnd(field_0xB6C);
+            } else {
+                field_0xB74 = 0;
+            }
+        }
+        break;
+    }
 }
 
 /* 00006FE4-00006FF0       .text cutTurnStart__10daNpc_So_cFv */
