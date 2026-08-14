@@ -415,7 +415,6 @@ void daObjFirewall_c::wait3_act_proc() {
 }
 
 /* 000018E0-000019B0       .text appear_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::appear_act_proc() {
     mBrk.play();
     bool b = true;
@@ -423,7 +422,7 @@ void daObjFirewall_c::appear_act_proc() {
     } else {
         b = false;
     }
-    if (b == true) {
+    if ((s32)b == 1) {
         m106C = 1.0f;
         if (mEventIdx != -1) {
             mProc = &daObjFirewall_c::demo_end_wait_act_proc;
@@ -459,7 +458,6 @@ void daObjFirewall_c::burn_wait_act_proc() {
 }
 
 /* 00001B68-00001BEC       .text retire_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::retire_act_proc() {
     mBrk.play();
     bool b = true;
@@ -467,7 +465,7 @@ void daObjFirewall_c::retire_act_proc() {
     } else {
         b = false;
     }
-    if (b == true) {
+    if ((s32)b == 1) {
         dComIfGs_onEventBit(0x2C01);
         fopAcM_delete(this);
     }
