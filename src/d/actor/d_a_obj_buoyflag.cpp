@@ -798,18 +798,24 @@ void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* i_actor) {
     static cXyz base_z_rev(0.0f, 0.0f, -1.0f);
 
     for (int i = 0; i < 2; i++) {
+        DrawVtx_c* vtx = &mDrawVtx[i];
         for (int row = 0; row < 5; row++) {
+            cXyz* posRow = &vtx->mPos[row * 7];
+            cXyz* nrmRow = &vtx->mNrm[row * 7];
+            cXyz* nrm2Row = &vtx->mNrm2[row * 7];
+            Vec* lposRow = &Khata::l_pos[row * 7];
             for (int col = 0; col < 7; col++) {
-                mDrawVtx[i].mPos[row * 7 + col] = Khata::l_pos[row * 7 + col];
-                mDrawVtx[i].mNrm[row * 7 + col] = cXyz::BaseZ;
-                mDrawVtx[i].mNrm2[row * 7 + col] = base_z_rev;
+                posRow[col] = lposRow[col];
+                nrmRow[col] = cXyz::BaseZ;
+                nrm2Row[col] = base_z_rev;
             }
         }
     }
     mB8C = 0;
     for (int row = 0; row < 5; row++) {
+        cXyz* posRow = &mPos[row * 7];
         for (int col = 0; col < 7; col++) {
-            mPos[row * 7 + col].set(0.0f, 0.0f, 0.0f);
+            posRow[col] = cXyz::Zero;
         }
     }
     mC68[0] = (s16)cM_rndFX(32768.0f);
