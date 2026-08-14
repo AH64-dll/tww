@@ -1340,9 +1340,10 @@ BOOL daNpc_Kf1_c::orderTsuboEvent() {
 }
 
 /* 00003278-00003374       .text wait_1__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::wait_1() { /* Nonmatching */
+BOOL daNpc_Kf1_c::wait_1() {
     if (mTalkOrder != 0) {
-        if (chk_talk()) {
+        u8 talk = chk_talk();
+        if (talk) {
             setStt(2);
             mLookMode = 1;
             mLookFlag = 0;
@@ -1357,12 +1358,12 @@ BOOL daNpc_Kf1_c::wait_1() { /* Nonmatching */
     if (mAnmNo == 9) {
         m792 = 0;
     }
-    if (cLib_calcTimer<s16>(&m792)) {
+    if (cLib_calcTimer<s16>(&m792) == 0) {
         if (mAnmNo != 9) {
             setAnm_NUM(9, TRUE);
             m794 = 0;
         }
-        if (cLib_calcTimer<s16>(&m794)) {
+        if (cLib_calcTimer<s16>(&m794) == 0) {
             setStt(3);
             return TRUE;
         }
