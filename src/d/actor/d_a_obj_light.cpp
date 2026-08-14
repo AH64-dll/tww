@@ -7,12 +7,12 @@
 #include "d/actor/d_a_obj_light.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
-void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+bool daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
+    return create_heap();
 }
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::create_heap() {
+bool daObjLight::Act_c::create_heap() {
     /* Nonmatching */
 }
 
@@ -57,13 +57,22 @@ void daObjLight::Act_c::delete_fire() {
 }
 
 /* 00000C60-00000C8C       .text now_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::now_event(short) {
-    /* Nonmatching */
+bool daObjLight::Act_c::now_event(s16 i_event) {
+    bool ret = false;
+    if (mEventActive != 0 && mEventId == i_event) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00000C8C-00000CB4       .text set_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::set_event(short) {
-    /* Nonmatching */
+bool daObjLight::Act_c::set_event(s16 i_event) {
+    if (mEventActive == 0) {
+        mEventId = i_event;
+        mEventActive = 1;
+        return true;
+    }
+    return false;
 }
 
 /* 00000CB4-00000D84       .text exe_event__Q210daObjLight5Act_cFv */
