@@ -16,7 +16,7 @@
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_lib.h"
 
-static const char* l_arcname = "Yswdr00";
+static const char l_arcname[] = "Yswdr00";
 
 static const dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -48,20 +48,11 @@ static const dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-static const char* l_ev_name = "btl_of_swroom";
-static const char* l_ev_name2 = "btl_of_swroom2";
+static const char l_ev_name[] = "btl_of_swroom";
+static const char l_ev_name2[] = "btl_of_swroom2";
 static const char* l_ev_name_table[] = {l_ev_name, l_ev_name2};
 
 static s32 l_enter_angl_band = abs(0xE00);
-
-static const s16 zou_chk_angl[] = {0xD556, 0x2AAA, 0x5555, 0xAAAB, 0x8000};
-
-static const char chk_word0[] = "050smile";
-static const char chk_word1[] = "049s_surp";
-static const char chk_word2[] = "dummy";
-static const char* chk_word_table[] = {chk_word0, chk_word1, chk_word2};
-
-static const s32 voice_table[] = {0x2E, 0x31, 0x00};
 
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
     /* Nonmatching */
@@ -79,27 +70,21 @@ BOOL daObjFirewall_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 00000110-000002DC       .text create_heap__15daObjFirewall_cFv */
     /* Nonmatching */
 bool daObjFirewall_c::create_heap() {
-    BOOL ok = TRUE;
-    J3DModelData* mdlData =
-        (J3DModelData*)dRes_control_c::getRes(l_arcname, 6, dComIfG_getObjectResInfo(l_arcname), 0x40);
-    J3DAnmTextureSRTKey* btkData =
-        (J3DAnmTextureSRTKey*)dRes_control_c::getRes(l_arcname, 0xC, dComIfG_getObjectResInfo(l_arcname), 0x40);
-    J3DAnmTevRegKey* brkData =
-        (J3DAnmTevRegKey*)dRes_control_c::getRes(l_arcname, 9, dComIfG_getObjectResInfo(l_arcname), 0x40);
+    bool ok = true;
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, 6);
+    J3DAnmTextureSRTKey* btkData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcname, 0xC);
+    J3DAnmTevRegKey* brkData = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname, 9);
     if (mdlData == NULL || btkData == NULL || brkData == NULL) {
         JUT_ASSERT(0x171, 0);
-        ok = FALSE;
+        ok = false;
     } else {
         mpModel = mDoExt_J3DModel__create(mdlData, 0x80000, 0x11000222);
-        mpBgW = dBgW_NewSet(
-            (cBgD_t*)dRes_control_c::getRes(l_arcname, 0xF, dComIfG_getObjectResInfo(l_arcname), 0x40),
-            cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
-        mBtk.init(mdlData, btkData, 1, 2, 1.0f, 0, -1, 0, 0);
-        mBrk.init(mdlData, brkData, 1, 0, 1.0f, 0, -1, 0, 0);
-        if (mpModel != NULL && mpBgW != NULL && mBtk.getBtkAnm() != NULL && mBrk.getBrkAnm() != NULL) {
-            ok = TRUE;
-        } else {
-            ok = FALSE;
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0xF), cBgW::MOVE_BG_e,
+                            &mpModel->getBaseTRMtx());
+        int btkOk = mBtk.init(mdlData, btkData, 1, 2, 1.0f, 0, -1, 0, 0);
+        int brkOk = mBrk.init(mdlData, brkData, 1, 0, 1.0f, 0, -1, 0, 0);
+        if (!(mpModel != NULL && mpBgW != NULL && btkOk != 0 && brkOk != 0)) {
+            ok = false;
         }
     }
     return ok;
@@ -108,19 +93,22 @@ bool daObjFirewall_c::create_heap() {
 /* 000002DC-00000568       .text registCollisionTable__15daObjFirewall_cFv */
     /* Nonmatching */
 void daObjFirewall_c::registCollisionTable() {
+    static s16 zou_chk_angl[] = {0xD556, 0x2AAA, 0x5555, 0xAAAB, 0x8000};
+
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 posY = -1.0f;
     s16 angle = cM_atan2s(player->current.pos.x - current.pos.x, player->current.pos.z - current.pos.z);
-    s16 absAngle = abs(angle);
+    s32 absAngle = abs(angle);
     if (absAngle < l_enter_angl_band) {
         f32 f1 = (f32)absAngle;
         f32 f0 = (f32)l_enter_angl_band;
-        posY = 100.0f + 30.0f * jmaCosTable[((s16)(f1 / f0 * 16384.0f)) >> jmaSinShift];
+        posY = 100.0f + 30.0f * jmaCosTable[((u16)(f1 / f0 * 16384.0f)) >> jmaSinShift];
     } else {
         s32 i = 0;
         for (i = 0; i < 5; i++) {
-            if (abs(angle - zou_chk_angl[i]) < 0x1A00) {
-                posY = 100.0f + 115.0f * jmaCosTable[((s16)((f32)abs(angle - zou_chk_angl[i]) / 6656.0f * 16384.0f)) >> jmaSinShift];
+            s32 diff = abs((s16)(angle - zou_chk_angl[i]));
+            if (diff < 0x1A00) {
+                posY = 100.0f + 115.0f * jmaCosTable[((u16)((f32)diff / 6656.0f * 16384.0f)) >> jmaSinShift];
                 break;
             }
         }
@@ -257,10 +245,15 @@ void daObjFirewall_c::seDelete() {
 }
 
 /* 00000B94-00000C64       .text set_pl_se__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::set_pl_se() {
+    static char chk_word0[] = "050smile";
+    static char chk_word1[] = "049s_surp";
+    static char chk_word2[] = "dummy";
+    static const char* chk_word_table[] = {chk_word0, chk_word1, chk_word2};
+    static s32 voice_table[] = {0x2E, 0x31, 0x00};
+
     dEvent_manager_c* evm = dComIfGp_getPEvtManager();
-    s32 staffId = evm->getMyStaffId("Link", this, 0);
+    s32 staffId = dComIfGp_evmng_getMyStaffId("Link");
     if (staffId != -1) {
         if (strcmp(evm->getMyNowCutName(staffId), chk_word_table[m10E8]) == 0) {
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -331,14 +324,14 @@ cPhs_State daObjFirewall_c::_create() {
             mCyl.OnBsRevHit();
             for (int i = 0; i < 8; i++) {
                 s16 ang = 0x2000 * i;
-                f32 sin = jmaSinTable[(u16)ang >> jmaSinShift];
                 f32 cos = jmaCosTable[(u16)ang >> jmaSinShift];
+                f32 sin = jmaSinTable[(u16)ang >> jmaSinShift];
                 mSePos[i].x = current.pos.x + 1000.0f * scale.x * sin;
                 mSePos[i].y = current.pos.y;
                 mSePos[i].z = current.pos.z + 1000.0f * scale.x * cos;
             }
             m10E0 = 1;
-            mParam = daObj::PrmAbstract(this, 8, 0);
+            mParam = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
             if (dComIfGs_isEventBit(0x3520)) {
                 m10E4 = 1;
                 mEventIdx = dComIfGp_evmng_getEventIdx(l_ev_name_table[1], 0xFF);
@@ -356,7 +349,6 @@ cPhs_State daObjFirewall_c::_create() {
 }
 
 /* 00001550-000015F4       .text _delete__15daObjFirewall_cFv */
-    /* Nonmatching */
 bool daObjFirewall_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
     if (heap != NULL && mpBgW != NULL) {
@@ -371,12 +363,11 @@ bool daObjFirewall_c::_delete() {
 }
 
 /* 000015F4-000016D4       .text wait_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::wait_act_proc() {
     s32 staffId = -1;
     dEvent_manager_c* evm = dComIfGp_getPEvtManager();
     if (evm->getEventData(evm->getEventIdx(l_ev_name_table[0], 0xFF)) != NULL) {
-        staffId = evm->getMyStaffId("Yswdr00", this, 0);
+        staffId = dComIfGp_evmng_getMyStaffId("Yswdr00");
     }
     if (staffId != -1) {
         if (strcmp(evm->getMyNowCutName(staffId), "BurnUp") == 0) {
@@ -399,8 +390,8 @@ void daObjFirewall_c::wait2_act_proc() {
         if (dist > 0.0f) {
             dist = std::sqrtf(dist);
         }
-        if (dist < 949.0f && player->current.pos.y < -7000.0f) {
-            if (eventInfo.getEventId() == 2) {
+        if (dist < 950.0f && player->current.pos.y < -7000.0f) {
+            if (eventInfo.checkCommandDemoAccrpt()) {
                 mProc = &daObjFirewall_c::wait3_act_proc;
             } else {
                 fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, -1, 0, 1);
@@ -410,12 +401,11 @@ void daObjFirewall_c::wait2_act_proc() {
 }
 
 /* 00001820-000018E0       .text wait3_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::wait3_act_proc() {
     s32 staffId = -1;
     dEvent_manager_c* evm = dComIfGp_getPEvtManager();
     if (evm->getEventData(evm->getEventIdx(l_ev_name_table[1], 0xFF)) != NULL) {
-        staffId = evm->getMyStaffId("Yswdr00", this, 0);
+        staffId = dComIfGp_evmng_getMyStaffId("Yswdr00");
     }
     if (staffId != -1) {
         if (strcmp(evm->getMyNowCutName(staffId), "BurnUp") == 0) {
@@ -428,13 +418,12 @@ void daObjFirewall_c::wait3_act_proc() {
     /* Nonmatching */
 void daObjFirewall_c::appear_act_proc() {
     mBrk.play();
-    BOOL b = TRUE;
+    bool b = true;
     if (mBrk.getFrameCtrl()->checkState(J3DFrameCtrl::STATE_STOP_E) || mBrk.getFrameCtrl()->getRate() == 0.0f) {
-        b = TRUE;
     } else {
-        b = FALSE;
+        b = false;
     }
-    if (b) {
+    if (b == true) {
         m106C = 1.0f;
         if (mEventIdx != -1) {
             mProc = &daObjFirewall_c::demo_end_wait_act_proc;
@@ -461,9 +450,9 @@ void daObjFirewall_c::burn_wait_act_proc() {
     registCollisionTable();
     if (mParam != 0xFF) {
         if (dComIfGs_isSwitch(mParam, home.roomNo)) {
-            J3DAnmTevRegKey* brkData = (J3DAnmTevRegKey*)dRes_control_c::getRes(l_arcname, 9, dComIfG_getObjectResInfo(l_arcname), 0x40);
-            JUT_ASSERT(0x4E4, brkData != NULL);
-            mBrk.init(mpModel->getModelData(), brkData, 1, 0, -1.0f, 0, -1, 0, 1);
+            J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname, 9);
+            JUT_ASSERT(0x4E4, brk_anm_p != 0);
+            mBrk.init(mpModel->getModelData(), brk_anm_p, 1, 0, -1.0f, 0, -1, true, false);
             setup_put_the_fire_out();
             mProc = &daObjFirewall_c::retire_act_proc;
         } else {
@@ -478,13 +467,12 @@ void daObjFirewall_c::burn_wait_act_proc() {
     /* Nonmatching */
 void daObjFirewall_c::retire_act_proc() {
     mBrk.play();
-    BOOL b = TRUE;
+    bool b = true;
     if (mBrk.getFrameCtrl()->checkState(J3DFrameCtrl::STATE_STOP_E) || mBrk.getFrameCtrl()->getRate() == 0.0f) {
-        b = TRUE;
     } else {
-        b = FALSE;
+        b = false;
     }
-    if (b) {
+    if (b == true) {
         dComIfGs_onEventBit(0x2C01);
         fopAcM_delete(this);
     }

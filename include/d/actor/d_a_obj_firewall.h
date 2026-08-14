@@ -9,6 +9,11 @@
 
 class daObjFirewall_c : public fopAc_ac_c {
 public:
+    enum Param_e {
+        PRM_SWSAVE_W = 8,
+        PRM_SWSAVE_S = 0,
+    };
+
     void init_mtx();
     static BOOL solidHeapCB(fopAc_ac_c*);
     bool create_heap();
