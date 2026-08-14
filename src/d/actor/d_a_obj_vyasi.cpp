@@ -420,8 +420,8 @@ bool daObjVyasi::Act_c::create_heap() {
     JUT_ASSERT(0x47F, mpBckData != NULL);
 
     if (mpBckData != NULL && modelData != NULL) {
-        mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, mpBckData, J3DFrameCtrl::EMode_LOOP, 1.0f,
-                                    -1, 1, 0, NULL, 0x00000000, 0x11000002);
+        mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, mpBckData, 0, 1.0f,
+                                    0, -1, 1, NULL, 0x00000000, 0x11000002);
     }
 
     bool ret = mpBckData != NULL && mpMorf != NULL;
