@@ -374,16 +374,17 @@ void hand_move(sss_class* i_this) {
     f32 f21;
     f32 f22;
 
+    u8 keep_3 = 0;
+    u8 keep_angle = 0;
     f3 = 0.1f;
     f5 = 8.0f;
     f4 = f3;
-    f6 = 30.0f;
-    f7 = 30.0f;
-    f8 = 1.0f;
     f32 f27 = 0.0f;
+    f6 = 30.0f;
+    f8 = 1.0f;
+    f9 = f27;
     f32 dist = fopAcM_searchPlayerDistance(actor);
     f22 = 5.0f;
-    f9 = f27;
     if (i_this->m2B9 != 0xFF) {
         f10 = 10.0f * i_this->m2B9;
     } else {
@@ -392,8 +393,6 @@ void hand_move(sss_class* i_this) {
     mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
     s8 cut = 0;
-    u8 keep_3 = 0;
-    u8 keep_angle = 0;
     switch (i_this->m2C0) {
     case 0:
         pos.x = actor->current.pos.x;
@@ -532,8 +531,6 @@ void hand_move(sss_class* i_this) {
         }
         if (i_this->m2C2[0] == 0) {
             i_this->m2C8 = actor->current.pos;
-            i_this->m2C8.y = actor->current.pos.y;
-            i_this->m2C8.z = actor->current.pos.z;
             i_this->m2C0 = 0;
             i_this->m2E8 = 0.0f;
             i_this->m2FC = 0.0f;
