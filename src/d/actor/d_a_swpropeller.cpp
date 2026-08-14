@@ -156,10 +156,9 @@ void daSwProp_c::set_mtx() {
 
 /* 0x00000838-0x00000B60       .text _execute__10daSwProp_cFv */
 bool daSwProp_c::_execute() {
-    /* Nonmatching */
-    mAcch.CrrPos(*dComIfG_Bgsp());
-
     u8 hit = 0;
+
+    mAcch.CrrPos(*dComIfG_Bgsp());
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
         if (hitObj != NULL) {
@@ -175,7 +174,7 @@ bool daSwProp_c::_execute() {
                 m64E = 1;
 
                 if ((hitObj->GetAtType() & AT_TYPE_SWORD) || (hitObj->GetAtType() & AT_TYPE_SKULL_HAMMER) ||
-                    (hitObj->GetAtType() & AT_TYPE_PGANON_SWORD) || (hitObj->GetAtType() & AT_TYPE_MACHETE)) {
+                    (hitObj->GetAtType() & AT_TYPE_MOBLIN_SPEAR) || (hitObj->GetAtType() & AT_TYPE_MACHETE)) {
                     if (m64D == 1) {
                         daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0xB);
                     } else if (m64D == 0) {
@@ -189,11 +188,15 @@ bool daSwProp_c::_execute() {
     if (hit) {
         mRotYVel = 0x1000;
         m644 = 0;
-    } else if (m64C) {
+    } else if (hit != m64C) {
         dComIfGs_revSwitch(m648, home.roomNo);
     }
 
-    s16 diff = cLib_addCalcAngleS(&mRotYVel, m644, m64E ? 10 : 30, 100, 10);
+    s16 step = 30;
+    if (m64E) {
+        step = 10;
+    }
+    s16 diff = cLib_addCalcAngleS(&mRotYVel, m644, step, 100, 10);
     if (m64E && diff == 0) {
         m644 = (s16)(-0.6f * m644);
         if (abs(m644) < 0x20) {
@@ -204,13 +207,14 @@ bool daSwProp_c::_execute() {
 
     if (m64D == 1) {
         JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos,
-                                        (u32)(100.0f * mRotYVel / 4096.0f), 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                        (u32)(100.0f * (mRotYVel / 4096.0f)), 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
 
     m64C = hit;
     set_mtx();
 
-    cXyz center(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    cXyz center(current.pos);
+    center.y += 50.0f;
     mCyl.SetC(center);
     dComIfG_Ccsp()->Set(&mCyl);
     return true;
