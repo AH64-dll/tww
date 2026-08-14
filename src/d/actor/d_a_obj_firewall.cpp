@@ -5,6 +5,12 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_firewall.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_w.h"
+#include "JAZelAudio/JAIZelBasic.h"
+
+static const char* l_arcname = "Yswdr00";
+static const char* l_ev_name[] = { "btl_of_swroom", "btl_of_swroom2" };
 
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
 void daObjFirewall_c::init_mtx() {
@@ -18,7 +24,30 @@ void daObjFirewall_c::solidHeapCB(fopAc_ac_c*) {
 
 /* 00000110-000002DC       .text create_heap__15daObjFirewall_cFv */
 void daObjFirewall_c::create_heap() {
-    /* Nonmatching */
+    BOOL ok = TRUE;
+    J3DModelData* mdlData =
+        (J3DModelData*)dRes_control_c::getRes(l_arcname, 6, dComIfG_getObjectResInfo(l_arcname), 0x40);
+    J3DAnmTextureSRTKey* btkData =
+        (J3DAnmTextureSRTKey*)dRes_control_c::getRes(l_arcname, 0xC, dComIfG_getObjectResInfo(l_arcname), 0x40);
+    J3DAnmTevRegKey* brkData =
+        (J3DAnmTevRegKey*)dRes_control_c::getRes(l_arcname, 9, dComIfG_getObjectResInfo(l_arcname), 0x40);
+    if (mdlData == NULL || btkData == NULL || brkData == NULL) {
+        JUT_ASSERT(0x171, 0);
+        ok = FALSE;
+    } else {
+        mpModel = mDoExt_J3DModel__create(mdlData, 0x80000, 0x11000222);
+        mpBgW = dBgW_NewSet(
+            (cBgD_t*)dRes_control_c::getRes(l_arcname, 0xF, dComIfG_getObjectResInfo(l_arcname), 0x40),
+            cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mBtk.init(mdlData, btkData, 1, 2, 1.0f, 0, -1, 0, 0);
+        mBrk.init(mdlData, brkData, 1, 0, 1.0f, 0, -1, 0, 0);
+        if (mpModel != NULL && mpBgW != NULL && mBtk.getBtkAnm() != NULL && mBrk.getBrkAnm() != NULL) {
+            ok = TRUE;
+        } else {
+            ok = FALSE;
+        }
+    }
+    return;
 }
 
 /* 000002DC-00000568       .text registCollisionTable__15daObjFirewall_cFv */
@@ -47,13 +76,27 @@ void daObjFirewall_c::seStart(unsigned long) {
 }
 
 /* 00000AB0-00000B28       .text set_se__15daObjFirewall_cFb */
-void daObjFirewall_c::set_se(bool) {
-    /* Nonmatching */
+void daObjFirewall_c::set_se(bool is_set) {
+    u8 oldState = mSeState;
+    if (oldState != is_set) {
+        if (oldState == 1) {
+            seStart(0x6950);
+        } else {
+            seStart(0x694E);
+        }
+    } else if (oldState == 1) {
+        seStart(0x614F);
+    }
+    mSeState = is_set;
 }
 
 /* 00000B28-00000B94       .text seDelete__15daObjFirewall_cFv */
 void daObjFirewall_c::seDelete() {
-    /* Nonmatching */
+    if (m10E0 == 1) {
+        for (int i = 0; i < 8; i++) {
+            JAIZelBasic::zel_basic->seDeleteObject(&mSePos[i]);
+        }
+    }
 }
 
 /* 00000B94-00000C64       .text set_pl_se__15daObjFirewall_cFv */
