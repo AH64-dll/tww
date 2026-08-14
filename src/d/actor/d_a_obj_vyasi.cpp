@@ -162,19 +162,21 @@ void daObjVyasi::Act_c::set_first_process() {
 void daObjVyasi::Act_c::set_collision() {
     /* Nonmatching */
     if (mCyl.ChkTgHit()) {
+        mCyl.GetTgHitObj();
         daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 7);
         daObj::HitEff_kikuzu(this, &mCyl);
         dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
         mCyl.ClrTgHit();
     } else {
-        mCyl.SetC(current.pos);
         mCyl.SetR(79.0f);
         mCyl.SetH(250.0f);
+        mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 
     for (int i = 0; i < 5; i++) {
         if (mCps[i].ChkTgHit()) {
+            mCps[i].GetTgHitObj();
             daObj::HitSeStart(&current.pos, current.roomNo, &mCps[i], 7);
             dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
             mCps[i].ClrTgHit();
@@ -187,17 +189,28 @@ void daObjVyasi::Act_c::set_collision() {
         }
     }
 
-    for (int i = 0; i < 4; i++) {
-        cXyz dir = (m0400[i + 2] - m0400[i + 1]) * 0.33333f;
-        cXyz pos = m0400[i + 1] + dir;
-        mSph[2 * i].SetC(pos);
-        mSph[2 * i].SetR(47.4f);
-        dComIfG_Ccsp()->Set(&mSph[2 * i]);
+    for (int i = 0; i < 8; i += 2) {
+        cXyz* p1 = &m0400[(i >> 1) + 1];
+        cXyz* p2 = &m0400[(i >> 1) + 2];
+        cXyz dir;
+        dir.x = (p2->x - p1->x) * 0.33333f;
+        dir.y = (p2->y - p1->y) * 0.33333f;
+        dir.z = (p2->z - p1->z) * 0.33333f;
 
-        cXyz pos2 = m0400[i + 1] + dir * 2.0f;
-        mSph[2 * i + 1].SetC(pos2);
-        mSph[2 * i + 1].SetR(47.4f);
-        dComIfG_Ccsp()->Set(&mSph[2 * i + 1]);
+        cXyz pos;
+        pos.x = p1->x + dir.x;
+        pos.y = p1->y + dir.y;
+        pos.z = p1->z + dir.z;
+        mSph[i].SetC(pos);
+        mSph[i].SetR(47.4f);
+        dComIfG_Ccsp()->Set(&mSph[i]);
+
+        pos.x = p1->x + dir.x * 2.0f;
+        pos.y = p1->y + dir.y * 2.0f;
+        pos.z = p1->z + dir.z * 2.0f;
+        mSph[i + 1].SetC(pos);
+        mSph[i + 1].SetR(47.4f);
+        dComIfG_Ccsp()->Set(&mSph[i + 1]);
     }
 }
 
