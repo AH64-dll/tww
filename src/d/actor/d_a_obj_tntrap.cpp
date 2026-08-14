@@ -229,7 +229,6 @@ void daObjTnTrap_c::set_tri(int i_idx) {
     mDoMtx_stack_c::transS(home.pos.x, home.pos.y + mOffsetY[i_idx], home.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
-    dCcD_Tri* tri = &mTri[i_idx * 4];
     for (int i = 0; i < 4; i++) {
         Vec vtx[3];
         const s32* tbl = &table_idx[i * 3];
@@ -237,7 +236,7 @@ void daObjTnTrap_c::set_tri(int i_idx) {
             vtx[j] = l_tri_vtx[tbl[j]];
             mDoMtx_stack_c::multVec(&vtx[j], &vtx[j]);
         }
-        tri[i].setPos(&vtx[0], &vtx[1], &vtx[2]);
+        mTri[i_idx][i].setPos(&vtx[0], &vtx[1], &vtx[2]);
     }
 }
 
@@ -265,7 +264,7 @@ BOOL daObjTnTrap_c::chk_event_flg() {
             if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
                 daShip_c* ship = dComIfGp_getShipActor();
                 if (ship != NULL) {
-                    ship->offStateFlg(daShip_c::daSFLG_UNK400000_e);
+                    ship->offStateFlg(daShip_c::daSFLG_UNK800000_e);
                     fopAcM_delete(this);
                     ret = FALSE;
                 }
@@ -315,8 +314,8 @@ cPhs_State daObjTnTrap_c::_create() {
                 mStts.Init(0xFF, 0xFF, this);
                 for (int g = 0; g < 2; g++) {
                     for (int i = 0; i < 4; i++) {
-                        (mTri + g * 4)[i].Set(l_tri_src);
-                        (mTri + g * 4)[i].SetStts(&mStts);
+                        mTri[g][i].Set(l_tri_src);
+                        mTri[g][i].SetStts(&mStts);
                     }
                     set_tri(g);
                 }
@@ -351,13 +350,11 @@ bool daObjTnTrap_c::_delete() {
 }
 
 /* 00001050-00001150       .text trap_off_wait_act_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
+
 BOOL daObjTnTrap_c::trap_off_wait_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
-        cXyz diff = player->current.pos - home.pos;
-        f32 dist = diff.absXZ();
-        if (dist < 500.0f) {
+        if ((player->current.pos - home.pos).absXZ() < 500.0f) {
             setup_action(1);
         }
     }
@@ -369,8 +366,7 @@ BOOL daObjTnTrap_c::trap_off_wait_act_proc() {
 BOOL daObjTnTrap_c::trap_on_wait_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
-        cXyz diff = player->current.pos - home.pos;
-        f32 dist = diff.absXZ();
+        f32 dist = (player->current.pos - home.pos).absXZ();
         if (dist > 500.0f) {
             setup_action(0);
         } else if (mAppear == 5) {
@@ -447,11 +443,12 @@ BOOL daObjTnTrap_c::demo_wait2_act_proc() {
 }
 
 /* 000015B4-000016A8       .text demo_end_wait_act_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
+
 BOOL daObjTnTrap_c::demo_end_wait_act_proc() {
     BOOL ret = TRUE;
+    dComIfG_inf_c& info = g_dComIfG_gameInfo;
     if (dComIfGp_evmng_endCheck(mEvtIdx)) {
-        g_dComIfG_gameInfo.play.getEvent()->mEventFlag |= 0x8;
+        info.play.getEvent()->mEventFlag |= 0x8;
         switch (mAppear) {
             case 0:
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
@@ -499,10 +496,10 @@ void daObjTnTrap_c::trap_on_wait_act_init_proc() {
 }
 
 /* 000017CC-00001860       .text demo_regist_wait_act_init_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
+
 void daObjTnTrap_c::demo_regist_wait_act_init_proc() {
     mOffsetY[0] = 0.0f;
-    particle_set(0, mOffsetY[0]);
+    particle_set(0, 0.0f);
     if (mAppear == 2) {
         mEvtIdx = dComIfGp_evmng_getEventIdx("break_tntrap2");
     } else {
@@ -511,10 +508,10 @@ void daObjTnTrap_c::demo_regist_wait_act_init_proc() {
 }
 
 /* 00001860-00001890       .text demo_wait2_act_init_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
+
 void daObjTnTrap_c::demo_wait2_act_init_proc() {
     mOffsetY[0] = 0.0f;
-    particle_set(0, mOffsetY[0]);
+    particle_set(0, 0.0f);
 }
 
 /* 00001890-000018DC       .text demo_end_wait_act_init_proc__13daObjTnTrap_cFv */
@@ -564,7 +561,7 @@ bool daObjTnTrap_c::_execute() {
     if (procResult == 1) {
         for (int g = 0; g < 2; g++) {
             for (int i = 0; i < 4; i++) {
-                dComIfG_Ccsp()->Set(&mTri[g * 4 + i]);
+                dComIfG_Ccsp()->Set(&mTri[g][i]);
             }
         }
         set_se();

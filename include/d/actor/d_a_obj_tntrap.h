@@ -63,7 +63,7 @@ public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ s32 mAppear;
     /* 0x29C */ dCcD_Stts mStts;
-    /* 0x2D8 */ dCcD_Tri mTri[8];
+    /* 0x2D8 */ dCcD_Tri mTri[2][4];
     /* 0xD58 */ dBgW* mpBgW;
     /* 0xD5C */ Mtx mMtx;
     /* 0xD8C */ JPABaseEmitter* mBallPrt[2][2];
