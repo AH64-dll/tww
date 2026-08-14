@@ -349,7 +349,7 @@ static void bo_move(bo_class* i_this) {
             i_this->mSph.OnTgSetBit();
             i_this->mSph.OnCoSetBit();
             JAIZelBasic::zel_basic->seStart(0x5844, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
-                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+                                                1.0f, 1.0f, -1.0f, -1.0f, 0);
             mDoAud_monsSeStart(0x484D, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
             anm_init(i_this, 9, 5.0f, 0, 1.0f, -1, 0);
             anm_init(i_this, 8, 5.0f, 0, 1.0f, -1, 1);
@@ -812,8 +812,83 @@ static void bo3_move(bo_class* i_this) {
 }
 
 /* 00003AD4-00003E8C       .text bo4_move__FP8bo_class */
-static void bo4_move(bo_class*) {
+static void bo4_move(bo_class* i_this) {
     /* Nonmatching */
+    switch (i_this->m2C5) {
+    case 0x1E:
+        i_this->mSph.OffTgSetBit();
+        i_this->mSph.OffCoSetBit();
+        i_this->mSph.OffAtSetBit();
+        i_this->mSph.ClrTgHit();
+        i_this->mSph.ClrTgHit();
+        anm_init(i_this, 7, 5.0f, 0, 1.0f, -1, 0);
+        i_this->speed.y = 30.0f;
+        i_this->gravity = -3.0f;
+        i_this->speedF = 10.0f;
+        i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+        i_this->m390 = i_this->current.pos.y - 80.0f;
+        i_this->m2C5++;
+        break;
+    case 0x1F:
+        i_this->shape_angle.x -= 0x1200;
+        if (i_this->speed.y < 0.0f && i_this->current.pos.y < i_this->m390) {
+            i_this->current.pos.y = i_this->m390;
+            i_this->shape_angle.x = -0x8000;
+            i_this->speed.y = 0.0f;
+            i_this->gravity = 0.0f;
+            i_this->speedF = 0.0f;
+            i_this->m366[1] = 0xA;
+            JAIZelBasic::zel_basic->seStart(0x5847, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+            g_dComIfG_gameInfo.play.getParticle()->set(
+                dPa_control_c::dPtclGroup_Normal_e, 0x810A, &i_this->m328, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            i_this->m366[2] = 0xA;
+            i_this->m376 = 0xB4;
+            i_this->m39C = i_this->m328;
+            smoke_set(i_this);
+            anm_init(i_this, 6, 0.0f, 0, 1.0f, -1, 0);
+            i_this->m2C5++;
+        }
+        break;
+    case 0x20:
+        if (i_this->m366[1] == 0) {
+            i_this->m394 = 200.0f;
+            i_this->current.pos.y = i_this->m390 - 200.0f;
+            i_this->speed.y = 10.0f;
+            i_this->gravity = -1.0f;
+            i_this->m2C5++;
+        }
+        break;
+    case 0x21:
+        i_this->shape_angle.z += 0x1000;
+        if (i_this->shape_angle.z > 0x4000) {
+            csXyz angle;
+            angle.x = 0;
+            angle.y = i_this->m348 + 0xC000;
+            angle.z = 0;
+            cXyz pos = i_this->m310;
+            pos.y = 30.0f + i_this->m390;
+            fopAcM_create(0x1D5, 0, &pos, i_this->current.roomNo, &angle, &i_this->scale, 0, 0);
+            i_this->scale.setall(0.0f);
+            i_this->m398 = 0.0f;
+            i_this->m366[1] = 0xA;
+            i_this->m2C5++;
+        }
+        break;
+    case 0x22:
+        if (i_this->m366[1] == 0 && i_this->mSmokeEcallBack.getEmitter() == NULL) {
+            fopAcM_delete(i_this);
+        }
+        break;
+    }
+
+    if (i_this->mSmokeEcallBack.getEmitter() != NULL && i_this->m366[2] == 0) {
+        i_this->mSmokeEcallBack.getEmitter()->mGlobalPrmColor.a = i_this->m376;
+        i_this->m376 -= 4;
+        if (i_this->m376 < 0) {
+            i_this->mSmokeEcallBack.end();
+        }
+    }
 }
 
 /* 00003E8C-000042B8       .text bo5_move__FP8bo_class */
