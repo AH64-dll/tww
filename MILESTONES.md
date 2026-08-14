@@ -217,3 +217,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T03:56Z — M28: flip #49 d_a_npc_mn → Equivalent — 20 flips this session (#30-49). Ledger: 57 NonMatching / 44 Equivalent / 313 Matching + 4 MatchingFor. mn: 4 structural cleared byte-exact (executeWait CSE-kill, executeWalk/eventWalk clrlwi, lookBack case-0 pivot NOT kantera), 114/119 fns 100, 5 accept-class. Gate 4a3cc2b2f 06:55:36. Bench: 6 flips concurred this RLead-12-shift (#43-49 cycle: aj1/magmarock/ss/hcbh/msdan2/ftree/mn all QA'd); d_a_sss value-bug catch (pos.y 70-vs-20).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T05:05Z — M29: flip #50 d_a_obj_Vds → Equivalent — 21 flips this session (#30-50). Ledger: 56 NonMatching / 45 Equivalent / 313 Matching + 4 MatchingFor. Vds: FULL stub transcription (34/37 fns 100, 9c5678470), 3 holdouts strip-equal norm-diff-0, .rodata/.data byte-identical. Gate fea7844bc 08:04:58. Wave respawned (D1-11..D10-11). Bench streak: 8 real bugs caught pre-flip this cycle (firewall ChkUsed no-op, sss 70/20, kf1 0.25, ko1 sig, buoyflag constants).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
