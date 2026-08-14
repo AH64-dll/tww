@@ -315,11 +315,12 @@ bool daObjMmrr::Act_c::chk_light() {
         light = true;
     } else {
         for (int i = 0; i < 5; i++) {
-            if (mTri[i].ChkTgHit()) {
-                if (mTri[i].GetNP()->inprod(*mTri[i].GetTgRVecP()) < 0.0f) {
+            dCcD_Tri& tri = mTri[i];
+            if (tri.ChkTgHit()) {
+                if (tri.GetNP()->inprod(*tri.GetTgRVecP()) < 0.0f) {
                     light = true;
                 }
-                mTri[i].ClrTgHit();
+                tri.ClrTgHit();
             }
         }
     }
