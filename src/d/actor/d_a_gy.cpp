@@ -1363,7 +1363,7 @@ f32 daGy_c::getWaterY() {
 bool daGy_c::_execute() {
     mpCtrl = NULL;
     if (parentActorID != 0xFFFFFFFF) {
-        fopAc_ac_c* ctrl_actor = NULL;
+        fopAc_ac_c* ctrl_actor;
         if (fopAcM_SearchByID(parentActorID, &ctrl_actor) != 0) {
             if (ctrl_actor != NULL) {
                 if (fopAc_IsActor(ctrl_actor) &&
