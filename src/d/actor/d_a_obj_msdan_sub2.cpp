@@ -104,8 +104,8 @@ void Act_c::init_mtx() {
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
 BOOL Act_c::Execute(Mtx** i_mtx) {
-    /* Nonmatching */
-    if (dComIfGs_isSwitch(prm_get_swSave(), home.roomNo)) {
+    s32 swSave = prm_get_swSave();
+    if (dComIfGs_isSwitch(swSave, home.roomNo)) {
         if (mTimer < 0.0f) {
             mTimer = 0.0f;
         }
@@ -117,22 +117,22 @@ BOOL Act_c::Execute(Mtx** i_mtx) {
             mTimer += 10.0f;
             mOffset += mTimer;
             if (mCounter == prm_get_swSave2()) {
-                if (mCounter & 1) {
-                    current.pos.x = home.pos.x - mOffset * cM_scos(current.angle.y);
-                    current.pos.z = home.pos.z - mOffset * cM_ssin(current.angle.y);
-                } else {
+                if (!(mCounter & 1)) {
                     current.pos.x = home.pos.x + mOffset * cM_scos(current.angle.y);
                     current.pos.z = home.pos.z + mOffset * cM_ssin(current.angle.y);
+                } else {
+                    current.pos.x = home.pos.x - mOffset * cM_scos(current.angle.y);
+                    current.pos.z = home.pos.z - mOffset * cM_ssin(current.angle.y);
                 }
             }
             if (mOffset >= 600.0f) {
                 if (mCounter == prm_get_swSave2()) {
-                    if (mCounter & 1) {
-                        current.pos.x = home.pos.x - mOffset * cM_scos(current.angle.y);
-                        current.pos.z = home.pos.z - mOffset * cM_ssin(current.angle.y);
+                    if (!(mCounter & 1)) {
+                        current.pos.x = home.pos.x + 600.0f * cM_scos(current.angle.y);
+                        current.pos.z = home.pos.z + 600.0f * cM_ssin(current.angle.y);
                     } else {
-                        current.pos.x = home.pos.x + mOffset * cM_scos(current.angle.y);
-                        current.pos.z = home.pos.z + mOffset * cM_ssin(current.angle.y);
+                        current.pos.x = home.pos.x - 600.0f * cM_scos(current.angle.y);
+                        current.pos.z = home.pos.z - 600.0f * cM_ssin(current.angle.y);
                     }
                     dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
                 }
@@ -149,8 +149,7 @@ BOOL Act_c::Execute(Mtx** i_mtx) {
 
 /* 0000090C-000009AC       .text Draw__Q214daObjMsdanSub25Act_cFv */
 BOOL Act_c::Draw() {
-    /* Nonmatching */
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
     j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListBG, 0);
