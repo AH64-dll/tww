@@ -108,7 +108,7 @@ void tex_anm_set(mt_class* i_this, unsigned short idx) {
     i_this->m346 = mt_tex_max_frame[idx];
     i_this->m33C = pJVar2;
     i_this->m344 = 0;
-    pJVar2->setFrame(0.0f);
+    i_this->m33C->setFrame(0.0f);
 
     u16 materialNum = pJVar2->getUpdateMaterialNum();
     for (u16 i = 0; i < materialNum; i++) {
@@ -118,7 +118,7 @@ void tex_anm_set(mt_class* i_this, unsigned short idx) {
 
 /* 0000053C-000005EC       .text mt_eye_tex_anm__FP8mt_class */
 void mt_eye_tex_anm(mt_class* i_this) {
-    if (i_this->m464 > 0) {
+    if (i_this->m464 != 0) {
         i_this->m464--;
     } else {
         i_this->m464 = (s16)(50.0f + cM_rndF(100.0f));
@@ -236,13 +236,29 @@ void body_control2(mt_class*) {
 }
 
 /* 00001B54-00001E44       .text wall_check_sub__FP8mt_classP4cXyzP4cXyz */
-void wall_check_sub(mt_class*, cXyz*, cXyz*) {
-    /* Nonmatching */
+BOOL wall_check_sub(mt_class* i_this, cXyz* pStart, cXyz* pEnd) {
+    dBgS_LinChk linChk;
+
+    linChk.Set(pStart, pEnd, i_this);
+    if (dComIfG_Bgsp()->LineCross(&linChk)) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00001E44-00001F10       .text body_wall_check__FP8mt_class */
-void body_wall_check(mt_class*) {
-    /* Nonmatching */
+void body_wall_check(mt_class* i_this) {
+    for (int i = 1; i < 8; i++) {
+        cXyz pStart = i_this->m500[i];
+        pStart.y += 50.0f;
+        cXyz pEnd = i_this->m4A0[i];
+        pEnd.y += 50.0f;
+
+        if (wall_check_sub(i_this, &pStart, &pEnd)) {
+            i_this->m4A0[i].x = i_this->m500[i].x;
+            i_this->m4A0[i].z = i_this->m500[i].z;
+        }
+    }
 }
 
 /* 00001F10-000022D8       .text body_control1__FP8mt_class */
@@ -301,8 +317,13 @@ void mt_move_maru(mt_class*) {
 }
 
 /* 00005B9C-00005C54       .text water_damage_se_set__FP8mt_class */
-void water_damage_se_set(mt_class*) {
-    /* Nonmatching */
+void water_damage_se_set(mt_class* i_this) {
+    s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CM_MAGTAIL_WATER, &i_this->eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+
+    reverb = dComIfGp_getReverb(i_this->current.roomNo);
+    JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_MG_WATER, &i_this->eyePos, fopAcM_GetID(i_this), 0, reverb);
+    i_this->m348 = 1;
 }
 
 /* 00005C54-0000614C       .text damage_check__FP8mt_class */

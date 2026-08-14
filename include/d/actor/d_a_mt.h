@@ -115,7 +115,7 @@ public:
     /* 0x47C */ f32 m47C;
     /* 0x480 */ f32 m480;
     /* 0x484 */ f32 m484;
-    /* 0x488 */ s16 m488[0x4A0 - 0x488];
+    /* 0x488 */ s16 m488[0xC];
     /* 0x4A0 */ cXyz m4A0[8];
     /* 0x500 */ cXyz m500[8];
     /* 0x560 */ csXyz m560[8];
@@ -135,7 +135,9 @@ public:
     /* 0xE0C */ dCcD_Stts mStts;
     /* 0xE48 */ dCcD_Sph mE48[8];
     /* 0x17A8 */ dCcD_Sph m17A8;
-    /* 0x18D8 */ u8 m18D8[0x18F0 - 0x18D8];
+    /* 0x18D4 */ u8 m18D4;
+    /* 0x18D5 */ u8 m18D5[0x18D8 - 0x18D5];
+    /* 0x18D8 */ J3DModel* m18D8[6];
     /* 0x18F0 */ f32 m18F0;
     /* 0x18F4 */ f32 m18F4;
     /* 0x18F8 */ u8 m18F8;
