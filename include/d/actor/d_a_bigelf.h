@@ -154,7 +154,7 @@ public:
     /* 0x3E8 */ f32 mHeightOffset;
     /* 0x3EC */ f32 m3EC;
     /* 0x3F0 */ f32 m3F0;
-    /* 0x3F4 */ u8 m3F4;
+    /* 0x3F4 */ s8 m3F4;
     /* 0x3F5 */ s8 m3F5;
     /* 0x3F6 */ s8 m3F6;
     /* 0x3F7 */ s8 m3F7;

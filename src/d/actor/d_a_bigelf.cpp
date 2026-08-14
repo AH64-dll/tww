@@ -239,7 +239,7 @@ BOOL daBigelf_c::demoProcFlLink() {
 void daBigelf_c::demoInitFlDmAf() {
     cXyz pos = m3D0;
     pos.y += 20.0f;
-    dComIfGp_particle_set(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &pos, &shape_angle, NULL, 0xFF, NULL, NULL, NULL);
+    m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
     JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_HANAFUBUKI, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
@@ -290,10 +290,8 @@ BOOL daBigelf_c::demoProcFlDmMd() {
         if (f31 <= 60.0f) {
             setFlag(0x80);
             cXyz pos = m3D0;
-            f32 s = cM_ssin(mJntCtrl.getHead_y() * 850.0f);
-            pos.x += s;
-            f32 c = cM_scos(mJntCtrl.getHead_y() * 850.0f);
-            pos.z += c;
+            pos.x += 850.0f * cM_ssin(shape_angle.y);
+            pos.z += 850.0f * cM_scos(shape_angle.y);
             lightInit(&pos);
             mLightInfluence.mPower = 126.0f;
             JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_FLOWER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -392,7 +390,8 @@ BOOL daBigelf_c::demoProcFlDemo() {
 /* 00000FB8-0000115C       .text demoInitExit__10daBigelf_cFv */
 void daBigelf_c::demoInitExit() {
     if (m3CC != 0) {
-        ((JPABaseEmitter*)m3CC)->setStatus(0);
+        ((JPABaseEmitter*)m3CC)->setMaxFrame(-1);
+        ((JPABaseEmitter*)m3CC)->setStatus(1);
         m3CC = 0;
     }
     setFlag(0x10);
@@ -403,14 +402,14 @@ void daBigelf_c::demoInitExit() {
     cXyz pos(1.0f, 1.0f, 1.0f);
     cXyz curPos = current.pos;
     curPos.y += mHeightOffset;
-    dComIfGp_particle_set(0x272, &curPos, NULL, &pos, 0xFF, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x272, &curPos, NULL, &pos, 0xFF, NULL, -1, NULL, NULL, NULL);
     tevStr.mFogColor.r = 0xFF;
     tevStr.mFogColor.g = 0xFF;
     tevStr.mFogColor.b = 0xFF;
     tevStr.mFogStartZ = 0.0f;
     tevStr.mFogEndZ = 2000.0f;
-    JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_FLOWER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     JAIZelBasic::zel_basic->seStart(JA_SE_CM_DY_GO_AWAY, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_GO_AWAY, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     darkEnd();
 }
 
@@ -456,7 +455,8 @@ void daBigelf_c::demoInitTalk() {
 
 /* 000013C0-00001418       .text demoProcTalk__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcTalk() {
-    if (talk() == 0x12 || talk() == 0xFE) {
+    u16 status = talk();
+    if (status == 0x12 || status == 0xFE) {
         dComIfGp_evmng_cutEnd(mStaffId);
     }
     return 1;
@@ -473,15 +473,15 @@ void daBigelf_c::demoInitAppear() {
     pos.y += 70.0f;
     cXyz shock(0.0f, 1.0f, 0.0f);
     dComIfGp_getVibration().StartShock(5, -0x21, shock);
-    dComIfGp_particle_set(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &pos, NULL, &scale, 0xFF, NULL, NULL, NULL);
-    dComIfGp_particle_set(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &pos, NULL, &scale, 0xFF, NULL, NULL, NULL);
+    dComIfGp_particle_set(p_name0[(s8)m3F5], &pos, NULL, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(p_name1[(s8)m3F5], &pos, NULL, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
     if (getType() == 6) {
         m3CA = 0xF;
     }
     m3DC = 0xF;
     m3A8 = 0.5f;
     if (getType() == 6) {
-        JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_BREATH_IN, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        JAIZelBasic::zel_basic->seStart(JA_SE_CM_DY_ENTER_DO, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         JAIZelBasic::zel_basic->bgmStart(0x800053, 0, 0);
     }
     setFlag(0x100);
@@ -886,7 +886,7 @@ BOOL daBigelf_c::init() {
     mAttentionBasePos.y += 100.0f;
     mEyePos = mAttentionBasePos;
     eyePos = mEyePos;
-    attention_info.position = mAttentionBasePos;
+    attention_info.position.set(mAttentionBasePos.x, mAttentionBasePos.y + 50.0f, mAttentionBasePos.z);
     m34C = -1;
     if (getType() != 6) {
         if (dComIfGs_isEventBit(getEventFlag())) {
@@ -922,11 +922,13 @@ void daBigelf_c::lookBack() {
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
 BOOL daBigelf_c::hunt() {
-    if (fopAcM_SearchByID(m34C) == NULL) {
+    fopAc_ac_c* fa1 = fopAcM_SearchByID(m34C);
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+    if (fa1 == NULL) {
         m3BD = 3;
         return 0;
     }
-    if (fopAcM_searchPlayerDistanceXZ(this) < 900.0f) {
+    if (fopAcM_searchActorDistanceXZ(this, player) < 900.0f) {
         m3BD = 1;
         m3C8 = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL", 0xFF);
         fopAcM_orderOtherEventId(this, m3C8, 0xFF, 0xFFFF, 0, 1);
@@ -979,7 +981,7 @@ BOOL daBigelf_c::oct() {
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */
 BOOL daBigelf_c::ready0() {
     fopAcM_SearchByID(m34C);
-    if (dComIfGs_isSwitch(2, current.roomNo)) {
+    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
         m3BD = 2;
         mStaffId = dComIfGp_evmng_getMyStaffId("BigElf", NULL, 0);
         m3A8 = 1.0f;
