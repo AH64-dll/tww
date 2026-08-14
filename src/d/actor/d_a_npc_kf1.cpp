@@ -489,7 +489,7 @@ u16 daNpc_Kf1_c::next_msgStatus(u32* i_msgNo) { /* Nonmatching */
             break;
         case 0x1C33: {
             s32 bensyou = mTsuboIdx * 10;
-            *i_msgNo = (mRupeeCnt < bensyou) ? 0x1C2F : 0x1C30;
+            *i_msgNo = (mRupeeCnt >= bensyou) ? 0x1C2F : 0x1C30;
             break;
         }
         case 0x1C36:
