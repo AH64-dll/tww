@@ -473,10 +473,13 @@ void ho_move(daGrid_c* i_this) {
 
         cXyz sp34;
         cXyz sp28;
-        sp34.set(0.0f, 0.0f, 0.064f);
+        sp34.x = 0.0f;
+        sp34.y = 0.0f;
+        sp34.z = 0.064f;
         MtxPosition(&sp34, &sp28);
         f32 f29 = 0.02f + std::fabsf(sp28.z);
-        sp34.set(1.0f, 0.0f, 0.0f);
+        sp34.x = 1.0f;
+        sp34.z = 0.0f;
         MtxPosition(&sp34, &sp28);
         f32 f28 = std::fabsf(sp28.z) * (1.0f - i_this->m2200);
         f32 f27 = 1.0f + (0.01f + REG0_F(231)) * (f28 * cM_ssin((s16)i_this->mWindAngle));
@@ -494,7 +497,8 @@ void ho_move(daGrid_c* i_this) {
         i_this->m2212 += r3_3;
         f32 f26 = 0.5f * cM_ssin((s16)angle);
 
-        sp34.set(0.0f, 0.0f, 1.6f);
+        sp34.x = 0.0f;
+        sp34.z = 1.6f;
         cXyz* nrm = &i_this->mPacket.mNrm[i_this->mPacket.mCount][0];
         if (l_HIO.m08 == 0) {
             if (l_ship->mStateFlag & 0x200) {
