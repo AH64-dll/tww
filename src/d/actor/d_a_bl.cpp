@@ -989,41 +989,17 @@ void action_dousa(bl_class* i_this) {
             f32 dx = i_this->mPath->m_points[i_this->m2E8].m_position.x - i_this->current.pos.x;
             f32 dz = i_this->mPath->m_points[i_this->m2E8].m_position.z - i_this->current.pos.z;
             angle = cM_atan2s(dx, dz);
-            f32 distSq = dx * dx + dz * dz;
-            f32 dist = distSq;
-            if (dist > 0.0f) {
-                dist = JMAFastSqrt(distSq);
-            }
-            if (dist > 80.0f + REG8_F(3)) {
-                i_this->m2E8++;
-                if (i_this->m2E8 >= i_this->mPath->m_num) {
-                    i_this->m2E8 = 0;
-                }
-            }
-            i_this->m2C4 = i_this->current.pos;
-            if (i_this->m2EC == 0) {
-                i_this->m300 = way_check(i_this, angle);
-                if (i_this->m300 == angle) {
-                    break;
-                }
-                i_this->m2EC = (s16)(10.0f + cM_rndF(10.0f));
-            }
+            i_this->speedF = i_this->m324;
         } else {
-            f32 distSq = (i_this->current.pos.x - i_this->m2C4.x) * (i_this->current.pos.x - i_this->m2C4.x) +
-                         (i_this->current.pos.z - i_this->m2C4.z) * (i_this->current.pos.z - i_this->m2C4.z);
-            f32 dist = distSq;
-            if (dist > 0.0f) {
-                dist = JMAFastSqrt(distSq);
-            }
-            if (dist < 250.0f) {
-                if (i_this->m2EC == 0) {
-                    i_this->m306 = 5;
-                }
-            } else {
-                i_this->m306 = 7;
+            i_this->m2EC = (s16)(100.0f + cM_rndFX(50.0f));
+            angle = (s16)cM_rndFX(32767.0f);
+            if (i_this->speedF == 0.0f) {
+                i_this->speedF = 4.0f + cM_rndF(2.0f);
             }
         }
-        break;
+        i_this->m300 = way_check(i_this, angle);
+        i_this->m306++;
+        // fall through
     case 6:
         if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
             f32 dx = i_this->mPath->m_points[i_this->m2E8].m_position.x - i_this->current.pos.x;
@@ -1032,7 +1008,7 @@ void action_dousa(bl_class* i_this) {
             f32 distSq = dx * dx + dz * dz;
             f32 dist = distSq;
             if (dist > 0.0f) {
-                dist = JMAFastSqrt(distSq);
+                dist = std::sqrtf(distSq);
             }
             if (dist < 80.0f + REG8_F(3)) {
                 i_this->m2E8++;
@@ -1054,7 +1030,7 @@ void action_dousa(bl_class* i_this) {
             f32 distSq = dx * dx + dz * dz;
             f32 dist = distSq;
             if (dist > 0.0f) {
-                dist = JMAFastSqrt(distSq);
+                dist = std::sqrtf(distSq);
             }
             if (dist < 250.0f) {
                 if (i_this->m2EC == 0) {
@@ -1076,7 +1052,7 @@ void action_dousa(bl_class* i_this) {
         f32 distSq = dx * dx + dz * dz;
         f32 dist = distSq;
         if (dist > 0.0f) {
-            dist = JMAFastSqrt(distSq);
+            dist = std::sqrtf(distSq);
         }
         if (dist < targetDist) {
             i_this->m306 = 5;
@@ -1191,7 +1167,7 @@ void action_kougeki(bl_class* i_this) {
                          (i_this->current.pos.z - i_this->m2C4.z) * (i_this->current.pos.z - i_this->m2C4.z);
             f32 dist = distSq;
             if (dist > 0.0f) {
-                dist = JMAFastSqrt(distSq);
+                dist = std::sqrtf(distSq);
             }
             if (dist > 700.0f) {
                 anm_init(i_this, 0x11, 1.0f, 2, 1.0f, -1);

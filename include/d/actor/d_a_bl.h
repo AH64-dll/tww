@@ -28,7 +28,7 @@ public:
     /* 0x2D6 */ u8 m2D6[0x2D8 - 0x2D6];
     /* 0x2D8 */ dPath* mPath;
     /* 0x2DC */ u8 m2DC[0x2E8 - 0x2DC];
-    /* 0x2E8 */ u8 m2E8;
+    /* 0x2E8 */ s8 m2E8;
     /* 0x2E9 */ u8 m2E9;
     /* 0x2EA */ u8 m2EA;
     /* 0x2EB */ u8 m2EB[0x2EC - 0x2EB];
