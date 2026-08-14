@@ -335,13 +335,11 @@ BOOL daObj_hsh_c::setAction(ActionFunc i_actionFunc, void* i_param) {
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
-/* Nonmatching */
 BOOL daObj_hsh_c::waitAction(void*) {
     if (mActionStatus == 0) {
         mActionStatus++;
     } else if (mActionStatus != -1) {
-        cXyz pos(current.pos.x, current.pos.y, current.pos.z);
-        m518 = chkAttention(pos, shape_angle.y);
+        m518 = chkAttention(current.pos, shape_angle.y);
 
         if (argument == 0) {
             if (m518) {
@@ -399,7 +397,6 @@ BOOL daObj_hsh_c::talkAction(void*) {
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
-/* Nonmatching */
 BOOL daObj_hsh_c::offAction(void*) {
     if (mActionStatus == 0) {
         mActionStatus++;
@@ -408,7 +405,6 @@ BOOL daObj_hsh_c::offAction(void*) {
 }
 
 /* 00001230-00001278       .text deleteAction__11daObj_hsh_cFPv */
-/* Nonmatching */
 BOOL daObj_hsh_c::deleteAction(void*) {
     if (mActionStatus == 0) {
         mActionStatus++;
@@ -446,8 +442,10 @@ void daObj_hsh_c::checkOrder() {
     if (eventInfo.checkCommandTalk()) {
         if (m514 == 4 || m514 == 3 || m514 == 5) {
             m514 = -1;
-            int talkBtn = dComIfGp_event_getTalkXYBtn();
-            if (!(talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e)) {
+            u8 present = (dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e ||
+                          dComIfGp_event_getTalkXYBtn() == dTalkBtn_Y_e ||
+                          dComIfGp_event_getTalkXYBtn() == dTalkBtn_Z_e);
+            if (!present) {
                 setAction(&talkAction, NULL);
             }
         }
@@ -458,11 +456,9 @@ void daObj_hsh_c::checkOrder() {
 /* Nonmatching */
 BOOL daObj_hsh_c::checkCommandTalk() {
     if (eventInfo.checkCommandTalk()) {
-        u8 present = 0;
-        u8 talkBtn = dComIfGp_event_getTalkXYBtn();
-        if (talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e) {
-            present = 1;
-        }
+        u8 present = (dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e ||
+                      dComIfGp_event_getTalkXYBtn() == dTalkBtn_Y_e ||
+                      dComIfGp_event_getTalkXYBtn() == dTalkBtn_Z_e);
         if (present) {
             if (m514 == 5) {
                 m514 = -1;
@@ -481,21 +477,23 @@ BOOL daObj_hsh_c::chkAttention(cXyz i_pos, short i_angle) {
     f32 hio_range = l_HIO.m08;
     s16 hio_angle = l_HIO.m14;
 
-    f32 dx = player->current.pos.x - i_pos.x;
-    f32 dz = player->current.pos.z - i_pos.z;
-    f32 distSq = dx * dx + dz * dz;
+    cXyz diff;
+    diff.x = player->current.pos.x - i_pos.x;
+    diff.z = player->current.pos.z - i_pos.z;
+    f32 distSq = diff.x * diff.x + diff.z * diff.z;
     f32 dist = std::sqrtf(distSq);
 
-    s16 angle = cM_atan2s(dx, dz);
+    s16 angle = cM_atan2s(diff.x, diff.z);
 
-    f32 dy = player->current.pos.y - i_pos.y;
+    diff.y = player->current.pos.y - i_pos.y;
     if (m518) {
         hio_range += 40.0f;
         hio_angle += 0x71C;
     }
 
     BOOL ret = 0;
-    if (hio_angle > abs(i_angle - angle) && hio_range > dist) {
+    s16 diff = angle - i_angle;
+    if (hio_angle > abs(diff) && hio_range > dist) {
         ret = 1;
     }
     return ret;
@@ -658,7 +656,6 @@ void daObj_hsh_c::initialJudgeEvent(int) {
 }
 
 /* 00001B3C-00001C1C       .text initialAppearEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 void daObj_hsh_c::initialAppearEvent(int i_staffId) {
     dComIfGs_onEventBit(0x2B10);
     particle_set(0x8270);
@@ -670,7 +667,6 @@ void daObj_hsh_c::initialAppearEvent(int i_staffId) {
 }
 
 /* 00001C1C-00001C74       .text actionAppearEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 BOOL daObj_hsh_c::actionAppearEvent(int) {
     if (cLib_calcTimer<u8>(&m519) == 0) {
         offOffDraw();
@@ -681,7 +677,6 @@ BOOL daObj_hsh_c::actionAppearEvent(int) {
 }
 
 /* 00001C74-00001D3C       .text initialDeleteEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 void daObj_hsh_c::initialDeleteEvent(int i_staffId) {
     particle_set(0x8270);
     particle_set(&m4A0, 0x8271);
@@ -692,7 +687,6 @@ void daObj_hsh_c::initialDeleteEvent(int i_staffId) {
 }
 
 /* 00001D3C-00001D88       .text actionDeleteEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 BOOL daObj_hsh_c::actionDeleteEvent(int) {
     if (cLib_calcTimer<u8>(&m519) == 0) {
         drawStop();
