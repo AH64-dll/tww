@@ -892,8 +892,71 @@ static void bo4_move(bo_class* i_this) {
 }
 
 /* 00003E8C-000042B8       .text bo5_move__FP8bo_class */
-static void bo5_move(bo_class*) {
+static void bo5_move(bo_class* i_this) {
     /* Nonmatching */
+    switch (i_this->m2C5) {
+    case 0x28:
+        i_this->m376 = 3;
+        i_this->mCyl.OffTgSetBit();
+        i_this->mSph.OffTgSetBit();
+        i_this->mSph.OffCoSetBit();
+        i_this->mCyl.ClrTgHit();
+        i_this->mSph.ClrTgHit();
+        dScnPly_ply_c::nextPauseTimer = 2;
+        anm_init(i_this, 0xF, 5.0f, 2, 1.0f, -1, 0);
+        i_this->attention_info.flags &= ~4;
+        mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        i_this->m2C5++;
+        break;
+    case 0x29:
+        if (i_this->mpMorf->checkFrame(0xD0)) {
+            i_this->m376--;
+            if (i_this->m376 <= 0) {
+                i_this->attention_info.flags &= ~4;
+                anm_init(i_this, 9, 0.0f, 0, 0.0f, -1, 0);
+                dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+                particle->set(dPa_control_c::dPtclGroup_Normal_e, 0x810A, &i_this->m328, NULL, NULL, 0xFF, NULL,
+                              -1, &i_this->tevStr.mColorK0, NULL, NULL);
+                i_this->m39C = i_this->m328;
+                i_this->m366[2] = 0xA;
+                i_this->m376 = 0xB4;
+                smoke_set(i_this);
+                JAIZelBasic::zel_basic->seStart(0x5801, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                                1.0f, 1.0f, -1.0f, -1.0f, 0);
+                i_this->m2CE = 1;
+                i_this->mAction = 2;
+                i_this->m2C5 = 0x14;
+            }
+        }
+        break;
+    case 0x32:
+        i_this->mCyl.OffTgSetBit();
+        i_this->mSph.OffTgSetBit();
+        i_this->mSph.OffCoSetBit();
+        i_this->mCyl.ClrTgHit();
+        i_this->mSph.ClrTgHit();
+        dScnPly_ply_c::nextPauseTimer = 2;
+        anm_init(i_this, 0xE, 5.0f, 0, 1.0f, -1, 0);
+        i_this->attention_info.flags = 0;
+        mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        i_this->m2C5++;
+        // fallthrough
+    case 0x33:
+        if (i_this->m366[0] == 0) {
+            if (i_this->mpMorf->isStop()) {
+                i_this->m366[2] = 0xA;
+                i_this->m376 = 0xB4;
+                i_this->m2CE = 1;
+                i_this->mAction = 2;
+                i_this->m2C5 = 0x14;
+            }
+        }
+        break;
+    }
 }
 
 /* 000042B8-000048B0       .text daBO_Execute__FP8bo_class */
