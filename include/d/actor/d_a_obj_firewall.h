@@ -4,14 +4,14 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_bg_w.h"
+#include "d/d_cc_d.h"
+#include "d/d_kankyo.h"
 
 class daObjFirewall_c : public fopAc_ac_c {
 public:
-    void param_get_swSave() const {}
-
     void init_mtx();
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    bool create_heap();
     void registCollisionTable();
     void setPointLight();
     void particle_set();
@@ -34,22 +34,33 @@ public:
     bool _execute();
     bool _draw();
 
+    typedef void (daObjFirewall_c::*ProcFunc)();
+
 public:
-    /* 0x290 */ u8 mPad290[0x404 - 0x290];  // TODO: dCcD_Stts + unverified members (retail 0x2B0/0x2D4/0x314/0x31C/0x350)
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ dCcD_Stts mStts;
+    /* 0x2D4 */ dCcD_Cyl mCyl;
     /* 0x404 */ J3DModel* mpModel;
     /* 0x408 */ dBgW* mpBgW;
     /* 0x40C */ mDoExt_btkAnm mBtk;
     /* 0x420 */ mDoExt_brkAnm mBrk;
-    /* 0x438 */ u8 mPad438[0x106C - 0x438];
-    /* 0x106C */ s32 m106C;
-    /* 0x1070 */ cXyz m1070;
-    /* 0x107C */ s16 m107C;
+    /* 0x438 */ JPABaseEmitter* mParticles[6];
+    /* 0x450 */ JPABaseEmitter* mParticles2[5];
+    /* 0x464 */ JPABaseEmitter* mParticle3;
+    /* 0x468 */ s32 mParam;
+    /* 0x46C */ LIGHT_INFLUENCE mLights[0x40];
+    /* 0xC6C */ cXyz mBurnPos[0x40];
+    /* 0xF6C */ u8 mPadF6C[0x106C - 0xF6C];
+    /* 0x106C */ f32 m106C;
+    /* 0x1070 */ ProcFunc mProc;
+    /* 0x107C */ s16 mEventIdx;
     /* 0x107E */ u8 mSeState;
     /* 0x107F */ u8 mPad107F;
-    /* 0x1080 */ Vec mSePos[8];
+    /* 0x1080 */ cXyz mSePos[8];
     /* 0x10E0 */ u8 m10E0;
     /* 0x10E1 */ u8 m10E1;
-    /* 0x10E4 */ u8 mPad10E4[4];
+    /* 0x10E2 */ u8 mPad10E2[2];
+    /* 0x10E4 */ u32 m10E4;
     /* 0x10E8 */ u32 m10E8;
 };  // Size: 0x10EC
 
