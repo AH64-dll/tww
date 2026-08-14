@@ -481,9 +481,7 @@ void hand_move(sitem_class* i_this) {
             if (i == 4) {
                 cXyz sp1C = dst->mPos - src->mPos;
                 f32 mag = PSVECSquareMag(&sp1C);
-                if (mag > 0.0f) {
-                    mag = std::sqrtf(mag);
-                }
+                mag = std::sqrtf(mag);
                 i_this->mHandPos.z = (1.5f + REG0_F(5)) * mag;
             }
             src++;
