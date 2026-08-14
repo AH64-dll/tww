@@ -1022,12 +1022,12 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
 /* 000020E4-0000220C       .text calc__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c* i_actor) {
     /* Nonmatching */
-    static cXyz hata_vec(0.0f, 60.0f, 0.0f);
 
     mDoMtx_stack_c::copy(i_actor->m1090);
     mDoMtx_stack_c::scaleM(i_actor->scale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mB90);
     if (i_actor->attr_type()->m05 != 0) {
+        static cXyz hata_vec(0.0f, 60.0f, 0.0f);
         mDoMtx_stack_c::copy(i_actor->m1090);
         mDoMtx_stack_c::scaleM(i_actor->scale);
         mDoMtx_stack_c::transM(hata_vec);
