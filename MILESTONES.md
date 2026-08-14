@@ -151,3 +151,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T00:14Z — M17: 4-version cycle ALL GREEN at 3ba252876 (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416) — covers flip #39 ds1 + shared-header renames (d_shop.h/d_snap.h). REAL CATCH: kiosk demo ships DIFFERENT code for aygr/hami2/tag_ba1 (verified hami2 demo cf947424 vs retail de364dda) → converted to MatchingFor(GZLJ01,GZLE01,GZLP01) per agbsw0/andsw0/att precedent, D44J01 re-gated 417 OK. Demo-divergence class now documented + handled. Ledger: 66 NonMatching / 35 Equivalent / 314 Matching + 3 MatchingFor.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T00:51Z — M18: flips #40 Itnak (re-flip after reconciliation — set_mtx norm-diff-0 arg-eval, R7-8 overruled on evidence) + #42 zk1 (8 ARG-only accept holdouts, zero one-sided) → Equivalent, gate 5240492fd 03:50:14. Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. 13 flips this session (#30-42: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke/balancelift/ashut/ds1/ekskz/Itnak/zk1 Equivalent). Bench caught 25+ real bugs incl ds1 loop-bounds (post-flip), mn speedF 0.0-vs-1.0, Itnak M_cyl_src x3, ekskz seStart 200-vs-1.0, magmarock logic inversions.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
