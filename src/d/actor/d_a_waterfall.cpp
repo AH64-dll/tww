@@ -28,6 +28,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
 BOOL daWfall_c::CreateHeap() {
+    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0xB);
     JUT_ASSERT(0xFD, modelData != 0);
     mpModel1 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -75,6 +76,7 @@ BOOL daWfall_c::CreateHeap() {
 
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
 void daWfall_c::CreateInit() {
+    /* Nonmatching */
     cullMtx = mpModel1->getBaseTRMtx();
     if (m356 == 1) {
         fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -200.0f, 1200.0f, 1000.0f, 3640.0f);
@@ -114,6 +116,7 @@ void daWfall_c::CreateInit() {
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
+    /* Nonmatching */
     fopAcM_SetupActor(this, daWfall_c);
 
     cPhs_State phase = (cPhs_State)dComIfG_resLoad(&mPhs, m_arcname);
@@ -129,6 +132,7 @@ cPhs_State daWfall_c::_create() {
 
 /* 00000938-000009B8       .text set_mtx__9daWfall_cFv */
 void daWfall_c::set_mtx() {
+    /* Nonmatching */
     mpModel1->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
@@ -137,6 +141,7 @@ void daWfall_c::set_mtx() {
 
 /* 000009B8-00000A1C       .text set_gate_mtx__9daWfall_cFv */
 void daWfall_c::set_gate_mtx() {
+    /* Nonmatching */
     mDoMtx_stack_c::transS(m344.x, m344.y, m344.z);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
     PSMTXCopy(mDoMtx_stack_c::get(), mpModel2->getBaseTRMtx());
@@ -144,6 +149,7 @@ void daWfall_c::set_gate_mtx() {
 
 /* 00000A1C-00000AD0       .text set_minamo_mtx__9daWfall_cFv */
 void daWfall_c::set_minamo_mtx() {
+    /* Nonmatching */
     getWaterHeight();
 
     cXyz scale(1.0f, 1.0f, 1.0f);
@@ -157,6 +163,7 @@ void daWfall_c::set_minamo_mtx() {
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
+    /* Nonmatching */
     switch (m355) {
     case 0:
         if (eventInfo.getCommand() == dEvtCmd_INDEMO_e || dComIfGp_evmng_startCheck(m350)) {
@@ -201,6 +208,7 @@ bool daWfall_c::_execute() {
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
 void daWfall_c::mode_proc_call() {
+    /* Nonmatching */
     typedef void (daWfall_c::*modeProc)();
     static modeProc mode_proc[] = {
         &daWfall_c::mode_wtr_on,
@@ -212,6 +220,7 @@ void daWfall_c::mode_proc_call() {
 
 /* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
 void daWfall_c::mode_wtr_on() {
+    /* Nonmatching */
     cLib_addCalc(&m344.y, 176.0f + (30.0f + current.pos.z), 60.0f, 150.0f, 600.0f);
     scale.y = getWaterScaleFromGatePos();
     mBtk1.setPlaySpeed(1.0f);
@@ -223,6 +232,7 @@ void daWfall_c::mode_wtr_on() {
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
+    /* Nonmatching */
     mMode = 0;
     if (m356 == 1) {
         mBrk.setPlaySpeed(-1.0f);
@@ -231,6 +241,7 @@ void daWfall_c::mode_wtr_on_init() {
 
 /* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
 void daWfall_c::mode_wtr_off() {
+    /* Nonmatching */
     cLib_addCalc(&m344.y, current.pos.z, 60.0f, 150.0f, 600.0f);
     f32 waterScale = getWaterScaleFromGatePos();
     scale.y = waterScale;
@@ -260,6 +271,7 @@ void daWfall_c::mode_wtr_off_init() {
 
 /* 00000EE8-00000FF0       .text setEmitter00Pos__9daWfall_cFv */
 BOOL daWfall_c::setEmitter00Pos() {
+    /* Nonmatching */
     BOOL ret = FALSE;
 
     m314 = current.pos;
@@ -289,6 +301,7 @@ BOOL daWfall_c::setEmitter00Pos() {
 
 /* 00000FF0-00001098       .text setEmitter01Pos__9daWfall_cFv */
 BOOL daWfall_c::setEmitter01Pos() {
+    /* Nonmatching */
     BOOL ret = FALSE;
 
     f32 waterHeight = getWaterHeight();
@@ -308,6 +321,7 @@ BOOL daWfall_c::setEmitter01Pos() {
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
 f32 daWfall_c::getWaterScaleFromGatePos() {
+    /* Nonmatching */
     f32 scale = m344.y - current.pos.z;
     if (scale < 0.0f) {
         scale = 0.0f;
@@ -321,6 +335,7 @@ f32 daWfall_c::getWaterScaleFromGatePos() {
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
 f32 daWfall_c::getWaterHeight() {
+    /* Nonmatching */
     dBgS_WtrChk wtr;
 
     f32 waterHeight = current.pos.y;
@@ -337,6 +352,7 @@ f32 daWfall_c::getWaterHeight() {
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
+    /* Nonmatching */
     JAIZelBasic::zel_basic->seStart(0x701F, &m344, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
@@ -352,6 +368,7 @@ static BOOL daWfall_Delete(void* i_this) {
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
 static BOOL daWfall_Draw(void* i_this) {
+    /* Nonmatching */
     daWfall_c* a_this = (daWfall_c*)i_this;
     cXyz* pos = &a_this->current.pos;
     dKy_tevstr_c* tevStr = &a_this->tevStr;
