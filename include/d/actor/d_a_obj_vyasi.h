@@ -22,7 +22,7 @@ namespace daObjVyasi {
         }
 
         BOOL SetStopJointAnimation(J3DAnmTransformKey*, float, float);
-        bool PlayStopJointAnimation();
+        BOOL PlayStopJointAnimation();
         void set_first_process();
         void set_collision();
         int process_none_init();

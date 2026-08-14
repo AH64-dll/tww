@@ -145,8 +145,8 @@ BOOL daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_bck, float i
 }
 
 /* 0000015C-00000194       .text PlayStopJointAnimation__Q210daObjVyasi5Act_cFv */
-bool daObjVyasi::Act_c::PlayStopJointAnimation() {
-    return mpMorf->play(NULL, 0, 0) == 0;
+BOOL daObjVyasi::Act_c::PlayStopJointAnimation() {
+    return mpMorf->play(NULL, 0, 0) == 0 ? 1 : 0;
 }
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
@@ -190,24 +190,22 @@ void daObjVyasi::Act_c::set_collision() {
     }
 
     for (int i = 0; i < 8; i += 2) {
-        cXyz* p1 = &m0400[(i >> 1) + 1];
-        cXyz* p2 = &m0400[(i >> 1) + 2];
         cXyz dir;
-        dir.x = (p2->x - p1->x) * 0.33333f;
-        dir.y = (p2->y - p1->y) * 0.33333f;
-        dir.z = (p2->z - p1->z) * 0.33333f;
+        dir.x = (m0400[(i >> 1) + 2].x - m0400[(i >> 1) + 1].x) * 0.33333f;
+        dir.y = (m0400[(i >> 1) + 2].y - m0400[(i >> 1) + 1].y) * 0.33333f;
+        dir.z = (m0400[(i >> 1) + 2].z - m0400[(i >> 1) + 1].z) * 0.33333f;
 
         cXyz pos;
-        pos.x = p1->x + dir.x;
-        pos.y = p1->y + dir.y;
-        pos.z = p1->z + dir.z;
+        pos.x = m0400[(i >> 1) + 1].x + dir.x;
+        pos.y = m0400[(i >> 1) + 1].y + dir.y;
+        pos.z = m0400[(i >> 1) + 1].z + dir.z;
         mSph[i].SetC(pos);
         mSph[i].SetR(47.4f);
         dComIfG_Ccsp()->Set(&mSph[i]);
 
-        pos.x = p1->x + dir.x * 2.0f;
-        pos.y = p1->y + dir.y * 2.0f;
-        pos.z = p1->z + dir.z * 2.0f;
+        pos.x = m0400[(i >> 1) + 1].x + dir.x * 2.0f;
+        pos.y = m0400[(i >> 1) + 1].y + dir.y * 2.0f;
+        pos.z = m0400[(i >> 1) + 1].z + dir.z * 2.0f;
         mSph[i + 1].SetC(pos);
         mSph[i + 1].SetR(47.4f);
         dComIfG_Ccsp()->Set(&mSph[i + 1]);
@@ -379,12 +377,17 @@ cPhs_State daObjVyasi::Act_c::_create() {
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00001DBC-00001E5C       .text set_mtx__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    PSMTXCopy(mDoMtx_stack_c::get(), m04BC);
 }
 
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
@@ -404,12 +407,29 @@ void daObjVyasi::Act_c::leaf_scale_main() {
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_execute() {
-    /* Nonmatching */
+    if (mState != 0) {
+        m19C4 = PlayStopJointAnimation();
+        process_main();
+        set_collision();
+        quaternion_main();
+        calc_dif_angle();
+        leaf_scale_main();
+        set_mtx();
+        fopAcM_rollPlayerCrash(this, 79.0f, 7);
+    }
+    return true;
 }
 
 /* 000029BC-00002A6C       .text _draw__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_draw() {
-    /* Nonmatching */
+    if (mState != 0) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+        dComIfGd_setListBG();
+        mpMorf->updateDL();
+        dComIfGd_setList();
+    }
+    return true;
 }
 
 namespace daObjVyasi {
