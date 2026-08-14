@@ -188,24 +188,22 @@ bool daNpc_Kp1_c::initTexPatternAnm(bool i_bModify) {
 }
 
 /* 000009B4-00000A80       .text playTexPatternAnm__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
-    u32 flag = 1;
+void daNpc_Kp1_c::playTexPatternAnm() {
+    bool flag = true;
     s8 btp_num = mBtpNum;
     if (btp_num != 1) {
         if (btp_num == 0) {
             flag = cLib_calcTimer(&mBtpTimer) == 0;
-        } else {
-            flag = 1;
         }
     }
     if (!flag) {
         return;
     }
     s16 frame_max = mpBtpAnm->getFrameMax();
-    mBtpFrame++;
+    ++mBtpFrame;
     if (mBtpFrame >= frame_max) {
         if (mBtpNum != 0) {
-            mBtpFrame = frame_max;
+            mBtpFrame = mpBtpAnm->getFrameMax();
         } else {
             mBtpFrame = 0;
             mBtpTimer = cM_rndF(60.0f) + 30.0f;
