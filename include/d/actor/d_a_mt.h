@@ -9,6 +9,8 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class mDoExt_McaMorf;
+class mDoExt_btkAnm;
+class mDoExt_brkAnm;
 class J3DAnmTexPattern;
 class J3DTexNoAnm;
 
@@ -71,8 +73,8 @@ public:
     /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
     /* 0x2E8 */ s32 m2E8;
     /* 0x2EC */ s32 m2EC;
-    /* 0x2F0 */ mDoExt_btkAnm* m2F0[8];
-    /* 0x310 */ mDoExt_brkAnm* m310[8];
+    /* 0x2F0 */ mDoExt_btkAnm* btk[8];
+    /* 0x310 */ mDoExt_brkAnm* brk[8];
     /* 0x330 */ f64 m330;
     /* 0x338 */ f32 m338;
     /* 0x33C */ J3DAnmTexPattern* m33C;
@@ -143,7 +145,8 @@ public:
     /* 0x17A8 */ dCcD_Sph m17A8;
     /* 0x18D4 */ u8 m18D4;
     /* 0x18D5 */ u8 m18D5[0x18D8 - 0x18D5];
-    /* 0x18D8 */ J3DModel* m18D8[6];
+    /* 0x18D8 */ J3DModel* br_modelL[3];
+    /* 0x18E4 */ J3DModel* br_modelR[3];
     /* 0x18F0 */ f32 m18F0;
     /* 0x18F4 */ f32 m18F4;
     /* 0x18F8 */ u8 m18F8;

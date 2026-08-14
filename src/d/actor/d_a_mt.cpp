@@ -25,10 +25,12 @@ static s32 mt_fight_count;
 static s32 j_index;
 static u16 mt_tex_anm_idx[] = {dRes_INDEX_MT_BTP_MG_MABA_e, dRes_INDEX_MT_BTP_MG_TOJI_e};
 static u16 mt_tex_max_frame[] = {6, 1};
-static u8 br_no[] = {0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0};
-static s16 br_ya[] = {0xCD38, 0xDCD8, 0xF060, 0, 0, 0, 0, 0, 0, 0, 0};
+static s32 brk_data[] = {dRes_INDEX_MT_BRK_MG_HEAD1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_BODY1_e, dRes_INDEX_MT_BRK_MG_TAIL1_e};
+static s32 btk_data[] = {dRes_INDEX_MT_BTK_MG_HEAD1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_BODY1_e, dRes_INDEX_MT_BTK_MG_TAIL1_e};
 static s32 move_ad[] = {0, -6, -12, -18, -24, -30, -36, -42};
 static s32 move_ad2[] = {0, -3, -6, -9, -12, -15, -18, -21};
+static u8 br_no[] = {0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0};
+static s16 br_ya[] = {0xCD38, 0xDCD8, 0xF060, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */
 daMt_HIO_c::daMt_HIO_c() {
@@ -429,7 +431,7 @@ void br_draw(mt_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, -0x4000);
     MtxScale(f31, f31, f31, 1);
 
-    J3DModel* model = i_this->m18D8[br_no[i_this->m18D4 - 1]];
+    J3DModel* model = i_this->br_modelL[br_no[i_this->m18D4 - 1]];
     g_env_light.setLightTevColorType(model, &i_this->tevStr);
     PSMTXCopy(*calc_mtx, model->getBaseTRMtx());
     mDoExt_modelUpdateDL(model);
@@ -440,7 +442,7 @@ void br_draw(mt_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, -0x4000);
     MtxScale(f31, f31, f31, 1);
 
-    model = i_this->m18D8[3 + br_no[i_this->m18D4 - 1]];
+    model = i_this->br_modelR[br_no[i_this->m18D4 - 1]];
     g_env_light.setLightTevColorType(model, &i_this->tevStr);
     PSMTXCopy(*calc_mtx, model->getBaseTRMtx());
     mDoExt_modelUpdateDL(model);
@@ -500,24 +502,24 @@ static BOOL daMt_Draw(mt_class* i_this) {
         }
 
         g_env_light.setLightTevColorType(model, &i_this->tevStr);
-        i_this->m2F0[i]->entry(model->getModelData());
-        i_this->m310[i]->entry(model->getModelData());
+        i_this->btk[i]->entry(model->getModelData());
+        i_this->brk[i]->entry(model->getModelData());
 
         if (i_this->m2E4 == 0) {
             s32 frame = i_this->m2E8 + i * l_HIO.m50;
             while (frame < 0) {
                 frame += 0x29;
             }
-            i_this->m310[i]->setFrame((f32)frame);
+            i_this->brk[i]->setFrame((f32)frame);
 
             frame = i_this->m2EC + i * l_HIO.m50;
             while (frame < 0) {
                 frame += 0x1F;
             }
-            i_this->m2F0[i]->setFrame((f32)frame);
+            i_this->btk[i]->setFrame((f32)frame);
         } else {
-            i_this->m310[i]->setFrame((f32)i_this->m2E8);
-            i_this->m2F0[i]->setFrame((f32)i_this->m2EC);
+            i_this->brk[i]->setFrame((f32)i_this->m2E8);
+            i_this->btk[i]->setFrame((f32)i_this->m2EC);
         }
 
         if (i == 0) {
@@ -632,8 +634,86 @@ static BOOL daMt_Delete(mt_class* i_this) {
 }
 
 /* 00007E18-00008400       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c* pActor) {
     /* Nonmatching */
+    static s32 bmd_data[] = {dRes_INDEX_MT_BDL_MG_HEAD_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_BODY_e, dRes_INDEX_MT_BDL_MG_TAIL_e};
+    static f32 scale_data[] = {1.0f, 1.0f, 1.0f, 0.975f, 0.925f, 0.825f, 0.75f, 0.525f};
+    static s32 br_bmd[] = {dRes_INDEX_MT_BDL_KBA_e, dRes_INDEX_MT_BDL_KBB_e, dRes_INDEX_MT_BDL_KBC_e};
+    mt_class* actor = (mt_class*)pActor;
+
+    for (int i = 0; i < 8; i++) {
+        actor->mpMorf[i] = new mDoExt_McaMorf(
+            (J3DModelData*)dComIfG_getObjectRes("Mt", bmd_data[i]), NULL, NULL, NULL,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x00080000, 0x37440402);
+        if (actor->mpMorf[i] == NULL || actor->mpMorf[i]->getModel() == NULL) {
+            return FALSE;
+        }
+        J3DModelData* modelData = actor->mpMorf[i]->getModel()->getModelData();
+
+        actor->btk[i] = new mDoExt_btkAnm();
+        JUT_ASSERT(0x11c0, actor->btk[i]);
+        if (!actor->btk[i]->init(modelData,
+                                 (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mt", btk_data[i]),
+                                 1, 2, 1.0f, 0, -1, 0, 0)) {
+            return FALSE;
+        }
+
+        actor->brk[i] = new mDoExt_brkAnm();
+        JUT_ASSERT(0x11cd, actor->brk[i]);
+        if (!actor->brk[i]->init(modelData,
+                                 (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mt", brk_data[i]),
+                                 1, 2, 1.0f, 0, -1, 0, 0)) {
+            return FALSE;
+        }
+
+        if (i == 0) {
+            anm_init(actor, 0xa, 20.0f, 2, 1.0f, 0);
+
+            J3DAnmTexPattern* texPattern = NULL;
+            for (int j = 0; j < 2; j++) {
+                texPattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Mt", mt_tex_anm_idx[j]);
+                texPattern->searchUpdateMaterialID(modelData);
+            }
+            u16 count = texPattern->getUpdateMaterialNum();
+            actor->m340 = new J3DTexNoAnm[count];
+            for (u16 j = 0; j < count; j++) {
+                actor->m340[j].setAnmIndex(j);
+            }
+            tex_anm_set(actor, 0);
+        }
+
+        actor->mpMorf[i]->getModel()->setUserArea((u32)actor);
+
+        for (u16 j = 0; j < modelData->getJointNum(); j++) {
+            if (i == 0) {
+                if (j >= 2 && j <= 5) {
+                    modelData->getJointNodePointer(j)->setCallBack(nodeCallBack_head);
+                }
+            } else if (i == 7) {
+                if (j >= 2 && j <= 5) {
+                    modelData->getJointNodePointer(j)->setCallBack(nodeCallBack_tail);
+                }
+            } else {
+                if (j >= 2 && j <= 5) {
+                    modelData->getJointNodePointer(j)->setCallBack(nodeCallBack_body);
+                }
+            }
+        }
+
+        actor->m600[i] = scale_data[i];
+    }
+
+    for (int i = 0; i < 3; i++) {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mt", br_bmd[i]);
+        JUT_ASSERT(0x127a, modelData != 0);
+        actor->br_modelL[i] = mDoExt_J3DModel__create(modelData, 0, 0x110203);
+        JUT_ASSERT(0x127d, actor->br_modelL[i] != 0);
+        actor->br_modelR[i] = mDoExt_J3DModel__create(modelData, 0, 0x110203);
+        JUT_ASSERT(0x127f, actor->br_modelR[i] != 0);
+        actor->br_modelL[i]->setBaseScale(actor->scale);
+        actor->br_modelR[i]->setBaseScale(actor->scale);
+    }
+    return TRUE;
 }
 
 /* 000084AC-000088A8       .text daMt_Create__FP10fopAc_ac_c */
