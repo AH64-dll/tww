@@ -271,7 +271,8 @@ void daNpc_So_c::cutEatesaFirstProc() {
     fopAc_ac_c* ship = g_dComIfG_gameInfo.play.getPlayerPtr(2);
     cXyz pos = player->current.pos;
     if (ship != NULL) {
-        s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+        s32 angle = ship->shape_angle.y + REG12_S(6);
+        angle -= 0x4000;
         pos = ship->current.pos;
         pos.x += 260.0f * cM_ssin(angle);
         pos.z += 260.0f * cM_scos(angle);
@@ -650,19 +651,21 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 
     daShip_c* ship = dComIfGp_getShipActor();
     field_0xB90.y = dLib_getWaterY(field_0xB90, mObjAcch);
-    field_0xBA0 = ship->current.pos.x;
-    field_0xBA4 = ship->current.pos.y;
-    field_0xBA8 = ship->current.pos.z;
+    field_0xBA0.x = ship->current.pos.x;
+    field_0xBA0.y = ship->current.pos.y;
+    field_0xBA0.z = ship->current.pos.z;
     field_0xBAC = ship->shape_angle.y;
     ship->initStartPos(&field_0xB90, field_0xB9C + 0x4000);
+    csXyz sp8 = ship->shape_angle;
 
-    player->setPlayerPosAndAngle(&field_0xB90, field_0xB9C + REG10_S(0));
+    player->setPlayerPosAndAngle(&field_0xB90, field_0xB9C + REG8_S(6));
     field_0xB9C = field_0xB9C;
 
     field_0xAFC = 4.0f;
     speedF = field_0xAFC;
 
-    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    s32 angle = ship->shape_angle.y + REG12_S(6);
+    angle -= 0x4000;
     current.pos = field_0xB90;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
@@ -685,7 +688,8 @@ void daNpc_So_c::cutMiniGameWarpProc() {
     player->mDemo.mDemoMode = 6;
     player->mDemo.mParam0 = 1;
 
-    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    s32 angle = ship->shape_angle.y + REG12_S(6);
+    angle -= 0x4000;
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
@@ -706,8 +710,8 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 
     s16 shipName = 0xA7;
     daShip_c* ship = (daShip_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &shipName);
-    player->setPlayerPosAndAngle((cXyz*)&field_0xBA0, field_0xB9C + REG10_S(0));
-    ship->initStartPos((cXyz*)&field_0xBA0, field_0xBAC);
+    player->setPlayerPosAndAngle(&field_0xBA0, field_0xB9C + REG8_S(6));
+    ship->initStartPos(&field_0xBA0, field_0xBAC);
 
     field_0xAFC = 4.0f;
     speedF = field_0xAFC;
@@ -720,13 +724,14 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 void daNpc_So_c::cutMiniGameReturnProc() {
     /* Nonmatching */
     daShip_c* ship = dComIfGp_getShipActor();
-    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    s32 angle = ship->shape_angle.y + REG12_S(6);
+    angle -= 0x4000;
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
     shape_angle.y = 0;
 
-    cXyz sp3C = *(cXyz*)&field_0xBA0 - current.pos;
+    cXyz sp3C = field_0xBA0 - current.pos;
     cXyz sp30(sp3C.x, 0.0f, sp3C.z);
     f32 distSq = PSVECSquareMag(&sp30);
     f32 dist = distSq > 0.0f ? std::sqrtf(distSq) : distSq;
@@ -812,11 +817,12 @@ void daNpc_So_c::cutMiniGamePlTurnProc() {
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
     player->mDemo.mDemoType = 3;
     player->mDemo.mParam0 = 0;
+    daShip_c* ship = dComIfGp_getShipActor();
     player->mDemo.mDemoMode = 6;
     player->mDemo.mParam0 = 1;
 
-    daShip_c* ship = dComIfGp_getShipActor();
-    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    s32 angle = ship->shape_angle.y + REG12_S(6);
+    angle -= 0x4000;
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);

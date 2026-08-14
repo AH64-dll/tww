@@ -1004,9 +1004,9 @@ void daNpc_So_c::modeDisappear() {
         field_0xB90.y = 0.0f;
         field_0xB90.z = 0.0f;
         field_0xB9C = 0;
-        field_0xBA0 = 0.0f;
-        field_0xBA4 = 0.0f;
-        field_0xBA8 = 0.0f;
+        field_0xBA0.x = 0.0f;
+        field_0xBA0.y = 0.0f;
+        field_0xBA0.z = 0.0f;
         field_0xBAC = 0;
         field_0xB0C = 0;
         field_0xBD9 = 0;
