@@ -831,6 +831,7 @@ void daGy_c::modeAttackPlayerInit() {
 }
 
 /* 00001F40-000022F8       .text modeAttackPlayer__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::modeAttackPlayer() {
     if (mpCtrl->m320 == 1) {
         modeCircleInit();
@@ -845,8 +846,11 @@ void daGy_c::modeAttackPlayer() {
         m4F0 = l_HIO.m58;
         cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &player->current.pos), 8, 0x400);
 
-        cXyz sp24 = mD08 - player->current.pos;
-        cXyz spC(sp24.x, 0.0f, sp24.z);
+        const cXyz& sp24 = mD08 - player->current.pos;
+        Vec spC;
+        spC.x = sp24.x;
+        spC.y = 0.0f;
+        spC.z = sp24.z;
         f32 f1 = PSVECSquareMag(&spC);
         if (f1 > 0.0f) {
             double guess = __frsqrte(f1);
@@ -919,6 +923,7 @@ void daGy_c::modeAttackBackInit() {
 }
 
 /* 00002400-00002560       .text modeAttackBack__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::modeAttackBack() {
     m4E8 = l_HIO.mA0;
     m4F0 = 0.0f;
@@ -961,6 +966,7 @@ void daGy_c::modeDamageInit() {
 }
 
 /* 000025F0-00002754       .text modeDamage__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::modeDamage() {
     m4F0 = 0.0f;
     f32 f2 = m920;
@@ -1053,6 +1059,7 @@ void daGy_c::modeDeleteBombInit() {
 }
 
 /* 00002A70-00002CBC       .text modeDeleteBomb__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::modeDeleteBomb() {
     f32 f1 = m920;
     if (f1 > 0.01f) {
@@ -1194,8 +1201,13 @@ void daGy_c::setWave() {
     mD18.setPitch(1.0f - l_HIO.m20);
     mD7C.setAnchor(&cXyz(l_HIO.m28, l_HIO.m2C, l_HIO.m30),
                    &cXyz(l_HIO.m34, l_HIO.m38, l_HIO.m3C));
-    mD18.setAnchor(&cXyz((f32)((f64)l_HIO.m28) * -1.0f, (f32)((f64)l_HIO.m2C), (f32)((f64)l_HIO.m30)),
-                   &cXyz((f32)((f64)l_HIO.m34) * -1.0f, (f32)((f64)l_HIO.m38), (f32)((f64)l_HIO.m3C)));
+    f32 nx = (f32)((f64)l_HIO.m28) * -1.0f;
+    f32 ny = (f32)((f64)l_HIO.m2C);
+    f32 nz = (f32)((f64)l_HIO.m30);
+    f32 nx2 = (f32)((f64)l_HIO.m34) * -1.0f;
+    f32 ny2 = (f32)((f64)l_HIO.m38);
+    f32 nz2 = (f32)((f64)l_HIO.m3C);
+    mD18.setAnchor(&cXyz(nx, ny, nz), &cXyz(nx2, ny2, nz2));
     mD7C.setMaxDisSpeed(l_HIO.m1C);
     mD18.setMaxDisSpeed(l_HIO.m1C);
     cLib_addCalc2(&mE10, var_f31, 0.1f, 10.0f);
@@ -1213,6 +1225,7 @@ void daGy_c::lineCheck(cXyz* param_0, cXyz* param_1) {
 }
 
 /* 000032E4-000038EC       .text checkTgHit__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::checkTgHit() {
     m8A8.Move();
 
@@ -1351,6 +1364,7 @@ bool daGy_c::_execute() {
 }
 
 /* 00004264-00004560       .text drawDebug__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::drawDebug() {
     u32 uVar1 = l_HIO.m180;
     if (uVar1 - 0x70000 != 0xFFFF || l_HIO.m180 != 0) {

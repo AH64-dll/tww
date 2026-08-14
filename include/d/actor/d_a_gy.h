@@ -58,7 +58,7 @@ public:
 public:
     /* 0x2AC */ s32 m2AC;
     /* 0x2B0 */ s32 m2B0;
-    /* 0x2B4 */ f32 m2B4;
+    /* 0x2B4 */ s32 m2B4;
     /* 0x2B8 */ daGy_Ctrl_c* mpCtrl;
     /* 0x2BC */ cXyz m2BC;
     /* 0x2C8 */ request_of_phase_process_class mPhs;
