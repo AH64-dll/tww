@@ -245,8 +245,64 @@ void daHo_packet_c::setNrmMtx(cXyz&) {
 }
 
 /* 800E8D74-800E92AC       .text setNrmVtx__13daHo_packet_cFP4cXyzii */
-void daHo_packet_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void daHo_packet_c::setNrmVtx(cXyz* out, int col, int row) {
+    cXyz* nrm = &mNrm[mCount][0];
+    cXyz cur = nrm[row * 7 + col];
+    cXyz v1;
+    cXyz add;
+    add.set(0.0f, 0.0f, 0.0f);
+    if (col != 0) {
+        v1 = nrm[row * 7 + col - 1] - cur;
+        if (row != 0 && row != 9) {
+            cXyz v2 = nrm[col + (row - 1) * 7] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        }
+        if (row == 0xB) {
+            cXyz v2 = nrm[0x54] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        } else if (row != 8) {
+            cXyz v2 = nrm[col + (row + 1) * 7] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        }
+    }
+    if (col != 6) {
+        v1 = nrm[col + row * 7 + 1] - cur;
+        if (row != 0 && row != 9) {
+            cXyz v2 = nrm[col + (row - 1) * 7] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        }
+        if (row == 0xB) {
+            cXyz v2 = nrm[0x54] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        } else if (row != 8) {
+            cXyz v2 = nrm[col + (row + 1) * 7] - cur;
+            cXyz cross = v1.outprod(v2);
+            cross = cross.normZC();
+            add += cross;
+        }
+    }
+    if (row > 7) {
+        add.y = 0.0f;
+    }
+    if (add.normalizeRS() == 0) {
+        add.set(1.0f, 0.0f, 0.0f);
+    }
+    MtxPush();
+    mDoMtx_YrotM(*calc_mtx, (s16)(900.0f * cM_ssin((s16)((col + row) * -0x320))));
+    cXyz pos;
+    MtxPosition(&add, &pos);
+    *out = pos.normZC();
+    MtxPull();
 }
 
 /* 800E92AC-800E93B8       .text setTopNrmVtx__13daHo_packet_cFP4cXyz */
