@@ -820,7 +820,10 @@ void daNpc_So_c::cutMiniGamePlTurnProc() {
 
 /* 00007AC0-00007B1C       .text cutMiniGamePlUpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpStart() {
-    /* Nonmatching */
+    field_0xA9C = 0x1E;
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    cam->mCamera.Stop();
+    cam->mCamera.SetTrimSize(1);
 }
 
 /* 00007B1C-00007CBC       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
