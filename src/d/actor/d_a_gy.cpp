@@ -1579,7 +1579,48 @@ bool daGy_c::_draw() {
 
 /* 000046C8-00004920       .text createInit__6daGy_cFv */
 void daGy_c::createInit() {
-    /* Nonmatching */
+    mCF8 = ZeroQuat;
+    gbaName = 0x1D;
+    scale.set(l_HIO.m90, l_HIO.m90, l_HIO.m90);
+    m4FC = -1;
+    m500 = -1;
+    m92C = this;
+    m938 = 1;
+    mACC = 0.0f;
+    mAC8 = 0.0f;
+    itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("GyCtrl", 0);
+    attention_info.flags = 4;
+    attention_info.distances[2] = 0x22;
+    mD15 = 1;
+    m918 = l_HIO.m174;
+    m8EC = -1;
+    m8F0 = 0x78;
+    m4E4 = l_HIO.mA0;
+    modeDiveInit();
+    m2BC = current.pos;
+    for (s32 i = 0; i < mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+    }
+    setMtx();
+    mpMorf->calc();
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
+              fopAcM_GetSpeed_p(this));
+    mAcch.SetWallNone();
+    mAcch.SetRoofNone();
+    fopAcM_SetGravity(this, -2.5f);
+    fopAcM_posMoveF(this, NULL);
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    m8A8.Init(0x64, 0x64, this);
+    m638.Set(l_sph_src);
+    m638.SetStts(&m8A8);
+    m764.Set(l_cps_src);
+    m764.SetStts(&m8A8);
+    m50C.Set(l_sph_head_src);
+    m50C.SetStts(&m8A8);
+    max_health = 4;
+    health = max_health;
+    createWave();
 }
 
 /* 00004920-00004A80       .text _create__6daGy_cFv */
