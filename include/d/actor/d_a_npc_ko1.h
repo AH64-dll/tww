@@ -70,7 +70,7 @@ public:
     u32 getMsg();
     BOOL chkAttention();
     void setAttention(bool);
-    fopAc_ac_c* searchByID(u32);
+    fopAc_ac_c* searchByID(unsigned int);
     void* partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
     BOOL check_landOn();

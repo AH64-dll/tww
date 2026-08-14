@@ -20,7 +20,7 @@
 daNpc_Ko1_childHIO_c::daNpc_Ko1_childHIO_c() {}
 
 /* 00000150-0000020C       .text __ct__15daNpc_Ko1_HIO_cFv */
-daNpc_Ko1_HIO_c::daNpc_Ko1_HIO_c() {
+daNpc_Ko1_HIO_c::daNpc_Ko1_HIO_c() { /* Nonmatching */
     static u8 a_prm_tbl[0xB0] = {
         0x40, 0x1F, 0x00, 0x20, 0xC0, 0xE0, 0xC0, 0xE0, 0x40, 0x1F, 0x00, 0x00, 0xC0, 0xE0, 0x00, 0x00,
         0x40, 0x06, 0xD0, 0x07, 0x00, 0x00, 0xB4, 0x42, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08,
@@ -126,7 +126,7 @@ static BOOL nodeCallBack_Ko1(J3DNode* i_node, int i_judge) {
 }
 
 /* 000005A0-000006E8       .text nodeKo1Control__11daNpc_Ko1_cFP7J3DNodeP8J3DModel */
-void daNpc_Ko1_c::nodeKo1Control(J3DNode* i_node, J3DModel* i_model) {
+void daNpc_Ko1_c::nodeKo1Control(J3DNode* i_node, J3DModel* i_model) { /* Nonmatching */
     static cXyz a_eye_pos_off(0.0f, 0.0f, 0.0f);
 
     s32 jointIdx = ((J3DJoint*)i_node)->getJntNo();
@@ -405,8 +405,10 @@ void daNpc_Ko1_c::setAttention(bool) { /* Nonmatching */
 }
 
 /* 00002610-00002644       .text searchByID__11daNpc_Ko1_cFUi */
-fopAc_ac_c* daNpc_Ko1_c::searchByID(u32) { /* Nonmatching */
-    return NULL;
+fopAc_ac_c* daNpc_Ko1_c::searchByID(unsigned int i_id) {
+    fopAc_ac_c* actor = NULL;
+    fopAcM_SearchByID(i_id, &actor);
+    return actor;
 }
 
 /* 00002644-000026DC       .text partner_srch_sub__11daNpc_Ko1_cFPFPvPv_Pv */
