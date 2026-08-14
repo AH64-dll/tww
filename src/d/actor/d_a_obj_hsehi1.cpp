@@ -374,7 +374,7 @@ BOOL daObj_hsh_c::talkAction(void*) {
         m508 = getMsg();
         mActionStatus++;
         if (argument == 0) {
-            daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
         }
     } else if (mActionStatus != -1) {
         if (mActionStatus == 1) {
@@ -386,7 +386,7 @@ BOOL daObj_hsh_c::talkAction(void*) {
                 setAction(&waitAction, NULL);
                 g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
                 if (argument == 0) {
-                    daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                    ((daPy_py_c*)dComIfGp_getLinkPlayer())->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
                 }
             }
         }
@@ -557,14 +557,13 @@ BOOL daObj_hsh_c::actionDefault(int) {
 }
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
     dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    char buf[0x10];
     char* substance = (char*)evmgr->getMySubstanceP(i_staffId, "target", 4);
 
     BOOL isLink = 0;
     if (substance != NULL) {
-        char buf[0x20];
         strcpy(buf, substance);
         if (strcmp(buf, "@PLAYER") == 0) {
             isLink = 1;
@@ -574,21 +573,22 @@ void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
     substance = (char*)evmgr->getMySubstanceP(i_staffId, "disp", 4);
     if (isLink == 1) {
         if (substance != NULL) {
-            char buf[0x20];
             strcpy(buf, substance);
+            daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
             if (strcmp(buf, "on") == 0) {
-                daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
-            } else if (strcmp(buf, "off") == 0) {
-                daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                link->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            }
+            if (strcmp(buf, "off") == 0) {
+                link->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
             }
         }
     } else {
         if (substance != NULL) {
-            char buf[0x20];
             strcpy(buf, substance);
             if (strcmp(buf, "on") == 0) {
                 drawStart();
-            } else if (strcmp(buf, "off") == 0) {
+            }
+            if (strcmp(buf, "off") == 0) {
                 drawStop();
             }
         }
