@@ -561,6 +561,9 @@ void ho_move(daGrid_c* i_this) {
                 f0_3 = spC;
             }
             f32 f0_2 = i_this->mWind[r22];
+            f31_2 *= f0_2;
+            f32 d60f03 = (f32)d60 * f0_3 * f0_2;
+            f30_2 *= f0_2;
             f32 f0_4 = f23 < 0.0f ? f23 : 0.0f;
             f32 f1_5 = f0_4 * f0_4 * 0.25f;
             f32 f0_3_2 = i_this->m2200;
@@ -608,9 +611,9 @@ void ho_move(daGrid_c* i_this) {
                 f1_3 = f1_2 * (i_this->m2200 * (((f32)r24 / 6.0f) * (6.0f * z_rate_tbl[r23])));
             }
             f32 f0_6 = (f32)d80 + ((f32)d88 * f25);
-            nrm->x += f4_2 + f0_6 * (f31_2 * f0_2 * i_this->m2204);
-            nrm->y += f5_2 + ((f32)d60 * f0_3 * f0_2 * f0_6);
-            nrm->z += f1_3 + ((f0_6 * (f30_2 * f0_2 * i_this->m2204)) - (f32)d90);
+            nrm->x += f4_2 + f0_6 * (f31_2 * i_this->m2204);
+            nrm->y += f5_2 + (d60f03 * f0_6);
+            nrm->z += f1_3 + ((f0_6 * (f30_2 * i_this->m2204)) - (f32)d90);
             s32 r0_3 = r23 + 1;
             if (r24 < 6) {
                 r0_3 = r23;
