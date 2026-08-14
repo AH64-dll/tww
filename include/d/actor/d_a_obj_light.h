@@ -34,8 +34,8 @@ namespace daObjLight {
         static bool renew_light_angle();
         static s16 get_light_angle();
         static s16 get_light_dif_angle();
-        static BOOL set_light_dif_angle_LOD(s16);
-        static BOOL set_light_dif_angle_FRRS(s16);
+        static bool set_light_dif_angle_LOD(s16);
+        static bool set_light_dif_angle_FRRS(s16);
 
         static const char M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;

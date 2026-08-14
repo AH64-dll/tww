@@ -170,7 +170,7 @@ s16 daObjLight::Act_c::get_light_dif_angle() {
 }
 
 /* 8005682C-80056860       .text set_light_dif_angle_LOD__Q210daObjLight5Act_cFs */
-BOOL daObjLight::Act_c::set_light_dif_angle_LOD(s16 r3) {
+bool daObjLight::Act_c::set_light_dif_angle_LOD(s16 r3) {
     if (g_Counter.mCounter0 != M_S_pre_set_frame_FRRS) {
         M_S_light_angle = r3;
         M_S_pre_set_frame_LOD = g_Counter.mCounter0;
@@ -182,7 +182,7 @@ BOOL daObjLight::Act_c::set_light_dif_angle_LOD(s16 r3) {
 }
 
 /* 80056860-800568A8       .text set_light_dif_angle_FRRS__Q210daObjLight5Act_cFs */
-BOOL daObjLight::Act_c::set_light_dif_angle_FRRS(s16 r3) {
+bool daObjLight::Act_c::set_light_dif_angle_FRRS(s16 r3) {
     if (g_Counter.mCounter0 != M_S_pre_set_frame_LOD && g_Counter.mCounter0-1 == M_S_pre_set_frame_FRRS) {
         M_S_light_angle = r3;
         M_S_pre_set_frame_FRRS = g_Counter.mCounter0;
