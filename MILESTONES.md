@@ -289,3 +289,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T08:36Z — M40: flip #60 d_a_npc_gp1 → Equivalent — 31 FLIPS THIS SESSION (#30-60). Ledger: 46 NonMatching / 54 Equivalent / 313 Matching + 7 MatchingFor. gp1: 21/21 accept-class after createInit u8-clrlwi blocker fixed (s32 path split cdf6d9c06 — R9-9 catch vs D5 reclassification resolved on retail r27 evidence). Gate 0502ae93e 11:35:53. BLead-10 shift: 7 flips (#52-60). R6-9 regression sweep: NO regressions across #30-58.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T09:19Z — M41: flip #61 d_a_obj_warpls → Equivalent — 32 FLIPS THIS SESSION (#30-61). Ledger: 45 NonMatching / 55 Equivalent / 313 Matching + 7 MatchingFor. warpls: 3 real structural fixed (TEV_TYPE value bug, demo flow, eventOrder form) + firewall-class _delete reload caught PRE-flip; 44/47 fns 100. Gate 7fa715f35 12:18:33. BLead-10 shift: 10 flips (#52-61) as sole executor, cycle-9 misclass catch corrected.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
