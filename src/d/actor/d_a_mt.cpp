@@ -538,8 +538,97 @@ void body_control4(mt_class* i_this) {
 }
 
 /* 00002AB0-00003008       .text body_control5__FP8mt_class */
-void body_control5(mt_class*) {
+void body_control5(mt_class* i_this) {
     /* Nonmatching */
+    cXyz sp18;
+    cXyz spC;
+    cXyz sp24;
+
+    i_this->m4A0[0] = i_this->current.pos;
+    i_this->m560[0] = i_this->shape_angle;
+
+    cXyz* p4A0 = &i_this->m4A0[0];
+    csXyz* p560 = &i_this->m560[0];
+
+    f32 f30 = l_HIO.m18 + i_this->mAcch.m_ground_h;
+
+    for (int i = 0; i < 8; i++) {
+        if (i > 0) {
+            f32 f2 = i_this->m474;
+            u32 sinIdx = (u16)(i_this->m46A * (REG0_S(5) + 0xDAC) + i * (REG0_S(6) + 0x1B58));
+            sp24.x = f2 * ((50.0f + REG0_F(4)) * jmaSinTable[sinIdx >> jmaSinShift]);
+            sinIdx = (u16)(i_this->m46A * (REG0_S(7) + 0x1194) + i * (REG0_S(8) + 0x1770));
+            sp24.y = f2 * ((80.0f + REG0_F(5)) * jmaSinTable[sinIdx >> jmaSinShift]);
+            sp24.z = -30.0f + REG0_F(3);
+            mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+            MtxPosition(&sp24, &spC);
+
+            f32 f3 = (p4A0[0].y - 10.0f) + spC.y;
+            if (f3 < f30) {
+                f3 = f30;
+            }
+            f32 f29 = spC.x + (p4A0[0].x - p4A0[-1].x);
+            f32 f31 = f3 - p4A0[-1].y;
+            f32 f28 = spC.z + (p4A0[0].z - p4A0[-1].z);
+            s16 r19 = cM_atan2s(f29, f28);
+            f2 = f29 * f29 + f28 * f28;
+            f2 = std::sqrtf(f2);
+            s16 r17 = -cM_atan2s(f31, f2);
+
+            sp24.x = 0.0f;
+            sp24.y = 0.0f;
+            sp24.z = 35.0f + REG0_F(7);
+            mDoMtx_YrotS(*calc_mtx, r19);
+            mDoMtx_XrotM(*calc_mtx, r17);
+            MtxPosition(&sp24, &sp18);
+
+            p560[0].y = (s16)(r19 + 0x8000);
+            p560[0].x = -r17;
+            p4A0[0].x = p4A0[-1].x + sp18.x;
+            p4A0[0].y = p4A0[-1].y + sp18.y;
+            p4A0[0].z = p4A0[-1].z + sp18.z;
+        }
+
+        J3DModel* model = i_this->mpMorf[i]->getModel();
+        model->setBaseScale(i_this->scale);
+        PSMTXTrans(mDoMtx_stack_c::now, p4A0[0].x, p4A0[0].y, p4A0[0].z);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, p560[0].y);
+        mDoMtx_XrotM(mDoMtx_stack_c::now, p560[0].x);
+        mDoMtx_ZrotM(mDoMtx_stack_c::now, p560[0].z);
+        if (i == 0) {
+            mDoMtx_YrotM(mDoMtx_stack_c::now, i_this->m468);
+        }
+        if (i == 0) {
+            mDoMtx_stack_c::scaleM(l_HIO.m1C, l_HIO.m1C, l_HIO.m1C);
+        } else {
+            mDoMtx_stack_c::scaleM(i_this->m600[i], i_this->m600[i] * i_this->m620[i], 1.0f);
+            if (i == 7) {
+                mDoMtx_stack_c::scaleM(i_this->m18F0, i_this->m18F0, i_this->m18F0);
+            }
+        }
+        mDoMtx_stack_c::transM(0.0f, 0.0f, i_this->m470);
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+        if (i == 0) {
+            cXyz offset(0.0f, 0.0f, 30.0f + REG0_F(12));
+            PSMTXMultVec(mDoMtx_stack_c::now, &offset, &i_this->eyePos);
+            i_this->m17A8.SetC(i_this->eyePos);
+            i_this->m17A8.SetR(30.0f);
+            dComIfG_Ccsp()->Set(&i_this->m17A8);
+        } else {
+            i_this->mE48[i].OffCoSetBit();
+            i_this->mE48[i].SetC(*p4A0);
+        }
+        i_this->mE48[i].OffAtSetBit();
+        i_this->mE48[i].OffCoSetBit();
+        dComIfG_Ccsp()->Set(&i_this->mE48[i]);
+
+        p4A0++;
+        p560++;
+    }
+
+    cLib_addCalc2(&i_this->m470, 20.0f, 1.0f, 1.0f);
+    i_this->m468 = (s16)(i_this->m474 * ((3000.0f + REG0_F(7)) * jmaSinTable[(u16)(i_this->m46A * (REG0_S(0) + 0xBB8)) >> jmaSinShift]));
 }
 
 /* 00003008-00003210       .text br_draw__FP8mt_class */
