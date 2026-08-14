@@ -94,6 +94,24 @@ void daObjLight::Act_c::draw_fire() {
 /* 00000B04-00000C28       .text exe_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_fire() {
     /* Nonmatching */
+    if (mFireFollowCb.getEmitter() != NULL) {
+        f32 sin_val = jmaSinTable[(u16)mFireAngle >> jmaSinShift];
+
+        cXyz pos = current.pos;
+        pos.y += 24.0f;
+
+        mFireAlpha = (u8)((s32)(10.0f * sin_val) + 0x8C);
+        mFireScale = 0.45f + 0.05f * sin_val;
+        mFireAngle2 += 0x2D0;
+
+        mDoMtx_stack_c::transS(pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y + mAngle);
+        mDoMtx_stack_c::XrotM(mFireAngle2);
+        mDoMtx_stack_c::scaleM(mFireScale, mFireScale, mFireScale);
+        PSMTXCopy(mDoMtx_stack_c::now, mFireMtx);
+
+        mFireAngle += 0x1194;
+    }
 }
 
 /* 00000C28-00000C60       .text delete_fire__Q210daObjLight5Act_cFv */

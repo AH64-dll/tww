@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
+#include "d/d_cc_d.h"
 
 class J3DModel;
 class dBgW;
@@ -50,7 +51,12 @@ public:
         /* 0x2A0 */ J3DModel* mpModelLight2;
         /* 0x2A4 */ dBgW* mpBgW;
         /* 0x2A8 */ Mtx mBgWBaseMtx;
-        /* 0x2D8 */ u8 field_0x2D8[0x44C - 0x2D8];
+        /* 0x2D8 */ s16 mAngle;
+        /* 0x2DA */ s16 m2DA;
+        /* 0x2DC */ s16 m2DC;
+        /* 0x2DE */ s16 m2DE;
+        /* 0x2E0 */ dCcD_Stts mStts;
+        /* 0x31C */ dCcD_Cyl mCyl;
         /* 0x44C */ dPa_followEcallBack mFireFollowCb;
         /* 0x460 */ s16 mFireAngle;
         /* 0x462 */ s16 mFireAngle2;
