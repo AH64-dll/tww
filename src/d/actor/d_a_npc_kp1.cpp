@@ -283,18 +283,18 @@ void daNpc_Kp1_c::ctrlAnmTag() {
 }
 
 /* 00000C38-00000CA4       .text chngAnmAtr__11daNpc_Kp1_cFUc */
-void daNpc_Kp1_c::chngAnmAtr(u8 param_1) { /* Nonmatching */
+void daNpc_Kp1_c::chngAnmAtr(u8 param_1) {
     if (param_1 >= 7) {
         return;
     }
     if (param_1 == mAnmAtr) {
         return;
     }
-    mBtpNum = 0;
+    mShadowIdx = 0;
     if (param_1 == 2) {
-        mBtpNum = 2;
+        mShadowIdx = 2;
     } else if (param_1 == 3) {
-        mBtpNum = 1;
+        mShadowIdx = 1;
     }
     mAnmAtr = param_1;
     setAnm_ATR(1);
@@ -365,7 +365,7 @@ void daNpc_Kp1_c::anmAtr(u16 i_msgStatus) {
 /* 00000E78-00000EE0       .text setStt__11daNpc_Kp1_cFSc */
 void daNpc_Kp1_c::setStt(s8 param_1) { /* Nonmatching */
     s8 old_type = mType;
-    mBtpNum = 0;
+    mShadowIdx = 0;
     mType = param_1;
 
     switch (mType) {
