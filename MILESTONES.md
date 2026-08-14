@@ -157,3 +157,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T00:51Z — M18: flips #40 Itnak (re-flip after reconciliation — set_mtx norm-diff-0 arg-eval, R7-8 overruled on evidence) + #42 zk1 (8 ARG-only accept holdouts, zero one-sided) → Equivalent, gate 5240492fd 03:50:14. Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. 13 flips this session (#30-42: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke/balancelift/ashut/ds1/ekskz/Itnak/zk1 Equivalent). Bench caught 25+ real bugs incl ds1 loop-bounds (post-flip), mn speedF 0.0-vs-1.0, Itnak M_cyl_src x3, ekskz seStart 200-vs-1.0, magmarock logic inversions.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T00:53Z — M19: 4-version cycle 2 ALL GREEN at 5240492fd (D44J01 417 with 788-step relink / GZLP01 416 / GZLJ01 416 / GZLE01 416) — zk1 shared-header renames (d_save_event_flag.inc + d_snap.h) verified on all 4 versions, Matching siblings confirmed post-flip. Flips #40 Itnak + #42 zk1 fully gated across the matrix. Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. Session total: 13 flips, 2 4-version cycles, 3 demo-divergence conversions.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
