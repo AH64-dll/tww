@@ -128,9 +128,7 @@ static int l_check_wrk;
 static daNpc_Kk1_HIO_c l_HIO;
 
 /* 0000044C-000004EC       .text searchActor_SWC00__FPvPv */
-static void searchActor_SWC00(void* i_actor, void* i_this) {
-    /* Nonmatching */
-
+static void* searchActor_SWC00(void* i_actor, void* i_this) {
     if(l_check_wrk < 20) {
         if(fopAcM_IsActor(i_actor)) {
             if(fopAcM_GetName(i_actor) == fpcNm_SWC00_e) {
@@ -144,18 +142,12 @@ static void searchActor_SWC00(void* i_actor, void* i_this) {
             }
         }
     }
+    return NULL;
 }
 
 /* 000004EC-00000598       .text init_KK1_0__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::init_KK1_0() {
-    /* Nonmatching */
-
-    if(dComIfGs_isEventBit(0x2D01)) {
-        if(dKy_daynight_check()) {
-            if(dComIfGs_isEventBit(0x0E08)) {
-                return false;
-            }
-        }
+    if (dComIfGs_isEventBit(0x2D01) && (!dKy_daynight_check() || !dComIfGs_isEventBit(0x0E08))) {
         set_action(&daNpc_Kk1_c::wait_action1, NULL);
         return true;
     }
@@ -347,8 +339,6 @@ void daNpc_Kk1_c::play_btp_anm() {
 
 /* 00000C80-00000CFC       .text play_eff_anm__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::play_eff_anm() {
-    /* Nonmatching */
-
     m800++;
     if(m800 >= 0x1E) {
         m800 = 0x1D;
