@@ -4,6 +4,7 @@
 #include "d/d_lib.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 
@@ -12,7 +13,6 @@ public:
     typedef int (daNpc_Pm1_c::*ProcFunc)(void*);
 
     struct anm_prm_c {
-        // Borrowed from d_lib.h, fields seem to match
         /* 0x00 */ s8 bckNum;
         /* 0x01 */ s8 btpNum;
         /* 0x02 */ s16 field_0x02;
@@ -21,15 +21,35 @@ public:
         /* 0x0C */ int loopMode;
     };
 
-    void createInit();
+    enum Animation {
+        /* 0x0 */ ANM_WAIT,
+        /* 0x1 */ ANM_TALK,
+        /* 0x2 */ ANM_END,
+    };
+
+    enum TexPattern {
+        /* 0x0 */ TEXPATTERN_MABA01,
+        /* 0x1 */ TEXPATTERN_END,
+    };
+
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s8 getBackboneJntNum() { return m_backbone_jnt_num; }
+    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
+    s16 getHead_y() { return m_jnt.getHead_y(); }
+    Vec* getAttPos() { return &mAttPos; }
+    Vec* getEyePos() { return &mEyePos; }
+
+    bool createInit();
     void setMtx();
-    void anmResID(int, int*, int*);
+    bool anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
     void setAnm_tex(signed char);
-    void init_btp(bool, int);
-    void initTexPatternAnm(bool);
+    bool init_btp(bool, int);
+    bool initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm_anm(anm_prm_c*);
+    s32 setAnm_anm(anm_prm_c*);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
@@ -43,83 +63,78 @@ public:
     void eventOrder();
     void checkOrder();
     void lookBack();
-    void chkAttention();
+    bool chkAttention();
     void setAttention();
-    void decideType(int);
+    bool decideType(int);
     void event_actionInit(int);
-    void event_action();
+    bool event_action();
     void privateCut();
     void endEvent();
     void event_proc();
-    void set_action(ProcFunc, void*);
-    void wait01();
-    void talk01();
-    void wait_action1(void*);
-    void demo();
+    bool set_action(ProcFunc, void*);
+    BOOL wait01();
+    BOOL talk01();
+    int wait_action1(void*);
+    u8 demo();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
-    /* 0x6CC */ s8 m_hed_jnt_num;
-    /* 0x6CD */ s8 m_bbone_jnt_num;
-    /* 0x6CE */ char mArcName[3];
-    /* 0x6D1 */ u8 m6D1[0x6D4 - 0x6D1];
-    /* 0x6D4 */ u32 mShadowId;
-    /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6EC */ u8 m6EC[0x780 - 0x6EC];
-    /* 0x780 */ cXyz mTransformedEyePos;
-    /* 0x78C */ cXyz field_0x78C;
-    /* 0x798 */ u8 m798[0x7A8 - 0x798];
-    /* 0x7A8 */ u8 m7A8;
-    /* 0x7A9 */ u8 m7A9;
-    /* 0x7AA */ u8 m7AA;
-    /* 0x7AB */ u8 m7AB;
-    /* 0x7AC */ u8 m7AC;
-    /* 0x7AD */ u8 m7AD;
-    /* 0x7AE */ u8 m7AE;
-    /* 0x7AF */ u8 m7AF;
-    /* 0x7B0 */ u8 m7B0;
-    /* 0x7B1 */ u8 m7B1;
-    /* 0x7B2 */ u8 m7B2;
-    /* 0x7B3 */ u8 m7B3;
-    /* 0x7B4 */ u8 m7B4;
-    /* 0x7B5 */ u8 m7B5;
+    /* 0x6C4 */ request_of_phase_process_class mPhs;
+    /* 0x6CC */ s8 m_head_jnt_num;
+    /* 0x6CD */ s8 m_backbone_jnt_num;
+    /* 0x6CE */ u8 m6CE[0x6D0 - 0x6CE];
+    /* 0x6D0 */ u32 mShadowId;
+    /* 0x6D4 */ J3DModel* mShadowModel;
+    /* 0x6D8 */ J3DAnmTexPattern* m_head_tex_pattern;
+    /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
+    /* 0x6F0 */ u8 mBtpFrame;
+    /* 0x6F1 */ u8 m6F1;
+    /* 0x6F2 */ s16 m6F2;
+    /* 0x6F4 */ ProcFunc mProcFunc;
+    /* 0x700 */ dNpc_EventCut_c mEventCut;
+    /* 0x76C */ csXyz m76C;
+    /* 0x772 */ u8 m772[0x774 - 0x772];
+    /* 0x774 */ cXyz m774;
+    /* 0x780 */ cXyz mAttPos;
+    /* 0x78C */ cXyz mEyePos;
+    /* 0x798 */ cXyz m798;
+    /* 0x7A4 */ f32 m7A4;
+    /* 0x7A8 */ u8 m7A8[0x7AC - 0x7A8];
+    /* 0x7AC */ f32 m7AC;
+    /* 0x7B0 */ s16 m7B0;
+    /* 0x7B2 */ s16 m7B2;
+    /* 0x7B4 */ s8 m7B4;
+    /* 0x7B5 */ s8 m7B5;
     /* 0x7B6 */ u8 m7B6;
     /* 0x7B7 */ u8 m7B7;
     /* 0x7B8 */ u8 m7B8;
-    /* 0x7B9 */ u8 m7B9;
-    /* 0x7BA */ u8 m7BA;
-    /* 0x7BB */ u8 m7BB;
-    /* 0x7BC */ u8 m7BC;
-    /* 0x7BD */ u8 m7BD;
-    /* 0x7BE */ u8 m7BE;
-    /* 0x7BF */ u8 m7BF;
-    /* 0x7C0 */ u8 m7C0;
-    /* 0x7C1 */ u8 m7C1;
-    /* 0x7C2 */ u8 m7C2;
-    /* 0x7C3 */ u8 m7C3;
+    /* 0x7B9 */ u8 m7B9[0x7BC - 0x7B9];
+    /* 0x7BC */ s32 m7BC;
+    /* 0x7C0 */ s32 m7C0;
     /* 0x7C4 */ u8 m7C4;
     /* 0x7C5 */ u8 m7C5;
-    /* 0x7C6 */ u8 m7C6;
+    /* 0x7C6 */ bool mHeadOnlyFollow;
     /* 0x7C7 */ u8 m7C7;
     /* 0x7C8 */ u8 m7C8;
-    /* 0x7C9 */ u8 m7C9;
-    /* 0x7CA */ u8 m7CA;
+    /* 0x7C9 */ s8 m7C9;
+    /* 0x7CA */ s8 m7CA;
     /* 0x7CB */ u8 m7CB;
     /* 0x7CC */ u8 m7CC;
-    /* 0x7CD */ u8 m7CD;
-    /* 0x7CE */ u8 m7CE;
-    /* 0x7CF */ u8 m7CF;
-    /* 0x7D0 */ u8 m7D0;
-    /* 0x7D1 */ u8 m7D1;
-    /* 0x7D2 */ u8 m7D2;
-    /* 0x7D3 */ u8 m7D3;
-    /* 0x7D4 */ u8 m7D4;
-    /* 0x7D5 */ u8 m7D5;
-    /* 0x7D6 */ u8 m7D6;
-};
+    /* 0x7CD */ s8 m7CD;
+    /* 0x7CE */ s8 m7CE;
+    /* 0x7CF */ s8 m7CF;
+    /* 0x7D0 */ s8 m7D0;
+    /* 0x7D1 */ s8 m7D1;
+    /* 0x7D2 */ s8 m7D2;
+    /* 0x7D3 */ s8 m7D3;
+    /* 0x7D4 */ s8 m7D4;
+    /* 0x7D5 */ s8 m7D5;
+    /* 0x7D6 */ s8 m7D6;
+    /* 0x7D7 */ s8 m7D7;
+};  // Size: 0x7D8
 
 #endif /* D_A_NPC_PM1_H */
