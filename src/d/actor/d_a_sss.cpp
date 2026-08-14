@@ -366,7 +366,6 @@ void hand_move(sss_class* i_this) {
     f32 f13;
     f32 f14;
     f32 f15;
-    f32 f16;
     f32 f17;
     f32 f18;
     f32 f19;
@@ -453,9 +452,7 @@ void hand_move(sss_class* i_this) {
         }
         pos2 = pos - i_this->m2C8;
         f12 = PSVECSquareMag(&pos2);
-        if (f12 > 0.0f) {
-            f12 = std::sqrtf(f12);
-        }
+        f12 = std::sqrtf(f12);
         if (f12 < 20.0f && player == link_player) {
             i_this->m2C0 = 3;
             hand_close(i_this);
@@ -551,9 +548,8 @@ void hand_move(sss_class* i_this) {
             pos = pos2 + actor->current.pos;
             f3 = 0.1f;
             actor->speedF = 0.2f * i_this->mA08;
-            f16 = 30.0f + REG6_F(8);
-            if (actor->speedF > f16) {
-                actor->speedF = f16;
+            if (actor->speedF > 30.0f + REG6_F(8)) {
+                actor->speedF = 30.0f + REG6_F(8);
             }
         }
         cLib_addCalc0(&i_this->mA08, 1.0f, 5.0f + REG6_F(7));
@@ -569,37 +565,40 @@ void hand_move(sss_class* i_this) {
     } else {
         cut_control1(i_this);
         cut_control2(i_this);
+        sss_s* src = i_this->m490;
         cXyz* posArr = i_this->m454.getPos(0);
         u8* sizeArr = i_this->m454.getSize(0);
-        for (int i = 0; i < 5; i++) {
-            posArr[i] = i_this->m490[i].mPos;
-            sizeArr[i] = (u8)i_this->m490[i].mSize;
+        for (int i = 0; i < 5; i++, src++, posArr++, sizeArr++) {
+            *posArr = src->mPos;
+            *sizeArr = (u8)src->mSize;
         }
         cLib_addCalc0(&i_this->m2FC, 1.0f, 1.0f + REG0_F(1));
     }
     control3(i_this);
     i_this->mpMorf->play(NULL, 0, 0);
+    sss_s* src = i_this->m33C;
     cXyz* posArr = i_this->m300.getPos(0);
     u8* sizeArr = i_this->m300.getSize(0);
-    for (int i = 0; i < 10; i++) {
-        posArr[i] = i_this->m33C[i].mPos;
-        sizeArr[i] = (u8)i_this->m33C[i].mSize;
+    for (int i = 0; i < 10; i++, src++, posArr++, sizeArr++) {
+        *posArr = src->mPos;
+        *sizeArr = (u8)src->mSize;
     }
-    actor->eyePos = i_this->m300.getPos(0)[5];
+    cXyz* pLinePos = i_this->m300.getPos(0);
+    actor->eyePos = pLinePos[5];
     actor->attention_info.position = actor->eyePos;
     i_this->mStts.Move();
-    u8 hit = 0;
     if (keep_3 == 0) {
         i_this->m8DC.SetC(actor->eyePos);
     } else {
         i_this->m8DC.SetC(non_pos);
     }
+    u8 hit = 0;
     dComIfG_Ccsp()->Set(&i_this->m8DC);
     for (int i = 0; i < 3; i++) {
         int idx = (i_this->m2BC & 3) + i * 2;
-        cXyz* pPos = &i_this->m300.getPos(0)[idx % 10];
+        cXyz pos = pLinePos[idx % 10];
         if (keep_3 == 0) {
-            i_this->mSph[i].SetC(*pPos);
+            i_this->mSph[i].SetC(pos);
         } else {
             i_this->mSph[i].SetC(non_pos);
         }
@@ -618,6 +617,7 @@ void hand_move(sss_class* i_this) {
     }
     if ((hit != 0 || i_this->m8DC.ChkTgHit()) && i_this->m2C6 == 0) {
         CcAtInfo atInfo;
+        atInfo.pParticlePos = NULL;
         i_this->m2C6 = 0x14;
         if (hit == 0) {
             atInfo.mpObj = i_this->m8DC.GetTgHitObj();
@@ -647,11 +647,9 @@ void hand_move(sss_class* i_this) {
             dst->mPos = src->mPos;
             dst->mSize = src->mSize;
             if (i == 4) {
-                pos3 = cXyz(dst->mPos) - (dst - 1)->mPos;
+                pos3 = *(cXyz*)&dst->mPos - (dst - 1)->mPos;
                 f17 = PSVECSquareMag(&pos3);
-                if (f17 > 0.0f) {
-                    f17 = std::sqrtf(f17);
-                }
+                f17 = std::sqrtf(f17);
                 i_this->m2FC = (1.5f + REG0_F(2)) * f17;
             }
         }
