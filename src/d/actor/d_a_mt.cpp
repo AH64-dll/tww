@@ -145,6 +145,7 @@ void mt_eye_tex_anm(mt_class* i_this) {
 /* 00000390-00000478       .text mt_bg_check__FP8mt_class */
 /* 000005EC-00000720       .text nodeCallBack_head__FP7J3DNodei */
 static BOOL nodeCallBack_head(J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -269,6 +270,7 @@ void body_wall_check(mt_class* i_this) {
 
 /* 00001F10-000022D8       .text body_control1__FP8mt_class */
 void body_control1(mt_class* i_this) {
+    /* Nonmatching */
     cXyz* p6F4 = &i_this->m6F4[i_this->mBF4];
     p6F4->x = i_this->current.pos.x;
     p6F4->y = i_this->current.pos.y;
@@ -365,6 +367,7 @@ void body_control3(mt_class*) {
 
 /* 000028BC-00002AB0       .text body_control4__FP8mt_class */
 void body_control4(mt_class* i_this) {
+    /* Nonmatching */
     cXyz* pPos = &i_this->m4A0[1];
     cXyz* pSpd = &i_this->m590[1];
     csXyz* pAng = &i_this->m560[1];
@@ -410,6 +413,7 @@ void body_control5(mt_class*) {
 
 /* 00003008-00003210       .text br_draw__FP8mt_class */
 void br_draw(mt_class* i_this) {
+    /* Nonmatching */
     if (i_this->m18D4 == 0) {
         return;
     }
@@ -444,6 +448,7 @@ void br_draw(mt_class* i_this) {
 
 /* 00003210-00003360       .text daMt_shadowDraw__FP8mt_class */
 static void daMt_shadowDraw(mt_class* i_this) {
+    /* Nonmatching */
     if (!(i_this->actor_status & 0x2000)) {
         cXyz pos(i_this->current.pos.x, i_this->current.pos.y + 150.0f + REG0_F(18),
                  i_this->current.pos.z);
@@ -470,6 +475,7 @@ static void daMt_shadowDraw(mt_class* i_this) {
 
 /* 00003360-00003604       .text daMt_Draw__FP8mt_class */
 static BOOL daMt_Draw(mt_class* i_this) {
+    /* Nonmatching */
     cXyz zero(0.0f, 0.0f, 0.0f);
 
     if (i_this->m2BB != 0) {
@@ -530,6 +536,7 @@ static BOOL daMt_Draw(mt_class* i_this) {
 
 /* 0000361C-000037B0       .text bakuha__FP8mt_class */
 void bakuha(mt_class* i_this) {
+    /* Nonmatching */
     fopAcM_createDisappear(i_this, &i_this->eyePos, 0xA, 0, 0xFF);
 
     if (i_this->m2B6 == 0 && i_this->m2B9 != 0) {
