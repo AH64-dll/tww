@@ -39,6 +39,17 @@ void daNpc_So_c::cutJumpStart() {
 /* 000054A4-00005598       .text cutJumpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutJumpProc() {
     /* Nonmatching */
+    f32 waterY = dLib_getWaterY(current.pos, mObjAcch);
+    if (cLib_calcTimer(&field_0xA9C) == 0) {
+        if (current.pos.y <= waterY) {
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(0x5939, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
+            field_0xAFC = 600.0f;
+            speedF = field_0xAFC;
+            dComIfGp_evmng_cutEnd(field_0xB6C);
+        }
+    }
 }
 
 /* 00005598-00005610       .text cutAppearStart__10daNpc_So_cFv */
@@ -116,6 +127,13 @@ void daNpc_So_c::cutSetAnmProc() {
 /* 0000599C-00005AA8       .text cutEffectStart__10daNpc_So_cFv */
 void daNpc_So_c::cutEffectStart() {
     /* Nonmatching */
+    cXyz pos(current.pos);
+    pos.y -= 80.0f;
+    cXyz scale(1.0f, 1.0f, 1.0f);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(0x8152, &pos, NULL, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+    emitter->mGlobalParticleScale.set(0.62f, 0.6f, 1.0f);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x58BD, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 00005AA8-00005ADC       .text cutEffectProc__10daNpc_So_cFv */
@@ -181,7 +199,10 @@ void daNpc_So_c::cutEatesaFirstProc() {
 
 /* 000060FC-00006148       .text cutJumpMapopenStart__10daNpc_So_cFv */
 void daNpc_So_c::cutJumpMapopenStart() {
-    /* Nonmatching */
+    field_0xBBC = 0;
+    offsetZero();
+    setAnm(2, 0);
+    field_0xBDA = 1;
 }
 
 /* 00006148-000064B8       .text cutJumpMapopenProc__10daNpc_So_cFv */
