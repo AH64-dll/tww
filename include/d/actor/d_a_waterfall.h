@@ -45,11 +45,9 @@ public:
     /* 0x2EC */ dPa_followEcallBack mFollow1;
     /* 0x300 */ dPa_followEcallBack mFollow2;
     /* 0x314 */ cXyz m314;
-    /* 0x320 */ f32 m320;
-    /* 0x324 */ f32 m324;
-    /* 0x328 */ f32 m328;
+    /* 0x320 */ cXyz m320;
     /* 0x32C */ u8 m32C[0x338 - 0x32C];
-    /* 0x338 */ s16 m338[6];
+    /* 0x338 */ csXyz m338[2];
     /* 0x344 */ cXyz m344;
     /* 0x350 */ s16 m350;
     /* 0x352 */ s16 m352;

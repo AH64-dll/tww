@@ -32,7 +32,41 @@ BOOL daWfall_c::CreateHeap() {
 
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
 void daWfall_c::CreateInit() {
-    /* Nonmatching */
+    cullMtx = mpModel1->getBaseTRMtx();
+    if (m356 == 1) {
+        fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -200.0f, 1200.0f, 1000.0f, 3640.0f);
+    } else {
+        fopAcM_setCullSizeBox(this, -250.0f, 0.0f, 0.0f, 250.0f, 1000.0f, 800.0f);
+    }
+    cullSizeFar = 2.5f;
+
+    set_mtx();
+
+    m314 = current.pos;
+    m320 = current.pos;
+    m338[0] = current.angle;
+    m338[1] = current.angle;
+
+    dComIfGp_particle_set(0x810D, &m314, &m338[0], NULL, 0xFF, &mFollow1, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x810E, &m320, &m338[1], NULL, 0xFF, &mFollow2, -1, NULL, NULL, NULL);
+
+    m2A8 = (void*)(u8)fopAcM_GetParam(this);
+    if (dComIfGs_isSwitch((int)(u8)fopAcM_GetParam(this), (s8)current.roomNo)) {
+        mode_wtr_off_init();
+        m344 = current.pos;
+        m355 = 10;
+        if (m356 == 1) {
+            mBrk.setPlaySpeed(0.0f);
+        }
+    } else {
+        mode_wtr_on_init();
+        m344 = current.pos;
+        m344.y += 863.0f;
+        if (m356 == 1) {
+            mBrk.setPlaySpeed(0.0f);
+        }
+    }
+    m350 = dComIfGp_evmng_getEventIdx("GATECLOSE", 0xFF);
 }
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
@@ -52,7 +86,10 @@ cPhs_State daWfall_c::_create() {
 
 /* 00000938-000009B8       .text set_mtx__9daWfall_cFv */
 void daWfall_c::set_mtx() {
-    /* Nonmatching */
+    mpModel1->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    PSMTXCopy(mDoMtx_stack_c::get(), mpModel1->getBaseTRMtx());
 }
 
 /* 000009B8-00000A1C       .text set_gate_mtx__9daWfall_cFv */
@@ -94,9 +131,9 @@ void daWfall_c::mode_wtr_on_init() {
 /* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
 void daWfall_c::mode_wtr_off() {
     cLib_addCalc(&m344.y, current.pos.z, 60.0f, 150.0f, 600.0f);
-    f32 scale = getWaterScaleFromGatePos();
-    m320 = scale;
-    if (scale > 0.0f) {
+    f32 waterScale = getWaterScaleFromGatePos();
+    scale.y = waterScale;
+    if (waterScale > 0.0f) {
         mBtk1.setPlaySpeed(1.0f);
         mBtk1.play();
         if (setEmitter00Pos() || setEmitter01Pos()) {
@@ -138,14 +175,14 @@ BOOL daWfall_c::setEmitter00Pos() {
     }
     m314.y = waterHeight;
 
-    f32 t = fabs(waterHeight - current.pos.z) / (m320 * 760.0f);
+    f32 t = fabs(waterHeight - current.pos.z) / (scale.y * 760.0f);
     if (t > 1.0f) {
         t = 1.0f;
     }
     if (t < 176.0f) {
         t = 176.0f;
     }
-    m314.x = m314.x + m320 * 80.0f * (f32)asin(t);
+    m314.x = m314.x + scale.y * 80.0f * (f32)asin(t);
     return ret;
 }
 
@@ -164,7 +201,7 @@ BOOL daWfall_c::setEmitter01Pos() {
         }
         ret = TRUE;
     }
-    m324 = current.pos.z - 760.0f * (1.0f - m320);
+    m320.y = current.pos.z - 760.0f * (1.0f - m320.x);
     return ret;
 }
 
