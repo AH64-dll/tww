@@ -8,7 +8,7 @@
 #include "m_Do/m_Do_ext.h"
 
 class JPABaseEmitter;
-class cBgW;
+class dBgW;
 
 class daObj_hsh_c : public fopAc_ac_c {
 public:
@@ -69,7 +69,7 @@ public:
     /* 0x460 */ dBgS_AcchCir mAcchCir;
     /* 0x4A0 */ JPABaseEmitter* m4A0;
     /* 0x4A4 */ Mtx m4A4;
-    /* 0x4D4 */ cBgW* m4D4;
+    /* 0x4D4 */ dBgW* m4D4;
     /* 0x4D8 */ u8 field_0x4D8[0x4E4 - 0x4D8];
     /* 0x4E4 */ cBgS_PolyInfo mPolyInfo;
     /* 0x4F4 */ ActionFunc mCurrActionFunc;
@@ -88,6 +88,7 @@ public:
     /* 0x51E */ s16 m51E;
     /* 0x520 */ s16 m520;
     /* 0x522 */ s16 m522;
+    /* 0x524 */ u32 field_0x524;
     /* 0x528 */ f32 m528;
     /* 0x530 */ s16 m530[2];
 };

@@ -31,6 +31,8 @@ static s32 l_hio_counter;
 static u32 l_msgId;
 static msg_class* l_msg;
 
+static const char* event_name_tbl[2] = { "hsehi1_tact", "hsehi1_talk" };
+
 static void (daObj_hsh_c::*event_init_tbl[8])(int) = {
     &daObj_hsh_c::initialDefault,
     &daObj_hsh_c::initialLinkDispEvent,
@@ -172,7 +174,6 @@ void daObj_hsh_c::setBaseMtx() {
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
-/* Nonmatching */
 BOOL daObj_hsh_c::createHeap() {
     if (argument == 0) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
@@ -184,8 +185,9 @@ BOOL daObj_hsh_c::createHeap() {
         m4D4 = new dBgW();
         if (m4D4 != NULL) {
             if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
-                return 1;
+                goto fail;
             }
+            return 0;
         }
         return 0;
     } else {
@@ -198,11 +200,14 @@ BOOL daObj_hsh_c::createHeap() {
         m4D4 = new dBgW();
         if (m4D4 != NULL) {
             if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
-                return 1;
+                goto fail;
             }
+            return 0;
         }
         return 0;
     }
+fail:
+    return 1;
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
@@ -211,7 +216,6 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
-/* Nonmatching */
 cPhs_State daObj_hsh_c::create() {
     static u32 a_heap_size_tbl = 0x4000;
 
@@ -231,23 +235,22 @@ cPhs_State daObj_hsh_c::create() {
         phase_state = dComIfG_resLoad(&mPhase, "Hsehi2");
     }
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
-            cullMtx = mpModel->getBaseTRMtx();
-
-            if (l_HIO.mNo < 0) {
-                if (argument == 0) {
-                    l_HIO.mNo = mDoHIO_createChild("タクト石版", &l_HIO);
-                } else {
-                    l_HIO.mNo = mDoHIO_createChild("メッセージ石碑", &l_HIO);
-                }
-                l_HIO.mpActor = this;
-            }
-
-            if (!init()) {
-                phase_state = cPhs_ERROR_e;
-            }
-        } else {
+        if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
             m4D4 = NULL;
+            return cPhs_ERROR_e;
+        }
+        cullMtx = mpModel->getBaseTRMtx();
+
+        if (l_HIO.mNo < 0) {
+            if (argument == 0) {
+                l_HIO.mNo = mDoHIO_createChild("タクト石版", &l_HIO);
+            } else {
+                l_HIO.mNo = mDoHIO_createChild("メッセージ石碑", &l_HIO);
+            }
+            l_HIO.mpActor = this;
+        }
+
+        if (!init()) {
             phase_state = cPhs_ERROR_e;
         }
     }
@@ -266,7 +269,6 @@ BOOL daObj_hsh_c::init() {
 
     mAcchCir.SetWall(30.0f, 30.0f);
 
-    cXyz zero(0.0f, 0.0f, 0.0f);
     mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
     setBaseMtx();
@@ -285,12 +287,10 @@ BOOL daObj_hsh_c::init() {
         setAction(&waitAction, NULL);
     }
 
-    static const char* event_name_tbl[2] = { "hsehi1_tact", "hsehi1_talk" };
     for (int i = 0; i < 2; i++) {
         m530[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
     }
 
-    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x100;
     eventInfo.setXyCheckCB(daObj_hsh_XyCheckCB);
     eventInfo.setXyEventCB(daObj_hsh_XyEventCB);
 
@@ -640,13 +640,12 @@ BOOL daObj_hsh_c::actionTactEvent(int i_staffId) {
 }
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */
-/* Nonmatching */
 void daObj_hsh_c::initialJudgeEvent(int) {
-    if (m504 & 2) {
-        m504 &= ~2;
-    } else if (m504 & 4) {
-        drawStart();
+    if (m504 & 4) {
         m504 &= ~4;
+    } else if (m504 & 2) {
+        drawStart();
+        m504 &= ~2;
         eventEnd();
     }
 }
@@ -713,7 +712,7 @@ BOOL daObj_hsh_c::talk(int i_param) {
                 l_msg->mStatus = 0x10;
                 fopMsgM_messageSendOn();
                 m504 |= 2;
-            } else if (m504 & 2) {
+            } else if (m504 & 4) {
                 l_msg->mStatus = 0x10;
                 fopMsgM_messageSendOn();
                 if (m508 == 0x5B3) {
@@ -758,21 +757,21 @@ u32 daObj_hsh_c::next_msgStatus(u32* pMsg) {
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
-/* Nonmatching */
 BOOL daObj_hsh_c::execute() {
     if (argument == 0) {
         if (dComIfGs_isEventBit(0x2B10)) {
             actor_status = (actor_status & ~0x3F) | 0x24;
         } else {
-            actor_status &= ~0x24;
+            actor_status &= ~0x20;
         }
     }
 
     mAcch.CrrPos(*dComIfG_Bgsp());
 
     if (mAcch.GetGroundH() != -1000000000.0f) {
-        current.roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-        tevStr.mRoomNo = current.roomNo;
+        u8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        current.roomNo = roomNo;
+        tevStr.mRoomNo = roomNo;
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         mPolyInfo = mAcch.m_gnd;
     }
