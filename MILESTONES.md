@@ -337,3 +337,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T18:24Z — PROGRESS SNAPSHOT: 91.3% functions at 100% (35,894/39,324 all units); 90.9% actor fns (34,283/37,713); 90.6% actor rows closed (376/415 = 224 Matching + 94 MatchingFor + 58 Equivalent), 39 NonMatching left (9.4%). 38 flips gated this session (#30-67).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T19:10Z — M48: flip #68 d_a_npc_pm1 → Equivalent — 39 FLIPS THIS SESSION (#30-68). Ledger: 38 NonMatching / 60 Equivalent / 224 Matching / 94 MatchingFor. pm1: full 41-fn transcription, 7 accept-class holdouts (R1-9+R5-9 independent strip), .rodata 330==330 byte-identical, weak-order class. Gate 4776b8f2c 22:10:15 + mirror check.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
