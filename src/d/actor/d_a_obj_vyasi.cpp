@@ -216,8 +216,51 @@ void daObjVyasi::Act_c::set_collision() {
 }
 
 /* 000005F4-000009B8       .text JointNodeCallBack__10daObjVyasiFP7J3DNodei */
-BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObjVyasi::JointNodeCallBack(J3DNode* i_node, int i_flag) {
+    J3DModel* model = j3dSys.getModel();
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    daObjVyasi::Act_c* actor = (daObjVyasi::Act_c*)model->getUserArea();
+
+    if (i_flag == 0) {
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+        Mtx mtx;
+        PSMTXCopy(model->getAnmMtx(jntNo), mtx);
+        cXyz trans;
+        trans.x = mtx[0][3];
+        trans.y = mtx[1][3];
+        trans.z = mtx[2][3];
+        mtx[0][3] = 1.0f;
+        mtx[1][3] = 1.0f;
+        mtx[2][3] = 1.0f;
+        mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
+        mDoMtx_stack_c::quatM(&actor->mJointQuat[jntNo]);
+        PSMTXConcat(mDoMtx_stack_c::now, mtx, mDoMtx_stack_c::now);
+        PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
+        PSMTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+
+        csXyz l_rot[14] = {
+            csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+            csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+        };
+        csXyz rot = l_rot[jntNo];
+        rot += actor->m03AC[jntNo];
+
+        PSMTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::now);
+        mDoMtx_stack_c::ZXYrotM(rot.x, rot.y, rot.z);
+
+        if (joint_kind_table[jntNo] == 0) {
+            mDoMtx_stack_c::scaleM(actor->m04A8, actor->m04AC, actor->m04B0);
+            PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
+            PSMTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+            Vec v;
+            v.x = 1.0f;
+            v.y = 1.0f;
+            v.z = 1.0f;
+            PSMTXMultVec(mDoMtx_stack_c::now, &v, &actor->m0400[jntNo]);
+        }
+    }
+    return 1;
 }
 
 /* 000009F4-000009FC       .text process_none_init__Q210daObjVyasi5Act_cFv */
