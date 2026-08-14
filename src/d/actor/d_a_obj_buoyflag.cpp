@@ -872,9 +872,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     springDelta.z = (i_actor->m10C0[2][3] - i_actor->m1090[2][3]) * 0.2f;
     f32 springMag = PSVECSquareMag(&springDelta);
     if (springMag > 625.0f) {
-        if (springMag > 0.0f) {
-            springMag = std::sqrtf(springMag);
-        }
+        springMag = std::sqrtf(springMag);
         PSVECScale(&springDelta, &springDelta, 1.0f / springMag);
         PSVECScale(&springDelta, &springDelta, 25.0f);
     }
@@ -894,9 +892,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
             mC5C *= L_attr.m0C;
             return;
         }
-        if (mag > 0.0f) {
-            mag = std::sqrtf(mag);
-        }
+        mag = std::sqrtf(mag);
         mC5C *= L_attr.m0C / mag;
     }
 }
