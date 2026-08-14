@@ -211,7 +211,7 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
 
 /* 00000A80-00000B4C       .text setAnm_anm__11daNpc_Kp1_cFPQ211daNpc_Kp1_c9anm_prm_c */
 BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
-    u32 ret = 0;
+    bool ret = false;
     int bck_idx;
     int bas_idx;
 
@@ -223,7 +223,7 @@ BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
                 dNpc_setAnmIDRes(mpMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed,
                                  bck_idx, bas_idx, "Kp");
             }
-            ret = 1;
+            ret = true;
         }
         mMorfFrame = 0.0f;
         mAnmTimer = 0;
@@ -251,9 +251,9 @@ void daNpc_Kp1_c::setAnm_NUM(int i_prmIdx, int i_texPattern) { /* Nonmatching */
 /* 00000BB8-00000C20       .text setAnm__11daNpc_Kp1_cFv */
 void daNpc_Kp1_c::setAnm() { /* Nonmatching */
     static daNpc_Kp1_c::anm_prm_c a_anm_prm_tbl[] = {
-        { -1, 0, 0, 0.0f, 0.0f, -1 },
+        { -1, -1, 0, 0.0f, 0.0f, -1 },
         { 0, 0, 0, 8.0f, 1.0f, 2 },
-        { -1, 0, 0, 0.0f, 0.0f, -1 },
+        { -1, -1, 0, 0.0f, 0.0f, -1 },
     };
     setAnm_tex(a_anm_prm_tbl[mType].btpNum);
     setAnm_anm(&a_anm_prm_tbl[mType]);
@@ -615,14 +615,14 @@ void daNpc_Kp1_c::event_actionInit(int i_staffIdx) {
 }
 
 /* 000016A8-00001778       .text event_action__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::event_action() {
-    u32 ret = 0;
+bool daNpc_Kp1_c::event_action() {
+    bool ret = false;
     switch (mEventAction) {
     case 0: {
         fpc_ProcID itemId = fopAcM_createItemForPresentDemo(&current.pos, 0x9A, 0, -1, -1, NULL, NULL);
         if (itemId != 0xFFFFFFFF) {
             dComIfGp_event_setItemPartnerId(itemId);
-            ret = 1;
+            ret = true;
         }
         break;
     }
@@ -630,7 +630,7 @@ BOOL daNpc_Kp1_c::event_action() {
         fpc_ProcID itemId = fopAcM_createItemForPresentDemo(&current.pos, 0x7, 0, -1, -1, NULL, NULL);
         if (itemId != 0xFFFFFFFF) {
             dComIfGp_event_setItemPartnerId(itemId);
-            ret = 1;
+            ret = true;
         }
         break;
     }
@@ -665,7 +665,7 @@ void daNpc_Kp1_c::privateCut() { /* Nonmatching */
                 bVar1 = event_action();
                 break;
             default:
-                bVar1 = 1;
+                bVar1 = TRUE;
                 break;
             }
             if (bVar1) {

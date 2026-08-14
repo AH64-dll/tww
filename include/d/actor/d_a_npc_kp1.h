@@ -46,7 +46,7 @@ public:
     bool chk_talk();
     bool decideType(int);
     void event_actionInit(int);
-    BOOL event_action();
+    bool event_action();
     void privateCut();
     void endEvent();
     void event_proc();
