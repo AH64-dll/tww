@@ -304,7 +304,7 @@ s32 skull_atari_check(bl_class* i_this) {
         break;
     case 0x10000:
         i_this->m2D4 = 4;
-        if (player->current.angle.y == 0x11) {
+        if (((daPy_py_c*)player)->mCutType == 0x11) {
             i_this->shape_angle.y = player->shape_angle.y - 0x4000;
             i_this->m2D4 = 5;
             i_this->speed.y = 30.0f;
@@ -342,13 +342,464 @@ s32 skull_atari_check(bl_class* i_this) {
 }
 
 /* 00000C44-00001768       .text blue_body_atari_check__FP8bl_class */
-void blue_body_atari_check(bl_class*) {
+s32 blue_body_atari_check(bl_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    i_this->mStts.Move();
+    if (shock_damage_check(i_this)) {
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x22;
+        return TRUE;
+    }
+
+    if (!i_this->mSph.ChkTgHit()) {
+        return FALSE;
+    }
+    cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
+    if (hitObj == NULL) {
+        return FALSE;
+    }
+    if (i_this->m2F4 != 0) {
+        return FALSE;
+    }
+
+    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    u8 flag = 0;
+    i_this->m2F4 = 8;
+    i_this->m2D4 = 0;
+
+    switch (hitObj->GetAtType()) {
+    case 0x8000000:
+        if (i_this->m2D3 != 0) {
+            i_this->stealItemLeft = i_this->m2EA;
+            if (i_this->stealItemLeft > 0) {
+                s8 saveHealth = i_this->health;
+                i_this->health = 0xA;
+                CcAtInfo atInfo;
+                atInfo.mpObj = i_this->mSph.GetTgHitObj();
+                atInfo.mpActor = NULL;
+                cc_at_check(i_this, &atInfo);
+                i_this->health = saveHealth;
+            }
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            if (i_this->m2EA > 0) {
+                i_this->m2EA--;
+            }
+            dComIfGp_particle_set(0x27B, &i_this->attention_info.position, NULL, NULL, 0xFF, NULL,
+                                  -1, NULL, NULL, NULL);
+            flag = 1;
+        } else {
+            i_this->stealItemLeft = 0;
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        break;
+    case 0x2:
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2803, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2803, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        if (((daPy_py_c*)player)->mCutType == 6 || ((daPy_py_c*)player)->mCutType == 7 || ((daPy_py_c*)player)->mCutType == 8 ||
+            ((daPy_py_c*)player)->mCutType == 9 || ((daPy_py_c*)player)->mCutType == 0xA || ((daPy_py_c*)player)->mCutType == 0xC ||
+            ((daPy_py_c*)player)->mCutType == 0xE || ((daPy_py_c*)player)->mCutType == 5 || ((daPy_py_c*)player)->mCutType == 0xF ||
+            ((daPy_py_c*)player)->mCutType == 0x10 || ((daPy_py_c*)player)->mCutType == 0x15 || ((daPy_py_c*)player)->mCutType == 0x17 ||
+            ((daPy_py_c*)player)->mCutType == 0x19 || ((daPy_py_c*)player)->mCutType == 0x1A || ((daPy_py_c*)player)->mCutType == 0x1B ||
+            ((daPy_py_c*)player)->mCutType == 0x1E || ((daPy_py_c*)player)->mCutType == 0x1F)
+        {
+            i_this->m2D4 = 6;
+        }
+        break;
+    case 0x20:
+        if (i_this->m2D3 == 0) {
+            i_this->m2D4 = 2;
+        }
+        /* fallthrough */
+    case 0x200000:
+        flag = 1;
+        i_this->m2D4 = 1;
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x24;
+        if (!(i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) && i_this->gravity > -2.0f) {
+            i_this->m306 = 0x1E;
+        }
+        break;
+    case 0x10000:
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2855, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2855, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->m2D4 = 4;
+        if (((daPy_py_c*)player)->mCutType == 0x11) {
+            i_this->current.angle.y = player->shape_angle.y - 0x4000;
+            i_this->m2D4 = 5;
+        }
+        if (i_this->m2D3 == 0) {
+            i_this->health = 0;
+        }
+        break;
+    case 0x80:
+    case 0x40:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2833, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2833, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->m2D4 = 3;
+        break;
+    case 0x40000:
+    case 0x200:
+        if (i_this->m2D3 == 0) {
+            i_this->mEnemyFire.mFireDuration = 0x64;
+            JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopAcM_monsSeStart(i_this, 0x4873, 0);
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->attention_info.flags = 0;
+            i_this->m2F0 = 0;
+            fire_emitter_clr(i_this);
+        }
+        break;
+    case 0x100000:
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
+        i_this->mEnemyIce.mYOffset = 40.0f;
+        JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        fopAcM_monsSeStart(i_this, 0x4873, 0);
+        i_this->current.angle.x = 0;
+        i_this->current.angle.z = 0;
+        i_this->m2D3 = 0;
+        i_this->shape_angle.x = 0;
+        i_this->shape_angle.z = 0;
+        i_this->gravity = 0.0f;
+        i_this->speedF = 0.0f;
+        i_this->m2EC = 0;
+        i_this->speed.x = 0.0f;
+        i_this->speed.y = 0.0f;
+        i_this->speed.z = 0.0f;
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        i_this->attention_info.flags = 0;
+        i_this->m2F0 = 0;
+        fire_emitter_clr(i_this);
+        break;
+    case 0x80000:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            i_this->m2D3 = 0;
+            i_this->current.angle.x = 0;
+            i_this->current.angle.z = 0;
+            i_this->shape_angle.x = 0;
+            i_this->shape_angle.z = 0;
+            i_this->gravity = 0.0f;
+            i_this->speedF = 0.0f;
+            i_this->m2EC = 0;
+            i_this->speed.x = 0.0f;
+            i_this->speed.y = 0.0f;
+            i_this->speed.z = 0.0f;
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->mEnemyIce.mFreezeDuration = 0xC8;
+            enemy_fire_remove(&i_this->mEnemyFire);
+            i_this->attention_info.flags = 0;
+        } else {
+            i_this->m2D4 = 1;
+            i_this->m2D2 = 3;
+            i_this->m306 = 0x1E;
+        }
+        break;
+    case 0x8000:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->m2D4 = 7;
+        i_this->m2D2 = 5;
+        i_this->m306 = 0x3C;
+        break;
+    default:
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        break;
+    }
+
+    cXyz hitPos = *i_this->mSph.GetTgHitPosP();
+    if (i_this->m2D3 != 0) {
+        if (i_this->m2D4 != 7 && i_this->m2D4 != 1) {
+            dComIfGp_particle_set(0xC, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            i_this->m2D2 = 2;
+            i_this->m306 = 0x14;
+            return TRUE;
+        }
+    }
+
+    if (flag == 0) {
+        CcAtInfo atInfo;
+        atInfo.mpObj = i_this->mSph.GetTgHitObj();
+        atInfo.mpActor = NULL;
+        cc_at_check(i_this, &atInfo);
+        if (i_this->m2D4 == 6 || i_this->m2D4 == 5 || i_this->m2D4 == 4 || i_this->health <= 0) {
+            dComIfGp_particle_set(0x10, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            cXyz scale(2.0f, 2.0f, 2.0f);
+            dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        } else {
+            dComIfGp_particle_set(0xD, &hitPos, &player->shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        }
+        i_this->m2D2 = 4;
+        i_this->m306 = 0x28;
+    }
+    return TRUE;
 }
 
 /* 00001768-000022BC       .text red_body_atari_check__FP8bl_class */
-void red_body_atari_check(bl_class*) {
+s32 red_body_atari_check(bl_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    i_this->mStts.Move();
+    if (shock_damage_check(i_this)) {
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x22;
+        return TRUE;
+    }
+
+    if (!i_this->mSph.ChkTgHit()) {
+        return FALSE;
+    }
+    cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
+    if (hitObj == NULL) {
+        return FALSE;
+    }
+    if (i_this->m2F4 != 0) {
+        return FALSE;
+    }
+
+    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    u8 flag = 0;
+    cXyz hitPos = *i_this->mSph.GetTgHitPosP();
+    i_this->m2F4 = 8;
+    i_this->m2D4 = 0;
+
+    switch (hitObj->GetAtType()) {
+    case 0x8000000:
+        if (i_this->m2D3 != 0) {
+            i_this->stealItemLeft = i_this->m2EA;
+            if (i_this->stealItemLeft > 0) {
+                s8 saveHealth = i_this->health;
+                i_this->health = 0xA;
+                CcAtInfo atInfo;
+                atInfo.mpObj = i_this->mSph.GetTgHitObj();
+                atInfo.mpActor = NULL;
+                cc_at_check(i_this, &atInfo);
+                i_this->health = saveHealth;
+            }
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            if (i_this->m2EA > 0) {
+                i_this->m2EA--;
+            }
+            dComIfGp_particle_set(0x27B, &i_this->attention_info.position, NULL, NULL, 0xFF, NULL,
+                                  -1, NULL, NULL, NULL);
+            flag = 1;
+        } else {
+            i_this->stealItemLeft = 0;
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        break;
+    case 0x2:
+        i_this->m2D4 = 8;
+        JAIZelBasic::zel_basic->seStart(0x2803, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        if (((daPy_py_c*)player)->mCutType == 6 || ((daPy_py_c*)player)->mCutType == 7 ||
+            ((daPy_py_c*)player)->mCutType == 8 || ((daPy_py_c*)player)->mCutType == 9 ||
+            ((daPy_py_c*)player)->mCutType == 0xA || ((daPy_py_c*)player)->mCutType == 0xC ||
+            ((daPy_py_c*)player)->mCutType == 0xE || ((daPy_py_c*)player)->mCutType == 5 ||
+            ((daPy_py_c*)player)->mCutType == 0xF || ((daPy_py_c*)player)->mCutType == 0x10 ||
+            ((daPy_py_c*)player)->mCutType == 0x15 || ((daPy_py_c*)player)->mCutType == 0x17 ||
+            ((daPy_py_c*)player)->mCutType == 0x19 || ((daPy_py_c*)player)->mCutType == 0x1A ||
+            ((daPy_py_c*)player)->mCutType == 0x1B || ((daPy_py_c*)player)->mCutType == 0x1E ||
+            ((daPy_py_c*)player)->mCutType == 0x1F)
+        {
+            i_this->m2D4 = 6;
+        }
+        break;
+    case 0x20:
+        if (i_this->m2D3 == 0) {
+            i_this->m2D4 = 2;
+        }
+        /* fallthrough */
+    case 0x200000:
+        flag = 1;
+        i_this->m2D4 = 1;
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x24;
+        if (!(i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) && i_this->gravity > -2.0f) {
+            i_this->m306 = 0x1E;
+        }
+        break;
+    case 0x10000:
+        JAIZelBasic::zel_basic->seStart(0x2855, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        i_this->m2D4 = 4;
+        if (((daPy_py_c*)player)->mCutType == 0x11) {
+            i_this->current.angle.y = player->shape_angle.y - 0x4000;
+            i_this->m2D4 = 5;
+        }
+        i_this->health = 0;
+        break;
+    case 0x80:
+    case 0x40:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2833, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2833, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->m2D4 = 3;
+        dComIfGp_particle_set(0xC, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        break;
+    case 0x40000:
+    case 0x4000:
+    case 0x200:
+        if (i_this->m2D3 == 0 || !(hitObj->GetAtType() & 0x200)) {
+            if (i_this->m2D3 == 0 && !(hitObj->GetAtType() & 0x4000)) {
+                i_this->mEnemyFire.mFireDuration = 0x64;
+            }
+            JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopAcM_monsSeStart(i_this, 0x4873, 0);
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->attention_info.flags = 0;
+            i_this->m2F0 = 0;
+            fire_emitter_clr(i_this);
+        }
+        break;
+    case 0x100000:
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
+        i_this->mEnemyIce.mYOffset = 40.0f;
+        JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        fopAcM_monsSeStart(i_this, 0x4873, 0);
+        i_this->current.angle.x = 0;
+        i_this->current.angle.z = 0;
+        i_this->m2D3 = 0;
+        i_this->shape_angle.x = 0;
+        i_this->shape_angle.z = 0;
+        i_this->gravity = 0.0f;
+        i_this->speedF = 0.0f;
+        i_this->m2EC = 0;
+        i_this->speed.x = 0.0f;
+        i_this->speed.y = 0.0f;
+        i_this->speed.z = 0.0f;
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        i_this->attention_info.flags = 0;
+        i_this->m2F0 = 0;
+        fire_emitter_clr(i_this);
+        break;
+    case 0x80000:
+        flag = 1;
+        i_this->m2D3 = 0;
+        i_this->current.angle.x = 0;
+        i_this->current.angle.z = 0;
+        i_this->shape_angle.x = 0;
+        i_this->shape_angle.z = 0;
+        i_this->gravity = 0.0f;
+        i_this->speedF = 0.0f;
+        i_this->m2EC = 0;
+        i_this->speed.x = 0.0f;
+        i_this->speed.y = 0.0f;
+        i_this->speed.z = 0.0f;
+        i_this->m2F0 = 0;
+        fire_emitter_clr(i_this);
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        i_this->mEnemyIce.mFreezeDuration = 0xC8;
+        enemy_fire_remove(&i_this->mEnemyFire);
+        i_this->attention_info.flags = 0;
+        break;
+    case 0x8000:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->m2D4 = 7;
+        i_this->m2D2 = 5;
+        i_this->m306 = 0x3C;
+        break;
+    default:
+        flag = 1;
+        if (i_this->m2D3 == 0) {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x33, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x42, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        dComIfGp_particle_set(0xC, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        break;
+    }
+
+    if (flag == 0) {
+        CcAtInfo atInfo;
+        atInfo.mpObj = i_this->mSph.GetTgHitObj();
+        atInfo.mpActor = NULL;
+        cc_at_check(i_this, &atInfo);
+        if (i_this->m2D4 == 6 || i_this->m2D4 == 5 || i_this->m2D4 == 4 || i_this->health <= 0) {
+            dComIfGp_particle_set(0x10, &hitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            cXyz scale(2.0f, 2.0f, 2.0f);
+            dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        } else {
+            dComIfGp_particle_set(0xD, &hitPos, &player->shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        }
+        if (i_this->m2D3 != 0) {
+            anm_init(i_this, 0x17, 1.0f, 0, 1.0f, -1);
+            i_this->speedF = 60.0f + REG8_F(10);
+            if (i_this->health <= 0) {
+                i_this->speedF = 60.0f + REG8_F(11);
+                if (i_this->m2D4 == 5) {
+                    i_this->current.angle.y = player->shape_angle.y - 0x4000;
+                }
+            }
+            fopAcM_monsSeStart(i_this, 0x4873, 0);
+            i_this->m2D2 = 2;
+            i_this->m306 = 0x15;
+        } else {
+            i_this->m2D2 = 4;
+            i_this->m306 = 0x28;
+        }
+    }
+    return TRUE;
 }
 
 /* 000022BC-00002354       .text bound_sound_set__FP8bl_class */
