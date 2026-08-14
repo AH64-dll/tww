@@ -309,17 +309,19 @@ void daObjFlame::Act_c::create_mode_init() {
             }
         }
 
-        if (mModeProc != 0 && (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4)) {
-            mEm0State = 1;
+        if (mModeProc != 0) {
+            if (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4) {
+                mEm0State = 1;
+            }
+            if (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4 || mModeProc == 5) {
+                mEm1State = 1;
+                mEm2State = 1;
+            }
+            if (flameAttr(this)->mF2C == 0) {
+                em_manual_set();
+            }
+            mbEmPosition = 1;
         }
-        if (mModeProc == 1 || mModeProc == 2 || mModeProc == 3 || mModeProc == 4 || mModeProc == 5) {
-            mEm1State = 1;
-            mEm2State = 1;
-        }
-        if (flameAttr(this)->mF2C == 0) {
-            em_manual_set();
-        }
-        mbEmPosition = 1;
     } else {
         mModeProc = 0;
         if (sch != 0) {
@@ -542,9 +544,7 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         u32 isLess = y1 < y2;
         f32 f2 = isLess ? y1 : y2;
         f32 f30 = f2 + M_attr_base.mF0A;
-        if (!isLess) {
-            y2 = y1;
-        }
+        y2 = isLess ? y2 : y1;
         f32 f29 = y2 + M_attr_base.mF0C;
 
         cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
