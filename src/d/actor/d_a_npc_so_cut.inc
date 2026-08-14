@@ -635,7 +635,22 @@ void daNpc_So_c::cutMiniGameWarpProc() {
 
 /* 00007438-00007524       .text cutMiniGameReturnStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameReturnStart() {
-    /* Nonmatching */
+    JAIZelBasic::getInterface()->field_0x00bf = 0;
+
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    player->mDemo.mDemoType = 3;
+    player->mDemo.mParam0 = 0;
+
+    s16 shipName = 0xA7;
+    daShip_c* ship = (daShip_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &shipName);
+    player->setPlayerPosAndAngle((cXyz*)&field_0xBA0, field_0xB9C + REG10_S(0));
+    ship->initStartPos((cXyz*)&field_0xBA0, field_0xBAC);
+
+    field_0xAFC = 4.0f;
+    speedF = field_0xAFC;
+    field_0xBDB = 1;
+    setAnm(2, 0);
+    offsetDive();
 }
 
 /* 00007524-0000781C       .text cutMiniGameReturnProc__10daNpc_So_cFv */
