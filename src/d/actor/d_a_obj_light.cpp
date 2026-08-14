@@ -277,6 +277,7 @@ void daObjLight::Act_c::set_mtx() {
         cXyz(0.0f, 0.0f, 377.74f),
         cXyz(0.0f, 0.0f, -377.74f),
     };
+    Mtx* baseMtx = &mBgWBaseMtx;
     for (int i = 0; i < 3; i++) {
         mpModel[i]->setBaseScale(scale);
 
@@ -286,7 +287,7 @@ void daObjLight::Act_c::set_mtx() {
             mDoMtx_stack_c::transS(pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + mAngle);
             mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
-            PSMTXCopy(mDoMtx_stack_c::now, &mBgWBaseMtx[i]);
+            PSMTXCopy(mDoMtx_stack_c::now, baseMtx[i]);
         } else if (i == 1) {
             cXyz pos = i_offset[i];
             mDoMtx_stack_c::transS(current.pos);
@@ -386,7 +387,6 @@ bool daObjLight::Act_c::_execute() {
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_draw() {
-    /* Nonmatching */
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     for (int i = 0; i < 3; i++) {
         if (i == 0) {
