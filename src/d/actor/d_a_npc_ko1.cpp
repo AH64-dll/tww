@@ -191,7 +191,98 @@ BOOL daNpc_Ko1_c::init_BOU_3() { /* Nonmatching */
 
 /* 00000C78-00000F14       .text createInit__11daNpc_Ko1_cFv */
 BOOL daNpc_Ko1_c::createInit() { /* Nonmatching */
-    return FALSE;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+
+    switch (mCharNo) {
+    case 0:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
+        break;
+    case 1:
+        attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA7;
+        attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
+        break;
+    }
+
+    gravity = -4.5f;
+
+    m7D0 = current.angle.x;
+    m7D2 = current.angle.y;
+    m7D4 = current.angle.z;
+
+    m7C4 = current.pos;
+    m80C = m7C4;
+    m7E8 = m80C;
+
+    s32 iVar5 = 0xFF;
+    if (((fopAcM_GetParam(this) >> 16) & 0xFF) != 0xFF) {
+        mPath.setInf((fopAcM_GetParam(this) >> 16) & 0xFF, fopAcM_GetRoomNo(this), true);
+        if (!mPath.isPath()) {
+            return FALSE;
+        }
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+        iVar5 = 0xF0;
+    }
+
+    static char* a_staff_tbl[] = {"Ko1", "Ko1", "Ko1", "Ko1", "Ko1", "Ko2", "Ko2", "Ko2", "Ko2"};
+    mEventCut.setActorInfo2(a_staff_tbl[mStaffNo], this);
+    m89F = 0xE;
+
+    BOOL init_success;
+    switch (mStaffNo) {
+    case 0:
+        init_success = init_HNA_0();
+        break;
+    case 1:
+        init_success = init_HNA_1();
+        iVar5 = 0xF0;
+        break;
+    case 2:
+        init_success = init_HNA_2();
+        iVar5 = 0xF0;
+        break;
+    case 3:
+        init_success = init_HNA_3();
+        break;
+    case 4:
+        init_success = init_HNA_4();
+        break;
+    case 5:
+        init_success = init_BOU_0();
+        break;
+    case 6:
+        init_success = init_BOU_1();
+        iVar5 = 0xF0;
+        break;
+    case 7:
+        init_success = init_BOU_2();
+        break;
+    case 8:
+        init_success = init_BOU_3();
+        break;
+    default:
+        init_success = FALSE;
+        break;
+    }
+
+    if (!init_success) {
+        return FALSE;
+    }
+
+    m7D6 = current.angle.x;
+    m7D8 = current.angle.y;
+    m7DA = current.angle.z;
+    shape_angle.x = m7D6;
+    shape_angle.y = m7D8;
+    shape_angle.z = m7DA;
+
+    mStts.Init(iVar5, 0xFF, this);
+    mCyl.SetStts(&mStts);
+    mCyl.Set(dNpc_cyl_src);
+    mpMorf->setMorf(0.0f);
+    mpHedMorf->setMorf(0.0f);
+    setMtx(true);
+    return TRUE;
 }
 
 /* 00000F14-000011C4       .text setMtx__11daNpc_Ko1_cFb */
