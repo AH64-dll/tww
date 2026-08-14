@@ -97,7 +97,7 @@ void daWarpls_c::CreateInit() {
                                           NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
         if (mpEmitter != NULL) {
             mpEmitter->setStatus(JPAEmtrStts_Immortal);
-            mpEmitter->mGlobalDynamicsScale.set(current.pos.x, current.pos.y, current.pos.z);
+            mpEmitter->mGlobalDynamicsScale.set(scale.x, scale.y, scale.z);
         }
         break;
     case 1:
