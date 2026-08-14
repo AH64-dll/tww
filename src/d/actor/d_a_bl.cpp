@@ -364,7 +364,7 @@ s32 blue_body_atari_check(bl_class* i_this) {
         return FALSE;
     }
 
-    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
     u8 flag = 0;
     i_this->m2F4 = 8;
     i_this->m2D4 = 0;
@@ -595,7 +595,7 @@ s32 red_body_atari_check(bl_class* i_this) {
         return FALSE;
     }
 
-    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
     u8 flag = 0;
     cXyz hitPos = *i_this->mSph.GetTgHitPosP();
     i_this->m2F4 = 8;
@@ -908,8 +908,255 @@ s16 way_check(bl_class* i_this, s16 angle) {
 }
 
 /* 00003054-000039F0       .text action_dousa__FP8bl_class */
-void action_dousa(bl_class*) {
+void action_dousa(bl_class* i_this) {
     /* Nonmatching */
+    s16 angle = 0;
+
+    switch (i_this->m306) {
+    case 0:
+        i_this->m304 = 0;
+        if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) > 1000.0f) {
+            break;
+        }
+        i_this->actor_status |= 0x20;
+        i_this->attention_info.flags = 4;
+        anm_init(i_this, 0x15, 1.0f, 0, 1.0f, -1);
+        i_this->m306++;
+        break;
+    case 1:
+        i_this->m31C = 1.5f;
+        if (i_this->mFollowCB1.getEmitter() == NULL) {
+            dComIfGp_particle_set(0x122, &i_this->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            JAIZelBasic::zel_basic->seStart(0x5888, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        if (i_this->mFollowCB1.getEmitter() != NULL) {
+            if (i_this->m2D0 == 0) {
+                i_this->mFollowCB1.getEmitter()->setGlobalEnvColor(0x55, 0x1A, 0x0D);
+            } else {
+                i_this->mFollowCB1.getEmitter()->setGlobalEnvColor(0x0D, 0x20, 0x41);
+            }
+        }
+        if (!i_this->mpMorf->isStop()) {
+            break;
+        }
+        i_this->gravity = 0.0f;
+        i_this->speed.y = 0.0f;
+        i_this->m306++;
+        break;
+    case 2:
+        if (i_this->mFollowCB1.getEmitter() != NULL) {
+            JPASetRMtxTVecfromMtx(i_this->mpMorf->getModel()->getAnmMtx(0), i_this->mFollowCB1.getEmitter()->mGlobalRotation,
+                                  i_this->mFollowCB1.getEmitter()->mGlobalTranslation);
+        }
+        cLib_addCalc2(&i_this->speed.y, 10.0f, 0.8f, 1.0f);
+        if (i_this->current.pos.y < 100.0f + i_this->m320) {
+            break;
+        }
+        fire_move_set(i_this);
+        i_this->speed.y = 0.0f;
+        JAIZelBasic::zel_basic->seStart(0x5889, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        fopAcM_monsSeStart(i_this, 0x4871, 0);
+        anm_init(i_this, 0x16, 1.0f, 0, 1.0f, -1);
+        i_this->m306++;
+        break;
+    case 3:
+        if (i_this->mpMorf->checkFrame(10.0f)) {
+            i_this->mFollowCB1.end();
+        }
+        if (!i_this->mpMorf->isStop()) {
+            break;
+        }
+        i_this->m306 = 5;
+        break;
+    case 4:
+        fire_move_set(i_this);
+        i_this->actor_status |= 0x20;
+        i_this->m2F2 = 5;
+        i_this->m306 = 5;
+        break;
+    case 5:
+        i_this->actor_status |= 0x20;
+        if (i_this->m308 != 0x11) {
+            anm_init(i_this, 0x11, 1.0f, 2, 1.0f, -1);
+            i_this->m2D3 = 1;
+            i_this->mStts.SetWeight(2);
+            i_this->mSph.OnAtSetBit();
+            i_this->mSph.OnAtHitBit();
+        }
+        i_this->attention_info.flags = 4;
+        if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
+            f32 dx = i_this->mPath->m_points[i_this->m2E8].m_position.x - i_this->current.pos.x;
+            f32 dz = i_this->mPath->m_points[i_this->m2E8].m_position.z - i_this->current.pos.z;
+            angle = cM_atan2s(dx, dz);
+            f32 distSq = dx * dx + dz * dz;
+            f32 dist = distSq;
+            if (dist > 0.0f) {
+                dist = JMAFastSqrt(distSq);
+            }
+            if (dist > 80.0f + REG8_F(3)) {
+                i_this->m2E8++;
+                if (i_this->m2E8 >= i_this->mPath->m_num) {
+                    i_this->m2E8 = 0;
+                }
+            }
+            i_this->m2C4 = i_this->current.pos;
+            if (i_this->m2EC == 0) {
+                i_this->m300 = way_check(i_this, angle);
+                if (i_this->m300 == angle) {
+                    break;
+                }
+                i_this->m2EC = (s16)(10.0f + cM_rndF(10.0f));
+            }
+        } else {
+            f32 distSq = (i_this->current.pos.x - i_this->m2C4.x) * (i_this->current.pos.x - i_this->m2C4.x) +
+                         (i_this->current.pos.z - i_this->m2C4.z) * (i_this->current.pos.z - i_this->m2C4.z);
+            f32 dist = distSq;
+            if (dist > 0.0f) {
+                dist = JMAFastSqrt(distSq);
+            }
+            if (dist < 250.0f) {
+                if (i_this->m2EC == 0) {
+                    i_this->m306 = 5;
+                }
+            } else {
+                i_this->m306 = 7;
+            }
+        }
+        break;
+    case 6:
+        if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
+            f32 dx = i_this->mPath->m_points[i_this->m2E8].m_position.x - i_this->current.pos.x;
+            f32 dz = i_this->mPath->m_points[i_this->m2E8].m_position.z - i_this->current.pos.z;
+            angle = cM_atan2s(dx, dz);
+            f32 distSq = dx * dx + dz * dz;
+            f32 dist = distSq;
+            if (dist > 0.0f) {
+                dist = JMAFastSqrt(distSq);
+            }
+            if (dist < 80.0f + REG8_F(3)) {
+                i_this->m2E8++;
+                if (i_this->m2E8 >= i_this->mPath->m_num) {
+                    i_this->m2E8 = 0;
+                }
+            }
+            i_this->m2C4 = i_this->current.pos;
+            if (i_this->m2EC == 0) {
+                i_this->m300 = way_check(i_this, angle);
+                if (i_this->m300 == angle) {
+                    break;
+                }
+                i_this->m2EC = (s16)(10.0f + cM_rndF(10.0f));
+            }
+        } else {
+            f32 dx = i_this->current.pos.x - i_this->m2C4.x;
+            f32 dz = i_this->current.pos.z - i_this->m2C4.z;
+            f32 distSq = dx * dx + dz * dz;
+            f32 dist = distSq;
+            if (dist > 0.0f) {
+                dist = JMAFastSqrt(distSq);
+            }
+            if (dist < 250.0f) {
+                if (i_this->m2EC == 0) {
+                    i_this->m306 = 5;
+                }
+            } else {
+                i_this->m306 = 7;
+            }
+        }
+        break;
+    case 7:
+        f32 dx = i_this->m2C4.x - i_this->current.pos.x;
+        f32 dz = i_this->m2C4.z - i_this->current.pos.z;
+        i_this->m300 = cM_atan2s(dx, dz);
+        f32 targetDist = 10.0f;
+        if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
+            targetDist = 80.0f;
+        }
+        f32 distSq = dx * dx + dz * dz;
+        f32 dist = distSq;
+        if (dist > 0.0f) {
+            dist = JMAFastSqrt(distSq);
+        }
+        if (dist < targetDist) {
+            i_this->m306 = 5;
+        }
+        break;
+    }
+
+    if (i_this->m306 >= 1 && i_this->m306 <= 3) {
+        if (i_this->mFollowCB1.getEmitter() != NULL) {
+            JPASetRMtxTVecfromMtx(i_this->mpMorf->getModel()->getAnmMtx(0), i_this->mFollowCB1.getEmitter()->mGlobalRotation,
+                                  i_this->mFollowCB1.getEmitter()->mGlobalTranslation);
+        }
+    }
+
+    if (i_this->m2F2 == 0) {
+        fire_kaiten_keisan(i_this);
+    }
+
+    s16 maxStep = 0x120;
+    s16 maxStep2 = 0x400;
+    if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
+        maxStep = 0x1000;
+        maxStep2 = 0x1000;
+    }
+    cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->m300, 1, maxStep);
+    cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->shape_angle.y, 1, maxStep2);
+
+    if (i_this->m306 >= 3) {
+        i_this->m31C = 1.5f;
+        fuwafuwa_keisan(i_this);
+    }
+
+    if (i_this->m2D0 == 1) {
+        if (!blue_body_atari_check(i_this)) {
+            if (i_this->m306 >= 5) {
+                if (i_this->mSph.ChkAtHit()) {
+                    if (i_this->m2E9 != 0xFF && i_this->mPath != NULL && i_this->m306 == 7) {
+                        return;
+                    }
+                    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+                    i_this->speedF = 50.0f;
+                    i_this->m2D2 = 1;
+                    i_this->m306 = 0xA;
+                } else if (i_this->m2D3 != 0) {
+                    if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 600.0f) {
+                        cXyz pos = dComIfGp_getPlayer(0)->current.pos;
+                        if (Line_check(i_this, pos)) {
+                            if (i_this->m2E9 == 0xFF || i_this->mPath == NULL || i_this->m306 != 7) {
+                                i_this->m2D2 = 1;
+                                i_this->m306 = 0xA;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else if (!red_body_atari_check(i_this)) {
+        if (i_this->m306 >= 5) {
+            if (i_this->mSph.ChkAtHit()) {
+                if (i_this->m2E9 != 0xFF && i_this->mPath != NULL && i_this->m306 == 7) {
+                    return;
+                }
+                i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+                i_this->speedF = 50.0f;
+                i_this->m2D2 = 1;
+                i_this->m306 = 0xA;
+            } else if (i_this->m2D3 != 0) {
+                if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 600.0f) {
+                    cXyz pos = dComIfGp_getPlayer(0)->current.pos;
+                    if (Line_check(i_this, pos)) {
+                        if (i_this->m2E9 == 0xFF || i_this->mPath == NULL || i_this->m306 != 7) {
+                            i_this->m2D2 = 1;
+                            i_this->m306 = 0xA;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* 000039F0-00003F68       .text action_kougeki__FP8bl_class */
