@@ -7,9 +7,58 @@
 #include "d/actor/d_a_npc_pm1.h"
 #include "m_Do/m_Do_ext.h"
 
+class daNpc_Pm1_HIO_c {
+public:
+    struct hio_prm_c {
+        s16 mMaxHeadX;
+        s16 mMaxHeadY;
+        s16 mMinHeadX;
+        s16 mMinHeadY;
+        s16 mMaxBackboneX;
+        s16 mMaxBackboneY;
+        s16 mMinBackboneX;
+        s16 mMinBackboneY;
+        s16 mMaxTurnStep;
+        s16 mCalcAngleTarget;
+        f32 mAttPosOffsetY;
+        f32 field_18;
+    };  // Size: 0x1C
+
+    daNpc_Pm1_HIO_c();
+    virtual ~daNpc_Pm1_HIO_c() {};
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 field_0x5;
+    /* 0x06 */ s8 field_0x6;
+    /* 0x07 */ s8 field_0x7;
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ hio_prm_c mPrmTbl;
+};
+
+static daNpc_Pm1_HIO_c l_HIO;
+
 /* 000000EC-00000144       .text __ct__15daNpc_Pm1_HIO_cFv */
 daNpc_Pm1_HIO_c::daNpc_Pm1_HIO_c() {
-    /* Nonmatching */
+    static hio_prm_c a_prm_tbl = {
+        /* mMaxHeadX         */ 0x1FFE,
+        /* mMaxHeadY         */ 0x38E0,
+        /* mMinHeadX         */ 0xE002,
+        /* mMinHeadY         */ 0xC720,
+        /* mMaxBackboneX     */ 0x0000,
+        /* mMaxBackboneY     */ 0x0000,
+        /* mMinBackboneX     */ 0x0000,
+        /* mMinBackboneY     */ 0x0000,
+        /* mMaxTurnStep      */ 0x0800,
+        /* mCalcAngleTarget  */ 0x0800,
+        /* mAttPosOffsetY    */ 150.0f,
+        /* field_18          */ 0.0f,
+    };
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
+    mNo = -1;
+    field_0x8 = -1;
 }
 
 /* 00000144-00000300       .text nodeCallBack_Pm__FP7J3DNodei */
@@ -103,13 +152,13 @@ void daNpc_Pm1_c::setStt(signed char) {
 }
 
 /* 00000C74-00000C7C       .text next_msgStatus__11daNpc_Pm1_cFPUl */
-void daNpc_Pm1_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daNpc_Pm1_c::next_msgStatus(unsigned long*) {
+    return 0x10;
 }
 
 /* 00000C7C-00000C84       .text getMsg__11daNpc_Pm1_cFv */
-void daNpc_Pm1_c::getMsg() {
-    /* Nonmatching */
+u32 daNpc_Pm1_c::getMsg() {
+    return 0;
 }
 
 /* 00000C84-00000CD4       .text eventOrder__11daNpc_Pm1_cFv */
