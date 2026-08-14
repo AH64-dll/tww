@@ -14,7 +14,9 @@ static const char* l_ev_name[] = { "btl_of_swroom", "btl_of_swroom2" };
 
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
 void daObjFirewall_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    PSMTXTrans(mDoMtx_stack_c::get(), 0.0f, 0.0f, 0.0f);
+    PSMTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
 }
 
 /* 000000EC-00000110       .text solidHeapCB__15daObjFirewall_cFP10fopAc_ac_c */
@@ -71,8 +73,10 @@ void daObjFirewall_c::particle_delete() {
 }
 
 /* 00000A1C-00000AB0       .text seStart__15daObjFirewall_cFUl */
-void daObjFirewall_c::seStart(unsigned long) {
-    /* Nonmatching */
+void daObjFirewall_c::seStart(unsigned long soundId) {
+    for (int i = 0; i < 8; i++) {
+        JAIZelBasic::zel_basic->seStart(soundId, &mSePos[i], 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    }
 }
 
 /* 00000AB0-00000B28       .text set_se__15daObjFirewall_cFb */
