@@ -1027,8 +1027,8 @@ void daGy_c::setWave() {
     mD18.setPitch(1.0f - l_HIO.m20);
     mD7C.setAnchor(&cXyz(l_HIO.m28, l_HIO.m2C, l_HIO.m30),
                    &cXyz(l_HIO.m34, l_HIO.m38, l_HIO.m3C));
-    mD18.setAnchor(&cXyz(l_HIO.m28 * -1.0f, l_HIO.m2C, l_HIO.m30),
-                   &cXyz(l_HIO.m34 * -1.0f, l_HIO.m38, l_HIO.m3C));
+    mD18.setAnchor(&cXyz((f32)((f64)l_HIO.m28) * -1.0f, (f32)((f64)l_HIO.m2C), (f32)((f64)l_HIO.m30)),
+                   &cXyz((f32)((f64)l_HIO.m34) * -1.0f, (f32)((f64)l_HIO.m38), (f32)((f64)l_HIO.m3C)));
     mD7C.setMaxDisSpeed(l_HIO.m1C);
     mD18.setMaxDisSpeed(l_HIO.m1C);
     cLib_addCalc2(&mE10, var_f31, 0.1f, 10.0f);
