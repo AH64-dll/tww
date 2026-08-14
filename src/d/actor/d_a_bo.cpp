@@ -45,8 +45,85 @@ static void smoke_set(bo_class* i_this) {
 }
 
 /* 000001E8-00000638       .text nodeCallBack_UP__FP7J3DNodei */
-static BOOL nodeCallBack_UP(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        int jntNo = ((J3DJoint*)node)->getJntNo();
+        BOOL isSet = FALSE;
+        J3DModel* model = j3dSys.getModel();
+        bo_class* i_this = (bo_class*)model->getUserArea();
+        if (i_this != NULL) {
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            if (jntNo <= 0xA) {
+                f32 scale = 0.025f * jntNo;
+                mDoMtx_YrotM(*calc_mtx, (s16)(i_this->m33A.y * scale));
+                mDoMtx_XrotM(*calc_mtx, (s16)(i_this->m33A.x * scale));
+                mDoMtx_ZrotM(*calc_mtx, (s16)(i_this->m33A.z * scale));
+                isSet = TRUE;
+            }
+            if (jntNo == 1) {
+                cXyz zero(0.0f, 0.0f, 0.0f);
+                MtxPosition(&zero, &i_this->m2F8);
+                isSet = TRUE;
+            }
+            if (jntNo == 0xA) {
+                cXyz zero(0.0f, 0.0f, 0.0f);
+                MtxPosition(&zero, &i_this->m328);
+                isSet = TRUE;
+            }
+            if (jntNo == 0xB) {
+                cXyz zero(0.0f, 0.0f, 0.0f);
+                MtxPosition(&zero, &i_this->m2E0);
+                isSet = TRUE;
+            }
+            if (jntNo == 4) {
+                cXyz zero(0.0f, 0.0f, 0.0f);
+                MtxPosition(&zero, &i_this->m310);
+                isSet = TRUE;
+            }
+            if (jntNo >= 5 && jntNo <= 7) {
+                f32 scale = (f32)(s16)(8 - jntNo) * 1.75f;
+                mDoMtx_YrotM(*calc_mtx, (s16)(i_this->m352.y * scale));
+                mDoMtx_ZrotM(*calc_mtx, (s16)(i_this->m352.z * scale));
+                isSet = TRUE;
+            }
+            if (jntNo == 8) {
+                mDoMtx_YrotM(*calc_mtx, i_this->m334.y + g_regHIO.mChild[0].mShortRegs[15]);
+                mDoMtx_XrotM(*calc_mtx, i_this->m334.z + g_regHIO.mChild[0].mShortRegs[19]);
+                cXyz zero(0.0f, 0.0f, 0.0f);
+                MtxPosition(&zero, &i_this->m31C);
+                isSet = TRUE;
+            }
+            if (jntNo == 0xC) {
+                if (i_this->m2CC != 0) {
+                    cXyz pos(0.0f, 0.0f, 0.0f);
+                    cXyz dst;
+                    MtxPosition(&pos, &dst);
+                    f32 dx = i_this->m31C.x - dst.x;
+                    f32 dz = i_this->m31C.z - dst.z;
+                    if (i_this->m2CD != 0) {
+                        csXyz angle;
+                        angle.x = -0x5FB4;
+                        angle.y = cM_atan2s(dz, dx) + 0x7FFF;
+                        angle.z = 0;
+                        player->setPlayerPosAndAngle(&dst, &angle);
+                    } else {
+                        csXyz angle;
+                        angle.x = 0x5BCC;
+                        angle.y = cM_atan2s(dz, dx);
+                        angle.z = 0;
+                        player->setPlayerPosAndAngle(&dst, &angle);
+                    }
+                    isSet = TRUE;
+                }
+            }
+            if (isSet) {
+                PSMTXCopy(*calc_mtx, model->getAnmMtx(jntNo));
+                PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 00000638-000006C8       .text nodeCallBack_DW__FP7J3DNodei */
