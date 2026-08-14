@@ -855,7 +855,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     mC68[11] += 0x223D;
 
     s16 angleX = (s16)(4096.0f * cM_ssin(mC68[0]) + 1024.0f * cM_ssin(mC68[1]));
-    s16 angleY = (s16)(5120.0f * cM_ssin(mC68[2]) + 1536.0f * cM_ssin(mC68[3]));
+    s16 angleY = (s16)(4608.0f * cM_ssin(mC68[2]) + 1536.0f * cM_ssin(mC68[3]));
     s16 angleZ = (s16)(5632.0f * cM_ssin(mC68[4]) + 2048.0f * cM_ssin(mC68[5]));
     f32 sin0 = cM_ssin(mC68[7]);
     f32 sin1 = cM_ssin(mC68[6]);
@@ -994,8 +994,8 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffUp = *vtx - *up;
                 cXyz diffDown = *down - *vtx;
-                nrm1 = (*up * 0.42524995f + diffUp * 0.383625f + diffDown * 0.136125f + *down * 0.57475f) -
-                       (*up * 0.57475f + diffUp * 0.358875f + diffDown * 0.111375f + *down * 0.42524995f);
+                nrm1 = (*up * 0.57475f + diffUp * 0.358875f + diffDown * 0.111375f + *down * 0.42524995f) -
+                       (*up * 0.42524995f + diffUp * 0.383625f + diffDown * 0.136125f + *down * 0.57475f);
             }
 
             cXyz nrm2;
@@ -1006,8 +1006,8 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffLeft = *vtx - *left;
                 cXyz diffRight = *right - *vtx;
-                nrm2 = (*left * 0.42524995f + diffLeft * 0.383625f + diffRight * 0.136125f + *right * 0.57475f) -
-                       (*left * 0.57475f + diffLeft * 0.358875f + diffRight * 0.111375f + *right * 0.42524995f);
+                nrm2 = (*left * 0.57475f + diffLeft * 0.358875f + diffRight * 0.111375f + *right * 0.42524995f) -
+                       (*left * 0.42524995f + diffLeft * 0.383625f + diffRight * 0.136125f + *right * 0.57475f);
             }
 
             cXyz nrm = nrm2.outprod(nrm1);
@@ -1033,10 +1033,10 @@ void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c* i_actor) {
         mDoMtx_stack_c::scaleM(i_actor->scale);
         mDoMtx_stack_c::transM(hata_vec);
         mDoMtx_copy(mDoMtx_stack_c::get(), mBC0);
+        mB8C ^= 1;
+        calc_pos(i_actor);
+        calc_nrm();
     }
-    mB8C ^= 1;
-    calc_pos(i_actor);
-    calc_nrm();
 }
 
 /* 0000220C-00002294       .text update__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
@@ -1060,7 +1060,7 @@ const dCcD_SrcCyl daObjBuoyflag::Act_c::M_cyl_src = {
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
@@ -1157,7 +1157,7 @@ int daObjBuoyflag::Act_c::mode_jumpToSea() {
     }
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::transM(0.0f, 60.0f, 0.0f);
-    mDoMtx_quatStack.rotAxisRadS(&m1130, 0.000258f * (f32)m112A);
+    mDoMtx_quatStack.rotAxisRadS(&m1130, 9.58738e-05f * (f32)m112A);
     mDoMtx_stack_c::quatM(mDoMtx_quatStack.get());
     mDoMtx_stack_c::concat(m10F0);
     mDoMtx_stack_c::transM(0.0f, -60.0f, 0.0f);
