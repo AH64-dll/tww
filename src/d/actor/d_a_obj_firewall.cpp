@@ -329,9 +329,10 @@ cPhs_State daObjFirewall_c::_create() {
                 s16 ang = 0x2000 * i;
                 f32 cos = jmaCosTable[(u16)ang >> jmaSinShift];
                 f32 sin = jmaSinTable[(u16)ang >> jmaSinShift];
-                mSePos[i].x = current.pos.x + 1000.0f * scale.x * sin;
+                f32 sx = 1000.0f * scale.x;
+                mSePos[i].x = current.pos.x + sx * sin;
                 mSePos[i].y = current.pos.y;
-                mSePos[i].z = current.pos.z + 1000.0f * scale.x * cos;
+                mSePos[i].z = current.pos.z + sx * cos;
             }
             m10E0 = 1;
             mParam = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
