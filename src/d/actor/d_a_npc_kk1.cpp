@@ -361,8 +361,6 @@ void daNpc_Kk1_c::play_eff_anm() {
 
 /* 00000CFC-00000DDC       .text setAnm_anm__11daNpc_Kk1_cFPQ211daNpc_Kk1_c9anm_prm_c */
 void daNpc_Kk1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
-    /* Nonmatching */
-
     if(i_anmPrmP->bckNum < 0 || mBckNum == i_anmPrmP->bckNum) {
         return;
     }
@@ -378,12 +376,14 @@ void daNpc_Kk1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
     delBikon();
     delAse();
     m7BE = 1;
-    if(mBckNum == 1) {
-        setAse();
-        m804 = 0;
-        m802 = 0;
-        m800 = 0;
-        m7BE = 0;
+    switch (mBckNum) {
+        case 1:
+            setAse();
+            m804 = 0;
+            m802 = 0;
+            m800 = 0;
+            m7BE = 0;
+            break;
     }
     mbMorfAnimStopped = 0;
     field_0x7B3 = 0;
