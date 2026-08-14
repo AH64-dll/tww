@@ -427,9 +427,10 @@ void daNpc_Aj1_c::chngAnmAtr(u8 i_atr) {
 }
 
 /* 00000F44-00000F98       .text ctrlAnmAtr__11daNpc_Aj1_cFv */
-        /* Nonmatching */
 void daNpc_Aj1_c::ctrlAnmAtr() {
     switch (mAnmAtr) {
+        case 1:
+            break;
         case 2:
             ctrl_WAITanm();
             break;
@@ -440,6 +441,8 @@ void daNpc_Aj1_c::ctrlAnmAtr() {
             }
             break;
         case 6:
+            break;
+        default:
             break;
     }
     ctrl_TIREanm();
@@ -682,12 +685,12 @@ void daNpc_Aj1_c::lookBack() {
     mJointHeadY = m_jnt.getHead_y();
     mJointBackboneY = m_jnt.getBackbone_y();
     mActorAngleY = current.angle.y;
+    cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz temp_pos = current.pos;
     temp_pos.y = eyePos.y;
-    cXyz look_pos(0.0f, 0.0f, 0.0f);
     cXyz* pLookPos = NULL;
     s16 angle = current.angle.y;
-    u8 headOnlyFollow = mHeadOnlyFollow;
+    bool headOnlyFollow = mHeadOnlyFollow;
     switch (mLookBackState) {
         case 1:
             dNpc_playerEyePos(-20.0f);
@@ -706,7 +709,7 @@ void daNpc_Aj1_c::lookBack() {
     if (m_jnt.trnChk() == 0) {
         mLookAtMaxVel = 0;
     }
-    m_jnt.lookAtTarget(&current.angle.y, pLookPos, temp_pos, angle, mLookAtMaxVel, headOnlyFollow != 0);
+    m_jnt.lookAtTarget(&current.angle.y, pLookPos, temp_pos, angle, mLookAtMaxVel, headOnlyFollow);
 }
 
 /* 0000184C-0000189C       .text chkAttention__11daNpc_Aj1_cFv */
@@ -1001,13 +1004,12 @@ void daNpc_Aj1_c::set_pa_aka() {
 /* 000021B4-00002280       .text set_pa_don__11daNpc_Aj1_cFv */
         /* Nonmatching */
 void daNpc_Aj1_c::set_pa_don() {
-    s8 roomNo = current.roomNo;
     cXyz pos(37.3f, 0.0f, 13.8f);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&pos, &m7A8);
     mDonEmitter = dComIfGp_particle_set(0x8114, &m7A8, NULL, NULL, 0xFF, NULL,
-                                        roomNo, NULL, NULL, NULL);
+                                        current.roomNo, NULL, NULL, NULL);
 }
 
 /* 00002284-00002404       .text set_pa_smk__11daNpc_Aj1_cFv */

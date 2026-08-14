@@ -153,7 +153,7 @@ public:
     /* 0x764 */ int mActionResult;
     /* 0x768 */ u8 m768;
     /* 0x769 */ u8 m769;
-    /* 0x76A */ u8 mHeadOnlyFollow;
+    /* 0x76A */ bool mHeadOnlyFollow;
     /* 0x76B */ u8 mInDemo;
     /* 0x76C */ dPa_smokeEcallBack mSmokeEcallBack;
     /* 0x78C */ JPABaseEmitter* mSmokeEmitter;
