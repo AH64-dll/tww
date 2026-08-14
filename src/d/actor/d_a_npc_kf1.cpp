@@ -1082,7 +1082,7 @@ void daNpc_Kf1_c::cut_init_CONTNUE_TLK(int i_actIdx) { /* Nonmatching */
 }
 
 /* 0000298C-00002A10       .text cut_move_TLK_MSG__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::cut_move_TLK_MSG() { /* Nonmatching */
+BOOL daNpc_Kf1_c::cut_move_TLK_MSG() {
     u16 msgStatus = talk(0);
     if (msgStatus == 0x12) {
         mAtr = 0xFF;
@@ -1091,7 +1091,7 @@ BOOL daNpc_Kf1_c::cut_move_TLK_MSG() { /* Nonmatching */
         return TRUE;
     }
     if (msgStatus == 0x2 || msgStatus == 0x6) {
-        return mCurrMsgNo == mEndMsgNo;
+        return (mCurrMsgNo == mEndMsgNo) ? TRUE : FALSE;
     }
     return FALSE;
 }
