@@ -655,7 +655,41 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 
 /* 00007524-0000781C       .text cutMiniGameReturnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameReturnProc() {
-    /* Nonmatching */
+    daShip_c* ship = dComIfGp_getShipActor();
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    current.pos = ship->current.pos;
+    current.pos.x += 300.0f * cM_ssin(angle);
+    current.pos.z += 300.0f * cM_scos(angle);
+    shape_angle.y = 0;
+
+    cXyz sp3C(field_0xBA0, field_0xBA4, field_0xBA8);
+    sp3C -= current.pos;
+    cXyz sp30(sp3C.x, 50.0f, sp3C.z);
+    f32 distSq = PSVECSquareMag(&sp30);
+    f32 dist = distSq > 0.0f ? std::sqrtf(distSq) : distSq;
+
+    if (dist < 400.0f) {
+        daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+        player->mDemo.mDemoType = 3;
+        player->mDemo.mParam0 = 0;
+        player->mDemo.mDemoMode = 6;
+        player->mDemo.mParam0 = 1;
+
+        mDoMtx_stack_c::YrotS(ship->shape_angle.y);
+        cXyz sp54(100.0f + REG0_F(4), 50.0f + REG0_F(5), 100.0f + REG0_F(6));
+        cXyz sp48;
+        mDoMtx_stack_c::multVec(&sp54, &sp48);
+
+        cXyz sp30b = ship->current.pos + sp48;
+        field_0xBC0 = sp30b;
+        field_0xBCC = ship->current.pos;
+        field_0xBCC.y += -50.0f + REG0_F(10);
+
+        camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        cam->mCamera.Reset(field_0xBCC, field_0xBC0);
+        cam->mCamera.Start();
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+    }
 }
 
 /* 0000781C-00007820       .text cutPartnerShipStart__10daNpc_So_cFv */
