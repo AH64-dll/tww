@@ -337,23 +337,26 @@ static BOOL daWarpls_Delete(void* i_this) {
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
-static bool daWarpls_Draw(void* i_this) {
+static BOOL daWarpls_Draw(void* i_this) {
     /* Nonmatching */
     daWarpls_c* i_this_ = (daWarpls_c*)i_this;
-    if (i_this_->mWarpStart == 0) {
-        return TRUE;
-    }
+    bool ret;
     dKy_tevstr_c* tevStr = &i_this_->tevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this_->current.pos, tevStr);
-    g_env_light.setLightTevColorType(i_this_->mpModel, tevStr);
-    if (i_this_->mpBrk != NULL) {
-        i_this_->mpBrk->entry(i_this_->mpModel->getModelData());
+    if (i_this_->mWarpStart == 0) {
+        ret = true;
+    } else {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this_->current.pos, tevStr);
+        g_env_light.setLightTevColorType(i_this_->mpModel, tevStr);
+        if (i_this_->mpBrk != NULL) {
+            i_this_->mpBrk->entry(i_this_->mpModel->getModelData());
+        }
+        if (i_this_->mpBck != NULL) {
+            i_this_->mpBck->entry(i_this_->mpModel->getModelData());
+        }
+        mDoExt_modelUpdateDL(i_this_->mpModel);
+        ret = true;
     }
-    if (i_this_->mpBck != NULL) {
-        i_this_->mpBck->entry(i_this_->mpModel->getModelData());
-    }
-    mDoExt_modelUpdateDL(i_this_->mpModel);
-    return TRUE;
+    return ret;
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
