@@ -80,7 +80,7 @@ void daObjLight::Act_c::set_fire(int) {
 
 /* 00000A9C-00000B04       .text draw_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::draw_fire() {
-    if (mpModel != NULL) {
+    if (mFireFollowCb.getEmitter() != NULL) {
         GXColor color;
         color.r = 0xEB;
         color.g = 0x7D;
@@ -98,7 +98,9 @@ void daObjLight::Act_c::exe_fire() {
 
 /* 00000C28-00000C60       .text delete_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::delete_fire() {
-    /* Nonmatching */
+    if (mFireFollowCb.getEmitter() != NULL) {
+        mFireFollowCb.end();
+    }
 }
 
 /* 00000C60-00000C8C       .text now_event__Q210daObjLight5Act_cFs */

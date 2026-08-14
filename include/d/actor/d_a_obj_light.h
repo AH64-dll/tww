@@ -2,6 +2,7 @@
 #define D_A_OBJ_LIGHT_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_particle.h"
 
 class J3DModel;
 class dBgW;
@@ -50,11 +51,12 @@ public:
         /* 0x2A4 */ dBgW* mpBgW;
         /* 0x2A8 */ Mtx mBgWBaseMtx;
         /* 0x2D8 */ u8 field_0x2D8[0x44C - 0x2D8];
-        /* 0x44C */ u8 field_0x44C[0x450 - 0x44C];  // object w/ vtable (virtual @ +0x20)
-        /* 0x450 */ void* mpModel;
-        /* 0x454 */ u8 field_0x454[0x464 - 0x454];
+        /* 0x44C */ dPa_followEcallBack mFireFollowCb;
+        /* 0x460 */ s16 mFireAngle;
+        /* 0x462 */ s16 mFireAngle2;
         /* 0x464 */ u8 mFireAlpha;
-        /* 0x465 */ u8 field_0x465[0x46C - 0x465];
+        /* 0x465 */ u8 field_0x465[0x468 - 0x465];
+        /* 0x468 */ f32 mFireScale;
         /* 0x46C */ Mtx mFireMtx;
         /* 0x49C */ s16 mEventId;
         /* 0x49E */ s16 mEventActive;
