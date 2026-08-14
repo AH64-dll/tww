@@ -832,7 +832,76 @@ void daGy_c::modeAttackPlayerInit() {
 
 /* 00001F40-000022F8       .text modeAttackPlayer__6daGy_cFv */
 void daGy_c::modeAttackPlayer() {
-    /* Nonmatching */
+    if (mpCtrl->m320 == 1) {
+        modeCircleInit();
+        return;
+    }
+
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    switch (m928) {
+    case 0:
+        m4E8 = l_HIO.mB4;
+        m4EC = l_HIO.mC4;
+        m4F0 = l_HIO.m58;
+        cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &player->current.pos), 8, 0x400);
+
+        cXyz sp24 = mD08 - player->current.pos;
+        cXyz spC(sp24.x, 0.0f, sp24.z);
+        f32 f1 = PSVECSquareMag(&spC);
+        if (f1 > 0.0f) {
+            double guess = __frsqrte(f1);
+            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+            f1 = (f32)(f1 * guess);
+        }
+        if (f1 < l_HIO.m148) {
+            mD15 = 0xA;
+            m928++;
+        }
+        return;
+    case 1:
+        m4E8 = l_HIO.mB4;
+        m4EC = l_HIO.mC4;
+        m4F0 = l_HIO.m5C;
+        if (mD15 == 0xA) {
+            if (mpMorf->isStop()) {
+                mD15 = 2;
+                setAnm();
+                mD15 = 0xA;
+                m924++;
+            }
+        }
+        if (m924 > (s16)l_HIO.m198) {
+            mD15 = 0xB;
+            m928++;
+        }
+        cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &player->current.pos), 8, 0x400);
+        return;
+    case 2:
+        if (m50C.ChkCoHit() && (s16)fopAcM_GetName(m50C.GetCoHitAc()) == 0xA9 && m504 == 0) {
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_ATTACK, &eyePos, fopAcM_GetID(this), 0, reverb);
+            dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            m504 = 1;
+        }
+        if (mpMorf->getFrame() > 10.0f + g_regHIO.mChild[12].mFloatRegs[10]) {
+            m4E8 = l_HIO.mA0;
+            m4EC = l_HIO.mC4;
+        } else {
+            m4E8 = l_HIO.mB4;
+            m4EC = l_HIO.mC4;
+        }
+        m4F0 = l_HIO.m60;
+        if (mD15 == 0xB) {
+            if (mpMorf->isStop()) {
+                mD15 = 1;
+                m504 = 0;
+                modeDiveInit();
+            }
+        }
+        break;
+    }
 }
 
 /* 000022F8-00002400       .text modeAttackBackInit__6daGy_cFv */

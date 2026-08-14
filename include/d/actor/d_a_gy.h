@@ -75,7 +75,7 @@ public:
     /* 0x4F8 */ s32 m4F8;
     /* 0x4FC */ int m4FC;
     /* 0x500 */ int m500;
-    /* 0x504 */ f32 m504;
+    /* 0x504 */ u8 m504;
     /* 0x508 */ f32 m508;
     /* 0x50C */ dCcD_Sph m50C;
     /* 0x638 */ dCcD_Sph m638;
