@@ -799,14 +799,14 @@ void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* i_actor) {
 
     for (int i = 0; i < 2; i++) {
         DrawVtx_c* vtx = &mDrawVtx[i];
-        Vec* lposRow = Khata::l_pos;
+        int idx = 0;
         for (int row = 0; row < 5; row++) {
             cXyz* posRow = &vtx->mPos[row * 7];
             for (int col = 0; col < 7; col++) {
-                posRow[col] = *lposRow;
+                posRow[col] = Khata::l_pos[idx];
                 posRow[col + 35] = cXyz::BaseZ;
                 posRow[col + 70] = base_z_rev;
-                lposRow++;
+                idx++;
             }
         }
     }
