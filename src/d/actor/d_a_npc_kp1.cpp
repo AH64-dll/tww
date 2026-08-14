@@ -603,7 +603,7 @@ bool daNpc_Kp1_c::decideType(int i_type) { /* Nonmatching */
 }
 
 /* 00001620-000016A8       .text event_actionInit__11daNpc_Kp1_cFi */
-void daNpc_Kp1_c::event_actionInit(int i_staffIdx) { /* Nonmatching */
+void daNpc_Kp1_c::event_actionInit(int i_staffIdx) {
     int* pSubstance = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffIdx, "ActNo", 3);
     dComIfGp_getPEvtManager()->getMySubstanceP(i_staffIdx, "Timer", 3);
     if (pSubstance != NULL) {
@@ -679,7 +679,7 @@ void daNpc_Kp1_c::endEvent() {
 }
 
 /* 000018A0-00001998       .text event_proc__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::event_proc() { /* Nonmatching */
+void daNpc_Kp1_c::event_proc() {
     if (dComIfGp_evmng_endCheck("GET_MAGYS_LTTR")) {
         endEvent();
         mStatus = 1;
