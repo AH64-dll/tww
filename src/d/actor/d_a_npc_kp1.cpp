@@ -135,7 +135,7 @@ int daNpc_Kp1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
 }
 
 /* 00000760-000007FC       .text BtpNum2ResID__11daNpc_Kp1_cFiPi */
-int daNpc_Kp1_c::BtpNum2ResID(int i_num, int* o_resID) { /* Nonmatching */
+int daNpc_Kp1_c::BtpNum2ResID(int i_num, int* o_resID) {
     static const int a_btp_arc_ix_tbl[] = {
         9,
         9,
@@ -143,7 +143,6 @@ int daNpc_Kp1_c::BtpNum2ResID(int i_num, int* o_resID) { /* Nonmatching */
 
     JUT_ASSERT(0x141, 0 <= i_num && i_num < TEXPATTERN_END);
     *o_resID = a_btp_arc_ix_tbl[i_num];
-    return 1;
 }
 
 /* 000007FC-00000840       .text setAnm_tex__11daNpc_Kp1_cFSc */
@@ -717,12 +716,12 @@ bool daNpc_Kp1_c::set_action(ProcFunc i_newProcFunc, void* i_argsP) {
 }
 
 /* 00001A44-00001AFC       .text wait01__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::wait01() { /* Nonmatching */
+BOOL daNpc_Kp1_c::wait01() {
     if (mStatus == 3 || mStatus == 4 || mStatus == 1) {
         return TRUE;
     }
     if (mTalkEnd != 0) {
-        if (chk_talk()) {
+        if (chk_talk() == true) {
             setStt(2);
         }
     } else {
