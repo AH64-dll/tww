@@ -1716,7 +1716,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_apzl"),
     ActorRel(Equivalent, "d_a_obj_ashut"),  # regalloc/anchor-only: chk_safe_area 98.25 norm-diff-0, Execute 99.73 init$ anchor
     ActorRel(Matching,    "d_a_obj_auzu"),
-    ActorRel(NonMatching, "d_a_obj_buoyflag"),
+    ActorRel(Equivalent, "d_a_obj_buoyflag"), # 9 sub-100 accept-class (RLead-21/R2-9/R6-9), +4 weaks
     ActorRel(Matching,    "d_a_obj_buoyrace"),
     ActorRel(Matching,    "d_a_obj_correct"),
     ActorRel(Matching,    "d_a_obj_dmgroom"),
