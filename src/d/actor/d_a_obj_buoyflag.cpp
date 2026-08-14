@@ -986,8 +986,15 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffUp = *vtx - *up;
                 cXyz diffDown = *down - *vtx;
-                nrm1 = (*up * 0.57475f + diffUp * 0.358875f + diffDown * 0.111375f + *down * 0.42524995f) -
-                       (*up * 0.42524995f + diffUp * 0.383625f + diffDown * 0.136125f + *down * 0.57475f);
+                cXyz sum1 = *up * 0.57475f;
+                PSVECAdd(&sum1, &(diffUp * 0.358875f), &sum1);
+                PSVECAdd(&sum1, &(diffDown * 0.111375f), &sum1);
+                PSVECAdd(&sum1, &(*down * 0.42524995f), &sum1);
+                cXyz sum2 = *down * 0.42524995f;
+                PSVECAdd(&sum2, &(diffUp * 0.383625f), &sum2);
+                PSVECAdd(&sum2, &(diffDown * 0.136125f), &sum2);
+                PSVECAdd(&sum2, &(*up * 0.57475f), &sum2);
+                nrm1 = sum2 - sum1;
             }
 
             cXyz nrm2;
@@ -998,8 +1005,15 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffLeft = *vtx - *left;
                 cXyz diffRight = *right - *vtx;
-                nrm2 = (*left * 0.57475f + diffLeft * 0.358875f + diffRight * 0.111375f + *right * 0.42524995f) -
-                       (*left * 0.42524995f + diffLeft * 0.383625f + diffRight * 0.136125f + *right * 0.57475f);
+                cXyz sum1 = *left * 0.57475f;
+                PSVECAdd(&sum1, &(diffLeft * 0.358875f), &sum1);
+                PSVECAdd(&sum1, &(diffRight * 0.111375f), &sum1);
+                PSVECAdd(&sum1, &(*right * 0.42524995f), &sum1);
+                cXyz sum2 = *left * 0.42524995f;
+                PSVECAdd(&sum2, &(diffLeft * 0.383625f), &sum2);
+                PSVECAdd(&sum2, &(diffRight * 0.136125f), &sum2);
+                PSVECAdd(&sum2, &(*right * 0.57475f), &sum2);
+                nrm2 = sum2 - sum1;
             }
 
             cXyz nrm = nrm2.outprod(nrm1);
