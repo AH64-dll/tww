@@ -54,7 +54,6 @@ static BOOL (daObj_hsh_c::*event_action_tbl[8])(int) = {
 };
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
-/* Nonmatching */
 daObj_hsh_c::~daObj_hsh_c() {
     if (argument == 0) {
         dComIfG_resDelete(&mPhase, "Hsehi1");
@@ -175,7 +174,6 @@ void daObj_hsh_c::setBaseMtx() {
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
 /* Nonmatching */
 BOOL daObj_hsh_c::createHeap() {
-    BOOL ret;
     if (argument == 0) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
         JUT_ASSERT(0x1F9, modelData != 0);
@@ -185,14 +183,11 @@ BOOL daObj_hsh_c::createHeap() {
         }
         m4D4 = new dBgW();
         if (m4D4 != NULL) {
-            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4)) {
-                ret = 0;
-            } else {
-                ret = 1;
+            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
+                return 1;
             }
-        } else {
-            return 0;
         }
+        return 0;
     } else {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
         JUT_ASSERT(0x20F, modelData != 0);
@@ -202,16 +197,12 @@ BOOL daObj_hsh_c::createHeap() {
         }
         m4D4 = new dBgW();
         if (m4D4 != NULL) {
-            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4)) {
-                ret = 0;
-            } else {
-                ret = 1;
+            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
+                return 1;
             }
-        } else {
-            return 0;
         }
+        return 0;
     }
-    return ret;
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
