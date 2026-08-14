@@ -169,7 +169,7 @@ static void* searchActor_Tsubo(void* i_actor, void*) {
 }
 
 /* 0000059C-0000061C       .text init_KF1_0__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::init_KF1_0() { /* Nonmatching */
+bool daNpc_Kf1_c::init_KF1_0() { /* Nonmatching */
     if (!dComIfGs_isEventBit(0x2D01)) {
         set_action(&daNpc_Kf1_c::wait_action1, NULL);
         return TRUE;
@@ -182,19 +182,18 @@ BOOL daNpc_Kf1_c::createInit() { /* Nonmatching */
     static const char* l_evn_tbl[] = {"angry", "rupee_age", "bensyou"};
 
     s32 i;
-    s8 roomNo = 0xFF;
-    dBgS* bg = dComIfG_Bgsp();
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
 
     for (i = 0; i < 3; i++) {
         mEvtIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xFF);
     }
     mEventCut.setActorInfo2("Kf1", this);
-    m79F = (fopAcM_GetParam(this) >> 16) & 0xFF;
-    roomNo = (fopAcM_GetParam(this) >> 8) & 0xFF;
-    if (roomNo != 0xFF) {
-        if (mPath.setInf(roomNo, current.roomNo, TRUE)) {
-            fopAcM_OffStatus(this, fopAcStts_UNK40_e);
+    m79F = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    int roomNo = 0xFF;
+    u8 paramRoom = (fopAcM_GetParam(this) >> 16) & 0xFF;
+    if (paramRoom != 0xFF) {
+        mPath.setInf(paramRoom, current.roomNo, TRUE);
+        if (mPath.isPath()) {
+            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
             roomNo = 0xD9;
             set_pthPoint(0);
         } else {
@@ -203,30 +202,36 @@ BOOL daNpc_Kf1_c::createInit() { /* Nonmatching */
     } else if (!mPath.isPath()) {
         return FALSE;
     }
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
     gravity = -4.5f;
     mAnmNo = 10;
-    if (mType2 != 0) {
-        if (!init_KF1_0()) {
-            return FALSE;
-        }
-    } else {
-        if (!init_KF1_0()) {
-            return FALSE;
-        }
+    bool init_success;
+    switch (mType2) {
+        case 0:
+            init_success = init_KF1_0();
+            break;
+        default:
+            init_success = false;
+            break;
+    }
+    if (!init_success) {
+        return FALSE;
     }
     m722.x = current.angle.x;
     m722.y = current.angle.y;
     m722.z = current.angle.z;
-    current.angle.x = m722.x;
-    current.angle.y = m722.y;
-    current.angle.z = m722.z;
+    shape_angle.x = m722.x;
+    shape_angle.y = m722.y;
+    shape_angle.z = m722.z;
     mStts.Init(roomNo, 0xFF, this);
     mCyl.SetStts(&mStts);
     mCyl.Set(dNpc_cyl_src);
-    mObjAcch.CrrPos(*bg);
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
     play_animation();
-    tevStr.mRoomNo = bg->GetRoomId(mObjAcch.m_gnd);
-    tevStr.mEnvrIdxOverride = bg->GetPolyColor(mObjAcch.m_gnd);
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     mpMorf->setMorf(0.0f);
     setMtx(TRUE);
     return TRUE;

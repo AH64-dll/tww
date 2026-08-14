@@ -23,7 +23,7 @@ public:
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_Neck(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
-    BOOL init_KF1_0();
+    bool init_KF1_0();
     BOOL createInit();
     void play_animation();
     void setMtx(bool);
