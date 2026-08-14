@@ -377,12 +377,13 @@ void hand_move(sss_class* i_this) {
     f3 = 0.1f;
     f5 = 8.0f;
     f4 = f3;
-    f6 = 0.0f;
+    f6 = 30.0f;
     f7 = 30.0f;
     f8 = 1.0f;
-    f9 = f6;
+    f32 f27 = 0.0f;
     f32 dist = fopAcM_searchPlayerDistance(actor);
     f22 = 5.0f;
+    f9 = f27;
     if (i_this->m2B9 != 0xFF) {
         f10 = 10.0f * i_this->m2B9;
     } else {
@@ -437,15 +438,15 @@ void hand_move(sss_class* i_this) {
         }
         break;
     case 2:
-        f5 = 70.0f;
-        f6 = 10.0f;
+        f5 = 15.0f;
+        f27 = 10.0f;
         f4 = 0.5f;
         keep_3 = 1;
         pos.x = player->current.pos.x;
         f11 = player->current.pos.y;
         pos.y = f11;
         pos.z = player->current.pos.z;
-        pos.y = f11 + 20.0f;
+        pos.y = f11 + 70.0f;
         if (dist > 450.0f + REG0_F(14)) {
             i_this->m2C0 = 1;
             actor->speedF = 0.0f;
@@ -484,7 +485,7 @@ void hand_move(sss_class* i_this) {
         f11 = player->current.pos.y;
         pos.y = f11;
         pos.z = player->current.pos.z;
-        pos.y = f11 + 20.0f;
+        pos.y = f11 + 70.0f;
         f5 = 200.0f;
         f3 = 1.0f;
         f4 = 5.0f;
@@ -537,7 +538,7 @@ void hand_move(sss_class* i_this) {
         break;
     }
     cLib_addCalc2(&i_this->m2E8, f6, 0.5f, f8);
-    cLib_addCalc2(&i_this->m2F0, f5, 1.0f, 0.2f);
+    cLib_addCalc2(&i_this->m2F0, f27, 1.0f, 0.2f);
     cLib_addCalc2(&i_this->m2F4, f22, 1.0f, 0.3f);
     if (keep_3 == 0) {
         cLib_addCalc2(&actor->speedF, f5, 1.0f, f4);
