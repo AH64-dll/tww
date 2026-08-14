@@ -1216,6 +1216,25 @@ BOOL daBigelf_c::CreateHeap() {
         return 0;
     }
     m3F5 = 0;
+    switch (getType()) {
+    case 2:
+    case 3:
+        mBrkAnimator.getFrameCtrl()->setFrame(1.0f);
+        mFlowerBrkAnimator.getFrameCtrl()->setFrame(1.0f);
+        m3F5 = 1;
+        break;
+    case 4:
+    case 5:
+        mBrkAnimator.getFrameCtrl()->setFrame(2.0f);
+        mFlowerBrkAnimator.getFrameCtrl()->setFrame(2.0f);
+        m3F5 = 2;
+        break;
+    case 6:
+        mBrkAnimator.getFrameCtrl()->setFrame(3.0f);
+        mFlowerBrkAnimator.getFrameCtrl()->setFrame(3.0f);
+        m3F5 = 3;
+        break;
+    }
     return 1;
 }
 
