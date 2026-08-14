@@ -352,10 +352,11 @@ void daNpc_Gp1_c::chg_anmAtr(u8 i_param_1) {
     setAnm_ATR(1);
 }
 
-/* Nonmatching */
 /* 00000BB0-00000D00       .text control_anmAtr__11daNpc_Gp1_cFv */
 void daNpc_Gp1_c::control_anmAtr() {
     switch(m80F) {
+        case 0:
+            break;
         case 1:
             if(mbMorfAnimStopped) {
                 m80F = 0;
