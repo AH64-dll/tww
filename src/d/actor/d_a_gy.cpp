@@ -487,12 +487,60 @@ void daGy_c::setAnm() {
 
 /* 00000C7C-00000E74       .text setAtCollision__6daGy_cFv */
 void daGy_c::setAtCollision() {
-    /* Nonmatching */
+    m50C.SetR(l_HIO.m88 * l_HIO.m90);
+    m50C.SetC(mD08);
+    if (m2B0 == 3) {
+        s32 frame = (s32)mpMorf->getFrame();
+        if (mD15 == 0xB && frame < 0x12) {
+            m50C.OnAtSetBit();
+            m50C.OnAtHitBit();
+            m50C.SetAtAtp(2);
+            m50C.SetAtSpl(dCcG_At_Spl_UNK1);
+            m50C.SetAtSe(6);
+            m50C.OffCoSetBit();
+        } else {
+            m50C.OffAtSetBit();
+            m50C.OffAtHitBit();
+            m50C.SetAtAtp(0);
+            m50C.OnCoSetBit();
+        }
+    } else if (m2B0 == 2 || m2B0 == 5) {
+        if (mpCtrl->m320 == 1) {
+            if (m50C.ChkCoHit()) {
+                if (fopAcM_GetName(m50C.GetCoHitAc()) == fpcNm_SHIP_e) {
+                    m50C.OnAtSetBit();
+                    m50C.OnAtHitBit();
+                    m50C.SetAtAtp(2);
+                    m50C.SetAtSpl(dCcG_At_Spl_UNK1);
+                    m50C.SetAtSe(6);
+                }
+            } else {
+                m50C.OffAtSetBit();
+                m50C.OffAtHitBit();
+                m50C.SetAtAtp(0);
+            }
+            m50C.OnCoSetBit();
+        }
+    } else {
+        m50C.OffAtSetBit();
+        m50C.OffAtHitBit();
+        m50C.SetAtAtp(0);
+        m50C.OnCoSetBit();
+        if (m50C.ChkCoHit() && m2B0 != 9 && m2B0 != 8) {
+            modeDiveInit();
+        }
+    }
+    dComIfG_Ccsp()->Set(&m50C);
 }
 
 /* 00000E74-00000F3C       .text setCollision__6daGy_cFv */
 void daGy_c::setCollision() {
-    /* Nonmatching */
+    m638.SetR(140.0f * l_HIO.m90);
+    m638.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&m638);
+    m764.SetStartEnd(m89C, m89C);
+    m764.SetR(l_HIO.m8C * l_HIO.m90);
+    dComIfG_Ccsp()->Set(&m764);
 }
 
 /* 00000F3C-00000FC4       .text setAimSpeedF__6daGy_cFv */
