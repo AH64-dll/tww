@@ -349,3 +349,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T20:15Z — M49: flip #69 d_a_obj_vyasi → Equivalent — 40 FLIPS THIS SESSION (#30-69). Ledger: 37 NonMatching / 61 Equivalent / 224 Matching / 94 MatchingFor. vyasi: 4 real value bugs caught at gate by value-decode (JNCB 0.0f, SPrm tables, 0.35 1-ULP, pool) + set_collision structural; sections byte-identical after fixes. Gate 0aaf84ef3 23:15:15 + mirror check.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T20:54Z — M50: flip #70 d_a_obj_buoyflag → Equivalent — 41 FLIPS THIS SESSION (#30-70). Ledger: 36 NonMatching / 62 Equivalent / 224 Matching / 94 MatchingFor. buoyflag: 3-way unanimous (RLead-21 + R2-9 + R6-9), _create re-classified pointer-hoist ACCEPT, 3 immovable-with-proof, .rodata 364 + .data 7000 byte-identical. Gate 6ea72bfb4 23:54:12 + mirror check.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
