@@ -3,10 +3,13 @@
 
 #include "f_op/f_op_actor.h"
 
+class J3DModel;
+class dBgW;
+
 namespace daObjLight {
     class Act_c : public fopAc_ac_c {
     public:
-        bool solidHeapCB(fopAc_ac_c*);
+        static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
         void init_collision();
         void set_collision();
@@ -32,13 +35,21 @@ namespace daObjLight {
         static BOOL set_light_dif_angle_LOD(s16);
         static BOOL set_light_dif_angle_FRRS(s16);
 
+        static const char M_arcname[];
+
         static s16 M_S_light_angle;
         static u32 M_S_pre_set_frame_LOD;
         static u32 M_S_pre_set_frame_FRRS;
         static u8 M_S_lod_access;
 
 public:
-        /* 0x290 */ u8 field_0x290[0x44C - 0x290];
+        /* 0x290 */ u8 field_0x290[0x298 - 0x290];
+        /* 0x298 */ J3DModel* mpModelLighthouse;
+        /* 0x29C */ J3DModel* mpModelLight;
+        /* 0x2A0 */ J3DModel* mpModelLight2;
+        /* 0x2A4 */ dBgW* mpBgW;
+        /* 0x2A8 */ Mtx mBgWBaseMtx;
+        /* 0x2D8 */ u8 field_0x2D8[0x44C - 0x2D8];
         /* 0x44C */ u8 field_0x44C[0x450 - 0x44C];  // object w/ vtable (virtual @ +0x20)
         /* 0x450 */ void* mpModel;
         /* 0x454 */ u8 field_0x454[0x464 - 0x454];

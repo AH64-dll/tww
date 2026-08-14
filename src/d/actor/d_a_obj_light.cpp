@@ -5,15 +5,52 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_light.h"
+#include "res/Object/Skanran.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_ext.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+const char daObjLight::Act_c::M_arcname[] = "Skanran";
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
-bool daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    return create_heap();
+BOOL daObjLight::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::create_heap() {
-    /* Nonmatching */
+    J3DModelData* mdl_data_lighthouse = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_BDL_STOUDAI_e));
+    JUT_ASSERT(267, mdl_data_lighthouse != 0);
+
+    if (mdl_data_lighthouse != NULL) {
+        mpModelLighthouse = mDoExt_J3DModel__create(mdl_data_lighthouse, 0, 0x11020203);
+    }
+
+    J3DModelData* mdl_data_light = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_BDL_SHIKARI_e));
+    JUT_ASSERT(274, mdl_data_light != 0);
+
+    if (mdl_data_light != NULL) {
+        mpModelLight = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
+        mpModelLight2 = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
+    }
+
+    set_mtx();
+
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_STOUDAI_e));
+    JUT_ASSERT(284, bgw_data != 0);
+
+    if (bgw_data != NULL) {
+        mpBgW = new dBgW();
+        if (mpBgW != NULL) {
+            if (mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mBgWBaseMtx) == 1) {
+                return false;
+            }
+        }
+    }
+
+    return mdl_data_lighthouse != NULL && mpModelLighthouse != NULL && mdl_data_light != NULL && mpModelLight != NULL &&
+           mpModelLight2 != NULL && bgw_data != NULL && mpBgW != NULL;
 }
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
