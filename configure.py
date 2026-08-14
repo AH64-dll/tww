@@ -1750,7 +1750,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_homen"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homensmoke"),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
-    ActorRel(NonMatching, "d_a_obj_htetu1"),  # revert #57: source-linked rel fails retail pins (weak-order/section divergence — cycle 9, RLead-14 re-derive)
+    ActorRel(Equivalent, "d_a_obj_htetu1"),  # #57 re-classed: 4 accept-class holdouts (unlock 94.20/create_heap 98.52/_execute 99.78/splash_manager 99.93) — MatchingFor would fail retail pin sha1; Equivalent linked=False preserves pins
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland"),
     ActorRel(Matching,    "d_a_obj_jump"),
     ActorRel(Equivalent, "d_a_obj_kanoke"),  # regalloc/pair-move: 3 sub-100 all 0 semantic one-sided (executeNormal 98.22 norm-diff-0, executeOpenTate 98.97 + executeEffectTate 95.65 paired single-insn); markers 3/3 keep
