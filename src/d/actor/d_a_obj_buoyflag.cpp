@@ -23,17 +23,17 @@
 namespace daObjBuoyflag {
 namespace {
 struct Khasi {
-    static const u8 l_k_taru02TEX[0x400];
-    static const Vec l_pos[11];
-    static const f32 l_texCoord[14];
-    static const u8 l_Khasi_00DL[0xA7];
+    static u8 l_k_taru02TEX[0x400] ALIGN_DECL(32);
+    static Vec l_pos[11];
+    static f32 l_texCoord[14];
+    static u8 l_Khasi_00DL[0xA7] ALIGN_DECL(32);
 };
 struct Khata {
-    static const u8 l_k_hata01TEX[0x1000];
-    static const Vec l_pos[35];
-    static const f32 l_texCoord[70];
-    static const u8 l_Khata_00DL[0xEF];
-    static const u8 l_matDL[0x34];
+    static u8 l_k_hata01TEX[0x1000] ALIGN_DECL(32);
+    static Vec l_pos[35];
+    static f32 l_texCoord[70];
+    static u8 l_Khata_00DL[0xEF] ALIGN_DECL(32);
+    static u8 l_matDL[0x34] ALIGN_DECL(32);
 };
 struct L_attr_t {
     /* 0x00 */ f32 m00;   /* 0.5f   */
@@ -56,11 +56,11 @@ struct L_attr_t {
 const char L_arcname[] = "Cloth";
 const L_attr_t L_attr = {
     /* m00 */ 0.5f, /* m04 */ -0.03f, /* m08 */ 20.0f, /* m0C */ 0.5f,
-    /* m10 */ 0.03f, /* m14 */ 0.6f, /* m18 */ -8.0f, /* m1C */ 0.00592f,
+    /* m10 */ 0.03f, /* m14 */ 0.6f, /* m18 */ -8.0f, /* m1C */ 0.006f,
     /* m20 */ 0.002f, /* m24 */ 0.04f, /* m28 */ 0.015f, /* m2C */ 1000,
     /* m2E */ 0, /* m30 */ 0.03f, /* m34 */ 0.08f, /* m38 */ 0.005f,
 };
-const u8 Khasi::l_k_taru02TEX[0x400] = {
+u8 Khasi::l_k_taru02TEX[0x400] = {
     0xCD, 0xB3, 0x8B, 0xED, 0x40, 0x4E, 0x7F, 0x7F, 0xCD, 0xD3, 0x7B, 0x4B,
     0xD0, 0xDB, 0xDB, 0xBB, 0xA4, 0x8F, 0x83, 0xAC, 0x40, 0x40, 0x40, 0x40,
     0xB5, 0x11, 0x9C, 0x4E, 0xDB, 0xAF, 0x8F, 0xF7, 0xBD, 0x52, 0xA4, 0x6F,
@@ -149,7 +149,7 @@ const u8 Khasi::l_k_taru02TEX[0x400] = {
     0xBD, 0xBD, 0xBB, 0x03,
 };
 
-const Vec Khasi::l_pos[11] = {
+Vec Khasi::l_pos[11] = {
     { 1.3352630138397217f, -0.15163099765777588f, -4.755282878875732f },
     { -4.254907131195068f, -0.15163099765777588f, -2.938926935195923f },
     { -4.254908084869385f, -0.15163099765777588f, 2.9389259815216064f },
@@ -163,9 +163,9 @@ const Vec Khasi::l_pos[11] = {
     { -0.05392400175333023f, 99.66593170166016f, 0.0f },
 };
 
-const f32 Khasi::l_texCoord[14] = { 0.030294999480247498f, 0.0f, 0.44999998807907104f, 0.0f, 0.44999998807907104f, 1.0f, 0.030294999480247498f, 1.0f, 0.25332900881767273f, 0.0f, 0.45435601472854614f, 1.0f, 0.0f, 1.0f };
+f32 Khasi::l_texCoord[14] = { 0.030294999480247498f, 0.0f, 0.44999998807907104f, 0.0f, 0.44999998807907104f, 1.0f, 0.030294999480247498f, 1.0f, 0.25332900881767273f, 0.0f, 0.45435601472854614f, 1.0f, 0.0f, 1.0f };
 
-const u8 Khasi::l_Khasi_00DL[0xA7] = {
+u8 Khasi::l_Khasi_00DL[0xA7] = {
     0x98, 0x00, 0x04, 0x00, 0x00, 0x02, 0x04, 0x04, 0x03, 0x05, 0x05, 0x01,
     0x09, 0x09, 0x00, 0x98, 0x00, 0x04, 0x04, 0x04, 0x02, 0x03, 0x03, 0x03,
     0x09, 0x09, 0x01, 0x08, 0x08, 0x00, 0x98, 0x00, 0x04, 0x03, 0x03, 0x02,
@@ -182,7 +182,7 @@ const u8 Khasi::l_Khasi_00DL[0xA7] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-const u8 Khata::l_k_hata01TEX[0x1000] = {
+u8 Khata::l_k_hata01TEX[0x1000] = {
     0x00, 0x00, 0x29, 0x65, 0x7F, 0x57, 0x55, 0x55, 0x00, 0x00, 0x29, 0x65,
     0xFF, 0xFF, 0x7F, 0x57, 0x29, 0x65, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x29, 0x65, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x29, 0x65, 0x29, 0x65,
@@ -527,7 +527,7 @@ const u8 Khata::l_k_hata01TEX[0x1000] = {
     0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-const Vec Khata::l_pos[35] = {
+Vec Khata::l_pos[35] = {
     { 0.0f, -22.499967575073242f, 0.0f },
     { 12.5f, -22.499967575073242f, 0.0f },
     { 25.0f, -22.499967575073242f, 0.0f },
@@ -565,9 +565,9 @@ const Vec Khata::l_pos[35] = {
     { 75.0f, 27.500032424926758f, 0.0f },
 };
 
-const f32 Khata::l_texCoord[70] = { 0.8333330154418945f, 0.75f, 1.0f, 0.75f, 1.0f, 1.0f, 0.8333330154418945f, 1.0f, 0.5f, 0.75f, 0.6666669845581055f, 0.75f, 0.6666669845581055f, 1.0f, 0.5f, 1.0f, 0.33333298563957214f, 0.0f, 0.33333298563957214f, 0.25f, 0.16666699945926666f, 0.25f, 0.16666699945926666f, 0.0f, 0.0f, 0.25f, 0.0f, 0.0f, 0.33333298563957214f, 0.75f, 0.33333298563957214f, 1.0f, 0.16666699945926666f, 1.0f, 0.0f, 1.0f, 0.0f, 0.75f, 0.16666699945926666f, 0.75f, 0.8333330154418945f, 0.5f, 1.0f, 0.5f, 0.6666669845581055f, 0.5f, 0.5f, 0.5f, 0.33333298563957214f, 0.5f, 0.0f, 0.5f, 0.16666699945926666f, 0.5f, 0.8333330154418945f, 0.25f, 1.0f, 0.25f, 0.6666669845581055f, 0.25f, 0.5f, 0.25f, 0.8333330154418945f, 0.0f, 1.0f, 0.0f, 0.6666669845581055f, 0.0f, 0.5f, 0.0f };
+f32 Khata::l_texCoord[70] = { 0.8333330154418945f, 0.75f, 1.0f, 0.75f, 1.0f, 1.0f, 0.8333330154418945f, 1.0f, 0.5f, 0.75f, 0.6666669845581055f, 0.75f, 0.6666669845581055f, 1.0f, 0.5f, 1.0f, 0.33333298563957214f, 0.0f, 0.33333298563957214f, 0.25f, 0.16666699945926666f, 0.25f, 0.16666699945926666f, 0.0f, 0.0f, 0.25f, 0.0f, 0.0f, 0.33333298563957214f, 0.75f, 0.33333298563957214f, 1.0f, 0.16666699945926666f, 1.0f, 0.0f, 1.0f, 0.0f, 0.75f, 0.16666699945926666f, 0.75f, 0.8333330154418945f, 0.5f, 1.0f, 0.5f, 0.6666669845581055f, 0.5f, 0.5f, 0.5f, 0.33333298563957214f, 0.5f, 0.0f, 0.5f, 0.16666699945926666f, 0.5f, 0.8333330154418945f, 0.25f, 1.0f, 0.25f, 0.6666669845581055f, 0.25f, 0.5f, 0.25f, 0.8333330154418945f, 0.0f, 1.0f, 0.0f, 0.6666669845581055f, 0.0f, 0.5f, 0.0f };
 
-const u8 Khata::l_Khata_00DL[0xEF] = {
+u8 Khata::l_Khata_00DL[0xEF] = {
     0x98, 0x00, 0x0A, 0x06, 0x06, 0x02, 0x05, 0x05, 0x03, 0x0D, 0x0D, 0x01,
     0x0C, 0x0C, 0x00, 0x14, 0x14, 0x15, 0x13, 0x13, 0x14, 0x1B, 0x1B, 0x1C,
     0x1A, 0x1A, 0x1B, 0x22, 0x22, 0x20, 0x21, 0x21, 0x1F, 0x98, 0x00, 0x0A,
@@ -590,7 +590,7 @@ const u8 Khata::l_Khata_00DL[0xEF] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-const u8 Khata::l_matDL[0x34] = {
+u8 Khata::l_matDL[0x34] = {
     0x61, 0x43, 0x00, 0x00, 0x01, 0x61, 0x40, 0x00, 0x00, 0x17, 0x61, 0x41,
     0x00, 0x04, 0xAD, 0x61, 0xF3, 0x64, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -602,44 +602,9 @@ const u8 Khata::l_matDL[0x34] = {
 cXyz daObjBuoyflag::Packet_c::M_hasi_nrm[11];
 bool daObjBuoyflag::Packet_c::M_hasi_nrm_flag;
 
-const dCcD_SrcCyl daObjBuoyflag::Act_c::M_cyl_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_LIGHT_ARROW & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGCylS
-    {{
-        /* Center */ {0.0f, 12.0f, 0.0f},
-        /* Radius */ 5.0f,
-        /* Height */ 88.0f,
-    }},
-};
-
-const daObjBuoyflag::AttrType_c daObjBuoyflag::Act_c::M_attr_type[4] = {
-    {1.0f, 1, 1, 0, 0},
-    {4.0f, 0, 1, 0, 0},
-    {5.77f, 0, 1, 0, 0},
-    {2.0f, 0, 0, 0, 0},
-};
 /* 000000EC-000001BC       .text hasi_nrm_init__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::hasi_nrm_init() {
+    /* Nonmatching */
     if (!M_hasi_nrm_flag) {
         M_hasi_nrm_flag = true;
         for (int i = 0; i < 10; i++) {
@@ -653,6 +618,7 @@ void daObjBuoyflag::Packet_c::hasi_nrm_init() {
 
 /* 000001F8-00000744       .text draw_hata__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     DrawVtx_c* vtx = &mDrawVtx[mB8C];
     dKy_tevstr_c* tevStr = &i_actor->tevStr;
     const u8* texData = &Khata::l_k_hata01TEX[(u32)i_actor->prm_get_texture() * 0x800];
@@ -738,6 +704,7 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
 
 /* 00000744-00000C4C       .text draw_hasi__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     dKy_tevstr_c* tevStr = &i_actor->tevStr;
 
     j3dSys.reinitGX();
@@ -828,6 +795,7 @@ void daObjBuoyflag::Packet_c::draw() {
 
 /* 00000CB8-00000F7C       .text init__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     static cXyz base_z_rev(0.0f, 0.0f, -1.0f);
 
     for (int i = 0; i < 2; i++) {
@@ -853,6 +821,7 @@ void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* i_actor) {
 
 /* 00000F7C-000014AC       .text calc_wind_base__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     DrawVtx_c* other = &mDrawVtx[mB8C ^ 1];
 
     mC68[0] += 0x578;
@@ -924,6 +893,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
 
 /* 000014AC-000015FC       .text calc_pos_spring_near__Q213daObjBuoyflag8Packet_cFPC4cXyzPC4cXyzff */
 void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz* i_target, const cXyz* i_pos, f32 i_spring, f32 i_damping) {
+    /* Nonmatching */
     cXyz diff = *i_target - *i_pos;
     f32 mag = diff.abs2();
     if (mag > 0.0f) {
@@ -936,6 +906,7 @@ void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz* i_target, const c
 
 /* 000015FC-00001BC0       .text calc_pos__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     DrawVtx_c* cur = &mDrawVtx[mB8C];
     DrawVtx_c* prev = &mDrawVtx[mB8C ^ 1];
 
@@ -962,7 +933,7 @@ void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
                     calc_pos_spring_near(vtx, &other->mPos[(row + 1) * 7 + col], 12.5f, L_attr.m00);
                 }
 
-                f32 colWeight = 0.166f * (f32)col;
+                f32 colWeight = 0.16666667f * (f32)col;
                 mC80 += mC50 * (0.5f * (rowInvWeight + colWeight) * L_attr.m04);
 
                 f32 weight = rowWeight * rowWeight + colWeight * colWeight;
@@ -970,16 +941,16 @@ void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
                     weight = std::sqrtf(weight);
                 }
                 f32 phase = 32768.0f * weight;
-                f32 wave = 1.0f + 0.333f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
+                f32 wave = 1.0f + 0.33333334f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
                 mC80 += prev->mNrm[row * 7 + col] * (mC5C.inprod(prev->mNrm[row * 7 + col]) * (wave * L_attr.m14 * (1.0f / L_attr.m08)));
 
                 mPos[row * 7 + col] += mC80;
 
                 f32 waveWeight = -(0.6f + 0.4f * colWeight) * L_attr.m10;
                 cXyz windVec = mC5C;
-                f32 rndZ = 1.8f + cM_rndF(0.2f);
-                f32 rndY = 1.8f + cM_rndF(0.2f);
-                f32 rndX = 1.8f + cM_rndF(0.2f);
+                f32 rndZ = 0.9f + cM_rndF(0.2f);
+                f32 rndY = 0.9f + cM_rndF(0.2f);
+                f32 rndX = 0.9f + cM_rndF(0.2f);
                 windVec.x *= rndX;
                 windVec.y *= rndY;
                 windVec.z *= rndZ;
@@ -993,6 +964,7 @@ void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
 
 /* 00001BC0-000020E4       .text calc_nrm__Q213daObjBuoyflag8Packet_cFv */
 void daObjBuoyflag::Packet_c::calc_nrm() {
+    /* Nonmatching */
     DrawVtx_c* cur = &mDrawVtx[mB8C];
     DrawVtx_c* prev = &mDrawVtx[mB8C ^ 1];
 
@@ -1012,8 +984,8 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffUp = *vtx - *up;
                 cXyz diffDown = *down - *vtx;
-                nrm1 = (*up * 0.425f + diffUp * 0.384f + diffDown * 0.137f + *down * 0.575f) -
-                       (*up * 0.575f + diffUp * 0.359f + diffDown * 0.111f + *down * 0.425f);
+                nrm1 = (*up * 0.42524995f + diffUp * 0.383625f + diffDown * 0.136125f + *down * 0.57475f) -
+                       (*up * 0.57475f + diffUp * 0.358875f + diffDown * 0.111375f + *down * 0.42524995f);
             }
 
             cXyz nrm2;
@@ -1024,8 +996,8 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
             } else {
                 cXyz diffLeft = *vtx - *left;
                 cXyz diffRight = *right - *vtx;
-                nrm2 = (*left * 0.425f + diffLeft * 0.384f + diffRight * 0.137f + *right * 0.575f) -
-                       (*left * 0.575f + diffLeft * 0.359f + diffRight * 0.111f + *right * 0.425f);
+                nrm2 = (*left * 0.42524995f + diffLeft * 0.383625f + diffRight * 0.136125f + *right * 0.57475f) -
+                       (*left * 0.57475f + diffLeft * 0.358875f + diffRight * 0.111375f + *right * 0.42524995f);
             }
 
             cXyz nrm = nrm2.outprod(nrm1);
@@ -1040,6 +1012,7 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
 
 /* 000020E4-0000220C       .text calc__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::calc(daObjBuoyflag::Act_c* i_actor) {
+    /* Nonmatching */
     static cXyz hata_vec(0.0f, 60.0f, 0.0f);
 
     mDoMtx_stack_c::copy(i_actor->m1090);
@@ -1065,26 +1038,64 @@ void daObjBuoyflag::Packet_c::update(daObjBuoyflag::Act_c* i_actor) {
     j3dSys.getDrawBuffer(0)->entryImm(this, 0);
 }
 
+const dCcD_SrcCyl daObjBuoyflag::Act_c::M_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 12.0f, 0.0f},
+        /* Radius */ 5.0f,
+        /* Height */ 88.0f,
+    }},
+};
+
+const daObjBuoyflag::AttrType_c daObjBuoyflag::Act_c::M_attr_type[4] = {
+    {1.0f, 1, 1, 0, 0},
+    {4.0f, 0, 1, 0, 0},
+    {5.76f, 0, 1, 0, 0},
+    {2.0f, 0, 0, 0, 0},
+};
+
 /* 00002294-000022BC       .text prm_get_texture__Q213daObjBuoyflag5Act_cCFv */
-daObjBuoyflag::Texture_e daObjBuoyflag::Act_c::prm_get_texture() const {
+inline daObjBuoyflag::Texture_e daObjBuoyflag::Act_c::prm_get_texture() const {
     return Texture_e(daObj::PrmAbstract<Prm_e>(this, PRM_TEXTURE_W, PRM_TEXTURE_S));
 }
 
 /* 000022BC-000022D4       .text attr_type__Q213daObjBuoyflag5Act_cCFv */
-const daObjBuoyflag::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
+inline const daObjBuoyflag::AttrType_c* daObjBuoyflag::Act_c::attr_type() const {
     return &M_attr_type[m1120];
 }
 
 /* 000022D4-0000234C       .text mtx_init__Q213daObjBuoyflag5Act_cFv */
 void daObjBuoyflag::Act_c::mtx_init() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_copy(mDoMtx_stack_c::get(), m1090);
     mDoMtx_copy(mDoMtx_stack_c::get(), m10C0);
 }
 
 /* 0000234C-000024B0       .text mode_afl__Q213daObjBuoyflag5Act_cFv */
 int daObjBuoyflag::Act_c::mode_afl() {
+    /* Nonmatching */
     current.pos.x = m1090[0][3];
     current.pos.y = m1090[1][3];
     current.pos.z = m1090[2][3];
@@ -1108,6 +1119,7 @@ int daObjBuoyflag::Act_c::mode_afl() {
 
 /* 000024B0-0000278C       .text mode_jumpToSea__Q213daObjBuoyflag5Act_cFv */
 int daObjBuoyflag::Act_c::mode_jumpToSea() {
+    /* Nonmatching */
     if (m1128) {
         gravity = L_attr.m18;
         m112A = 0;
@@ -1151,6 +1163,7 @@ cPhs_State Mthd_Create(void* i_proc) {
 
 /* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
 inline cPhs_State daObjBuoyflag::Act_c::_create() {
+    /* Nonmatching */
     fopAcM_ct(this, Act_c);
     m1120 = prm_get_type();
     cPhs_State res = dComIfG_resLoad(&mPhase, L_arcname);

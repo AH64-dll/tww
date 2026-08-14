@@ -38,8 +38,8 @@ namespace daObjBuoyflag {
 
     class Packet_c : public J3DPacket {
     public:
-        Packet_c() {}
-        virtual ~Packet_c() {}
+        Packet_c() { hasi_nrm_init(); }
+        virtual ~Packet_c() { /* Nonmatching */ }
 
         void hasi_nrm_init();
         void draw_hata(Act_c*);
@@ -110,8 +110,8 @@ namespace daObjBuoyflag {
             u32 params = prm_make(Type_UNK1_e, texture, false);
             return fopAcM_createChild(fpcNm_Obj_Buoyflag_e, parent, params, pos, room, angle);
         }
-        const AttrType_c* attr_type() const; // weak but not inlined?
-        Texture_e prm_get_texture() const; // weak but not inlined?
+        inline const AttrType_c* attr_type() const;
+        inline Texture_e prm_get_texture() const;
         void prm_get_noCull() const {}
         s32 prm_get_type() const {
             return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S);
