@@ -763,8 +763,8 @@ void daBigelf_c::setAnmStatus() {
 }
 
 /* 00002030-000021A4       .text next_msgStatus__10daBigelf_cFPUl */
-u8 daBigelf_c::next_msgStatus(u32* pMsgNo) {
-    u8 status = 0xF;
+s32 daBigelf_c::next_msgStatus(u32* pMsgNo) {
+    s32 status = 0xF;
     switch (*pMsgNo) {
     case 0x2EE8:
         (*pMsgNo)++;
@@ -779,7 +779,7 @@ u8 daBigelf_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 2:
         case 3:
-            if (dComIfGs_getBombNum() <= 0x1E) {
+            if (dComIfGs_getBombMax() <= 0x1E) {
                 mGivenItem = 0xAD;
             } else {
                 mGivenItem = 0xAE;
@@ -787,7 +787,7 @@ u8 daBigelf_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 4:
         case 5:
-            if (dComIfGs_getArrowNum() <= 0x1E) {
+            if (dComIfGs_getArrowMax() <= 0x1E) {
                 mGivenItem = 0xAF;
             } else {
                 mGivenItem = 0xB0;
@@ -799,10 +799,11 @@ u8 daBigelf_c::next_msgStatus(u32* pMsgNo) {
         }
         dComIfGp_event_setGtItm(mGivenItem);
         break;
-    case 0x2EE9:
-    case 0x2EEA:
+    case 0x2EEB:
+    case 0x2EEC:
         (*pMsgNo)++;
         break;
+    case 0x2EEF:
     case 0x2EF0:
         (*pMsgNo)++;
         break;

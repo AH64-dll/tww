@@ -73,7 +73,7 @@ public:
     void makeFa1();
     void setAnm(signed char);
     void setAnmStatus();
-    u8 next_msgStatus(unsigned long*);
+    s32 next_msgStatus(unsigned long*);
     u32 getMsg();
     void msgPushButton();
     void msgAnm(unsigned char);
