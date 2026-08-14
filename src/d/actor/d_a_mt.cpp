@@ -319,8 +319,29 @@ static BOOL daMt_Draw(mt_class*) {
 }
 
 /* 0000361C-000037B0       .text bakuha__FP8mt_class */
-void bakuha(mt_class*) {
-    /* Nonmatching */
+void bakuha(mt_class* i_this) {
+    fopAcM_createDisappear(i_this, &i_this->eyePos, 0xA, 0, 0xFF);
+
+    if (i_this->m2B6 == 0 && i_this->m2B9 != 0) {
+        dComIfGs_onSwitch(i_this->m2B9, fopAcM_GetRoomNo(i_this));
+    }
+
+    i_this->m454 = 3;
+    i_this->m45A = REG0_S(0) + 0x39;
+
+    for (int i = 1; i < 8; i++) {
+        i_this->m590[i].x = cM_rndFX(30.0f + REG0_F(4));
+        i_this->m590[i].y = REG0_F(5) + (20.0f + cM_rndF(10.0f));
+        i_this->m590[i].z = cM_rndFX(30.0f + REG0_F(4));
+        i_this->m5F0[i] = (s16)cM_rndF(3.0f);
+        if ((s32)i_this->m18F8 == 3) {
+            i_this->m5F0[i] += 5;
+        }
+    }
+
+    dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+    particle->set(0, dPa_name::ID_IT_SN_MAGT_HAHEN_A, &i_this->current.pos, NULL, NULL, 0xFF,
+                  NULL, -1, NULL, NULL, NULL);
 }
 
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
