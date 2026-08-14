@@ -169,3 +169,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T01:05Z — M20: ALL 5 WAVE-2 FLIPS QA-PASSED — #38 ashut (R8-7), #39 ds1 (R8-8+value-bug-fixed), #40 Itnak (R1-8, reconciliation held), #41 ekskz (R4-8), #42 zk1 (R7-8). 13 flips this session (#30-42). Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. Bench caught 30+ real bugs org-wide. 2 4-version cycles green. D-team mid-flight: mmrr 5 sub-100, light 15 stubs, firewall transcribing, aj1 lookBack one-liner.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T01:14Z — M21: flip #43 d_a_npc_aj1 → Equivalent — closes the longest actor saga of the session (20+ commits, 4 real value bugs: HIO field-order, msg IDs, wrong-member 0x26D, set_pa_smk GXColor; 3 structural rounds; 21/21 sub-100 0-structural final). Gate 43a1e88e5 04:14:24. Ledger: 63 NonMatching / 38 Equivalent / 314 Matching + 3 MatchingFor. 14 flips this session (#30-43: 3 Matching + 10 Equivalent + 3 MatchingFor conversions).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
