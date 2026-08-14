@@ -275,7 +275,7 @@ void daObjVyasi::Act_c::process_none_main() {
 
 /* 00000A00-00000A64       .text process_sag_init__Q210daObjVyasi5Act_cFv */
 int daObjVyasi::Act_c::process_sag_init() {
-    if (SetStopJointAnimation(mpBckData, 1.0f, 0.0f)) {
+    if (SetStopJointAnimation(M_bck_data, 1.0f, 0.0f)) {
         mpMorf->setPlaySpeed(0.0f);
         return 1;
     }
@@ -295,7 +295,7 @@ void daObjVyasi::Act_c::process_sag_main() {
 /* 00000AD8-00000CC0       .text process_sagWind_init__Q210daObjVyasi5Act_cFv */
 int daObjVyasi::Act_c::process_sagWind_init() {
     /* Nonmatching */
-    if (SetStopJointAnimation(mpBckData, 1.0f, 3.0f)) {
+    if (SetStopJointAnimation(M_bck_data, 1.0f, 3.0f)) {
         f32 dist = mEkszsPos.getSquareDistance(current.pos);
         dist = std::sqrtf(dist);
         f32 f = dist > 2800.0f ? 2800.0f : dist;
@@ -330,7 +330,7 @@ void daObjVyasi::Act_c::process_sagWind_main() {
 
 /* 00000D20-00000D54       .text process_toNormal_init__Q210daObjVyasi5Act_cFv */
 int daObjVyasi::Act_c::process_toNormal_init() {
-    return SetStopJointAnimation(mpBckData, 1.0f, 0.0f);
+    return SetStopJointAnimation(M_bck_data, 1.0f, 0.0f);
 }
 
 /* 00000D54-00000E10       .text process_toNormal_main__Q210daObjVyasi5Act_cFv */
@@ -354,7 +354,7 @@ void daObjVyasi::Act_c::process_toNormal_main() {
 
 /* 00000E10-00000E74       .text process_normal_init__Q210daObjVyasi5Act_cFv */
 int daObjVyasi::Act_c::process_normal_init() {
-    if (SetStopJointAnimation(mpBckData, -1.0f, 0.0f)) {
+    if (SetStopJointAnimation(M_bck_data, -1.0f, 0.0f)) {
         mpMorf->setPlaySpeed(0.0f);
         return 1;
     }
@@ -413,20 +413,26 @@ BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
 /* Nonmatching */
 bool daObjVyasi::Act_c::create_heap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 7);
-    JUT_ASSERT(0x47A, modelData != NULL);
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 7);
+    JUT_ASSERT(0x47A, mdl_data != NULL);
 
-    mpBckData = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, 4);
-    JUT_ASSERT(0x47F, mpBckData != NULL);
+    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, 4);
+    JUT_ASSERT(0x47F, M_bck_data != NULL);
 
-    if (mpBckData != NULL && modelData != NULL) {
-        mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, mpBckData, 0, 1.0f,
+    if (M_bck_data != NULL && mdl_data != NULL) {
+        mpMorf = new mDoExt_McaMorf(mdl_data, NULL, NULL, M_bck_data, 0, 1.0f,
                                     0, -1, 1, NULL, 0x00000000, 0x11000002);
     }
 
-    bool ret = mpBckData != NULL && mpMorf != NULL;
-    if (ret) {
-        ret = mpMorf->getModel() != NULL;
+    bool ret = false;
+    bool tmp = ret;
+    if (M_bck_data != 0 && mpMorf != 0) {
+        tmp = true;
+    }
+    if (tmp) {
+        if (mpMorf->getModel() != 0) {
+            ret = true;
+        }
     }
     return ret;
 }
@@ -468,10 +474,10 @@ cPhs_State daObjVyasi::Act_c::_create() {
             }
 
             J3DModel* model = mpMorf->getModel();
-            J3DModelData* modelData = model->getModelData();
+            J3DModelData* mdl_data = model->getModelData();
             model->setUserArea((u32)this);
             for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-                modelData->getJointNodePointer(i)->setCallBack(JointNodeCallBack);
+                mdl_data->getJointNodePointer(i)->setCallBack(JointNodeCallBack);
             }
 
             for (u16 i = 0; i < 14; i++) {
@@ -502,62 +508,51 @@ void daObjVyasi::Act_c::set_mtx() {
 
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::calc_dif_angle() {
-    /* Nonmatching */
-    csXyz ang(0, 0, 0);
-
-    if (mState != 2) {
-        return;
-    }
-
-    s16 step = 2;
     for (int i = 0; i < 14; i++) {
-        switch (joint_kind_table[i]) {
-        case 2: {
-            f32 t = m0504 * cM_ssin(m0508[i]);
-            ang.x = (s16)(20.0f * t);
-            ang.y = (s16)(40.0f * t);
-            ang.z = (s16)(40.0f * t);
-            break;
-        }
-        case 1: {
-            f32 t = m0504 * cM_ssin(m0508[i]);
-            ang.x = (s16)(120.0f * t);
-            ang.y = (s16)(180.0f * t);
-            ang.z = (s16)(220.0f * t);
-            if (i == 1) {
-                ang.z += (s16)(-3200.0f + 3200.0f * m0504);
-            }
-            break;
-        }
-        case 0: {
-            static csXyz l_rot[14] = {
-                csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
-                csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
-            };
-            f32 t = m0504 * cM_ssin(m0508[i]);
-            ang.x = (s16)(700.0f * t);
-            ang.y = (s16)(1700.0f * t);
-            ang.z = (s16)(1700.0f * t);
-            ang.x += l_rot[i].x;
-            ang.y += l_rot[i].y;
-            ang.z += l_rot[i].z;
-            step = 1;
-            break;
-        }
-        case 3: {
-            if (m19C4 == 0 && i > 1 && i == 6) {
-                ang.z = (s16)(m19CC * cM_ssin(m19D0));
-                cLib_addCalcAngleS2(&m03AC[i].x, ang.x, step, 0x4000);
-                cLib_addCalcAngleS2(&m03AC[i].y, ang.y, step, 0x4000);
-                cLib_addCalcAngleS2(&m03AC[i].z, ang.z, step, 0x4000);
-                if (joint_kind_table[i] == 0) {
-                    m0508[i] += (s16)(1.5f * ((f32)m0524[i] - 176.0f));
-                } else {
-                    m0508[i] += m0524[i];
+        csXyz ang(0, 0, 0);
+        s16 step = 2;
+
+        if (mState == 2) {
+            if (joint_kind_table[i] == 2) {
+                f32 t = m0504 * cM_ssin(m0508[i]);
+                ang.x = (s16)(20.0f * t);
+                ang.y = (s16)(40.0f * t);
+                ang.z = (s16)(40.0f * t);
+            } else if (joint_kind_table[i] == 1) {
+                f32 t = m0504 * cM_ssin(m0508[i]);
+                ang.x = (s16)(120.0f * t);
+                ang.y = (s16)(180.0f * t);
+                ang.z = (s16)(220.0f * t);
+                if (i == 1) {
+                    ang.z += (s16)(-3200.0f + 3200.0f * m0504);
                 }
+            } else if (joint_kind_table[i] == 0) {
+                static csXyz l_rot[14] = {
+                    csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+                    csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
+                };
+                f32 t = m0504 * cM_ssin(m0508[i]);
+                ang.x = (s16)(700.0f * t);
+                ang.y = (s16)(1700.0f * t);
+                ang.z = (s16)(1700.0f * t);
+                ang.x += l_rot[i].x;
+                ang.y += l_rot[i].y;
+                ang.z += l_rot[i].z;
+                step = 1;
             }
-            break;
+        } else if (mState == 3) {
+            if (m19C4 == 0 && ((u32)i <= 1 || i == 6)) {
+                ang.z = (s16)(m19CC * cM_ssin(m19D0));
+            }
         }
+
+        cLib_addCalcAngleS2(&m03AC[i].x, ang.x, step, 0x4000);
+        cLib_addCalcAngleS2(&m03AC[i].y, ang.y, step, 0x4000);
+        cLib_addCalcAngleS2(&m03AC[i].z, ang.z, step, 0x4000);
+        if (joint_kind_table[i] == 0) {
+            m0508[i] += (s16)(1.5f * (f32)m0524[i]);
+        } else {
+            m0508[i] += m0524[i];
         }
     }
 }
