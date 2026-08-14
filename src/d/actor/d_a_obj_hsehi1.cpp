@@ -278,7 +278,7 @@ BOOL daObj_hsh_c::init() {
             setAction(&waitAction, NULL);
         } else {
             onOffDraw();
-            setAction(&waitAction, NULL);
+            setAction(&offAction, NULL);
         }
     } else {
         setAction(&waitAction, NULL);
