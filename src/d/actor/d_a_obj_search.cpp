@@ -233,7 +233,7 @@ void daObj_Search::Act_c::modeSearchRnd() {
 
 /* 800FE200-800FE244       .text modeSearchPathInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPathInit() {
-    if (!is_path_info()) {
+    if (is_path_info() == false) {
         modeProc(PROC_INIT_e, MODE_SEARCH_RND_e);
     }
 }
@@ -270,7 +270,7 @@ void daObj_Search::Act_c::modeToSearch() {
     }
 
     if (b1 && b2) {
-        modeProc(PROC_INIT_e, MODE_SEARCH_RND_e);
+        modeProc(PROC_INIT_e, MODE_SEARCH_PATH_e);
     }
 }
 
@@ -279,7 +279,7 @@ void daObj_Search::Act_c::modeToStopInit() {
     m7B0 = mAngle[0].y;
 
     if (dComIfGs_isEventBit(0x201)) {
-        JAIZelBasic::zel_basic->seStart(0x6939, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        JAIZelBasic::zel_basic->seStart(0x6939, &eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
 }
 
@@ -299,7 +299,7 @@ void daObj_Search::Act_c::modeFindInit() {
         dComIfGs_onEventBit(0x340);
     }
 
-    if (setID != 2) {
+    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
         JAIZelBasic::zel_basic->seStart(0x834, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
 
@@ -386,18 +386,13 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c* i_actor, cXyz* o_p
     }
 }
 
-/* 801002D4-801002E0       .text attr__Q212daObj_Search5Act_cCFv */
-const daObj_Search::Attr_c* daObj_Search::Act_c::attr() const {
-    return &m_attr;
-}
-
 /* 801002E0-8010035C       .text SetArgData__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::SetArgData() {
     u32 param = fopAcM_GetParam(this);
     m7E2 = param >> 24;
-    m837 = (param >> 8) & 0xff;
+    m837 = (param >> 16) & 0xff;
     m836 = param & 0xff;
-    m8D0 = (param >> 16) & 0xff;
+    m8D0 = (param >> 8) & 0xff;
     if (m8D0 == 0xff) {
         m8D0 = 0;
     }
@@ -408,7 +403,7 @@ void daObj_Search::Act_c::SetArgData() {
         scale.set(1.27f, 1.27f, 1.27f);
     }
 
-    m85C = (current.angle.x >> 8) & 0xff;
+    m85C = (home.angle.x >> 8) & 0xff;
 }
 
 /* 8010035C-8010071C       .text CreateInit__Q212daObj_Search5Act_cFv */
@@ -621,13 +616,13 @@ bool daObj_Search::Act_c::_execute() {
 
     eyePos = current.pos;
     if (abs(m7B0 - mAngle[0].y) != 0 && mMode != MODE_STOP_e) {
-        JAIZelBasic::zel_basic->seStart(0x6131, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        JAIZelBasic::zel_basic->seStart(0x6131, &eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
 
     mModel->entry();
 
     Vec zero = {0.0f, 0.0f, 0.0f};
-    PSMTXCopy(mModel->getAnmMtx(0) + 0xf0, mDoMtx_stack_c::get());
+    PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0xf0), mDoMtx_stack_c::get());
     PSMTXMultVec(mDoMtx_stack_c::get(), &zero, &m600);
 
     set_mtx_light_A();
@@ -699,7 +694,7 @@ void daObj_Search::Act_c::set_mtx_light_A() {
     cXyz lightPos(0.0f, 0.0f, 0.0f);
     cXyz lightDir(0.0f, 0.0f, attr()->m04);
 
-    PSMTXCopy(mModel->getAnmMtx(0) + 0xf0, mDoMtx_stack_c::get());
+    PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0xf0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::transM(1004.0f, 376.0f, 1111.0f);
     mDoMtx_stack_c::XYZrotM(0, -0xc8, 0);
     PSMTXMultVec(mDoMtx_stack_c::get(), &lightPos, &m624[0]);
@@ -756,7 +751,7 @@ void daObj_Search::Act_c::set_mtx_light_B() {
     cXyz lightDir(0.0f, 0.0f, attr()->m04);
     cXyz center(0.0f, 0.0f, attr()->m04);
 
-    PSMTXCopy(mModel->getAnmMtx(0) + 0xf0, mDoMtx_stack_c::get());
+    PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0xf0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::transM(742.0f, -402.0f, -1010.0f);
     mDoMtx_stack_c::XYZrotM(-0x8000, 0xc8, 0);
     PSMTXMultVec(mDoMtx_stack_c::get(), &center, &m624[1]);
@@ -806,7 +801,7 @@ void daObj_Search::Act_c::set_moveBG_mtx_base() {
 
 /* 80101C30-80101CB0       .text set_moveBG_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
-    PSMTXCopy(mModel->getAnmMtx(0) + 0xf0, mDoMtx_stack_c::get());
+    PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0xf0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::XYZrotM(0, 0, -0x4000);
     mDoMtx_stack_c::transM(40.0f, -270.0f, 30.0f);
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtxBeam[0]);
@@ -815,7 +810,7 @@ void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
 
 /* 80101CB0-80101D30       .text set_moveBG_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
-    PSMTXCopy(mModel->getAnmMtx(0) + 0x120, mDoMtx_stack_c::get());
+    PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0x120), mDoMtx_stack_c::get());
     mDoMtx_stack_c::XYZrotM(0, 0, -0x4000);
     mDoMtx_stack_c::transM(-1010.0f, -270.0f, 9585.62f);
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtxBeam[1]);
@@ -833,28 +828,28 @@ void daObj_Search::Act_c::bg_check() {
 }
 
 /* 80101D94-8010234C       .text player_check__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::player_check() {
+bool daObj_Search::Act_c::player_check() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    cXyz diff1 = player->current.pos - m624[0];
-    f32 dist1 = diff1.abs();
-    cXyz diff2 = player->current.pos - m624[1];
-    f32 dist2 = diff2.abs();
+    cXyz diff = player->current.pos - m624[0];
+    f32 dist1 = diff.abs();
+    diff = player->current.pos - m624[1];
+    f32 dist2 = diff.abs();
 
     mCps[0].SetStartEnd(m624[0], m63C[0]);
-    mCps[0].SetR(attr()->m28);
+    mCps[0].SetR(m_attr.m28);
 
     dComIfG_Ccsp()->Set(&mCps[0]);
     if (mCps[0].ChkCoHit()) {
-        fopAc_ac_c* hitActor = mCps[0].GetAc();
+        fopAc_ac_c* hitActor = mCps[0].GetCoHitAc();
         cXyz toActor = hitActor->current.pos - m624[0];
         cXyz beamDir = m63C[0] - m624[0];
         beamDir.normZP();
 
         f32 dot = beamDir.inprod(toActor) - 0.2f;
         mLight.mPos = m624[0] + beamDir * dot;
-        mLight.mColor.r = attr()->m50;
-        mLight.mColor.g = attr()->m50;
-        mLight.mPower = attr()->m54;
+        mLight.mColor.r = m_attr.m50;
+        mLight.mColor.g = m_attr.m50;
+        mLight.mPower = m_attr.m54;
 
         if (((base_process_class*)hitActor)->mProcName != 0xa9 || dist1 < 1000000.0f || dist2 >= 1000000.0f) {
             return false;
@@ -868,20 +863,20 @@ BOOL daObj_Search::Act_c::player_check() {
     }
 
     mCps[1].SetStartEnd(m624[1], m63C[1]);
-    mCps[1].SetR(attr()->m28);
+    mCps[1].SetR(m_attr.m28);
 
     dComIfG_Ccsp()->Set(&mCps[1]);
     if (mCps[1].ChkCoHit()) {
-        fopAc_ac_c* hitActor = mCps[1].GetAc();
+        fopAc_ac_c* hitActor = mCps[1].GetCoHitAc();
         cXyz toActor = hitActor->current.pos - m624[1];
         cXyz beamDir = m63C[1] - m624[1];
         beamDir.normZP();
 
         f32 dot = beamDir.inprod(toActor) - 0.2f;
         mLight.mPos = m624[1] + beamDir * dot;
-        mLight.mColor.r = attr()->m50;
-        mLight.mColor.g = attr()->m50;
-        mLight.mPower = attr()->m54;
+        mLight.mColor.r = m_attr.m50;
+        mLight.mColor.g = m_attr.m50;
+        mLight.mPower = m_attr.m54;
 
         if (dist1 < 1000000.0f || dist2 >= 1000000.0f) {
             return false;
@@ -904,170 +899,12 @@ BOOL daObj_Search::Act_c::player_check() {
 
     f32 dot = beamDir.inprod(toActor) - 0.2f;
     mLight.mPos = m624[0] + beamDir * dot;
-    mLight.mColor.r = attr()->m50;
-    mLight.mColor.g = attr()->m50;
-    mLight.mPower = attr()->m54;
+    mLight.mColor.r = m_attr.m50;
+    mLight.mColor.g = m_attr.m50;
+    mLight.mPower = m_attr.m54;
 
     return false;
 }
-
-/* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */
-bool daObj_Search::Act_c::_draw() {
-    if (attr()->m01 != 0) {
-        return true;
-    }
-
-    if (mMode == MODE_TO_STOP_e || mMode == MODE_FIND_e) {
-        // skip frustum culling for these modes
-    } else {
-        mDoLib_clipper::mClipper.setFar(1000000.0f);
-        mDoLib_clipper::mClipper.calcViewFrustum();
-
-        if (attr()->m44 == 0) {
-            m7B8 = fopAcM_checkCullingBox(mModel->getBaseTRMtx(), -1000.0f, 0.0f, -1000.0f, 1500.0f, 1000.0f, 1500.0f);
-        }
-        if (attr()->m45 == 0) {
-            m7B6 = fopAcM_checkCullingBox(mBeamModel[0]->getBaseTRMtx(), -600.0f, -600.0f, -100.0f, 600.0f, 600.0f, 9585.62f);
-        }
-        if (attr()->m46 == 0) {
-            m7B7 = fopAcM_checkCullingBox(mBeamModel[1]->getBaseTRMtx(), -600.0f, -600.0f, -100.0f, 600.0f, 600.0f, 9585.62f);
-        }
-
-        mDoLib_clipper::mClipper.setFar(mDoLib_clipper::mSystemFar);
-        mDoLib_clipper::mClipper.calcViewFrustum();
-    }
-
-    if (m7B8 == 0) {
-        if (m836 == 1) {
-            g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
-            tevStr.mColorC0 = g_env_light.mActorC0;
-            tevStr.mColorK0.r = g_env_light.mActorK0.r;
-            tevStr.mColorK0.g = g_env_light.mActorK0.g;
-            tevStr.mColorK0.b = g_env_light.mActorK0.b;
-        } else {
-            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        }
-        g_env_light.setLightTevColorType(mModel, &tevStr);
-        mDoExt_modelEntryDL(mModel);
-    }
-
-    if (m7B6 == 0) {
-        mDoExt_modelUpdateDL(mBeamModel[0]);
-        if (m77E > 0x80) {
-            dComIfGd_setAlphaModel(2, m71C, 0x20);
-            dComIfGd_getAlphaModelColor().r = m82C[0];
-            dComIfGd_getAlphaModelColor().g = m82C[1];
-            dComIfGd_getAlphaModelColor().b = 0;
-            dComIfGd_getAlphaModelColor().a = 0;
-        }
-    }
-
-    if (m7B7 == 0) {
-        mDoExt_modelUpdateDL(mBeamModel[1]);
-        if (m77E > 0x80) {
-            dComIfGd_setAlphaModel(2, m74C, 0x20);
-            dComIfGd_getAlphaModelColor().r = m82C[0];
-            dComIfGd_getAlphaModelColor().g = m82C[1];
-            dComIfGd_getAlphaModelColor().b = 0;
-            dComIfGd_getAlphaModelColor().a = 0;
-        }
-    }
-
-    J3DModel* beamModel = mBeamModel[0];
-    J3DTexture* texture = beamModel->getModelData()->getTexture();
-    texture->getResTIMG(0)->alphaEnabled = m77E;
-
-    if (attr()->m47 != 0) {
-        static GXColor color_ok = {0, 0xFF, 0, 0x80};
-        static GXColor color_ng = {0xFF, 0, 0, 0x80};
-        GXColor color = color_ng;
-        if (m8EE != 0) {
-            color = color_ok;
-        }
-        dLib_debugDrawFan(m8D4, m8E0, m8EC, m8E4, color);
-    }
-
-    return true;
-}
-
-/* 801026F8-8010283C       .text _delete__Q212daObj_Search5Act_cFv */
-bool daObj_Search::Act_c::_delete() {
-    dKy_plight_cut(&mLight);
-
-    if (mBgWBeam[0] != NULL && mBgWBeam[0]->ChkUsed()) {
-        dComIfG_Bgsp()->Release(mBgWBeam[0]);
-    }
-    if (mBgWBeam[1] != NULL && mBgWBeam[1]->ChkUsed()) {
-        dComIfG_Bgsp()->Release(mBgWBeam[1]);
-    }
-    if (mBgW != NULL && mBgW->ChkUsed()) {
-        dComIfG_Bgsp()->Release(mBgW);
-    }
-
-    dComIfG_resDelete(&mPhs, m_arc_name);
-
-    mSmokeE.end();
-    if (JAIZelBasic::zel_basic->checkSePlaying(0x834)) {
-        JAIZelBasic::zel_basic->seStop(0x834, 0);
-    }
-
-    return true;
-}
-
-/* 8010283C-80102844       .text _isdelete__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::_isdelete() {
-    return true;
-}
-
-/* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-cPhs_State daObj_Search::Mthd::Create(void* i_this) {
-    return static_cast<daObj_Search::Act_c*>(i_this)->_create();
-}
-
-/* 80102864-80102884       .text Delete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Delete(void* i_this) {
-    return static_cast<daObj_Search::Act_c*>(i_this)->_delete();
-}
-
-/* 80102884-801028A4       .text Execute__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Execute(void* i_this) {
-    return static_cast<daObj_Search::Act_c*>(i_this)->_execute();
-}
-
-/* 801028A4-801028C4       .text Draw__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Draw(void* i_this) {
-    return static_cast<daObj_Search::Act_c*>(i_this)->_draw();
-}
-
-/* 801028C4-801028E4       .text IsDelete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::IsDelete(void* i_this) {
-    return static_cast<daObj_Search::Act_c*>(i_this)->_isdelete();
-}
-
-actor_method_class daObj_Search::Mthd::Table = {
-    (process_method_func)daObj_Search::Mthd::Create,
-    (process_method_func)daObj_Search::Mthd::Delete,
-    (process_method_func)daObj_Search::Mthd::Execute,
-    (process_method_func)daObj_Search::Mthd::IsDelete,
-    (process_method_func)daObj_Search::Mthd::Draw,
-};
-
-actor_process_profile_definition g_profile_OBJ_SEARCH = {
-    /* Layer ID     */ fpcLy_CURRENT_e,
-    /* List ID      */ 0x0003,
-    /* List Prio    */ fpcPi_CURRENT_e,
-    /* Proc Name    */ fpcNm_OBJ_SEARCH_e,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObj_Search::Act_c),
-    /* Size Other   */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Draw Prio    */ fpcDwPi_OBJ_SEARCH_e,
-    /* Actor SubMtd */ &daObj_Search::Mthd::Table,
-    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
-};
 
 /* 8010234C-80102384       .text set_path_info__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_path_info() {
@@ -1077,6 +914,6 @@ void daObj_Search::Act_c::set_path_info() {
 }
 
 /* 80102384-80102398       .text is_path_info__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::is_path_info() {
+bool daObj_Search::Act_c::is_path_info() {
     return m837 != 0xff;
 }

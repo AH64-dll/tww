@@ -133,9 +133,9 @@ namespace daObj_Search {
         void set_moveBG_mtx_light_A();
         void set_moveBG_mtx_light_B();
         void bg_check();
-        BOOL player_check();
+        bool player_check();
         void set_path_info();
-        BOOL is_path_info();
+        bool is_path_info();
         bool _draw();
         bool _delete();
         BOOL _isdelete();
@@ -203,7 +203,7 @@ namespace daObj_Search {
         /* 0x84C */ fpc_ProcID mChildId;
         /* 0x850 */ u32 m850;
         /* 0x854 */ request_of_phase_process_class mPhs;
-        /* 0x85C */ u32 m85C;
+        /* 0x85C */ s32 m85C;
         /* 0x860 */ u8 m860;
         /* 0x861 */ u8 m861[0x864 - 0x861];
         /* 0x864 */ dBgS_ObjLinChk mObjLinChk;
