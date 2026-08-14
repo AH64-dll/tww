@@ -746,8 +746,69 @@ static void bo2_move(bo_class* i_this) {
 }
 
 /* 0000380C-00003AD4       .text bo3_move__FP8bo_class */
-static void bo3_move(bo_class*) {
+static void bo3_move(bo_class* i_this) {
     /* Nonmatching */
+    switch (i_this->m2C5) {
+    case 0x14:
+        if (i_this->m364 != 0) {
+            i_this->m364--;
+        }
+        if (i_this->m364 == 0) {
+            i_this->mCyl.OffTgSetBit();
+            i_this->mSph.OffTgSetBit();
+            i_this->mSph.OffCoSetBit();
+            i_this->mCyl.ClrTgHit();
+            i_this->mSph.ClrTgHit();
+            csXyz angle;
+            angle.x = i_this->current.angle.x;
+            angle.y = i_this->m348;
+            angle.z = i_this->current.angle.z;
+            if (i_this->m2CE == 0) {
+                fopAcM_create(0xD7, 2, &i_this->m304, i_this->current.roomNo, &angle, &i_this->scale, 0, 0);
+            }
+            i_this->m2CE = 0;
+            i_this->mType = 1;
+            anm_init(i_this, 0x13, 5.0f, 0, 1.0f, -1, 1);
+            dScnPly_ply_c::nextPauseTimer = 4;
+            i_this->m2C5++;
+        }
+        break;
+    case 0x15:
+        if (i_this->mpMorf2->checkFrame(0xC4)) {
+            int dropType = 0;
+            if (i_this->m2C1 != 0) {
+                dropType = 3;
+                i_this->m366[1] = 0x32;
+            }
+            if (i_this->m2D0 != 3) {
+                fopAcM_createDisappear(i_this, &i_this->current.pos, 5, dropType, i_this->stealItemBitNo);
+            }
+        }
+        if (i_this->mpMorf2->isStop()) {
+            if (i_this->m2C1 != 0) {
+                i_this->m2C5++;
+            } else {
+                g_dComIfG_gameInfo.save.onActor(i_this->setID, fopAcM_GetHomeRoomNo(i_this));
+                fopAcM_delete(i_this);
+            }
+        }
+        break;
+    case 0x16:
+        if (i_this->m366[1] == 0) {
+            fopAcM_create(0xD6, 1, &i_this->current.pos, i_this->current.roomNo, &i_this->current.angle, &i_this->scale, 0, 0);
+            g_dComIfG_gameInfo.save.onActor(i_this->setID, fopAcM_GetHomeRoomNo(i_this));
+            fopAcM_delete(i_this);
+        }
+        break;
+    }
+
+    if (i_this->mSmokeEcallBack.getEmitter() != NULL && i_this->m366[2] == 0) {
+        i_this->mSmokeEcallBack.getEmitter()->mGlobalPrmColor.a = i_this->m376;
+        i_this->m376 -= 4;
+        if (i_this->m376 < 0) {
+            i_this->mSmokeEcallBack.end();
+        }
+    }
 }
 
 /* 00003AD4-00003E8C       .text bo4_move__FP8bo_class */

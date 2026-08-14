@@ -42,7 +42,8 @@ public:
     /* 0x2CB */ u8 m2CB;
     /* 0x2CC */ u8 m2CC;
     /* 0x2CD */ u8 m2CD;
-    /* 0x2CE */ u8 m2CE[0x2D0 - 0x2CE];
+    /* 0x2CE */ u8 m2CE;
+    /* 0x2CF */ u8 m2CF;
     /* 0x2D0 */ u8 m2D0;
     /* 0x2D1 */ u8 m2D1[0x2D4 - 0x2D1];
     /* 0x2D4 */ s32 m2D4;
