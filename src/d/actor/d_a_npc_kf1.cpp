@@ -313,18 +313,16 @@ void daNpc_Kf1_c::play_btp_anm() { /* Nonmatching */
 }
 
 /* 00000C08-00000CA4       .text setAnm_anm__11daNpc_Kf1_cFPQ211daNpc_Kf1_c9anm_prm_c */
-void daNpc_Kf1_c::setAnm_anm(anm_prm_c* i_anmPrmP) { /* Nonmatching */
-    if (i_anmPrmP->mAnmNum < 0) {
+void daNpc_Kf1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
+    if (i_anmPrmP->mAnmNum < 0 || mAnmNo == i_anmPrmP->mAnmNum) {
         return;
     }
-    if (mAnmNo != i_anmPrmP->mAnmNum) {
-        dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed,
-                         bckResID(i_anmPrmP->mAnmNum), -1, mArcName);
-        mAnmNo = i_anmPrmP->mAnmNum;
-        mAnmResult = 0;
-        m79D = 0;
-        mPrevMorfFrame = 0.0f;
-    }
+    dNpc_setAnmIDRes(mpMorf, i_anmPrmP->mLoopMode, i_anmPrmP->mMorf, i_anmPrmP->mSpeed,
+                     bckResID(i_anmPrmP->mAnmNum), -1, mArcName);
+    mAnmNo = i_anmPrmP->mAnmNum;
+    mAnmResult = 0;
+    m79D = 0;
+    mPrevMorfFrame = 0.0f;
 }
 
 /* 00000CA4-00000D14       .text setAnm_NUM__11daNpc_Kf1_cFii */
@@ -503,7 +501,7 @@ u16 daNpc_Kf1_c::next_msgStatus(u32* i_msgNo) { /* Nonmatching */
 }
 
 /* 000010F4-000011DC       .text getMsg_KF1_0__11daNpc_Kf1_cFv */
-u32 daNpc_Kf1_c::getMsg_KF1_0() { /* Nonmatching */
+u32 daNpc_Kf1_c::getMsg_KF1_0() {
     if (mTalkStt != 0) {
         return 0x1C38;
     }
@@ -513,12 +511,11 @@ u32 daNpc_Kf1_c::getMsg_KF1_0() { /* Nonmatching */
         }
     }
     if (dComIfGs_isEventBit(0xB02)) {
-        s32 eventReg = dComIfGs_getEventReg(0xBCFF);
-        if (dKy_daynight_check() == 1 || (dComIfGs_isEventBit(0x2780) && (eventReg & 1) == 0)) {
+        u8 eventReg = dComIfGs_getEventReg(0xBCFF);
+        if (dKy_daynight_check() == 1 || !dComIfGs_isEventBit(0x2780) || (eventReg & 1) != 0) {
             return 0x1C26;
-        } else {
-            return 0x1C27;
         }
+        return 0x1C27;
     }
     return 0x1C21;
 }
@@ -526,7 +523,7 @@ u32 daNpc_Kf1_c::getMsg_KF1_0() { /* Nonmatching */
 /* 000011DC-00001218       .text getMsg__11daNpc_Kf1_cFv */
 u32 daNpc_Kf1_c::getMsg() { /* Nonmatching */
     u32 msgNo = 0;
-    if (mType2 == 0) {
+    if ((s32)mType2 == 0) {
         msgNo = getMsg_KF1_0();
     }
     return msgNo;
@@ -779,7 +776,7 @@ BOOL daNpc_Kf1_c::decideType(int i_type) { /* Nonmatching */
     mType = 1;
     mType2 = 0;
     strcpy(mArcName, "Kf");
-    if (mType != -1 && mType2 != -1) {
+    if (mType != -1 && (s8)mType2 != -1) {
         return TRUE;
     }
     return FALSE;
@@ -1269,10 +1266,12 @@ BOOL daNpc_Kf1_c::set_action(ProcFunc i_action, void* i_param_2) {
 }
 
 /* 00002F88-00003030       .text setStt__11daNpc_Kf1_cFSc */
-void daNpc_Kf1_c::setStt(s8 i_status) { /* Nonmatching */
-    s8 prev_status = mStatus;
+void daNpc_Kf1_c::setStt(s8 i_status) {
+    u8 prev_status = mStatus;
     mStatus = i_status;
     switch (mStatus) {
+        case 0:
+            break;
         case 1:
             mOrder = 0;
             m794 = cLib_getRndValue(0x3C, 0x5A);
@@ -1453,7 +1452,7 @@ BOOL daNpc_Kf1_c::talk_1() { /* Nonmatching */
 }
 
 /* 00003670-00003754       .text wait_action1__11daNpc_Kf1_cFPv */
-BOOL daNpc_Kf1_c::wait_action1(void*) { /* Nonmatching */
+BOOL daNpc_Kf1_c::wait_action1(void*) {
     switch (mPhase) {
         case 0:
             setStt(3);
@@ -1471,13 +1470,14 @@ BOOL daNpc_Kf1_c::wait_action1(void*) { /* Nonmatching */
                     m77C = talk_1();
                     break;
                 case 3:
-                case 4:
                     m77C = walk_1();
                     break;
             }
             if (mPhase > 1) {
                 orderTsuboEvent();
             }
+            break;
+        case 9:
             break;
     }
     return TRUE;

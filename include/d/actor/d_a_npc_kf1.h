@@ -181,12 +181,12 @@ public:
     /* 0x7F5 */ s8 mBtpNo;
     /* 0x7F6 */ s8 mAnmNo;
     /* 0x7F7 */ s8 mOrder;
-    /* 0x7F8 */ u8 mStatus;
+    /* 0x7F8 */ s8 mStatus;
     /* 0x7F9 */ s8 mPrevStatus;
     /* 0x7FA */ u8 mLookMode;
     /* 0x7FB */ s8 mType;
     /* 0x7FC */ u8 mType2;
-    /* 0x7FD */ u8 mPhase;
+    /* 0x7FD */ s8 mPhase;
     /* 0x7FE */ u8 m7FE;
     /* 0x7FF */ u8 field_0x7ff;
 };  // Size: 0x800
