@@ -439,9 +439,188 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     return TRUE;
 }
 
-/* 00004D50-000050DC       .text daBO_Create__FP10fopAc_ac_c */
+static dCcD_SrcSph head_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK2000,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ 0x5,
+        /* SrcObjTg  Type    */ 0xFF3DFEFF,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ 0x15,
+        /* SrcGObjAt Se      */ 6,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 15.0f,
+    }},
+};
+
+static dCcD_SrcSph foot_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0x75,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 15.0f,
+    }},
+};
+
+static dCcD_SrcCyl body_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0xFF1DFEFF,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    }},
+};
+
+static const u8 fire_j[10] = {1, 3, 5, 6, 8, 9, 0xA, 0xB, 0xC, 0xD};
+static const f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
+
 static cPhs_State daBO_Create(fopAc_ac_c* i_this) {
-    /* Nonmatching */
+    bo_class* bo = (bo_class*)i_this;
+
+    fopAcM_ct(i_this, bo_class);
+
+    cPhs_State res = dComIfG_resLoad(&bo->mPhase, "BO");
+    if (res == cPhs_COMPLEATE_e) {
+        bo->mType = fopAcM_GetParam(i_this);
+        bo->m2C1 = fopAcM_GetParam(i_this) >> 16;
+        if (bo->mType == 0xff) {
+            bo->mType = 0;
+        }
+        if (bo->m2C1 == 0xff) {
+            bo->m2C1 = 0;
+        }
+
+        cDT_NamePTbl* nameTbl = (cDT_NamePTbl*)((u8*)&g_dComIfG_gameInfo + 0x50AC);
+        bo->itemTableIdx = nameTbl->GetIndex("bbaba", 0);
+
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x3100)) {
+            return cPhs_ERROR_e;
+        }
+
+        if (bo->mType == 0 || bo->mType == 2) {
+            bo->cullMtx = bo->mpMorf->getModel()->getBaseTRMtx();
+        } else {
+            bo->cullMtx = bo->mpMorf2->getModel()->getBaseTRMtx();
+        }
+
+        fopAcM_setCullSizeBox(i_this, -150.0f, 0.0f, -150.0f, 150.0f, 330.0f, 150.0f);
+
+        bo->attention_info.flags = 0;
+        bo->max_health = 1;
+        bo->health = 1;
+        bo->m398 = 1.0f;
+
+        bo->mStts.Init(0xff, 0x1, i_this);
+        bo->mAction = 0;
+        bo->m2C5 = 0;
+
+        if (bo->mType == 0) {
+            bo->mSph.Set(head_co_sph_src);
+            bo->mSph.SetStts(&bo->mStts);
+            bo->stealItemLeft = 3;
+            bo->mCyl.Set(body_cyl_src);
+            bo->mCyl.SetStts(&bo->mStts);
+            bo->mSph.OffAtSetBit();
+            bo->mSph.OffAtSetBit();
+            bo->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
+            bo->mEnemyIce.mpActor = bo;
+            bo->mEnemyIce.mWallRadius = 15.0f;
+            bo->mEnemyIce.mCylHeight = 160.0f;
+            bo->mEnemyFire.mpMcaMorf = bo->mpMorf;
+            bo->mEnemyFire.mpActor = bo;
+            for (int i = 0; i < 10; i++) {
+                bo->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+                bo->mEnemyFire.mParticleScale[i] = fire_sc[i];
+            }
+        }
+
+        if (bo->mType == 0 || bo->mType == 1) {
+            bo->mSph2.Set(foot_co_sph_src);
+            bo->mSph2.SetStts(&bo->mStts);
+        }
+
+        if (bo->mType == 1) {
+            bo->m366 = (s16)(15.0f + g_regHIO.mChild[8].mFloatRegs[14]);
+            anm_init(bo, 8, 0.0f, 0, 0.0f, -1, 1);
+            bo->mAction = 4;
+            bo->m2C5 = 0x33;
+            bo->m2D0 = 3;
+            bo->mpMorf2->play(NULL, 0, 0);
+            draw_SUB(bo);
+        }
+
+        bo->m34E = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+        bo->m348 = bo->m34E;
+        bo->m304 = bo->current.pos;
+
+        if (bo->mType == 2) {
+            bo->m394 = 100.0f;
+            bo->attention_info.flags = 0;
+            bo->mAction = 3;
+            bo->m2C5 = 0x1e;
+            bo->mpMorf->play(NULL, 0, 0);
+            draw_SUB(bo);
+        }
+
+        daBO_Execute(bo);
+    }
+    return res;
 }
 
 static actor_method_class l_daBO_Method = {
