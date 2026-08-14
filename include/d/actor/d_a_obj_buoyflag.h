@@ -53,10 +53,10 @@ namespace daObjBuoyflag {
         void calc(Act_c*);
         void update(Act_c*);
 
-        void calc_pos_gravity(int, int) {}
-        void calc_pos_spd(int, int) {}
-        void calc_pos_spring(int, int) {}
-        void calc_pos_wave(int, int) {}
+        void calc_pos_gravity(int, int);
+        void calc_pos_spd(int, int);
+        void calc_pos_spring(int, int);
+        void calc_pos_wave(int, int);
 
         static cXyz M_hasi_nrm[11];
         static bool M_hasi_nrm_flag;

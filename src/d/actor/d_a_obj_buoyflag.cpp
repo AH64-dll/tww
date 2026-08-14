@@ -906,6 +906,66 @@ void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz* i_target, const c
     }
 }
 
+
+
+
+
+inline void daObjBuoyflag::Packet_c::calc_pos_spring(int row, int col) {
+    mC80 = cXyz::Zero;
+    DrawVtx_c* other = &mDrawVtx[mB8C ^ 1];
+    cXyz* vtx = &other->mPos[row * 7 + col];
+    if (col > 0) {
+        calc_pos_spring_near(vtx, &other->mPos[row * 7 + col - 1], 12.5f, L_attr.m00);
+    }
+    if (col < 6) {
+        calc_pos_spring_near(vtx, &other->mPos[row * 7 + col + 1], 12.5f, L_attr.m00);
+    }
+    if (row > 0) {
+        calc_pos_spring_near(vtx, &other->mPos[(row - 1) * 7 + col], 12.5f, 0.8f * L_attr.m00);
+    }
+    if (row < 4) {
+        calc_pos_spring_near(vtx, &other->mPos[(row + 1) * 7 + col], 12.5f, L_attr.m00);
+    }
+}
+
+inline void daObjBuoyflag::Packet_c::calc_pos_gravity(int row, int col) {
+    f32 rowInvWeight = 0.25f * (f32)(4 - row);
+    f32 colWeight = 0.16666667f * (f32)col;
+    mC80 += mC50 * (0.5f * (rowInvWeight + colWeight) * L_attr.m04);
+}
+
+inline void daObjBuoyflag::Packet_c::calc_pos_wave(int row, int col) {
+    DrawVtx_c* prev = &mDrawVtx[mB8C ^ 1];
+    cXyz* nrm = &prev->mNrm[row * 7 + col];
+    f32 rowWeight = 0.25f * (f32)row - 0.5f;
+    f32 colWeight = 0.16666667f * (f32)col;
+    f32 weight = rowWeight * rowWeight + colWeight * colWeight;
+    weight = std::sqrtf(weight);
+    f32 phase = 32768.0f * weight;
+    f32 wave = 1.0f + 0.33333334f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
+    f32 dot = nrm->inprod(mC5C);
+    mC80 += *nrm * (dot * (wave * L_attr.m14 * (1.0f / L_attr.m08)));
+}
+
+inline void daObjBuoyflag::Packet_c::calc_pos_spd(int row, int col) {
+    f32 colWeight = 0.16666667f * (f32)col;
+
+    mPos[row * 7 + col] += mC80;
+
+    f32 waveWeight = -(0.6f + 0.4f * colWeight) * L_attr.m10;
+    cXyz windVec = mC5C;
+    f32 rndZ = 0.9f + cM_rndF(0.2f);
+    f32 rndY = 0.9f + cM_rndF(0.2f);
+    f32 rndX = 0.9f + cM_rndF(0.2f);
+    cXyz rnd(rndX, rndY, rndZ);
+    windVec.x *= rnd.x;
+    windVec.y *= rnd.y;
+    windVec.z *= rnd.z;
+    cXyz diff = mPos[row * 7 + col] - windVec;
+    cXyz scaled = diff * waveWeight;
+    mPos[row * 7 + col] += scaled;
+}
+
 /* 000015FC-00001BC0       .text calc_pos__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
     /* Nonmatching */
@@ -917,48 +977,16 @@ void daObjBuoyflag::Packet_c::calc_pos(daObjBuoyflag::Act_c* i_actor) {
     for (int row = 0; row < 5; row++) {
         f32 rowWeight = 0.25f * (f32)row - 0.5f;
         f32 rowInvWeight = 0.25f * (f32)(4 - row);
+        cXyz* curRow = &cur->mPos[row * 7];
+        cXyz* prevRow = &prev->mPos[row * 7];
+        cXyz* myRow = &mPos[row * 7];
         for (int col = 0; col < 7; col++) {
             if ((row != 0 || col != 0) && (row != 4 || col != 0)) {
-                cXyz* vtx = &prev->mPos[row * 7 + col];
-                mC80.set(0.0f, 0.0f, 0.0f);
-                DrawVtx_c* other = &mDrawVtx[mB8C ^ 1];
-                if (col > 0) {
-                    calc_pos_spring_near(vtx, &prev->mPos[row * 7 + col - 1], 12.5f, L_attr.m00);
-                }
-                if (col < 6) {
-                    calc_pos_spring_near(vtx, &prev->mPos[row * 7 + col + 1], 12.5f, L_attr.m00);
-                }
-                if (row > 0) {
-                    calc_pos_spring_near(vtx, &other->mPos[(row - 1) * 7 + col], 12.5f, 0.8f * L_attr.m00);
-                }
-                if (row < 4) {
-                    calc_pos_spring_near(vtx, &other->mPos[(row + 1) * 7 + col], 12.5f, L_attr.m00);
-                }
-
-                f32 colWeight = 0.16666667f * (f32)col;
-                mC80 += mC50 * (0.5f * (rowInvWeight + colWeight) * L_attr.m04);
-
-                f32 weight = rowWeight * rowWeight + colWeight * colWeight;
-                if (weight > 0.0f) {
-                    weight = std::sqrtf(weight);
-                }
-                f32 phase = 32768.0f * weight;
-                f32 wave = 1.0f + 0.33333334f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
-                mC80 += prev->mNrm[row * 7 + col] * (mC5C.inprod(prev->mNrm[row * 7 + col]) * (wave * L_attr.m14 * (1.0f / L_attr.m08)));
-
-                mPos[row * 7 + col] += mC80;
-
-                f32 waveWeight = -(0.6f + 0.4f * colWeight) * L_attr.m10;
-                cXyz windVec = mC5C;
-                f32 rndZ = 0.9f + cM_rndF(0.2f);
-                f32 rndY = 0.9f + cM_rndF(0.2f);
-                f32 rndX = 0.9f + cM_rndF(0.2f);
-                windVec.x *= rndX;
-                windVec.y *= rndY;
-                windVec.z *= rndZ;
-                mPos[row * 7 + col] += (*vtx - windVec) * waveWeight;
-
-                cur->mPos[row * 7 + col] = prev->mPos[row * 7 + col] + mPos[row * 7 + col];
+                calc_pos_spring(row, col);
+                calc_pos_gravity(row, col);
+                calc_pos_wave(row, col);
+                calc_pos_spd(row, col);
+                curRow[col] = prevRow[col] + myRow[col];
             }
         }
     }
@@ -1192,7 +1220,7 @@ inline cPhs_State daObjBuoyflag::Act_c::_create() {
         fopAcM_setCullSizeSphere(this, 0.0f, 50.0f, 0.0f, 2000.0f);
         mtx_init();
         if (daObj::PrmAbstract<Prm_e>(this, PRM_FLAG_W, PRM_FLAG_S) != 0) {
-            fopAcM_OffStatus(this, fopAcStts_NODRAW_e | 0x00800000);
+            fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
         }
         if (attr_type()->m04 != 0) {
             mStts.Init(0xFF, 0xFF, this);
