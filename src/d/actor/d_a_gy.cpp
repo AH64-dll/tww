@@ -11,6 +11,8 @@
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
 #include "c/c_damagereaction.h"
+#include "d/d_material.h"
+#include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_func.h"
@@ -1573,8 +1575,29 @@ void daGy_c::drawDebug() {
 }
 
 /* 00004560-000046C8       .text _draw__6daGy_cFv */
+/* Nonmatching */
 bool daGy_c::_draw() {
-    /* Nonmatching */
+    if (l_HIO.m94 != 0) {
+        drawDebug();
+    }
+    if (m4E4 <= l_HIO.mA0 && mD15 != 5) {
+        return true;
+    }
+    if (l_HIO.m96 != 0) {
+        return true;
+    }
+    g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+    if ((s16)m93A > 0x14) {
+        dMat_control_c::iceEntryDL(mpMorf, -1, &m2D8);
+        return true;
+    }
+    mpMorf->entryDL();
+    dSnap_RegistFig(0xBC, this, 1.0f, 1.0f, 1.0f);
+    cXyz sp8(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    m8E4 = dComIfGd_setShadow(m8E4, 0, mpMorf->getModel(), &sp8, 800.0f, 30.0f, current.pos.y,
+                              mAcch.m_ground_h, mAcch.m_gnd, &tevStr, 0, 1.0f,
+                              dDlst_shadowControl_c::getSimpleTex());
+    return true;
 }
 
 /* 000046C8-00004920       .text createInit__6daGy_cFv */
