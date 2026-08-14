@@ -184,8 +184,9 @@ void daObjVyasi::Act_c::set_collision() {
             dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
             mCps[i].ClrTgHit();
         } else {
+            int j = i + 1;
             mCpsData[i].mStart = m0400[i];
-            mCpsData[i].mEnd = m0400[i + 1];
+            mCpsData[i].mEnd = m0400[j];
             mCpsData[i].mRadius = 47.4f;
             ((cM3dGCps&)mCps[i]).Set(mCpsData[i]);
             dComIfG_Ccsp()->Set(&mCps[i]);
