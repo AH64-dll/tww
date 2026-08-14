@@ -75,7 +75,9 @@ public:
     /* 0x2EC */ s32 m2EC;
     /* 0x2F0 */ mDoExt_btkAnm* btk[8];
     /* 0x310 */ mDoExt_brkAnm* brk[8];
-    /* 0x330 */ f64 m330;
+    /* 0x330 */ f32 m330;
+    /* 0x334 */ s16 m334;
+    /* 0x336 */ s16 m336;
     /* 0x338 */ f32 m338;
     /* 0x33C */ J3DAnmTexPattern* m33C;
     /* 0x340 */ J3DTexNoAnm* m340;
