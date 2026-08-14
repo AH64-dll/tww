@@ -209,7 +209,7 @@ void daWarpls_c::checkOrder() {
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
     /* Nonmatching */
-    BOOL sw = fopAcM_isSwitch(this, mSwNo);
+    u8 sw = fopAcM_isSwitch(this, mSwNo);
     if (mOrder == 1) {
         fopAcM_orderOtherEventId(this, mEventId1, daWarpls_prm::getEventIdxNo(this), 0xFFFF, 0, 1);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -225,7 +225,7 @@ void daWarpls_c::eventOrder() {
         }
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     } else {
-        if (mEventId1 == -1 && (mSwNo == 0xff || sw != 0)) {
+        if ((mEventId1 == -1 && mSwNo == 0xff) || (mEventId1 == -1 && sw != 0)) {
             warp_eff_start();
         }
     }
@@ -241,7 +241,6 @@ BOOL daWarpls_c::setStatus() {
 
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
 BOOL daWarpls_c::demo() {
-    /* Nonmatching */
     u8 sw = fopAcM_isSwitch(this, mSwNo);
     if (m2BE != 0) {
         if (!check_warp_distance()) {
@@ -275,7 +274,6 @@ BOOL daWarpls_c::demo() {
 
 /* 00000DC4-00000EE8       .text check_warp_link__10daWarpls_cFv */
 BOOL daWarpls_c::check_warp_link() {
-    /* Nonmatching */
     fopAc_ac_c* link = dComIfGp_getLinkPlayer();
     if (link != dComIfGp_getPlayer(0) || mWarpStart == 0 || m2BE != 0) {
         return FALSE;
@@ -295,7 +293,6 @@ BOOL daWarpls_c::check_warp_link() {
 
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
 BOOL daWarpls_c::check_warp_distance() {
-    /* Nonmatching */
     fopAc_ac_c* link = dComIfGp_getLinkPlayer();
     if (link != dComIfGp_getPlayer(0)) {
         return FALSE;
@@ -341,14 +338,15 @@ static BOOL daWarpls_Delete(void* i_this) {
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
-static BOOL daWarpls_Draw(void* i_this) {
+static bool daWarpls_Draw(void* i_this) {
     /* Nonmatching */
     daWarpls_c* i_this_ = (daWarpls_c*)i_this;
     if (i_this_->mWarpStart == 0) {
-        return TRUE;
+        return true;
     }
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this_->current.pos, &i_this_->tevStr);
-    g_env_light.setLightTevColorType(i_this_->mpModel, &i_this_->tevStr);
+    dKy_tevstr_c* tevStr = &i_this_->tevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this_->current.pos, tevStr);
+    g_env_light.setLightTevColorType(i_this_->mpModel, tevStr);
     if (i_this_->mpBrk != NULL) {
         i_this_->mpBrk->entry(i_this_->mpModel->getModelData());
     }
@@ -356,7 +354,7 @@ static BOOL daWarpls_Draw(void* i_this) {
         i_this_->mpBck->entry(i_this_->mpModel->getModelData());
     }
     mDoExt_modelUpdateDL(i_this_->mpModel);
-    return TRUE;
+    return true;
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
