@@ -1506,10 +1506,100 @@ bool daNpc_Bj1_c::fall01() {
 /* 0000514C-00005510       .text talk_1__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::talk_1() {
     /* Nonmatching */
+    u8 temp_r31 = chk_partsNotMove();
+    talk(1);
+    if (mpCurrMsg != NULL) {
+        switch (mpCurrMsg->mStatus) {
+            case fopMsgStts_MSG_TYPING_e:
+            case fopMsgStts_BOX_OPENING_e:
+                break;
+            case fopMsgStts_MSG_DESTROYED_e:
+                switch (mCurrMsgNo) {
+                    case 0x140F:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0604);
+                        break;
+                    case 0x1411:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0904);
+                        break;
+                    case 0x1413:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C80);
+                        break;
+                    case 0x13F3:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0920);
+                        break;
+                    case 0x13F9:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C20);
+                        break;
+                    case 0x13FE:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C08);
+                        break;
+                    case 0x13F6:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C04);
+                        break;
+                    case 0x1404:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C02);
+                        break;
+                    case 0x1408:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0D40);
+                        break;
+                    case 0x141D:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0D08);
+                        break;
+                    case 0x1426:
+                        m840 = 1;
+                        break;
+                    case 0x1429:
+                        *(s16*)((u8*)&g_dComIfG_gameInfo.play.mEvtManager + 0x1B5E) -= 4;
+                        mStatus = 3;
+                        break;
+                    case 0x142B:
+                        mStatus = 4;
+                        break;
+                    case 0x142F:
+                        m841 = 1;
+                        break;
+                    case 0x1432:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C80);
+                        break;
+                    case 0x140C:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0D10);
+                        break;
+                    case 0x1409:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0D20);
+                        break;
+                    case 0x13EF:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0C10);
+                        break;
+                    case 0x1493:
+                    case 0x149D:
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2E10);
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1D40);
+                        setReg(0x97FF);
+                        break;
+                    case 0x1483:
+                        setReg(0x96FF);
+                        break;
+                    case 0x1485:
+                        setReg(0x99FF);
+                        break;
+                    case 0x1489:
+                        setReg(0x98FF);
+                        break;
+                }
+                m83E = 0xFF;
+                m855 = 0;
+                setStt(m8B2);
+                mEvTimer = 0x3C;
+                endEvent();
+                break;
+        }
+    }
+    return temp_r31;
 }
 
 /* 00005510-000055D8       .text walk_1__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::walk_1() {
+    /* Nonmatching */
     m84A = 0;
     if (m8AA == 0) {
         mInitPosSave = current.pos;
