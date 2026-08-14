@@ -443,10 +443,11 @@ void daObj_hsh_c::eventOrder() {
 /* 0000135C-0000140C       .text checkOrder__11daObj_hsh_cFv */
 /* Nonmatching */
 void daObj_hsh_c::checkOrder() {
-    if (eventInfo.checkCommandTalk() == 1) {
+    if (eventInfo.checkCommandTalk()) {
         if (m514 == 4 || m514 == 3 || m514 == 5) {
             m514 = -1;
-            if (g_dComIfG_gameInfo.play.getEvent()->getTalkXYBtn() == dTalkBtn_NONE_e) {
+            int talkBtn = dComIfGp_event_getTalkXYBtn();
+            if (!(talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e)) {
                 setAction(&talkAction, NULL);
             }
         }
@@ -456,8 +457,13 @@ void daObj_hsh_c::checkOrder() {
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
 /* Nonmatching */
 BOOL daObj_hsh_c::checkCommandTalk() {
-    if (eventInfo.checkCommandTalk() == 1) {
-        if (g_dComIfG_gameInfo.play.getEvent()->getTalkXYBtn() != dTalkBtn_NONE_e) {
+    if (eventInfo.checkCommandTalk()) {
+        u8 present = 0;
+        u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+        if (talkBtn == dTalkBtn_X_e || talkBtn == dTalkBtn_Y_e || talkBtn == dTalkBtn_Z_e) {
+            present = 1;
+        }
+        if (present) {
             if (m514 == 5) {
                 m514 = -1;
             }
