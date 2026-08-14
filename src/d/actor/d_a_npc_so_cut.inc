@@ -581,12 +581,56 @@ void daNpc_So_c::cutTurnProc() {
 
 /* 00007114-00007324       .text cutMiniGameWarpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpStart() {
-    /* Nonmatching */
+    JAIZelBasic::getInterface()->field_0x00bf = 1;
+
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    player->mDemo.mDemoType = 3;
+    player->mDemo.mParam0 = 0;
+
+    daShip_c* ship = dComIfGp_getShipActor();
+    field_0xB90.y = dLib_getWaterY(field_0xB90, mObjAcch);
+    field_0xBA0 = ship->current.pos.x;
+    field_0xBA4 = ship->current.pos.y;
+    field_0xBA8 = ship->current.pos.z;
+    field_0xBAC = ship->shape_angle.y;
+    ship->initStartPos(&field_0xB90, field_0xB9C + 0x4000);
+
+    player->setPlayerPosAndAngle(&field_0xB90, field_0xB9C + REG10_S(0));
+    field_0xB9C = field_0xB9C;
+
+    field_0xAFC = 4.0f;
+    speedF = field_0xAFC;
+
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    current.pos = field_0xB90;
+    current.pos.x += 300.0f * cM_ssin(angle);
+    current.pos.z += 300.0f * cM_scos(angle);
+    field_0xBDB = 1;
+    field_0xA9C = REG12_S(1) + 10;
+
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    cam->mCamera.Reset(field_0xBCC, field_0xBC0);
+    cam->mCamera.Start();
 }
 
 /* 00007324-00007438       .text cutMiniGameWarpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpProc() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    player->mDemo.mDemoType = 3;
+    player->mDemo.mParam0 = 0;
+
+    daShip_c* ship = dComIfGp_getShipActor();
+    player->mDemo.mDemoMode = 6;
+    player->mDemo.mParam0 = 1;
+
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    current.pos = ship->current.pos;
+    current.pos.x += 300.0f * cM_ssin(angle);
+    current.pos.z += 300.0f * cM_scos(angle);
+
+    if (cLib_calcTimer(&field_0xA9C) == 0) {
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+    }
 }
 
 /* 00007438-00007524       .text cutMiniGameReturnStart__10daNpc_So_cFv */
