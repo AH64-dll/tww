@@ -739,17 +739,16 @@ BOOL daNpc_Kp1_c::wait01() { /* Nonmatching */
 }
 
 /* 00001AFC-00001BD4       .text talk01__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::talk01() { /* Nonmatching */
+BOOL daNpc_Kp1_c::talk01() {
     BOOL ret = TRUE;
     talk(1);
     if (mpCurrMsg != NULL) {
         switch (mpCurrMsg->mStatus) {
-        case fopMsgStts_BOX_OPENING_e:
-        case fopMsgStts_MSG_TYPING_e:
-            break;
         case fopMsgStts_MSG_DESTROYED_e:
-            if (mCurrMsgNo == 0x1E9D) {
+            switch (mCurrMsgNo) {
+            case 0x1E9D:
                 dComIfGs_setReserveItemEmpty();
+                break;
             }
             mMsgNo = 0xFF;
             setStt(mPrevType);
@@ -757,12 +756,11 @@ BOOL daNpc_Kp1_c::talk01() { /* Nonmatching */
             mTalkEnd = 0;
             endEvent();
             break;
-        default:
-            if (mCurrMsgNo == 0x1E97 || mCurrMsgNo == 0x1E98) {
-                if (mCancelFlag != 0) {
-                    dComIfGp_evmng_CancelPresent();
-                    mCancelFlag = 0;
-                }
+        case fopMsgStts_BOX_OPENING_e:
+        case fopMsgStts_MSG_TYPING_e:
+            if (mCancelFlag != 0) {
+                dComIfGp_evmng_CancelPresent();
+                mCancelFlag = 0;
             }
             break;
         }
