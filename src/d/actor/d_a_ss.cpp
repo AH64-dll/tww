@@ -531,10 +531,11 @@ void core_move(ss_class* i_this) {
                 dComIfGp_particle_setSimple(1, &i_this->eyePos, 0xFF, g_whiteColor, g_whiteColor, 0);
                 for (int i = 0; i < 10; i++) {
                     cXyz* p = i_this->mLine.getPos(i);
-                    for (int j = 0; j < 20; j += REG0_S(7) + 2) {
+                    for (int j = 0; j < 20;) {
                         if (cM_rndF(1.0f) < 0.2f + REG0_F(15)) {
                             dComIfGp_particle_setSimple(1, p, 0xFF, g_whiteColor, g_whiteColor, 0);
                         }
+                        j += REG0_S(7) + 2;
                         p += REG0_S(7) + 2;
                     }
                     i_this->mHand[i].mState = 1;
@@ -559,7 +560,10 @@ void core_move(ss_class* i_this) {
         CcAtInfo atInfo;
         atInfo.mpObj = i_this->mSph.GetTgHitObj();
         atInfo.mpActor = at_power_check(&atInfo);
-        if (atInfo.mpObj == NULL || !(atInfo.mpObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK)) {
+        if (atInfo.mpObj != NULL && (atInfo.mpObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK)) {
+            return;
+        }
+        {
             i_this->m2C6 = i_this->m2C4;
             i_this->m2C4 = 0x28;
             if (i_this->m2B4 == 0 || atInfo.mResultingAttackType == 5) {
@@ -588,8 +592,6 @@ void core_move(ss_class* i_this) {
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_SVINE_REBOUND, &i_this->eyePos, 0,
                                                 reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
-        } else {
-            return;
         }
     }
 
