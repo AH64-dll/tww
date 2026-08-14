@@ -870,14 +870,13 @@ void daBigelf_c::talkInit() {
 
 /* 000021F0-0000236C       .text talk__10daBigelf_cFv */
 u16 daBigelf_c::talk() {
-    /* Nonmatching */
     u16 r31 = 0xFF;
     if (m3F7 == 0) {
         l_msgId = -1;
         m33C = getMsg();
         m3F7 = 1;
     } else if (m3F7 != -1) {
-        if (l_msgId + 0x10000 == 0xFFFFFFFF) {
+        if (l_msgId == 0xFFFFFFFF) {
             l_msgId = fopMsgM_messageSet(m33C, this);
         } else {
             if (!chkFlag(0x4)) {
@@ -912,7 +911,7 @@ u16 daBigelf_c::talk() {
 /* 0000236C-00002534       .text init__10daBigelf_cFv */
 BOOL daBigelf_c::init() {
     /* Nonmatching */
-    if (m3F4 == 0) {
+    if ((s32)m3F4 == 0) {
         setAction(&daBigelf_c::wait_action, NULL);
     }
     current.pos.y = 30.0f + old.pos.y;
