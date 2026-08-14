@@ -696,10 +696,10 @@ void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
     GXLoadPosMtxImm(mC20, 0);
     GXLoadNrmMtxImm(mC20, 0);
     GXSetCullMode(GX_CULL_FRONT);
-    GXCallDisplayList((void*)&Khata::l_Khata_00DL[0x2C0], 0xE0);
+    GXCallDisplayList((void*)Khata::l_Khata_00DL, 0xE0);
     GXSetCullMode(GX_CULL_BACK);
     GXSetArray(GX_VA_NRM, (void*)vtx->mNrm2, sizeof(cXyz));
-    GXCallDisplayList((void*)&Khata::l_Khata_00DL[0x2C0], 0xE0);
+    GXCallDisplayList((void*)Khata::l_Khata_00DL, 0xE0);
 }
 
 /* 00000744-00000C4C       .text draw_hasi__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
@@ -861,7 +861,7 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     f32 sin1 = cM_ssin(mC68[6]);
     f32 sin2 = cM_ssin(mC68[8]);
 
-    f32 windScale = cM_rndF(0.2f) + 0.2f + 0.35f * (1.0f + 0.15f * sin2 + 0.5f * sin1 + 0.35f * sin0);
+    f32 windScale = 0.2f + 0.35f * (1.0f + 0.15f * sin2 + 0.5f * sin1 + 0.35f * sin0) + cM_rndF(0.2f);
 
     cXyz wind = dKyw_get_AllWind_vecpow(&other->mPos[0]);
     wind *= 0.5f * windScale * L_attr.m08;
