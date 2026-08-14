@@ -85,7 +85,7 @@ public:
     /* 0x8E4 */ u32 m8E4;
     /* 0x8E8 */ u8 m8E8[0x8EC - 0x8E8];
     /* 0x8EC */ int m8EC;
-    /* 0x8F0 */ u8 m8F0[0x8F4 - 0x8F0];
+    /* 0x8F0 */ int m8F0;
     /* 0x8F4 */ s16 m8F4;
     /* 0x8F6 */ u8 m8F6[0x8F8 - 0x8F6];
     /* 0x8F8 */ cXyz m8F8;
@@ -93,7 +93,7 @@ public:
     /* 0x910 */ u8 m910[0x914 - 0x910];
     /* 0x914 */ int m914;
     /* 0x918 */ f32 m918;
-    /* 0x91C */ u8 m91C[0x920 - 0x91C];
+    /* 0x91C */ f32 m91C;
     /* 0x920 */ f32 m920;
     /* 0x924 */ s32 m924;
     /* 0x928 */ s32 m928;
@@ -124,7 +124,7 @@ public:
     /* 0xE14 */ dBgS_ObjLinChk mE14;
     /* 0xE80 */ u8 mE80;
     /* 0xE81 */ u8 mE81[0xE84 - 0xE81];
-    /* 0xE84 */ Vec mE84;
+    /* 0xE84 */ cXyz mE84;
 };
 
 class daGy_HIO_c : public mDoHIO_entry_c {

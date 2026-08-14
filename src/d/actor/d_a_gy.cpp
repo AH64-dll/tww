@@ -10,6 +10,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
+#include "c/c_damagereaction.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_func.h"
@@ -1360,7 +1361,163 @@ f32 daGy_c::getWaterY() {
 
 /* 000039AC-00004264       .text _execute__6daGy_cFv */
 bool daGy_c::_execute() {
-    /* Nonmatching */
+    mpCtrl = NULL;
+    if (parentActorID != 0xFFFFFFFF) {
+        fopAc_ac_c* ctrl_actor = NULL;
+        if (fopAcM_SearchByID(parentActorID, &ctrl_actor) != 0) {
+            if (ctrl_actor != NULL) {
+                if (fopAc_IsActor(ctrl_actor) &&
+                    (fopAcM_GetName(ctrl_actor) == fpcNm_GY_CTRL_e ||
+                     fopAcM_GetName(ctrl_actor) == fpcNm_GY_CTRLB_e)) {
+                    mpCtrl = (daGy_Ctrl_c*)ctrl_actor;
+                    daGy_Ctrl_c* ctrl = mpCtrl;
+                    shape_angle.x = current.angle.x;
+                    shape_angle.y = current.angle.y;
+                    shape_angle.z = current.angle.z;
+                    if (enemy_ice((enemyice*)&m92C)) {
+                        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+                        mpMorf->calc();
+                        return true;
+                    }
+                    lineCheck(&current.pos, &mE84);
+                    if (m2B0 != 0 && mE80 != 0) {
+                        modeDiveInit();
+                    }
+                    if (m2B0 != 0 && ctrl->m324 == 3) {
+                        modeDiveInit();
+                    }
+                    m2BC = ctrl->m290[m2AC];
+                    mpMorf->play(NULL, 0, 0);
+                    mpMorf->calc();
+                    if (m2B0 != 0) {
+                        setAtCollision();
+                        setCollision();
+                        checkTgHit();
+                    }
+                    if (gravity == 0.0f) {
+                        cLib_addCalc2(&m4E4, m4E8, m918, m4EC);
+                    }
+                    cLib_addCalc2(&speedF, m4F0, 0.3f, 4.0f);
+                    setAnm();
+                    if (l_HIO.m97 != 0) {
+                        cXyz sp50(current.pos);
+                        sp50.y += 100.0f;
+                        current.pos.y = dBgS_GetWaterHeight(sp50);
+                        setMtx();
+                        setWave();
+                        return true;
+                    }
+                    modeProcCall();
+                    fopAcM_posMoveF(this, (cXyz*)&m8A8);
+                    current.pos.y = getWaterY();
+                    switch (mD15) {
+                    case 5: {
+                        if (speed.y < -5.0f) {
+                            cLib_addCalcAngleS2(&current.angle.x, (s16)(g_regHIO.mChild[12].mShortRegs[1] + 0x2000), 8, 0x400);
+                        } else if (speed.y > 40.0f) {
+                            cLib_addCalcAngleS2(&current.angle.x, (s16)(g_regHIO.mChild[12].mShortRegs[2] - 0x1000), 8, 0x400);
+                        } else {
+                            cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
+                        }
+                        if (gravity == 0.0f && m91C < 0.0f) {
+                            mD15 = 1;
+                            cXyz sp44(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
+                                      2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+                                      2.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+                            dComIfGp_particle_set(0x203B, &current.pos, NULL, &sp44, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp44, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                        }
+                        break;
+                    }
+                    case 6:
+                    case 4: {
+                        if (m2B0 == 4) {
+                            cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
+                        }
+                        daSea_calcWave(current.pos.x, current.pos.z);
+                        if (gravity == 0.0f && m91C < 0.0f) {
+                            cXyz sp38(1.0f + g_regHIO.mChild[10].mFloatRegs[0],
+                                      1.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+                                      1.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+                            dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp38, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                        }
+                        break;
+                    }
+                    case 7:
+                    case 9: {
+                        daSea_calcWave(current.pos.x, current.pos.z);
+                        if (gravity == 0.0f && m91C < 0.0f) {
+                            cXyz sp2C(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
+                                      2.0f + g_regHIO.mChild[10].mFloatRegs[0] + g_regHIO.mChild[10].mFloatRegs[1],
+                                      2.0f + g_regHIO.mChild[10].mFloatRegs[0]);
+                            dComIfGp_particle_set(0x203B, &current.pos, NULL, &sp2C, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp2C, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                        }
+                        break;
+                    }
+                    default:
+                        cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
+                        break;
+                    }
+                    if (m2B0 != 0) {
+                        mAcch.CrrPos(*dComIfG_Bgsp());
+                    }
+                    tevStr.mRoomNo = current.roomNo;
+                    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+                    setMtx();
+                    setWave();
+                    attention_info.position.x = current.pos.x;
+                    attention_info.position.y = current.pos.y;
+                    attention_info.position.z = current.pos.z;
+                    attention_info.position.y += 160.0f;
+                    eyePos = current.pos;
+                    eyePos.y += 55.0f;
+                    m91C = gravity;
+                    if (mD15 != 5 && m2B0 != 0) {
+                        const cXyz& sp20 = current.pos - old.pos;
+                        f32 f1 = PSVECSquareMag(&sp20);
+                        if (f1 > 0.0f) {
+                            double guess = __frsqrte(f1);
+                            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+                            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+                            guess = 0.5 * guess * (3.0 - guess * guess * f1);
+                            f1 = (f32)(f1 * guess);
+                        }
+                        f32 f31 = f1 / 20.0f;
+                        if (f31 <= 0.0f) {
+                            f31 = 0.0f;
+                        } else if (f31 >= 1.0f) {
+                            f31 = 1.0f;
+                        }
+                        JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_CRUISING, &eyePos, (s8)(110.0f * f31), dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                        if (mD15 == 1) {
+                            f32 sp8 = f31 * l_HIO.m04;
+                            f32 sp18 = l_HIO.m08;
+                            if (sp8 >= sp18) {
+                                sp18 = sp8;
+                            }
+                            mpMorf->setPlaySpeed(sp18);
+                        }
+                    }
+                    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+                    return true;
+                }
+                if (cLib_calcTimer(&m8F0) == 0) {
+                    fopAcM_delete(this);
+                }
+                return true;
+            }
+            fopAcM_delete(this);
+            return true;
+        }
+        fopAcM_delete(this);
+        return true;
+    }
+    fopAcM_delete(this);
+    return true;
 }
 
 /* 00004264-00004560       .text drawDebug__6daGy_cFv */
