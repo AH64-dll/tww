@@ -123,7 +123,7 @@ void daHo_packet_c::setBackNrm() {
 
 /* 800E8D48-800E8D74       .text setNrmMtx__13daHo_packet_cFR4cXyz */
 void daHo_packet_c::setNrmMtx(cXyz&) {
-    /* Nonmatching */
+    mDoMtx_YrotS(*calc_mtx, m189C);
 }
 
 /* 800E8D74-800E92AC       .text setNrmVtx__13daHo_packet_cFP4cXyzii */
