@@ -208,7 +208,6 @@ void daWarpls_c::checkOrder() {
 
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
-    /* Nonmatching */
     u8 sw = fopAcM_isSwitch(this, mSwNo);
     if (mOrder == 1) {
         fopAcM_orderOtherEventId(this, mEventId1, daWarpls_prm::getEventIdxNo(this), 0xFFFF, 0, 1);
@@ -342,7 +341,7 @@ static bool daWarpls_Draw(void* i_this) {
     /* Nonmatching */
     daWarpls_c* i_this_ = (daWarpls_c*)i_this;
     if (i_this_->mWarpStart == 0) {
-        return true;
+        return TRUE;
     }
     dKy_tevstr_c* tevStr = &i_this_->tevStr;
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this_->current.pos, tevStr);
@@ -354,7 +353,7 @@ static bool daWarpls_Draw(void* i_this) {
         i_this_->mpBck->entry(i_this_->mpModel->getModelData());
     }
     mDoExt_modelUpdateDL(i_this_->mpModel);
-    return true;
+    return TRUE;
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
