@@ -202,7 +202,6 @@ void daObjMmrr::Act_c::init_cc() {
 }
 
 /* 00000434-000005DC       .text set_cc_rec_pos__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 void daObjMmrr::Act_c::set_cc_rec_pos() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -249,7 +248,6 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 void daObjMmrr::Act_c::set_cull() {
     f32 cullX;
     f32 cullY;
@@ -265,7 +263,6 @@ void daObjMmrr::Act_c::set_cull() {
 }
 
 /* 0000102C-0000122C       .text _create__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 cPhs_State daObjMmrr::Act_c::_create() {
     fopAcM_SetupActor(this, daObjMmrr::Act_c);
 
