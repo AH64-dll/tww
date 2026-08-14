@@ -1417,7 +1417,7 @@ bool daGy_c::_execute() {
                     if ((s8)d15 == 5) {
                         if (speed.y < -5.0f) {
                             cLib_addCalcAngleS2(&current.angle.x, (s16)(g_regHIO.mChild[12].mShortRegs[1] + 0x2000), 8, 0x400);
-                        } else if (speed.y > 40.0f) {
+                        } else if (speed.y > 5.0f) {
                             cLib_addCalcAngleS2(&current.angle.x, (s16)(g_regHIO.mChild[12].mShortRegs[2] - 0x1000), 8, 0x400);
                         } else {
                             cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
