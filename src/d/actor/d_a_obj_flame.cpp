@@ -544,8 +544,8 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         u32 isLess = y1 < y2;
         f32 f2 = isLess ? y1 : y2;
         f32 f30 = f2 + M_attr_base.mF0A;
-        y2 = isLess ? y2 : y1;
-        f32 f29 = y2 + M_attr_base.mF0C;
+        f32 y2max = isLess ? flame->current.pos.y : y1;
+        f32 f29 = y2max + M_attr_base.mF0C;
 
         cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
         cXyz b(flame->eyePos.x, 0.0f, flame->eyePos.z);
