@@ -946,9 +946,10 @@ void action_dousa(bl_class* i_this) {
         i_this->m306++;
         break;
     case 2:
-        if (i_this->mFollowCB1.getEmitter() != NULL) {
-            JPASetRMtxTVecfromMtx(i_this->mpMorf->getModel()->getAnmMtx(0), i_this->mFollowCB1.getEmitter()->mGlobalRotation,
-                                  i_this->mFollowCB1.getEmitter()->mGlobalTranslation);
+        JPABaseEmitter* emitter = i_this->mFollowCB1.getEmitter();
+        if (emitter != NULL) {
+            JPASetRMtxTVecfromMtx(i_this->mpMorf->getModel()->getAnmMtx(0), emitter->mGlobalRotation,
+                                  emitter->mGlobalTranslation);
         }
         cLib_addCalc2(&i_this->speed.y, 10.0f, 0.8f, 1.0f);
         if (i_this->current.pos.y < 100.0f + i_this->m320) {
