@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mmrr.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_detect.h"
 #include "d/d_kankyo.h"
@@ -12,28 +13,18 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
 
 namespace daObjMmrr {
     namespace {
         struct L_attr_t {
-            /* 0x00 */ Vec mTriPos[5];
-            /* 0x3C */ Vec mTriNrm[5];
-            /* 0x78 */ f32 mF78;
-            /* 0x7C */ f32 mF7C;
-            /* 0x80 */ f32 mF80;
-            /* 0x84 */ f32 mF84;
-            /* 0x88 */ f32 mF88;
-            /* 0x8C */ f32 mF8C;
-            /* 0x90 */ f32 mF90;
-            /* 0x94 */ f32 mF94;
-            /* 0x98 */ f32 mF98;
-            /* 0x9C */ f32 mF9C;
-            /* 0xA0 */ f32 mFA0;
-            /* 0xA4 */ f32 mFA4;
-            /* 0xA8 */ f32 mFA8;
-            /* 0xAC */ f32 mFAC;
-            /* 0xB0 */ f32 mFB0;
+            struct TriSrc {
+                /* 0x00 */ Vec mP1;
+                /* 0x0C */ Vec mP2;
+                /* 0x18 */ Vec mP3;
+            };  // 0x24
+            /* 0x00 */ TriSrc mTri[5];
             /* 0xB4 */ f32 mFB4;
             /* 0xB8 */ f32 mFB8;
             /* 0xBC */ s16 mRotY;
@@ -46,25 +37,13 @@ namespace daObjMmrr {
         };
 
         const L_attr_t L_attr = {
-            /* mTriPos */ {{0.0f, 0.0f, 0.0f}, {-50.0f, -230.0f, 0.0f}, {50.0f, -230.0f, 0.0f},
-                           {0.0f, 0.0f, 0.0f}, {-60.0f, -20.0f, 0.0f}},
-            /* mTriNrm */ {{-90.0f, -80.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {90.0f, -80.0f, 0.0f},
-                           {60.0f, -20.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
-            /* mF78 */ -90.0f,
-            /* mF7C */ -80.0f,
-            /* mF80 */ 0.0f,
-            /* mF84 */ -50.0f,
-            /* mF88 */ -230.0f,
-            /* mF8C */ 0.0f,
-            /* mF90 */ 0.0f,
-            /* mF94 */ 0.0f,
-            /* mF98 */ 0.0f,
-            /* mF9C */ 50.0f,
-            /* mFA0 */ -230.0f,
-            /* mFA4 */ 0.0f,
-            /* mFA8 */ 90.0f,
-            /* mFAC */ -80.0f,
-            /* mFB0 */ 0.0f,
+            /* mTri */ {
+                {{0.0f, 0.0f, 0.0f}, {-50.0f, -230.0f, 0.0f}, {50.0f, -230.0f, 0.0f}},
+                {{0.0f, 0.0f, 0.0f}, {-60.0f, -20.0f, 0.0f}, {-90.0f, -80.0f, 0.0f}},
+                {{0.0f, 0.0f, 0.0f}, {90.0f, -80.0f, 0.0f}, {60.0f, -20.0f, 0.0f}},
+                {{0.0f, 0.0f, 0.0f}, {-90.0f, -80.0f, 0.0f}, {-50.0f, -230.0f, 0.0f}},
+                {{0.0f, 0.0f, 0.0f}, {50.0f, -230.0f, 0.0f}, {90.0f, -80.0f, 0.0f}},
+            },
             /* mFB4 */ 445.0f,
             /* mFB8 */ 0.0f,
             /* mRotY */ -2000,
@@ -76,6 +55,8 @@ namespace daObjMmrr {
             /* mCullSize */ 10000.0f,
         };
     };
+
+    const char Act_c::M_arcname[8] = "Mmirror";
 
     const dCcD_SrcTri Act_c::M_tri_src = {
         // dCcD_SrcGObjInf
@@ -155,7 +136,6 @@ namespace daObjMmrr {
         {{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 50.0f}},
     };
 
-    const char Act_c::M_arcname[9] = "Mmirror";
 }; // namespace daObjMmrr
 
 /* 00000078-000000AC       .text end__Q29daObjMmrr5Eff_cFv */
@@ -182,39 +162,27 @@ int daObjMmrr::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000110-00000360       .text create_heap__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
 int daObjMmrr::Act_c::create_heap() {
-    BOOL ret = FALSE;
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x9);
-    JUT_ASSERT(488, mdl_data != 0);
+    J3DModelData* bdl_Mmrr = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x9);
+    JUT_ASSERT(488, bdl_Mmrr != 0);
 
-    mpModel = mDoExt_J3DModel__create(mdl_data, 0x8, 0x11000222);
+    mpModel = mDoExt_J3DModel__create(bdl_Mmrr, 0x80000, 0x11000222);
 
-    J3DModelData* mdl_data2 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0xB);
-    JUT_ASSERT(497, mdl_data2 != 0);
+    J3DModelData* bdl_Yssmr00 = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0xB);
+    JUT_ASSERT(497, bdl_Yssmr00 != 0);
 
-    mpModel2 = mDoExt_J3DModel__create(mdl_data2, 0x8, 0x11000222);
+    mpModel2 = mDoExt_J3DModel__create(bdl_Yssmr00, 0x80000, 0x11000222);
 
-    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, 0xE);
-    JUT_ASSERT(508, btk != 0);
+    J3DAnmTextureSRTKey* btk_Mmrr = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, 0xE);
+    JUT_ASSERT(508, btk_Mmrr != 0);
 
-    mpBtkAnm = new mDoExt_btkAnm();
-    BOOL btkOk = FALSE;
-    if (mpBtkAnm != NULL) {
-        btkOk = mpBtkAnm->init(mdl_data, btk, 1, 2, 1.0f, 0, -1, 0, 0);
-    }
+    BOOL btkOk = mpBtkAnm.init(bdl_Mmrr, btk_Mmrr, 1, 2, 1.0f, 0, -1, 0, 0);
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, 0x10);
-    JUT_ASSERT(515, brk != 0);
+    J3DAnmTextureSRTKey* btk_Yssmr00 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, 0x10);
+    JUT_ASSERT(515, btk_Yssmr00 != 0);
 
-    mpBrkAnm = new mDoExt_brkAnm();
-    BOOL brkOk = FALSE;
-    if (mpBrkAnm != NULL) {
-        brkOk = mpBrkAnm->init(mdl_data2, brk, 1, 2, 1.0f, 0, -1, 0, 0);
-    }
+    BOOL btkOk2 = mpBtkAnm2.init(bdl_Yssmr00, btk_Yssmr00, 1, 2, 1.0f, 0, -1, 0, 0);
 
-    if (mpModel != NULL && mpModel2 != NULL && btkOk && brkOk) {
-        ret = TRUE;
-    }
-    return ret;
+    return mpModel && mpModel2 && btkOk && btkOk2;
 }
 
 /* 00000360-00000434       .text init_cc__Q29daObjMmrr5Act_cFv */
@@ -241,41 +209,43 @@ void daObjMmrr::Act_c::set_cc_rec_pos() {
     mDoMtx_stack_c::transM(0.0f, L_attr.mFB4, L_attr.mFB8);
     mDoMtx_stack_c::XrotM(L_attr.mRotY);
     for (int i = 0; i < 5; i++) {
-        cXyz a(L_attr.mTriPos[i]);
-        cXyz b(L_attr.mTriNrm[i]);
-        PSMTXMultVec(mDoMtx_stack_c::now, &a, &b);
-        PSMTXMultVec(mDoMtx_stack_c::now, &b, &b);
-        cXyz c;
-        cXyz d;
-        cXyz e;
-        PSMTXMultVec(mDoMtx_stack_c::now, &b, &c);
-        PSMTXMultVec(mDoMtx_stack_c::now, &b, &d);
-        PSMTXMultVec(mDoMtx_stack_c::now, &b, &e);
-        mTri[i].setPos(&c, &d, &e);
+        cXyz a;
+        cXyz pa, pb, pc;
+        a.set(L_attr.mTri[i].mP1);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a, &pa);
+        a.set(L_attr.mTri[i].mP2);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a, &pb);
+        a.set(L_attr.mTri[i].mP3);
+        PSMTXMultVec(mDoMtx_stack_c::now, &a, &pc);
+        mTri[i].setPos(&pa, &pb, &pc);
     }
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    mDoMtx_stack_c::scaleM(mC00, mC00, mC00);
-    cXyz p1;
-    cXyz p2;
-    PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &p1);
-    PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &p2);
-    mCps.SetStartEnd(p1, p2);
 }
 
 /* 000005DC-000009FC       .text set_cc_trans_pos__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
 void daObjMmrr::Act_c::set_cc_trans_pos() {
+    cXyz end(0.0f, 0.0f, L_attr.mCullSize);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    for (int i = 0; i < 5; i++) {
-        mDoMtx_stack_c::push();
-        mDoMtx_stack_c::transM(mTri[i].mA.x, mTri[i].mA.y, mTri[i].mA.z);
-        cXyz a;
-        PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &a);
-        mTri[i].mA = a;
-        mDoMtx_stack_c::pop();
+    mDoMtx_stack_c::transM(L_attr.mFC0, L_attr.mFC4, L_attr.mFC8);
+
+    cXyz start;
+    cXyz end2;
+    PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &start);
+    PSMTXMultVec(mDoMtx_stack_c::now, &end, &end2);
+
+    dBgS_MirLightLinChk chk;
+    chk.Set(&start, &end2, this);
+    if (dComIfG_Bgsp()->LineCross(&chk)) {
+        end2 = chk.GetCross();
     }
+
+    mCps.SetStartEnd(start, end2);
+    mCps.SetR(L_attr.mFCC);
+    mCps.CalcAtVec();
+    mCps.GetAtVecP()->normalizeRS();
+
+    mC00 = start.abs(end2) / L_attr.mCullSize;
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
@@ -301,11 +271,14 @@ cPhs_State daObjMmrr::Act_c::_create() {
 
     cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x1140)) {
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x1A80)) {
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
             init_cc();
+            mBF8 = 0;
+            mBFC = 0.0f;
+            mBF9 = 0;
             set_cull();
-            mEff.setFollowOff(); mEff.setRateOff(0);
         } else {
             phase = cPhs_ERROR_e;
         }
@@ -346,11 +319,7 @@ BOOL daObjMmrr::Act_c::chk_light() {
     } else {
         for (int i = 0; i < 5; i++) {
             if (mTri[i].ChkTgHit()) {
-                cXyz n;
-                cXyz c;
-                mTri[i].GetNVec(c, &n);
-                c = mTri[i].mC;
-                if (PSVECDotProduct(&c, &n) >= 0.0f) {
+                if (mTri[i].GetNP()->inprod(*mTri[i].GetTgRVecP()) < 0.0f) {
                     light = TRUE;
                 }
                 mTri[i].ClrTgHit();
@@ -379,56 +348,70 @@ void daObjMmrr::Act_c::eff_remove() {
 /* 000014D0-000016E8       .text _execute__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
 bool daObjMmrr::Act_c::_execute() {
-    if (mBF8 != 0) {
-        mBF8 = 0;
-        setup(&current.pos);
-        if (mBF9 != 0) {
-            mC00 = 0.0f;
-        }
-        init_mtx();
-        set_cc_rec_pos();
-        set_cc_trans_pos();
-        set_cull();
-        mEff.setFollowOff(); mEff.setRateOff(0);
-        return true;
-    }
+    attention_info.position.x = current.pos.x;
+    attention_info.position.y = current.pos.y + 260.0f;
+    attention_info.position.z = current.pos.z;
+    eyePos = attention_info.position;
 
-    set_mtx();
-    set_cc_rec_pos();
-    set_cc_trans_pos();
     if (chk_light()) {
-        if (!mEff.isEnd()) {
-            mEff.onEnd();
+        cLib_chaseF(&mBFC, 1.0f, 0.2f);
+    } else {
+        cLib_chaseF(&mBFC, 0.0f, 0.2f);
+    }
+    u8 mbf9 = mBF9;
+    mBF9 = mBFC > 0.999f;
+
+    mpBtkAnm.play();
+    mpBtkAnm2.play();
+
+    if (mBF8 != 0) {
+        set_cc_rec_pos();
+    }
+    if (mBF8 != 0 || mBF9 != 0) {
+        set_cc_trans_pos();
+    }
+    set_mtx();
+    set_cull();
+
+    if (mBF9 != 0) {
+        if (mbf9 == 0) {
+            fopAcM_seStart(this, 0x6961, 0);
             eff_start();
         }
-    } else {
-        if (mEff.isEnd()) {
-            mEff.setFollowOff(); mEff.setRateOff(0);
-            eff_stop();
-        }
+        fopAcM_seStart(this, 0x7028, 0);
+    } else if (mbf9 != 0) {
+        eff_stop();
     }
-    set_cull();
+
+    for (int i = 0; i < 5; i++) {
+        dComIfG_Ccsp()->Set(&mTri[i]);
+    }
+    if (mBF9 != 0) {
+        dComIfG_Ccsp()->Set(&mCps);
+    }
+    mBF8 = 0;
     return true;
 }
 
 /* 000016E8-000017E8       .text _draw__Q29daObjMmrr5Act_cFv */
     /* Nonmatching */
 bool daObjMmrr::Act_c::_draw() {
-    dKy_tevstr_c* tev = &tevStr;
-    g_env_light.settingTevStruct(0, &current.pos, tev);
-    g_env_light.setLightTevColorType(mpModel, tev);
+    u8 mbf9 = mBF9;
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
 
-    mpBtkAnm->entry(mpModel->getModelData());
-    if (mpBrkAnm != NULL) {
-        mpBrkAnm->entry(mpModel2->getModelData());
+    mpBtkAnm.entry(mpModel->getModelData());
+    if (mbf9 != 0) {
+        g_env_light.setLightTevColorType(mpModel2, &tevStr);
+        mpBtkAnm2.entry(mpModel2->getModelData());
     }
 
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListFilter, 0);
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListFilter, 1);
+    dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
-    mDoExt_modelUpdateDL(mpModel2);
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, 0);
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, 1);
+    dComIfGd_setList();
+    if (mbf9 != 0) {
+        mDoExt_modelUpdateDL(mpModel2);
+    }
     return true;
 }
 

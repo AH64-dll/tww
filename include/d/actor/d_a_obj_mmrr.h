@@ -4,11 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
+#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
 class J3DModel;
-class mDoExt_btkAnm;
-class mDoExt_brkAnm;
 
 namespace daObjMmrr {
     class Eff_c : public dPa_followEcallBack {
@@ -19,7 +18,7 @@ namespace daObjMmrr {
 
     class Act_c : public fopAc_ac_c {
     public:
-        static const char M_arcname[9];
+        static const char M_arcname[8];
         static const dCcD_SrcTri M_tri_src;
         static const dCcD_SrcCps M_cps_src;
 
@@ -49,17 +48,16 @@ namespace daObjMmrr {
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ J3DModel* mpModel2;
-        /* 0x2A0 */ mDoExt_btkAnm* mpBtkAnm;
-        /* 0x2A4 */ u8 m2A4[0x2B4 - 0x2A4];
-        /* 0x2B4 */ mDoExt_brkAnm* mpBrkAnm;
-        /* 0x2B8 */ u8 m2B8[0x2C8 - 0x2B8];
+        /* 0x2A0 */ mDoExt_btkAnm mpBtkAnm;
+        /* 0x2B4 */ mDoExt_btkAnm mpBtkAnm2;
         /* 0x2C8 */ dCcD_Tri mTri[5];
         /* 0x958 */ dCcD_Stts mStts[5];
         /* 0xA84 */ dCcD_Cps mCps;
         /* 0xBBC */ dCcD_Stts mStts2;
         /* 0xBF8 */ u8 mBF8;
         /* 0xBF9 */ u8 mBF9;
-        /* 0xBFA */ u8 mBFA[0xC00 - 0xBFA];
+        /* 0xBFA */ u8 mBFA[0xBFC - 0xBFA];
+        /* 0xBFC */ f32 mBFC;
         /* 0xC00 */ f32 mC00;
         /* 0xC04 */ Eff_c mEff;
     };
