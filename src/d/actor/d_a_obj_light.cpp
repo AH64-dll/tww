@@ -239,7 +239,7 @@ bool daObjLight::Act_c::now_event(s16 i_event) {
 }
 
 /* 00000C8C-00000CB4       .text set_event__Q210daObjLight5Act_cFs */
-bool daObjLight::Act_c::set_event(s16 i_event) {
+BOOL daObjLight::Act_c::set_event(s16 i_event) {
     if (mEventActive == 0) {
         mEventId = i_event;
         mEventActive = 1;
@@ -337,8 +337,10 @@ void daObjLight::Act_c::renew_angle() {
 void daObjLight::Act_c::control_light() {
     /* Nonmatching */
     switch (m2DA) {
+        case 0:
+            break;
         case 1:
-            if (set_event(mEventIdx)) {
+            if (set_event(mEventIdx) == TRUE) {
                 m2DA++;
             }
             break;

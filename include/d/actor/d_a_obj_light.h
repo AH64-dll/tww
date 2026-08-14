@@ -22,7 +22,7 @@ namespace daObjLight {
         void exe_fire();
         void delete_fire();
         bool now_event(s16);
-        bool set_event(s16);
+        BOOL set_event(s16);
         void exe_event();
         void set_mtx();
         void renew_angle();
