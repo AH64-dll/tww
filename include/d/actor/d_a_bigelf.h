@@ -118,7 +118,7 @@ public:
     /* 0x345 */ u8 m345[0x346 - 0x345];
     /* 0x346 */ u8 mGivenItem;
     /* 0x347 */ u8 m347[0x348 - 0x347];
-    /* 0x348 */ int mCurrentMessageId;
+    /* 0x348 */ u32 mCurrentMessageId;
     /* 0x34C */ u32 m34C;
     /* 0x350 */ s16 m350;
     /* 0x352 */ bool mIsLightShining;

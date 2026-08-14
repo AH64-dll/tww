@@ -249,7 +249,8 @@ BOOL daBigelf_c::demoProcFlDmAf() {
         dComIfGp_evmng_cutEnd(mStaffId);
         clrFlag(0x1);
         if (m3E0 != 0) {
-            ((JPABaseEmitter*)m3E0)->setStatus(0);
+            ((JPABaseEmitter*)m3E0)->setMaxFrame(-1);
+            ((JPABaseEmitter*)m3E0)->setStatus(1);
             m3E0 = 0;
         }
         return 1;
@@ -371,14 +372,15 @@ BOOL daBigelf_c::demoProcFlDemo() {
             pos.y += 20.0f;
             if (f2 <= 300.0f) {
                 m3DC++;
-                dComIfGp_particle_set(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &pos, &shape_angle, NULL, 0xFF, NULL, NULL, NULL);
+                m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_HANAFUBUKI, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
             break;
         case 1:
             if (!chkFlag(0x1) && m3E0 != 0) {
                 m3DC++;
-                ((JPABaseEmitter*)m3E0)->setStatus(0);
+                ((JPABaseEmitter*)m3E0)->setMaxFrame(-1);
+                ((JPABaseEmitter*)m3E0)->setStatus(1);
                 m3E0 = 0;
             }
             break;
@@ -492,10 +494,10 @@ BOOL daBigelf_c::demoProcAppear() {
     if (m3DC != 0) {
         m3DC--;
         if (m3DC == 0) {
-            clrFlag(0x1);
+            clrFlag(0x2);
             setAnm(1);
             if (m3CC == 0) {
-                m3CC = dComIfGp_particle_set(0x8346, &current.pos, NULL, NULL, 0xFF, NULL, NULL, NULL);
+                m3CC = dComIfGp_particle_set(0x8346, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             }
         }
         return 1;
@@ -503,7 +505,7 @@ BOOL daBigelf_c::demoProcAppear() {
     if (chkFlag(0x100)) {
         if (mpBckAnimator->getFrame() <= 87.0f) {
             clrFlag(0x100);
-            JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_FLOWER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            JAIZelBasic::zel_basic->seStart(JA_SE_CV_DY_ENTER, &eyePos, 0, dComIfGp_getReverb((s8)current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
     }
     if (m336 != 0) {
