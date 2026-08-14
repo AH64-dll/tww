@@ -259,3 +259,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T06:53Z — M35: flip #56 d_a_fallrock_tag → MatchingFor — 27 flips this session (#30-56). Ledger: 50 NonMatching / 50 Equivalent / 313 Matching + 7 MatchingFor. fallrock: 7/7 fns + sections byte-identical, weak set exact, D44J01 4B divergence in Delete. Gate 00639d148 09:52:09 + cycle 8 ALL GREEN (8 consecutive). 6 flips in RLead-13 shift (#50-56: Vds/YLzou/firewall/msdan_sub2/light/tntrap/fallrock).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T07:39Z — M36: flip #57 d_a_obj_htetu1 → Equivalent (CLASS CORRECTED from MatchingFor — cycle 9 gate caught the misclass: source-linked rel failed 3 retail pins; MatchingFor requires 0 sub-100 for byte-identity, htetu1 has 4 accept-class. Reverted → re-classed → re-gated aa0dac8d8 10:39:01). 28 flips this session (#30-57). Ledger: 49 NonMatching / 51 Equivalent / 313 Matching + 7 MatchingFor. THE 4-VERSION GATE CAUGHT A REAL FLIP FAILURE — MatchingFor-relink pin check works as designed.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
