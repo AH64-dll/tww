@@ -264,7 +264,7 @@ void daObjFlame::Act_c::create_mode_init() {
             idx++;
         }
         s32 type = mType;
-        f32 f3 = (f32)(timer + cycle * idx) * flameAttr(this)->mF24;
+        f32 f3 = (f32)(timer + cycle * idx) * flameAttrIdx(type)->mF24;
         if (type != 1) {
             f3 -= 127.0f;
         }
@@ -532,8 +532,8 @@ void daObjFlame::Act_c::se_fireblast_omen() {
 /* 00001254-00001610       .text liftup_magmarock__Q210daObjFlame5Act_cFPvPv */
     /* Nonmatching */
 void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
-    daObjMagmarock::Act_c* rock = (daObjMagmarock::Act_c*)i_actor;
     Act_c* flame = (Act_c*)i_this;
+    daObjMagmarock::Act_c* rock = (daObjMagmarock::Act_c*)i_actor;
     if (fopAc_IsActor(rock) && fopAcM_GetName(rock) == 0x2C && !fpcM_IsCreating(fopAcM_GetID(rock))) {
         f32 mScale = 145.0f * flameAttr(flame)->mScale;
         f32 f31 = mScale + M_attr_base.mF08;
@@ -542,39 +542,44 @@ void* daObjFlame::Act_c::liftup_magmarock(void* i_actor, void* i_this) {
         u32 isLess = y1 < y2;
         f32 f2 = isLess ? y1 : y2;
         f32 f30 = f2 + M_attr_base.mF0A;
-        f32 f4 = isLess ? y2 : y1;
-        f32 f29 = f4 + M_attr_base.mF0C;
+        if (!isLess) {
+            y2 = y1;
+        }
+        f32 f29 = y2 + M_attr_base.mF0C;
 
         cXyz a(rock->current.pos.x, 0.0f, rock->current.pos.z);
         cXyz b(flame->eyePos.x, 0.0f, flame->eyePos.z);
         f32 dist = std::sqrtf(PSVECSquareDistance(&a, &b));
 
-        if (dist < f31 && rock->current.pos.y > f30 && rock->current.pos.y < f29 && flame->mType != 1) {
-            s32 type = flame->mType;
-            f32 f3;
-            f32 f4;
-            if (flame->mHeight < 0.1f) {
-                f4 = M_attr_base.mF0E;
-                f3 = 10.0f * M_attr_base.mF10 * flame->mHeight;
-            } else if (flame->mHeight > 0.9f) {
-                f3 = 1.0f - flame->mHeight;
-                f4 = 10.0f * M_attr_base.mF0E * f3;
-                f3 = 10.0f * M_attr_base.mF10 * f3;
-            } else {
-                f4 = M_attr_base.mF0E;
-                f3 = M_attr_base.mF10;
-            }
+        if (dist < f31 && rock->current.pos.y > f30 && rock->current.pos.y < f29) {
+            rock = (daObjMagmarock::Act_c*)i_actor;
+            if (flame->mType != 1) {
+                s32 type = flame->mType;
+                f32 f3;
+                f32 f4;
+                if (flame->mHeight < 0.1f) {
+                    f4 = M_attr_base.mF0E;
+                    f3 = 10.0f * M_attr_base.mF10 * flame->mHeight;
+                } else if (flame->mHeight > 0.9f) {
+                    f3 = 1.0f - flame->mHeight;
+                    f4 = 10.0f * M_attr_base.mF0E * f3;
+                    f3 = 10.0f * M_attr_base.mF10 * f3;
+                } else {
+                    f4 = M_attr_base.mF0E;
+                    f3 = M_attr_base.mF10;
+                }
 
-            f32 f0 = flame->mScaleX * flameAttrIdx(type)->mF04;
-            f4 = f4 * f0;
-            f3 = f3 * f0;
-            cXyz pos(flame->eyePos.x, flame->eyePos.y + f4 + f3, flame->eyePos.z);
-            if (flame->mModeProc == 1 || flame->mModeProc == 2) {
-                rock->BeforeLiftRequest(pos);
-            } else {
-                rock->LiftUpRequest((cXyz&)pos);
+                f32 f0 = flame->mScaleX * flameAttrIdx(type)->mF04;
+                f4 = f4 * f0;
+                f3 = f3 * f0;
+                cXyz pos(flame->eyePos.x, flame->eyePos.y + f4 + f3, flame->eyePos.z);
+                if (flame->mModeProc == 1 || flame->mModeProc == 2) {
+                    rock->BeforeLiftRequest(pos);
+                } else {
+                    rock->LiftUpRequest((cXyz&)pos);
+                }
+                flame->mbLiftup = 1;
             }
-            flame->mbLiftup = 1;
         }
     }
     return 0;
@@ -891,8 +896,9 @@ BOOL daObjFlame::Method::Execute(void* i_this) {
     /* Nonmatching */
 BOOL daObjFlame::Method::Draw(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
-    g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.setLightTevColorType(a_this->mpModel, &a_this->tevStr);
+    dKy_tevstr_c* tevStr = &a_this->tevStr;
+    g_env_light.settingTevStruct(0, &a_this->current.pos, tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel, tevStr);
 
     a_this->mpBtkAnm->entry(a_this->mpModel->getModelData());
     if (a_this->mpBrkAnm != NULL) {
