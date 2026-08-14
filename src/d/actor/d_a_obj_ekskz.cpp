@@ -183,7 +183,7 @@ namespace daObjEkskz {
         mBtkAnm.play();
         dComIfG_Ccsp()->Set(&mCyl);
         if (m480 == 0 && mCyl.ChkTgHit()) {
-            JAIZelBasic::zel_basic->seStart(0x806, NULL, 0, 0, 200.0f, 200.0f, -1.0f, -1.0f, 0);
+            JAIZelBasic::zel_basic->seStart(0x806, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             fopAcM_onSwitch(this, param_get_swSave());
             m480 = 1;
             mSmokeCallback[0].end();
