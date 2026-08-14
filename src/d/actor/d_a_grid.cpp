@@ -453,7 +453,7 @@ void ho_move(daGrid_c* i_this) {
         i_this->mB4C = 0x1D4C;
         i_this->mB4E = 0x1C20;
         s16 shipAngle = l_ship->mSailAngle;
-        s32 angle = (s16)(i_this->current.angle.y + shipAngle) - cM_atan2s(windVec->x, windVec->z);
+        s16 angle = (s16)((s16)(i_this->current.angle.y + shipAngle) - cM_atan2s(windVec->x, windVec->z));
         s16 r3 = (s16)(angle + 0x8000);
         if (r3 > 0) {
             if (shipAngle > 0 && shipAngle < 0x4000) {
