@@ -48,6 +48,7 @@ static BOOL nodeCallBack_Bigelf(J3DNode*, int);
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
+    /* Nonmatching */
     fopAc_ac_c* octActor = fopAcM_SearchByID(m3F8);
     daShip_c* ship = dComIfGp_getShipActor();
     if (!chkFlag(0x40)) {
@@ -74,6 +75,7 @@ void daBigelf_c::oct_delete() {
 
 /* 0000016C-00000338       .text nodeCallBack__10daBigelf_cFP7J3DNode */
 s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
+    /* Nonmatching */
     J3DModel* model = j3dSys.getModel();
     u16 jntNo = ((J3DJoint*)i_joint)->getJntNo();
     u32 jointOff = jntNo * 0x30;
@@ -108,6 +110,7 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
 
 /* 00000338-00000384       .text nodeCallBack_Bigelf__FP7J3DNodei */
 static BOOL nodeCallBack_Bigelf(J3DNode* i_joint, int i_flag) {
+    /* Nonmatching */
     if (i_flag == 0) {
         J3DModel* model = j3dSys.getModel();
         if (model != NULL) {
@@ -119,6 +122,7 @@ static BOOL nodeCallBack_Bigelf(J3DNode* i_joint, int i_flag) {
 
 /* 00000384-00000438       .text lightInit__10daBigelf_cFP4cXyz */
 void daBigelf_c::lightInit(cXyz* i_pos) {
+    /* Nonmatching */
     mLightInfluencePos = *i_pos;
     mLightInfluence.mPos = *i_pos;
     if (!mIsLightShining) {
@@ -160,6 +164,7 @@ void daBigelf_c::darkInit() {
 
 /* 00000488-000004D0       .text darkEnd__10daBigelf_cFv */
 void daBigelf_c::darkEnd() {
+    /* Nonmatching */
     mDark = 0;
     dKy_set_actcol_ratio(1.0f);
     dKy_set_bgcol_ratio(1.0f);
@@ -168,6 +173,7 @@ void daBigelf_c::darkEnd() {
 
 /* 000004D0-00000574       .text darkProc__10daBigelf_cFv */
 void daBigelf_c::darkProc() {
+    /* Nonmatching */
     if (mDark != 0) {
         cLib_addCalc2(&m3A0, m3A4, 0.1f, 1.0f);
         dKy_set_actcol_ratio(0.3f + m3A0 * 0.7f);
@@ -185,6 +191,7 @@ void daBigelf_c::demoInitFlDelete() {
 
 /* 00000588-00000708       .text demoProcFlDelete__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlDelete() {
+    /* Nonmatching */
     m3C0++;
     if (m3C0 == 0x1B) {
         fopAc_ac_c* player = dComIfGp_getLinkPlayer();
@@ -220,6 +227,7 @@ BOOL daBigelf_c::demoProcFlDelete() {
 
 /* 00000708-000007E4       .text demoInitFlLink__10daBigelf_cFv */
 void daBigelf_c::demoInitFlLink() {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz pos(0.0f, 300.0f, 400.0f);
     cXyz curPos;
@@ -232,11 +240,13 @@ void daBigelf_c::demoInitFlLink() {
 
 /* 000007E4-00000808       .text demoProcFlLink__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlLink() {
+    /* Nonmatching */
     return demoProcWait();
 }
 
 /* 00000808-000008F0       .text demoInitFlDmAf__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmAf() {
+    /* Nonmatching */
     cXyz pos = m3D0;
     pos.y += 20.0f;
     m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
@@ -245,6 +255,7 @@ void daBigelf_c::demoInitFlDmAf() {
 
 /* 000008F0-000009C0       .text demoProcFlDmAf__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlDmAf() {
+    /* Nonmatching */
     if (m336 != 0 || !chkFlag(0x1)) {
         dComIfGp_evmng_cutEnd(mStaffId);
         clrFlag(0x1);
@@ -264,6 +275,7 @@ BOOL daBigelf_c::demoProcFlDmAf() {
 
 /* 000009C0-00000A20       .text demoInitFlDmMd__10daBigelf_cFv */
 void daBigelf_c::demoInitFlDmMd() {
+    /* Nonmatching */
     darkInit();
     m3A0 = 1.0f;
     m3A4 = 1.0f;
@@ -274,6 +286,7 @@ void daBigelf_c::demoInitFlDmMd() {
 
 /* 00000A20-00000CEC       .text demoProcFlDmMd__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlDmMd() {
+    /* Nonmatching */
     f32 f31 = mpBckAnimator->getFrame();
     if (!chkFlag(0x1)) {
         dComIfGp_evmng_cutEnd(mStaffId);
@@ -344,6 +357,7 @@ void daBigelf_c::demoInitFlDemo() {
 
 /* 00000D88-00000FB8       .text demoProcFlDemo__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlDemo() {
+    /* Nonmatching */
     if (m336 != 0) {
         if (chkFlag(0x1)) {
             switch (m3BC) {
@@ -391,6 +405,7 @@ BOOL daBigelf_c::demoProcFlDemo() {
 
 /* 00000FB8-0000115C       .text demoInitExit__10daBigelf_cFv */
 void daBigelf_c::demoInitExit() {
+    /* Nonmatching */
     if (m3CC != 0) {
         ((JPABaseEmitter*)m3CC)->setMaxFrame(-1);
         ((JPABaseEmitter*)m3CC)->setStatus(1);
@@ -417,6 +432,7 @@ void daBigelf_c::demoInitExit() {
 
 /* 0000115C-000012D4       .text demoProcExit__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcExit() {
+    /* Nonmatching */
     m3C0++;
     cLib_addCalc2(&tevStr.mFogEndZ, 10.0f, 1.0f, 80.0f);
     if (m3C0 < 0x46) {
@@ -445,6 +461,7 @@ BOOL daBigelf_c::demoProcExit() {
 
 /* 000012D4-000013C0       .text demoInitTalk__10daBigelf_cFv */
 void daBigelf_c::demoInitTalk() {
+    /* Nonmatching */
     talkInit();
     int* pMsgNo = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "MsgNo", 3);
     JUT_ASSERT(0x325, pMsgNo != NULL);
@@ -466,6 +483,7 @@ BOOL daBigelf_c::demoProcTalk() {
 
 /* 00001418-0000163C       .text demoInitAppear__10daBigelf_cFv */
 void daBigelf_c::demoInitAppear() {
+    /* Nonmatching */
     fopAc_ac_c* fa1 = fopAcM_SearchByID(m34C);
     if (fa1 != NULL) {
         g_dComIfG_gameInfo.play.mEvtCtrl.mPtTalk = g_dComIfG_gameInfo.play.mEvtCtrl.getPId(this);
@@ -491,6 +509,7 @@ void daBigelf_c::demoInitAppear() {
 
 /* 0000163C-000017B4       .text demoProcAppear__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcAppear() {
+    /* Nonmatching */
     if (m3DC != 0) {
         m3DC--;
         if (m3DC == 0) {
@@ -519,6 +538,7 @@ BOOL daBigelf_c::demoProcAppear() {
 
 /* 000017B4-00001848       .text demoInitFa1__10daBigelf_cFv */
 void daBigelf_c::demoInitFa1() {
+    /* Nonmatching */
     daNpc_Fa1_c* fa1 = (daNpc_Fa1_c*)fopAcM_SearchByID(m34C);
     if (fa1 != NULL) {
         fa1->init_bigelf_change();
@@ -528,6 +548,7 @@ void daBigelf_c::demoInitFa1() {
 
 /* 00001848-000018D4       .text demoProcFa1__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFa1() {
+    /* Nonmatching */
     daNpc_Fa1_c* fa1 = (daNpc_Fa1_c*)fopAcM_SearchByID(m34C);
     if (fa1 != NULL) {
         cLib_addCalc2(&fa1->current.pos.y, 70.0f + current.pos.y, 0.2f, 100.0f);
@@ -538,6 +559,7 @@ BOOL daBigelf_c::demoProcFa1() {
 
 /* 000018D4-00001948       .text demoInitWait__10daBigelf_cFv */
 void daBigelf_c::demoInitWait() {
+    /* Nonmatching */
     int* pTimer = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "Timer", 3);
     if (pTimer != NULL) {
         m3C0 = *pTimer;
@@ -559,6 +581,7 @@ BOOL daBigelf_c::demoProcWait() {
 
 /* 00001998-00001A74       .text demoInitCom__10daBigelf_cFv */
 void daBigelf_c::demoInitCom() {
+    /* Nonmatching */
     setFlag(0x1);
     if (dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "Ship", 3) != NULL) {
         daShip_c* ship = dComIfGp_getShipActor();
@@ -583,11 +606,13 @@ void daBigelf_c::demoProcCom() {
 
 /* 00001ACC-00001B14       .text getNowEventAction__10daBigelf_cFv */
 int daBigelf_c::getNowEventAction() {
+    /* Nonmatching */
     return dComIfGp_evmng_getMyActIdx(mStaffId, (char**)action_table, 0xB, 0, 1);
 }
 
 /* 00001B14-00001CCC       .text demoProc__10daBigelf_cFv */
 void daBigelf_c::demoProc() {
+    /* Nonmatching */
     int action = getNowEventAction();
     if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
         demoInitCom();
@@ -675,16 +700,19 @@ u8 daBigelf_c::getType() {
 
 /* 00001CD8-00001CE4       .text getSwbit__10daBigelf_cFv */
 u8 daBigelf_c::getSwbit() {
+    /* Nonmatching */
     return (fopAcM_GetParam(this) >> 16) & 0xFF;
 }
 
 /* 00001CE4-00001CF0       .text getSwbit2__10daBigelf_cFv */
 u8 daBigelf_c::getSwbit2() {
+    /* Nonmatching */
     return (fopAcM_GetParam(this) >> 8) & 0xFF;
 }
 
 /* 00001CF0-00001D70       .text getEventFlag__10daBigelf_cFv */
 u16 daBigelf_c::getEventFlag() {
+    /* Nonmatching */
     switch (getType()) {
     case 0:
         return 0x3020;
@@ -707,6 +735,7 @@ u16 daBigelf_c::getEventFlag() {
 
 /* 00001D70-00001E20       .text makeFa1S__10daBigelf_cFv */
 void daBigelf_c::makeFa1S() {
+    /* Nonmatching */
     cXyz pos = current.pos;
     csXyz angle;
     angle.x = current.angle.x;
@@ -721,6 +750,7 @@ void daBigelf_c::makeFa1S() {
 
 /* 00001E20-00001EB4       .text makeFa1__10daBigelf_cFv */
 void daBigelf_c::makeFa1() {
+    /* Nonmatching */
     cXyz pos = current.pos;
     csXyz angle;
     angle.x = current.angle.x;
@@ -732,6 +762,7 @@ void daBigelf_c::makeFa1() {
 
 /* 00001EB4-0000200C       .text setAnm__10daBigelf_cFSc */
 void daBigelf_c::setAnm(signed char i_anm) {
+    /* Nonmatching */
     f32 f31 = 8.0f;
     int r31 = -1;
     f32 f30 = 1.0f;
@@ -835,12 +866,14 @@ void daBigelf_c::msgAnm(unsigned char) {}
 
 /* 000021DC-000021F0       .text talkInit__10daBigelf_cFv */
 void daBigelf_c::talkInit() {
+    /* Nonmatching */
     m344 = 0xFF;
     m3F7 = 0;
 }
 
 /* 000021F0-0000236C       .text talk__10daBigelf_cFv */
 u16 daBigelf_c::talk() {
+    /* Nonmatching */
     u16 r31 = 0xFF;
     if (m3F7 == 0) {
         l_msgId = -1;
@@ -881,6 +914,7 @@ u16 daBigelf_c::talk() {
 
 /* 0000236C-00002534       .text init__10daBigelf_cFv */
 BOOL daBigelf_c::init() {
+    /* Nonmatching */
     if (m3F4 == 0) {
         setAction(&daBigelf_c::wait_action, NULL);
     }
@@ -925,6 +959,7 @@ void daBigelf_c::lookBack() {
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
 BOOL daBigelf_c::hunt() {
+    /* Nonmatching */
     fopAc_ac_c* fa1 = fopAcM_SearchByID(m34C);
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (fa1 == NULL) {
@@ -941,6 +976,7 @@ BOOL daBigelf_c::hunt() {
 
 /* 000026C0-00002730       .text oct_search__10daBigelf_cFv */
 BOOL daBigelf_c::oct_search() {
+    /* Nonmatching */
     fopAc_ac_c* octActor = fopAcM_searchFromName("Daiocta", 0, 0);
     if (octActor != NULL) {
         m3F8 = fpcM_GetID(octActor);
@@ -952,6 +988,7 @@ BOOL daBigelf_c::oct_search() {
 
 /* 00002730-000028E8       .text oct__10daBigelf_cFv */
 BOOL daBigelf_c::oct() {
+    /* Nonmatching */
     fopAc_ac_c* octActor = fopAcM_SearchByID(m3F8);
     if (octActor != NULL) {
         current.pos = octActor->current.pos;
@@ -983,6 +1020,7 @@ BOOL daBigelf_c::oct() {
 
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */
 BOOL daBigelf_c::ready0() {
+    /* Nonmatching */
     fopAcM_SearchByID(m34C);
     if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
         m3BD = 2;
@@ -997,6 +1035,7 @@ BOOL daBigelf_c::ready0() {
 
 /* 000029A0-00002A78       .text event0__10daBigelf_cFv */
 BOOL daBigelf_c::event0() {
+    /* Nonmatching */
     if (dComIfGp_evmng_endCheck(m3C8)) {
         dComIfGs_onEventBit(getEventFlag());
         m3BD = 3;
@@ -1017,6 +1056,7 @@ BOOL daBigelf_c::dead() {
 
 /* 00002A80-00002C8C       .text wait_action__10daBigelf_cFPv */
 BOOL daBigelf_c::wait_action(void*) {
+    /* Nonmatching */
     if (m3F6 == 0) {
         if (dComIfGs_isEventBit(getEventFlag())) {
             m3BD = 3;
@@ -1069,6 +1109,7 @@ BOOL daBigelf_c::wait_action(void*) {
 
 /* 00002C8C-00002DB4       .text _draw__10daBigelf_cFv */
 BOOL daBigelf_c::_draw() {
+    /* Nonmatching */
     J3DModel* model = mpBckAnimator->getModel();
     J3DModelData* modelData = model->getModelData();
     J3DModelData* flModelData = mpFlowerModel->getModelData();
@@ -1093,6 +1134,7 @@ BOOL daBigelf_c::_draw() {
 
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
 BOOL daBigelf_c::_execute() {
+    /* Nonmatching */
     mJntCtrl.setParam(0, 0, 0, 0, 0xFA0, 0x2328, -0x7D0, -0xFA0, 0x1000);
     if (!chkFlag(0x10)) {
         m336 = mpBckAnimator->play(&eyePos, 0, 0);
@@ -1123,6 +1165,7 @@ BOOL daBigelf_c::_execute() {
 
 /* 00002F5C-00002FAC       .text _delete__10daBigelf_cFv */
 BOOL daBigelf_c::_delete() {
+    /* Nonmatching */
     dComIfG_resDelete(&mPhaseProcReq, "bigelf");
     if (mpBckAnimator != NULL) {
         mpBckAnimator->stopZelAnime();
@@ -1137,6 +1180,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
 cPhs_State daBigelf_c::_create() {
+    /* Nonmatching */
     fopAcM_SetupActor(this, daBigelf_c);
     cPhs_State phase = dComIfG_resLoad(&mPhaseProcReq, "bigelf");
     if (phase == cPhs_COMPLEATE_e) {
@@ -1159,6 +1203,7 @@ cPhs_State daBigelf_c::_create() {
 
 /* 00003224-00003808       .text CreateHeap__10daBigelf_cFv */
 BOOL daBigelf_c::CreateHeap() {
+    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("bigelf", 0xB);
     JUT_ASSERT(0x7D4, modelData != NULL);
     mpBckAnimator = new mDoExt_McaMorf(
