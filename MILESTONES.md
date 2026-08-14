@@ -193,3 +193,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T01:32Z — M24: flip #45 d_a_ss → Equivalent — 16 flips this session (#30-45). Ledger: 61 NonMatching / 40 Equivalent / 314 Matching + 3 MatchingFor. ss: core_move early-return restructure (R3-8 fix direction, 18==18 branches, SVINE fall-through restored), 9 sub-100 0-one-sided. Gate 904caa658 04:31:46. BLead-8 shift: 12 gates (#38-45 + MatchingFor conversion + 3 4-version cycles).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T02:15Z — M25: flip #46 d_a_obj_hcbh → Equivalent — 17 flips this session (#30-46). Ledger: 60 NonMatching / 41 Equivalent / 314 Matching + 3 MatchingFor. hcbh: 15 real bugs fixed (R9-8's 8 + D8-10's 9 incl roomNo member, ClrTgHit-vs-ClrCoHit, X/Y angle swap), 56/64 fns 100, 8 sub-100 all register-strip-equal. Gate 638b767dc 05:15:07. Also this cycle: buoyflag UNBLOCKED (shared-header wall root-caused — m258 layout + mpActor + header-inline static; 5 siblings sha1-verified), ftree held (marker restore + pikupikuS_init).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
