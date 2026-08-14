@@ -947,8 +947,8 @@ inline void daObjBuoyflag::Packet_c::calc_pos_wave(int row, int col) {
     f32 weight = rowWeight * rowWeight + colWeight * colWeight;
     weight = std::sqrtf(weight);
     f32 phase = 32768.0f * weight;
-    f32 wave = 1.0f + 0.33333334f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
     f32 dot = nrm->inprod(mC5C);
+    f32 wave = 1.0f + 0.33333334f * (cM_ssin((s16)(phase + mC68[9])) + cM_ssin((s16)(phase + mC68[10])) + cM_ssin((s16)(phase + mC68[11])));
     mC80 += *nrm * (dot * (wave * L_attr.m14 * (1.0f / L_attr.m08)));}
 
 inline void daObjBuoyflag::Packet_c::calc_pos_spd(int row, int col) {
