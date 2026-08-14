@@ -103,6 +103,7 @@ BOOL daObj_Search::Act_c::_createHeap() {
 
 /* 800FDB8C-800FDCAC       .text searchCreateHeap__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::searchCreateHeap() {
+    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(
         g_dComIfG_gameInfo.mResControl.getRes(m_arc_name, 5, &g_dComIfG_gameInfo.mResControl.mObjectInfo[0], 0x40)
     );
@@ -124,6 +125,7 @@ bool daObj_Search::Act_c::searchCreateHeap() {
 
 /* 800FDCAC-800FDDBC       .text beamCreateHeap__Q212daObj_Search5Act_cFi */
 bool daObj_Search::Act_c::beamCreateHeap(int i_beamNo) {
+    /* Nonmatching */
     static u32 dzb[2] = {9, 10};
 
     J3DModelData* modelData = static_cast<J3DModelData*>(
@@ -160,6 +162,7 @@ static BOOL nodeControl_CB(J3DNode* i_node, int i_tim) {
 
 /* 800FDE08-800FE10C       .text _nodeControl__Q212daObj_Search5Act_cFP7J3DNodeP8J3DModel */
 void daObj_Search::Act_c::_nodeControl(J3DNode* i_node, J3DModel* i_model) {
+    /* Nonmatching */
     u16 idx = static_cast<J3DJoint*>(i_node)->getJntNo();
     MtxP mtx = i_model->getAnmMtx(idx);
 
@@ -240,6 +243,7 @@ void daObj_Search::Act_c::modeSearchPathInit() {
 
 /* 800FE244-800FEA6C       .text modeSearchPath__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPath() {
+    /* Nonmatching */
     s16 name = 0xF3;
 
     dLib_pathMove(&m838, &m844, mPath, (f32)attr()->m02, NULL, NULL);
@@ -387,6 +391,7 @@ void daObj_Search::Act_c::modeToStopInit() {
 
 /* 800FEBB4-800FEECC       .text modeToStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToStop() {
+    /* Nonmatching */
     bool b1 = false;
     bool b2 = false;
 
@@ -495,6 +500,7 @@ void daObj_Search::Act_c::modeSearchBdk() {
 
 /* 800FFE78-80100080       .text modeProc__Q212daObj_Search5Act_cFQ312daObj_Search5Act_c6Proc_ei */
 void daObj_Search::Act_c::modeProc(daObj_Search::Act_c::Proc_e i_proc, int i_mode) {
+    /* Nonmatching */
     typedef void(daObj_Search::Act_c::*mode_func_t)(void);
     struct mode_entry_t {
         mode_func_t init;
@@ -522,10 +528,13 @@ void daObj_Search::Act_c::modeProc(daObj_Search::Act_c::Proc_e i_proc, int i_mod
 }
 
 /* 80100080-801001C4       .text __ct__Q212daObj_Search5Bgc_cFv */
-daObj_Search::Bgc_c::Bgc_c() : dBgS_LinChk() {}
+daObj_Search::Bgc_c::Bgc_c() : dBgS_LinChk() {
+    /* Nonmatching */
+}
 
 /* 801001C4-801002D4       .text wall_pos__Q212daObj_Search5Bgc_cFPCQ212daObj_Search5Act_cP4cXyzP4cXyzPbPf */
 void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c* i_actor, cXyz* o_pos, cXyz* o_normal, bool* o_hit, float* o_dist) {
+    /* Nonmatching */
     Set(o_pos, o_normal, (fopAc_ac_c*)i_actor);
 
     dBgS* bg = dComIfG_Bgsp();
@@ -545,6 +554,7 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c* i_actor, cXyz* o_p
 
 /* 801002E0-8010035C       .text SetArgData__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::SetArgData() {
+    /* Nonmatching */
     u32 param = fopAcM_GetParam(this);
     m7E2 = param >> 24;
     m837 = (param >> 16) & 0xff;
@@ -565,6 +575,7 @@ void daObj_Search::Act_c::SetArgData() {
 
 /* 8010035C-8010071C       .text CreateInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::CreateInit() {
+    /* Nonmatching */
     set_path_info();
 
     m7B6 = 0;
@@ -572,7 +583,7 @@ void daObj_Search::Act_c::CreateInit() {
     m7B8 = 0;
 
     mModel->setBaseTRMtx(mModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -1000.0f, 1500.0f, 1000.0f, 1500.0f);
+    fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -1000.0f, 1000.0f, 1500.0f, 1000.0f);
 
     mBgWBeam[0]->SetCrrFunc(dBgS_MoveBGProc_Typical);
     mBgWBeam[1]->SetCrrFunc(dBgS_MoveBGProc_Typical);
@@ -638,6 +649,7 @@ void daObj_Search::Act_c::CreateInit() {
 
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
 cPhs_State daObj_Search::Act_c::_create() {
+    /* Nonmatching */
     fopAcM_SetupActor(this, daObj_Search::Act_c);
 
     cPhs_State phase = dComIfG_resLoad(&mPhs, m_arc_name);
@@ -728,6 +740,7 @@ daObj_Search::Act_c::Act_c() : mBgc(), mCps(), mStts(), m60C(), m624(), m63C(), 
 
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
 void daObj_Search::Act_c::smoke_set(float i_scale, int i_timer) {
+    /* Nonmatching */
     m7F4 = m600;
     m800.x = 0;
     m800.y = 0;
@@ -752,6 +765,7 @@ void daObj_Search::Act_c::smoke_set(float i_scale, int i_timer) {
 
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::_execute() {
+    /* Nonmatching */
     if (attr()->m00 != 0) {
         return true;
     }
@@ -821,6 +835,7 @@ bool daObj_Search::Act_c::_execute() {
 
 /* 801013AC-80101464       .text check_bk_control__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::check_bk_control() {
+    /* Nonmatching */
     fopAc_ac_c* bk = fopAcM_SearchByID(mChildId);
     if (bk != NULL) {
         m860 = 0;
@@ -840,6 +855,7 @@ void daObj_Search::Act_c::check_bk_control() {
 
 /* 80101464-801014E4       .text set_mtx_base__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_base() {
+    /* Nonmatching */
     mModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -848,6 +864,7 @@ void daObj_Search::Act_c::set_mtx_base() {
 
 /* 801014E4-801018A8       .text set_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_light_A() {
+    /* Nonmatching */
     cXyz lightPos(0.0f, 0.0f, 0.0f);
     cXyz lightDir(0.0f, 0.0f, attr()->m04);
 
@@ -904,6 +921,7 @@ void daObj_Search::Act_c::set_mtx_light_A() {
 
 /* 801018A8-80101BAC       .text set_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_light_B() {
+    /* Nonmatching */
     cXyz lightPos(0.0f, 0.0f, 0.0f);
     cXyz lightDir(0.0f, 0.0f, attr()->m04);
     cXyz center(0.0f, 0.0f, attr()->m04);
@@ -958,6 +976,7 @@ void daObj_Search::Act_c::set_moveBG_mtx_base() {
 
 /* 80101C30-80101CB0       .text set_moveBG_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
+    /* Nonmatching */
     PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0xf0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::XYZrotM(0, 0, -0x4000);
     mDoMtx_stack_c::transM(40.0f, -270.0f, 30.0f);
@@ -967,16 +986,18 @@ void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
 
 /* 80101CB0-80101D30       .text set_moveBG_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
+    /* Nonmatching */
     PSMTXCopy((MtxP)((u8*)mModel->getAnmMtx(0) + 0x120), mDoMtx_stack_c::get());
     mDoMtx_stack_c::XYZrotM(0, 0, -0x4000);
-    mDoMtx_stack_c::transM(-1010.0f, -270.0f, 9585.62f);
+    mDoMtx_stack_c::transM(45.0f, -270.0f, 35.0f);
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtxBeam[1]);
     mBgWBeam[1]->Move();
 }
 
 /* 80101D30-80101D94       .text bg_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::bg_check() {
-    if (fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0)) > 1000000.0f) {
+    /* Nonmatching */
+    if (fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0)) > 2000.0f) {
         return;
     }
     if (m7B8 == 0) {
@@ -987,6 +1008,7 @@ void daObj_Search::Act_c::bg_check() {
 
 /* 80101D94-8010234C       .text player_check__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::player_check() {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz diff = player->current.pos - m624[0];
     f32 dist1 = diff.abs();
@@ -1066,6 +1088,7 @@ bool daObj_Search::Act_c::player_check() {
 
 /* 8010234C-80102384       .text set_path_info__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_path_info() {
+    /* Nonmatching */
     if (m837 != 0xff) {
         dLib_pathInfo(&mPath, m837);
     }
