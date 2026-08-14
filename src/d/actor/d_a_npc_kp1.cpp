@@ -471,8 +471,8 @@ u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
     }
     if (dComIfGs_isGetItemReserve(0xF)) {
         if (!dComIfGs_checkReserveItem(0x9B)) {
-            bool flag = dComIfGs_getEventReg(0xCCFF) >= 1;
-            return flag + 0x1E83;
+            u8 eventReg = dComIfGs_getEventReg(0xCCFF);
+            return (eventReg >= 1) + 0x1E83;
         }
     }
     if (dComIfGs_isGetItemReserve(0xE)) {
@@ -794,7 +794,7 @@ BOOL daNpc_Kp1_c::wait_action1(void* param_1) {
 }
 
 /* 00001C88-00001DB8       .text demo__11daNpc_Kp1_cFv */
-u8 daNpc_Kp1_c::demo() { /* Nonmatching */
+u8 daNpc_Kp1_c::demo() {
     if (demoActorID == 0) {
         if (mDemoFlag != 0) {
             mDemoFlag = 0;
@@ -803,14 +803,13 @@ u8 daNpc_Kp1_c::demo() { /* Nonmatching */
         mDemoFlag = 1;
         dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
         s16 frame_max = m_head_tex_pattern->getFrameMax();
-        mBtpFrame++;
-        if (mBtpFrame >= frame_max) {
-            mBtpFrame = frame_max;
+        if (++mBtpFrame >= frame_max) {
+            mBtpFrame = m_head_tex_pattern->getFrameMax();
         }
         J3DAnmTexPattern* btp = demo_actor->getP_BtpData("Kp");
         if (btp != NULL) {
             m_head_tex_pattern = btp;
-            if (mBtpAnm.init(mpMorf->getModel()->getModelData(), btp, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,
+            if (mBtpAnm.init(mpMorf->getModel()->getModelData(), m_head_tex_pattern, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,
                              -1, true, 0) != 0)
             {
                 mBtpFrame = 0;
