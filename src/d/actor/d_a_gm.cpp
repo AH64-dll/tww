@@ -64,6 +64,7 @@ void wing_ret_set(gm_class*) {
 
 /* 00002204-000022C4       .text fuwafuwa_set__FP8gm_class */
 void fuwafuwa_set(gm_class* i_this) {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if (i_this->current.pos.z >= player->current.pos.z + 176.0f) {
@@ -145,6 +146,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 
 /* 00007EBC-0000842C       .text daGM_Create__FP10fopAc_ac_c */
 static cPhs_State daGM_Create(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     gm_class* a_this = (gm_class*)i_this;
 
     fopAcM_SetupActor(a_this, gm_class);
