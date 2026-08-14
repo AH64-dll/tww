@@ -36,16 +36,16 @@ daNpc_Kp1_HIO_c::daNpc_Kp1_HIO_c() { /* Nonmatching */
 }
 
 /* 00000198-0000035C       .text nodeCallBack_Kp__FP7J3DNodei */
-static BOOL nodeCallBack_Kp(J3DNode* i_node, int i_param) { /* Nonmatching */
+static BOOL nodeCallBack_Kp(J3DNode* i_node, int i_param) {
     if (i_param == 0) {
-        daNpc_Kp1_c* actor = (daNpc_Kp1_c*)j3dSys.getModel()->getUserArea();
+        J3DModel* model = j3dSys.getModel();
+        daNpc_Kp1_c* actor = (daNpc_Kp1_c*)model->getUserArea();
         if (actor != NULL) {
-            static cXyz a_att_pos_offst;
+            static cXyz a_att_pos_offst(0.0f, 0.0f, 0.0f);
             static cXyz a_eye_pos_offst(20.0f, -20.0f, 0.0f);
 
             J3DJoint* jnt_p = (J3DJoint*)i_node;
             s32 jnt_no = jnt_p->getJntNo();
-            J3DModel* model = j3dSys.getModel();
 
             mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
             if (jnt_no == actor->m_head_jnt_num) {
