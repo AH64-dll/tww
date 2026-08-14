@@ -914,7 +914,7 @@ BOOL daBigelf_c::init() {
     if ((s32)m3F4 == 0) {
         setAction(&daBigelf_c::wait_action, NULL);
     }
-    current.pos.y = 30.0f + old.pos.y;
+    current.pos.y = 30.0f + home.pos.y;
     mAttentionBasePos = current.pos;
     mAttentionBasePos.y += 100.0f;
     mEyePos = mAttentionBasePos;
@@ -1333,7 +1333,7 @@ actor_process_profile_definition g_profile_BIGELF = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x012B,
     /* Actor SubMtd */ &l_daBigelf_Method,
-    /* Process Group */ fpcLy_CURRENT_e,
+    /* Status       */ fopAcStts_UNK40000_e,
     /* Unique ID    */ 0,
     /* Delete Delay */ 0x000C,
 };
