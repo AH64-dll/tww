@@ -34,7 +34,7 @@ namespace daObjMagmarock {
         void vanish_proc_init();
         void vanish_proc();
         BOOL CreateHeap();
-        void CreateInit();
+        BOOL CreateInit();
         void calc_ground_quat();
         inline bool _execute();
 
