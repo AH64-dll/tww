@@ -1413,8 +1413,8 @@ bool daGy_c::_execute() {
                     modeProcCall();
                     fopAcM_posMoveF(this, (cXyz*)&m8A8);
                     current.pos.y = getWaterY();
-                    switch (mD15) {
-                    case 5: {
+                    u8 d15 = mD15;
+                    if ((s8)d15 == 5) {
                         if (speed.y < -5.0f) {
                             cLib_addCalcAngleS2(&current.angle.x, (s16)(g_regHIO.mChild[12].mShortRegs[1] + 0x2000), 8, 0x400);
                         } else if (speed.y > 40.0f) {
@@ -1431,10 +1431,7 @@ bool daGy_c::_execute() {
                             dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp44, 0xFF, NULL, -1, NULL, NULL, NULL);
                             JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                         }
-                        break;
-                    }
-                    case 6:
-                    case 4: {
+                    } else if ((s8)d15 == 6 || (s8)d15 == 4) {
                         if (m2B0 == 4) {
                             cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
                         }
@@ -1446,10 +1443,7 @@ bool daGy_c::_execute() {
                             dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp38, 0xFF, NULL, -1, NULL, NULL, NULL);
                             JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_S, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                         }
-                        break;
-                    }
-                    case 7:
-                    case 9: {
+                    } else if ((s8)d15 == 7 || (s8)d15 == 9) {
                         daSea_calcWave(current.pos.x, current.pos.z);
                         if (gravity == 0.0f && m91C < 0.0f) {
                             cXyz sp2C(2.0f + g_regHIO.mChild[10].mFloatRegs[0],
@@ -1459,11 +1453,8 @@ bool daGy_c::_execute() {
                             dComIfGp_particle_set(0x3C, &current.pos, NULL, &sp2C, 0xFF, NULL, -1, NULL, NULL, NULL);
                             JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_LANDING_L, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                         }
-                        break;
-                    }
-                    default:
+                    } else {
                         cLib_addCalcAngleS2(&current.angle.x, 0, 8, 0x800);
-                        break;
                     }
                     if (m2B0 != 0) {
                         mAcch.CrrPos(*dComIfG_Bgsp());
