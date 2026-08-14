@@ -1507,7 +1507,6 @@ void daNpc_Ds1_c::RoomEffectDelete() {
 
 /* 00003F20-000041D0       .text _draw__11daNpc_Ds1_cFv */
 BOOL daNpc_Ds1_c::_draw() {
-    /* Nonmatching (demo) */
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
