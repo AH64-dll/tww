@@ -519,17 +519,18 @@ BOOL daObj_hsh_c::eventProc() {
         }
     }
 
+    BOOL ret = 0;
     if (m504 & 1) {
         if (evmgr->endCheck(m530[m515])) {
             eventEnd();
         }
-        return 1;
+        ret = 1;
+    } else if (staffId != -1) {
+        ret = 1;
+    } else {
+        ret = 0;
     }
-
-    if (staffId != -1) {
-        return 1;
-    }
-    return 0;
+    return ret;
 }
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
