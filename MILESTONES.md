@@ -271,3 +271,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T07:42Z — M37: cycle 10 ALL GREEN at 26e32c9d3 — htetu1 cycle-9 FAIL rows closed (re-class to Equivalent makes all legs CHECK-only). 10 cycles: 9 green + 1 REAL catch corrected. The MatchingFor-relink pin check proved itself end-to-end: misclass caught by gate → doctrine codified (0 sub-100 required) → re-class → re-gate → closure. Ledger: 49 NonMatching / 51 Equivalent / 313 Matching + 7 MatchingFor. 28 flips (#30-57).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T07:58Z — M38: flip #58 d_a_obj_flame → Equivalent — 29 flips this session (#30-58). Ledger: 48 NonMatching / 52 Equivalent / 313 Matching + 7 MatchingFor. flame: 5-cycle structural loop 9→3→2→1→0 closed (create_mode_init guard, liftup in-place fmr 3==3, Draw tevStr, magmarock ternary). Gate 1d4ef003b 10:57:57. BLead-10 shift: 7 flips (#52-58).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
