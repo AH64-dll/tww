@@ -5,57 +5,229 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mt.h"
+#include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
+#include "d/d_s_play.h"
+#include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_hostIO.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "res/Object/Mt.h"
+#include "JAZelAudio/JAIZelBasic.h"
+
+static daMt_HIO_c l_HIO;
+static s32 mt_all_count;
+static s32 mt_fight_count;
+static s32 j_index;
+static u16 mt_tex_anm_idx[] = {dRes_INDEX_MT_BTP_MG_MABA_e, dRes_INDEX_MT_BTP_MG_TOJI_e};
+static u16 mt_tex_max_frame[] = {6, 1};
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */
 daMt_HIO_c::daMt_HIO_c() {
-    /* Nonmatching */
+    m04 = 0;
+    m05 = 0;
+    m06 = 0;
+    m07 = 0;
+    m08 = 0x157c;
+    m0C = -7500.0f;
+    m10 = 0xf;
+    m14 = 0.5f;
+    m18 = 21.0f;
+    m1C = 0.8f;
+    m20 = 0.8f;
+    m24 = 450.0f;
+    m28 = 350.0f;
+    m2C = 30.0f;
+    m30 = 0x11;
+    m32 = 0x28;
+    m34 = 400.0f;
+    m38 = 0x2d;
+    m3C = 0x2b;
+    m3E = 0x2f;
+    m3A = 0x46;
+    m40 = 55.0f;
+    m44 = 30.0f;
+    m48 = 25.0f;
+    m4C = 0.65f;
+    m50 = -5;
+    m52 = 0x2af8;
+    m54 = 0x258;
+    m58 = 1.0f;
+    m5C = 1.0f;
 }
 
 /* 00000230-000002D8       .text anm_init__FP8mt_classifUcfi */
-void anm_init(mt_class*, int, float, unsigned char, float, int) {
-    /* Nonmatching */
+void anm_init(mt_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float playSpeed, int soundResIdx) {
+    i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Mt", anmResIdx), loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
 }
 
 /* 000002D8-00000350       .text mt_a_d_sub__FPvPv */
-void mt_a_d_sub(void*, void*) {
-    /* Nonmatching */
+void* mt_a_d_sub(void* i_actor, void*) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_MT_e) {
+        mt_all_count++;
+        mt_class* i_this = (mt_class*)i_actor;
+        if (i_this->m454 == 1) {
+            mt_fight_count++;
+        }
+    }
+    return NULL;
 }
 
 /* 00000350-00000390       .text mt_check__FP8mt_class */
-void mt_check(mt_class*) {
-    /* Nonmatching */
+void mt_check(mt_class* i_this) {
+    mt_fight_count = 0;
+    mt_all_count = 0;
+    fpcM_Search(mt_a_d_sub, i_this);
 }
 
 /* 00000390-00000478       .text mt_bg_check__FP8mt_class */
-void mt_bg_check(mt_class*) {
-    /* Nonmatching */
+void mt_bg_check(mt_class* i_this) {
+    f32 f31 = 40.0f + REG0_F(3);
+
+    i_this->current.pos.y -= f31;
+    i_this->old.pos.y -= f31;
+    i_this->actor_status |= 0x400;
+    i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+    i_this->current.pos.y += f31;
+    i_this->old.pos.y += f31;
+
+    if (i_this->home.pos.y - i_this->current.pos.y > 1000.0f
+        && i_this->current.pos.y - i_this->mAcch.m_ground_h > 5000.0f)
+    {
+        i_this->m1CBC = 1;
+        fopAcM_delete(i_this);
+    }
 }
 
 /* 00000478-0000053C       .text tex_anm_set__FP8mt_classUs */
-void tex_anm_set(mt_class*, unsigned short) {
-    /* Nonmatching */
+void tex_anm_set(mt_class* i_this, unsigned short idx) {
+    i_this->m345 = 1;
+    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Mt", mt_tex_anm_idx[idx]);
+    i_this->m346 = mt_tex_max_frame[idx];
+    i_this->m33C = pJVar2;
+    i_this->m344 = 0;
+    pJVar2->setFrame(0.0f);
+
+    u16 materialNum = pJVar2->getUpdateMaterialNum();
+    for (u16 i = 0; i < materialNum; i++) {
+        i_this->m340[i].setAnmTexPattern(pJVar2);
+    }
 }
 
 /* 0000053C-000005EC       .text mt_eye_tex_anm__FP8mt_class */
-void mt_eye_tex_anm(mt_class*) {
-    /* Nonmatching */
+void mt_eye_tex_anm(mt_class* i_this) {
+    if (i_this->m464 > 0) {
+        i_this->m464--;
+    } else {
+        i_this->m464 = (s16)(50.0f + cM_rndF(100.0f));
+        if (i_this->m345 == 0) {
+            tex_anm_set(i_this, 0);
+        }
+    }
+
+    if (i_this->m345 != 0) {
+        if (i_this->m344 < i_this->m346) {
+            i_this->m344++;
+        } else {
+            i_this->m345 = 0;
+        }
+    }
 }
 
+/* 00000390-00000478       .text mt_bg_check__FP8mt_class */
 /* 000005EC-00000720       .text nodeCallBack_head__FP7J3DNodei */
-static BOOL nodeCallBack_head(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_head(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        mt_class* i_this = (mt_class*)model->getUserArea();
+
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+
+            if (jntNo == 2) {
+                cMtx_YrotM(*calc_mtx, -i_this->m640[0].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[0].z);
+            } else if (jntNo == 3) {
+                cMtx_YrotM(*calc_mtx, i_this->m640[15].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[15].z);
+            } else {
+                MtxScale(i_this->m18F0, i_this->m18F0, i_this->m18F0, 1);
+            }
+
+            model->setAnmMtx(jntNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000075C-0000098C       .text nodeCallBack_body__FP7J3DNodei */
-static BOOL nodeCallBack_body(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_body(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        mt_class* i_this = (mt_class*)model->getUserArea();
+
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+
+            if (jntNo == 2) {
+                cMtx_YrotM(*calc_mtx, -i_this->m640[j_index + 1].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[j_index + 1].z);
+            } else if (jntNo == 3) {
+                cMtx_YrotM(*calc_mtx, -i_this->m640[j_index + 2].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[j_index + 2].z);
+            } else if (jntNo == 4) {
+                cMtx_YrotM(*calc_mtx, i_this->m640[j_index + 16].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[j_index + 16].z);
+            } else if (jntNo == 5) {
+                cMtx_YrotM(*calc_mtx, i_this->m640[j_index + 17].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[j_index + 17].z);
+                j_index += 2;
+            }
+
+            model->setAnmMtx(jntNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000098C-00000B28       .text nodeCallBack_tail__FP7J3DNodei */
-static BOOL nodeCallBack_tail(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_tail(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        mt_class* i_this = (mt_class*)model->getUserArea();
+
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+
+            if (jntNo == 2) {
+                cMtx_YrotM(*calc_mtx, -i_this->m640[13].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[13].z);
+            } else if (jntNo == 3) {
+                cMtx_YrotM(*calc_mtx, -i_this->m640[14].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[14].z);
+            } else if (jntNo == 4) {
+                cMtx_YrotM(*calc_mtx, i_this->m640[28].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[28].z);
+            } else if (jntNo == 5) {
+                cMtx_YrotM(*calc_mtx, i_this->m640[29].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[29].z);
+            }
+
+            model->setAnmMtx(jntNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000B28-0000171C       .text body_control2__FP8mt_class */
