@@ -364,8 +364,135 @@ void body_control1(mt_class* i_this) {
 }
 
 /* 000022D8-000028BC       .text body_control3__FP8mt_class */
-void body_control3(mt_class*) {
+void body_control3(mt_class* i_this) {
     /* Nonmatching */
+    cXyz sp30;
+    cXyz sp24;
+    cXyz sp18;
+    cXyz spC;
+
+    i_this->m4A0[0].x = i_this->current.pos.x;
+    i_this->m4A0[0].y = i_this->current.pos.y;
+    i_this->m4A0[0].z = i_this->current.pos.z;
+    i_this->m560[0].x = i_this->shape_angle.x;
+    i_this->m560[0].y = i_this->shape_angle.y;
+    i_this->m560[0].z = i_this->shape_angle.z;
+
+    cXyz* p500 = &i_this->m500[0];
+    cXyz* p4A0 = &i_this->m4A0[0];
+    csXyz* p560 = &i_this->m560[0];
+
+    mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
+    mDoMtx_XrotM(*calc_mtx, i_this->shape_angle.z);
+
+    sp30.x = 0.0f;
+    sp30.y = 32.0f * i_this->m474;
+    sp30.z = -17.0f * i_this->m474;
+    MtxPosition(&sp30, &spC);
+
+    s16 r19 = 0;
+    if (i_this->m18FC != 0) {
+        r19 = (s16)((i_this->m18FC & 2) * 0x1F4);
+    }
+
+    s32 r28 = 0;
+    int i = 0;
+    do {
+        if (i > 0) {
+            r28 -= (s16)(i_this->m488[1] + r19);
+            sp30.x = i_this->m330
+                     * jmaSinTable[(u16)(i_this->m466 * (REG0_S(5) + 0x1388)
+                                         + i * (REG0_S(6) + 0x1B58))
+                                   >> jmaSinShift];
+            sp30.y = 0.0f;
+            sp30.z = -i_this->m478;
+            mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+            mDoMtx_XrotM(*calc_mtx, (s16)(i_this->shape_angle.x + r28));
+            mDoMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
+            MtxPosition(&sp30, &sp18);
+
+            f32 f30 = sp18.x + (p4A0[0].x - p4A0[-1].x);
+            f32 f31 = sp18.y + (p4A0[0].y - p4A0[-1].y);
+            f32 f29 = sp18.z + (p4A0[0].z - p4A0[-1].z);
+            s16 r20 = cM_atan2s(f30, f29);
+            f32 f2 = f30 * f30 + f29 * f29;
+            f2 = std::sqrtf(f2);
+            s16 r17 = -cM_atan2s(f31, f2);
+
+            sp30.x = 0.0f;
+            sp30.y = 0.0f;
+            sp30.z = 35.0f + REG0_F(7);
+            mDoMtx_YrotS(*calc_mtx, r20);
+            mDoMtx_XrotM(*calc_mtx, r17);
+            MtxPosition(&sp30, &sp24);
+
+            s16 r0 = r20 - i_this->shape_angle.y;
+            if (r0 < 0) {
+                r0 = -r0;
+            }
+            if ((u16)r0 < 0x4000) {
+                p560[0].y = r20;
+                p560[0].x = (s16)(r17 - 0x8000);
+            } else {
+                p560[0].y = (s16)(r20 + 0x8000);
+                p560[0].x = -r17;
+            }
+
+            p500[0].x = p4A0[0].x;
+            p500[0].y = p4A0[0].y;
+            p500[0].z = p4A0[0].z;
+            p4A0[0].x = p4A0[-1].x + sp24.x;
+            p4A0[0].y = p4A0[-1].y + sp24.y;
+            p4A0[0].z = p4A0[-1].z + sp24.z;
+        }
+
+        J3DModel* model = i_this->mpMorf[i]->getModel();
+        model->setBaseScale(i_this->scale);
+        PSMTXTrans(mDoMtx_stack_c::now, p4A0[0].x + spC.x, p4A0[0].y + spC.y,
+                   p4A0[0].z + spC.z);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, p560[0].y);
+        mDoMtx_XrotM(mDoMtx_stack_c::now, p560[0].x);
+        mDoMtx_ZrotM(mDoMtx_stack_c::now, p560[0].z);
+        if (i == 0) {
+            mDoMtx_stack_c::scaleM(l_HIO.m20, l_HIO.m20, l_HIO.m20);
+        } else {
+            mDoMtx_stack_c::scaleM(i_this->m600[i], i_this->m600[i] * i_this->m620[i], 1.0f);
+            if (i == 7) {
+                mDoMtx_stack_c::scaleM(i_this->m18F0, i_this->m18F0, i_this->m18F0);
+            }
+        }
+        mDoMtx_stack_c::transM(0.0f, 0.0f, i_this->m470);
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+        if (i == 0) {
+            i_this->eyePos = i_this->current.pos;
+            i_this->mE48[0].SetC(i_this->current.pos);
+            i_this->mE48[0].OnAtSetBit();
+            i_this->m17A8.SetR(-30.0f);
+            if (fabs(i_this->speedF) > 2.0f) {
+                i_this->mE48[0].OnAtVsBitSet(cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e);
+            } else {
+                i_this->mE48[0].OffAtVsBitSet(cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e);
+            }
+            if (i_this->m466 < 0x5A) {
+                i_this->mE48[0].OnAtVsPlayerBit();
+                i_this->mE48[0].SetR(60.0f);
+            } else {
+                i_this->mE48[0].OffAtVsPlayerBit();
+                i_this->mE48[0].SetR(40.0f);
+            }
+            dComIfG_Ccsp()->Set(&i_this->mE48[0]);
+        }
+        p500++;
+        p4A0++;
+        p560++;
+        i++;
+    } while (i < 8);
+
+    cLib_addCalc0(&i_this->m18F4, 1.0f, 0.01f);
+    cLib_addCalc2(&i_this->m470, 20.0f, 1.0f, 1.0f);
+    cLib_addCalcAngleS2(&i_this->current.angle.z, 0, 2, 0x400);
 }
 
 /* 000028BC-00002AB0       .text body_control4__FP8mt_class */
