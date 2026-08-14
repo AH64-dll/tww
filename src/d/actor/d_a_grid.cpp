@@ -5,6 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grid.h"
+#include "d/d_camera.h"
+#include "f_op/f_op_camera.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
 class daShip_c;
@@ -275,7 +277,39 @@ bool daGrid_c::_delete() {
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
 bool daGrid_c::_execute() {
-    /* Nonmatching */
+    u8 alpha = mPacket.mAlpha;
+
+    s32 target;
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
+        cXyz eye = dComIfGp_getCamera(0)->mCamera.Eye();
+        f32 dist = PSVECSquareMag(&(current.pos - eye));
+        dist = std::sqrtf(dist);
+        s32 result;
+        if (dist > l_HIO.m34) {
+            result = l_HIO.m30;
+        } else {
+            f32 t = dist / l_HIO.m34;
+            result = (s32)((f32)l_HIO.m30 * t + (f32)l_HIO.m31 * (1.0f - t));
+        }
+        target = result;
+    } else {
+        target = l_HIO.m30;
+    }
+
+    u8 t8 = target & 0xFF;
+    if (t8 > alpha + 5) {
+        mPacket.mAlpha = alpha + 5;
+    } else if (t8 < alpha - 5) {
+        mPacket.mAlpha = alpha - 5;
+    } else {
+        mPacket.mAlpha = t8;
+    }
+
+    if (scale.y < 0.06f) {
+        return true;
+    }
+    ho_move(this);
+    return true;
 }
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
