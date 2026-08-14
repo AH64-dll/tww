@@ -211,3 +211,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T03:35Z — M27: flips #47 msdan2 (MatchingFor, rel re-linked on retail = strongest gate form) + #48 ftree (Equivalent, 9/9 strip-equal after S_init reclassification) → 4-version cycle 5 ALL GREEN at 16961e3bc (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416) — 5 consecutive cycles green today. Ledger: 58 NonMatching / 43 Equivalent / 313 Matching + 4 MatchingFor. 18 flips this session (#30-48: 3 Matching + 13 Equivalent + 1 MatchingFor + 1 re-class).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T03:56Z — M28: flip #49 d_a_npc_mn → Equivalent — 20 flips this session (#30-49). Ledger: 57 NonMatching / 44 Equivalent / 313 Matching + 4 MatchingFor. mn: 4 structural cleared byte-exact (executeWait CSE-kill, executeWalk/eventWalk clrlwi, lookBack case-0 pivot NOT kantera), 114/119 fns 100, 5 accept-class. Gate 4a3cc2b2f 06:55:36. Bench: 6 flips concurred this RLead-12-shift (#43-49 cycle: aj1/magmarock/ss/hcbh/msdan2/ftree/mn all QA'd); d_a_sss value-bug catch (pos.y 70-vs-20).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
