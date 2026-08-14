@@ -139,3 +139,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-13T15:15Z — M15: flip #37 d_a_obj_balancelift → Equivalent — 8 flips this session (#30-37: aygr/tag_ba1/hami2 Matching; kg2/sarace/vtil/kanoke/balancelift Equivalent). Ledger: 68 NonMatching / 33 Equivalent / 314 Matching. Gate doctrine caught a REAL shared-header ripple (d_shop.h m54→mSelectIdx rename missed rsh1.cpp:931 → compile break at committed state; D10 fixed b808825e9, re-gated 5e983f5a7 18:15:08). Bench caught 20+ real bugs today incl 2 gameplay logic inversions (magmarock polarity) + mVelocity 440→2.0.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T00:10Z — M16: flip #39 d_a_npc_ds1 → Equivalent — 10 flips this session (#30-39: 3 Matching + 7 Equivalent). Ledger: 66 NonMatching / 35 Equivalent / 314 Matching. ds1: 46/47 fns 100 via full stub transcription; marker arbitration settled (nonstandard 'demo' marker dropped per msdan precedent; D44J01 _draw divergence 0x30C-vs-0x2AC recorded + gate-enforced). Double gate 03:09:18/03:09:30; 4-version cycle dispatched for rsh1/bs1 rename verification. Wave respawned after 8.5h gap: 33 agents, integrity gate green at 5d4386add.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
