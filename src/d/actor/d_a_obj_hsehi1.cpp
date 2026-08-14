@@ -442,10 +442,19 @@ void daObj_hsh_c::checkOrder() {
     if (eventInfo.checkCommandTalk()) {
         if (m514 == 4 || m514 == 3 || m514 == 5) {
             m514 = -1;
-            u8 present = (dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e ||
-                          dComIfGp_event_getTalkXYBtn() == dTalkBtn_Y_e ||
-                          dComIfGp_event_getTalkXYBtn() == dTalkBtn_Z_e);
-            if (!present) {
+            u8 present = 0;
+            u8 talkBtn = dComIfGp_event_getTalkXYBtn();
+            if (talkBtn == dTalkBtn_X_e) {
+                present = 1;
+            }
+            if (talkBtn == dTalkBtn_Y_e) {
+                present = 1;
+            }
+            if (talkBtn == dTalkBtn_Z_e) {
+                present = 1;
+            }
+            if (present) {
+            } else {
                 setAction(&talkAction, NULL);
             }
         }
