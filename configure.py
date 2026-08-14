@@ -1513,7 +1513,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_swhit0"),
     ActorRel(Matching,    "d_a_swtdoor"),
     ActorRel(Matching,    "d_a_tag_attention"),
-    ActorRel(Matching,    "d_a_tag_ba1"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_tag_ba1"),  # D44J01 demo divergence (0x568-vs-0x560 .text): Matching on retail 3, demo assembles original
     ActorRel(Matching,    "d_a_tag_event"),
     ActorRel(Matching,    "d_a_tag_evsw"),
     ActorRel(Matching,    "d_a_tag_ghostship"),
@@ -1563,7 +1563,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_md"),
     ActorRel(NonMatching, "d_a_npc_so"),
     ActorRel(Matching,    "d_a_nzg"),
-    ActorRel(Matching,    "d_a_obj_aygr"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_aygr"),  # D44J01 demo divergence (0x88C-vs-0x888 .text): Matching on retail 3, demo assembles original
     ActorRel(Equivalent, "d_a_obj_balancelift"),  # accept-class 0-one-sided: calc_quat 99.91 frame-fix, Draw 90.12 multiset-identical, ride_actor_check/Create/calc_weight; markers 5/5 keep
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_barrier"),
     ActorRel(Matching,    "d_a_obj_bemos"),
@@ -1739,7 +1739,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_gnndemotakis"),
     ActorRel(Matching,    "d_a_obj_gong"),
     ActorRel(Matching,    "d_a_obj_gtaki"),
-    ActorRel(Matching,    "d_a_obj_hami2"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_hami2"),  # D44J01 demo divergence (cf947424-vs-de364dda rel sha1): Matching on retail 3, demo assembles original
     ActorRel(Matching,    "d_a_obj_hami3"),
     ActorRel(Matching,    "d_a_obj_hami4"),
     ActorRel(Matching,    "d_a_obj_hat"),
