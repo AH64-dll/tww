@@ -230,11 +230,12 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
 
     cXyz start;
     cXyz end2;
+    cXyz* pEnd2 = &end2;
     PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &start);
-    PSMTXMultVec(mDoMtx_stack_c::now, &end, &end2);
+    PSMTXMultVec(mDoMtx_stack_c::now, &end, pEnd2);
 
     dBgS_MirLightLinChk chk;
-    chk.Set(&start, &end2, this);
+    chk.Set(&start, pEnd2, this);
     if (dComIfG_Bgsp()->LineCross(&chk)) {
         end2 = chk.GetCross();
     }
@@ -244,7 +245,7 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
     mCps.CalcAtVec();
     mCps.GetAtVecP()->normalizeRS();
 
-    mC00 = cXyz(start).abs(end2) / L_attr.mCullSize;
+    mC00 = cXyz(start).abs(*pEnd2) / L_attr.mCullSize;
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
