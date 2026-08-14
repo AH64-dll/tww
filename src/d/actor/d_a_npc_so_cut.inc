@@ -338,6 +338,7 @@ void daNpc_So_c::cutJumpMapopenStart() {
 
 /* 00006148-000064B8       .text cutJumpMapopenProc__10daNpc_So_cFv */
 void daNpc_So_c::cutJumpMapopenProc() {
+    /* Nonmatching */
     daShip_c* ship = dComIfGp_getShipActor();
     if (ship == NULL) {
         dComIfGp_evmng_cutEnd(field_0xB6C);
@@ -640,6 +641,7 @@ void daNpc_So_c::cutTurnProc() {
 
 /* 00007114-00007324       .text cutMiniGameWarpStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpStart() {
+    /* Nonmatching */
     JAIZelBasic::getInterface()->field_0x00bf = 1;
 
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
@@ -674,6 +676,7 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 
 /* 00007324-00007438       .text cutMiniGameWarpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpProc() {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
     player->mDemo.mDemoType = 3;
     player->mDemo.mParam0 = 0;
@@ -694,6 +697,7 @@ void daNpc_So_c::cutMiniGameWarpProc() {
 
 /* 00007438-00007524       .text cutMiniGameReturnStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameReturnStart() {
+    /* Nonmatching */
     JAIZelBasic::getInterface()->field_0x00bf = 0;
 
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
@@ -714,6 +718,7 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 
 /* 00007524-0000781C       .text cutMiniGameReturnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameReturnProc() {
+    /* Nonmatching */
     daShip_c* ship = dComIfGp_getShipActor();
     s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
     current.pos = ship->current.pos;
@@ -801,6 +806,7 @@ void daNpc_So_c::cutMiniGamePlTurnStart() {
 
 /* 000079AC-00007AC0       .text cutMiniGamePlTurnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlTurnProc() {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
     player->mDemo.mDemoType = 3;
     player->mDemo.mParam0 = 0;
@@ -828,6 +834,7 @@ void daNpc_So_c::cutMiniGamePlUpStart() {
 
 /* 00007B1C-00007CBC       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
+    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
     player->mDemo.mDemoMode = 6;
 
