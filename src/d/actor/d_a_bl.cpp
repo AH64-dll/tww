@@ -927,7 +927,7 @@ void action_dousa(bl_class* i_this) {
     case 1:
         i_this->m31C = 1.5f;
         if (i_this->mFollowCB1.getEmitter() == NULL) {
-            dComIfGp_particle_set(0x122, &i_this->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(0x8122, &i_this->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             JAIZelBasic::zel_basic->seStart(0x5888, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
                                             1.0f, 1.0f, -1.0f, -1.0f, 0);
         }
