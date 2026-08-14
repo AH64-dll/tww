@@ -502,6 +502,63 @@ void daObjVyasi::Act_c::set_mtx() {
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::calc_dif_angle() {
     /* Nonmatching */
+    static csXyz l_rot[14] = {
+        csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+        csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
+    };
+    csXyz ang(0, 0, 0);
+
+    if (mState != 2) {
+        return;
+    }
+
+    s16 step = 2;
+    for (int i = 0; i < 14; i++) {
+        switch (joint_kind_table[i]) {
+        case 2: {
+            f32 t = m0504 * cM_ssin(m0508[i]);
+            ang.x = (s16)(20.0f * t);
+            ang.y = (s16)(40.0f * t);
+            ang.z = (s16)(40.0f * t);
+            break;
+        }
+        case 1: {
+            f32 t = m0504 * cM_ssin(m0508[i]);
+            ang.x = (s16)(120.0f * t);
+            ang.y = (s16)(180.0f * t);
+            ang.z = (s16)(220.0f * t);
+            if (i == 1) {
+                ang.z += (s16)(-3200.0f + 3200.0f * m0504);
+            }
+            break;
+        }
+        case 0: {
+            f32 t = m0504 * cM_ssin(m0508[i]);
+            ang.x = (s16)(700.0f * t);
+            ang.y = (s16)(1700.0f * t);
+            ang.z = (s16)(1700.0f * t);
+            ang.x += l_rot[i].x;
+            ang.y += l_rot[i].y;
+            ang.z += l_rot[i].z;
+            step = 1;
+            break;
+        }
+        case 3: {
+            if (m19C4 == 0 && i > 1 && i == 6) {
+                ang.z = (s16)(m19CC * cM_ssin(m19D0));
+                cLib_addCalcAngleS2(&m03AC[i].x, ang.x, step, 0x4000);
+                cLib_addCalcAngleS2(&m03AC[i].y, ang.y, step, 0x4000);
+                cLib_addCalcAngleS2(&m03AC[i].z, ang.z, step, 0x4000);
+                if (joint_kind_table[i] == 0) {
+                    m0508[i] += (s16)(1.5f * ((f32)m0524[i] - 176.0f));
+                } else {
+                    m0508[i] += m0524[i];
+                }
+            }
+            break;
+        }
+        }
+    }
 }
 
 /* 000025A8-00002880       .text quaternion_main__Q210daObjVyasi5Act_cFv */
