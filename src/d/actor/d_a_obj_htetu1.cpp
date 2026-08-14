@@ -140,13 +140,12 @@ void daObjHtetu1_c::unlock() {
 
 /* 000007F8-0000098C       .text get_water_h__13daObjHtetu1_cFv */
 f32 daObjHtetu1_c::get_water_h() {
-    /* Nonmatching */
     dBgS_WtrChk waterChk;
     cXyz chkPos = home.pos;
     f32 ret = current.pos.y;
 
     mDoMtx_stack_c::YrotS(current.angle.y);
-    cXyz offVec = cXyz::BaseZ;
+    cXyz offVec;
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &offVec);
     offVec *= 400.0f;
     chkPos += offVec;
