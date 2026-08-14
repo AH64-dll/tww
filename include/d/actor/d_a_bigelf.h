@@ -80,7 +80,7 @@ public:
     void talkInit();
     u16 talk();
     BOOL init();
-    void setAttention(bool);
+    void setAttention(BOOL);
     void lookBack();
     BOOL hunt();
     BOOL oct_search();

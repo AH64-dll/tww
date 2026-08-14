@@ -900,7 +900,7 @@ BOOL daBigelf_c::init() {
 }
 
 /* 00002534-000025A0       .text setAttention__10daBigelf_cFb */
-void daBigelf_c::setAttention(bool i_on) {
+void daBigelf_c::setAttention(BOOL i_on) {
     if (m3CA > 0) {
         m3CA--;
         return;
@@ -1058,6 +1058,7 @@ BOOL daBigelf_c::wait_action(void*) {
         if (chkFlag(0x2)) {
             attention_info.position = current.pos;
             eyePos = current.pos;
+            oct_delete();
         }
     }
     return 1;
