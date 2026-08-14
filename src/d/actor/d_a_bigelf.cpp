@@ -376,7 +376,7 @@ BOOL daBigelf_c::demoProcFlDemo() {
         case 0:
             cXyz pos = m3D0;
             pos.y += 20.0f;
-            if (f2 <= 167.0f) {
+            if (f2 >= 167.0f) {
                 m3DC++;
                 m3E0 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &pos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 JAIZelBasic::zel_basic->seStart(JA_SE_OBJ_DY_HANAFUBUKI, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -1210,8 +1210,8 @@ BOOL daBigelf_c::CreateHeap() {
         (J3DAnmTransform*)dComIfG_getObjectRes("bigelf", 8),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
-        2,
         0,
+        -1,
         1,
         NULL,
         0x80000,
@@ -1250,13 +1250,13 @@ BOOL daBigelf_c::CreateHeap() {
     JUT_ASSERT(0x829, m_jnt.getBackboneJntNum() >= 0);
     m_fl_jnt = modelData->getJointName()->getIndex("handRB");
     JUT_ASSERT(0x82D, m_fl_jnt >= 0);
-    J3DModelData* md = mpBckAnimator->getModel()->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         if (i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum() || i == m_fl_jnt) {
-            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack_Bigelf);
+            mpBckAnimator->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(
+                nodeCallBack_Bigelf);
         }
     }
-    model->setUserArea((u32)this);
+    mpBckAnimator->getModel()->setUserArea((u32)this);
     J3DModelData* flModelData = (J3DModelData*)dComIfG_getObjectRes("bigelf", 0xC);
     JUT_ASSERT(0x842, flModelData);
     mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x01000000);
