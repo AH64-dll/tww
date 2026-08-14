@@ -104,6 +104,7 @@ void Act_c::init_mtx() {
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
 BOOL Act_c::Execute(Mtx** i_mtx) {
+    /* Nonmatching */
     if (dComIfGs_isSwitch(prm_get_swSave(), home.roomNo)) {
         if (mTimer < 0.0f) {
             mTimer = 0.0f;
@@ -148,6 +149,7 @@ BOOL Act_c::Execute(Mtx** i_mtx) {
 
 /* 0000090C-000009AC       .text Draw__Q214daObjMsdanSub25Act_cFv */
 BOOL Act_c::Draw() {
+    /* Nonmatching */
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
 
