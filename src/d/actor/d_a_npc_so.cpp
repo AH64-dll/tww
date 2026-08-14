@@ -143,7 +143,7 @@ void daNpc_So_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 
     if (jntNo == m_jnt.getHeadJntNum()) {
         cXyz pos(0.0f, 0.0f, 0.0f);
-        cXyz off(24.0f, -12.0f, 0.0f);
+        cXyz off(24.0f, -16.0f, 0.0f);
         mDoMtx_stack_c::multVec(&pos, &field_0xB60);
         mDoMtx_stack_c::YrotM(m_jnt.mAngles[0][1]);
         mDoMtx_stack_c::ZrotM(m_jnt.mAngles[0][0]);
@@ -721,7 +721,7 @@ void daNpc_So_c::modeSwim() {
             cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mCirclePath.mPos), 8, 0x400);
             field_0xB04 = 0.0f;
         } else {
-            cLib_addCalc2(&field_0xB04, 1.0f, 1.0f, 3.0f);
+            cLib_addCalc2(&field_0xB04, 1.0f, 0.01f, 0.05f);
             cXyz move = (mCirclePath.mPos - current.pos) * field_0xB04;
             current.pos = current.pos + move;
             cLib_addCalcAngleS2(&shape_angle.y, mCirclePath.mAngle + 0x8000, 4, 0x400);
@@ -778,7 +778,7 @@ void daNpc_So_c::modeNearSwim() {
             field_0xB04 = 0.0f;
             current.pos.y += field_0xB34;
         } else {
-            cLib_addCalc2(&field_0xB04, 1.0f, 1.0f, 3.0f);
+            cLib_addCalc2(&field_0xB04, 1.0f, 0.01f, 0.05f);
             cXyz move = (mCirclePath.mPos - current.pos) * field_0xB04;
             current.pos = current.pos + move;
             cLib_addCalcAngleS2(&shape_angle.y, mCirclePath.mAngle + 0x8000, 4, 0x400);
@@ -1013,7 +1013,7 @@ void daNpc_So_c::modeDisappear() {
         field_0xBD8 = 0;
         field_0xBDB = 1;
         modeProc(PROC_INIT_e, 1);
-        gravity = 176.0f;
+        gravity = -2.5f;
     }
 }
 
@@ -1343,8 +1343,8 @@ bool daNpc_So_c::_draw() {
     snapPos.y += field_0xB34;
     dSnap_RegistFig(0x7D, this, snapPos, shape_angle.y, 1.0f, 1.0f, 1.0f);
 
-    cXyz shadowPos(current.pos.x, current.pos.y + 20.0f, current.pos.z);
-    mShadowId = dComIfGd_setShadow(mShadowId, 0, mpMorf->getModel(), &shadowPos, 30.0f, 6.0f,
+    cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(mShadowId, 0, mpMorf->getModel(), &shadowPos, 800.0f, 40.0f,
                                    current.pos.y + field_0xB34, mObjAcch.GetGroundH(), mObjAcch.m_gnd,
                                    &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return true;
@@ -1392,7 +1392,7 @@ void daNpc_So_c::createInit() {
     fopAcM_setCullSizeBox(this, 100.0f * scale.x, 1.0f * scale.x, 1.0f * scale.x, 100.0f * scale.x,
                           100.0f * scale.x, 100.0f * scale.x);
     cullSizeFar = 10.0f;
-    gravity = 176.0f;
+    gravity = -2.5f;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x22;
     eventInfo.setXyCheckCB(daNpc_So_XyCheckCB);
