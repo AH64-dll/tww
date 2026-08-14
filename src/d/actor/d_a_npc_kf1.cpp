@@ -623,41 +623,29 @@ BOOL daNpc_Kf1_c::srch_Tsubo() { /* Nonmatching */
 
 /* 0000156C-000017F4       .text create_rupee__11daNpc_Kf1_cF4cXyzi */
 void daNpc_Kf1_c::create_rupee(cXyz i_pos, int i_num) { /* Nonmatching */
-    static const cXyz a_rupee_offset[] = {
-        cXyz(-30.0f, 0.0f, 30.0f),
-    };
+    cXyz local(0.2f, 0.2f, 0.2f);
+    csXyz angle(0, 0, 0);
 
-    cXyz local;
-    csXyz angle;
-    f32 speed;
-    f32 speedY;
-    int i;
-    s32 counter = g_Counter.mCounter1;
-
-    local.set(0.0f, 0.0f, 0.0f);
-    angle.set(0, 0, 0);
-    for (i = 0; i < i_num; i++, counter++) {
-        s32 idx = counter % 3;
-        s16 s = (s16)(cM_rndF(30.0f) - 15.0f + a_rupee_offset[idx].x);
-        angle.x = (s16)(11.52f * (s16)(13.0f * s) + current.angle.y);
+    s32 counter = g_Counter.mCounter0;
+    for (int i = 0; i < i_num; i++, counter++) {
+        f32 a_off_tbl[3] = {-30.0f, 0.0f, 30.0f};
+        s16 s = (s16)(cM_rndF(30.0f) - 15.0f + a_off_tbl[counter % 3]);
+        s32 rot = (s32)(s * 182.0389f);
+        angle.y = current.angle.y + rot;
         s8 roomNo = current.roomNo;
-        speedY = 31.0f + cM_rndFX(4.0f);
-        speed = 2.0f + cM_rndFX(-2.0f);
-        fopAc_ac_c* a_actor = fopAcM_createItemForKP2(&i_pos, 4, roomNo, &angle, &local, speed, speedY,
-                                                      0.5f, 1);
+        f32 speedY = 31.0f + cM_rndFX(4.0f);
+        f32 speed = 13.0f + cM_rndFX(2.0f);
+        fopAc_ac_c* a_actor = fopAcM_createItemForKP2(&i_pos, 4, roomNo, NULL, NULL, speed, speedY,
+                                                      -2.0f, 1);
         JUT_ASSERT(0x412, 0 != a_actor);
         if (a_actor != NULL) {
-            fopAcM_OnStatus(a_actor, fopAcStts_UNK40000_e);
-            fopAcM_OffStatus(a_actor, fopAcStts_UNK40_e);
-            a_actor->current.pos.set(local);
-            a_actor->current.angle.x = angle.x;
-            a_actor->current.angle.y = angle.y;
-            a_actor->current.angle.z = angle.z;
-            a_actor->shape_angle.x = angle.x;
-            a_actor->shape_angle.y = angle.y;
-            a_actor->shape_angle.z = angle.z;
-            mItemProcId[i] = fopAcM_GetID(a_actor);
+            fopAcM_OnStatus(a_actor, fopAcStts_UNK4000_e);
+            fopAcM_OffStatus(a_actor, fopAcStts_NOCULLEXEC_e);
+            a_actor->scale.set(local);
+            a_actor->shape_angle = angle;
+            a_actor->current.angle = a_actor->shape_angle;
         }
+        mItemProcId[i] = (a_actor != NULL) ? fopAcM_GetID(a_actor) : -1;
     }
 }
 
