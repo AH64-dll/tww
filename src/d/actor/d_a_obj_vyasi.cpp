@@ -402,7 +402,15 @@ void daObjVyasi::Act_c::quaternion_main() {
 
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::leaf_scale_main() {
-    /* Nonmatching */
+    cXyz scale(1.0f, 1.0f, 1.0f);
+    if (mState == 2) {
+        scale.x = 1.0f + 0.35f * m0504;
+        scale.y = 1.0f + -1.0f * m0504;
+        scale.z = 1.0f + -1.0f * m0504;
+    }
+    cLib_addCalc2(&m04A8, scale.x, 0.5f, 0.5f);
+    cLib_addCalc2(&m04AC, scale.y, 0.5f, 0.5f);
+    cLib_addCalc2(&m04B0, scale.z, 0.5f, 0.5f);
 }
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
