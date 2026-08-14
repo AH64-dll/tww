@@ -503,10 +503,6 @@ void daObjVyasi::Act_c::set_mtx() {
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::calc_dif_angle() {
     /* Nonmatching */
-    static csXyz l_rot[14] = {
-        csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
-        csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
-    };
     csXyz ang(0, 0, 0);
 
     if (mState != 2) {
@@ -534,6 +530,10 @@ void daObjVyasi::Act_c::calc_dif_angle() {
             break;
         }
         case 0: {
+            static csXyz l_rot[14] = {
+                csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+                csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
+            };
             f32 t = m0504 * cM_ssin(m0508[i]);
             ang.x = (s16)(700.0f * t);
             ang.y = (s16)(1700.0f * t);
