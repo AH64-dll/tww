@@ -145,8 +145,8 @@ static BOOL daBL_Draw(bl_class* i_this) {
 void smoke_set(bl_class* i_this) {
     /* Nonmatching */
     if (i_this->mSmokeCB.getEmitter() == NULL) {
-        dComIfGp_particle_setToon(0x2027, &i_this->m6BC, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCB,
-                                  i_this->current.roomNo, NULL, NULL, NULL);
+        dComIfGp_particle_setToon(0x2027, (const cXyz*)i_this->m6BC, &i_this->shape_angle, NULL, 0xB9,
+                                  &i_this->mSmokeCB, i_this->current.roomNo, NULL, NULL, NULL);
     }
 
     JPABaseEmitter* emitter = i_this->mSmokeCB.getEmitter();
@@ -1533,7 +1533,7 @@ void action_itaiyo_ne_san(bl_class* i_this) {
                     ppos.y += 25.0f + REG8_F(2);
                     dComIfGp_particle_set(0x3E8, &ppos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
                                           i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
-                    i_this->m6BC = ppos;
+                    *(cXyz*)i_this->m6BC = ppos;
                     smoke_set(i_this);
                     i_this->mSph.ClrTgSet();
                     i_this->mSph.ClrCoSet();
@@ -1677,7 +1677,7 @@ void action_normal_skull(bl_class* i_this) {
         pos.y += 25.0f + REG8_F(2);
         dComIfGp_particle_set(0x3E8, &pos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
                               i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
-        i_this->m6BC = pos;
+        *(cXyz*)i_this->m6BC = pos;
         smoke_set(i_this);
 
         for (int i = 0; i < (s32)cM_rndF(1.99f); i++) {
@@ -2029,7 +2029,7 @@ static cPhs_State daBL_Create(fopAc_ac_c* i_this) {
             i_this->health = 1;
             i_bl->m2D3 = 1;
             i_bl->mSph.OnCoSetBit();
-            i_this->current.angle.y = (s16)cM_rndFX(32766.0f);
+            i_this->current.angle.y = (s16)cM_rndFX(32767.0f);
             i_this->shape_angle.y = i_this->current.angle.y;
             i_this->actor_status |= 0x4000;
             i_bl->m2F6 = 4;

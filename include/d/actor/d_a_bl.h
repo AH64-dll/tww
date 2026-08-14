@@ -57,7 +57,7 @@ public:
     /* 0x530 */ dCcD_Stts mStts;
     /* 0x56C */ dCcD_Sph mSph;
     /* 0x698 */ cXyz m698[3];
-    /* 0x6BC */ cXyz m6BC;
+    /* 0x6BC */ csXyz m6BC[2];
     /* 0x6C8 */ dPa_smokeEcallBack mSmokeCB;
     /* 0x6E8 */ dPa_followEcallBack mFollowCB1;
     /* 0x6FC */ dPa_followEcallBack mFollowCB2;
