@@ -280,14 +280,17 @@ BOOL daWarpls_c::check_warp_link() {
     if (link != dComIfGp_getPlayer(0) || mWarpStart == 0 || m2BE != 0) {
         return FALSE;
     }
-    cXyz diff = link->current.pos - current.pos;
+    const cXyz& diff = link->current.pos - current.pos;
     Vec distVec;
     distVec.x = diff.x;
     distVec.y = 0.0f;
     distVec.z = diff.z;
     f32 sqMag = PSVECSquareMag(&distVec);
     f32 dist = std::sqrtf(sqMag);
-    return dist < 112.5f * scale.x;
+    if (dist < 112.5f * scale.x) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
@@ -297,14 +300,17 @@ BOOL daWarpls_c::check_warp_distance() {
     if (link != dComIfGp_getPlayer(0)) {
         return FALSE;
     }
-    cXyz diff = link->current.pos - current.pos;
+    const cXyz& diff = link->current.pos - current.pos;
     Vec distVec;
     distVec.x = diff.x;
     distVec.y = 0.0f;
     distVec.z = diff.z;
     f32 sqMag = PSVECSquareMag(&distVec);
     f32 dist = std::sqrtf(sqMag);
-    return dist < 112.5f * scale.x;
+    if (dist < 112.5f * scale.x) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00000FF4-000010C8       .text warp_eff_start__10daWarpls_cFv */
