@@ -38,7 +38,13 @@ namespace daObjLight {
         static u8 M_S_lod_access;
 
 public:
-        /* 0x290 */ u8 field_0x290[0x49C - 0x290];
+        /* 0x290 */ u8 field_0x290[0x44C - 0x290];
+        /* 0x44C */ u8 field_0x44C[0x450 - 0x44C];  // object w/ vtable (virtual @ +0x20)
+        /* 0x450 */ void* mpModel;
+        /* 0x454 */ u8 field_0x454[0x464 - 0x454];
+        /* 0x464 */ u8 mFireAlpha;
+        /* 0x465 */ u8 field_0x465[0x46C - 0x465];
+        /* 0x46C */ Mtx mFireMtx;
         /* 0x49C */ s16 mEventId;
         /* 0x49E */ s16 mEventActive;
     };

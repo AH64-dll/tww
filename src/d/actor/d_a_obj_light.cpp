@@ -43,7 +43,15 @@ void daObjLight::Act_c::set_fire(int) {
 
 /* 00000A9C-00000B04       .text draw_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::draw_fire() {
-    /* Nonmatching */
+    if (mpModel != NULL) {
+        GXColor color;
+        color.r = 0xEB;
+        color.g = 0x7D;
+        color.b = 0;
+        color.a = 0;
+        dComIfGd_setAlphaModelColor(color);
+        dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_TWO_SPHERES, mFireMtx, mFireAlpha);
+    }
 }
 
 /* 00000B04-00000C28       .text exe_fire__Q210daObjLight5Act_cFv */
