@@ -162,8 +162,7 @@ void smoke_set(bl_class* i_this) {
 
 /* 000003F8-000004AC       .text fire_move_set__FP8bl_class */
 void fire_move_set(bl_class* i_this) {
-    /* Nonmatching */
-    u16 particleId = 0x8123 + (i_this->m2D0 == 0);
+    u16 particleId = i_this->m2D0 == 0 ? 0x8124 : 0x8123;
 
     if (i_this->mFollowCB2.getEmitter() == NULL) {
         g_dComIfG_gameInfo.play.getParticle()->set(0, particleId, &i_this->current.pos, NULL, NULL, 0xFF,
@@ -178,14 +177,13 @@ void fire_move_set(bl_class* i_this) {
 
 /* 000004AC-00000578       .text fire_emitter_clr__FP8bl_class */
 void fire_emitter_clr(bl_class* i_this) {
-    /* Nonmatching */
     JPABaseEmitter* emitter = i_this->mFollowCB2.getEmitter();
     if (emitter != NULL && i_this->m2F0 == 0) {
         if (i_this->m2D0 == 0) {
             JPAGetXYZRotateMtx(0, (s16)(dComIfGp_getPlayer(0)->shape_angle.y + 0x8000), 0, emitter->mGlobalRotation);
-            emitter->setRate(3.0f);
-            emitter->setLifeTime(0xA);
-            emitter->setDirectionalSpeed(50.0f);
+            i_this->mFollowCB2.getEmitter()->setRate(3.0f);
+            i_this->mFollowCB2.getEmitter()->setLifeTime(0xA);
+            i_this->mFollowCB2.getEmitter()->setDirectionalSpeed(50.0f);
             i_this->m2F0 = 0x15;
         } else {
             i_this->m2F0 = 1;
