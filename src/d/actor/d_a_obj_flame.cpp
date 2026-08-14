@@ -896,9 +896,8 @@ BOOL daObjFlame::Method::Execute(void* i_this) {
     /* Nonmatching */
 BOOL daObjFlame::Method::Draw(void* i_this) {
     Act_c* a_this = (Act_c*)i_this;
-    dKy_tevstr_c* tevStr = &a_this->tevStr;
-    g_env_light.settingTevStruct(0, &a_this->current.pos, tevStr);
-    g_env_light.setLightTevColorType(a_this->mpModel, tevStr);
+    g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
+    g_env_light.setLightTevColorType(a_this->mpModel, &a_this->tevStr);
 
     a_this->mpBtkAnm->entry(a_this->mpModel->getModelData());
     if (a_this->mpBrkAnm != NULL) {
