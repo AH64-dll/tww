@@ -244,7 +244,7 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
     mCps.CalcAtVec();
     mCps.GetAtVecP()->normalizeRS();
 
-    mC00 = start.abs(end2) / L_attr.mCullSize;
+    mC00 = cXyz(start).abs(end2) / L_attr.mCullSize;
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
