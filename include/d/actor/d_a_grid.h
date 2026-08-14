@@ -2,19 +2,41 @@
 #define D_A_GRID_H
 
 #include "f_op/f_op_actor.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "d/d_kankyo.h"
 
-class daHo_packet_c {
+class daGrid_c;
+
+class daHo_packet_c : public J3DMatPacket {
 public:
+    daHo_packet_c();
+    virtual ~daHo_packet_c();
     void setBackNrm();
     void setNrmMtx(cXyz&);
     void setNrmVtx(cXyz*, int, int);
     void setTopNrmVtx(cXyz*);
-    void draw();
-};
+    virtual void draw();
+
+public:
+    /* 0x3C */ J3DShapePacket mShapePacket;
+    /* 0x80 */ Mtx mMtx;
+    /* 0xB0 */ dKy_tevstr_c* mpTevStr;
+    /* 0xB4 */ cXyz mNrm[0xAA];
+    /* 0x8AC */ cXyz mNrm2[0xAA];
+    /* 0x10A4 */ cXyz mPos[0xAA];
+    /* 0x189C */ s16 m189C;
+    /* 0x189E */ s16 m189E;
+    /* 0x18A0 */ s16 m18A0;
+    /* 0x18A2 */ u8 mCount;
+    /* 0x18A3 */ u8 mAlpha;
+};  // Size: 0x18A4
 
 class daGrid_c : public fopAc_ac_c {
 public:
-    void force_calc_wind_rel_angle(short param_1) { m2216 = param_1; m2218 = 1; }
+    void force_calc_wind_rel_angle(short param_1) {
+        m2216 = param_1;
+        m2218 = 1;
+    }
 
     cPhs_State _create();
     bool _delete();
@@ -22,18 +44,86 @@ public:
     bool _draw();
 
 public:
-    /* 0x0290 */ u8 m0290[0x2200 - 0x290];
+    /* 0x290 */ request_of_phase_process_class mPhase1;
+    /* 0x298 */ request_of_phase_process_class mPhase2;
+    /* 0x2A0 */ daHo_packet_c mPacket;
+    /* 0x1B44 */ u32 mWindAngle;
+    /* 0x1B48 */ u8 mParam;
+    /* 0x1B49 */ u8 mPad1B49[1];
+    /* 0x1B4A */ s16 mB4A;
+    /* 0x1B4C */ s16 mB4C;
+    /* 0x1B4E */ s16 mB4E;
+    /* 0x1B50 */ u8 mPad1B50[4];
+    /* 0x1B54 */ f32 mWind[0x55];
+    /* 0x1CA8 */ cXyz mWindPos[0x55];
+    /* 0x20A4 */ u8 mPad20A4[0x15C];
     /* 0x2200 */ f32 m2200;
-    /* 0x2204 */ u8 m2219[0x2216 - 0x2204];
+    /* 0x2204 */ f32 m2204;
+    /* 0x2208 */ f32 m2208;
+    /* 0x220C */ u8 mPad220C[4];
+    /* 0x2210 */ s16 m2210;
+    /* 0x2212 */ s16 m2212;
+    /* 0x2214 */ u8 mPad2214[2];
     /* 0x2216 */ s16 m2216;
     /* 0x2218 */ u8 m2218;
-};
+    /* 0x2219 */ u8 mPad2219[3];
+};  // Size: 0x221C
+
+STATIC_ASSERT(sizeof(daHo_packet_c) == 0x18A4);
+STATIC_ASSERT(sizeof(daGrid_c) == 0x221C);
 
 class daHo_HIO_c {
 public:
+    daHo_HIO_c();
     virtual ~daHo_HIO_c() {}
 
-    u8 field_0x4[0xa4 - 0x04];
-};
+    /* 0x04 */ s8 mChildId;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ u8 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ u8 m10[4];
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ f32 m18;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ f32 m24;
+    /* 0x28 */ f32 m28;
+    /* 0x2C */ f32 m2C;
+    /* 0x30 */ u8 m30;
+    /* 0x31 */ u8 m31;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ u8 m38;
+    /* 0x39 */ u8 m39;
+    /* 0x3C */ f32 m3C;
+    /* 0x40 */ f32 m40;
+    /* 0x44 */ f32 m44;
+    /* 0x48 */ f32 m48;
+    /* 0x4C */ f32 m4C;
+    /* 0x50 */ f32 m50;
+    /* 0x54 */ f32 m54;
+    /* 0x58 */ f32 m58;
+    /* 0x5C */ f32 m5C;
+    /* 0x60 */ f32 m60;
+    /* 0x64 */ f32 m64;
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 m6C;
+    /* 0x70 */ f32 m70;
+    /* 0x74 */ f32 m74;
+    /* 0x78 */ f32 m78;
+    /* 0x7C */ f32 m7C;
+    /* 0x80 */ f32 m80;
+    /* 0x84 */ f32 m84;
+    /* 0x88 */ f32 m88;
+    /* 0x8C */ f32 m8C;
+    /* 0x90 */ f32 m90;
+    /* 0x94 */ f32 m94;
+    /* 0x98 */ f32 m98;
+    /* 0x9C */ f32 m9C;
+    /* 0xA0 */ f32 mA0;
+};  // Size: 0xA4
+
+STATIC_ASSERT(sizeof(daHo_HIO_c) == 0xA4);
 
 #endif /* D_A_GRID_H */
