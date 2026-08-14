@@ -4,7 +4,11 @@
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_gm.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player.h"
+#include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
 
@@ -59,8 +63,19 @@ void wing_ret_set(gm_class*) {
 }
 
 /* 00002204-000022C4       .text fuwafuwa_set__FP8gm_class */
-void fuwafuwa_set(gm_class*) {
-    /* Nonmatching */
+void fuwafuwa_set(gm_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+
+    if (i_this->current.pos.z >= player->current.pos.z + 176.0f) {
+        i_this->m2F0 += 1000;
+        i_this->m3C4 = cM_ssin(i_this->m2F0) * 0.5f;
+        if (i_this->mAction == 3 || i_this->mAction == 4) {
+            i_this->m3C0 = 0.0f;
+            i_this->m3C4 = 0.0f;
+            i_this->m3C8 = 0.0f;
+        }
+        cLib_addCalc2(&i_this->m3B4.y, i_this->m3C4, 900.0f, 94.0f);
+    }
 }
 
 /* 000022C4-00002474       .text fly_move__FP8gm_class */
@@ -129,8 +144,11 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00007EBC-0000842C       .text daGM_Create__FP10fopAc_ac_c */
-static cPhs_State daGM_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daGM_Create(fopAc_ac_c* i_this) {
+    gm_class* a_this = (gm_class*)i_this;
+
+    fopAcM_SetupActor(a_this, gm_class);
+
     static dCcD_SrcSph weapon_co_sph_src = {
         // dCcD_SrcGObjInf
         {
