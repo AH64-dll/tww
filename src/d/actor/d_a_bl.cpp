@@ -857,8 +857,8 @@ s32 Line_check(bl_class* i_this, cXyz param) {
     dBgS_LinChk linChk;
     cXyz start = i_this->current.pos;
 
-    start.y += 1.0f;
-    param.y += 1.0f;
+    start.y += 100.0f;
+    param.y += 100.0f;
 
     linChk.Set(&start, &param, i_this);
     if (!dComIfG_Bgsp()->LineCross(&linChk)) {
