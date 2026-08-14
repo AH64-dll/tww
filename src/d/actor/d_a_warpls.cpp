@@ -131,7 +131,7 @@ void daWarpls_c::CreateInit() {
     mEventId1 = dComIfGp_evmng_getEventIdx(NULL, daWarpls_prm::getEventIdxNo(this));
     mEventId2 = dComIfGp_evmng_getEventIdx(warp_name[mWarpKind], 0xff);
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, 2.0f, -250.0f, 2.0f, 250.0f, 2500.0f, 250.0f);
+    fopAcM_setCullSizeBox(this, 2.0f, -250.0f, 2.0f, 250.0f, 2600.0f, 250.0f);
     cullSizeFar = 1.0f;
     set_mtx();
     if (check_warp_distance()) {
