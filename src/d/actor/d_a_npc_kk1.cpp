@@ -64,16 +64,6 @@ static const char* l_evn_tbl[8] = {
     "bye_2",
 };
 
-static const int a_resID_tbl[12] = {
-    0x00000009, 0x0000000A, 0x0000000B, 0x0000000C,
-    0x00000004, 0x00000005, 0x00000006, 0x00000007,
-    0x00000001, 0x00000002, 0x00000003, 0x00000008,
-};
-
-static const int a_btpResID_tbl[1] = {
-    0x00000011,
-};
-
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 static BOOL nodeCB_Head(J3DNode* i_node, int i_param) {
 
@@ -270,7 +260,7 @@ void daNpc_Kk1_c::play_animation() {
 
 /* 00000918-00000A98       .text setMtx__11daNpc_Kk1_cFb */
 void daNpc_Kk1_c::setMtx(bool i_setEyePos) {
-    /* Nonmatching */
+
 
     mpMorf->getModel()->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
@@ -292,19 +282,27 @@ void daNpc_Kk1_c::setMtx(bool i_setEyePos) {
 
 /* 00000A98-00000AAC       .text bckResID__11daNpc_Kk1_cFi */
 int daNpc_Kk1_c::bckResID(int i_idx) {
-    /* Nonmatching */
+
+    static const int a_resID_tbl[12] = {
+        0x00000009, 0x0000000A, 0x0000000B, 0x0000000C,
+        0x00000004, 0x00000005, 0x00000006, 0x00000007,
+        0x00000001, 0x00000002, 0x00000003, 0x00000008,
+    };
     return a_resID_tbl[i_idx];
 }
 
 /* 00000AAC-00000AC0       .text btpResID__11daNpc_Kk1_cFi */
 int daNpc_Kk1_c::btpResID(int i_idx) {
-    /* Nonmatching */
-    return a_btpResID_tbl[i_idx];
+
+    static const int a_resID_tbl[1] = {
+        0x00000011,
+    };
+    return a_resID_tbl[i_idx];
 }
 
 /* 00000AC0-00000BC4       .text setBtp__11daNpc_Kk1_cFScb */
 bool daNpc_Kk1_c::setBtp(s8 i_btpNum, bool i_bModify) {
-    /* Nonmatching */
+
 
     J3DModel* morf_model_p = mpMorf->getModel();
     if(i_btpNum < 0) {
@@ -531,7 +529,7 @@ void daNpc_Kk1_c::setAnm_ATR() {
 
 /* 000010E4-000011A0       .text anmAtr__11daNpc_Kk1_cFUs */
 void daNpc_Kk1_c::anmAtr(unsigned short i_status) {
-    /* Nonmatching */
+
 
     switch(i_status) {
         case 6:
@@ -539,10 +537,13 @@ void daNpc_Kk1_c::anmAtr(unsigned short i_status) {
                 chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
                 m822++;
             }
-            if(dComIfGp_getMesgAnimeTagInfo() != 0xFF && dComIfGp_getMesgAnimeTagInfo() != m818) {
-                dComIfGp_clearMesgAnimeTagInfo();
-                m818 = dComIfGp_getMesgAnimeTagInfo();
-                chngAnmTag();
+            {
+                u8 tag = dComIfGp_getMesgAnimeTagInfo();
+                if(tag != 0xFF && tag != m818) {
+                    dComIfGp_clearMesgAnimeTagInfo();
+                    m818 = tag;
+                    chngAnmTag();
+                }
             }
             break;
         case 0xE:
@@ -715,7 +716,7 @@ void daNpc_Kk1_c::cut_move_BYE_END() {
 
 /* 000026C4-000026C8       .text cut_init_PLYER_TRN__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_PLYER_TRN(int) {
-    /* Nonmatching */
+
 }
 
 /* 000026C8-000026D0       .text cut_move_PLYER_TRN__11daNpc_Kk1_cFv */
@@ -850,7 +851,7 @@ void daNpc_Kk1_c::setBikon(cXyz) {
 
 /* 00003D9C-00003DA0       .text delBikon__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::delBikon() {
-    /* Nonmatching */
+
 }
 
 /* 00003DA0-00003E18       .text setAse__11daNpc_Kk1_cFv */
