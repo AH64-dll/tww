@@ -319,3 +319,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T15:36Z — M45: flip #65 d_a_grid → Object(Equivalent) — FIRST FRAMEWORK-EQUIVALENT FLIP (codified class; DOL object, framework-Equivalent exception: value-parity byte-proven, 7-shape allocator experiment documented, pin-safe by construction). 36 flips this session (#30-65). Ledger: 41 NonMatching / 57 Equivalent / 224 Matching / 94 MatchingFor. Gate 433a46cf0 18:34:46. Grid: 6 value bugs caught by value-decode from a '0 real bugs' claim.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T15:40Z — M46: flip #66 d_a_warpmj → Equivalent — 37 FLIPS THIS SESSION (#30-66). Ledger: 40 NonMatching / 58 Equivalent / 224 Matching / 94 MatchingFor. warpmj: 32/33 fns 100, _execute 99.90 pure stack-slot permutation (calc_nrm class), .rodata/.data byte-identical cleanest of shift. Gate 8ad8245c4 18:37:47 + mirror check. BLead-11 shift: 5 flips (#62-66 incl first framework-Equivalent #65 grid).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
