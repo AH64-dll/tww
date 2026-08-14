@@ -187,3 +187,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T01:18Z — M23: 4-version cycle 3 ALL GREEN at 6e693b089 (D44J01 417 / GZLP01 416 / GZLJ01 416 / GZLE01 416). Magmarock demo-divergence CONFIRMED (D44J01 arc 3ecaa539 12100B vs retail 037485a8 12292B) but #44 Equivalent linked=False → D44J01 assembles original sections, pin matches by construction; NO MatchingFor needed (that class is only for Matching/linked=True — the aygr/hami2/ba1 failure was wrongly-flipped-Matching). 3 consecutive 4-version cycles green today. Ledger: 62 NonMatching / 39 Equivalent / 314 Matching + 3 MatchingFor.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T01:32Z — M24: flip #45 d_a_ss → Equivalent — 16 flips this session (#30-45). Ledger: 61 NonMatching / 40 Equivalent / 314 Matching + 3 MatchingFor. ss: core_move early-return restructure (R3-8 fix direction, 18==18 branches, SVINE fall-through restored), 9 sub-100 0-one-sided. Gate 904caa658 04:31:46. BLead-8 shift: 12 gates (#38-45 + MatchingFor conversion + 3 4-version cycles).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
