@@ -1728,7 +1728,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_eskban"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ferris"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_figure"),
-    ActorRel(NonMatching, "d_a_obj_firewall"),
+    ActorRel(Equivalent, "d_a_obj_firewall"),  # regalloc/position-shift holdouts (122/128 @100, 6 accept)
     ActorRel(NonMatching, "d_a_obj_flame"),
     ActorRel(Equivalent, "d_a_obj_ftree"),
     ActorRel(Matching,    "d_a_obj_ganonbed"),
