@@ -33,7 +33,8 @@ void daNpc_So_c::cutJumpStart() {
     offsetSwim();
     speedF = field_0xAFC;
     setAnm(4, 0);
-    JAIZelBasic::getInterface()->seStart(0x5938, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x5938, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 /* 000054A4-00005598       .text cutJumpProc__10daNpc_So_cFv */
@@ -55,7 +56,8 @@ void daNpc_So_c::cutJumpProc() {
 /* 00005598-00005610       .text cutAppearStart__10daNpc_So_cFv */
 void daNpc_So_c::cutAppearStart() {
     /* Nonmatching */
-    JAIZelBasic::getInterface()->seStart(0x593A, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x593A, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     offsetAppear();
 }
 
@@ -82,7 +84,8 @@ void daNpc_So_c::cutDiveProc() {
 void daNpc_So_c::cutDisappearStart() {
     /* Nonmatching */
     offsetDive();
-    JAIZelBasic::getInterface()->seStart(0x593B, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    s8 reverb = dComIfGp_getReverb(current.roomNo);
+    JAIZelBasic::getInterface()->seStart(0x593B, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     fopKyM_createWpillar(&current.pos, 1.2f * scale.x, 1.4f, 0);
 }
 
