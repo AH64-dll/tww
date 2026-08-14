@@ -531,6 +531,7 @@ static const u8 fire_j[10] = {1, 3, 5, 6, 8, 9, 0xA, 0xB, 0xC, 0xD};
 static const f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
 
 static cPhs_State daBO_Create(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     bo_class* bo = (bo_class*)i_this;
 
     fopAcM_ct(i_this, bo_class);
