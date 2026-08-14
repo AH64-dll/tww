@@ -782,8 +782,161 @@ void bakuha(mt_class* i_this) {
 }
 
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
-void mt_move(mt_class*) {
+void mt_move(mt_class* i_this) {
     /* Nonmatching */
+    static f32 check_x[] = {0.0f, 0.0f, 50.0f, -50.0f, -1.0f, 1.0f};
+    static f32 check_y[] = {-50.0f, -50.0f, -150.0f, -150.0f, 100.0f, 100.0f};
+    static f32 check_z[] = {150.0f, -10.0f, 0.0f, 0.0f, 200.0f, 200.0f};
+    static u8 check_bitD[] = {1, 2, 4, 8};
+
+    dBgS_LinChk linChk;
+
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+
+    cXyz dir(0.0f, 50.0f, 0.0f);
+    cXyz dirPos;
+    MtxPosition(&dir, &dirPos);
+    cXyz pos = dirPos + i_this->current.pos;
+
+    int count = abs(i_this->current.angle.x) >= 0x1000 ? 4 : 6;
+    u16 hitBits = 0;
+    cXyz cross[6];
+    for (int i = 0; i < count; i++) {
+        cXyz off(check_x[i], check_y[i], check_z[i]);
+        cXyz world;
+        MtxPosition(&off, &world);
+        PSVECAdd(&world, &i_this->current.pos, &world);
+        linChk.Set(&pos, &world, i_this);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            cross[i] = linChk.GetCross();
+            hitBits |= check_bitD[i];
+        }
+    }
+
+    if ((hitBits & 3) == 3) {
+        cXyz diff = cross[1] - cross[0];
+        cXyz d2;
+        cXyz dir2(0.0f, l_HIO.m18, 0.0f);
+        MtxPosition(&dir2, &d2);
+        if (i_this->m48E == 0) {
+            cLib_addCalc2(&i_this->current.pos.x, d2.x + cross[0].x + 0.5f * diff.x, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.y, d2.y + cross[0].y + 0.5f * diff.y, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.z, d2.z + cross[0].z + 0.5f * diff.z, 1.0f, 1.0f);
+        }
+        f32 xzDist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
+        i_this->current.angle.x = -cM_atan2s(diff.y, xzDist);
+        if (std::fabsf(diff.x) > 0.1f || std::fabsf(diff.z) > 0.1f) {
+            i_this->m488[2] = cM_atan2s(diff.z, diff.x);
+        }
+        if (abs(i_this->current.angle.y - i_this->m488[2]) > 0x4000) {
+            i_this->current.angle.x = 0x8000 - i_this->current.angle.x;
+        }
+        i_this->m492 = 0x17;
+    } else {
+        if (!(hitBits & 1)) {
+            if (i_this->m492 == 0) {
+                i_this->current.angle.x += REG0_S(4) + 0x800;
+            } else {
+                i_this->m492--;
+            }
+        }
+    }
+
+    if ((hitBits & 0xC) == 0xC) {
+        cXyz diff = cross[3] - cross[2];
+        mDoMtx_XrotS(*calc_mtx, -i_this->current.angle.x);
+        mDoMtx_YrotM(*calc_mtx, -i_this->current.angle.y);
+        cXyz d3;
+        MtxPosition(&diff, &d3);
+        f32 xzDist = std::sqrtf(d3.x * d3.x + d3.z * d3.z);
+        i_this->current.angle.z = cM_atan2s(d3.y, xzDist);
+    }
+
+    if (abs(i_this->current.angle.x) < 0x1000) {
+        if ((hitBits & 0x30) == 0x30) {
+            cXyz diff = cross[5] - cross[4];
+            i_this->current.angle.y = cM_atan2s(diff.z, diff.x) + 0x4000;
+        } else if (i_this->m2B4 < 0xA) {
+            s16 angleY;
+            if (i_this->m2BC != 0) {
+                cXyz diff = *((cXyz*)&i_this->m47C) - i_this->current.pos;
+                i_this->m488[0] = 0x800;
+                angleY = cM_atan2s(diff.z, diff.x);
+                f32 xzDist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
+                if (xzDist < 100.0f) {
+                    dPath* path = (dPath*)i_this->m2C0;
+                    i_this->m2BD += i_this->m2BE;
+                    if (i_this->m2BD >= path->m_num) {
+                        if (dPath_ChkClose(path)) {
+                            i_this->m2BD = 0;
+                        } else {
+                            i_this->m2BE = -1;
+                            i_this->m2BD = path->m_num - 2;
+                        }
+                    } else if ((s8)i_this->m2BD < 0) {
+                        i_this->m2BE = 1;
+                        i_this->m2BD = 1;
+                    }
+                    dPnt* pnt = &path->m_points[i_this->m2BD];
+                    *((cXyz*)&i_this->m47C) = pnt->m_position;
+                }
+            } else {
+                angleY = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                cLib_addCalcAngleS2(&i_this->m488[0], REG0_S(6) + 0x400, 1, 0x10);
+            }
+            if (i_this->m2B5 == 1) {
+                i_this->current.angle.y = angleY;
+            } else {
+                cLib_addCalcAngleS2(&i_this->current.angle.y, angleY, 0x10, i_this->m488[0]);
+            }
+        }
+        if (i_this->m2B4 < 0xA && i_this->m18F9 == 0) {
+            f32 dist = fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0));
+            if (dist < l_HIO.m24) {
+                bool found = false;
+                for (int i = 0; i < 8; i++) {
+                    if (abs(i_this->m9F4[i * 8].x) > 0x1000) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    i_this->mC01 = 1;
+                }
+            }
+        }
+    } else if (i_this->m2B4 < 0xA) {
+        i_this->m488[0] = 0;
+    }
+
+    if (i_this->m48E == 0) {
+        f32 wave = (3500.0f + 1000.0f * cM_ssin((s16)(i_this->m46A * 100))) *
+                   cM_ssin((s16)(i_this->m46A * (REG0_S(2) + 0x7D0)));
+        cLib_addCalcAngleS2(&i_this->m468, (s16)wave, 4, 0x400);
+        f32 target = i_this->mC00 != 0 ? 10.0f : 5.0f;
+        cLib_addCalc2(&i_this->speedF, target, 1.0f, target);
+    } else {
+        cLib_addCalc0(&i_this->speedF, 1.0f, 5.0f);
+    }
+
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    mDoMtx_YrotM(*calc_mtx, i_this->m468);
+    cXyz spd(0.0f, 0.0f, i_this->speedF);
+    cXyz move;
+    MtxPosition(&spd, &move);
+    fopAcM_posMove(i_this, &move);
+
+    if (hitBits == 0) {
+        if (++i_this->m46C >= 0xA) {
+            i_this->m454 = 1;
+            i_this->m455 = 0x11;
+        }
+    } else {
+        i_this->m46C = 0;
+    }
 }
 
 /* 000042C4-00005088       .text mt_fight__FP8mt_class */
