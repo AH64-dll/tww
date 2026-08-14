@@ -821,7 +821,7 @@ u8 daNpc_Kp1_c::demo() { /* Nonmatching */
 }
 
 /* 00001DB8-00001E9C       .text shadowDraw__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::shadowDraw() { /* Nonmatching */
+void daNpc_Kp1_c::shadowDraw() {
     cXyz pos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
 
     mShadowId = dComIfGd_setShadow(
@@ -834,10 +834,13 @@ void daNpc_Kp1_c::shadowDraw() { /* Nonmatching */
         &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     if (mShadowId != 0) {
-        if (mShadowIdx == 1) {
+        switch (mShadowIdx) {
+        case 1:
             dComIfGd_addRealShadow(mShadowId, mpModel);
-        } else if (mShadowIdx == 2) {
+            break;
+        case 2:
             dComIfGd_addRealShadow(mShadowId, mpHandLModel);
+            break;
         }
     }
 }
