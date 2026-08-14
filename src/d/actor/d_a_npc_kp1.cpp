@@ -257,8 +257,8 @@ void daNpc_Kp1_c::setAnm() { /* Nonmatching */
         { 0, 0, 0, 8.0f, 1.0f, 2 },
         { -1, 0, 0, 0.0f, 0.0f, -1 },
     };
-    setAnm_tex(a_anm_prm_tbl[mStatus].btpNum);
-    setAnm_anm(&a_anm_prm_tbl[mStatus]);
+    setAnm_tex(a_anm_prm_tbl[mType].btpNum);
+    setAnm_anm(&a_anm_prm_tbl[mType]);
 }
 
 /* 00000C20-00000C2C       .text chngAnmTag__11daNpc_Kp1_cFv */
