@@ -99,8 +99,8 @@ namespace daObj_Search {
         void setChildId(fpc_ProcID id) { mChildId = id; }
 
         BOOL _createHeap();
-        BOOL searchCreateHeap();
-        BOOL beamCreateHeap(int);
+        bool searchCreateHeap();
+        bool beamCreateHeap(int);
         void _nodeControl(J3DNode*, J3DModel*);
         void modeSearchRndInit();
         void modeSearchRnd();
@@ -141,7 +141,7 @@ namespace daObj_Search {
         BOOL _isdelete();
 
     public:
-        /* 0x290 */ u32 mMode;
+        /* 0x290 */ s32 mMode;
         /* 0x294 */ Bgc_c mBgc;
         /* 0x30C */ dCcD_Cps mCps[2];
         /* 0x57C */ dCcD_Stts mStts[2];

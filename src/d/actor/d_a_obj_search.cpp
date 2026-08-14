@@ -90,19 +90,19 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 800FDB1C-800FDB8C       .text _createHeap__Q212daObj_Search5Act_cFv */
 BOOL daObj_Search::Act_c::_createHeap() {
-    if (!searchCreateHeap()) {
+    if (searchCreateHeap() == false) {
         return false;
     }
 
-    if (!beamCreateHeap(0)) {
+    if (beamCreateHeap(0) == false) {
         return false;
     }
 
-    return beamCreateHeap(1) != false;
+    return beamCreateHeap(1) ? TRUE : FALSE;
 }
 
 /* 800FDB8C-800FDCAC       .text searchCreateHeap__Q212daObj_Search5Act_cFv */
-BOOL daObj_Search::Act_c::searchCreateHeap() {
+bool daObj_Search::Act_c::searchCreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(
         g_dComIfG_gameInfo.mResControl.getRes(m_arc_name, 5, &g_dComIfG_gameInfo.mResControl.mObjectInfo[0], 0x40)
     );
@@ -119,12 +119,12 @@ BOOL daObj_Search::Act_c::searchCreateHeap() {
     }
 
     void* dzb = g_dComIfG_gameInfo.mResControl.getRes(m_arc_name, 8, &g_dComIfG_gameInfo.mResControl.mObjectInfo[0], 0x40);
-    return !mBgW->Set((cBgD_t*)dzb, 1, &mBgMtx);
+    return mBgW->Set((cBgD_t*)dzb, 1, &mBgMtx) != 1;
 }
 
 /* 800FDCAC-800FDDBC       .text beamCreateHeap__Q212daObj_Search5Act_cFi */
-BOOL daObj_Search::Act_c::beamCreateHeap(int i_beamNo) {
-    static u8 dzb[2] = {9, 10};
+bool daObj_Search::Act_c::beamCreateHeap(int i_beamNo) {
+    static u32 dzb[2] = {9, 10};
 
     J3DModelData* modelData = static_cast<J3DModelData*>(
         g_dComIfG_gameInfo.mResControl.getRes(m_arc_name, 4, &g_dComIfG_gameInfo.mResControl.mObjectInfo[0], 0x40)
@@ -144,14 +144,14 @@ BOOL daObj_Search::Act_c::beamCreateHeap(int i_beamNo) {
     }
 
     void* dzbRes = g_dComIfG_gameInfo.mResControl.getRes(m_arc_name, dzb[i_beamNo], &g_dComIfG_gameInfo.mResControl.mObjectInfo[0], 0x40);
-    return !mBgWBeam[i_beamNo]->Set((cBgD_t*)dzbRes, 1, &mBgMtxBeam[i_beamNo]);
+    return mBgWBeam[i_beamNo]->Set((cBgD_t*)dzbRes, 1, &mBgMtxBeam[i_beamNo]) != 1;
 }
 
 /* 800FDDBC-800FDE08       .text nodeControl_CB__FP7J3DNodei */
 static BOOL nodeControl_CB(J3DNode* i_node, int i_tim) {
     if (i_tim == 0) {
         J3DModel* model = j3dSys.getModel();
-        if (model != NULL) {
+        if (model->getUserArea() != 0) {
             reinterpret_cast<daObj_Search::Act_c*>(model->getUserArea())->_nodeControl(i_node, model);
         }
     }
@@ -670,12 +670,12 @@ void daObj_Search::Act_c::check_bk_control() {
         *(s16*)((u8*)bk + 0x1224) = m7AC;
 
         if (mBkControl == 1) {
-            if (mMode == MODE_FIND_e || mMode == MODE_STOP_e) {
-                modeProc(PROC_INIT_e, MODE_TO_STOP_e);
+            if (mMode == MODE_TO_STOP_e || mMode == MODE_STOP_e) {
+                modeProc(PROC_INIT_e, MODE_TO_SEARCH_e);
             }
         } else if (mBkControl == 0) {
-            if (mMode != MODE_FIND_e && mMode != MODE_STOP_e) {
-                modeProc(PROC_INIT_e, MODE_TO_SEARCH_e);
+            if (mMode != MODE_TO_STOP_e && mMode != MODE_STOP_e) {
+                modeProc(PROC_INIT_e, MODE_TO_STOP_e);
             }
         }
     }
@@ -819,11 +819,12 @@ void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
 
 /* 80101D30-80101D94       .text bg_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::bg_check() {
-    if (fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0)) <= 1000000.0f) {
-        if (m7B8 == 0) {
-            set_moveBG_mtx_light_A();
-            set_moveBG_mtx_light_B();
-        }
+    if (fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0)) > 1000000.0f) {
+        return;
+    }
+    if (m7B8 == 0) {
+        set_moveBG_mtx_light_A();
+        set_moveBG_mtx_light_B();
     }
 }
 
