@@ -309,7 +309,6 @@ void daObjMmrr::Act_c::init_mtx() {
 }
 
 /* 00001358-00001418       .text chk_light__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 bool daObjMmrr::Act_c::chk_light() {
     bool light = false;
     if (dComIfGp_getDetect().chk_light(&eyePos)) {
@@ -345,7 +344,6 @@ void daObjMmrr::Act_c::eff_remove() {
 }
 
 /* 000014D0-000016E8       .text _execute__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 bool daObjMmrr::Act_c::_execute() {
     attention_info.position.x = current.pos.x;
     attention_info.position.y = current.pos.y + 260.0f;
@@ -393,7 +391,6 @@ bool daObjMmrr::Act_c::_execute() {
 }
 
 /* 000016E8-000017E8       .text _draw__Q29daObjMmrr5Act_cFv */
-    /* Nonmatching */
 bool daObjMmrr::Act_c::_draw() {
     u8 mbf9 = mBF9;
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
