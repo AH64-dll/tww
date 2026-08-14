@@ -26,6 +26,7 @@ const char daObjHtetu1_c::M_arcname[] = "Htetu1";
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
 void daObjHtetu1Splash_c::create_s(u16 param, cXyz* pos, csXyz* angle, dKy_tevstr_c* tevStr) {
+    /* Nonmatching */
     mPos = *pos;
     mAngle = *angle;
     mpEmitter = dComIfGp_particle_set(param, &mPos, &mAngle, NULL, 0xFF, this, -1, NULL, NULL, NULL);
@@ -42,11 +43,13 @@ void daObjHtetu1Splash_c::create_s(u16 param, cXyz* pos, csXyz* angle, dKy_tevst
 
 /* 00000178-00000198       .text solidHeapCB__13daObjHtetu1_cFP10fopAc_ac_c */
 u8 daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     return ((daObjHtetu1_c*)i_this)->create_heap();
 }
 
 /* 00000198-00000298       .text create_heap__13daObjHtetu1_cFv */
 int daObjHtetu1_c::create_heap() {
+    /* Nonmatching */
     int ret = TRUE;
     J3DModelData* mdl_data =
         (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
@@ -66,6 +69,7 @@ int daObjHtetu1_c::create_heap() {
 
 /* 00000298-00000460       .text _create__13daObjHtetu1_cFv */
 cPhs_State daObjHtetu1_c::_create() {
+    /* Nonmatching */
     fopAcM_SetupActor(this, daObjHtetu1_c);
 
     cPhs_State phs = dComIfG_resLoad(&mPhs, M_arcname);
@@ -127,6 +131,7 @@ void daObjHtetu1_c::init_mtx() {
 
 /* 000006E4-000007F8       .text unlock__13daObjHtetu1_cFv */
 void daObjHtetu1_c::unlock() {
+    /* Nonmatching */
     cXyz dir = cXyz::BaseY;
     mPos -= mDir;
     f32 spd = (s16)(mSpeed * cM_ssin(mAngle * 0x859));
@@ -138,6 +143,7 @@ void daObjHtetu1_c::unlock() {
 
 /* 000007F8-0000098C       .text get_water_h__13daObjHtetu1_cFv */
 f32 daObjHtetu1_c::get_water_h() {
+    /* Nonmatching */
     dBgS_WtrChk waterChk;
     cXyz chkPos = home.pos;
     f32 ret = current.pos.y;
@@ -155,6 +161,7 @@ f32 daObjHtetu1_c::get_water_h() {
 
 /* 00000AB0-00000BCC       .text splash_manager__13daObjHtetu1_cFv */
 void daObjHtetu1_c::splash_manager() {
+    /* Nonmatching */
     f32 waterH = get_water_h();
     for (int i = 0; i < 2; i++) {
         mSplash[i].set_pos_y(waterH);
@@ -182,6 +189,7 @@ void daObjHtetu1_c::splash_manager() {
 
 /* 00000BCC-0000101C       .text _execute__13daObjHtetu1_cFv */
 bool daObjHtetu1_c::_execute() {
+    /* Nonmatching */
     switch (mMode) {
     case 0:
         if (check_sw()) {
