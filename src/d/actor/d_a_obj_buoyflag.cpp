@@ -1147,12 +1147,12 @@ int daObjBuoyflag::Act_c::mode_jumpToSea() {
     if (posY > waveY) {
         m112C -= (f32)m112A * L_attr.m38;
         m112C *= 1.0f - L_attr.m30;
-        m112A += (s16)m112C;
+        m112A += (s16)(int)m112C;
         daObj::posMoveF_stream(this, NULL, &cXyz::Zero, L_attr.m1C, L_attr.m20);
     } else {
         m112C -= (f32)m112A * L_attr.m38;
         m112C *= 1.0f - L_attr.m34;
-        m112A += (s16)m112C;
+        m112A += (s16)(int)m112C;
         daObj::posMoveF_stream(this, NULL, &cXyz::Zero, L_attr.m24, L_attr.m28);
     }
     mDoMtx_stack_c::transS(current.pos);
