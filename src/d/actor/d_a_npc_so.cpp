@@ -1300,7 +1300,7 @@ void daNpc_So_c::debugDraw() {
     cXyz b = dComIfGp_getPlayer(0)->current.pos;
     b.y += -300.0f;
     cXyz c = current.pos;
-    c.y += -300.0f;
+    c.y = b.y;
     cXyz d = field_0xAAC;
     d.y += -300.0f;
     (void)a;
