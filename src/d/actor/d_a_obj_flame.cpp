@@ -251,9 +251,11 @@ void daObjFlame::Act_c::create_mode_init() {
     if (sch != 0 && schbit != 0) {
         s32 timer = dKy_get_schbit_timer();
         s32 cycle = dStage_stagInfo_GetSchSec(dComIfGp_getStage().getStagInfo()) * 30;
-        u32 mask = sch << 8;
+        u32 mask;
         if (sch >= schbit) {
             mask = sch;
+        } else {
+            mask = sch << 8;
         }
         s32 idx = 0;
         u32 bit = schbit;
