@@ -30,7 +30,7 @@ public:
     /* 0x29C */ mDoExt_brkAnm* mpBrk;
     /* 0x2A0 */ mDoExt_bckAnm* mpBck;
     /* 0x2A4 */ JPABaseEmitter* mpEmitter;
-    /* 0x2A8 */ u32 mSwNo;
+    /* 0x2A8 */ s32 mSwNo;
     /* 0x2AC */ u32 mStageNo;
     /* 0x2B0 */ s32 mOrder;
     /* 0x2B4 */ u8 mWarpStart;
@@ -54,8 +54,8 @@ public:
 namespace daWarpls_prm {
     inline u8 getType(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 28) & 0xF; }
     inline u8 getSwNo(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 0) & 0xFF; }
-    inline u8 getStageNo(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 16) & 0xFF; }
-    inline u8 getEventIdxNo(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
+    inline u8 getStageNo(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
+    inline u8 getEventIdxNo(daWarpls_c* i_this) { return (fopAcM_GetParam(i_this) >> 16) & 0xFF; }
 }
 
 #endif /* D_A_WARPLS_H */

@@ -97,7 +97,7 @@ void daWarpls_c::CreateInit() {
                                           NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
         if (mpEmitter != NULL) {
             mpEmitter->setStatus(JPAEmtrStts_Immortal);
-            mpEmitter->setGlobalTranslation(current.pos.x, current.pos.y, current.pos.z);
+            mpEmitter->mGlobalDynamicsScale.set(current.pos.x, current.pos.y, current.pos.z);
         }
         break;
     case 1:
@@ -131,7 +131,7 @@ void daWarpls_c::CreateInit() {
     mEventId1 = dComIfGp_evmng_getEventIdx(NULL, daWarpls_prm::getEventIdxNo(this));
     mEventId2 = dComIfGp_evmng_getEventIdx(warp_name[mWarpKind], 0xff);
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, 2.0f, -250.0f, 2.0f, 250.0f, 2600.0f, 250.0f);
+    fopAcM_setCullSizeBox(this, -250.0f, 0.0f, -250.0f, 250.0f, 2600.0f, 250.0f);
     cullSizeFar = 1.0f;
     set_mtx();
     if (check_warp_distance()) {
