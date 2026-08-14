@@ -260,6 +260,7 @@ void anm_init(bl_class* i_this, int i_anmIdx, f32 i_morf, u8 i_playMode, f32 i_p
 
 /* 0000094C-00000BF4       .text skull_atari_check__FP8bl_class */
 s32 skull_atari_check(bl_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     i_this->mStts.Move();
@@ -460,6 +461,7 @@ void action_dousa(bl_class*) {
 
 /* 000039F0-00003F68       .text action_kougeki__FP8bl_class */
 void action_kougeki(bl_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     switch (i_this->m306) {
@@ -564,6 +566,7 @@ void action_kougeki(bl_class* i_this) {
 
 /* 00003F68-00004204       .text action_sagarimasu__FP8bl_class */
 void action_sagarimasu(bl_class* i_this) {
+    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     switch (i_this->m306) {
@@ -615,6 +618,7 @@ void action_itaiyo_ne_san(bl_class*) {
 
 /* 00004B84-00004D3C       .text action_hook_atari__FP8bl_class */
 void action_hook_atari(bl_class* i_this) {
+    /* Nonmatching */
     switch (i_this->m306) {
     case 0x3C:
         for (int i = 0; i < 4; i++) {
@@ -652,6 +656,7 @@ void action_hook_atari(bl_class* i_this) {
 
 /* 00004D3C-00004DBC       .text action_come_wait__FP8bl_class */
 void action_come_wait(bl_class* i_this) {
+    /* Nonmatching */
     if (i_this->m306 == 0x46) {
         if (i_this->m2D5 != 0xFF && dComIfGs_isSwitch(i_this->m2D5, dComIfGp_roomControl_getStayNo())) {
             i_this->actor_status |= 0x20;
@@ -663,6 +668,7 @@ void action_come_wait(bl_class* i_this) {
 
 /* 00004DBC-00005104       .text action_normal_skull__FP8bl_class */
 void action_normal_skull(bl_class* i_this) {
+    /* Nonmatching */
     cXyz pos = i_this->current.pos;
 
     switch (i_this->m306) {
