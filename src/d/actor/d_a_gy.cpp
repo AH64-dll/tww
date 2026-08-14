@@ -1066,9 +1066,11 @@ void daGy_c::modeDeleteBombInit() {
 void daGy_c::modeDeleteBomb() {
     f32 f1 = m920;
     if (f1 > 0.01f) {
-        cXyz vec(0.0f, 0.0f, -f1);
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        f32 neg = -f1;
+        cXyz vec(0.0f, 0.0f, neg);
         cXyz out(0.0f, 0.0f, 0.0f);
-        mDoMtx_YrotS(mDoMtx_stack_c::now, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
+        mDoMtx_YrotS(mDoMtx_stack_c::now, fopAcM_searchActorAngleY(this, player));
         PSMTXMultVec(mDoMtx_stack_c::now, &vec, &out);
         current.pos.x += out.x;
         current.pos.y += out.y;
@@ -1092,11 +1094,10 @@ void daGy_c::modeDeleteBomb() {
             m4EC = l_HIO.m178;
             m918 = l_HIO.m17C;
         }
-        f32 f5 = l_HIO.m16C - l_HIO.m170;
-        if (m4E4 <= 10.0f + f5) {
+        if (m4E4 <= 10.0f + (l_HIO.m16C - l_HIO.m170)) {
             m4E8 = l_HIO.m16C + l_HIO.m170;
         } else if (m4E4 >= (l_HIO.m16C + l_HIO.m170) - 10.0f) {
-            m4E8 = f5;
+            m4E8 = l_HIO.m16C - l_HIO.m170;
         }
         if (-1.0f != (f32)m8EC && cLib_calcTimer(&m8EC) == 0) {
             fopAcM_createDisappear(this, &current.pos, 0xA, 0, 0xFF);
