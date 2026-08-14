@@ -209,9 +209,10 @@ void daObjFirewall_c::particle_delete() {
             mParticles2[i] = NULL;
         }
     }
-    if (mParticle3 != NULL) {
-        mParticle3->mMaxFrame = -1;
-        mParticle3->mFlags |= 1;
+    JPABaseEmitter* prt = mParticle3;
+    if (prt != NULL) {
+        prt->mMaxFrame = -1;
+        prt->mFlags |= 1;
         mParticle3 = NULL;
     }
 }
