@@ -224,7 +224,7 @@ BOOL shock_damage_check(bl_class* i_this) {
         return FALSE;
     }
 
-    if (!(player->actor_status & 0x20000)) {
+    if (!(player->mResetFlg0 & 0x20000)) {
         return FALSE;
     }
 
@@ -287,7 +287,7 @@ s32 skull_atari_check(bl_class* i_this) {
         return FALSE;
     }
 
-    i_this->shape_angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
     i_this->m2F4 = 8;
     i_this->m2D4 = 0;
     u8 flag = 0;
@@ -305,7 +305,7 @@ s32 skull_atari_check(bl_class* i_this) {
     case 0x10000:
         i_this->m2D4 = 4;
         if (((daPy_py_c*)player)->mCutType == 0x11) {
-            i_this->shape_angle.y = player->shape_angle.y - 0x4000;
+            i_this->current.angle.y = player->shape_angle.y - 0x4000;
             i_this->m2D4 = 5;
             i_this->speed.y = 30.0f;
             i_this->speedF = 20.0f;
@@ -1499,7 +1499,7 @@ void action_itaiyo_ne_san(bl_class* i_this) {
                 if (i_this->m2D4 == 4) {
                     cXyz ppos = i_this->current.pos;
                     ppos.y += 25.0f + REG8_F(2);
-                    dComIfGp_particle_set(0x3E8, &ppos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
+                    dComIfGp_particle_set(0x3E8, &ppos, &i_this->current.angle, &i_this->scale, 0xFF, NULL,
                                           i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
                     *(cXyz*)i_this->m6BC = ppos;
                     smoke_set(i_this);
@@ -1643,7 +1643,7 @@ void action_normal_skull(bl_class* i_this) {
         break;
     case 0x68:
         pos.y += 25.0f + REG8_F(2);
-        dComIfGp_particle_set(0x3E8, &pos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
+        dComIfGp_particle_set(0x3E8, &pos, &i_this->current.angle, &i_this->scale, 0xFF, NULL,
                               i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
         *(cXyz*)i_this->m6BC = pos;
         smoke_set(i_this);
