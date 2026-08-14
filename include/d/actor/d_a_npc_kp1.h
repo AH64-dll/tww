@@ -43,7 +43,7 @@ public:
     void lookBack();
     bool chkAttention();
     void setAttention();
-    bool chk_talk();
+    BOOL chk_talk();
     bool decideType(int);
     void event_actionInit(int);
     bool event_action();
@@ -108,8 +108,8 @@ public:
     /* 0x7D0 */ u8 mTalkClear;
     /* 0x7D1 */ s8 mActIdx;
     /* 0x7D2 */ s8 mEventAction;
-    /* 0x7D3 */ s8 mAnmAtr;
-    /* 0x7D4 */ s8 mAnmTag;
+    /* 0x7D3 */ u8 mAnmAtr;
+    /* 0x7D4 */ u8 mAnmTag;
     /* 0x7D5 */ s8 mBtpNum;
     /* 0x7D6 */ s8 mBckNum;
     /* 0x7D7 */ s8 mStatus;

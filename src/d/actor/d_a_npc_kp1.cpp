@@ -182,8 +182,12 @@ bool daNpc_Kp1_c::init_btp(bool i_bModify, int i_btpNum) { /* Nonmatching */
 }
 
 /* 00000970-000009B4       .text initTexPatternAnm__11daNpc_Kp1_cFb */
-bool daNpc_Kp1_c::initTexPatternAnm(bool i_bModify) { /* Nonmatching */
-    return init_btp(i_bModify, mBtpNum);
+bool daNpc_Kp1_c::initTexPatternAnm(bool i_bModify) {
+    bool ret = false;
+    if (init_btp(i_bModify, mBtpNum)) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 000009B4-00000A80       .text playTexPatternAnm__11daNpc_Kp1_cFv */
@@ -338,7 +342,7 @@ void daNpc_Kp1_c::setAnm_ATR(int i_texPattern) { /* Nonmatching */
 }
 
 /* 00000DBC-00000E78       .text anmAtr__11daNpc_Kp1_cFUs */
-void daNpc_Kp1_c::anmAtr(u16 i_msgStatus) { /* Nonmatching */
+void daNpc_Kp1_c::anmAtr(u16 i_msgStatus) {
     if (i_msgStatus == fopMsgStts_MSG_TYPING_e) {
         if (mAnmAtrStep == 0) {
             mAnmTag = 0xFF;
@@ -571,18 +575,19 @@ void daNpc_Kp1_c::setAttention() {
 }
 
 /* 00001558-000015F4       .text chk_talk__11daNpc_Kp1_cFv */
-bool daNpc_Kp1_c::chk_talk() { /* Nonmatching */
+BOOL daNpc_Kp1_c::chk_talk() { /* Nonmatching */
+    u32 ret = TRUE;
     mMsgNo = 0xFF;
-    if (dComIfGp_event_getTalkXYBtn() == 1 || dComIfGp_event_getTalkXYBtn() == 2 ||
-        dComIfGp_event_getTalkXYBtn() == 3)
-    {
+    bool is_talk = dComIfGp_event_getTalkXYBtn() == 1 || dComIfGp_event_getTalkXYBtn() == 2 ||
+                   dComIfGp_event_getTalkXYBtn() == 3;
+    if (is_talk) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
             mMsgNo = dComIfGp_event_getPreItemNo();
-            return true;
+        } else {
+            ret = FALSE;
         }
-        return false;
     }
-    return true;
+    return ret;
 }
 
 /* 000015F4-00001620       .text decideType__11daNpc_Kp1_cFi */
@@ -660,8 +665,8 @@ void daNpc_Kp1_c::privateCut() { /* Nonmatching */
 }
 
 /* 00001880-000018A0       .text endEvent__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::endEvent() { /* Nonmatching */
-    eventInfo.onCondition(dEvtCnd_CANTALK_e);
+void daNpc_Kp1_c::endEvent() {
+    g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
     mAnmAtr = 0xFF;
 }
 
@@ -699,7 +704,7 @@ bool daNpc_Kp1_c::set_action(ProcFunc i_newProcFunc, void* i_argsP) {
 }
 
 /* 00001A44-00001AFC       .text wait01__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::wait01() {
+BOOL daNpc_Kp1_c::wait01() { /* Nonmatching */
     if (mStatus == 3 || mStatus == 4 || mStatus == 1) {
         return TRUE;
     }
