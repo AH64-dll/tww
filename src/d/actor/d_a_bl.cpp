@@ -143,21 +143,20 @@ static BOOL daBL_Draw(bl_class* i_this) {
 
 /* 000002F8-000003F8       .text smoke_set__FP8bl_class */
 void smoke_set(bl_class* i_this) {
-    /* Nonmatching */
     if (i_this->mSmokeCB.getEmitter() == NULL) {
+        s8 roomNo = i_this->current.roomNo;
         dComIfGp_particle_setToon(0x2027, (const cXyz*)i_this->m6BC, &i_this->shape_angle, NULL, 0xB9,
-                                  &i_this->mSmokeCB, i_this->current.roomNo, NULL, NULL, NULL);
+                                  &i_this->mSmokeCB, roomNo, NULL, NULL, NULL);
     }
 
-    JPABaseEmitter* emitter = i_this->mSmokeCB.getEmitter();
-    if (emitter != NULL) {
-        emitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.6f, 1.6f, 1.6f));
-        emitter->setRate(10.0f);
-        emitter->setMaxFrame(1);
-        emitter->setAwayFromCenterSpeed(8.0f);
-        emitter->becomeImmortalEmitter();
+    if (i_this->mSmokeCB.getEmitter() != NULL) {
         GXColor color = { 0xB4, 0x80, 0xA0, 0xA0 };
-    i_this->mSmokeCB.setColor(color);
+        i_this->mSmokeCB.getEmitter()->setGlobalParticleScale(JGeometry::TVec3<f32>(1.6f, 1.6f, 1.6f));
+        i_this->mSmokeCB.getEmitter()->setRate(10.0f);
+        i_this->mSmokeCB.getEmitter()->setMaxFrame(1);
+        i_this->mSmokeCB.getEmitter()->setAwayFromCenterSpeed(8.0f);
+        i_this->mSmokeCB.getEmitter()->becomeImmortalEmitter();
+        i_this->mSmokeCB.setColor(color);
     }
 }
 
