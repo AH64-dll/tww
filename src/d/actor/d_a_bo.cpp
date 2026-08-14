@@ -22,6 +22,8 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_material.h"
 #include "d/d_particle.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_particle_name.h"
 
 static const GXColor l_smokeColor = {0xA0, 0xA0, 0x80, 0xFF};
@@ -586,8 +588,161 @@ static void bo_move(bo_class* i_this) {
 }
 
 /* 00002FC4-0000380C       .text bo2_move__FP8bo_class */
-static void bo2_move(bo_class*) {
+static void bo2_move(bo_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 stickX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+
+    switch (i_this->m2C5) {
+    case 0xA:
+        anm_init(i_this, 0x14, 5.0f, 0, 1.0f, -1, 0);
+        JAIZelBasic::zel_basic->seStart(0x5849, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        i_this->mSph.OnAtSPrmBit(cCcD_AtSPrm_NoTgHitInfSet_e);
+        i_this->mSph.OffCoSetBit();
+        i_this->m2CB = 0;
+        i_this->m2CC = 0;
+        i_this->m2C5++;
+        break;
+    case 0xB:
+        if (i_this->mpMorf->getFrame() >= 0xB4 && i_this->mpMorf->getFrame() <= 0xB8) {
+            if (i_this->mSph.ChkAtHit()) {
+                fopAc_ac_c* hitAc = i_this->mSph.mGObjAt.GetAc();
+                if (hitAc != NULL && hitAc == player) {
+                    i_this->m2CB = 1;
+                }
+            }
+        }
+        if (i_this->mpMorf->checkFrame(0xB4)) {
+            i_this->mSph.OnAtSetBit();
+            i_this->mSph.OnAtHitBit();
+            mDoAud_monsSeStart(0x4851, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        }
+        if (i_this->mpMorf->checkFrame(0xB8)) {
+            i_this->mSph.OffAtSetBit();
+            i_this->mSph.OffAtSetBit();
+            i_this->mSph.SetAtSpl(dCcG_At_Spl_UNK0);
+        }
+        if (i_this->mpMorf->isStop()) {
+            wait_initial(i_this);
+            i_this->m366[1] = (s16)(30.0f + cM_rndF(30.0f));
+        }
+        break;
+    case 0xC:
+        if (i_this->m2CC == 0) {
+            if (i_this->mpMorf->checkFrame(0xB8) || i_this->mpMorf->getFrame() >= 0xB8) {
+                ((daPy_py_c*)player)->mDemo.mDemoType = daPy_demo_c::TYPE_ORIGINAL_e;
+                ((daPy_py_c*)player)->mDemo.mParam0 = 0;
+                ((daPy_py_c*)player)->mDemo.mDemoMode = 0x1E;
+                s16 angle = cLib_distanceAngleS(fopAcM_searchActorAngleY(player, i_this), ((daPy_py_c*)player)->shape_angle.y);
+                i_this->m2CD = (angle > 0x4000) ? 1 : 0;
+                i_this->m2CC = 1;
+            }
+        }
+        if (i_this->mpMorf->isStop()) {
+            anm_init(i_this, 0xD, 5.0f, 2, 1.0f, -1, 0);
+            JPABaseEmitter* emitter = g_dComIfG_gameInfo.play.getParticle()->set(
+                dPa_control_c::dPtclGroup_Normal_e, 0x810C, &i_this->current.pos, NULL, NULL, 0xFF, NULL,
+                -1, NULL, NULL, NULL);
+            if (emitter != NULL) {
+                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+            }
+            i_this->m376 = 0;
+            i_this->m366[1] = 0;
+            i_this->m2D4 = 1;
+            i_this->m2D8 = 1;
+            mDoAud_monsSeStart(0x4852, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            i_this->m2C5++;
+        }
+        break;
+    case 0xD:
+        if (i_this->mpEmitter3 == NULL) {
+            i_this->mpEmitter3 = g_dComIfG_gameInfo.play.getParticle()->set(
+                dPa_control_c::dPtclGroup_Normal_e, 0x8107, &i_this->current.pos, NULL, NULL, 0xFF, NULL,
+                -1, NULL, NULL, NULL);
+            if (i_this->mpEmitter3 != NULL) {
+                i_this->mpEmitter3->mpParticleCallBack = &i_this->mYodare;
+                i_this->mpEmitter3->mRate = 0.0f;
+            }
+            i_this->m2C7 = 0;
+        } else {
+            i_this->mpEmitter3->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+        }
+        if (i_this->m366[1] == 0) {
+            daPy_lk_c* pyPlayer = (daPy_lk_c*)player;
+            if (!(pyPlayer->mNoResetFlg1 & 1) && pyPlayer->checkTinkleShield() == 0) {
+                pyPlayer->setDamagePoint(-1.0f);
+            }
+            i_this->m366[1] = 0x1E;
+        }
+        i_this->m376++;
+        if (i_this->m376 > 0x78) {
+            i_this->m376 = 0;
+            anm_init(i_this, 0xB, 5.0f, 0, 1.0f, -1, 0);
+            mDoAud_monsSeStart(0x5846, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            end_event_camera(i_this);
+            i_this->m2C5++;
+            break;
+        }
+        if (i_this->mpMorf->checkFrame(0.0f)) {
+            mDoAud_monsSeStart(0x4852, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JPABaseEmitter* emitter = g_dComIfG_gameInfo.play.getParticle()->set(
+                dPa_control_c::dPtclGroup_Normal_e, 0x810C, &i_this->current.pos, NULL, NULL, 0xFF, NULL,
+                -1, NULL, NULL, NULL);
+            if (emitter != NULL) {
+                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(9));
+            }
+        }
+        if (i_this->m2D4 > 0) {
+            if (stickX < 0.0f) {
+                i_this->m2D4 = -1;
+                i_this->m376 += 2;
+            }
+        } else if (i_this->m2D4 < 0) {
+            if (stickX > 0.0f) {
+                i_this->m2D4 = 1;
+                i_this->m376 += 2;
+            }
+        }
+        if (i_this->m2D8 > 0) {
+            if (stickY < 0.0f) {
+                i_this->m2D8 = -1;
+                i_this->m376 += 2;
+            }
+        } else if (i_this->m2D8 < 0) {
+            if (stickY > 0.0f) {
+                i_this->m2D8 = 1;
+                i_this->m376 += 2;
+            }
+        }
+        if (g_mDoCPd_cpadInfo[0].mButtonTrig.a) {
+            i_this->m376 += 2;
+        }
+        break;
+    case 0xE:
+        if (i_this->mpMorf->checkFrame(0xC0)) {
+            ((daPy_py_c*)player)->current.angle.y = i_this->m348;
+            ((daPy_py_c*)player)->mDemo.mDemoMode = 9;
+            i_this->m2CC = 0;
+            if (i_this->m2CD) {
+                ((daPy_py_c*)player)->mDemo.mParam0 = 0;
+            } else {
+                ((daPy_py_c*)player)->mDemo.mParam0 = 1;
+            }
+        }
+        if (i_this->mpMorf->isStop()) {
+            g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+            wait_initial(i_this);
+            i_this->m366[1] = (s16)(30.0f + cM_rndF(30.0f));
+            i_this->m366[1] *= 2;
+        }
+        break;
+    }
+
+    if (i_this->m2C5 < 0xC && i_this->m2CB == 0) {
+        damage_check(i_this);
+    }
 }
 
 /* 0000380C-00003AD4       .text bo3_move__FP8bo_class */
