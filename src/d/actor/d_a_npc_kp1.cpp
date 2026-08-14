@@ -455,12 +455,12 @@ u16 daNpc_Kp1_c::next_msgStatus(u32* pMsgNo) { /* Nonmatching */
 }
 
 /* 0000102C-00001178       .text getMsg__11daNpc_Kp1_cFv */
-u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
+u32 daNpc_Kp1_c::getMsg() {
     if (mMsgNo != 0xFF) {
         if (mMsgNo == 0x9B) {
             return 0x1E96;
         }
-        return (mMsgNo == 0x45) + 0x1E9F;
+        return (mMsgNo == 0x45 ? 1 : 0) + 0x1E9F;
     }
     if (mTalkFlag != 0) {
         mTalkFlag = 0;
@@ -471,8 +471,8 @@ u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
         return 0x1E9E;
     }
     if (dComIfGs_isGetItemReserve(0xF)) {
-        if (!dComIfGs_checkReserveItem(0x9B) && dComIfGs_getEventReg(0xCCFF) != 1) {
-            return 0x1E83;
+        if (!dComIfGs_checkReserveItem(0x9B)) {
+            return (dComIfGs_getEventReg(0xCCFF) != 0 ? 1 : 0) + 0x1E83;
         }
     }
     if (dComIfGs_isGetItemReserve(0xE)) {
@@ -615,7 +615,7 @@ void daNpc_Kp1_c::event_actionInit(int i_staffIdx) {
 }
 
 /* 000016A8-00001778       .text event_action__11daNpc_Kp1_cFv */
-bool daNpc_Kp1_c::event_action() { /* Nonmatching */
+BOOL daNpc_Kp1_c::event_action() {
     u32 ret = 0;
     switch (mEventAction) {
     case 0: {
