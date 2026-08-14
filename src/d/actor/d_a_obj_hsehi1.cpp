@@ -31,8 +31,6 @@ static s32 l_hio_counter;
 static u32 l_msgId;
 static msg_class* l_msg;
 
-static const char* event_name_tbl[2] = { "hsehi1_tact", "hsehi1_talk" };
-
 static void (daObj_hsh_c::*event_init_tbl[8])(int) = {
     &daObj_hsh_c::initialDefault,
     &daObj_hsh_c::initialLinkDispEvent,
@@ -287,6 +285,7 @@ BOOL daObj_hsh_c::init() {
         setAction(&waitAction, NULL);
     }
 
+    static const char* event_name_tbl[2] = { "hsehi1_tact", "hsehi1_talk" };
     for (int i = 0; i < 2; i++) {
         m530[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
     }
