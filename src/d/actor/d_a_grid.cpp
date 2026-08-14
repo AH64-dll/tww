@@ -552,7 +552,13 @@ void ho_move(daGrid_c* i_this) {
             f32 f30_2 = f30 + f2 * (f25 * (sp28.z * f28));
             f32 f0_3 = f31_2 * f31_2 + f30_2 * f30_2;
             if (f0_3 > 0.0f) {
-                f0_3 = std::sqrtf(f0_3);
+                volatile f32 spC;
+                double guess = __frsqrte(f0_3);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_3);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_3);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_3);
+                spC = (f32)(f0_3 * guess);
+                f0_3 = spC;
             }
             f32 f0_2 = i_this->mWind[r22];
             f32 f0_4 = f23 < 0.0f ? f23 : 0.0f;
@@ -583,7 +589,13 @@ void ho_move(daGrid_c* i_this) {
             f32 f5_2 = f5 * (((f32)r24 * (f7_2 * cM_scos((s16)(i_this->m2212 + r21 * r24)))) / (f32)d78) * f0_4_2;
             f32 f0_5 = f4_2 * f4_2 + f5_2 * f5_2;
             if (f0_5 > 0.0f) {
-                f0_5 = std::sqrtf(f0_5);
+                volatile f32 sp8;
+                double guess = __frsqrte(f0_5);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_5);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_5);
+                guess = 0.5 * guess * (3.0 - guess * guess * f0_5);
+                sp8 = (f32)(f0_5 * guess);
+                f0_5 = sp8;
             }
             f32 f1_2 = 0.25f * -f0_5;
             if (r24 > 4) {
