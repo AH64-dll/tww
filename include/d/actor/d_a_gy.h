@@ -47,7 +47,7 @@ public:
     void setWave();
     void lineCheck(cXyz*, cXyz*);
     void checkTgHit();
-    void getWaterY();
+    f32 getWaterY();
     bool _execute();
     void drawDebug();
     bool _draw();

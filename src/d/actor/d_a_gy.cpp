@@ -1155,8 +1155,27 @@ void daGy_c::checkTgHit() {
 }
 
 /* 000038EC-000039AC       .text getWaterY__6daGy_cFv */
-void daGy_c::getWaterY() {
-    /* Nonmatching */
+f32 daGy_c::getWaterY() {
+    f32 waterY;
+    if (mAcch.ChkWaterHit()) {
+        waterY = mAcch.m_wtr.GetHeight();
+        if (current.pos.y > waterY) {
+            gravity = -2.5f;
+            return current.pos.y;
+        }
+        gravity = 2.0f;
+        return waterY;
+    }
+
+    cXyz pos = current.pos;
+    pos.y += 1000.0f;
+    waterY = dBgS_GetWaterHeight(pos);
+    if (current.pos.y > waterY) {
+        gravity = -2.5f;
+        return current.pos.y;
+    }
+    gravity = 2.0f;
+    return waterY;
 }
 
 /* 000039AC-00004264       .text _execute__6daGy_cFv */
