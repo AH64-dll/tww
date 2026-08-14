@@ -235,3 +235,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T06:13Z — M31: flip #52 d_a_obj_firewall → Equivalent — 23 flips this session (#30-52). Ledger: 53 NonMatching / 47 Equivalent / 313 Matching + 5 MatchingFor. firewall: 122/128 fns 100 after 5-round fix chain (950.0f/pos.z/brk_anm_p/!ChkUsed no-op semantic/wait2 absXZ/_create); 6 holdouts all accept-class raw-disasm-verified. Gate 6ce8fb606 09:13:07. Bench caught the ChkUsed guaranteed-no-op collision regist pre-flip — a real gameplay bug averted.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T06:29Z — M32: flip #53 d_a_obj_msdan_sub2 → MatchingFor — 24 flips this session (#30-53). Ledger: 52 NonMatching / 48 Equivalent / 313 Matching + 6 MatchingFor. msdan_sub2: full transcription 9/9 fns + 5 weaks ALL 100.0 (cull ±1500, TEV_TYPE_BG0, Execute arm value bugs fixed). Gate 093cc3222 09:27:52 + cycle 7 ALL GREEN. 7 consecutive 4-version cycles green. Bench: 12+ real bugs caught pre-flip this cycle (ChkUsed no-op, rlwinm mask, TEV_TYPE li-arg, cull extents).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
