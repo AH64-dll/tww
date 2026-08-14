@@ -715,7 +715,6 @@ bool daNpc_Gp1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
     return o_retval;
 }
 
-/* Nonmatching */
 /* 00001874-00001918       .text partner_srch__11daNpc_Gp1_cFv */
 void daNpc_Gp1_c::partner_srch() {
     if(m819 == 1) {
