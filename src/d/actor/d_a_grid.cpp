@@ -332,6 +332,7 @@ bool daGrid_c::_execute() {
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
 bool daGrid_c::_draw() {
+    /* Nonmatching */
     if (scale.y < 0.06f) {
         return true;
     }
