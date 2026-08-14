@@ -143,6 +143,7 @@ static BOOL daBL_Draw(bl_class* i_this) {
 
 /* 000002F8-000003F8       .text smoke_set__FP8bl_class */
 void smoke_set(bl_class* i_this) {
+    /* Nonmatching */
     if (i_this->mSmokeCB.getEmitter() == NULL) {
         s8 roomNo = i_this->current.roomNo;
         dComIfGp_particle_setToon(0x2027, (const cXyz*)i_this->m6BC, &i_this->shape_angle, NULL, 0xB9,
@@ -162,6 +163,7 @@ void smoke_set(bl_class* i_this) {
 
 /* 000003F8-000004AC       .text fire_move_set__FP8bl_class */
 void fire_move_set(bl_class* i_this) {
+    /* Nonmatching */
     u16 particleId = i_this->m2D0 == 0 ? 0x8124 : 0x8123;
 
     if (i_this->mFollowCB2.getEmitter() == NULL) {
@@ -177,6 +179,7 @@ void fire_move_set(bl_class* i_this) {
 
 /* 000004AC-00000578       .text fire_emitter_clr__FP8bl_class */
 void fire_emitter_clr(bl_class* i_this) {
+    /* Nonmatching */
     JPABaseEmitter* emitter = i_this->mFollowCB2.getEmitter();
     if (emitter != NULL && i_this->m2F0 == 0) {
         if (i_this->m2D0 == 0) {
