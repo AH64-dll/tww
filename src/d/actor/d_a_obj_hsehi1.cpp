@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -26,10 +27,50 @@ daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
 }
 
 static daObj_hsh_HIO_c l_HIO;
+static s32 l_hio_counter;
+static u32 l_msgId;
+static msg_class* l_msg;
+
+static const char* cut_name_tbl[8] = { "WAIT", "Disp", "MsgSet", "Talk", "Tact", "Judge", "Appear", "Delete" };
+
+static void (daObj_hsh_c::*event_init_tbl[8])(int) = {
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialLinkDispEvent,
+    &daObj_hsh_c::initialMsgSetEvent,
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialDefault,
+    &daObj_hsh_c::initialJudgeEvent,
+    &daObj_hsh_c::initialAppearEvent,
+    &daObj_hsh_c::initialDeleteEvent,
+};
+
+static BOOL (daObj_hsh_c::*event_action_tbl[8])(int) = {
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionMsgSetEvent,
+    &daObj_hsh_c::actionMessageEvent,
+    &daObj_hsh_c::actionTactEvent,
+    &daObj_hsh_c::actionDefault,
+    &daObj_hsh_c::actionAppearEvent,
+    &daObj_hsh_c::actionDeleteEvent,
+};
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
+/* Nonmatching */
 daObj_hsh_c::~daObj_hsh_c() {
-    /* Nonmatching */
+    if (argument == 0) {
+        dComIfG_resDelete(&mPhase, "Hsehi1");
+    } else {
+        dComIfG_resDelete(&mPhase, "Hsehi2");
+    }
+    if (m4D4 != NULL) {
+        dComIfG_Bgsp()->Release(m4D4);
+    }
+    emitterDelete(&m4A0);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_root.deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
@@ -53,7 +94,7 @@ s16 daObj_hsh_c::XyEventCB(int) {
     mDoAud_seStart(JA_SE_PRE_TAKT, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
     m504 |= 1;
     m515 = 0;
-    return m530;
+    return m530[0];
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
@@ -134,83 +175,371 @@ void daObj_hsh_c::setBaseMtx() {
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
-void daObj_hsh_c::createHeap() {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::createHeap() {
+    if (argument == 0) {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
+        JUT_ASSERT(0x1F9, modelData != 0);
+        if (modelData != NULL) {
+            mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+            if (mpModel != NULL) {
+                m4D4 = new dBgW();
+                if (m4D4 != NULL) {
+                    if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    } else {
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
+        JUT_ASSERT(0x20F, modelData != 0);
+        if (modelData != NULL) {
+            mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+            if (mpModel != NULL) {
+                m4D4 = new dBgW();
+                if (m4D4 != NULL) {
+                    if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
-static BOOL checkCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObj_hsh_c*)i_this)->createHeap();
 }
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
+/* Nonmatching */
 cPhs_State daObj_hsh_c::create() {
-    /* Nonmatching */
+    static u32 a_heap_size_tbl = 0x4000;
+
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
+
+    fopAcM_ct(this, daObj_hsh_c);
+
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(0x2510)) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    if (argument == 0) {
+        phase_state = dComIfG_resLoad(&mPhase, "Hsehi1");
+    } else {
+        phase_state = dComIfG_resLoad(&mPhase, "Hsehi2");
+    }
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
+            cullMtx = mpModel->getBaseTRMtx();
+
+            if (l_HIO.mNo < 0) {
+                if (argument == 0) {
+                    l_HIO.mNo = mDoHIO_createChild("タクト石版", &l_HIO);
+                } else {
+                    l_HIO.mNo = mDoHIO_createChild("メッセージ石碑", &l_HIO);
+                }
+                l_HIO.mpActor = this;
+            }
+
+            if (!init()) {
+                phase_state = cPhs_ERROR_e;
+            }
+        } else {
+            m4D4 = NULL;
+            phase_state = cPhs_ERROR_e;
+        }
+    }
+
+    return phase_state;
 }
 
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
-void daObj_hsh_c::init() {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::init() {
+    m50C = fopAcM_GetParam(this) & 0xFF;
+    m510 = (fopAcM_GetParam(this) >> 8) & 0xFFFF;
+    m518 = 0;
+    m514 = -1;
+    m515 = -1;
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+
+    cXyz zero(0.0f, 0.0f, 0.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+
+    setBaseMtx();
+
+    dComIfG_Bgsp()->Regist(m4D4, this);
+    m4D4->Move();
+
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(0x2B10)) {
+            setAction(&waitAction, NULL);
+        } else {
+            onOffDraw();
+            setAction(&waitAction, NULL);
+        }
+    } else {
+        setAction(&waitAction, NULL);
+    }
+
+    static const char* event_name_tbl[2] = { "hsehi1_tact", "hsehi1_talk" };
+    for (int i = 0; i < 2; i++) {
+        m530[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
+    }
+
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x100;
+    eventInfo.setXyCheckCB(daObj_hsh_XyCheckCB);
+    eventInfo.setXyEventCB(daObj_hsh_XyEventCB);
+
+    return 1;
 }
 
 /* 00000E60-00000EF4       .text action__11daObj_hsh_cFPv */
-void daObj_hsh_c::action(void*) {
-    /* Nonmatching */
+/* Nonmatching */
+void daObj_hsh_c::action(void* i_param) {
+    if (mCurrActionFunc == NULL) {
+        speedF = 0.0f;
+        setAction(&waitAction, NULL);
+    }
+    (this->*mCurrActionFunc)(i_param);
 }
 
 /* 00000EF4-00000FBC       .text setAction__11daObj_hsh_cFM11daObj_hsh_cFPCvPvPv_iPv */
-void daObj_hsh_c::setAction(int (daObj_hsh_c::*)(void*), void*) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::setAction(ActionFunc i_actionFunc, void* i_param) {
+    if (mCurrActionFunc != i_actionFunc) {
+        if (mCurrActionFunc != NULL) {
+            mActionStatus = -1;
+            (this->*mCurrActionFunc)(i_param);
+        }
+        mCurrActionFunc = i_actionFunc;
+        mActionStatus = 0;
+        m51C = 0;
+        m51E = 0;
+        m520 = 0;
+        m522 = 0;
+        m528 = 0.0f;
+        (this->*mCurrActionFunc)(i_param);
+    }
+    return 1;
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::waitAction(void*) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::waitAction(void*) {
+    if (mActionStatus == 0) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
+        cXyz pos(current.pos.x, current.pos.y, current.pos.z);
+        m518 = chkAttention(pos, shape_angle.y);
+
+        if (argument == 0) {
+            if (m518) {
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+                if (m514 == -1) {
+                    m514 = 5;
+                }
+            } else {
+                cLib_offBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+            }
+        } else {
+            if (m518) {
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+                if (m514 == -1) {
+                    m514 = 3;
+                }
+            } else {
+                cLib_offBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+            }
+        }
+
+        setAttention(1);
+    }
+    return 1;
 }
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::talkAction(void*) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::talkAction(void*) {
+    if (mActionStatus == 0) {
+        l_msgId = -1;
+        m508 = getMsg();
+        mActionStatus++;
+        if (argument == 0) {
+            daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+        }
+    } else if (mActionStatus != -1) {
+        if (mActionStatus == 1) {
+            if (talk_init()) {
+                mActionStatus++;
+            }
+        } else {
+            if (talk(0)) {
+                setAction(&waitAction, NULL);
+                g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
+                if (argument == 0) {
+                    daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                }
+            }
+        }
+
+        setAttention(1);
+    }
+    return 1;
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::offAction(void*) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::offAction(void*) {
+    if (mActionStatus == 0) {
+        mActionStatus++;
+    }
+    return 1;
 }
 
 /* 00001230-00001278       .text deleteAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::deleteAction(void*) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::deleteAction(void*) {
+    if (mActionStatus == 0) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
+        fopAcM_delete(this);
+    }
+    return 1;
 }
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
+/* Nonmatching */
 void daObj_hsh_c::eventOrder() {
-    /* Nonmatching */
+    if (!(m504 & 1)) {
+        if (m514 == 4 || m514 == 3) {
+            eventInfo.onCondition(0x1);
+            if (m514 == 4) {
+                fopAcM_orderSpeakEvent(this);
+            }
+        } else if (m514 == 5) {
+            eventInfo.onCondition(0x20);
+            eventInfo.onCondition(0x1);
+            if (argument == 0) {
+                eventInfo.setEventName("Hsh");
+            }
+        } else if (m514 != -1 && m514 < 2) {
+            m515 = m514;
+            fopAcM_orderOtherEventId(this, m530[m515], 0xFF, 0xFFFF, 0, 1);
+        }
+    }
 }
 
 /* 0000135C-0000140C       .text checkOrder__11daObj_hsh_cFv */
+/* Nonmatching */
 void daObj_hsh_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandTalk() == 1) {
+        if (m514 == 4 || m514 == 3 || m514 == 5) {
+            m514 = -1;
+            if (g_dComIfG_gameInfo.play.getEvent()->getTalkXYBtn() == dTalkBtn_NONE_e) {
+                setAction(&talkAction, NULL);
+            }
+        }
+    }
 }
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
-void daObj_hsh_c::checkCommandTalk() {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::checkCommandTalk() {
+    if (eventInfo.checkCommandTalk() == 1) {
+        if (g_dComIfG_gameInfo.play.getEvent()->getTalkXYBtn() != dTalkBtn_NONE_e) {
+            if (m514 == 5) {
+                m514 = -1;
+            }
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
-void daObj_hsh_c::chkAttention(cXyz, short) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::chkAttention(cXyz i_pos, short i_angle) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 hio_range = l_HIO.m08;
+    s16 hio_angle = l_HIO.m14;
+
+    f32 dx = player->current.pos.x - i_pos.x;
+    f32 dz = player->current.pos.z - i_pos.z;
+    f32 distSq = dx * dx + dz * dz;
+    f32 dist = std::sqrtf(distSq);
+
+    s16 angle = cM_atan2s(dx, dz);
+
+    f32 dy = player->current.pos.y - i_pos.y;
+    if (m518) {
+        hio_range += 40.0f;
+        hio_angle += 0x71C;
+    }
+
+    BOOL ret = 0;
+    if (hio_angle > abs(i_angle - angle) && hio_range > dist) {
+        ret = 1;
+    }
+    return ret;
 }
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
-void daObj_hsh_c::eventProc() {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::eventProc() {
+    if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
+        if (m514 != -1) {
+            m504 |= 1;
+            m514 = -1;
+        }
+    }
+
+    dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    int staffId = evmgr->getMyStaffId("Hsh", NULL, 0);
+
+    if (g_dComIfG_gameInfo.play.getEvent()->runCheck() && !checkCommandTalk() && staffId != -1) {
+        int actIdx = evmgr->getMyActIdx(staffId, cut_name_tbl, 8, 1, 0);
+        if (actIdx == -1) {
+            evmgr->cutEnd(staffId);
+        } else {
+            if (evmgr->getIsAddvance(staffId)) {
+                (this->*event_init_tbl[actIdx])(staffId);
+            }
+            if ((this->*event_action_tbl[actIdx])(staffId)) {
+                evmgr->cutEnd(staffId);
+            }
+        }
+    }
+
+    if (m504 & 1) {
+        if (evmgr->endCheck(m530[m515])) {
+            eventEnd();
+        }
+        return 1;
+    }
+
+    if (staffId != -1) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
 void daObj_hsh_c::eventEnd() {
-    /* Nonmatching */
+    g_dComIfG_gameInfo.play.getEvent()->onEventFlag(8);
+    m504 &= ~1;
+    m515 = -1;
 }
 
 /* 000017B0-000017B4       .text initialDefault__11daObj_hsh_cFi */
@@ -218,88 +547,263 @@ void daObj_hsh_c::initialDefault(int) {
 }
 
 /* 000017B4-000017BC       .text actionDefault__11daObj_hsh_cFi */
-void daObj_hsh_c::actionDefault(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::actionDefault(int) {
+    return 1;
 }
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialLinkDispEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
+    dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    char* substance = (char*)evmgr->getMySubstanceP(i_staffId, "target", 4);
+
+    BOOL isLink = 0;
+    if (substance != NULL) {
+        char buf[0x20];
+        strcpy(buf, substance);
+        if (strcmp(buf, "@PLAYER") == 0) {
+            isLink = 1;
+        }
+    }
+
+    substance = (char*)evmgr->getMySubstanceP(i_staffId, "disp", 4);
+    if (isLink == 1) {
+        if (substance != NULL) {
+            char buf[0x20];
+            strcpy(buf, substance);
+            if (strcmp(buf, "on") == 0) {
+                daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            } else if (strcmp(buf, "off") == 0) {
+                daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            }
+        }
+    } else {
+        if (substance != NULL) {
+            char buf[0x20];
+            strcpy(buf, substance);
+            if (strcmp(buf, "on") == 0) {
+                drawStart();
+            } else if (strcmp(buf, "off") == 0) {
+                drawStop();
+            }
+        }
+    }
 }
 
 /* 00001938-000019C0       .text initialMsgSetEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialMsgSetEvent(int) {
-    /* Nonmatching */
+void daObj_hsh_c::initialMsgSetEvent(int i_staffId) {
+    l_msgId = -1;
+    m508 = 0;
+
+    dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    int* substance = (int*)evmgr->getMySubstanceP(i_staffId, "MsgNo", 3);
+    if (substance != NULL) {
+        m508 = *substance;
+        if (m508 == 0x5B3) {
+            dComIfGp_setMelodyNum(2);
+        }
+    }
 }
 
 /* 000019C0-000019E0       .text actionMsgSetEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionMsgSetEvent(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::actionMsgSetEvent(int i_staffId) {
+    return talk_init();
 }
 
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionMessageEvent(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::actionMessageEvent(int i_staffId) {
+    dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    int* substance = (int*)evmgr->getMySubstanceP(i_staffId, "prm0", 3);
+
+    int prm0 = 0;
+    if (substance != NULL) {
+        prm0 = *substance;
+    }
+    talk(prm0);
 }
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionTactEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::actionTactEvent(int i_staffId) {
+    dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
+    int* substance = (int*)evmgr->getMySubstanceP(i_staffId, "prm0", 3);
+
+    int prm0 = 0;
+    if (substance != NULL) {
+        prm0 = *substance;
+    }
+
+    if (daPy_getPlayerActorClass()->getTactMusic() == prm0) {
+        m504 |= 4;
+    }
+    talk(1);
 }
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */
+/* Nonmatching */
 void daObj_hsh_c::initialJudgeEvent(int) {
-    /* Nonmatching */
+    if (m504 & 2) {
+        m504 &= ~2;
+    } else if (m504 & 4) {
+        drawStart();
+        m504 &= ~4;
+        eventEnd();
+    }
 }
 
 /* 00001B3C-00001C1C       .text initialAppearEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialAppearEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+void daObj_hsh_c::initialAppearEvent(int i_staffId) {
+    dComIfGs_onEventBit(0x2B10);
+    particle_set(0x8270);
+    particle_set(&m4A0, 0x8271);
+
+    mDoAud_seStart(JA_SE_OBJ_ST_TAKT_GR_ON, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    m519 = 30;
+    setAction(&waitAction, NULL);
 }
 
 /* 00001C1C-00001C74       .text actionAppearEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionAppearEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::actionAppearEvent(int) {
+    if (cLib_calcTimer<u8>(&m519) == 0) {
+        offOffDraw();
+        emitterDelete(&m4A0);
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001C74-00001D3C       .text initialDeleteEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::initialDeleteEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+void daObj_hsh_c::initialDeleteEvent(int i_staffId) {
+    particle_set(0x8270);
+    particle_set(&m4A0, 0x8271);
+
+    mDoAud_seStart(JA_SE_OBJ_ST_TAKT_GR_ON, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+    m519 = 60;
+    setAction(&deleteAction, NULL);
 }
 
 /* 00001D3C-00001D88       .text actionDeleteEvent__11daObj_hsh_cFi */
-void daObj_hsh_c::actionDeleteEvent(int) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::actionDeleteEvent(int) {
+    if (cLib_calcTimer<u8>(&m519) == 0) {
+        drawStop();
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
-void daObj_hsh_c::talk_init() {
-    /* Nonmatching */
+BOOL daObj_hsh_c::talk_init() {
+    if (l_msgId == 0xFFFFFFFF) {
+        l_msgId = fopMsgM_messageSet(m508, this);
+    } else {
+        l_msg = fopMsgM_SearchByID(l_msgId);
+        if (l_msg != NULL) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 00001DF4-00001F1C       .text talk__11daObj_hsh_cFi */
-void daObj_hsh_c::talk(int) {
-    /* Nonmatching */
+/* Nonmatching */
+BOOL daObj_hsh_c::talk(int i_param) {
+    if (l_msg->mStatus == 0xE) {
+        if (i_param == 1) {
+            if (dComIfGp_checkMesgCancelButton()) {
+                l_msg->mStatus = 0x10;
+                fopMsgM_messageSendOn();
+                m504 |= 2;
+            } else if (m504 & 2) {
+                l_msg->mStatus = 0x10;
+                fopMsgM_messageSendOn();
+                if (m508 == 0x5B3) {
+                    dComIfGs_onSwitch(m50C, current.roomNo);
+                }
+            }
+        } else {
+            l_msg->mStatus = next_msgStatus(&m508);
+            if (l_msg->mStatus == 0xF) {
+                fopMsgM_messageSet(m508);
+            }
+        }
+    } else if (l_msg->mStatus == 0x15) {
+        if (i_param == 2) {
+            return 1;
+        }
+    } else if (l_msg->mStatus == 0x6) {
+    } else if (l_msg->mStatus == 0x12) {
+        l_msg->mStatus = 0x13;
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001F1C-00001F38       .text getMsg__11daObj_hsh_cFv */
-void daObj_hsh_c::getMsg() {
-    /* Nonmatching */
+u32 daObj_hsh_c::getMsg() {
+    if (argument == 0) {
+        return 0x1901;
+    }
+    return m510;
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-void daObj_hsh_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u32 daObj_hsh_c::next_msgStatus(u32* pMsg) {
+    u32 status = 0xF;
+    if (*pMsg == 0 || *pMsg == 0xEF3 || *pMsg == m510) {
+        status = 0x10;
+    } else if (*pMsg == 0x1901) {
+        status = 0x10;
+    }
+    return status;
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
+/* Nonmatching */
 BOOL daObj_hsh_c::execute() {
-    /* Nonmatching */
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(0x2B10)) {
+            actor_status = (actor_status & ~0x3F) | 0x24;
+        } else {
+            actor_status &= ~0x24;
+        }
+    }
+
+    mAcch.CrrPos(*dComIfG_Bgsp());
+
+    if (mAcch.GetGroundH() != -1000000000.0f) {
+        current.roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        tevStr.mRoomNo = current.roomNo;
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
+        mPolyInfo = mAcch.m_gnd;
+    }
+
+    if (!eventProc()) {
+        checkOrder();
+        action(NULL);
+    }
+
+    eventOrder();
+    setBaseMtx();
+    return 1;
 }
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::draw() {
-    /* Nonmatching */
+    if (m504 & 8) {
+        return 1;
+    }
+
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdate(mpModel);
+
+    cXyz pos(current.pos.x, current.pos.y, current.pos.z);
+    m500 = dComIfGd_setRealShadow2(m500, 1, mpModel, &pos, 800.0f, mAcch.GetGroundH(), &tevStr);
+    return 1;
 }
 
 /* 00002158-00002178       .text daObj_hsh_Draw__FP11daObj_hsh_c */
