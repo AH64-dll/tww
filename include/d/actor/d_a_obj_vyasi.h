@@ -16,11 +16,11 @@ namespace daObjVyasi {
     public:
         void is_switch() const {}
     
-        void SetStopJointAnimation(J3DAnmTransformKey*, float, float);
-        void PlayStopJointAnimation();
+        bool SetStopJointAnimation(J3DAnmTransformKey*, float, float);
+        bool PlayStopJointAnimation();
         void set_first_process();
         void set_collision();
-        void process_none_init();
+        int process_none_init();
         void process_none_main();
         void process_sag_init();
         void process_sag_main();
@@ -32,8 +32,8 @@ namespace daObjVyasi {
         void process_normal_main();
         void process_init(int);
         void process_main();
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        BOOL solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         cPhs_State _create();
         bool _delete();
         void set_mtx();

@@ -5,20 +5,30 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vyasi.h"
+#include "d/d_a_obj.h"
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
-void daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey*, float, float) {
-    /* Nonmatching */
+bool daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_bck, float i_morf, float i_speed) {
+    if(i_bck != NULL) {
+        mpMorf->setAnm(i_bck, 0, i_speed, i_morf, 0.0f, -1.0f, NULL);
+        m19C4 = 1;
+        return true;
+    }
+    return false;
 }
 
 /* 0000015C-00000194       .text PlayStopJointAnimation__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::PlayStopJointAnimation() {
-    /* Nonmatching */
+bool daObjVyasi::Act_c::PlayStopJointAnimation() {
+    return mpMorf->play(NULL, 0, 0) == 0;
 }
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_first_process() {
-    /* Nonmatching */
+    s32 swNo = daObj::PrmAbstract<int>(this, 8, 0);
+    process_init(dComIfGs_isSwitch(swNo, home.roomNo) ? 4 : 1);
+    mNormalCounter = 0;
+    m19D4 = 0.0f;
+    shape_angle.y += 0x8000;
 }
 
 /* 0000021C-000005B8       .text set_collision__Q210daObjVyasi5Act_cFv */
@@ -32,13 +42,12 @@ BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
 }
 
 /* 000009F4-000009FC       .text process_none_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_none_init() {
-    /* Nonmatching */
+int daObjVyasi::Act_c::process_none_init() {
+    return 1;
 }
 
 /* 000009FC-00000A00       .text process_none_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_none_main() {
-    /* Nonmatching */
 }
 
 /* 00000A00-00000A64       .text process_sag_init__Q210daObjVyasi5Act_cFv */
@@ -92,12 +101,12 @@ void daObjVyasi::Act_c::process_main() {
 }
 
 /* 000010C8-000010EC       .text solidHeapCB__Q210daObjVyasi5Act_cFP10fopAc_ac_c */
-void daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
+    return create_heap();
 }
 
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::create_heap() {
+bool daObjVyasi::Act_c::create_heap() {
     /* Nonmatching */
 }
 
