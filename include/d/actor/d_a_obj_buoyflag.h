@@ -39,7 +39,7 @@ namespace daObjBuoyflag {
     class Packet_c : public J3DPacket {
     public:
         Packet_c() { hasi_nrm_init(); }
-        virtual ~Packet_c() { /* Nonmatching */ /* __dt__ 95.12: retail guards mPos[35] __destroy_arr with addic./beq */ }
+        virtual ~Packet_c() { /* Nonmatching */ /* __dt__ 95.12: retail guards mPos[35] __destroy_arr with addic./beq — resisted explicit/implicit/body forms, mwcc dtor-gen quirk */ }
 
         void hasi_nrm_init();
         void draw_hata(Act_c*);
