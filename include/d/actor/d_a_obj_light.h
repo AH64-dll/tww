@@ -17,7 +17,7 @@ namespace daObjLight {
         void set_collision();
         cPhs_State _create();
         bool _delete();
-        void set_fire(int);
+        BOOL set_fire(int);
         void draw_fire();
         void exe_fire();
         void delete_fire();
@@ -38,6 +38,7 @@ namespace daObjLight {
         static BOOL set_light_dif_angle_FRRS(s16);
 
         static const char M_arcname[];
+        static const dCcD_SrcCyl M_cyl_src;
 
         static s16 M_S_light_angle;
         static u32 M_S_pre_set_frame_LOD;
@@ -45,10 +46,8 @@ namespace daObjLight {
         static u8 M_S_lod_access;
 
 public:
-        /* 0x290 */ u8 field_0x290[0x298 - 0x290];
-        /* 0x298 */ J3DModel* mpModelLighthouse;
-        /* 0x29C */ J3DModel* mpModelLight;
-        /* 0x2A0 */ J3DModel* mpModelLight2;
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpModel[3];
         /* 0x2A4 */ dBgW* mpBgW;
         /* 0x2A8 */ Mtx mBgWBaseMtx;
         /* 0x2D8 */ s16 mAngle;
@@ -66,6 +65,7 @@ public:
         /* 0x46C */ Mtx mFireMtx;
         /* 0x49C */ s16 mEventId;
         /* 0x49E */ s16 mEventActive;
+        /* 0x4A0 */ s16 mEventIdx;
     };
 };
 
