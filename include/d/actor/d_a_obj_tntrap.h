@@ -33,7 +33,7 @@ public:
     BOOL chk_appear();
     void set_mtx();
     static BOOL solidHeapCB(fopAc_ac_c*);
-    BOOL create_heap();
+    bool create_heap();
     void particle_set(int, f32);
     void particle_delete(int);
     void set_se();
@@ -76,6 +76,7 @@ public:
     /* 0xDD0 */ s32 mArg0;
     /* 0xDD4 */ s32 mMapType;
     /* 0xDD8 */ s16 mEvtIdx;
+    /* 0xDDA */ u8 field_0xDDA[6];
     /* 0xDE0 */ u8 mPrtSetFlg[2];
     /* 0xDE4 */ f32 mOffsetY[2];
 };  // Size: 0xDEC

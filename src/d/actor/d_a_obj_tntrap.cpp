@@ -29,9 +29,9 @@ static const dCcD_SrcTri l_tri_src = {
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Spl     */ 0xB,
         /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0xB00,
+        /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
@@ -67,7 +67,7 @@ static const Vec l_offset_thunder[3] = {
     {0.0f, 145.0f, 0.0f},
 };
 
-static const s32 table_idx[12] = {0, 1, 2, 0, 2, 3, 3, 2, 5, 3, 5, 4};
+static s32 table_idx[12] = {0, 1, 2, 0, 2, 3, 3, 2, 5, 3, 5, 4};
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
     /* Nonmatching */
@@ -133,7 +133,6 @@ BOOL daObjTnTrap_c::chk_appear() {
 }
 
 /* 000002AC-00000344       .text set_mtx__13daObjTnTrap_cFv */
-    /* Nonmatching */
 void daObjTnTrap_c::set_mtx() {
     mDoMtx_stack_c::transS(home.pos.x, home.pos.y, home.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -143,18 +142,17 @@ void daObjTnTrap_c::set_mtx() {
 }
 
 /* 00000344-00000368       .text solidHeapCB__13daObjTnTrap_cFP10fopAc_ac_c */
-    /* Nonmatching */
 BOOL daObjTnTrap_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((daObjTnTrap_c*)i_this)->create_heap();
 }
 
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
-BOOL daObjTnTrap_c::create_heap() {
-    BOOL ret = TRUE;
+bool daObjTnTrap_c::create_heap() {
+    bool ret = true;
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(l_arcname, 3);
     mpBgW = dBgW_NewSet(bgd, 1, &mMtx);
     if (mpBgW == NULL) {
-        ret = FALSE;
+        ret = false;
     }
     return ret;
 }
@@ -207,14 +205,12 @@ void daObjTnTrap_c::particle_delete(int i_idx) {
         for (int i = 0; i < 2; i++) {
             if (mBallPrt[i_idx][i] != NULL) {
                 mBallPrt[i_idx][i]->becomeInvalidEmitter();
-                mBallPrt[i_idx][i]->mFlags |= 1;
                 mBallPrt[i_idx][i] = NULL;
             }
         }
         for (int i = 0; i < 3; i++) {
             if (mThunderPrt[i_idx][i] != NULL) {
                 mThunderPrt[i_idx][i]->becomeInvalidEmitter();
-                mThunderPrt[i_idx][i]->mFlags |= 1;
                 mThunderPrt[i_idx][i] = NULL;
             }
         }
@@ -236,14 +232,15 @@ void daObjTnTrap_c::set_tri(int i_idx) {
     mDoMtx_stack_c::transS(home.pos.x, home.pos.y + mOffsetY[i_idx], home.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
+    dCcD_Tri* tri = &mTri[i_idx * 4];
     for (int i = 0; i < 4; i++) {
         Vec vtx[3];
+        const s32* tbl = &table_idx[i * 3];
         for (int j = 0; j < 3; j++) {
-            vtx[j] = l_tri_vtx[table_idx[i * 3 + j]];
+            vtx[j] = l_tri_vtx[tbl[j]];
             mDoMtx_stack_c::multVec(&vtx[j], &vtx[j]);
         }
-        cM3dGTri& tri = mTri[i_idx * 4 + i];
-        tri.setPos(&vtx[0], &vtx[1], &vtx[2]);
+        tri[i].setPos(&vtx[0], &vtx[1], &vtx[2]);
     }
 }
 
@@ -361,7 +358,6 @@ BOOL daObjTnTrap_c::trap_off_wait_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
         cXyz diff = player->current.pos - home.pos;
-        diff.y = 0.0f;
         f32 dist = diff.absXZ();
         if (dist < 500.0f) {
             setup_action(1);
@@ -376,23 +372,26 @@ BOOL daObjTnTrap_c::trap_on_wait_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
         cXyz diff = player->current.pos - home.pos;
-        diff.y = 0.0f;
         f32 dist = diff.absXZ();
         if (dist > 500.0f) {
             setup_action(0);
-        } else if (mAction == 5) {
+        } else if (mAppear == 5) {
+            f32 offset[2];
             for (int i = 0; i < 2; i++) {
-                f32 offset = player->current.pos.y - (home.pos.y + mOffsetY[i]);
-                if (fabs(offset) > 150.0f) {
+                offset[i] = player->current.pos.y - (home.pos.y + mOffsetY[i] + 90.0f);
+                if (std::fabsf(offset[i]) > 150.0f) {
                     particle_delete(i);
-                } else {
-                    f32 target = mOffsetY[i];
-                    if (offset > 0.0f) {
-                        target += 90.0f;
+                }
+            }
+            for (int i = 0; i < 2; i++) {
+                if (std::fabsf(offset[i]) > 80.0f) {
+                    f32 target;
+                    if (offset[i] > 0.0f) {
+                        target = 180.0f + mOffsetY[i];
                     } else {
-                        target -= 90.0f;
+                        target = mOffsetY[i] - 180.0f;
                     }
-                    if (fabs(player->current.pos.y - (home.pos.y + target)) <= 80.0f) {
+                    if (std::fabsf(player->current.pos.y - (home.pos.y + target + 90.0f)) <= 150.0f) {
                         particle_set(i ^ 1, target);
                     }
                 }
@@ -497,7 +496,6 @@ void daObjTnTrap_c::trap_off_wait_act_init_proc() {
 }
 
 /* 00001790-000017CC       .text trap_on_wait_act_init_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
 void daObjTnTrap_c::trap_on_wait_act_init_proc() {
     set_em_set_offsetY();
     particle_set(0, mOffsetY[0]);
@@ -626,7 +624,7 @@ actor_process_profile_definition g_profile_Obj_TnTrap = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Draw Prio    */ fpcDwPi_Obj_TnTrap_e,
     /* Actor SubMtd */ &l_daObjTnTrap_Method,
-    /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
