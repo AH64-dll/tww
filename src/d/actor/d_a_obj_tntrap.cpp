@@ -70,7 +70,6 @@ static const Vec l_offset_thunder[3] = {
 static s32 table_idx[12] = {0, 1, 2, 0, 2, 3, 3, 2, 5, 3, 5, 4};
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
-    /* Nonmatching */
 BOOL daObjTnTrap_c::chk_appear() {
     BOOL ret = FALSE;
     mSwSave = param_get_swSave();
@@ -80,26 +79,21 @@ BOOL daObjTnTrap_c::chk_appear() {
     switch (mMapType) {
         case 0:
             if (dComIfGs_isEventBit(0x3A04) == TRUE) {
-                if (mSwSave != 0xFF) {
-                    if (dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
-                        if (dComIfGs_getTriforceNum() == 8) {
-                            if (mArg0 == 0) {
-                                if (dComIfGs_isEventBit(0x2C01) == TRUE) {
-                                    if (mSwSave2 != 0xFF) {
-                                        if (!dComIfGs_isSwitch(mSwSave2, home.roomNo)) {
-                                            mAppear = 2;
-                                            ret = TRUE;
-                                        }
+                if (mSwSave != 0xFF && dComIfGs_isSwitch(mSwSave, home.roomNo) == TRUE) {
+                    if (dComIfGs_getTriforceNum() == 8) {
+                        if (mArg0 == 0) {
+                            if (dComIfGs_isEventBit(0x2C01) == TRUE) {
+                                if (mSwSave2 != 0xFF) {
+                                    if (!dComIfGs_isSwitch(mSwSave2, home.roomNo)) {
+                                        mAppear = 2;
+                                        ret = TRUE;
                                     }
-                                } else {
-                                    mAppear = 1;
-                                    ret = TRUE;
                                 }
+                            } else {
+                                mAppear = 1;
+                                ret = TRUE;
                             }
                         }
-                    } else {
-                        mAppear = 0;
-                        ret = TRUE;
                     }
                 } else {
                     mAppear = 0;
@@ -301,7 +295,6 @@ void daObjTnTrap_c::set_em_set_offsetY() {
 }
 
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
-    /* Nonmatching */
 cPhs_State daObjTnTrap_c::_create() {
     cPhs_State phase = cPhs_ERROR_e;
     fopAcM_ct(this, daObjTnTrap_c);
@@ -314,23 +307,25 @@ cPhs_State daObjTnTrap_c::_create() {
     }
     if (phase == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x2E0)) {
-            if (mAppear != 3) {
-                if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-                    phase = cPhs_ERROR_e;
-                    return phase;
+            if (mAppear != 3 && dComIfG_Bgsp()->Regist(mpBgW, this)) {
+                phase = cPhs_ERROR_e;
+            } else {
+                set_em_set_offsetY();
+                set_mtx();
+                mStts.Init(0xFF, 0xFF, this);
+                for (int g = 0; g < 2; g++) {
+                    for (int i = 0; i < 4; i++) {
+                        (mTri + g * 4)[i].Set(l_tri_src);
+                        (mTri + g * 4)[i].SetStts(&mStts);
+                    }
+                    set_tri(g);
                 }
-            }
-            set_em_set_offsetY();
-            set_mtx();
-            mStts.Init(0xFF, 0xFF, this);
-            for (int g = 0; g < 2; g++) {
-                for (int i = 0; i < 4; i++) {
-                    mTri[g * 4 + i].Set(l_tri_src);
-                    mTri[g * 4 + i].SetStts(&mStts);
+                int act = 0;
+                if (mAppear == 3) {
+                    act = 6;
                 }
-                set_tri(g);
+                setup_action(act);
             }
-            setup_action(mAppear == 3 ? 6 : 0);
         } else {
             phase = cPhs_ERROR_e;
         }
