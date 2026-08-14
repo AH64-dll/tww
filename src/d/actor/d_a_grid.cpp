@@ -251,23 +251,25 @@ void daHo_packet_c::setNrmVtx(cXyz* out, int col, int row) {
     cXyz cur = nrm[row * 7 + col];
     cXyz v1;
     cXyz add;
+    cXyz v2;
+    cXyz cross;
     add.set(0.0f, 0.0f, 0.0f);
     if (col != 0) {
         v1 = nrm[row * 7 + col - 1] - cur;
         if (row != 0 && row != 9) {
-            cXyz v2 = nrm[col + (row - 1) * 7] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[col + (row - 1) * 7] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         }
         if (row == 0xB) {
-            cXyz v2 = nrm[0x54] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[0x54] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         } else if (row != 8) {
-            cXyz v2 = nrm[col + (row + 1) * 7] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[col + (row + 1) * 7] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         }
@@ -275,19 +277,19 @@ void daHo_packet_c::setNrmVtx(cXyz* out, int col, int row) {
     if (col != 6) {
         v1 = nrm[col + row * 7 + 1] - cur;
         if (row != 0 && row != 9) {
-            cXyz v2 = nrm[col + (row - 1) * 7] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[col + (row - 1) * 7] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         }
         if (row == 0xB) {
-            cXyz v2 = nrm[0x54] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[0x54] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         } else if (row != 8) {
-            cXyz v2 = nrm[col + (row + 1) * 7] - cur;
-            cXyz cross = v1.outprod(v2);
+            v2 = nrm[col + (row + 1) * 7] - cur;
+            cross = v1.outprod(v2);
             cross = cross.normZC();
             add += cross;
         }
