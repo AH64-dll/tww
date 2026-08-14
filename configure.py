@@ -1763,7 +1763,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_msdan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_msdan2"),
     ActorRel(Matching,    "d_a_obj_msdan_sub"),
-    ActorRel(NonMatching, "d_a_obj_msdan_sub2"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_msdan_sub2"),  # D44J01 demo divergence (8B delta) — sitem/msdan class
     ActorRel(Matching,    "d_a_obj_mtest"),
     ActorRel(Matching,    "d_a_obj_nest"),
     ActorRel(Matching,    "d_a_obj_ojtree"),
