@@ -87,6 +87,7 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
     cXyz start;
     cXyz sp18;
     s16 angle = 0;
+    ss_s_s* ptr = hand->mSss;
 
     mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
     sp48.set(0.0f, 0.0f, 30.0f + REG0_F(7) - 10.0f);
@@ -94,7 +95,6 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
     end = hand->mPos;
     end.y -= 300.0f + REG0_F(6);
 
-    ss_s_s* ptr = hand->mSss;
     for (int i = 0; i < 20; i++) {
         ptr->mSize = 0;
         linChk.Set(&start, &end, i_this);
@@ -112,7 +112,7 @@ void hand_1_set(ss_class* i_this, ss_s* hand) {
         }
         MtxPush();
         mDoMtx_YrotM(*calc_mtx, angle);
-        angle += (s32)cM_rndFX(6000.0f);
+        angle += (s16)cM_rndFX(6000.0f);
         MtxPosition(&sp48, &pos);
         MtxPull();
         start += pos;
@@ -131,6 +131,7 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
     cXyz start;
     cXyz sp18;
     s16 angle = 0;
+    ss_s_s* ptr = hand->mSss;
 
     mDoMtx_YrotS(*calc_mtx, hand->mAngleY);
     sp3C.set(0.0f, 0.0f, -250.0f + REG12_F(6));
@@ -139,7 +140,6 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
     mDoMtx_ZrotM(*calc_mtx, hand->mAngleZ);
     sp3C.set(0.0f, 30.0f + REG12_F(7) - 10.0f, 0.0f);
 
-    ss_s_s* ptr = hand->mSss;
     for (int i = 0; i < 20; i++) {
         ptr->mSize = 0;
         linChk.Set(&hand->mPos, &start, i_this);
@@ -150,18 +150,18 @@ void hand_1_set_2(ss_class* i_this, ss_s* hand) {
             mDoMtx_YrotS(*calc_mtx, cM_atan2s(sp18.x, sp18.z));
             f32 dist = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
             mDoMtx_XrotM(*calc_mtx, (s16)-cM_atan2s(sp18.y, dist));
-            sp18.set(0.0f, 0.0f, -5.0f + REG8_F(8));
+            sp18.set(0.0f, 0.0f, -5.0f + REG12_F(8));
             MtxPosition(&sp18, &pos);
             ptr->mPos += pos;
             MtxPull();
         }
         MtxPush();
         mDoMtx_ZrotM(*calc_mtx, angle);
-        angle += (s32)cM_rndFX(6000.0f);
+        angle += (s16)cM_rndFX(6000.0f);
         MtxPosition(&sp3C, &pos);
         MtxPull();
         start += pos;
-        sp3C.y += 2.0f + REG8_F(9);
+        sp3C.y += 2.0f + REG12_F(9);
         ptr++;
     }
 }
