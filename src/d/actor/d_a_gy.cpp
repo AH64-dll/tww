@@ -161,19 +161,6 @@ static daGy_HIO_c l_HIO;
 const u32 daGy_c::m_heapsize = 0x3FA0;
 const char daGy_c::m_arc_name[] = "Gy";
 
-static void (daGy_c::*mode_proc[])() = {
-    &daGy_c::modeDive,
-    &daGy_c::modeCircle,
-    &daGy_c::modeAttack,
-    &daGy_c::modeAttackPlayer,
-    &daGy_c::modeAttackBack,
-    &daGy_c::modeWithAttack,
-    &daGy_c::modeWithCircle,
-    &daGy_c::modeDamage,
-    &daGy_c::modeDelete,
-    &daGy_c::modeDeleteBomb,
-};
-
 /* 000000EC-000003CC       .text __ct__10daGy_HIO_cFv */
 daGy_HIO_c::daGy_HIO_c() {
     m0C = 0xC8;
@@ -943,17 +930,110 @@ void daGy_c::modeDeleteBomb() {
 
 /* 00002CBC-00002E24       .text modeProcCall__6daGy_cFv */
 void daGy_c::modeProcCall() {
-    /* Nonmatching */
+    if (l_HIO.m95 != 0) {
+        m2B0 = l_HIO.m9A;
+    }
+    static void (daGy_c::*mode_proc[])() = {
+        &daGy_c::modeDive,
+        &daGy_c::modeCircle,
+        &daGy_c::modeAttack,
+        &daGy_c::modeAttackPlayer,
+        &daGy_c::modeAttackBack,
+        &daGy_c::modeWithAttack,
+        &daGy_c::modeWithCircle,
+        &daGy_c::modeDamage,
+        &daGy_c::modeDelete,
+        &daGy_c::modeDeleteBomb,
+    };
+    (this->*mode_proc[m2B0])();
 }
 
 /* 00002E24-00003004       .text createWave__6daGy_cFv */
 void daGy_c::createWave() {
-    /* Nonmatching */
+    static s8 wave_l_initialized;
+    static Vec wave_l_direction;
+    if (!wave_l_initialized) {
+        wave_l_direction.x = 0.5f;
+        wave_l_direction.y = 1.0f;
+        wave_l_direction.z = -0.3f;
+        wave_l_initialized = 1;
+    }
+    static s8 wave_r_initialized;
+    static Vec wave_r_direction;
+    if (!wave_r_initialized) {
+        wave_r_direction.x = -0.5f;
+        wave_r_direction.y = 1.0f;
+        wave_r_direction.z = -0.3f;
+        wave_r_initialized = 1;
+    }
+    if (mD18.mpBaseEmitter == NULL) {
+        dComIfGp_particle_set(0x37, &mDFC, &mE08, NULL, 0xFF, &mD18, -1, NULL, NULL, NULL);
+        if (mD18.mpBaseEmitter != NULL) {
+            mD18.mpBaseEmitter->mEmitterDir = wave_l_direction;
+        }
+    }
+    if (mD7C.mpBaseEmitter == NULL) {
+        dComIfGp_particle_set(0x37, &mDFC, &mE08, NULL, 0xFF, &mD7C, -1, NULL, NULL, NULL);
+        if (mD7C.mpBaseEmitter != NULL) {
+            mD7C.mpBaseEmitter->mEmitterDir = wave_r_direction;
+        }
+    }
+    if (mDE0.getEmitter() == NULL) {
+        dComIfGp_particle_set(0x35, &mDFC, &mE08, NULL, 0xFF, &mDE0, -1, NULL, NULL, NULL);
+    }
 }
 
 /* 00003004-00003268       .text setWave__6daGy_cFv */
+/* Nonmatching */
 void daGy_c::setWave() {
-    /* Nonmatching */
+    f32 var_f29 = l_HIO.m24;
+    u8 d15 = mD15;
+    f32 var_f30;
+    f32 var_f31;
+    if ((s8)d15 == 5 || (s8)d15 == 8 || (s8)d15 == 9 || (s8)d15 == 6) {
+        var_f30 = 0.0f;
+        var_f31 = 0.0f;
+    } else {
+        f32 one = 1.0f;
+        var_f30 = l_HIO.m18 * one;
+        var_f31 = l_HIO.m10;
+    }
+    switch (m2B0) {
+    case 1:
+        var_f29 = l_HIO.m24 * (0.6f + g_regHIO.mChild[12].mFloatRegs[13]);
+        var_f30 *= 0.7f + g_regHIO.mChild[12].mFloatRegs[13];
+        break;
+    case 0:
+        var_f30 = 0.0f;
+        var_f31 = 0.0f;
+        break;
+    case 8:
+        var_f30 = 0.0f;
+        var_f31 = 0.0f;
+        break;
+    }
+    if ((s8)d15 != 0xA) {
+    } else {
+        var_f30 = 0.0f;
+        var_f31 = 0.0f;
+    }
+    mDFC.y = daSea_calcWave(mDFC.x, mDFC.z);
+    mE08.y = current.angle.y;
+    mD7C.setSpeed(var_f30);
+    mD18.setSpeed(var_f30);
+    mD7C.setMaxSpeed(var_f29);
+    mD18.setMaxSpeed(var_f29);
+    mD7C.setPitch(1.0f + l_HIO.m20);
+    mD18.setPitch(1.0f - l_HIO.m20);
+    mD7C.setAnchor(&cXyz(l_HIO.m28, l_HIO.m2C, l_HIO.m30),
+                   &cXyz(l_HIO.m34, l_HIO.m38, l_HIO.m3C));
+    mD18.setAnchor(&cXyz(l_HIO.m28 * -1.0f, l_HIO.m2C, l_HIO.m30),
+                   &cXyz(l_HIO.m34 * -1.0f, l_HIO.m38, l_HIO.m3C));
+    mD7C.setMaxDisSpeed(l_HIO.m1C);
+    mD18.setMaxDisSpeed(l_HIO.m1C);
+    cLib_addCalc2(&mE10, var_f31, 0.1f, 10.0f);
+    mDE0.setSpeed(mE10);
+    mDE0.setMaxSpeed(l_HIO.m14);
 }
 
 /* 00003268-000032E4       .text lineCheck__6daGy_cFP4cXyzP4cXyz */

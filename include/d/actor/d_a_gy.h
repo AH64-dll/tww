@@ -114,7 +114,9 @@ public:
     /* 0xD7C */ dPa_waveEcallBack mD7C;
     /* 0xDE0 */ dPa_splashEcallBack mDE0;
     /* 0xDFC */ cXyz mDFC;
-    /* 0xE08 */ u8 mE08[0xE14 - 0xE08];
+    /* 0xE08 */ csXyz mE08;
+    /* 0xE0E */ u8 mE0E[0xE10 - 0xE0E];
+    /* 0xE10 */ f32 mE10;
     /* 0xE14 */ dBgS_ObjLinChk mE14;
     /* 0xE80 */ u8 mE80;
     /* 0xE81 */ u8 mE81[0xE84 - 0xE81];
@@ -169,6 +171,7 @@ public:
     /* 0x97 */ u8 m97;
     /* 0x98 */ u8 m98;
     /* 0x99 */ u8 m99;
+    /* 0x9A */ s16 m9A;
     /* 0x9C */ f32 m9C;
     /* 0xA0 */ f32 mA0;
     /* 0xA4 */ f32 mA4;
