@@ -620,7 +620,7 @@ void daNpc_So_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::transM(1.0f, field_0xB34, 1.0f);
-    mDoMtx_copy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    model->setBaseTRMtx(mDoMtx_stack_c::now);
 }
 
 /* 000016E8-00001718       .text modeWaitInit__10daNpc_So_cFv */
