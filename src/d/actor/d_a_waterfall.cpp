@@ -220,7 +220,18 @@ f32 daWfall_c::getWaterScaleFromGatePos() {
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
 f32 daWfall_c::getWaterHeight() {
-    /* Nonmatching */
+    dBgS_WtrChk wtr;
+
+    f32 waterHeight = current.pos.y;
+    cXyz sp8 = current.pos;
+    sp8.x = current.pos.x - 400.0f;
+
+    wtr.Set(sp8, current.pos.y + 1500.0f);
+    if (dComIfG_Bgsp()->WaterChk(&wtr)) {
+        waterHeight = wtr.GetHeight();
+    }
+
+    return waterHeight;
 }
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
