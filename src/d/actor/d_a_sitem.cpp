@@ -405,7 +405,6 @@ void hand_move(sitem_class* i_this) {
     } else {
         i_this->mBmSph.SetC(non_pos);
     }
-    cCcD_Obj* hitObj = NULL;
     dComIfG_Ccsp()->Set(&i_this->mBmSph);
     for (int i = 0; i < 3; i++) {
         cXyz pos = pPos[((i_this->m2BC & 3) + i * 2) % 10];
@@ -426,6 +425,7 @@ void hand_move(sitem_class* i_this) {
     i_this->mSph[3].OnCoSPrmBit(cCcD_CoSPrm_Set_e);
     dComIfG_Ccsp()->Set(&i_this->mSph[3]);
 
+    cCcD_Obj* hitObj = NULL;
     if (i_this->m2C6 == 0) {
         if (i_this->mSph[3].ChkTgHit() || (i_this->mB0C > 100.0f && i_this->mSph[3].ChkCoHit())) {
             hitObj = i_this->mSph[3].GetTgHitObj();
