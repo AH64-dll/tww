@@ -114,15 +114,15 @@ static BOOL daBL_Draw(bl_class* i_this) {
 
     dSnap_RegistFig(0xB4, i_this, 1.0f, 1.0f, 1.0f);
 
-    if (i_this->m71E > 0x14) {
+    if (i_this->mEnemyIce.mFreezeTimer > 0x14) {
         dMat_control_c::iceEntryDL(i_this->mpMorf, -1, &i_this->mInvisibleModel);
         return TRUE;
     }
 
     if (i_this->m2D3 == 0) {
-        i_this->mpBtk1->entry(model->getModelData());
-    } else {
         i_this->mpBtk2->entry(model->getModelData());
+    } else {
+        i_this->mpBtk1->entry(model->getModelData());
     }
 
     i_this->mpMorf->entryDL();
@@ -133,9 +133,9 @@ static BOOL daBL_Draw(bl_class* i_this) {
     }
 
     if (i_this->m2D3 == 0) {
-        i_this->mpBtk1->remove(model->getModelData());
-    } else {
         i_this->mpBtk2->remove(model->getModelData());
+    } else {
+        i_this->mpBtk1->remove(model->getModelData());
     }
 
     return TRUE;
@@ -168,9 +168,9 @@ void fire_move_set(bl_class* i_this) {
         dComIfGp_particle_set(0x8123 + (i_this->m2D0 == 0), &i_this->current.pos, NULL, NULL, 0xFF, &i_this->mFollowCB2,
                               i_this->current.roomNo, NULL, NULL, NULL);
         if (i_this->m2D0 == 1) {
-            i_this->mCyl.SetTgSe(5);
-            i_this->mCyl.SetTgHitMark(dCcg_TgHitMark_Purple_e);
-            i_this->mCyl.OnTgShield();
+            i_this->mEnemyIce.mCyl.SetTgSe(5);
+            i_this->mEnemyIce.mCyl.SetTgHitMark(dCcg_TgHitMark_Purple_e);
+            i_this->mEnemyIce.mCyl.OnTgShield();
         }
     }
 }
@@ -759,8 +759,128 @@ void action_normal_skull(bl_class* i_this) {
 }
 
 /* 00005104-00005504       .text daBL_Execute__FP8bl_class */
-static BOOL daBL_Execute(bl_class*) {
+static BOOL daBL_Execute(bl_class* i_this) {
     /* Nonmatching */
+    if (i_this->m2F0 == 1) {
+        i_this->mFollowCB2.end();
+    }
+
+    if (i_this->m2F6 == 1) {
+        i_this->actor_status &= ~0x20000;
+    }
+
+    i_this->eyePos = i_this->current.pos;
+    i_this->attention_info.position = i_this->current.pos;
+    i_this->eyePos.y += 40.0f;
+    i_this->attention_info.position.y += 80.0f;
+
+    if (!(i_this->m2D0 & 0x80)) {
+        if (i_this->m2D3 == 0) {
+            i_this->mpBtk2->play();
+        } else {
+            i_this->mpBtk1->play();
+        }
+    }
+
+    if (enemy_ice(&i_this->mEnemyIce)) {
+        PSMTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0), *calc_mtx);
+        i_this->mpMorf->calc();
+        if (i_this->m2F0 != 0) {
+            i_this->m2F0--;
+        }
+        return TRUE;
+    }
+
+    s16* timers = &i_this->m2F0;
+    for (int i = 0; i < 6; i++) {
+        if (timers[i] != 0) {
+            timers[i]--;
+        }
+    }
+
+    switch (i_this->m2D2) {
+    case 0:
+        action_dousa(i_this);
+        break;
+    case 1:
+        action_kougeki(i_this);
+        break;
+    case 2:
+        action_sagarimasu(i_this);
+        break;
+    case 3:
+        action_kaze_move(i_this);
+        break;
+    case 4:
+        action_itaiyo_ne_san(i_this);
+        break;
+    case 5:
+        action_hook_atari(i_this);
+        break;
+    case 6:
+        action_come_wait(i_this);
+        break;
+    case 7:
+        action_normal_skull(i_this);
+        break;
+    case 0xA:
+        action_normal_skull(i_this);
+        break;
+    }
+
+    if (i_this->m306 != 0) {
+        u32 groundHit = (i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) ? 1 : 0;
+        i_this->mpMorf->play(&i_this->eyePos, groundHit, dComIfGp_getReverb(i_this->current.roomNo));
+    }
+
+    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cXyz dir(0.0f, 0.0f, i_this->speedF);
+    cXyz out;
+    MtxPosition(&dir, &out);
+    i_this->speed.x = out.x;
+    i_this->speed.z = out.z;
+    i_this->speed.y += i_this->gravity;
+    if (i_this->speed.y < -55.0f) {
+        i_this->speed.y = -55.0f;
+    }
+    cLib_addCalc2(&i_this->scale.x, i_this->m31C, 0.3f, 0.3f);
+    i_this->scale.z = i_this->scale.x;
+    i_this->scale.y = i_this->scale.x;
+
+    cXyz pos = i_this->current.pos;
+    pos.y += 20.0f;
+    i_this->mSph.SetC(pos);
+    i_this->mSph.SetR(i_this->m328);
+    dComIfG_Ccsp()->Set(&i_this->mSph);
+
+    if (i_this->mSph.ChkCoSet()) {
+        fopAcM_posMove(i_this, i_this->mStts.GetCCMoveP());
+    } else {
+        fopAcM_posMove(i_this, NULL);
+    }
+
+    BG_check(i_this);
+
+    if (i_this->m2D1 != 0 || i_this->gravity != 0.0f) {
+        if (i_this->mAcch.GetGroundH() != -1000000000.0f) {
+            if (dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) &&
+                dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4)
+            {
+                if (i_this->current.pos.y < i_this->m320 - 5000.0f) {
+                    i_this->speedF = 0.0f;
+                    i_this->speed.x = 0.0f;
+                    i_this->speed.y = 0.0f;
+                    i_this->speed.z = 0.0f;
+                    i_this->gravity = 0.0f;
+                    dComIfGs_onActor(i_this->setID, i_this->home.roomNo);
+                    fopAcM_delete(i_this);
+                }
+            }
+        }
+    }
+
+    draw_SUB(i_this);
+    return TRUE;
 }
 
 /* 00005504-0000550C       .text daBL_IsDelete__FP8bl_class */
@@ -882,9 +1002,9 @@ static cPhs_State daBL_Create(fopAc_ac_c* i_this) {
         i_this->max_health = 2;
         i_this->health = 2;
 
-        i_bl->m710 = i_this;
-        i_bl->mCyl.mCenter.x = 1.0f;
-        i_bl->mCyl.mCenter.y = 1.0f;
+        i_bl->mEnemyIce.mpActor = i_this;
+        i_bl->mEnemyIce.mCyl.mCenter.x = 1.0f;
+        i_bl->mEnemyIce.mCyl.mCenter.y = 1.0f;
 
         i_bl->mEnemyFire.mpMcaMorf = i_bl->mpMorf;
         i_bl->mEnemyFire.mpActor = i_this;
