@@ -532,7 +532,7 @@ void core_move(ss_class* i_this) {
                 for (int i = 0; i < 10; i++) {
                     cXyz* p = i_this->mLine.getPos(i);
                     for (int j = 0; j < 20; j += REG0_S(7) + 2) {
-                        if (cM_rndF(1.0f) < 25.0f + REG0_F(15)) {
+                        if (cM_rndF(1.0f) < 0.2f + REG0_F(15)) {
                             dComIfGp_particle_setSimple(1, p, 0xFF, g_whiteColor, g_whiteColor, 0);
                         }
                         p += REG0_S(7) + 2;
@@ -597,7 +597,7 @@ void core_move(ss_class* i_this) {
         i_this->eyePos.set(10000.0f, 10000.0f, 10000.0f);
     }
     i_this->mSph.SetC(i_this->eyePos);
-    i_this->mSph.SetR(35.0f + REG0_F(3));
+    i_this->mSph.SetR(35.0f + REG0_F(0));
     if (i_this->m2B4 == 0) {
         i_this->mSph.OffTgShield();
     } else {
