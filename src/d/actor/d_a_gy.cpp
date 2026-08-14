@@ -851,7 +851,32 @@ void daGy_c::modeAttackBackInit() {
 
 /* 00002400-00002560       .text modeAttackBack__6daGy_cFv */
 void daGy_c::modeAttackBack() {
-    /* Nonmatching */
+    m4E8 = l_HIO.mA0;
+    m4F0 = 0.0f;
+    cLib_addCalcAngleS2(&m8F4, 0, 4, 0x800);
+
+    cXyz sp18 = current.pos - m904;
+    cXyz spC(sp18.x, 0.0f, sp18.z);
+    f32 f1 = PSVECSquareMag(&spC);
+    if (f1 > 0.0f) {
+        double guess = __frsqrte(f1);
+        guess = 0.5 * guess * (3.0 - guess * guess * f1);
+        guess = 0.5 * guess * (3.0 - guess * guess * f1);
+        guess = 0.5 * guess * (3.0 - guess * guess * f1);
+        f1 = (f32)(f1 * guess);
+    }
+
+    if (f1 > l_HIO.m144) {
+        setAimSpeedF();
+        if (mD15 == 1) {
+            modeWithCircleInit();
+        }
+        cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &m904), 8, 0x400);
+        return;
+    }
+    if (mD15 == 1) {
+        modeCircleInit();
+    }
 }
 
 /* 00002560-000025F0       .text modeDamageInit__6daGy_cFv */

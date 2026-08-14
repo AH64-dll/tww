@@ -83,7 +83,9 @@ public:
     /* 0x89C */ Vec m89C;
     /* 0x8A8 */ dCcD_Stts m8A8;
     /* 0x8E4 */ u32 m8E4;
-    /* 0x8E8 */ u8 m8E8[0x8F8 - 0x8E8];
+    /* 0x8E8 */ u8 m8E8[0x8F4 - 0x8E8];
+    /* 0x8F4 */ s16 m8F4;
+    /* 0x8F6 */ u8 m8F6[0x8F8 - 0x8F6];
     /* 0x8F8 */ cXyz m8F8;
     /* 0x904 */ cXyz m904;
     /* 0x910 */ u8 m910[0x914 - 0x910];
