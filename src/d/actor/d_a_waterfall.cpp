@@ -6,18 +6,26 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
 
+const char daWfall_c::m_arcname[6] = "Wfall";
+const s16 daWfall_c::m_wait_timer = 0x32;
+const s16 daWfall_c::m_heapsize[2] = { 0x35A0, 0x4870 };
+
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
 bool daWfall_c::_delete() {
-    /* Nonmatching */
+    mFollow1.remove();
+    mFollow2.remove();
+    dComIfG_resDelete(&mPhs, m_arcname);
+    JAIZelBasic::zel_basic->seDeleteObject(&m344);
+    return true;
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daWfall_c*)i_this)->CreateHeap();
 }
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
-void daWfall_c::CreateHeap() {
+BOOL daWfall_c::CreateHeap() {
     /* Nonmatching */
 }
 
@@ -28,7 +36,17 @@ void daWfall_c::CreateInit() {
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daWfall_c);
+
+    cPhs_State phase = (cPhs_State)dComIfG_resLoad(&mPhs, m_arcname);
+    if (phase == cPhs_COMPLEATE_e) {
+        m356 = (fopAcM_GetParam(this) >> 8) & 0xF;
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[m356])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return phase;
 }
 
 /* 00000938-000009B8       .text set_mtx__9daWfall_cFv */
@@ -58,7 +76,10 @@ void daWfall_c::mode_proc_call() {
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
-    /* Nonmatching */
+    mMode = 0;
+    if (m356 == 1) {
+        mBrk.setPlaySpeed(-1.0f);
+    }
 }
 
 /* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
@@ -68,12 +89,10 @@ void daWfall_c::mode_wtr_on() {
 
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_off_init() {
-    /* Nonmatching */
-}
-
-/* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
-void daWfall_c::mode_wtr_off() {
-    /* Nonmatching */
+    mMode = 1;
+    if (m356 == 1) {
+        mBrk.setPlaySpeed(1.0f);
+    }
 }
 
 /* 00000EE8-00000FF0       .text setEmitter00Pos__9daWfall_cFv */
@@ -87,8 +106,16 @@ void daWfall_c::setEmitter01Pos() {
 }
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
-void daWfall_c::getWaterScaleFromGatePos() {
-    /* Nonmatching */
+f32 daWfall_c::getWaterScaleFromGatePos() {
+    f32 scale = m344.y - current.pos.z;
+    if (scale < 0.0f) {
+        scale = 0.0f;
+    }
+    scale /= 760.0f;
+    if (scale > 1.0f) {
+        scale = 1.0f;
+    }
+    return scale;
 }
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
