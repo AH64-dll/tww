@@ -32,13 +32,8 @@ static const u16 pa_name_flower[] = {0x834F, 0x8351, 0x8353, 0x8355};
 static const u16 pa_name_flower2[] = {0x8350, 0x8352, 0x8354, 0x8356};
 
 /* p_name0 / p_name1: appear particle names per flower type */
-static const u16 p_name0[] = {0x8347, 0x8349, 0x834B, 0x834D};
-static const u16 p_name1[] = {0x8348, 0x834A, 0x834C, 0x834E};
-
-static const char* action_table[] = {
-    "WAIT", "FA1", "APPEAR", "TALK", "EXIT", "FL_DEMO", "FL_LINK", "FL_DELETE", "FL_DM_BF", "FL_DM_MD",
-    "FL_DM_AF",
-};
+static u16 p_name0[] = {0x8347, 0x8349, 0x834B, 0x834D};
+static u16 p_name1[] = {0x8348, 0x834A, 0x834C, 0x834E};
 
 static u32 l_msgId;
 static msg_class* l_msg;
@@ -84,7 +79,7 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
     if (jntNo == getHeadJntNum()) {
         s16 target = 0;
         if (m3BC == 0) {
-            target = mJntCtrl.getHead_x();
+            target = m_jnt.getHead_x();
         }
         cLib_addCalcAngleS(&m350, target, 8, 0x400, 0x100);
         mDoMtx_ZrotM(*calc_mtx, -m350);
@@ -98,7 +93,7 @@ s32 daBigelf_c::nodeCallBack(J3DNode* i_joint) {
         if (m337 != 0xFF) {
             m337++;
         }
-    } else if (jntNo != getBackboneJntNum() && jntNo == mHandRBJointIndex) {
+    } else if (jntNo != getBackboneJntNum() && jntNo == m_fl_jnt) {
         cXyz pos(0.0f, 0.0f, 0.0f);
         MtxPosition(&pos, &m3D0);
     }
@@ -164,7 +159,7 @@ void daBigelf_c::darkInit() {
 
 /* 00000488-000004D0       .text darkEnd__10daBigelf_cFv */
 void daBigelf_c::darkEnd() {
-    /* Nonmatching */
+
     mDark = 0;
     dKy_set_actcol_ratio(1.0f);
     dKy_set_bgcol_ratio(1.0f);
@@ -240,8 +235,8 @@ void daBigelf_c::demoInitFlLink() {
 
 /* 000007E4-00000808       .text demoProcFlLink__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFlLink() {
-    /* Nonmatching */
-    return demoProcWait();
+    demoProcWait();
+    return 1;
 }
 
 /* 00000808-000008F0       .text demoInitFlDmAf__10daBigelf_cFv */
@@ -461,11 +456,11 @@ BOOL daBigelf_c::demoProcExit() {
 
 /* 000012D4-000013C0       .text demoInitTalk__10daBigelf_cFv */
 void daBigelf_c::demoInitTalk() {
-    /* Nonmatching */
+
     talkInit();
-    int* pMsgNo = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "MsgNo", 3);
-    JUT_ASSERT(0x325, pMsgNo != NULL);
-    mCurrentMessageId = *pMsgNo;
+    int* a_intP = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "MsgNo", 3);
+    JUT_ASSERT(0x325, a_intP);
+    mCurrentMessageId = *a_intP;
     if (mCurrentMessageId == 0x2EEA) {
         dComIfGp_setItemLifeCount(dComIfGs_getMaxLife());
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
@@ -548,7 +543,7 @@ void daBigelf_c::demoInitFa1() {
 
 /* 00001848-000018D4       .text demoProcFa1__10daBigelf_cFv */
 BOOL daBigelf_c::demoProcFa1() {
-    /* Nonmatching */
+
     daNpc_Fa1_c* fa1 = (daNpc_Fa1_c*)fopAcM_SearchByID(m34C);
     if (fa1 != NULL) {
         cLib_addCalc2(&fa1->current.pos.y, 70.0f + current.pos.y, 0.2f, 100.0f);
@@ -559,7 +554,7 @@ BOOL daBigelf_c::demoProcFa1() {
 
 /* 000018D4-00001948       .text demoInitWait__10daBigelf_cFv */
 void daBigelf_c::demoInitWait() {
-    /* Nonmatching */
+
     int* pTimer = (int*)dComIfGp_getPEvtManager()->getMySubstanceP(mStaffId, "Timer", 3);
     if (pTimer != NULL) {
         m3C0 = *pTimer;
@@ -603,6 +598,12 @@ void daBigelf_c::demoProcCom() {
     lightProc();
     darkProc();
 }
+
+/* action_table: event action names indexed by getNowEventAction */
+static const char* action_table[] = {
+    "WAIT", "FA1", "APPEAR", "TALK", "EXIT", "FL_DEMO", "FL_LINK", "FL_DELETE", "FL_DM_BF", "FL_DM_MD",
+    "FL_DM_AF",
+};
 
 /* 00001ACC-00001B14       .text getNowEventAction__10daBigelf_cFv */
 int daBigelf_c::getNowEventAction() {
@@ -937,7 +938,7 @@ BOOL daBigelf_c::init() {
 }
 
 /* 00002534-000025A0       .text setAttention__10daBigelf_cFb */
-void daBigelf_c::setAttention(BOOL i_on) {
+void daBigelf_c::setAttention(bool i_on) {
     if (m3CA > 0) {
         m3CA--;
         return;
@@ -959,7 +960,7 @@ void daBigelf_c::lookBack() {
 
 /* 000025F4-000026C0       .text hunt__10daBigelf_cFv */
 BOOL daBigelf_c::hunt() {
-    /* Nonmatching */
+
     fopAc_ac_c* fa1 = fopAcM_SearchByID(m34C);
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (fa1 == NULL) {
@@ -976,7 +977,7 @@ BOOL daBigelf_c::hunt() {
 
 /* 000026C0-00002730       .text oct_search__10daBigelf_cFv */
 BOOL daBigelf_c::oct_search() {
-    /* Nonmatching */
+
     fopAc_ac_c* octActor = fopAcM_searchFromName("Daiocta", 0, 0);
     if (octActor != NULL) {
         m3F8 = fpcM_GetID(octActor);
@@ -1020,7 +1021,7 @@ BOOL daBigelf_c::oct() {
 
 /* 000028E8-000029A0       .text ready0__10daBigelf_cFv */
 BOOL daBigelf_c::ready0() {
-    /* Nonmatching */
+
     fopAcM_SearchByID(m34C);
     if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
         m3BD = 2;
@@ -1126,7 +1127,7 @@ BOOL daBigelf_c::_draw() {
     mpBckAnimator->entry();
     if (chkFlag(0x8)) {
         mFlowerBrkAnimator.entry(flModelData, mFlowerBrkAnimator.getFrame());
-        PSMTXCopy(model->getAnmMtx(mHandRBJointIndex), mpFlowerModel->getBaseTRMtx());
+        PSMTXCopy(model->getAnmMtx(m_fl_jnt), mpFlowerModel->getBaseTRMtx());
         mDoExt_modelUpdateDL(mpFlowerModel);
     }
     return 1;
@@ -1134,8 +1135,8 @@ BOOL daBigelf_c::_draw() {
 
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
 BOOL daBigelf_c::_execute() {
-    /* Nonmatching */
-    mJntCtrl.setParam(0, 0, 0, 0, 0xFA0, 0x2328, -0x7D0, -0xFA0, 0x1000);
+
+    m_jnt.setParam(0, 0, 0, 0, 0xFA0, 0x2328, -0x7D0, -0xFA0, 0x1000);
     if (!chkFlag(0x10)) {
         m336 = mpBckAnimator->play(&eyePos, 0, 0);
         if (mpBckAnimator->getFrame() < m338 && m3BC != 3) {
@@ -1165,7 +1166,7 @@ BOOL daBigelf_c::_execute() {
 
 /* 00002F5C-00002FAC       .text _delete__10daBigelf_cFv */
 BOOL daBigelf_c::_delete() {
-    /* Nonmatching */
+
     dComIfG_resDelete(&mPhaseProcReq, "bigelf");
     if (mpBckAnimator != NULL) {
         mpBckAnimator->stopZelAnime();
@@ -1205,7 +1206,7 @@ cPhs_State daBigelf_c::_create() {
 BOOL daBigelf_c::CreateHeap() {
     /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("bigelf", 0xB);
-    JUT_ASSERT(0x7D4, modelData != NULL);
+    JUT_ASSERT(0x7D4, modelData);
     mpBckAnimator = new mDoExt_McaMorf(
         modelData,
         NULL,
@@ -1247,21 +1248,21 @@ BOOL daBigelf_c::CreateHeap() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
     mpBckAnimator->calc();
-    mJntCtrl.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(0x824, mJntCtrl.getHeadJntNum() >= 0);
-    mJntCtrl.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(0x829, mJntCtrl.getBackboneJntNum() >= 0);
-    mHandRBJointIndex = modelData->getJointName()->getIndex("handRB");
-    JUT_ASSERT(0x82D, mHandRBJointIndex >= 0);
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
+    JUT_ASSERT(0x824, m_jnt.getHeadJntNum() >= 0);
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
+    JUT_ASSERT(0x829, m_jnt.getBackboneJntNum() >= 0);
+    m_fl_jnt = modelData->getJointName()->getIndex("handRB");
+    JUT_ASSERT(0x82D, m_fl_jnt >= 0);
     J3DModelData* md = mpBckAnimator->getModel()->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
-        if (i == mJntCtrl.getHeadJntNum() || i == mJntCtrl.getBackboneJntNum() || i == mHandRBJointIndex) {
+        if (i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum() || i == m_fl_jnt) {
             modelData->getJointNodePointer(i)->setCallBack(nodeCallBack_Bigelf);
         }
     }
     model->setUserArea((u32)this);
     J3DModelData* flModelData = (J3DModelData*)dComIfG_getObjectRes("bigelf", 0xC);
-    JUT_ASSERT(0x842, flModelData != NULL);
+    JUT_ASSERT(0x842, flModelData);
     mpFlowerModel = mDoExt_J3DModel__create(flModelData, 0x80000, 0x01000000);
     if (mpFlowerModel == NULL) {
         return 0;

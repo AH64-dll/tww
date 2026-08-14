@@ -13,9 +13,9 @@ public:
     bool chkFlag(unsigned short flag) { return (mStateBits & flag) == flag; }
     void clrFlag(unsigned short flag) { mStateBits &= ~flag; }
     void setFlag(unsigned short flag) { mStateBits |= flag; }
-    s8 getBackboneJntNum() { return mJntCtrl.getBackboneJntNum(); }
-    s8 getHeadJntNum() { return mJntCtrl.getHeadJntNum(); }
-    s16 getHead_x() { return mJntCtrl.getHead_x(); }
+    s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
+    s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
     void incAttnSetCount() {}
     void setAction(ActionFunc i_actionFunc, void* i_param) {
         if (mCurrentStateFunc != i_actionFunc) {
@@ -80,7 +80,7 @@ public:
     void talkInit();
     u16 talk();
     BOOL init();
-    void setAttention(BOOL);
+    void setAttention(bool);
     void lookBack();
     BOOL hunt();
     BOOL oct_search();
@@ -102,9 +102,9 @@ public:
     /* 0x2B4 */ mDoExt_btkAnm mBtkAnimator;
     /* 0x2C8 */ J3DModel* mpFlowerModel;
     /* 0x2CC */ mDoExt_brkAnm mFlowerBrkAnimator;
-    /* 0x2E4 */ s8 mHandRBJointIndex;
+    /* 0x2E4 */ s8 m_fl_jnt;
     /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
-    /* 0x2E8 */ dNpc_JntCtrl_c mJntCtrl;
+    /* 0x2E8 */ dNpc_JntCtrl_c m_jnt;
     /* 0x31C */ cXyz mEyePos;
     /* 0x328 */ cXyz mAttentionBasePos;
     /* 0x334 */ u8 m334[0x336 - 0x334];
