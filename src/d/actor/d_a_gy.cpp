@@ -1315,8 +1315,8 @@ void daGy_c::checkTgHit() {
                 JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, &eyePos, 0,
                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 health = 0;
-                JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DIE, &eyePos, fopAcM_GetID(this), 0,
-                                                    dComIfGp_getReverb(current.roomNo));
+                s8 reverb = dComIfGp_getReverb(current.roomNo);
+                JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DIE, &eyePos, fopAcM_GetID(this), 0, reverb);
                 if (m920 == l_HIO.m14C) {
                     modeDeleteBombInit();
                 } else {
@@ -1326,8 +1326,8 @@ void daGy_c::checkTgHit() {
             }
 
             m2B4 = m2B0;
-            JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DAMAGE, &eyePos, fopAcM_GetID(this), 0,
-                                                dComIfGp_getReverb(current.roomNo));
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DAMAGE, &eyePos, fopAcM_GetID(this), 0, reverb);
             modeDamageInit();
             return;
         }
