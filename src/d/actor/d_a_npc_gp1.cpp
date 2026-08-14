@@ -228,13 +228,12 @@ int daNpc_Gp1_c::btpNum_toResID(int param_1) {
     return a_btp_resID_tbl[param_1];
 }
 
-/* Nonmatching */
 /* 00000780-00000890       .text setBtp__11daNpc_Gp1_cFbi */
 bool daNpc_Gp1_c::setBtp(bool i_param_1, int i_btp_num) {
     J3DModelData* model_data = mpMorf->getModel()->getModelData();
     int res_id = btpNum_toResID(i_btp_num);
     m_hed_tex_pttrn = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Gp", res_id));
-    JUT_ASSERT(VERSION_SELECT(0x23D, 0x23D, 0x23D, 0x23D), m_hed_tex_pttrn != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x1B3, 0x1B3, 0x1B3, 0x1B3), m_hed_tex_pttrn != NULL);
 
     int iVar1 = mHeadBtpAnm.init(model_data, m_hed_tex_pttrn, 1, 2, 1.0f, 0, -1, i_param_1, 0);
     bool o_retval = iVar1 == 1;
@@ -1374,7 +1373,6 @@ cPhs_State daNpc_Gp1_c::_create() {
     return state;
 }
 
-/* Nonmatching */
 /* 000035D4-00003844       .text create_Anm__11daNpc_Gp1_cFv */
 J3DModelData* daNpc_Gp1_c::create_Anm() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Gp", dRes_ID_GP_BDL_GP_e);
@@ -1407,9 +1405,9 @@ J3DModelData* daNpc_Gp1_c::create_Anm() {
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
     JUT_ASSERT(VERSION_SELECT(0x883, 0x883, 0x883, 0x883), m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
-    JUT_ASSERT(VERSION_SELECT(0x897, 0x897, 0x897, 0x897), m_bbone_jnt_num >= 0);
+    JUT_ASSERT(VERSION_SELECT(0x886, 0x886, 0x886, 0x886), m_bbone_jnt_num >= 0);
     m_hnd_L_jnt_num = a_mdl_dat->getJointName()->getIndex("handL");
-    JUT_ASSERT(VERSION_SELECT(0x8AB, 0x8AB, 0x8AB, 0x8AB), m_hnd_L_jnt_num >= 0);
+    JUT_ASSERT(VERSION_SELECT(0x889, 0x889, 0x889, 0x889), m_hnd_L_jnt_num >= 0);
 
     return a_mdl_dat;
 }
