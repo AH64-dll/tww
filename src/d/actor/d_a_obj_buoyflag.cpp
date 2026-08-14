@@ -971,12 +971,16 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
     DrawVtx_c* prev = &mDrawVtx[mB8C ^ 1];
 
     for (int row = 0; row < 5; row++) {
+        cXyz* vtxRow = &prev->mPos[row * 7];
+        cXyz* downRow = &prev->mPos[(row + 1) * 7];
+        cXyz* upRow = &prev->mPos[(row - 1) * 7];
+        cXyz* curRow = &cur->mPos[row * 7];
         for (int col = 0; col < 7; col++) {
-            cXyz* vtx = &prev->mPos[row * 7 + col];
-            cXyz* down = &prev->mPos[(row + 1) * 7 + col];
-            cXyz* up = &prev->mPos[(row - 1) * 7 + col];
-            cXyz* right = &prev->mPos[row * 7 + col + 1];
-            cXyz* left = &prev->mPos[row * 7 + col - 1];
+            cXyz* vtx = &vtxRow[col];
+            cXyz* down = &downRow[col];
+            cXyz* up = &upRow[col];
+            cXyz* right = &vtxRow[col + 1];
+            cXyz* left = &vtxRow[col - 1];
 
             cXyz nrm1;
             if (row == 0) {
@@ -1018,9 +1022,9 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
 
             cXyz nrm = nrm2.outprod(nrm1);
             if (nrm.normalizeRS()) {
-                cur->mNrm[row * 7 + col] = nrm;
-                cur->mNrm2[row * 7 + col] = nrm;
-                cur->mNrm2[row * 7 + col] *= -1.0f;
+                curRow[col + 35] = nrm;
+                curRow[col + 70] = nrm;
+                curRow[col + 70] *= -1.0f;
             }
         }
     }
