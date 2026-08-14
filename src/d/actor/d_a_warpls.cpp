@@ -215,10 +215,10 @@ void daWarpls_c::eventOrder() {
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     } else if (mOrder == 2) {
         if (mWarpKind == 0) {
-            if (check_warp_distance()) {
-                fopAcM_orderOtherEventId(this, mEventId2, 0xFF, 0xFFFF, 0, 5);
-            } else {
+            if (check_warp_distance() == 0) {
                 mOrder = 0;
+            } else {
+                fopAcM_orderOtherEventId(this, mEventId2, 0xFF, 0xFFFF, 0, 5);
             }
         } else {
             fopAcM_orderOtherEventId(this, mEventId2, 0xFF, 0xFFFF, 0, 1);
