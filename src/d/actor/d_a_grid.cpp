@@ -659,9 +659,9 @@ void ho_move(daGrid_c* i_this) {
         }
         i_this->mPacket.setTopNrmVtx(nrm2);
         i_this->mPacket.setBackNrm();
-        DCStoreRangeNoSync((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0x354, 0x3FC);
-        DCStoreRangeNoSync((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0xB4C, 0x3FC);
-        DCStoreRangeNoSync((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0x1344, 0x3FC);
+        DCStoreRangeNoSync(&i_this->mPacket.mNrm[i_this->mPacket.mCount][0], 0x3FC);
+        DCStoreRangeNoSync(&i_this->mPacket.mNrm2[i_this->mPacket.mCount][0], 0x3FC);
+        DCStoreRangeNoSync(&i_this->mPacket.mPos[i_this->mPacket.mCount][0], 0x3FC);
     }
 }
 
