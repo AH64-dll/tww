@@ -86,9 +86,9 @@ void control1(sitem_class* i_this) {
         f32 f29 = sp18.x * f30 + ((cur->mPos.x - (cur - 1)->mPos.x) + sp24.x * f30);
         f32 f28 = sp18.y * f30 + ((cur->mPos.y - (cur - 1)->mPos.y) + sp24.y * f30);
         f32 f26 = sp18.z * f30 + ((cur->mPos.z - (cur - 1)->mPos.z) + sp24.z * f30);
-        s16 yrot = cM_atan2s(f29, f26);
+        int yrot = cM_atan2s(f29, f26);
         f32 dist = std::sqrtf(f29 * f29 + f26 * f26);
-        s16 xrot = (s16)-cM_atan2s(f28, dist);
+        int xrot = (s16)-cM_atan2s(f28, dist);
         MtxPush();
         mDoMtx_YrotS(*calc_mtx, yrot);
         mDoMtx_XrotM(*calc_mtx, xrot);
@@ -236,9 +236,9 @@ void cut_control2(sitem_class* i_this) {
         }
         f32 y2 = y - (cur + 1)->mPos.y;
         f32 z = cos1 + (cur->mPos.z - (cur + 1)->mPos.z);
-        s16 yrot = cM_atan2s(x, z);
+        int yrot = cM_atan2s(x, z);
         f32 dist = std::sqrtf(x * x + z * z);
-        s16 xrot = (s16)-cM_atan2s(y2, dist);
+        int xrot = (s16)-cM_atan2s(y2, dist);
         mDoMtx_YrotS(*calc_mtx, yrot);
         mDoMtx_XrotM(*calc_mtx, xrot);
         sp60.z = i_this->m2F4;
