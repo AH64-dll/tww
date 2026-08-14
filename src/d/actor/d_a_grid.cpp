@@ -246,6 +246,7 @@ void daHo_packet_c::setNrmMtx(cXyz&) {
 
 /* 800E8D74-800E92AC       .text setNrmVtx__13daHo_packet_cFP4cXyzii */
 void daHo_packet_c::setNrmVtx(cXyz* out, int col, int row) {
+    /* Nonmatching */
     cXyz* nrm = &mNrm[mCount][0];
     cXyz cur = nrm[row * 7 + col];
     cXyz v1;
