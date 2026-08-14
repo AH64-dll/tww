@@ -163,7 +163,6 @@ void daObjVyasi::Act_c::set_first_process() {
 
 /* 0000021C-000005B8       .text set_collision__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_collision() {
-    /* Nonmatching */
     if (mCyl.ChkTgHit()) {
         mCyl.GetTgHitObj();
         daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 7);
@@ -194,22 +193,24 @@ void daObjVyasi::Act_c::set_collision() {
     }
 
     for (int i = 0; i < 8; i += 2) {
-        cXyz dir;
-        dir.x = (m0400[(i >> 1) + 2].x - m0400[(i >> 1) + 1].x) * 0.33333f;
-        dir.y = (m0400[(i >> 1) + 2].y - m0400[(i >> 1) + 1].y) * 0.33333f;
-        dir.z = (m0400[(i >> 1) + 2].z - m0400[(i >> 1) + 1].z) * 0.33333f;
+        int half = i >> 1;
+        int j1 = half + 1;
+        int j2 = half + 2;
+        cXyz dir((m0400[j2].x - m0400[j1].x) * 0.33333f,
+                 (m0400[j2].y - m0400[j1].y) * 0.33333f,
+                 (m0400[j2].z - m0400[j1].z) * 0.33333f);
 
         cXyz pos;
-        pos.x = m0400[(i >> 1) + 1].x + dir.x;
-        pos.y = m0400[(i >> 1) + 1].y + dir.y;
-        pos.z = m0400[(i >> 1) + 1].z + dir.z;
+        pos.x = m0400[j1].x + dir.x;
+        pos.y = m0400[j1].y + dir.y;
+        pos.z = m0400[j1].z + dir.z;
         mSph[i].SetC(pos);
         mSph[i].SetR(47.4f);
         dComIfG_Ccsp()->Set(&mSph[i]);
 
-        pos.x = m0400[(i >> 1) + 1].x + dir.x * 2.0f;
-        pos.y = m0400[(i >> 1) + 1].y + dir.y * 2.0f;
-        pos.z = m0400[(i >> 1) + 1].z + dir.z * 2.0f;
+        pos.x = m0400[j1].x + dir.x * 2.0f;
+        pos.y = m0400[j1].y + dir.y * 2.0f;
+        pos.z = m0400[j1].z + dir.z * 2.0f;
         mSph[i + 1].SetC(pos);
         mSph[i + 1].SetR(47.4f);
         dComIfG_Ccsp()->Set(&mSph[i + 1]);
