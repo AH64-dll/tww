@@ -488,7 +488,7 @@ void ho_move(daGrid_c* i_this) {
         i_this->mWindAngle += r3_2;
         i_this->m2212 += (s32)(3000.0f * cM_scos((s16)angle));
         s32 r3_3 = -0x12C;
-        if ((s16)i_this->m2212 > 0) {
+        if (i_this->m2212 > 0) {
             r3_3 = 0x12C;
         }
         i_this->m2212 += r3_3;
@@ -503,7 +503,7 @@ void ho_move(daGrid_c* i_this) {
                         i_this->m2208 = 1.0f;
                         i_this->mB4A = 0xF;
                     }
-                } else if ((s16)i_this->mB4A > 0) {
+                } else if (i_this->mB4A > 0) {
                     cLib_addCalc2(&i_this->m2204, 1.414f, 0.25f, l_HIO.m1C);
                     i_this->mB4A--;
                 } else {
@@ -604,10 +604,7 @@ void ho_move(daGrid_c* i_this) {
                 r0_3 = r23;
             }
             r23 = r0_3;
-            r24++;
-            if (r24 >= 7) {
-                r24 = 0;
-            }
+            r24 = (r24 < 6) ? (r24 + 1) : 0;
             r22++;
             r19 += 0xC;
             r18 += 4;
@@ -621,8 +618,7 @@ void ho_move(daGrid_c* i_this) {
         f32 f7_3 = 1.0f - (f4_3 * (0.00020000007f + REG0_F(226)));
         f32 f2_2 = 1.0f - (f4_3 * (0.0015f + REG0_F(227)));
         f32 f1_4 = 1.0f - (f4_3 * (0.0012f + REG0_F(228)));
-        s32 i = 0;
-        do {
+        for (s32 i = 0; i < 0x55; i++) {
             if (i >= 0x38 && i <= 0x3E) {
                 base->z *= f5_3;
             } else if (i >= 0x31 && i <= 0x37) {
@@ -634,9 +630,8 @@ void ho_move(daGrid_c* i_this) {
             } else if (i >= 0x46 && i <= 0x4D) {
                 base->z *= f1_4;
             }
-            i++;
             base++;
-        } while (i < 0x55);
+        }
 
         cXyz* nrm2 = &i_this->mPacket.mNrm2[i_this->mPacket.mCount][0];
         cXyz sp10 = i_this->tevStr.mLightPosWorld - i_this->current.pos;
