@@ -145,7 +145,7 @@ static BOOL daBL_Draw(bl_class* i_this) {
 void smoke_set(bl_class* i_this) {
     /* Nonmatching */
     if (i_this->mSmokeCB.getEmitter() == NULL) {
-        dComIfGp_particle_setToon(0x2027, (const cXyz*)i_this->m6BC, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCB,
+        dComIfGp_particle_setToon(0x2027, &i_this->m6BC, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeCB,
                                   i_this->current.roomNo, NULL, NULL, NULL);
     }
 
@@ -258,6 +258,86 @@ void anm_init(bl_class* i_this, int i_anmIdx, f32 i_morf, u8 i_playMode, f32 i_p
     }
 }
 
+/* 0000094C-00000BF4       .text skull_atari_check__FP8bl_class */
+s32 skull_atari_check(bl_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    i_this->mStts.Move();
+    if (i_this->health == 0) {
+        return TRUE;
+    }
+
+    if (shock_damage_check(i_this)) {
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x22;
+        return TRUE;
+    }
+
+    if (!i_this->mSph.ChkTgHit()) {
+        return FALSE;
+    }
+    cCcD_Obj* hitObj = i_this->mSph.GetTgHitObj();
+    if (hitObj == NULL) {
+        return FALSE;
+    }
+    if (i_this->m2F4 != 0) {
+        return FALSE;
+    }
+
+    i_this->shape_angle.y = fopAcM_searchActorAngleY(i_this, player) + 0x8000;
+    i_this->m2F4 = 8;
+    i_this->m2D4 = 0;
+    u8 flag = 0;
+
+    switch (hitObj->GetAtType()) {
+    case 0x2:
+        i_this->m2D4 = 6;
+        break;
+    case 0x200000:
+        flag = 1;
+        i_this->m2D4 = 1;
+        i_this->m2D2 = 3;
+        i_this->m306 = 0x24;
+        break;
+    case 0x10000:
+        i_this->m2D4 = 4;
+        if (player->current.angle.y == 0x11) {
+            i_this->shape_angle.y = player->shape_angle.y - 0x4000;
+            i_this->m2D4 = 5;
+            i_this->speed.y = 30.0f;
+            i_this->speedF = 20.0f;
+        }
+        break;
+    case 0x40:
+    case 0x80:
+        i_this->m2D4 = 3;
+        break;
+    case 0x20:
+        i_this->speed.y = 30.0f;
+        /* fallthrough */
+    case 0x200:
+        i_this->mEnemyFire.mFireDuration = 0x3E8;
+        break;
+    case 0x8000:
+        flag = 1;
+        i_this->m2D4 = 7;
+        i_this->m2D2 = 5;
+        i_this->m306 = 0x3C;
+        break;
+    }
+
+    cXyz hitPos = *i_this->mSph.GetTgHitPosP();
+    if (flag == 0) {
+        JAIZelBasic::zel_basic->seStart(0x692B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        i_this->health = 0;
+        i_this->attention_info.flags = 0;
+        i_this->m2D2 = 0xA;
+        i_this->m306 = 0x67;
+    }
+    return TRUE;
+}
+
 /* 00000C44-00001768       .text blue_body_atari_check__FP8bl_class */
 void blue_body_atari_check(bl_class*) {
     /* Nonmatching */
@@ -336,8 +416,8 @@ s32 Line_check(bl_class* i_this, cXyz param) {
 BOOL roll_check(bl_class* i_this) {
     cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 1, 0x1000);
     cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
-    i_this->m2F8 = 0;
-    i_this->m2FA = 0;
+    i_this->m2F8[0] = 0;
+    i_this->m2F8[1] = 0;
 
     if (abs(i_this->shape_angle.x) < 0x200 && abs(i_this->shape_angle.z) < 0x200) {
         return TRUE;
@@ -379,13 +459,148 @@ void action_dousa(bl_class*) {
 }
 
 /* 000039F0-00003F68       .text action_kougeki__FP8bl_class */
-void action_kougeki(bl_class*) {
-    /* Nonmatching */
+void action_kougeki(bl_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    switch (i_this->m306) {
+    case 0xA:
+        for (int i = 0; i < 4; i++) {
+            i_this->m2F8[i] = 0;
+        }
+        i_this->mSph.OnAtSetBit();
+        i_this->mSph.OnAtHitBit();
+        i_this->m304 = 0;
+        anm_init(i_this, 0x12, 1.0f, 0, 1.0f, -1);
+        fopAcM_monsSeStart(i_this, 0x4870, 0);
+        i_this->speedF = 0.0f;
+        i_this->m306++;
+        break;
+    case 0xB:
+        if (i_this->mpMorf->isStop()) {
+            i_this->m306++;
+            anm_init(i_this, 0x10, 1.0f, 2, 1.0f, 6);
+            i_this->speedF = 10.0f;
+            i_this->m302 = (s16)(cM_rndFX(768.0f) * (f32)(fopAcM_GetID(i_this) & 3));
+            i_this->m306++;
+        }
+        break;
+    case 0xC:
+        if (i_this->m2E9 != 0xFF && i_this->mPath != NULL) {
+            f32 distSq = (i_this->current.pos.x - i_this->m2C4.x) * (i_this->current.pos.x - i_this->m2C4.x) +
+                         (i_this->current.pos.z - i_this->m2C4.z) * (i_this->current.pos.z - i_this->m2C4.z);
+            f32 dist = distSq;
+            if (dist > 0.0f) {
+                dist = JMAFastSqrt(distSq);
+            }
+            if (dist > 700.0f) {
+                anm_init(i_this, 0x11, 1.0f, 2, 1.0f, -1);
+                i_this->speedF = 4.0f + cM_rndF(2.0f);
+                i_this->m2D2 = 0;
+                i_this->m306 = 7;
+                break;
+            }
+        } else if (fopAcM_searchActorDistance(i_this, player) > 700.0f) {
+            i_this->speedF = 4.0f + cM_rndF(2.0f);
+            i_this->m2D2 = 0;
+            i_this->m306 = 5;
+            break;
+        }
+        break;
+    case 0xD:
+        break;
+    case 0xE:
+        cLib_addCalc0(&i_this->speedF, 0.5f, 1.0f);
+        if (fabs(i_this->speedF) < 0.2f) {
+            i_this->speedF = 0.0f;
+            anm_init(i_this, 0x18, 1.0f, 0, 1.0f, -1);
+            fopAcM_monsSeStart(i_this, 0x4870, 0);
+            i_this->m306 = 0xF;
+        }
+        break;
+    case 0xF:
+        if (i_this->mpMorf->isStop()) {
+            i_this->m306 = 0xC;
+        }
+        break;
+    }
+
+    i_this->mpMorf->setPlaySpeed(1.0f);
+    if (i_this->m306 == 0xD && fopAcM_searchActorDistance(i_this, player) < 230.0f) {
+        i_this->mpMorf->setPlaySpeed(2.0f);
+    }
+
+    if (i_this->mSph.ChkAtShieldHit()) {
+        if (i_this->m306 != 0xE) {
+            i_this->speedF = -20.0f;
+            i_this->m2D2 = 1;
+            i_this->m306 = 0xE;
+        }
+    } else if (i_this->mSph.ChkAtHit()) {
+        fopAc_ac_c* ac = i_this->mSph.mGObjAt.GetAc();
+        if (ac != NULL && ac == player && i_this->m306 != 0xF) {
+            anm_init(i_this, 0x14, 1.0f, 0, 1.0f, -1);
+            fopAcM_monsSeStart(i_this, 0x4872, 0);
+            i_this->speedF = 0.0f;
+            i_this->m2F8[0] = 0;
+            i_this->m306 = 0xF;
+        }
+    }
+
+    fire_kaiten_keisan(i_this);
+    i_this->m300 = i_this->m302 + fopAcM_searchActorAngleY(i_this, player);
+    cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->m300, 1, 0x1000);
+    cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x400);
+
+    if (i_this->m306 >= 0xC) {
+        fuwafuwa_keisan(i_this);
+    }
+
+    if (i_this->m2D0 == 1) {
+        blue_body_atari_check(i_this);
+    } else {
+        red_body_atari_check(i_this);
+    }
 }
 
-/* 00003F68-00004128       .text action_sagarimasu__FP8bl_class */
-void action_sagarimasu(bl_class*) {
-    /* Nonmatching */
+/* 00003F68-00004204       .text action_sagarimasu__FP8bl_class */
+void action_sagarimasu(bl_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    switch (i_this->m306) {
+    case 0x14:
+        anm_init(i_this, 0x17, 1.0f, 0, 1.0f, -1);
+        i_this->speedF = 20.0f + REG8_F(10);
+        if (i_this->m2D4 == 4 || i_this->m2D4 == 5) {
+            i_this->speedF = 60.0f + REG8_F(11);
+            if (i_this->m2D4 == 5) {
+                i_this->shape_angle.y = player->shape_angle.y - 0x4000;
+            }
+        }
+        i_this->m306++;
+        /* fallthrough */
+    case 0x15:
+        cLib_addCalc0(&i_this->speedF, 0.8f, 5.0f);
+        if (i_this->speedF < 0.1f) {
+            i_this->m2D2 = 1;
+            i_this->m306 = 0xA;
+            if (i_this->m2D3 != 0 && i_this->m2D0 == 0 && i_this->health <= 0) {
+                cXyz pos = i_this->current.pos;
+                pos.y += 30.0f;
+                fopAcM_createDisappear(i_this, &pos, 5, 0, 0xFF);
+                i_this->attention_info.flags = 0;
+                dComIfGs_onActor(i_this->setID, i_this->home.roomNo);
+                fopAcM_delete(i_this);
+            }
+        }
+        break;
+    }
+
+    fire_kaiten_keisan(i_this);
+    if (i_this->m2D0 == 1) {
+        blue_body_atari_check(i_this);
+    } else {
+        red_body_atari_check(i_this);
+    }
 }
 
 /* 00004128-000046BC       .text action_kaze_move__FP8bl_class */
@@ -399,18 +614,142 @@ void action_itaiyo_ne_san(bl_class*) {
 }
 
 /* 00004B84-00004D3C       .text action_hook_atari__FP8bl_class */
-void action_hook_atari(bl_class*) {
-    /* Nonmatching */
+void action_hook_atari(bl_class* i_this) {
+    switch (i_this->m306) {
+    case 0x3C:
+        for (int i = 0; i < 4; i++) {
+            i_this->m2F8[i] = 0;
+        }
+        if (i_this->mFollowCB2.getEmitter() != NULL) {
+            i_this->m2F0 = 0;
+            fire_emitter_clr(i_this);
+            anm_init(i_this, 0x17, 1.0f, 0, 1.0f, -1);
+            i_this->mSph.ClrAtSet();
+            i_this->mSph.ClrAtSet();
+            i_this->speedF = 0.0f;
+
+            JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                            1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopAcM_monsSeStart(i_this, 0x4873, 0);
+        }
+        i_this->actor_status |= 0x20;
+        i_this->mSph.SetTgSe(0);
+        i_this->mSph.SetTgHitMark(dCcG_TgHitMark_None_e);
+        i_this->mSph.OffTgShield();
+        i_this->attention_info.flags = 4;
+        i_this->m306++;
+        break;
+    case 0x3D:
+        if (!(i_this->actor_status & 0x100000)) {
+            i_this->m2D2 = 3;
+            i_this->m306 = 0x20;
+        }
+        break;
+    }
+
+    i_this->mFollowCB1.end();
 }
 
 /* 00004D3C-00004DBC       .text action_come_wait__FP8bl_class */
-void action_come_wait(bl_class*) {
-    /* Nonmatching */
+void action_come_wait(bl_class* i_this) {
+    if (i_this->m306 == 0x46) {
+        if (i_this->m2D5 != 0xFF && dComIfGs_isSwitch(i_this->m2D5, dComIfGp_roomControl_getStayNo())) {
+            i_this->actor_status |= 0x20;
+            i_this->m2D2 = 3;
+            i_this->m306 = 0x26;
+        }
+    }
 }
 
 /* 00004DBC-00005104       .text action_normal_skull__FP8bl_class */
-void action_normal_skull(bl_class*) {
-    /* Nonmatching */
+void action_normal_skull(bl_class* i_this) {
+    cXyz pos = i_this->current.pos;
+
+    switch (i_this->m306) {
+    case 0x64:
+        i_this->m328 = 30.0f + REG8_F(7);
+        i_this->gravity = -3.0f;
+        if (i_this->actor_status & 0x2000) {
+            i_this->gravity = 0.0f;
+            i_this->mSph.ClrCoSet();
+            i_this->m306++;
+        }
+        /* fallthrough */
+    case 0x65:
+        if (!(i_this->actor_status & 0x2000)) {
+            i_this->mSph.OnCoSetBit();
+            i_this->gravity = -3.0f;
+            if (i_this->speedF > 0.0f) {
+                i_this->speed.y = 25.0f;
+                i_this->speedF = 35.0f;
+                i_this->m306 = 0x66;
+            } else {
+                i_this->speedF = 0.0f;
+                i_this->speed.x = 0.0f;
+                i_this->speed.y = 0.0f;
+                i_this->speed.z = 0.0f;
+                i_this->gravity = -3.0f;
+                i_this->m306 = 0x64;
+            }
+        }
+        break;
+    case 0x66:
+        if ((i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) ||
+            (i_this->mAcch.m_flags & dBgS_Acch::WALL_HIT)) {
+            i_this->speed.x = 0.0f;
+            i_this->speed.y = 0.0f;
+            i_this->speed.z = 0.0f;
+            if (i_this->mEnemyFire.mFireDuration == 0) {
+                i_this->speedF = 0.0f;
+                i_this->health = 0;
+                i_this->attention_info.flags = 0;
+                i_this->m306 = 0x68;
+            }
+        }
+        break;
+    case 0x67:
+        bound_sound_set(i_this);
+        i_this->m306 = 0x66;
+        break;
+    case 0x68:
+        pos.y += 25.0f + REG8_F(2);
+        dComIfGp_particle_set(0x3E8, &pos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
+                              i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+        i_this->m6BC = pos;
+        smoke_set(i_this);
+
+        for (int i = 0; i < (s32)cM_rndF(1.99f); i++) {
+            fopAcM_createItem(&i_this->current.pos, 0, -1, -1, 0, NULL, 4, NULL);
+        }
+
+        i_this->mSph.ClrTgSet();
+        i_this->mSph.ClrCoSet();
+        i_this->mSph.ClrTgHit();
+        i_this->m31C = 0.0f;
+        i_this->scale.x = 0.0f;
+        i_this->scale.y = 0.0f;
+        i_this->scale.z = 0.0f;
+        i_this->m2F8[3] = 0xB4;
+        i_this->m2EE = 0xA;
+        i_this->m306++;
+        break;
+    case 0x69:
+        if (i_this->mSmokeCB.getEmitter() != NULL) {
+            if (i_this->m2EE == 0) {
+                i_this->mSmokeCB.getEmitter()->mGlobalPrmColor.a = i_this->m2F8[3];
+                i_this->m2F8[3] -= 4;
+                if (i_this->m2F8[3] < 0) {
+                    i_this->mSmokeCB.end();
+                }
+            }
+        } else {
+            fopAcM_delete(i_this);
+        }
+        break;
+    }
+
+    i_this->m314 = 0.3f;
+    skull_atari_check(i_this);
 }
 
 /* 00005104-00005504       .text daBL_Execute__FP8bl_class */

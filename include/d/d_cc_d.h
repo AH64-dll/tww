@@ -490,7 +490,7 @@ public:
     cXyz* GetAtHitPosP() { return mGObjAt.GetHitPosP(); }
     cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
-protected:
+public:
     /* 0x000 */ /* cCcD_GObjInf */
     /* 0x050 */ dCcD_GObjAt mGObjAt;
     /* 0x094 */ dCcD_GObjTg mGObjTg;
