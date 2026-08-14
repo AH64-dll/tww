@@ -563,7 +563,8 @@ bool daObjTnTrap_c::_execute() {
         set_tri(i);
     }
     mStts.Move();
-    if ((this->*mProcFunc)()) {
+    u8 procResult = (this->*mProcFunc)();
+    if (procResult == 1) {
         for (int g = 0; g < 2; g++) {
             for (int i = 0; i < 4; i++) {
                 dComIfG_Ccsp()->Set(&mTri[g * 4 + i]);
