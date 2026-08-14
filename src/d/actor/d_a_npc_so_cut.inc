@@ -96,8 +96,16 @@ void daNpc_So_c::cutJumpStart() {
     f32* jumpSpeed = dComIfGp_evmng_getMyFloatP(field_0xB6C, "Speed_y");
     f32* swimSpeed = dComIfGp_evmng_getMyFloatP(field_0xB6C, "SpeedF");
     shape_angle.x = l_HIO.field_0x68;
-    speed.y = jumpSpeed != NULL ? *jumpSpeed : 40.0f;
-    field_0xAFC = swimSpeed != NULL ? *swimSpeed : 5.0f;
+    if (jumpSpeed != NULL) {
+        speed.y = *jumpSpeed;
+    } else {
+        speed.y = 40.0f;
+    }
+    if (swimSpeed != NULL) {
+        field_0xAFC = *swimSpeed;
+    } else {
+        field_0xAFC = 5.0f;
+    }
 
     offsetSwim();
     speedF = field_0xAFC;
