@@ -952,7 +952,7 @@ BOOL daBigelf_c::oct() {
     fopAc_ac_c* octActor = fopAcM_SearchByID(m3F8);
     if (octActor != NULL) {
         current.pos = octActor->current.pos;
-        current.pos.y = old.pos.y;
+        current.pos.y = home.pos.y;
         attention_info.position = current.pos;
         eyePos = current.pos;
         current.angle.y = octActor->shape_angle.y;
@@ -970,7 +970,7 @@ BOOL daBigelf_c::oct() {
         } else {
             m3BD = 1;
             m3C8 = dComIfGp_evmng_getEventIdx("BIGELF_ARRIVAL2", 0xFF);
-            fopAcM_orderChangeEventId(this, dComIfGp_getPlayer(0), m3C8, 0, 0xFFFF);
+            fopAcM_orderChangeEventId(this, dComIfGp_getLinkPlayer(), m3C8, 0, 0xFFFF);
             m3AC = 0x1E;
             setFlag(0x40);
         }
@@ -1107,6 +1107,7 @@ BOOL daBigelf_c::_execute() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     model->setBaseScale(scale);
     if (chkFlag(0x10)) {
+        mDoMtx_stack_c::transM(0.0f, mHeightOffset, 0.0f);
         f32 f1 = m3EC;
         mDoMtx_stack_c::scaleM(f1, m3F0, f1);
         mDoMtx_stack_c::transM(0.0f, -mHeightOffset, 0.0f);
@@ -1136,6 +1137,10 @@ cPhs_State daBigelf_c::_create() {
     fopAcM_SetupActor(this, daBigelf_c);
     cPhs_State phase = dComIfG_resLoad(&mPhaseProcReq, "bigelf");
     if (phase == cPhs_COMPLEATE_e) {
+        if (fpcM_GetName(this) != fpcNm_BIGELF_e) {
+            return cPhs_ERROR_e;
+        }
+        m3F4 = 0;
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB7B0)) {
             mpBckAnimator = NULL;
             return cPhs_ERROR_e;
