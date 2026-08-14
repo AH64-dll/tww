@@ -898,12 +898,9 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
 
 /* 000014AC-000015FC       .text calc_pos_spring_near__Q213daObjBuoyflag8Packet_cFPC4cXyzPC4cXyzff */
 void daObjBuoyflag::Packet_c::calc_pos_spring_near(const cXyz* i_target, const cXyz* i_pos, f32 i_spring, f32 i_damping) {
-    /* Nonmatching */
     cXyz diff = *i_target - *i_pos;
     f32 mag = diff.abs2();
-    if (mag > 0.0f) {
-        mag = std::sqrtf(mag);
-    }
+    mag = std::sqrtf(mag);
     if (mag > 0.01f) {
         mC80 += (diff * (mag - i_spring) * -i_damping) / mag;
     }
