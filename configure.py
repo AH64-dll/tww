@@ -1750,7 +1750,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_homen"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homensmoke"),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_htetu1"),  # D44J01 demo divergence (.text 0x1530-vs-0x1528)
+    ActorRel(NonMatching, "d_a_obj_htetu1"),  # revert #57: source-linked rel fails retail pins (weak-order/section divergence — cycle 9, RLead-14 re-derive)
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland"),
     ActorRel(Matching,    "d_a_obj_jump"),
     ActorRel(Equivalent, "d_a_obj_kanoke"),  # regalloc/pair-move: 3 sub-100 all 0 semantic one-sided (executeNormal 98.22 norm-diff-0, executeOpenTate 98.97 + executeEffectTate 95.65 paired single-insn); markers 3/3 keep
