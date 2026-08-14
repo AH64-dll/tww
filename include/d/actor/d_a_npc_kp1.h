@@ -43,7 +43,7 @@ public:
     void lookBack();
     bool chkAttention();
     void setAttention();
-    BOOL chk_talk();
+    bool chk_talk();
     bool decideType(int);
     void event_actionInit(int);
     BOOL event_action();

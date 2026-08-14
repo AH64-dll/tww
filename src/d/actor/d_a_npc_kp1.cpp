@@ -135,7 +135,7 @@ int daNpc_Kp1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
 }
 
 /* 00000760-000007FC       .text BtpNum2ResID__11daNpc_Kp1_cFiPi */
-int daNpc_Kp1_c::BtpNum2ResID(int i_num, int* o_resID) {
+int daNpc_Kp1_c::BtpNum2ResID(int i_num, int* o_resID) { /* Nonmatching */
     static const int a_btp_arc_ix_tbl[] = {
         9,
         9,
@@ -199,8 +199,7 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
         return;
     }
     s16 frame_max = m_head_tex_pattern->getFrameMax();
-    ++mBtpFrame;
-    if (mBtpFrame >= frame_max) {
+    if ((mBtpFrame = mBtpFrame + 1) >= frame_max) {
         if (mBtpNum != 0) {
             mBtpFrame = m_head_tex_pattern->getFrameMax();
         } else {
@@ -455,7 +454,7 @@ u16 daNpc_Kp1_c::next_msgStatus(u32* pMsgNo) { /* Nonmatching */
 }
 
 /* 0000102C-00001178       .text getMsg__11daNpc_Kp1_cFv */
-u32 daNpc_Kp1_c::getMsg() {
+u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
     if (mMsgNo != 0xFF) {
         if (mMsgNo == 0x9B) {
             return 0x1E96;
@@ -472,7 +471,8 @@ u32 daNpc_Kp1_c::getMsg() {
     }
     if (dComIfGs_isGetItemReserve(0xF)) {
         if (!dComIfGs_checkReserveItem(0x9B)) {
-            return (dComIfGs_getEventReg(0xCCFF) != 0 ? 1 : 0) + 0x1E83;
+            bool flag = dComIfGs_getEventReg(0xCCFF) >= 1;
+            return flag + 0x1E83;
         }
     }
     if (dComIfGs_isGetItemReserve(0xE)) {
@@ -579,14 +579,14 @@ void daNpc_Kp1_c::setAttention() {
 }
 
 /* 00001558-000015F4       .text chk_talk__11daNpc_Kp1_cFv */
-BOOL daNpc_Kp1_c::chk_talk() {
-    BOOL ret = TRUE;
+bool daNpc_Kp1_c::chk_talk() {
+    bool ret = true;
     mMsgNo = 0xFF;
     if (dComIfGp_event_chkTalkXY()) {
         if (dComIfGp_evmng_ChkPresentEnd()) {
             mMsgNo = dComIfGp_event_getPreItemNo();
         } else {
-            ret = FALSE;
+            ret = false;
         }
     }
     return ret;
@@ -721,7 +721,7 @@ BOOL daNpc_Kp1_c::wait01() {
         return TRUE;
     }
     if (mTalkEnd != 0) {
-        if (chk_talk() == true) {
+        if (chk_talk()) {
             setStt(2);
         }
     } else {
@@ -740,7 +740,7 @@ BOOL daNpc_Kp1_c::wait01() {
 
 /* 00001AFC-00001BD4       .text talk01__11daNpc_Kp1_cFv */
 BOOL daNpc_Kp1_c::talk01() {
-    BOOL ret = TRUE;
+    bool ret = true;
     talk(1);
     if (mpCurrMsg != NULL) {
         switch (mpCurrMsg->mStatus) {
