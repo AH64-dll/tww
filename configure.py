@@ -1709,7 +1709,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_obj_Itnak"),  # 3 sub-100 accept (set_mtx 90.44 norm-diff-0 arg-eval balancelift #37 class — reconciliation 2026-08-14, R7-8 structural overruled; _draw 99.88 anchor+pool, create_heap 99.90 branch-addr); .rodata 253B byte-identical; .data +48B zero-referenced dead statics (0 relocs); markers 3==3; weak order
     ActorRel(Equivalent, "d_a_obj_Vds"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Vteng"),
-    ActorRel(NonMatching, "d_a_obj_YLzou"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_YLzou"),
     ActorRel(Matching,    "d_a_obj_Yboil"),
     ActorRel(Matching,    "d_a_obj_adnno"),
     ActorRel(Matching,    "d_a_obj_ajav"),
