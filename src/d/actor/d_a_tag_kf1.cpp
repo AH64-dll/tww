@@ -15,19 +15,15 @@ static daTag_Kf1_HIO_c l_HIO;
 static s32 l_check_inf[0x64];
 static s32 l_check_wrk;
 
-static const char a_tagKf1_strings[] = "TagKf1" "BENSYO" "MsgNo" "MES_SET" "MES_END" "TSUBO_BENSYO" "GO_NEXT" "CNT_TSUBO" "\203N\203^\203j\217\304\202\253\212\304\216\213\203^\203O";
-
-static const char* a_demo_name_tbl[] = { "BENSYO" };
-
-#define STR_TAGKF1 (a_tagKf1_strings + 0x00)
-#define STR_BENSYO (a_tagKf1_strings + 0x07)
-#define STR_MSGNO  (a_tagKf1_strings + 0x0E)
-#define STR_MES_SET     (a_tagKf1_strings + 0x14)
-#define STR_MES_END     (a_tagKf1_strings + 0x1C)
-#define STR_TSUBO_BENSYO (a_tagKf1_strings + 0x24)
-#define STR_GO_NEXT     (a_tagKf1_strings + 0x31)
-#define STR_CNT_TSUBO   (a_tagKf1_strings + 0x39)
-#define STR_HIO_NAME    (a_tagKf1_strings + 0x43)
+#define STR_TAGKF1 "TagKf1"
+#define STR_BENSYO "BENSYO"
+#define STR_MSGNO  "MsgNo"
+#define STR_MES_SET     "MES_SET"
+#define STR_MES_END     "MES_END"
+#define STR_TSUBO_BENSYO "TSUBO_BENSYO"
+#define STR_GO_NEXT     "GO_NEXT"
+#define STR_CNT_TSUBO   "CNT_TSUBO"
+#define STR_HIO_NAME    "\203N\203^\203j\217\304\202\253\212\304\216\213\203^\203O"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
@@ -41,7 +37,7 @@ daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
 static s32 searchActor_Kutani(void* i_actor, void*) {
     if (l_check_wrk < 0x64 && fopAcM_IsActor(i_actor) &&
-        ((fopAc_ac_c*)i_actor)->actor_type == 0x1CB &&
+        fopAcM_GetName(i_actor) == fpcNm_TSUBO_e &&
         daObj::PrmAbstract<daTsubo::Act_c::Prm_e>((fopAc_ac_c*)i_actor,
                                                    daTsubo::Act_c::PRM_TYPE_W,
                                                    daTsubo::Act_c::PRM_TYPE_S) == daTsubo::Act_c::TYPE_KUTANI)
@@ -62,7 +58,7 @@ s32 daTag_Kf1_c::createInit() {
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 void daTag_Kf1_c::setStt(signed char param_0) {
     m768 = param_0;
-    if ((s32)m768 == 3) {
+    if (m768 == 3) {
         return;
     }
 }
@@ -89,6 +85,7 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* i_msgNo) {
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
+    static const char* a_demo_name_tbl[] = { STR_BENSYO };
     if (m767 == 1 || m767 == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
         if (m767 == 1) {
@@ -254,7 +251,7 @@ void daTag_Kf1_c::event_proc() {
         setStt(2);
         return;
     }
-    u8 attn = mEventCut.getAttnFlag();
+    bool attn = mEventCut.getAttnFlag();
     if (mEventCut.cutProc()) {
         if (mEventCut.getAttnFlag() == 0) {
             mEventCut.setAttnFlag(attn);
