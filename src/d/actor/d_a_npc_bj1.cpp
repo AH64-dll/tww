@@ -433,7 +433,18 @@ void daNpc_Bj1_c::anmAtr(unsigned short i_attr) {
 
 /* 00001534-000015D8       .text eventOrder__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eventOrder() {
-    /* Nonmatching */
+    if (mStatus == 1 || mStatus == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (mSpecificType == 0xC) {
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+        }
+        if (mStatus == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (mStatus >= 3) {
+        m82C = mStatus - 3;
+        fopAcM_orderOtherEventId(this, mEventIdTable[m82C], 0xFF, 0xFFFF, 0, 1);
+    }
 }
 
 /* 000015D8-00001690       .text checkOrder__11daNpc_Bj1_cFv */
@@ -1305,8 +1316,16 @@ void daNpc_Bj1_c::eInit_DEL_TNE_() {
 }
 
 /* 00004114-0000417C       .text eInit_SET_ANM___11daNpc_Bj1_cFPiPf */
-void daNpc_Bj1_c::eInit_SET_ANM_(int*, float*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_SET_ANM_(int* i_anmNum, float* i_morf) {
+    if (i_anmNum != NULL) {
+        s8 anmNum = (s8)*i_anmNum;
+        if (anmNum >= 0 && anmNum < 0xB) {
+            setAnm_NUM(anmNum);
+            if (i_morf != NULL) {
+                mpMorf->setMorf(*i_morf);
+            }
+        }
+    }
 }
 
 /* 0000417C-000044E4       .text event_actionInit__11daNpc_Bj1_cFi */
