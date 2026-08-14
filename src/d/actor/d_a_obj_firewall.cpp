@@ -329,9 +329,10 @@ cPhs_State daObjFirewall_c::_create() {
                 s16 ang = 0x2000 * i;
                 f32 cos = jmaCosTable[(u16)ang >> jmaSinShift];
                 f32 sin = jmaSinTable[(u16)ang >> jmaSinShift];
-                f32 z = current.pos.z + 1000.0f * cos * scale.x;
+                f32 sx = scale.x;
+                f32 z = current.pos.z + 1000.0f * cos * sx;
                 f32 y = current.pos.y;
-                f32 x = current.pos.x + 1000.0f * sin * scale.x;
+                f32 x = current.pos.x + 1000.0f * sin * sx;
                 mSePos[i].x = x;
                 mSePos[i].y = y;
                 mSePos[i].z = z;
