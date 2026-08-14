@@ -588,9 +588,8 @@ void ho_move(daGrid_c* i_this) {
             s32 r0_2 = ((s32)(u16)(i_this->m2212 + r21 * r24) >> jmaSinShift) * 4;
             f32 f6_2 = 9.0f - f24 * f24;
             f32 f7_2 = i_this->m2200;
-            f32 f0_4_2 = 1.0f - 0.5f * f1_5;
-            f32 f4_2 = f4 * (((f6_2 * (f7_2 * cM_ssin((s16)(i_this->m2212 + r21 * r24)))) / 9.0f) - ((f26 * f6_2) / 9.0f)) * f0_4_2;
-            f32 f5_2 = f5 * (((f32)r24 * (f7_2 * cM_scos((s16)(i_this->m2212 + r21 * r24)))) / (f32)d78) * f0_4_2;
+            f32 f4_2 = f4 * (((f6_2 * (f7_2 * cM_ssin((s16)(i_this->m2212 + r21 * r24)))) / 9.0f) - ((f26 * f6_2) / 9.0f)) * (1.0f - 0.5f * f1_5);
+            f32 f5_2 = f5 * (((f32)r24 * (f7_2 * cM_scos((s16)(i_this->m2212 + r21 * r24)))) / (f32)d78) * (1.0f - 0.5f * f1_5);
             f32 f0_5 = f4_2 * f4_2 + f5_2 * f5_2;
             if (f0_5 > 0.0f) {
                 volatile f32 sp8;
