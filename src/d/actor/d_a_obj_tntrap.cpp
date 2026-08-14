@@ -221,8 +221,10 @@ void daObjTnTrap_c::particle_delete(int i_idx) {
 /* 000006A4-0000072C       .text set_se__13daObjTnTrap_cFv */
     /* Nonmatching */
 void daObjTnTrap_c::set_se() {
-    if (mAction >= 1 && mAction < 5) {
-        fopAcM_seStartCurrent(this, JA_SE_OBJ_TN_TRAP, 0);
+    if (mAction < 5) {
+        if (mAction >= 1) {
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_TN_TRAP, 0);
+        }
     }
 }
 
