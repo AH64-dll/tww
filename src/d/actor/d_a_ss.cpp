@@ -607,7 +607,6 @@ void core_move(ss_class* i_this) {
 }
 
 /* 00002B84-00002F1C       .text daSs_Execute__FP8ss_class */
-/* Nonmatching */
 static BOOL daSs_Execute(ss_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -655,15 +654,15 @@ static BOOL daSs_Execute(ss_class* i_this) {
     cXyz sp18(0.0f, 45.0f, 0.0f);
     MtxPosition(&sp18, &i_this->eyePos);
 
-    cXyz diff = player->eyePos - i_this->eyePos;
+    sp18 = player->eyePos - i_this->eyePos;
 
-    s32 sinTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_ssin((s16)(i_this->m2C0 * 0x2F00)));
-    s32 cosTerm = (s32)((f32)((s8)i_this->m2D8 * 200) * cM_scos((s16)(i_this->m2C0 * 0x2C00)));
+    s16 sinTerm = (s16)((f32)((s8)i_this->m2D8 * 200) * cM_ssin((s16)(i_this->m2C0 * 0x2F00)));
+    s16 cosTerm = (s16)((f32)((s8)i_this->m2D8 * 200) * cM_scos((s16)(i_this->m2C0 * 0x2C00)));
 
-    i_this->m2D4 = (s16)(cM_atan2s(diff.x, diff.z) * (REG0_S(0) + 1) - i_this->current.angle.y + sinTerm);
+    i_this->m2D4 = (s16)(cM_atan2s(sp18.x, sp18.z) * (REG0_S(0) + 1) - i_this->current.angle.y + sinTerm);
 
-    f32 distXZ = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
-    i_this->m2D2 = (s16)(-(cosTerm + cM_atan2s(diff.y, distXZ) * (REG0_S(2) + 1)));
+    f32 distXZ = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
+    i_this->m2D2 = (s16)(-(cosTerm + cM_atan2s(sp18.y, distXZ) * (REG0_S(2) + 1)));
     if (i_this->m2D8 != 0) {
         i_this->m2D8--;
     }
