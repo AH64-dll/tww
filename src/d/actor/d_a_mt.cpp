@@ -24,6 +24,8 @@ static s32 mt_fight_count;
 static s32 j_index;
 static u16 mt_tex_anm_idx[] = {dRes_INDEX_MT_BTP_MG_MABA_e, dRes_INDEX_MT_BTP_MG_TOJI_e};
 static u16 mt_tex_max_frame[] = {6, 1};
+static u8 br_no[] = {0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0};
+static s16 br_ya[] = {0xCD38, 0xDCD8, 0xF060, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */
 daMt_HIO_c::daMt_HIO_c() {
@@ -318,8 +320,37 @@ void body_control5(mt_class*) {
 }
 
 /* 00003008-00003210       .text br_draw__FP8mt_class */
-void br_draw(mt_class*) {
-    /* Nonmatching */
+void br_draw(mt_class* i_this) {
+    if (i_this->m18D4 == 0) {
+        return;
+    }
+
+    MtxTrans(i_this->eyePos.x, i_this->eyePos.y, i_this->eyePos.z, 0);
+    mDoMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
+    mDoMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
+    mDoMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
+    f32 f31 = l_HIO.m1C * (2.0f + g_regHIO.mChild[0].mFloatRegs[4]);
+
+    MtxPush();
+    mDoMtx_YrotM(*calc_mtx, br_ya[i_this->m18D4 - 1]);
+    mDoMtx_XrotM(*calc_mtx, -0x4000);
+    MtxScale(f31, f31, f31, 1);
+
+    J3DModel* model = i_this->m18D8[br_no[i_this->m18D4 - 1]];
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    PSMTXCopy(*calc_mtx, model->getBaseTRMtx());
+    mDoExt_modelUpdateDL(model);
+
+    MtxPull();
+    mDoMtx_ZrotM(*calc_mtx, -0x8000);
+    mDoMtx_YrotM(*calc_mtx, br_ya[i_this->m18D4 - 1]);
+    mDoMtx_XrotM(*calc_mtx, -0x4000);
+    MtxScale(f31, f31, f31, 1);
+
+    model = i_this->m18D8[3 + br_no[i_this->m18D4 - 1]];
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    PSMTXCopy(*calc_mtx, model->getBaseTRMtx());
+    mDoExt_modelUpdateDL(model);
 }
 
 /* 00003210-00003360       .text daMt_shadowDraw__FP8mt_class */
