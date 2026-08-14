@@ -106,7 +106,46 @@ void daWfall_c::set_minamo_mtx() {
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
-    /* Nonmatching */
+    switch (m355) {
+    case 0:
+        if (eventInfo.getCommand() == dEvtCmd_INDEMO_e || dComIfGp_evmng_startCheck(m350)) {
+            m355++;
+        } else if (dComIfGs_isSwitch((int)(u8)fopAcM_GetParam(this), (s8)current.roomNo)) {
+            fopAcM_orderOtherEventId(this, m350, 0xFF, 0xFFFF, 0, 1);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+    case 1:
+        if (dComIfGp_evmng_startCheck(m350)) {
+            mode_wtr_off_init();
+            m355++;
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(m350)) {
+            dComIfGp_event_onEventFlag(0x8);
+            m355 = 10;
+        }
+        break;
+    case 10:
+        m352 = 0;
+        break;
+    }
+
+    if (!dComIfGs_isSwitch((int)(u8)fopAcM_GetParam(this), (s8)current.roomNo)) {
+        mode_wtr_on_init();
+        m355 = 0;
+    }
+
+    if (m356 == 1) {
+        mBrk.play();
+        mBtk2.play();
+        set_minamo_mtx();
+    }
+    mode_proc_call();
+    set_mtx();
+    set_gate_mtx();
+    return true;
 }
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
