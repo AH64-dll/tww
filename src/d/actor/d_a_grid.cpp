@@ -499,7 +499,7 @@ void ho_move(daGrid_c* i_this) {
 
         sp34.x = 0.0f;
         sp34.z = 1.6f;
-        cXyz* nrm = &i_this->mPacket.mNrm[i_this->mPacket.mCount][0];
+        cXyz* nrm = (cXyz*)((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0x354);
         if (l_HIO.m08 == 0) {
             if (l_ship->mStateFlag & 0x200) {
                 if (i_this->m2208 == 0.0f) {
@@ -629,7 +629,7 @@ void ho_move(daGrid_c* i_this) {
             nrm++;
         } while (r22 < 0x55);
 
-        cXyz* base = &i_this->mPacket.mNrm[i_this->mPacket.mCount][0];
+        cXyz* base = (cXyz*)((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0x354);
         f32 f4_3 = std::fabsf(i_this->mPacket.mNrm[i_this->mPacket.mCount][0x3B].z);
         f32 f5_3 = 1.0f - (f4_3 * (0.0015f + REG0_F(224)));
         f32 f6_3 = 1.0f - (f4_3 * (0.00070000003f + REG0_F(225)));
@@ -651,7 +651,7 @@ void ho_move(daGrid_c* i_this) {
             base++;
         }
 
-        cXyz* nrm2 = &i_this->mPacket.mNrm2[i_this->mPacket.mCount][0];
+        cXyz* nrm2 = (cXyz*)((u8*)i_this + i_this->mPacket.mCount * 0x3FC + 0xB4C);
         cXyz sp10 = i_this->tevStr.mLightPosWorld - i_this->current.pos;
         cXyz sp1C = sp10;
         i_this->mPacket.setNrmMtx(sp1C);
