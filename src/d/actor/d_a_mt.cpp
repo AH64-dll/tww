@@ -16,6 +16,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_snap.h"
+#include "d/d_path.h"
 #include "res/Object/Mt.h"
 #include "JAZelAudio/JAIZelBasic.h"
 
@@ -717,8 +718,35 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* pActor) {
 }
 
 /* 000084AC-000088A8       .text daMt_Create__FP10fopAc_ac_c */
-static cPhs_State daMt_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daMt_Create(fopAc_ac_c* pActor) {
+    static dCcD_SrcSph sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK2,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
+            /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 30.0f,
+        }},
+    };
     static dCcD_SrcSph eye_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -747,6 +775,115 @@ static cPhs_State daMt_Create(fopAc_ac_c*) {
             /* Radius */ 30.0f,
         }},
     };
+
+    mt_class* i_this = (mt_class*)pActor;
+    fopAcM_ct(i_this, mt_class);
+
+    cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Mt");
+    if (res == cPhs_COMPLEATE_e) {
+        i_this->gbaName = 5;
+
+        i_this->m2B4 = fopAcM_GetParam(i_this) & 0xFF;
+        if (i_this->m2B4 == 0xFF) {
+            i_this->m2B4 = 0;
+        }
+        i_this->m2B5 = (fopAcM_GetParam(i_this) >> 8) & 0x7F;
+        i_this->m2B6 = (fopAcM_GetParam(i_this) >> 15) & 1;
+        i_this->m2B7 = (fopAcM_GetParam(i_this) >> 16) & 0xFF;
+        i_this->m2B8 = (fopAcM_GetParam(i_this) >> 24) & 0xFF;
+
+        if (i_this->m2B6 == 0) {
+            i_this->m2B9 = i_this->current.angle.z;
+            if (i_this->m2B9 != 0 && dComIfGs_isSwitch(i_this->m2B9, fopAcM_GetRoomNo(i_this))) {
+                return cPhs_ERROR_e;
+            }
+        } else {
+            i_this->m2BA = i_this->current.angle.z;
+        }
+        i_this->current.angle.z = 0;
+
+        cDT_NamePTbl* nameTbl = (cDT_NamePTbl*)((u8*)&g_dComIfG_gameInfo + 0x50AC);
+        i_this->itemTableIdx = nameTbl->GetIndex("magtail", 0);
+
+        if (!fopAcM_entrySolidHeap(i_this, CallbackCreateHeap, 0x1BFC8)) {
+            return cPhs_ERROR_e;
+        }
+
+        i_this->mBtHeight = 162.5f;
+        i_this->mBtBodyR = 200.0f;
+
+        if (i_this->m2B4 >= 0xA) {
+            switch (i_this->m2B5) {
+            case 0:
+                break;
+            case 1:
+                i_this->m488[0] = 0x3E8;
+                break;
+            case 2:
+                i_this->m488[0] = 0x1F4;
+                break;
+            case 3:
+                i_this->m488[0] = 0xFA;
+                break;
+            case 11:
+                i_this->m488[0] = -0x3E8;
+                break;
+            case 12:
+                i_this->m488[0] = -0x1F4;
+                break;
+            case 13:
+                i_this->m488[0] = -0xFA;
+                break;
+            }
+        } else if (i_this->m2B7 != 0xFF) {
+            i_this->m2C0 = (u32)dPath_GetRoomPath(i_this->m2B7, fopAcM_GetRoomNo(i_this));
+            if (i_this->m2C0 == 0) {
+                return cPhs_ERROR_e;
+            }
+            i_this->m2BC = i_this->m2B7 + 1;
+            i_this->m2BE = 1;
+            dPnt* point = ((dPath*)i_this->m2C0)->m_points;
+            i_this->m47C = point->m_position.x;
+            i_this->m480 = point->m_position.y;
+            i_this->m484 = point->m_position.z;
+        }
+
+        if (i_this->m2B8 != 0xFF) {
+            i_this->m2BB = i_this->m2B8 + 1;
+        }
+
+        i_this->cullMtx = i_this->mpMorf[1]->getModel()->getBaseTRMtx();
+        fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
+        fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
+        i_this->gravity = -3.0f;
+        i_this->m46A = (s16)cM_rndF(32768.0f);
+
+        for (int i = 0; i < 64; i++) {
+            i_this->m6F4[i] = i_this->current.pos;
+            i_this->m9F4[i] = i_this->current.angle;
+        }
+
+        i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mC08, &i_this->speed);
+        i_this->mC08.SetWall(50.0f, 19.0f + REG0_F(0));
+        i_this->mStts.Init(0xFA, 2, i_this);
+
+        for (int i = 0; i < 8; i++) {
+            i_this->mE48[i].Set(sph_src);
+            i_this->mE48[i].SetStts(&i_this->mStts);
+        }
+        i_this->mE48[0].SetAtAtp(2);
+
+        i_this->m17A8.Set(eye_sph_src);
+        i_this->m17A8.SetStts(&i_this->mStts);
+        i_this->m18F0 = 1.0f;
+        i_this->m18FB = 2;
+        i_this->max_health = 8;
+        i_this->health = 8;
+        i_this->mEnemyIce.mpActor = i_this;
+        i_this->mEnemyIce.mDeathSwitch = i_this->m2B9;
+        daMt_Execute(i_this);
+    }
+    return res;
 }
 
 static actor_method_class l_daMt_Method = {
