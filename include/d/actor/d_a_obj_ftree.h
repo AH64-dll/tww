@@ -29,7 +29,7 @@ namespace daObjFtree {
 
         static char M_arcname[];
 
-        s32 param_get_tree_idx() const; // weak but not inlined?
+        inline s32 param_get_tree_idx() const;
 
         void search_heart_part();
         BOOL launch_heart_part();

@@ -112,7 +112,6 @@ BOOL daObjFtree::Act_c::launch_heart_part() {
 
 /* 000001F0-00000394       .text place_heart_part__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::place_heart_part() {
-    /* Nonmatching */
     if (m356 == -1) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == TRUE) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E20)) {
@@ -260,7 +259,6 @@ BOOL daObjFtree::Act_c::SetJointAnimation(int i_anm, float i_f1, float i_f2, int
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, i_anm);
     s32 v = cLib_maxLimit(i_arg, 0);
     if (anm != NULL) {
-    /* Nonmatching */
         if (v == 0) {
             mpMorf->setAnm(anm, 0, i_f2, i_f1, 0.0f, -1.0f, NULL);
         } else {
@@ -364,7 +362,6 @@ void daObjFtree::Act_c::talk_ct() {
 
 /* 00000D50-00000F14       .text talk_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::talk_main() {
-    /* Nonmatching */
     if (m356 == -1 && eventInfo.mCommand == dEvtCmd_INTALK_e) {
         if (m6A4 == fpcM_ERROR_PROCESS_ID_e) {
             m6A4 = fopMsgM_messageSet(message_table[mMode], this);
@@ -378,12 +375,12 @@ void daObjFtree::Act_c::talk_main() {
         switch (m6A8->mStatus) {
         case fopMsgStts_MSG_DISPLAYED_e:
             m6A8->mStatus = fopMsgStts_MSG_ENDS_e;
-            return;
+            break;
         case fopMsgStts_BOX_CLOSED_e:
             m6A8->mStatus = fopMsgStts_MSG_DESTROYED_e;
             g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
             talk_ct();
-            return;
+            break;
         }
         return;
     }
@@ -392,13 +389,12 @@ void daObjFtree::Act_c::talk_main() {
         if (PSVECSquareDistance(&current.pos, &player->current.pos) <=
             (m4C8 + 130.0f) * (m4C8 + 130.0f)) {
             talk_ct();
+            player = dComIfGp_getPlayer(0);
             if (player != NULL) {
                 cXyz diff = current.pos - player->current.pos;
                 s16 diffAngle = cM_atan2s(diff.x, diff.z) - player->shape_angle.y;
-                if (diffAngle <= 0) {
-                    diffAngle = -diffAngle;
-                }
-                if (diffAngle <= 0x4000) {
+                s32 absAngle = diffAngle <= 0 ? -diffAngle : diffAngle;
+                if (absAngle <= 0x4000) {
                     eventInfo.mCondition |= 1;
                 }
             }
@@ -429,7 +425,6 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 }
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
-/* Nonmatching */
 BOOL daObjFtree::is_broughtID(int i_id) {
     u8 ret = TRUE;
     dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
@@ -643,7 +638,6 @@ void daObjFtree::Act_c::action_waitL_main() {
 
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
-    /* Nonmatching */
     s32 cnt = i_cnt > 0 ? i_cnt : 1;
     m2A6 = 1;
     m2A7 = 0;
@@ -678,7 +672,6 @@ s32 daObjFtree::Act_c::action_pikupikuM_init(s16 i_cnt) {
 
 /* 00001B4C-00001C44       .text action_pikupikuM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuM_main() {
-    /* Nonmatching */
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
@@ -707,7 +700,6 @@ s32 daObjFtree::Act_c::action_pikupikuL_init(s16 i_cnt) {
 
 /* 00001C9C-00001D94       .text action_pikupikuL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuL_main() {
-    /* Nonmatching */
     s16 cnt = m69C;
     s16 max = m69A;
     if (cnt < max || max == -1) {
@@ -768,7 +760,6 @@ s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
 
 /* 00001FB4-00002300       .text action_changeSL2_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSL2_main() {
-    /* Nonmatching */
     if (m2A6 != 0) {
         cLib_addCalc(&m640, 1.0f, 0.2f, 1.0f, 0.007f);
         m66C = (s16)((f32)m65C + (255.0f - (f32)m65C) * m640);
@@ -911,7 +902,6 @@ s32 daObjFtree::Act_c::process_init(int i_state, s16 i_arg) {
         &Act_c::action_pikupikuL_init,
     };
     if (i_state >= 0 && i_state < 0xD) {
-    /* Nonmatching */
         if ((this->*init_table[i_state])(i_arg)) {
             m696 = 0;
             m698 = 0;
@@ -942,7 +932,6 @@ void daObjFtree::Act_c::process_main() {
         &Act_c::action_pikupikuL_main,
     };
     if (mMode >= 0 && mMode < 0xD) {
-    /* Nonmatching */
         (this->*main_table[mMode])();
     }
 }
