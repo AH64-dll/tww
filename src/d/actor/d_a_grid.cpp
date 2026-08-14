@@ -9,6 +9,14 @@
 
 static daHo_HIO_c l_HIO;
 
+/* 800EB4D0-800EB520       .text __dt__10daHo_HIO_cFv */
+daHo_HIO_c::~daHo_HIO_c() {
+    mChildId = -1;
+}
+
+/* 800EB520-800EB5D8       .text __dt__13daHo_packet_cFv */
+daHo_packet_c::~daHo_packet_c() {}
+
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
     /* Nonmatching */

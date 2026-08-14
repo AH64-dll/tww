@@ -9,7 +9,14 @@ class daGrid_c;
 
 class daHo_packet_c : public J3DMatPacket {
 public:
-    daHo_packet_c();
+    daHo_packet_c() {
+        mCount = 0;
+        m189C = 0;
+        m18A0 = 0;
+        m189E = 0;
+        mAlpha = 0xFF;
+        setShapePacket(&mShapePacket);
+    }
     virtual ~daHo_packet_c();
     void setBackNrm();
     void setNrmMtx(cXyz&);
@@ -21,9 +28,9 @@ public:
     /* 0x3C */ J3DShapePacket mShapePacket;
     /* 0x80 */ Mtx mMtx;
     /* 0xB0 */ dKy_tevstr_c* mpTevStr;
-    /* 0xB4 */ cXyz mNrm[0xAA];
-    /* 0x8AC */ cXyz mNrm2[0xAA];
-    /* 0x10A4 */ cXyz mPos[0xAA];
+    /* 0xB4 */ cXyz mNrm[2][0x55];
+    /* 0x8AC */ cXyz mNrm2[2][0x55];
+    /* 0x10A4 */ cXyz mPos[2][0x55];
     /* 0x189C */ s16 m189C;
     /* 0x189E */ s16 m189E;
     /* 0x18A0 */ s16 m18A0;
@@ -33,6 +40,8 @@ public:
 
 class daGrid_c : public fopAc_ac_c {
 public:
+    daGrid_c() : mPacket() {}
+
     void force_calc_wind_rel_angle(short param_1) {
         m2216 = param_1;
         m2218 = 1;
@@ -74,8 +83,53 @@ STATIC_ASSERT(sizeof(daGrid_c) == 0x221C);
 
 class daHo_HIO_c {
 public:
-    daHo_HIO_c();
-    virtual ~daHo_HIO_c() {}
+    daHo_HIO_c() {
+        mChildId = -1;
+        m05 = 1;
+        m07 = 0;
+        m14 = 40.0f;
+        m06 = 0;
+        m08 = 0;
+        m18 = 0.5f;
+        m1C = 0.1f;
+        m0C = 0.1f;
+        m20 = 0.4f;
+        m24 = 1.0f;
+        m28 = 1.0f;
+        m2C = 1.0f;
+        m30 = 0xFF;
+        m31 = 0x32;
+        m34 = 900.0f;
+        m38 = 0;
+        m39 = 0;
+        m70 = 1.0f;
+        m74 = 0.425f;
+        m78 = 0.45f;
+        m7C = 0.4f;
+        m80 = 0.2f;
+        m84 = 0.4f;
+        m88 = 0.45f;
+        m8C = 0.4f;
+        m90 = 0.2f;
+        m94 = 0.5f;
+        m98 = 0.75f;
+        m9C = 1.0f;
+        mA0 = 1.0f;
+        m3C = 0.05f;
+        m40 = 0.125f;
+        m44 = 0.175f;
+        m48 = 0.15f;
+        m4C = 0.0625f;
+        m50 = 0.15f;
+        m54 = 0.2f;
+        m58 = 0.15f;
+        m5C = 0.075f;
+        m60 = 0.175f;
+        m64 = 0.175f;
+        m68 = 0.1f;
+        m6C = 0.0f;
+    }
+    virtual ~daHo_HIO_c();
 
     /* 0x04 */ s8 mChildId;
     /* 0x05 */ u8 m05;
