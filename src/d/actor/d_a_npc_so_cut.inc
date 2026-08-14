@@ -338,7 +338,66 @@ void daNpc_So_c::cutJumpMapopenStart() {
 
 /* 00006148-000064B8       .text cutJumpMapopenProc__10daNpc_So_cFv */
 void daNpc_So_c::cutJumpMapopenProc() {
-    /* Nonmatching */
+    daShip_c* ship = dComIfGp_getShipActor();
+    if (ship == NULL) {
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+        return;
+    }
+
+    if (field_0xBBC == 0) {
+        field_0xB34 = field_0xB38.x;
+        gravity = l_HIO.field_0x80;
+        speed.y = l_HIO.field_0x84;
+        field_0xB00 = speed.y;
+        speedF = 0.0f;
+        field_0xAFC = speedF;
+        shape_angle.x = l_HIO.field_0x68;
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        JAIZelBasic::getInterface()->seStart(0x593C, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        field_0xBBC++;
+    } else if (field_0xBBC == 1) {
+        s16 angle = ship->shape_angle.y + 0x4000;
+        field_0xBB0 = ship->current.pos.x;
+        field_0xBB4 = ship->current.pos.y;
+        field_0xBB8 = ship->current.pos.z;
+        f32 negDist = -l_HIO.field_0x88;
+        field_0xBB0 += negDist * cM_ssin(angle);
+        field_0xBB8 += negDist * cM_scos(angle);
+        f32 y = current.pos.y;
+        if (speed.y < 1.0) {
+            speed.y = 1.0f;
+        }
+        if (cLib_chasePosXZ(&current.pos, *(cXyz*)&field_0xBB0, l_HIO.field_0x90)) {
+            current.pos.y = y;
+            if (l_HIO.field_0x94 == 0) {
+                g_dComIfG_gameInfo.play.mFmapOpen = 2;
+            }
+            shape_angle.y += 0x8000;
+            field_0xBBC++;
+        }
+    } else if (field_0xBBC == 2) {
+        s16 angle2 = ship->shape_angle.y + 0x4000;
+        field_0xBB0 = ship->current.pos.x;
+        field_0xBB4 = ship->current.pos.y;
+        field_0xBB8 = ship->current.pos.z;
+        f32 negDist2 = -l_HIO.field_0x8C;
+        field_0xBB0 += negDist2 * cM_ssin(angle2);
+        field_0xBB8 += negDist2 * cM_scos(angle2);
+        f32 y2 = current.pos.y;
+        if (cLib_chasePosXZ(&current.pos, *(cXyz*)&field_0xBB0, l_HIO.field_0x90)) {
+            current.pos.y = y2;
+            s8 reverb2 = dComIfGp_getReverb(current.roomNo);
+            JAIZelBasic::getInterface()->seStart(0x593B, &eyePos, 0, reverb2, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
+            field_0xAFC = 0.0f;
+            speedF = 0.0f;
+            speed.y = 0.0f;
+            field_0xB00 = speed.y;
+            dComIfGp_evmng_cutEnd(field_0xB6C);
+            offsetDive();
+            field_0xBDA = 0;
+        }
+    }
 }
 
 /* 000064B8-00006710       .text cutMiniGameStart__10daNpc_So_cFv */
