@@ -163,3 +163,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T00:53Z — M19: 4-version cycle 2 ALL GREEN at 5240492fd (D44J01 417 with 788-step relink / GZLP01 416 / GZLJ01 416 / GZLE01 416) — zk1 shared-header renames (d_save_event_flag.inc + d_snap.h) verified on all 4 versions, Matching siblings confirmed post-flip. Flips #40 Itnak + #42 zk1 fully gated across the matrix. Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. Session total: 13 flips, 2 4-version cycles, 3 demo-divergence conversions.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T01:05Z — M20: ALL 5 WAVE-2 FLIPS QA-PASSED — #38 ashut (R8-7), #39 ds1 (R8-8+value-bug-fixed), #40 Itnak (R1-8, reconciliation held), #41 ekskz (R4-8), #42 zk1 (R7-8). 13 flips this session (#30-42). Ledger: 64 NonMatching / 37 Equivalent / 314 Matching + 3 MatchingFor. Bench caught 30+ real bugs org-wide. 2 4-version cycles green. D-team mid-flight: mmrr 5 sub-100, light 15 stubs, firewall transcribing, aj1 lookBack one-liner.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
