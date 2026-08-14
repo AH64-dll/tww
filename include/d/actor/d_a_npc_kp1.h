@@ -73,7 +73,7 @@ public:
     /* 0x6D8 */ u8 mShadowIdx;
     /* 0x6D9 */ u8 field_0x6d9[3];
     /* 0x6DC */ u32 mShadowId;
-    /* 0x6E0 */ J3DAnmTexPattern* mpBtpAnm;
+    /* 0x6E0 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBtpFrame;
     /* 0x6F9 */ u8 field_0x6f9;

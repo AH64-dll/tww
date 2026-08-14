@@ -163,10 +163,10 @@ bool daNpc_Kp1_c::init_btp(bool i_bModify, int i_btpNum) {
     if (i_btpNum >= 0) {
         int resID;
         BtpNum2ResID(i_btpNum, &resID);
-        mpBtpAnm = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Kp", resID);
-        JUT_ASSERT(0x162, mpBtpAnm != 0);
+        m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes("Kp", resID);
+        JUT_ASSERT(0x162, m_head_tex_pattern != 0);
         int dummy = 0;
-        if (mBtpAnm.init(modelData, mpBtpAnm, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_bModify, 0) == 0) {
+        if (mBtpAnm.init(modelData, m_head_tex_pattern, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_bModify, 0) == 0) {
             return false;
         }
         mBtpFrame = 0;
@@ -199,11 +199,11 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
     if (!flag) {
         return;
     }
-    s16 frame_max = mpBtpAnm->getFrameMax();
+    s16 frame_max = m_head_tex_pattern->getFrameMax();
     ++mBtpFrame;
     if (mBtpFrame >= frame_max) {
         if (mBtpNum != 0) {
-            mBtpFrame = mpBtpAnm->getFrameMax();
+            mBtpFrame = m_head_tex_pattern->getFrameMax();
         } else {
             mBtpFrame = 0;
             mBtpTimer = cM_rndF(60.0f) + 30.0f;
@@ -799,14 +799,14 @@ u8 daNpc_Kp1_c::demo() { /* Nonmatching */
     } else {
         mDemoFlag = 1;
         dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
-        s16 frame_max = mpBtpAnm->getFrameMax();
+        s16 frame_max = m_head_tex_pattern->getFrameMax();
         mBtpFrame++;
         if (mBtpFrame >= frame_max) {
             mBtpFrame = frame_max;
         }
         J3DAnmTexPattern* btp = demo_actor->getP_BtpData("Kp");
         if (btp != NULL) {
-            mpBtpAnm = btp;
+            m_head_tex_pattern = btp;
             if (mBtpAnm.init(mpMorf->getModel()->getModelData(), btp, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,
                              -1, true, 0) != 0)
             {
@@ -966,11 +966,10 @@ BOOL daNpc_Kp1_c::CreateHeap() { /* Nonmatching */
         0x80000, 0x11020002
     );
     if (mpMorf == NULL) {
-        return FALSE;
+        goto create_heap_fail;
     }
     if (mpMorf->getModel() == NULL) {
-        mpMorf = NULL;
-        return FALSE;
+        goto create_heap_fail;
     }
     m_head_jnt_num = a_mdl_data->getJointName()->getIndex("head");
     JUT_ASSERT(0x63F, m_head_jnt_num >= 0);
@@ -981,22 +980,19 @@ BOOL daNpc_Kp1_c::CreateHeap() { /* Nonmatching */
 
     mBtpNum = a_tex_pattern_num_tbl[mSpecificType];
     if (initTexPatternAnm(false) == 0) {
-        mpMorf = NULL;
-        return FALSE;
+        goto create_heap_fail;
     }
     J3DModelData* a_itm_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Kp", 6);
     JUT_ASSERT(0x655, a_itm_mdl_data != 0);
     mpModel = mDoExt_J3DModel__create(a_itm_mdl_data, 0x80000, 0x11000002);
     if (mpModel == NULL) {
-        mpMorf = NULL;
-        return FALSE;
+        goto create_heap_fail;
     }
-    J3DModelData* a_itm2_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Kp", 7);
-    JUT_ASSERT(0x65F, a_itm2_mdl_data != 0);
-    mpHandLModel = mDoExt_J3DModel__create(a_itm2_mdl_data, 0x80000, 0x11000002);
+    a_itm_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Kp", 7);
+    JUT_ASSERT(0x65F, a_itm_mdl_data != 0);
+    mpHandLModel = mDoExt_J3DModel__create(a_itm_mdl_data, 0x80000, 0x11000002);
     if (mpHandLModel == NULL) {
-        mpMorf = NULL;
-        return FALSE;
+        goto create_heap_fail;
     }
 
     for (u16 i = 0; i < a_mdl_data->getJointNum(); i++) {
@@ -1006,10 +1002,14 @@ BOOL daNpc_Kp1_c::CreateHeap() { /* Nonmatching */
     }
     mpMorf->getModel()->setUserArea((u32)(this));
 
-    mAcchCir.SetWall(170.0f, 50.0f);
+    mAcchCir.SetWall(30.0f, 60.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                  fopAcM_GetSpeed_p(this), NULL, NULL);
     return TRUE;
+
+create_heap_fail:
+    mpMorf = NULL;
+    return FALSE;
 }
 
 /* 00002B14-00002B34       .text daNpc_Kp1_Create__FP10fopAc_ac_c */
