@@ -742,7 +742,21 @@ void daNpc_So_c::cutMiniGamePlTurnStart() {
 
 /* 000079AC-00007AC0       .text cutMiniGamePlTurnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlTurnProc() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    player->mDemo.mDemoType = 3;
+    player->mDemo.mParam0 = 0;
+    player->mDemo.mDemoMode = 6;
+    player->mDemo.mParam0 = 1;
+
+    daShip_c* ship = dComIfGp_getShipActor();
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+    current.pos = ship->current.pos;
+    current.pos.x += 300.0f * cM_ssin(angle);
+    current.pos.z += 300.0f * cM_scos(angle);
+
+    if (cLib_calcTimer(&field_0xA9C) == 0) {
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+    }
 }
 
 /* 00007AC0-00007B1C       .text cutMiniGamePlUpStart__10daNpc_So_cFv */
@@ -752,7 +766,24 @@ void daNpc_So_c::cutMiniGamePlUpStart() {
 
 /* 00007B1C-00007CBC       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    player->mDemo.mDemoMode = 6;
+
+    mDoMtx_stack_c::YrotS(player->shape_angle.y);
+    cXyz sp38(100.0f + REG0_F(4), 50.0f + REG0_F(5), 100.0f + REG0_F(6));
+    cXyz sp2C;
+    mDoMtx_stack_c::multVec(&sp38, &sp2C);
+
+    cXyz sp20 = player->current.pos + sp2C;
+    field_0xBC0 = sp20;
+    field_0xBCC = player->current.pos;
+    field_0xBCC.y += -50.0f + REG0_F(10);
+
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    cam->mCamera.Set(field_0xBCC, field_0xBC0);
+    if (cLib_calcTimer(&field_0xA9C) == 0) {
+        dComIfGp_evmng_cutEnd(field_0xB6C);
+    }
 }
 
 /* 00007CBC-00007E74       .text initCam__10daNpc_So_cFv */
