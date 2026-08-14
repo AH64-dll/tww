@@ -175,3 +175,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T01:14Z — M21: flip #43 d_a_npc_aj1 → Equivalent — closes the longest actor saga of the session (20+ commits, 4 real value bugs: HIO field-order, msg IDs, wrong-member 0x26D, set_pa_smk GXColor; 3 structural rounds; 21/21 sub-100 0-structural final). Gate 43a1e88e5 04:14:24. Ledger: 63 NonMatching / 38 Equivalent / 314 Matching + 3 MatchingFor. 14 flips this session (#30-43: 3 Matching + 10 Equivalent + 3 MatchingFor conversions).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T01:16Z — M22: flip #44 d_a_obj_magmarock → Equivalent — 15 flips this session (#30-44). Ledger: 62 NonMatching / 39 Equivalent / 314 Matching + 3 MatchingFor. magmarock: 26/32 fns 100, 6 accept-class 0-one-sided (Draw multiset-equal position-shift RLead-11-proven); 8 real bugs fixed en route incl 2 gameplay logic inversions + mVelocity 440→2.0. Gate 6e693b089 04:16:11; 4-version cycle dispatched (Magrock arc D44J01 divergence check, MatchingFor contingency pre-armed).
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
