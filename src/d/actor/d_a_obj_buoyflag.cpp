@@ -973,10 +973,10 @@ void daObjBuoyflag::Packet_c::calc_nrm() {
     for (int row = 0; row < 5; row++) {
         for (int col = 0; col < 7; col++) {
             cXyz* vtx = &prev->mPos[row * 7 + col];
-            cXyz* up = &prev->mPos[(row - 1) * 7 + col];
             cXyz* down = &prev->mPos[(row + 1) * 7 + col];
-            cXyz* left = &prev->mPos[row * 7 + col - 1];
+            cXyz* up = &prev->mPos[(row - 1) * 7 + col];
             cXyz* right = &prev->mPos[row * 7 + col + 1];
+            cXyz* left = &prev->mPos[row * 7 + col - 1];
 
             cXyz nrm1;
             if (row == 0) {
