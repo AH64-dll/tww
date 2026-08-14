@@ -253,10 +253,8 @@ int daObjVyasi::Act_c::process_sagWind_init() {
     /* Nonmatching */
     if (SetStopJointAnimation(mpBckData, 1.0f, 3.0f)) {
         f32 dist = mEkszsPos.getSquareDistance(current.pos);
-        if (dist > 0.0f) {
-            dist = std::sqrtf(dist);
-        }
-        f32 f = dist < 2800.0f ? dist : 2800.0f;
+        dist = std::sqrtf(dist);
+        f32 f = dist > 2800.0f ? 2800.0f : dist;
         f = f < 1000.0f ? 1000.0f : f;
         m0504 = (f - 2800.0f) / -1800.0f;
 
