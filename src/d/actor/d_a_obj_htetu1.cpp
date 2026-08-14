@@ -214,11 +214,17 @@ bool daObjHtetu1_c::_execute() {
             mMode = 2;
         }
         break;
+    case 2:
+    default:
+        break;
     }
 
     mPos = current.pos;
 
     switch (mStatus) {
+    case 0:
+    default:
+        break;
     case 1:
         unlock();
         if (mAngle != 0) {
