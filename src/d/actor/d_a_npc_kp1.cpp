@@ -106,12 +106,12 @@ void daNpc_Kp1_c::setMtx() { /* Nonmatching */
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getBaseTRMtx());
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     mpMorf->getModel()->setAnmMtx(m_handL_jnt_num, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
-    mDoMtx_stack_c::copy(mpHandLModel->getBaseTRMtx());
+    mpHandLModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpHandLModel->calc();
     setAttention();
 }
