@@ -1690,7 +1690,7 @@ static BOOL daBL_Execute(bl_class* i_this) {
     }
 
     if (i_this->m2F6 == 1) {
-        i_this->actor_status &= ~0x20000;
+        i_this->actor_status &= ~0x4000;
     }
 
     i_this->eyePos = i_this->current.pos;
@@ -1707,7 +1707,7 @@ static BOOL daBL_Execute(bl_class* i_this) {
     }
 
     if (enemy_ice(&i_this->mEnemyIce)) {
-        PSMTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0), *calc_mtx);
+        i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
         i_this->mpMorf->calc();
         if (i_this->m2F0 != 0) {
             i_this->m2F0--;
