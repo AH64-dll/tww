@@ -229,3 +229,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T05:29Z — M30: flip #51 d_a_obj_YLzou → MatchingFor(retail-3) — 22 flips this session (#30-51). Ledger: 54 NonMatching / 46 Equivalent / 313 Matching + 5 MatchingFor. YLzou: 49/49 fns + all sections 100.0 (full transcription), demo-only HIO class proven (53 demo refs vs 0 retail). Gate 9301769f4 08:27:30 + cycle 6 ALL GREEN. BLead-9 shift: 6 flips, 10 gap-closes, 3 cycles. MatchingFor-family signature: retail legs relink+pin, demo leg CHECK-only.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T06:13Z — M31: flip #52 d_a_obj_firewall → Equivalent — 23 flips this session (#30-52). Ledger: 53 NonMatching / 47 Equivalent / 313 Matching + 5 MatchingFor. firewall: 122/128 fns 100 after 5-round fix chain (950.0f/pos.z/brk_anm_p/!ChkUsed no-op semantic/wait2 absXZ/_create); 6 holdouts all accept-class raw-disasm-verified. Gate 6ce8fb606 09:13:07. Bench caught the ChkUsed guaranteed-no-op collision regist pre-flip — a real gameplay bug averted.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
