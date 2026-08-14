@@ -1755,7 +1755,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_jump"),
     ActorRel(Equivalent, "d_a_obj_kanoke"),  # regalloc/pair-move: 3 sub-100 all 0 semantic one-sided (executeNormal 98.22 norm-diff-0, executeOpenTate 98.97 + executeEffectTate 95.65 paired single-insn); markers 3/3 keep
     ActorRel(Matching,    "d_a_obj_ladder"),
-    ActorRel(NonMatching, "d_a_obj_light"),
+    ActorRel(Equivalent, "d_a_obj_light"),  # set_mtx regalloc-family accept (191-vs-192, 0 value deltas); NOT Matching (missing FORCEACTIVE weak-inline bodies)
     ActorRel(Matching,    "d_a_obj_mkie"),
     ActorRel(Matching,    "d_a_obj_mkiek"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_mknjd"),
