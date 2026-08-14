@@ -1647,8 +1647,43 @@ void daGy_c::createInit() {
 }
 
 /* 00004920-00004A80       .text _create__6daGy_cFv */
+/* Nonmatching */
 cPhs_State daGy_c::_create() {
-    /* Nonmatching */
+    if (!(actor_condition & 8)) {
+        new (this) daGy_c();
+        actor_condition |= 8;
+    }
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arc_name);
+    if (res == cPhs_COMPLEATE_e) {
+        if (dComIfGs_checkGetItem(0x2D) == 0) {
+            return cPhs_ERROR_e;
+        }
+        fopAc_ac_c* ctrl_actor;
+        if (parentActorID != 0xFFFFFFFF) {
+            if (fopAcM_SearchByID(parentActorID, &ctrl_actor) != 0) {
+                if (ctrl_actor != NULL) {
+                    if (fopAc_IsActor(ctrl_actor) &&
+                        (fopAcM_GetName(ctrl_actor) == fpcNm_GY_CTRL_e ||
+                         fopAcM_GetName(ctrl_actor) == fpcNm_GY_CTRLB_e)) {
+                        mpCtrl = (daGy_Ctrl_c*)ctrl_actor;
+                        daGy_Ctrl_c* ctrl = mpCtrl;
+                        m2AC = ctrl->m31C;
+                        ctrl->m31C++;
+                        if (fopAcM_GetName(ctrl_actor) == fpcNm_GY_CTRL_e) {
+                            fopAcM_setStageLayer(this);
+                        }
+                        if (fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize) == 0) {
+                            return cPhs_ERROR_e;
+                        }
+                        createInit();
+                        return res;
+                    }
+                }
+            }
+        }
+        return cPhs_ERROR_e;
+    }
+    return res;
 }
 
 /* 00004A80-00005A80       .text __ct__6daGy_cFv */
