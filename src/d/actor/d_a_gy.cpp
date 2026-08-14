@@ -864,7 +864,38 @@ void daGy_c::modeDamageInit() {
 
 /* 000025F0-00002754       .text modeDamage__6daGy_cFv */
 void daGy_c::modeDamage() {
-    /* Nonmatching */
+    m4F0 = 0.0f;
+    f32 f2 = m920;
+    if (f2 > 0.01f) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        f32 negF2 = -f2;
+        cXyz vec(0.0f, 0.0f, negF2);
+        cXyz out(0.0f, 0.0f, 0.0f);
+        mDoMtx_YrotS(mDoMtx_stack_c::now, fopAcM_searchActorAngleY(this, player));
+        PSMTXMultVec(mDoMtx_stack_c::now, &vec, &out);
+        current.pos.x += out.x;
+        current.pos.y += out.y;
+        current.pos.z += out.z;
+        cLib_addCalc0(&m920, 1.0f, 2.0f);
+    }
+
+    if (mD15 == 6) {
+        bool flag = mpMorf->isStop();
+        if (flag) {
+            mD15 = 1;
+            switch ((s8)mD16[0]) {
+            case 6:
+                modeWithCircleInit();
+                break;
+            case 0:
+                modeDiveInit();
+                break;
+            default:
+                modeCircleInit();
+                break;
+            }
+        }
+    }
 }
 
 /* 00002754-000028B8       .text modeDeleteInit__6daGy_cFv */
@@ -1163,7 +1194,7 @@ f32 daGy_c::getWaterY() {
             gravity = -2.5f;
             return current.pos.y;
         }
-        gravity = 2.0f;
+        gravity = 0.0f;
         return waterY;
     }
 
@@ -1174,7 +1205,7 @@ f32 daGy_c::getWaterY() {
         gravity = -2.5f;
         return current.pos.y;
     }
-    gravity = 2.0f;
+    gravity = 0.0f;
     return waterY;
 }
 
