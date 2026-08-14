@@ -5,11 +5,12 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grid.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_camera.h"
 #include "f_op/f_op_camera.h"
+#include "m_Do/m_Do_graphic.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
-class daShip_c;
 daShip_c* l_ship;
 
 struct l_pos_t {
@@ -331,7 +332,29 @@ bool daGrid_c::_execute() {
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
 bool daGrid_c::_draw() {
-    /* Nonmatching */
+    if (scale.y < 0.06f) {
+        return true;
+    }
+
+    tevStr = l_ship->tevStr;
+
+    MtxTrans(current.pos.x, current.pos.y, current.pos.z, FALSE);
+    mDoMtx_YrotM(*calc_mtx, current.angle.y);
+    mDoMtx_XrotM(*calc_mtx, current.angle.x);
+    mDoMtx_ZrotM(*calc_mtx, current.angle.z);
+    s16 sailAngle = l_ship->mSailAngle;
+    mDoMtx_YrotM(*calc_mtx, sailAngle);
+    MtxScale(1.0f, scale.y, 1.0f, TRUE);
+    MtxScale(l_HIO.m24, l_HIO.m28, l_HIO.m2C, TRUE);
+
+    PSMTXConcat(j3dSys.getViewMtx(), *calc_mtx, mPacket.mMtx);
+
+    mPacket.mpTevStr = &tevStr;
+    J3DDrawBuffer* drawBuffer =
+        mDoGph_gInf_c::isMonotone() ? g_dComIfG_gameInfo.drawlist.getXluListP1() : g_dComIfG_gameInfo.drawlist.getXluList();
+    drawBuffer->mpZMtx = *calc_mtx;
+    drawBuffer->entryZSort(&mPacket);
+    return true;
 }
 
 static actor_method_class l_daGrid_Method = {
