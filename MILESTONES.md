@@ -283,3 +283,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T08:30Z — M39: flip #59 d_a_obj_hsehi1 → Equivalent — 30 FLIPS THIS SESSION (#30-59). Ledger: 47 NonMatching / 53 Equivalent / 313 Matching + 7 MatchingFor. hsehi1: dispatch-table offAction blocker (RLead-14 .rela.data content catch) fixed 45bc2afda, 16/16 entries 1:1 by symbol+addend. Gate 8a3787141 11:29:38. BLead-10 shift: 6 flips (#52-59). The .rela.data CONTENT scan is now a codified gate step.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T08:36Z — M40: flip #60 d_a_npc_gp1 → Equivalent — 31 FLIPS THIS SESSION (#30-60). Ledger: 46 NonMatching / 54 Equivalent / 313 Matching + 7 MatchingFor. gp1: 21/21 accept-class after createInit u8-clrlwi blocker fixed (s32 path split cdf6d9c06 — R9-9 catch vs D5 reclassification resolved on retail r27 evidence). Gate 0502ae93e 11:35:53. BLead-10 shift: 7 flips (#52-60). R6-9 regression sweep: NO regressions across #30-58.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
