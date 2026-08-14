@@ -23,6 +23,8 @@ public:
 
 class bo_class : public fopEn_enemy_c {
 public:
+    bo_class() { /* Nonmatching */ /* __ct__ 98.31: retail orders yodare vtable stores (mYodare) ahead of dPa_smokePcallBack */ }
+
     /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ mDoExt_brkAnm* mpBaseAnm;
     /* 0x2B8 */ mDoExt_McaMorf* mpMorf;
@@ -37,7 +39,7 @@ public:
     /* 0x2CB */ u8 m2CB;
     /* 0x2CC */ u8 m2CC;
     /* 0x2CD */ u8 m2CD;
-    /* 0x2CE */ u8 m2CE[0x2E0 - 0x2CE];
+    /* 0x2CE */ u8 m2CE[0x2D0 - 0x2CE];
     /* 0x2D0 */ u8 m2D0;
     /* 0x2D1 */ u8 m2D1[0x2DC - 0x2D1];
     /* 0x2DC */ s32 m2DC;

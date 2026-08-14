@@ -130,7 +130,6 @@ static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
 
 /* 00000638-000006C8       .text nodeCallBack_DW__FP7J3DNodei */
 static BOOL nodeCallBack_DW(J3DNode* node, int calcTiming) {
-    /* Nonmatching */
     if (calcTiming == 0) {
         int jntNo = ((J3DJoint*)node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -296,7 +295,6 @@ static void damage_check(bo_class*) {
 
 /* 00002048-00002080       .text angle_initial__FP8bo_class */
 static void angle_initial(bo_class* i_this) {
-    /* Nonmatching */
     i_this->m33A.setall(0);
     i_this->m352.setall(0);
     i_this->m334.setall(0);
@@ -373,7 +371,6 @@ static BOOL daBO_IsDelete(bo_class*) {
 
 /* 000048B8-00004998       .text daBO_Delete__FP8bo_class */
 static BOOL daBO_Delete(bo_class* i_this) {
-    /* Nonmatching */
     i_this->mSmokeEcallBack.remove();
     if (i_this->mpEmitter1 != NULL) {
         i_this->mpEmitter1->becomeInvalidEmitter();
@@ -527,9 +524,10 @@ static dCcD_SrcCyl body_cyl_src = {
     }},
 };
 
-static const u8 fire_j[10] = {1, 3, 5, 6, 8, 9, 0xA, 0xB, 0xC, 0xD};
-static const f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
+static u8 fire_j[10] = {1, 3, 5, 6, 8, 9, 0xA, 0xB, 0xC, 0xD};
+static f32 fire_sc[10] = {1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
 
+/* 00004D50-000050DC       .text daBO_Create__FP10fopAc_ac_c */
 static cPhs_State daBO_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
     bo_class* bo = (bo_class*)i_this;
@@ -539,7 +537,7 @@ static cPhs_State daBO_Create(fopAc_ac_c* i_this) {
     cPhs_State res = dComIfG_resLoad(&bo->mPhase, "BO");
     if (res == cPhs_COMPLEATE_e) {
         bo->mType = fopAcM_GetParam(i_this);
-        bo->m2C1 = fopAcM_GetParam(i_this) >> 16;
+        bo->m2C1 = fopAcM_GetParam(i_this) >> 8;
         if (bo->mType == 0xff) {
             bo->mType = 0;
         }
