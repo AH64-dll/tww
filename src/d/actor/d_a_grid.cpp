@@ -141,6 +141,7 @@ void daHo_packet_c::setNrmVtx(cXyz*, int, int) {
 
 /* 800E92AC-800E93B8       .text setTopNrmVtx__13daHo_packet_cFP4cXyz */
 void daHo_packet_c::setTopNrmVtx(cXyz* out) {
+    /* Nonmatching */
     cXyz* nrm = mNrm[mCount];
     cXyz v1 = nrm[0x4D] - nrm[0x54];
     cXyz v2 = nrm[0x53] - nrm[0x54];
