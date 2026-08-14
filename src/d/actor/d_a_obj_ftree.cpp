@@ -112,6 +112,7 @@ BOOL daObjFtree::Act_c::launch_heart_part() {
 
 /* 000001F0-00000394       .text place_heart_part__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::place_heart_part() {
+    /* Nonmatching */
     if (m356 == -1) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) == TRUE) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E20)) {
@@ -256,6 +257,7 @@ s32 daObjFtree::Act_c::param_get_tree_idx() const {
 
 /* 000007A8-000008D8       .text SetJointAnimation__Q210daObjFtree5Act_cFiffi */
 BOOL daObjFtree::Act_c::SetJointAnimation(int i_anm, float i_f1, float i_f2, int i_arg) {
+    /* Nonmatching */
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, i_anm);
     s32 v = cLib_maxLimit(i_arg, 0);
     if (anm != NULL) {
@@ -426,6 +428,7 @@ void daObjFtree::Act_c::set_tev_color(J3DModelData* modelData, unsigned long i_i
 
 /* 00001070-000010F0       .text is_broughtID__10daObjFtreeFi */
 BOOL daObjFtree::is_broughtID(int i_id) {
+    /* Nonmatching */
     u8 ret = TRUE;
     dSv_event_c* event = &g_dComIfG_gameInfo.save.getEvent();
     u8 reg = event->getEventReg(dSv_event_flag_c::UNK_9EFF);
@@ -638,7 +641,8 @@ void daObjFtree::Act_c::action_waitL_main() {
 
 /* 000019BC-00001A4C       .text action_pikupikuS_init__Q210daObjFtree5Act_cFs */
 s32 daObjFtree::Act_c::action_pikupikuS_init(s16 i_cnt) {
-    s32 cnt = i_cnt > 0 ? i_cnt : 1;
+    /* Nonmatching */
+    s16 cnt = i_cnt > 0 ? i_cnt : 1;
     m2A6 = 1;
     m2A7 = 0;
     m688 = cnt;
@@ -672,6 +676,7 @@ s32 daObjFtree::Act_c::action_pikupikuM_init(s16 i_cnt) {
 
 /* 00001B4C-00001C44       .text action_pikupikuM_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuM_main() {
+    /* Nonmatching */
     s16 cnt = m692;
     s16 max = m690;
     if (cnt < max || max == -1) {
@@ -700,6 +705,7 @@ s32 daObjFtree::Act_c::action_pikupikuL_init(s16 i_cnt) {
 
 /* 00001C9C-00001D94       .text action_pikupikuL_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_pikupikuL_main() {
+    /* Nonmatching */
     s16 cnt = m69C;
     s16 max = m69A;
     if (cnt < max || max == -1) {
@@ -760,6 +766,7 @@ s32 daObjFtree::Act_c::action_changeSL2_init(s16) {
 
 /* 00001FB4-00002300       .text action_changeSL2_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::action_changeSL2_main() {
+    /* Nonmatching */
     if (m2A6 != 0) {
         cLib_addCalc(&m640, 1.0f, 0.2f, 1.0f, 0.007f);
         m66C = (s16)((f32)m65C + (255.0f - (f32)m65C) * m640);
@@ -886,6 +893,7 @@ void daObjFtree::Act_c::action_changeMS_main() {
 
 /* 00002860-00002A4C       .text process_init__Q210daObjFtree5Act_cFis */
 s32 daObjFtree::Act_c::process_init(int i_state, s16 i_arg) {
+    /* Nonmatching */
     static ProcInitFunc init_table[] = {
         &Act_c::action_none_init,
         &Act_c::action_waitS_init,
@@ -916,6 +924,7 @@ s32 daObjFtree::Act_c::process_init(int i_state, s16 i_arg) {
 
 /* 00002A4C-00002BF0       .text process_main__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::process_main() {
+    /* Nonmatching */
     static ProcMainFunc main_table[] = {
         &Act_c::action_none_main,
         &Act_c::action_waitS_main,
