@@ -150,6 +150,7 @@ void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
 
 /* 00000664-00000710       .text init_BJ4_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ4_0() {
+/* Nonmatching */
     bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
         ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
@@ -162,6 +163,7 @@ bool daNpc_Bj1_c::init_BJ4_0() {
 
 /* 00000710-000007D4       .text init_BJ6_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ6_0() {
+/* Nonmatching */
     bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
         ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
@@ -176,6 +178,7 @@ bool daNpc_Bj1_c::init_BJ6_0() {
 
 /* 000007D4-00000864       .text init_BJ7_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJ7_0() {
+/* Nonmatching */
     bool ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
     if (ret) {
         setPrtcl_drugPot_1();
@@ -186,6 +189,7 @@ bool daNpc_Bj1_c::init_BJ7_0() {
 
 /* 00000864-00000910       .text init_BJX_0__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_0() {
+/* Nonmatching */
     bool ret = dComIfGs_isSymbol(2) == 0;
     if (ret) {
         ret = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801) != 0;
@@ -198,6 +202,7 @@ bool daNpc_Bj1_c::init_BJX_0() {
 
 /* 00000910-00000998       .text init_BJX_1__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::init_BJX_1() {
+/* Nonmatching */
     bool ret = dComIfGs_isSymbol(2) != 0;
     if (ret) {
         set_action(&daNpc_Bj1_c::wait_action1, NULL);
@@ -207,6 +212,7 @@ bool daNpc_Bj1_c::init_BJX_1() {
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::createInit() {
+/* Nonmatching */
     int i = 0;
     for (; i < 3; i++) {
         mEventIdTable[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
@@ -322,11 +328,13 @@ void daNpc_Bj1_c::setMtx(bool) {
 
 /* 00001098-000010AC       .text anmNum_toResID__11daNpc_Bj1_cFi */
 int daNpc_Bj1_c::anmNum_toResID(int i_anmNum) {
+/* Nonmatching */
     return a_bck_resID_tbl[i_anmNum];
 }
 
 /* 000010AC-00001188       .text setAnm_anm__11daNpc_Bj1_cFPQ211daNpc_Bj1_c9anm_prm_c */
 BOOL daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c* i_anmPrmP) {
+/* Nonmatching */
     if (m8AF == i_anmPrmP->mAnmNum) {
         return TRUE;
     }
@@ -348,11 +356,13 @@ BOOL daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c* i_anmPrmP) {
 
 /* 00001188-000011B8       .text setAnm_NUM__11daNpc_Bj1_cFi */
 void daNpc_Bj1_c::setAnm_NUM(int i_anmNum) {
+/* Nonmatching */
     setAnm_anm(&a_anm_prm_tbl[i_anmNum]);
 }
 
 /* 000011B8-000011F4       .text setAnm__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::setAnm() {
+/* Nonmatching */
     setAnm_anm(&a_anm_prm_tbl[mPrevStatus]);
     return true;
 }
@@ -364,12 +374,10 @@ BOOL daNpc_Bj1_c::setAnm_prp(signed char) {
 
 /* 00001378-0000137C       .text chg_anmTag__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::chg_anmTag() {
-    /* Nonmatching */
 }
 
 /* 0000137C-00001380       .text control_anmTag__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::control_anmTag() {
-    /* Nonmatching */
 }
 
 /* 00001380-000013C0       .text chg_anmAtr__11daNpc_Bj1_cFUc */
@@ -383,6 +391,7 @@ void daNpc_Bj1_c::chg_anmAtr(unsigned char i_attr) {
 
 /* 000013C0-0000143C       .text control_anmAtr__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::control_anmAtr() {
+/* Nonmatching */
     switch (m8AD) {
     case 10:
         if (m83C != 0) {
@@ -402,6 +411,7 @@ void daNpc_Bj1_c::control_anmAtr() {
 
 /* 0000143C-00001470       .text setAnm_ATR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setAnm_ATR() {
+/* Nonmatching */
     setAnm_anm(&a_anm_prm_tbl[m8AD]);
 }
 
@@ -487,6 +497,7 @@ bool daNpc_Bj1_c::chk_talk() {
 
 /* 0000172C-000017C0       .text chk_drct__11daNpc_Bj1_cFf */
 bool daNpc_Bj1_c::chk_drct(f32 i_param_1) {
+/* Nonmatching */
     s16 target = cLib_targetAngleY(
         &current.pos,
         &dComIfGp_getPlayer(0)->current.pos
@@ -506,6 +517,7 @@ bool daNpc_Bj1_c::chk_partsNotMove() {
 
 /* 000017F0-000019A0       .text lookBack__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::lookBack() {
+/* Nonmatching */
     cXyz dstPos;
     cXyz* dstPos_p;
     cXyz src_pos;
@@ -552,6 +564,7 @@ void daNpc_Bj1_c::lookBack() {
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
 bool daNpc_Bj1_c::getMaskInf(unsigned char* i_mask) {
+/* Nonmatching */
     bool ret = i_mask != NULL;
     if (ret) {
         switch (mSpecificType) {
@@ -589,6 +602,7 @@ bool daNpc_Bj1_c::getMaskInf(unsigned char* i_mask) {
 
 /* 00001A44-00001AA8       .text chkReg__11daNpc_Bj1_cFUs */
 bool daNpc_Bj1_c::chkReg(unsigned short i_reg) {
+/* Nonmatching */
     u8 mask;
     if (getMaskInf(&mask)) {
         u8 reg = dComIfGs_getEventReg(i_reg);
@@ -599,6 +613,7 @@ bool daNpc_Bj1_c::chkReg(unsigned short i_reg) {
 
 /* 00001AA8-00001B14       .text setReg__11daNpc_Bj1_cFUs */
 void daNpc_Bj1_c::setReg(unsigned short i_reg) {
+/* Nonmatching */
     u8 mask;
     if (getMaskInf(&mask)) {
         dComIfGs_setEventReg(i_reg, (u8)(dComIfGs_getEventReg(i_reg) | mask));
@@ -607,6 +622,7 @@ void daNpc_Bj1_c::setReg(unsigned short i_reg) {
 
 /* 00001B14-00001E84       .text next_msgStatus__11daNpc_Bj1_cFPUl */
 u16 daNpc_Bj1_c::next_msgStatus(u32* pMsgNo) {
+/* Nonmatching */
     u16 status = fopMsgStts_MSG_CONTINUES_e;
     switch (*pMsgNo) {
     case 0x13ED:
@@ -909,6 +925,7 @@ u32 daNpc_Bj1_c::getMsg_BJ9_0() {
 }
 /* 00002294-0000242C       .text getMsg_Corog__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg_Corog() {
+/* Nonmatching */
     if (chkReg(0x9AFF)) {
         if (dComIfGs_isEventBit(0x102)) {
             return chkReg(0x99FF) ? 0x1486 : 0x1485;
@@ -947,6 +964,7 @@ u32 daNpc_Bj1_c::getMsg_Corog() {
 
 /* 0000242C-000024EC       .text getMsg__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg() {
+/* Nonmatching */
     u32 msg = 0;
     switch (mSpecificType) {
     case 0:
@@ -1021,6 +1039,7 @@ fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID i_id) {
 
 /* 00002608-000026B8       .text partner_srch_sub__11daNpc_Bj1_cFPFPvPv_Pv */
 bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_judgeFunc) {
+/* Nonmatching */
     bool ret = false;
     mPartnerProcID = -1;
     l_check_wrk = 0;
@@ -1040,6 +1059,7 @@ bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_judgeFunc) {
 
 /* 000026B8-00002724       .text partner_srch__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::partner_srch() {
+/* Nonmatching */
     fpcLyIt_JudgeFunc judge = NULL;
     if (mActionIndex == 1) {
         if (mSpecificType == 4) {
@@ -1052,6 +1072,7 @@ void daNpc_Bj1_c::partner_srch() {
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setCollision_SP_() {
+/* Nonmatching */
     static f32 l_chk_tbl[9][2] = {
         {130.0f, 40.0f},
         {100.0f, 40.0f},
@@ -1071,6 +1092,7 @@ void daNpc_Bj1_c::setCollision_SP_() {
 
 /* 000027B0-00002840       .text set_pthPoint__11daNpc_Bj1_cFUc */
 void daNpc_Bj1_c::set_pthPoint(u8 i_point) {
+/* Nonmatching */
     if (mPathRun.isPath()) {
         u8 max = mPathRun.maxPoint();
         if (i_point > max) {
@@ -1114,6 +1136,7 @@ void daNpc_Bj1_c::bj_nMove() {
 
 /* 000030A4-000031F4       .text setPrtcl_drugPot_1__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_1() {
+/* Nonmatching */
     f32 transX, transZ;
     s16 angleY;
     if (dComIfGp_getMapTrans(current.roomNo, &transX, &transZ, &angleY)) {
@@ -1131,6 +1154,7 @@ void daNpc_Bj1_c::setPrtcl_drugPot_1() {
 
 /* 000031F4-000032B4       .text setPrtcl_drugPot_2__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_2() {
+/* Nonmatching */
     f32 transX, transZ;
     s16 angleY;
     if (dComIfGp_getMapTrans(current.roomNo, &transX, &transZ, &angleY)) {
@@ -1166,6 +1190,7 @@ void daNpc_Bj1_c::delPrtcl_drugPot() {
 
 /* 00003330-000033F4       .text setPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_danceLR() {
+/* Nonmatching */
     delPrtcl_danceLR();
     dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
     mpPrtclDance1 = particle->set(
@@ -1178,6 +1203,7 @@ void daNpc_Bj1_c::setPrtcl_danceLR() {
 
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::flwPrtcl_danceLR() {
+/* Nonmatching */
     if (mpPrtclDance1 != NULL) {
         JPASetRMtxTVecfromMtx(mpMorf->getModel()->getAnmMtx(m_armL2_jnt_num), mpPrtclDance1->mGlobalRotation,
                               mpPrtclDance1->mGlobalTranslation);
@@ -1206,6 +1232,7 @@ void daNpc_Bj1_c::delPrtcl_danceLR() {
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_peraProOpen() {
+/* Nonmatching */
     PSMTXCopy(mpPrpMorf->getModel()->getAnmMtx(m_prp_jnt_num_1), mDoMtx_stack_c::now);
     m86C = mDoMtx_stack_c::now[0][3];
     m870 = mDoMtx_stack_c::now[1][3];
@@ -1303,6 +1330,7 @@ void daNpc_Bj1_c::eInit_MOV_(float*, float*, float*, int*) {
 
 /* 00003F04-00003F74       .text eInit_JMP___11daNpc_Bj1_cFPfPf */
 void daNpc_Bj1_c::eInit_JMP_(float* i_prm1, float* i_prm2) {
+/* Nonmatching */
     m8A9 = 1;
     speed.y = eInit_prmFloat(i_prm1, 0.0f);
     gravity = eInit_prmFloat(i_prm2, 0.0f);
@@ -1316,6 +1344,7 @@ void daNpc_Bj1_c::eInit_CHG_PTH_(int*, int*) {
 
 /* 0000406C-000040BC       .text eInit_END_MOV___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_END_MOV_() {
+/* Nonmatching */
     setAnm_NUM(0);
     m8AA = 0;
     m80C = 0.0f;
@@ -1375,6 +1404,7 @@ BOOL daNpc_Bj1_c::eMove_JMP_() {
 
 /* 00004594-000045F0       .text eMove_SET_TNE___11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::eMove_SET_TNE_() {
+/* Nonmatching */
     if (mpMorf->checkFrame(1.0f)) {
         createSeed();
     }
@@ -1457,6 +1487,7 @@ void daNpc_Bj1_c::flyMov() {
 
 /* 000050CC-0000514C       .text fall01__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::fall01() {
+/* Nonmatching */
     mStatus = 0;
     m849 = 0;
     if (m8A8 == 0) {
