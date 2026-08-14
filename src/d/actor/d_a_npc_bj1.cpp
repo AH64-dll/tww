@@ -1510,7 +1510,20 @@ BOOL daNpc_Bj1_c::talk_1() {
 
 /* 00005510-000055D8       .text walk_1__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::walk_1() {
-    /* Nonmatching */
+    m84A = 0;
+    if (m8AA == 0) {
+        mInitPosSave = current.pos;
+        mInitAngleSave = current.angle;
+        m80C = 0.0f;
+        m814 = 0.0f;
+        speedF = m80C;
+        setStt(7);
+        return true;
+    } else {
+        mPathPoint = mPathRun.getPoint(mPathRun.getIdx());
+        m856 = 1;
+        return true;
+    }
 }
 
 /* 000055D8-00005694       .text wait_action1__11daNpc_Bj1_cFPv */
