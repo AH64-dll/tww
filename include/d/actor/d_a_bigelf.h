@@ -10,7 +10,7 @@ class daBigelf_c : public fopAc_ac_c {
 public:
     typedef BOOL (daBigelf_c::*ActionFunc)(void*);
 
-    bool chkFlag(unsigned short flag) { return (mStateBits & flag) != 0; }
+    bool chkFlag(unsigned short flag) { return (mStateBits & flag) == flag; }
     void clrFlag(unsigned short flag) { mStateBits &= ~flag; }
     void setFlag(unsigned short flag) { mStateBits |= flag; }
     s8 getBackboneJntNum() { return mJntCtrl.getBackboneJntNum(); }

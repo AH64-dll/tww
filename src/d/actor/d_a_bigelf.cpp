@@ -64,7 +64,7 @@ void daBigelf_c::oct_delete() {
             cXyz pos(0.0f, 0.0f, 1570.0f);
             cXyz curPos;
             fpoAcM_absolutePos(octActor, &pos, &curPos);
-            cXyz shipPos(0.0f, ship->current.pos.y, 0.0f);
+            curPos.y = ship->current.pos.y;
             ship->initStartPos(&curPos, cLib_targetAngleY(&current.pos, &curPos) + 0x4000);
         }
         fopAcM_delete(octActor);
@@ -187,17 +187,18 @@ void daBigelf_c::demoInitFlDelete() {
 BOOL daBigelf_c::demoProcFlDelete() {
     m3C0++;
     if (m3C0 == 0x1B) {
-        dComIfGp_particle_set(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00 + 0, NULL, NULL, NULL, 0xFF, NULL, NULL, NULL);
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        dComIfGp_particle_set(pa_name_flower2[(s8)m3F5], &player->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
         m3A4 = 1.0f;
     }
     if (m3C0 >= 0x1B) {
         if (m3E4 != 0) {
             if (m3DC > 0xA) {
                 m3DC -= 0xA;
-                ((JPABaseEmitter*)m3E4)->setRate(m3DC);
+                ((JPABaseEmitter*)m3E4)->mGlobalPrmColor.a = m3DC;
             } else {
                 m3DC = 0;
-                ((JPABaseEmitter*)m3E4)->setRate(0);
+                ((JPABaseEmitter*)m3E4)->mGlobalPrmColor.a = 0;
                 ((JPABaseEmitter*)m3E4)->setMaxFrame(-1);
                 ((JPABaseEmitter*)m3E4)->setStatus(1);
                 m3E4 = 0;
@@ -208,9 +209,8 @@ BOOL daBigelf_c::demoProcFlDelete() {
             if (chkFlag(0x1)) {
                 clrFlag(0x1);
                 if (getType() == 6) {
-                    s16* pFlags = (s16*)&g_dComIfG_gameInfo.play.getEvtManager();
-                    pFlags[0x8B0 / 2] += 0x20;
-                    pFlags[0x8AC / 2] += 0x20;
+                    g_dComIfG_gameInfo.play.setItemMaxMagicCount(0x20);
+                    g_dComIfG_gameInfo.play.setItemMagicCount(0x20);
                 }
             }
         }
@@ -220,12 +220,13 @@ BOOL daBigelf_c::demoProcFlDelete() {
 
 /* 00000708-000007E4       .text demoInitFlLink__10daBigelf_cFv */
 void daBigelf_c::demoInitFlLink() {
-    cXyz pos(0.0f, 20.0f, 1000.0f);
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz pos(0.0f, 300.0f, 400.0f);
     cXyz curPos;
-    fpoAcM_absolutePos(this, &pos, &curPos);
-    dComIfGp_particle_set(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &curPos, &shape_angle, NULL, 0xFF, NULL, NULL, NULL);
+    fpoAcM_absolutePos(player, &pos, &curPos);
+    m3E4 = dComIfGp_particle_set(pa_name_flower[(s8)m3F5], &curPos, &shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
     lightInit(&curPos);
-    mLightInfluence.mPower = 0.5f;
+    mLightInfluence.mPower = 1000.0f;
     demoInitWait();
 }
 
@@ -705,8 +706,11 @@ u16 daBigelf_c::getEventFlag() {
 /* 00001D70-00001E20       .text makeFa1S__10daBigelf_cFv */
 void daBigelf_c::makeFa1S() {
     cXyz pos = current.pos;
+    csXyz angle;
+    angle.x = current.angle.x;
+    angle.y = current.angle.y;
+    angle.z = current.angle.z;
     pos.y += mHeightOffset;
-    csXyz angle = current.angle;
     for (int i = 0; i < 0xA; i++) {
         fopAcM_create(fpcNm_NPC_FA1_e, 4, &pos, (s8)current.roomNo, &angle, NULL, -1, NULL);
         angle.y += 0x2710;
@@ -716,8 +720,11 @@ void daBigelf_c::makeFa1S() {
 /* 00001E20-00001EB4       .text makeFa1__10daBigelf_cFv */
 void daBigelf_c::makeFa1() {
     cXyz pos = current.pos;
+    csXyz angle;
+    angle.x = current.angle.x;
+    angle.y = current.angle.y;
+    angle.z = current.angle.z;
     pos.y += 100.0f;
-    csXyz angle = current.angle;
     m34C = fopAcM_create(fpcNm_NPC_FA1_e, 6, &pos, (s8)current.roomNo, &angle, NULL, -1, NULL);
 }
 
