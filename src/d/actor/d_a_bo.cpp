@@ -22,8 +22,8 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_material.h"
 #include "d/d_particle.h"
+#include "d/d_particle_name.h"
 
-static const char l_arcname[] = "BO";
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */
 static void smoke_set(bo_class* i_this) {
@@ -41,8 +41,14 @@ static BOOL nodeCallBack_DW(J3DNode*, int) {
 }
 
 /* 000006C8-0000079C       .text execute__22yodare_ato_PcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
-void yodare_ato_PcallBack_c::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+void yodare_ato_PcallBack_c::execute(JPABaseEmitter* i_emitter, JPABaseParticle* i_particle) {
+    f32 y = i_particle->mGlobalPosition.y;
+    cXyz pos(i_particle->mGlobalPosition.x, y + 20.0f, i_particle->mGlobalPosition.z);
+    mGndChk.SetPos(&pos);
+    pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    if (pos.y > y) {
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BKBABA_YODAPOTA00, &pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+    }
 }
 
 /* 0000079C-00000930       .text draw_SUB__FP8bo_class */
@@ -121,8 +127,27 @@ static BOOL daBO_Draw(bo_class* i_this) {
 }
 
 /* 00000AD4-00000CD4       .text anm_init__FP8bo_classifUcfii */
-static void anm_init(bo_class*, int, float, unsigned char, float, int, int) {
-    /* Nonmatching */
+static void anm_init(bo_class* i_this, int i_anmIdx, f32 i_playSpeed, u8 i_attr, f32 i_rate, int i_soundRes, int i_flag) {
+    i_this->m2DC = i_anmIdx; // 0x2DC
+    if (i_flag == 0) {
+        if (i_soundRes >= 0) {
+            J3DAnmTransform* soundAnm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_soundRes);
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_anmIdx);
+            i_this->mpMorf->setAnm(anm, i_attr, i_playSpeed, i_rate, 0.0f, -1.0f, soundAnm);
+        } else {
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_anmIdx);
+            i_this->mpMorf->setAnm(anm, i_attr, i_playSpeed, i_rate, 0.0f, -1.0f, NULL);
+        }
+    } else {
+        if (i_soundRes >= 0) {
+            J3DAnmTransform* soundAnm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_soundRes);
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_anmIdx);
+            i_this->mpMorf2->setAnm(anm, i_attr, i_playSpeed, i_rate, 0.0f, -1.0f, soundAnm);
+        } else {
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("BO", i_anmIdx);
+            i_this->mpMorf2->setAnm(anm, i_attr, i_playSpeed, i_rate, 0.0f, -1.0f, NULL);
+        }
+    }
 }
 
 /* 00000CD4-00000E24       .text shock_damage_check__FP8bo_class */
@@ -187,8 +212,12 @@ static void wait_initial(bo_class* i_this) {
 }
 
 /* 00002170-000022F8       .text start_bakutsuki_event_camera__FP10fopAc_ac_c */
-static void start_bakutsuki_event_camera(fopAc_ac_c*) {
-    /* Nonmatching */
+static void start_bakutsuki_event_camera(fopAc_ac_c* i_this) {
+    static cXyz cam_pos(40.0f, 10.0f, 280.0f);
+    static cXyz ctr_pos(0.0f, 50.0f, 50.0f);
+    static f32 cam_fovy = 75.0f;
+    static s32 cam_timer = 30;
+    dComIfGp_getCamera(0)->mCamera.StartEventCamera(0x5, fopAcM_GetID(i_this), "RelActor", "@STARTER", "RelUseMask", "--or", "Timer", &cam_timer, "Center", &ctr_pos, "Eye", &cam_pos, "Fovy", &cam_fovy, 0);
 }
 
 /* 000022F8-0000233C       .text end_event_camera__FP10fopAc_ac_c */
@@ -249,7 +278,7 @@ static BOOL daBO_Delete(bo_class* i_this) {
         i_this->mpEmitter3 = NULL;
     }
     enemy_fire_remove(&i_this->mEnemyFire);
-    dComIfG_resDelete(&i_this->mPhase, l_arcname);
+    dComIfG_resDelete(&i_this->mPhase, "BO");
     return TRUE;
 }
 
