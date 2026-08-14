@@ -6,6 +6,65 @@
 /* 00004CE8-000051E8       .text cutProc__10daNpc_So_cFv */
 void daNpc_So_c::cutProc() {
     /* Nonmatching */
+    field_0xB6C = dComIfGp_evmng_getMyStaffId("NpcSo", NULL, 0);
+    if (field_0xB6C != -1) {
+        static char* cut_name_tbl[] = {
+            "SWIM",
+            "JUMP",
+            "APPEAR",
+            "DIVE",
+            "DISAPPEAR",
+            "SET_ANM",
+            "EFFECT",
+            "EQUIP",
+            "UNEQUIP",
+            "EATESA",
+            "EATESA1ST",
+            "JUMP_MAPOPEN",
+            "MINIGAME",
+            "TURN",
+            "MINIGAME_WARP",
+            "MINIGAME_RETURN",
+            "PARTNER_SHIP",
+            "MINIGAME_WAIT",
+            "MINIGAME_END",
+            "MINIGAME_PL_TURN",
+            "MINIGAME_PL_UP",
+        };
+        static void (daNpc_So_c::*cut_tbl[][2])() = {
+            {&daNpc_So_c::cutSwimStart, &daNpc_So_c::cutSwimProc},
+            {&daNpc_So_c::cutJumpStart, &daNpc_So_c::cutJumpProc},
+            {&daNpc_So_c::cutAppearStart, &daNpc_So_c::cutAppearProc},
+            {&daNpc_So_c::cutDiveStart, &daNpc_So_c::cutDiveProc},
+            {&daNpc_So_c::cutDisappearStart, &daNpc_So_c::cutDisappearProc},
+            {&daNpc_So_c::cutSetAnmStart, &daNpc_So_c::cutSetAnmProc},
+            {&daNpc_So_c::cutEffectStart, &daNpc_So_c::cutEffectProc},
+            {&daNpc_So_c::cutEquipStart, &daNpc_So_c::cutEquipProc},
+            {&daNpc_So_c::cutUnequipStart, &daNpc_So_c::cutUnequipProc},
+            {&daNpc_So_c::cutEatesaStart, &daNpc_So_c::cutEatesaProc},
+            {&daNpc_So_c::cutEatesaFirstStart, &daNpc_So_c::cutEatesaFirstProc},
+            {&daNpc_So_c::cutJumpMapopenStart, &daNpc_So_c::cutJumpMapopenProc},
+            {&daNpc_So_c::cutMiniGameStart, &daNpc_So_c::cutMiniGameProc},
+            {&daNpc_So_c::cutTurnStart, &daNpc_So_c::cutTurnProc},
+            {&daNpc_So_c::cutMiniGameWarpStart, &daNpc_So_c::cutMiniGameWarpProc},
+            {&daNpc_So_c::cutMiniGameReturnStart, &daNpc_So_c::cutMiniGameReturnProc},
+            {&daNpc_So_c::cutPartnerShipStart, &daNpc_So_c::cutPartnerShipProc},
+            {&daNpc_So_c::cutMiniGameWaitStart, &daNpc_So_c::cutMiniGameWaitProc},
+            {&daNpc_So_c::cutMiniGameEndStart, &daNpc_So_c::cutMiniGameEndProc},
+            {&daNpc_So_c::cutMiniGamePlTurnStart, &daNpc_So_c::cutMiniGamePlTurnProc},
+            {&daNpc_So_c::cutMiniGamePlUpStart, &daNpc_So_c::cutMiniGamePlUpProc},
+        };
+
+        int actIdx = dComIfGp_evmng_getMyActIdx(field_0xB6C, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if (actIdx == -1) {
+            dComIfGp_evmng_cutEnd(field_0xB6C);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(field_0xB6C)) {
+                (this->*cut_tbl[actIdx][0])();
+            }
+            (this->*cut_tbl[actIdx][1])();
+        }
+    }
 }
 
 /* 000051E8-000051EC       .text cutSwimStart__10daNpc_So_cFv */
@@ -208,6 +267,65 @@ void daNpc_So_c::cutEatesaFirstStart() {
 /* 00005C6C-000060FC       .text cutEatesaFirstProc__10daNpc_So_cFv */
 void daNpc_So_c::cutEatesaFirstProc() {
     /* Nonmatching */
+    fopAc_ac_c* player = g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    fopAc_ac_c* ship = g_dComIfG_gameInfo.play.getPlayerPtr(2);
+    cXyz pos = player->current.pos;
+    if (ship != NULL) {
+        s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
+        pos = ship->current.pos;
+        pos.x += 260.0f * cM_ssin(angle);
+        pos.z += 260.0f * cM_scos(angle);
+    }
+
+    cXyz diff = current.pos - pos;
+    f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
+    f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+
+    if (dist < 700.0f + REG8_F(11)) {
+        cLib_addCalc2(&mCirclePath.mRadius, 30.0f, 0.05f, 8.0f + REG8_F(10));
+    }
+
+    mCirclePath.mAngleSpeed = 0x300;
+    mCirclePath.mTranslation = pos;
+    mCirclePath.mTranslation.y = dLib_getWaterY(mCirclePath.mTranslation, mObjAcch);
+    dLib_setCirclePath(&mCirclePath);
+
+    mCirclePath.mPos.y = dLib_getWaterY(mCirclePath.mPos, mObjAcch);
+    cXyz target = mCirclePath.mPos;
+    target.y -= 100.0f;
+
+    cXyz diff2 = current.pos - target;
+    f32 sq2 = PSVECSquareMag(&cXyz(diff2.x, 0.0f, diff2.z));
+    f32 dist2 = sq2 > 0.0f ? std::sqrtf(sq2) : sq2;
+
+    mEventCut.setAttnPos(target);
+    mEventCut.setAttnFlag(0);
+    field_0xB44 = target;
+
+    f32 speed = 2.0f;
+    if (dist2 < 100.0f + REG12_F(7)) {
+        if (dist2 <= 50.0f) {
+            speed = 0.0f;
+            fopAc_ac_c* esa = (fopAc_ac_c*)fopAcIt_Judge(searchEsa_CB, this);
+            if (esa != NULL) {
+                static_cast<esa_class*>(esa)->field_0x298 = 1;
+            } else {
+                dComIfGp_evmng_cutEnd(field_0xB6C);
+                field_0xBDA = 0;
+                field_0xB04 = speed;
+            }
+        }
+    } else if (dist2 < 200.0f + REG12_F(7)) {
+        speed = 12.0f;
+    } else {
+        speed = 20.0f + REG12_F(10);
+    }
+
+    if (speed != 0.0f) {
+        cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&field_0xB54, &target), 3, 0x1200);
+    }
+    cLib_addCalcPos2(&current.pos, target, 0.1f, speed);
+    current.pos.y = dLib_getWaterY(current.pos, mObjAcch) - 100.0f;
 }
 
 /* 000060FC-00006148       .text cutJumpMapopenStart__10daNpc_So_cFv */
@@ -226,6 +344,36 @@ void daNpc_So_c::cutJumpMapopenProc() {
 /* 000064B8-00006710       .text cutMiniGameStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameStart() {
     /* Nonmatching */
+    field_0xB74 = 0;
+    mB78 = 0;
+    field_0xB7C = 0;
+    field_0xB80 = 0;
+    offsetDive();
+    dComIfGp_startMiniGame(8);
+    JAIZelBasic::getInterface()->seStart(0x8F0, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+
+    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    if (REG8_S(1) == 0) {
+        field_0xBCC = player->current.pos;
+        field_0xBCC.x += 100.0f * cM_ssin(player->shape_angle.y);
+        field_0xBCC.z += 100.0f * cM_scos(player->shape_angle.y);
+        field_0xBCC.y += 50.0f;
+
+        field_0xBC0 = player->current.pos;
+        field_0xBC0.x += -200.0f * cM_ssin(player->shape_angle.y);
+        field_0xBC0.z += -200.0f * cM_scos(player->shape_angle.y);
+        field_0xBC0.y += 100.0f;
+
+        cam->mCamera.Reset(field_0xBCC, field_0xBC0);
+        cam->mCamera.Start();
+    }
+
+    player->mDemo.mDemoType = 3;
+    player->mDemo.mParam0 = 0;
+    player->mDemo.mDemoMode = 0x44;
+    field_0xBDB = 0;
+    field_0xBDE = 0;
 }
 
 /* 00006710-00006FE4       .text cutMiniGameProc__10daNpc_So_cFv */
