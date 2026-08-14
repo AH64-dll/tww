@@ -124,7 +124,6 @@ void daObjLight::Act_c::set_collision() {
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
 cPhs_State daObjLight::Act_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, Act_c);
 
     cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
@@ -153,7 +152,7 @@ cPhs_State daObjLight::Act_c::_create() {
             m2DA = 0;
             m2DE = 0;
         } else {
-            return cPhs_ERROR_e;
+            phase = cPhs_ERROR_e;
         }
     }
     return phase;
@@ -278,39 +277,38 @@ void daObjLight::Act_c::set_mtx() {
         cXyz(0.0f, 0.0f, 377.74f),
         cXyz(0.0f, 0.0f, -377.74f),
     };
+    Mtx* baseMtx = &mBgWBaseMtx;
 
     for (int i = 0; i < 3; i++) {
-        J3DModel* model = mpModel[i];
-        model->setBaseScale(scale);
+        mpModel[i]->setBaseScale(scale);
 
         if (i == 0) {
             cXyz pos = current.pos;
             pos += i_offset[i];
             mDoMtx_stack_c::transS(pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + mAngle);
-            model->setBaseTRMtx(mDoMtx_stack_c::get());
-            PSMTXCopy(mDoMtx_stack_c::now, mBgWBaseMtx);
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+            PSMTXCopy(mDoMtx_stack_c::now, baseMtx[i]);
         } else if (i == 1) {
             cXyz pos = i_offset[i];
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + mAngle);
             mDoMtx_stack_c::transM(pos);
-            model->setBaseTRMtx(mDoMtx_stack_c::get());
-        } else {
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        } else if (i == 2) {
             cXyz pos = i_offset[i];
             pos.z += 700.0f;
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + mAngle + 0x8000);
             mDoMtx_stack_c::transM(pos);
-            model->setBaseTRMtx(mDoMtx_stack_c::get());
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         }
-        model->calc();
+        mpModel[i]->calc();
     }
 }
 
 /* 00001084-000011C4       .text renew_angle__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::renew_angle() {
-    /* Nonmatching */
     if (now_event(mEventIdx)) {
         if (m2DA == 0) {
             mAngle += 0x40;
@@ -335,7 +333,6 @@ void daObjLight::Act_c::renew_angle() {
 
 /* 000011C4-00001330       .text control_light__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_light() {
-    /* Nonmatching */
     switch (m2DA) {
         case 0:
             break;
