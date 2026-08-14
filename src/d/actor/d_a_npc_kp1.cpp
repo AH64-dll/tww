@@ -594,12 +594,14 @@ BOOL daNpc_Kp1_c::chk_talk() {
 }
 
 /* 000015F4-00001620       .text decideType__11daNpc_Kp1_cFi */
-bool daNpc_Kp1_c::decideType(int i_type) { /* Nonmatching */
+bool daNpc_Kp1_c::decideType(int i_type) {
     UNUSED(i_type);
     mSpecificType = -1;
-    if (fopAcM_GetName(this) == 0x165) {
+    switch (fopAcM_GetName(this)) {
+    case 0x165:
         mSpecificType = 0;
         mSubType = 0;
+        break;
     }
     return true;
 }
