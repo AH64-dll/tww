@@ -30,7 +30,8 @@ public:
     /* 0x2DC */ u8 m2DC[0x2E9 - 0x2DC];
     /* 0x2E9 */ u8 m2E9;
     /* 0x2EA */ u8 m2EA;
-    /* 0x2EB */ u8 m2EB[0x2EE - 0x2EB];
+    /* 0x2EB */ u8 m2EB[0x2EC - 0x2EB];
+    /* 0x2EC */ s16 m2EC;
     /* 0x2EE */ s16 m2EE;
     /* 0x2F0 */ s16 m2F0;
     /* 0x2F2 */ s16 m2F2;

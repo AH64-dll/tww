@@ -750,9 +750,124 @@ void action_kaze_move(bl_class* i_this) {
     }
 }
 
-/* 000046BC-00004B84       .text action_itaiyo_ne_san__FP8bl_class */
-void action_itaiyo_ne_san(bl_class*) {
+/* 00004798-00004B84       .text action_itaiyo_ne_san__FP8bl_class */
+void action_itaiyo_ne_san(bl_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    switch (i_this->m306) {
+    case 0x28:
+        i_this->m31C = 1.0f;
+        for (int i = 0; i < 4; i++) {
+            i_this->m2F8[i] = 0;
+        }
+        i_this->gravity = -3.0f;
+        i_this->attention_info.flags = 4;
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        if (i_this->m308 != 0x17) {
+            anm_init(i_this, 0x17, 1.0f, 0, 1.0f, -1);
+        }
+        i_this->m2F0 = 0;
+        fire_emitter_clr(i_this);
+        cXyz dir(0.0f, 0.0f, 0.0f);
+
+        if (i_this->health <= 0) {
+            if (i_this->m2D4 == 4) {
+                i_this->m2EC = 0;
+            } else {
+                i_this->m2EC = 0x32;
+                i_this->m310 = 30.0f;
+                i_this->speed.y = 30.0f;
+                i_this->speedF = 20.0f;
+                dir.z = 5000.0f;
+                if (i_this->m2D4 == 5) {
+                    i_this->current.angle.y = player->shape_angle.y - 0x4000;
+                }
+                bound_sound_set(i_this);
+            }
+            i_this->attention_info.flags = 0;
+            i_this->m306 = 0x2A;
+        } else {
+            i_this->m306 = 0x29;
+            i_this->speed.y = 15.0f;
+            i_this->speedF = 10.0f;
+            dir.z = 5000.0f;
+            bound_sound_set(i_this);
+        }
+
+        mDoMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(i_this, player) + 0x8000);
+        cXyz out;
+        MtxPosition(&dir, &out);
+        i_this->m2F8[0] = -(s16)out.x;
+        i_this->m2F8[1] = (s16)out.z;
+        break;
+    case 0x29:
+        if (i_this->speedF < 0.1f && roll_check(i_this)) {
+            i_this->m2D2 = 3;
+            i_this->m306 = 0x26;
+        }
+        cLib_addCalc0(&i_this->speedF, 0.8f, 1.0f);
+        if (i_this->m2D0 == 1) {
+            blue_body_atari_check(i_this);
+        } else {
+            red_body_atari_check(i_this);
+        }
+        break;
+    case 0x2A:
+        if (i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) {
+            i_this->m310 *= 0.5f;
+            if (i_this->m310 < 10.0f) {
+                i_this->m310 = 10.0f;
+            }
+            i_this->speed.y = i_this->m310;
+            bound_sound_set(i_this);
+            if (i_this->m2EC == 0) {
+                cXyz pos = i_this->current.pos;
+                pos.y += 30.0f;
+                fopAcM_createDisappear(i_this, &pos, 5, 0, 0xFF);
+                if (i_this->m2D4 == 4) {
+                    cXyz ppos = i_this->current.pos;
+                    ppos.y += 25.0f + REG8_F(2);
+                    dComIfGp_particle_set(0x3E8, &ppos, &i_this->shape_angle, &i_this->scale, 0xFF, NULL,
+                                          i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+                    i_this->m6BC = ppos;
+                    smoke_set(i_this);
+                    i_this->mSph.ClrTgSet();
+                    i_this->mSph.ClrCoSet();
+                    i_this->mSph.ClrTgHit();
+                    i_this->scale.x = 0.0f;
+                    i_this->scale.y = 0.0f;
+                    i_this->scale.z = 0.0f;
+                    i_this->m31C = 0.0f;
+                    i_this->m2F8[2] = 0xB4;
+                    i_this->m2EE = 0xA;
+                    i_this->m306++;
+                } else {
+                    dComIfGs_onActor(i_this->setID, i_this->home.roomNo);
+                    fopAcM_delete(i_this);
+                }
+            }
+        }
+        break;
+    case 0x2B:
+        if (i_this->mSmokeCB.getEmitter() != NULL) {
+            if (i_this->m2EE == 0) {
+                i_this->mSmokeCB.getEmitter()->mGlobalPrmColor.a = i_this->m2F8[2];
+                i_this->m2F8[2] -= 4;
+                if (i_this->m2F8[2] < 0) {
+                    i_this->mSmokeCB.end();
+                }
+            }
+        } else {
+            dComIfGs_onActor(i_this->setID, i_this->home.roomNo);
+            fopAcM_delete(i_this);
+        }
+        break;
+    }
+
+    i_this->shape_angle.x += i_this->m2F8[0];
+    i_this->shape_angle.z += i_this->m2F8[1];
 }
 
 /* 00004B84-00004D3C       .text action_hook_atari__FP8bl_class */
