@@ -1223,21 +1223,26 @@ int daNpc_Kf1_c::isEventEntry() {
 }
 
 /* 00002CBC-00002E14       .text event_proc__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::event_proc(int i_actIdx) { /* Nonmatching */
+void daNpc_Kf1_c::event_proc(int i_actIdx) {
     if (dComIfGp_evmng_endCheck(mEvtIdx[mCurEvtIdx])) {
         switch (mCurEvtIdx) {
             case 0:
                 dComIfGs_onEventBit(0x2780);
                 mTsuboCnt = chk_tsubo();
                 break;
-            case 1:
-                dComIfGs_setEventReg(0xBCFF, dComIfGs_getEventReg(0xBCFF) | 1);
+            case 1: {
+                u8 eventReg = dComIfGs_getEventReg(0xBCFF);
+                eventReg |= 1;
+                dComIfGs_setEventReg(0xBCFF, eventReg);
                 mStartAge = 0;
                 setStt(1);
                 setAnm_NUM(0, TRUE);
                 m792 = cLib_getRndValue(0x1E, 0x3C);
                 m790 = cLib_getRndValue(0xF, 0x1E);
                 mTalkStt = 1;
+                /* fall through */
+            }
+            case 2:
                 break;
         }
         m792 = cLib_getRndValue(0x1E, 0x3C);
