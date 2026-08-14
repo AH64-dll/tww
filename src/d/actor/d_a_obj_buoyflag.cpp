@@ -722,7 +722,7 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
     GXSetArray(GX_VA_TEX0, (void*)Khasi::l_texCoord, 8);
 
     GXTexObj texObj;
-    GXInitTexObj(&texObj, (void*)Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&texObj, (void*)Khasi::l_k_taru02TEX, 0x20, 0x40, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 
@@ -778,7 +778,7 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c* i_actor) {
     GXCallDisplayList((void*)Khata::l_matDL, 0x20);
     GXLoadPosMtxImm(mBF0, 0);
     GXLoadNrmMtxImm(mBF0, 0);
-    GXSetCullMode(GX_CULL_FRONT);
+    GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList((void*)Khasi::l_Khasi_00DL, 0xA0);
 }
 
