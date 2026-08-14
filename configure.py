@@ -1667,7 +1667,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_npc_de1"),  # 3 anchor-only holdouts (CreateHeap 99.98/_draw 99.85/setMtx 99.83); .data/.rodata 100; weak order
     ActorRel(Equivalent, "d_a_npc_ds1"),  # 1 accept holdout RoomEffectDelete 99.20 pure-ARG 0-one-sided; sections byte-parity; weak order (+656B 9 extra weaks); D44J01 _draw demo divergence recorded (msdan precedent, enforced by D44J01 gate)
     ActorRel(Equivalent, "d_a_npc_gk1"),  # 7 anchor-only holdouts (chk_attn 100, _create 99.78); 12B dead GXColor rodata (kddoor precedent); weak order
-    ActorRel(NonMatching, "d_a_npc_gp1"),
+    ActorRel(Equivalent, "d_a_npc_gp1"),  # 21/21 accept-class 0-structural (+6 weak dtors = Equivalent basis)
     ActorRel(Matching,    "d_a_npc_hi1"),
     ActorRel(Matching,    "d_a_npc_ho"),
     ActorRel(Matching,    "d_a_npc_hr"),
