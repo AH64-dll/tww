@@ -210,7 +210,7 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
 }
 
 /* 00000A80-00000B4C       .text setAnm_anm__11daNpc_Kp1_cFPQ211daNpc_Kp1_c9anm_prm_c */
-BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) { /* Nonmatching */
+BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
     u32 ret = 0;
     int bck_idx;
     int bas_idx;
@@ -454,7 +454,7 @@ u16 daNpc_Kp1_c::next_msgStatus(u32* pMsgNo) { /* Nonmatching */
 }
 
 /* 0000102C-00001178       .text getMsg__11daNpc_Kp1_cFv */
-u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
+u32 daNpc_Kp1_c::getMsg() {
     if (mMsgNo != 0xFF) {
         if (mMsgNo == 0x9B) {
             return 0x1E96;
@@ -472,7 +472,7 @@ u32 daNpc_Kp1_c::getMsg() { /* Nonmatching */
     if (dComIfGs_isGetItemReserve(0xF)) {
         if (!dComIfGs_checkReserveItem(0x9B)) {
             u8 eventReg = dComIfGs_getEventReg(0xCCFF);
-            return (eventReg >= 1) + 0x1E83;
+            return eventReg >= 1 ? 0x1E84 : 0x1E83;
         }
     }
     if (dComIfGs_isGetItemReserve(0xE)) {
@@ -514,7 +514,7 @@ void daNpc_Kp1_c::checkOrder() { /* Nonmatching */
 }
 
 /* 000012E4-00001474       .text lookBack__11daNpc_Kp1_cFv */
-void daNpc_Kp1_c::lookBack() { /* Nonmatching */
+void daNpc_Kp1_c::lookBack() {
     cXyz player_eye_pos;
     cXyz current_pos;
 
