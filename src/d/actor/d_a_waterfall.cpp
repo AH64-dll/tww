@@ -92,8 +92,8 @@ void daWfall_c::CreateInit() {
     m338[0] = current.angle;
     m338[1] = current.angle;
 
-    dComIfGp_particle_set(0x810D, &m314, &m338[0], NULL, 0xFF, &mFollow1, -1, NULL, NULL, NULL);
-    dComIfGp_particle_set(0x810E, &m320, &m338[1], NULL, 0xFF, &mFollow2, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x810D, &m314, (csXyz*)&m338[0], NULL, 0xFF, &mFollow1, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x810E, &m320, (csXyz*)&m338[1], NULL, 0xFF, &mFollow2, -1, NULL, NULL, NULL);
 
     m2A8 = (void*)(u8)fopAcM_GetParam(this);
     if (dComIfGs_isSwitch((int)(u8)fopAcM_GetParam(this), (s8)current.roomNo)) {
@@ -116,7 +116,6 @@ void daWfall_c::CreateInit() {
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daWfall_c);
 
     cPhs_State phase = (cPhs_State)dComIfG_resLoad(&mPhs, m_arcname);
