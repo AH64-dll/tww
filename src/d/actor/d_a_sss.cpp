@@ -17,7 +17,7 @@
 static f32 l_size_d[10] = {10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f};
 static f32 l_g_d[10] = {50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f};
 
-static cXyz non_pos(0.0f, 30000.0f, -20000.0f);
+static cXyz non_pos;
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */
 void hand_draw(sss_class* i_this) {
@@ -393,6 +393,7 @@ void hand_move(sss_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
     s8 cut = 0;
     u8 keep_3 = 0;
+    u8 keep_angle = 0;
     switch (i_this->m2C0) {
     case 0:
         pos.x = actor->current.pos.x;
