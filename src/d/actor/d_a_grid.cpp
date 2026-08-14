@@ -264,7 +264,13 @@ cPhs_State daGrid_c::_create() {
 
 /* 800EAEAC-800EAF28       .text _delete__8daGrid_cFv */
 bool daGrid_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase1, &"Ship\0Cloth\0船の帆"[5]);
+    dComIfG_resDelete(&mPhase2, &"Ship\0Cloth\0船の帆"[0]);
+    if (l_HIO.mChildId >= 0) {
+        mDoHIO_deleteChild(l_HIO.mChildId);
+        l_HIO.mChildId = -1;
+    }
+    return true;
 }
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
