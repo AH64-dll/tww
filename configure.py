@@ -1729,7 +1729,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ferris"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_figure"),
     ActorRel(Equivalent, "d_a_obj_firewall"),  # regalloc/position-shift holdouts (122/128 @100, 6 accept)
-    ActorRel(NonMatching, "d_a_obj_flame"),
+    ActorRel(Equivalent, "d_a_obj_flame"),  # 8/8 accept-class (fmr 3==3, 253==253 liftup_magmarock; 5-cycle structural loop closed)
     ActorRel(Equivalent, "d_a_obj_ftree"),
     ActorRel(Matching,    "d_a_obj_ganonbed"),
     ActorRel(Matching,    "d_a_obj_gaship"),
