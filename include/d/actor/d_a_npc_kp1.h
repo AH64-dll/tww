@@ -26,7 +26,7 @@ public:
     bool init_btp(bool, int);
     bool initTexPatternAnm(bool);
     void playTexPatternAnm();
-    bool setAnm_anm(anm_prm_c*);
+    BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     void setAnm();
     void chngAnmTag();

@@ -212,7 +212,7 @@ void daNpc_Kp1_c::playTexPatternAnm() { /* Nonmatching */
 }
 
 /* 00000A80-00000B4C       .text setAnm_anm__11daNpc_Kp1_cFPQ211daNpc_Kp1_c9anm_prm_c */
-bool daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) { /* Nonmatching */
+BOOL daNpc_Kp1_c::setAnm_anm(anm_prm_c* i_anmPrmP) { /* Nonmatching */
     u32 ret = 0;
     int bck_idx;
     int bas_idx;
