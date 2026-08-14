@@ -1706,7 +1706,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_zk1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_zl1"),
     ActorRel(NonMatching, "d_a_nz"),
-    ActorRel(Equivalent, "d_a_obj_Itnak"),  # 3 accept holdouts (set_mtx 90.44 pure-scheduling, _draw 99.88 anchor+pool, create_heap 99.90 branch-addr); .rodata 253B byte-identical after M_cyl_src fixes; markers 3==3; weak order
+    ActorRel(NonMatching, "d_a_obj_Itnak"),
     ActorRel(NonMatching, "d_a_obj_Vds"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Vteng"),
     ActorRel(NonMatching, "d_a_obj_YLzou"),
