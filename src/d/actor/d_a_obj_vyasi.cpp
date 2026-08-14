@@ -85,14 +85,14 @@ static const dCcD_SrcCps M_cps_src = {
         /* SrcObjCo  SPrm    */ 0x79,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Spl     */ 1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0x100,
+        /* SrcGObjTg SPrm    */ 3,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
@@ -116,14 +116,14 @@ static const dCcD_SrcSph M_sph_src = {
         /* SrcObjCo  SPrm    */ 0x79,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Spl     */ 1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0x100,
+        /* SrcGObjTg SPrm    */ 0,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
@@ -231,9 +231,9 @@ BOOL daObjVyasi::JointNodeCallBack(J3DNode* i_node, int i_flag) {
         trans.x = mtx[0][3];
         trans.y = mtx[1][3];
         trans.z = mtx[2][3];
-        mtx[0][3] = 1.0f;
-        mtx[1][3] = 1.0f;
-        mtx[2][3] = 1.0f;
+        mtx[0][3] = 0.0f;
+        mtx[1][3] = 0.0f;
+        mtx[2][3] = 0.0f;
         mDoMtx_stack_c::transS(trans.x, trans.y, trans.z);
         mDoMtx_stack_c::quatM(&actor->mJointQuat[jntNo]);
         PSMTXConcat(mDoMtx_stack_c::now, mtx, mDoMtx_stack_c::now);
@@ -255,9 +255,9 @@ BOOL daObjVyasi::JointNodeCallBack(J3DNode* i_node, int i_flag) {
             PSMTXCopy(mDoMtx_stack_c::now, model->getAnmMtx(jntNo));
             PSMTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
             Vec v;
-            v.x = 1.0f;
-            v.y = 1.0f;
-            v.z = 1.0f;
+            v.x = 0.0f;
+            v.y = 0.0f;
+            v.z = 0.0f;
             PSMTXMultVec(mDoMtx_stack_c::now, &v, &actor->m0400[jntNo]);
         }
     }
@@ -583,10 +583,10 @@ void daObjVyasi::Act_c::quaternion_main() {
             quat0.z = sinA * cross.z;
             quat0.w = JMASCos(angle);
 
-            s16 angle2 = cLib_maxLimit<s16>((s16)(2048.0f * windPow * m19D4), 0xDC);
+            s16 angle2 = cLib_maxLimit<s16>((s16)(360.0f * windPow * m19D4), 0xDC);
             cLib_addCalcAngleS2(&m02B0[i], angle2, 4, 0x20);
 
-            m0294[i] += (s16)(cM_rndFX(0.4f) + 256.0f * windPow * m19D4);
+            m0294[i] += (s16)(cM_rndFX(256.0f) + 2048.0f * windPow * m19D4);
 
             f32 sinX = JMASSin(m02B0[i]);
             Quaternion quat1;
@@ -610,9 +610,9 @@ void daObjVyasi::Act_c::quaternion_main() {
 void daObjVyasi::Act_c::leaf_scale_main() {
     cXyz scale(1.0f, 1.0f, 1.0f);
     if (mState == 2) {
-        scale.x = 1.0f + 0.35f * m0504;
-        scale.y = 1.0f + -1.0f * m0504;
-        scale.z = 1.0f + -1.0f * m0504;
+        scale.x = 1.0f + 0.35000002f * m0504;
+        scale.y = 1.0f + -0.5f * m0504;
+        scale.z = 1.0f + -0.5f * m0504;
     }
     cLib_addCalc2(&m04A8, scale.x, 0.5f, 0.5f);
     cLib_addCalc2(&m04AC, scale.y, 0.5f, 0.5f);
