@@ -273,8 +273,43 @@ void body_control3(mt_class*) {
 }
 
 /* 000028BC-00002AB0       .text body_control4__FP8mt_class */
-void body_control4(mt_class*) {
-    /* Nonmatching */
+void body_control4(mt_class* i_this) {
+    cXyz* pPos = &i_this->m4A0[1];
+    cXyz* pSpd = &i_this->m590[1];
+    csXyz* pAng = &i_this->m560[1];
+
+    J3DModel* baseModel = i_this->mpMorf[0]->getModel();
+    mDoMtx_stack_c::scaleS(0.0f, 0.0f, 0.0f);
+    PSMTXCopy(mDoMtx_stack_c::now, baseModel->getBaseTRMtx());
+
+    for (int i = 1; i < 8; i++, pPos++, pAng++, pSpd++) {
+        if (i_this->m5F0[i] != 0) {
+            i_this->m5F0[i]--;
+        } else {
+            g_dComIfG_gameInfo.play.getParticle()->setSimple(
+                dPa_name::ID_IT_SN_O_MAGT_HAHEN_B, pPos, 0xFF, g_whiteColor, g_whiteColor, 0);
+            pPos->x += pSpd->x;
+            pPos->y += pSpd->y;
+            pPos->z += pSpd->z;
+            pSpd->y -= 2.5f;
+            pAng->x += 0x1800;
+            pAng->y += 0x1000;
+            if (pSpd->y < 0.0f) {
+                cLib_addCalc0(&i_this->m600[i], 1.0f, 0.025f);
+            }
+        }
+
+        J3DModel* model = i_this->mpMorf[i]->getModel();
+        mDoMtx_stack_c::transS(*pPos);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, pAng->y);
+        mDoMtx_XrotM(mDoMtx_stack_c::now, pAng->x);
+        mDoMtx_ZrotM(mDoMtx_stack_c::now, pAng->z);
+        mDoMtx_stack_c::scaleM(i_this->m600[i], i_this->m600[i], i_this->m600[i]);
+        if (i == 7) {
+            mDoMtx_stack_c::scaleM(0.0f, 0.0f, 0.0f);
+        }
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    }
 }
 
 /* 00002AB0-00003008       .text body_control5__FP8mt_class */
