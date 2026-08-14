@@ -474,7 +474,6 @@ BOOL daObjTnTrap_c::demo_end_wait_act_proc() {
 }
 
 /* 000016A8-00001740       .text hide_wait_act_proc__13daObjTnTrap_cFv */
-    /* Nonmatching */
 BOOL daObjTnTrap_c::hide_wait_act_proc() {
     if (mSwSave2 != 0xFF && dComIfGs_isSwitch(mSwSave2, home.roomNo) == TRUE) {
         daShip_c* ship = dComIfGp_getShipActor();
