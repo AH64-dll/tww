@@ -854,9 +854,9 @@ void daObjBuoyflag::Packet_c::calc_wind_base(daObjBuoyflag::Act_c* i_actor) {
     mC68[10] += 0xC8A;
     mC68[11] += 0x223D;
 
-    s16 angleX = (s16)(4096.0f * cM_ssin(mC68[0]) + 1024.0f * cM_ssin(mC68[1]));
-    s16 angleY = (s16)(4608.0f * cM_ssin(mC68[2]) + 1536.0f * cM_ssin(mC68[3]));
-    s16 angleZ = (s16)(5632.0f * cM_ssin(mC68[4]) + 2048.0f * cM_ssin(mC68[5]));
+    s32 angleX = (s32)(4096.0f * cM_ssin(mC68[0]) + 1024.0f * cM_ssin(mC68[1]));
+    s32 angleY = (s32)(4608.0f * cM_ssin(mC68[2]) + 1536.0f * cM_ssin(mC68[3]));
+    s32 angleZ = (s32)(5632.0f * cM_ssin(mC68[4]) + 2048.0f * cM_ssin(mC68[5]));
     f32 sin0 = cM_ssin(mC68[7]);
     f32 sin1 = cM_ssin(mC68[6]);
     f32 sin2 = cM_ssin(mC68[8]);
