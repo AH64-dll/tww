@@ -307,3 +307,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T12:54Z — M43: flip #63 d_a_obj_mmrr → Equivalent — 34 FLIPS THIS SESSION (#30-63). Ledger: 42 NonMatching / 56 Equivalent / 224 Matching / 94 MatchingFor. mmrr: 2 sub-100 both strip-equal accept (create_heap 99.49, set_cc_trans_pos 96.92), markers 2==2. Gate b7e8d521a 15:53:40 + mirror-integrity check PASSED (new pre-gate step). Bench VALUE-DECODE doctrine codified after bigelf 15+ real bugs invisible to strip-only.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T13:55Z — M44: flip #64 d_a_npc_kp1 → Equivalent — 35 FLIPS THIS SESSION (#30-64). Ledger: 41 NonMatching / 57 Equivalent / 224 Matching / 94 MatchingFor. kp1: 11-commit cycle, 7 reviewer catches (setAnm btpNum -1 VALUE BUG — would have shipped wrong tex-pattern selection, privateCut ==1-idiom, 3 false closures); 17/17 accept-class value-delta-scanned. Gate 585a9e079 16:54:22 + mirror-integrity check. The value-decode pass keeps catching accept-band bugs.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
