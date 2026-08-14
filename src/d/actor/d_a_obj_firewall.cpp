@@ -383,13 +383,10 @@ void daObjFirewall_c::wait_act_proc() {
 }
 
 /* 000016D4-00001820       .text wait2_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::wait2_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
-        cXyz diff = player->current.pos - current.pos;
-        f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
-        dist = std::sqrtf(dist);
+        f32 dist = (player->current.pos - current.pos).absXZ();
         if (dist < 950.0f && player->current.pos.z < -7000.0f) {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 mProc = &daObjFirewall_c::wait3_act_proc;
