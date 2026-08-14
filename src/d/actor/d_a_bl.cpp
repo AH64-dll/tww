@@ -164,13 +164,15 @@ void smoke_set(bl_class* i_this) {
 /* 000003F8-000004AC       .text fire_move_set__FP8bl_class */
 void fire_move_set(bl_class* i_this) {
     /* Nonmatching */
+    u16 particleId = 0x8123 + (i_this->m2D0 == 0);
+
     if (i_this->mFollowCB2.getEmitter() == NULL) {
-        dComIfGp_particle_set(0x8123 + (i_this->m2D0 == 0), &i_this->current.pos, NULL, NULL, 0xFF, &i_this->mFollowCB2,
-                              i_this->current.roomNo, NULL, NULL, NULL);
+        g_dComIfG_gameInfo.play.getParticle()->set(0, particleId, &i_this->current.pos, NULL, NULL, 0xFF,
+                                                   &i_this->mFollowCB2, i_this->current.roomNo, NULL, NULL, NULL);
         if (i_this->m2D0 == 1) {
-            i_this->mEnemyIce.mCyl.SetTgSe(5);
-            i_this->mEnemyIce.mCyl.SetTgHitMark(dCcg_TgHitMark_Purple_e);
-            i_this->mEnemyIce.mCyl.OnTgShield();
+            i_this->mSph.SetTgSe(5);
+            i_this->mSph.SetTgHitMark(dCcg_TgHitMark_Purple_e);
+            i_this->mSph.OnTgShield();
         }
     }
 }
@@ -363,7 +365,6 @@ void bound_sound_set(bl_class* i_this) {
 
 /* 00002354-00002458       .text fuwafuwa_keisan__FP8bl_class */
 void fuwafuwa_keisan(bl_class* i_this) {
-    /* Nonmatching */
     f32 f3 = 3.0f;
 
     if (i_this->m2D2 == 1) {
