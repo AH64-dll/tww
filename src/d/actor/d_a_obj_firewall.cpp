@@ -272,7 +272,7 @@ void daObjFirewall_c::set_pl_se() {
     /* Nonmatching */
 void daObjFirewall_c::setup_burn_up() {
     particle_set();
-    if (mpBgW != NULL && mpBgW->ChkUsed()) {
+    if (mpBgW != NULL && !mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Regist(mpBgW, this);
     }
     set_se(TRUE);
@@ -388,11 +388,8 @@ void daObjFirewall_c::wait2_act_proc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player != NULL) {
         cXyz diff = player->current.pos - current.pos;
-        cXyz pos(diff.x, 0.0f, diff.z);
-        f32 dist = PSVECSquareMag(&pos);
-        if (dist > 0.0f) {
-            dist = std::sqrtf(dist);
-        }
+        f32 dist = PSVECSquareMag((Vec*)&cXyz(diff.x, 0.0f, diff.z));
+        dist = std::sqrtf(dist);
         if (dist < 950.0f && player->current.pos.z < -7000.0f) {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 mProc = &daObjFirewall_c::wait3_act_proc;
@@ -447,20 +444,15 @@ void daObjFirewall_c::demo_end_wait_act_proc() {
 }
 
 /* 00001A34-00001B68       .text burn_wait_act_proc__15daObjFirewall_cFv */
-    /* Nonmatching */
 void daObjFirewall_c::burn_wait_act_proc() {
     mStts.Move();
     registCollisionTable();
-    if (mParam != 0xFF) {
-        if (dComIfGs_isSwitch(mParam, home.roomNo) == 1) {
-            J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname, 9);
-            JUT_ASSERT(0x4E4, brk_anm_p != 0);
-            mBrk.init(mpModel->getModelData(), brk_anm_p, 1, 0, -1.0f, 0, -1, true, false);
-            setup_put_the_fire_out();
-            mProc = &daObjFirewall_c::retire_act_proc;
-        } else {
-            set_se(TRUE);
-        }
+    if (mParam != 0xFF && dComIfGs_isSwitch(mParam, home.roomNo) == 1) {
+        J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname, 9);
+        JUT_ASSERT(0x4E4, brk_anm_p != 0);
+        mBrk.init(mpModel->getModelData(), brk_anm_p, 1, 0, -1.0f, 0, -1, true, false);
+        setup_put_the_fire_out();
+        mProc = &daObjFirewall_c::retire_act_proc;
     } else {
         set_se(TRUE);
     }
