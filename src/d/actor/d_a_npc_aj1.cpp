@@ -693,8 +693,7 @@ void daNpc_Aj1_c::lookBack() {
     bool headOnlyFollow = mHeadOnlyFollow;
     switch (mLookBackState) {
         case 1:
-            dNpc_playerEyePos(-20.0f);
-            look_pos = temp_pos;
+            look_pos = dNpc_playerEyePos(-20.0f);
             pLookPos = &look_pos;
             break;
         case 2:
