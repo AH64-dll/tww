@@ -608,9 +608,8 @@ void daObjBuoyflag::Packet_c::hasi_nrm_init() {
     if (!M_hasi_nrm_flag) {
         M_hasi_nrm_flag = true;
         for (int i = 0; i < 10; i++) {
-            cXyz v(Khasi::l_pos[i].x, 0.0f, Khasi::l_pos[i].z);
-            M_hasi_nrm[i] = v;
-            v.normalize();
+            M_hasi_nrm[i].set(Khasi::l_pos[i].x, 0.0f, Khasi::l_pos[i].z);
+            M_hasi_nrm[i].normalize();
         }
         M_hasi_nrm[10].set(0.0f, 1.0f, 0.0f);
     }
