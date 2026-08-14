@@ -1776,7 +1776,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_rforce"),
     ActorRel(Matching,    "d_a_obj_smplbg"),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
-    ActorRel(NonMatching, "d_a_obj_tntrap"),
+    ActorRel(Equivalent, "d_a_obj_tntrap"),  # 8 sub-100 strict-accept (immediates preserved, rlwinm mask bit-verified, _execute induction fixed)
     ActorRel(Matching,    "d_a_obj_tower"),
     ActorRel(Equivalent, "d_a_obj_trap"),
     ActorRel(Equivalent, "d_a_obj_tribox"),  # anchor-only: mode_block_walk 99.86 norm-diff-2 (L_attr anchor + fpr swap), .rodata/.data byte-identical; weak order
