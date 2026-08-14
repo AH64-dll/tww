@@ -21,10 +21,10 @@ const f32 daWarpls_c::m_warp_distance = 112.5f;
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
 bool daWarpls_c::_delete() {
-    /* Nonmatching */
-    if (mpEmitter != NULL) {
-        mpEmitter->mMaxFrame = -1;
-        mpEmitter->setStatus(JPAEmtrStts_StopEmit);
+    JPABaseEmitter* emitter = mpEmitter;
+    if (emitter != NULL) {
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(JPAEmtrStts_StopEmit);
         mpEmitter = NULL;
     }
     dComIfG_resDelete(&mPhs, m_arcname[mWarpType]);
