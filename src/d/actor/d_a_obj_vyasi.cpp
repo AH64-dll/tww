@@ -362,10 +362,10 @@ void daObjVyasi::Act_c::process_main() {
 const char daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 000010C8-000010EC       .text solidHeapCB__Q210daObjVyasi5Act_cFP10fopAc_ac_c */
-BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
-    return create_heap();
+BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c* a_this) {
+    daObjVyasi::Act_c* i_this = (daObjVyasi::Act_c*)a_this;
+    return i_this->create_heap();
 }
-
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
 /* Nonmatching */
 bool daObjVyasi::Act_c::create_heap() {
@@ -388,8 +388,57 @@ bool daObjVyasi::Act_c::create_heap() {
 }
 
 /* 00001290-000016E0       .text _create__Q210daObjVyasi5Act_cFv */
+/* Nonmatching */
 cPhs_State daObjVyasi::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, Act_c);
+
+    cPhs_State res = dComIfG_resLoad(&mPhs, M_arcname);
+    if (res == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            set_first_process();
+            set_mtx();
+            cullMtx = mpMorf->getModel()->getBaseTRMtx();
+            fopAcM_setCullSizeBox(this, -2000.0f, 0.0f, -2000.0f, 2000.0f, 2000.0f, 2000.0f);
+            cullSizeFar = 2.0f;
+            mStts.Init(0xFF, 0xFF, this);
+            mCyl.Set(M_cyl_src);
+            mCyl.SetStts(&mStts);
+            mCyl.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl.OnTgNoHitMark();
+
+            for (int i = 0; i < 5; i++) {
+                mSttsCps[i].Init(0x64, 0xFF, this);
+                mCps[i].Set(M_cps_src);
+                mCps[i].SetStts(&mSttsCps[i]);
+                mCpsData[i].mStart = current.pos;
+                mCpsData[i].mEnd = current.pos;
+                mCpsData[i].mRadius = 100.0f;
+            }
+
+            for (int i = 0; i < 8; i++) {
+                mSttsSph[i].Init(0x64, 0xFF, this);
+                mSph[i].Set(M_sph_src);
+                mSph[i].SetStts(&mSttsSph[i]);
+                mCyl.SetTgVec((cXyz&)cXyz::Zero);
+                mCyl.OnTgNoHitMark();
+            }
+
+            J3DModel* model = mpMorf->getModel();
+            J3DModelData* modelData = model->getModelData();
+            model->setUserArea((u32)this);
+            for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+                modelData->getJointNodePointer(i)->setCallBack(JointNodeCallBack);
+            }
+
+            for (u16 i = 0; i < 14; i++) {
+                mJointQuat[i] = ZeroQuat;
+            }
+            m04A8 = m04AC = m04B0 = 1.0f;
+        } else {
+            res = cPhs_ERROR_e;
+        }
+    }
+    return res;
 }
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
