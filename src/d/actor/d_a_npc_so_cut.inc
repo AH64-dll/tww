@@ -707,7 +707,11 @@ void daNpc_So_c::cutPartnerShipProc() {
 
 /* 00007878-000078E0       .text cutMiniGameWaitStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWaitStart() {
-    /* Nonmatching */
+    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    if (REG8_S(1) == 0) {
+        cam->mCamera.Stop();
+        cam->mCamera.SetTrimSize(1);
+    }
 }
 
 /* 000078E0-00007914       .text cutMiniGameWaitProc__10daNpc_So_cFv */
