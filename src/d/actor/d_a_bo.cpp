@@ -29,6 +29,7 @@ static const GXColor l_smokeColor = {0xA0, 0xA0, 0x80, 0xFF};
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */
 static void smoke_set(bo_class* i_this) {
+    /* Nonmatching */
     GXColor color = l_smokeColor;
     i_this->mSmokeEcallBack.remove();
     dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &i_this->m39C, &i_this->shape_angle, NULL, 0xB9, &i_this->mSmokeEcallBack, i_this->current.roomNo, NULL, NULL, NULL);
@@ -46,6 +47,7 @@ static void smoke_set(bo_class* i_this) {
 
 /* 000001E8-00000638       .text nodeCallBack_UP__FP7J3DNodei */
 static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     if (calcTiming == 0) {
         int jntNo = ((J3DJoint*)node)->getJntNo();
         BOOL isSet = FALSE;
@@ -128,6 +130,7 @@ static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
 
 /* 00000638-000006C8       .text nodeCallBack_DW__FP7J3DNodei */
 static BOOL nodeCallBack_DW(J3DNode* node, int calcTiming) {
+    /* Nonmatching */
     if (calcTiming == 0) {
         int jntNo = ((J3DJoint*)node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -143,6 +146,7 @@ static BOOL nodeCallBack_DW(J3DNode* node, int calcTiming) {
 
 /* 000006C8-0000079C       .text execute__22yodare_ato_PcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
 void yodare_ato_PcallBack_c::execute(JPABaseEmitter* i_emitter, JPABaseParticle* i_particle) {
+    /* Nonmatching */
     f32 y = i_particle->mGlobalPosition.y;
     cXyz pos(i_particle->mGlobalPosition.x, y + 20.0f, i_particle->mGlobalPosition.z);
     mGndChk.SetPos(&pos);
@@ -154,6 +158,7 @@ void yodare_ato_PcallBack_c::execute(JPABaseEmitter* i_emitter, JPABaseParticle*
 
 /* 0000079C-00000930       .text draw_SUB__FP8bo_class */
 static void draw_SUB(bo_class* i_this) {
+    /* Nonmatching */
     if (i_this->mType == 0 || i_this->mType == 2) {
         if (i_this->mType == 2) {
             i_this->m304 = i_this->current.pos;
@@ -187,6 +192,7 @@ static void draw_SUB(bo_class* i_this) {
 
 /* 00000930-00000AD4       .text daBO_Draw__FP8bo_class */
 static BOOL daBO_Draw(bo_class* i_this) {
+    /* Nonmatching */
     if (REG13_S(5) != 0) {
         return TRUE;
     }
@@ -229,6 +235,7 @@ static BOOL daBO_Draw(bo_class* i_this) {
 
 /* 00000AD4-00000CD4       .text anm_init__FP8bo_classifUcfii */
 static void anm_init(bo_class* i_this, int i_anmIdx, f32 i_playSpeed, u8 i_attr, f32 i_rate, int i_soundRes, int i_flag) {
+    /* Nonmatching */
     i_this->m2DC = i_anmIdx; // 0x2DC
     if (i_flag == 0) {
         if (i_soundRes >= 0) {
@@ -289,6 +296,7 @@ static void damage_check(bo_class*) {
 
 /* 00002048-00002080       .text angle_initial__FP8bo_class */
 static void angle_initial(bo_class* i_this) {
+    /* Nonmatching */
     i_this->m33A.setall(0);
     i_this->m352.setall(0);
     i_this->m334.setall(0);
@@ -297,6 +305,7 @@ static void angle_initial(bo_class* i_this) {
 
 /* 00002080-00002170       .text wait_initial__FP8bo_class */
 static void wait_initial(bo_class* i_this) {
+    /* Nonmatching */
     if (cM_rnd() < 0.5f) {
         anm_init(i_this, 0x15, 5.0f, 2, 1.0f, -1, 0);
     } else {
@@ -314,6 +323,7 @@ static void wait_initial(bo_class* i_this) {
 
 /* 00002170-000022F8       .text start_bakutsuki_event_camera__FP10fopAc_ac_c */
 static void start_bakutsuki_event_camera(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     static cXyz cam_pos(40.0f, 10.0f, 280.0f);
     static cXyz ctr_pos(0.0f, 50.0f, 50.0f);
     static f32 cam_fovy = 75.0f;
@@ -363,6 +373,7 @@ static BOOL daBO_IsDelete(bo_class*) {
 
 /* 000048B8-00004998       .text daBO_Delete__FP8bo_class */
 static BOOL daBO_Delete(bo_class* i_this) {
+    /* Nonmatching */
     i_this->mSmokeEcallBack.remove();
     if (i_this->mpEmitter1 != NULL) {
         i_this->mpEmitter1->becomeInvalidEmitter();
@@ -385,6 +396,7 @@ static BOOL daBO_Delete(bo_class* i_this) {
 
 /* 00004998-00004D08       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     bo_class* bo = (bo_class*)i_this;
     int modelIdx = 9;
     if (bo->mType == 2) {

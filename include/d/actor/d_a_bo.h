@@ -15,7 +15,7 @@ class JPABaseEmitter;
 class yodare_ato_PcallBack_c : public dPa_smokePcallBack {
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
-    virtual ~yodare_ato_PcallBack_c() {}
+    virtual ~yodare_ato_PcallBack_c() { /* Nonmatching */ /* __dt__ 95.49 */ }
 
     /* 0x00 */ /* dPa_smokePcallBack */
     /* 0x04 */ dBgS_ObjGndChk mGndChk;
