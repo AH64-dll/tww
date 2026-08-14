@@ -813,9 +813,18 @@ void daObjBuoyflag::Packet_c::init(daObjBuoyflag::Act_c* i_actor) {
             mPos[row * 7 + col].set(0.0f, 0.0f, 0.0f);
         }
     }
-    for (int i = 0; i < 12; i++) {
-        mC68[i] = (s16)cM_rndFX(32768.0f);
-    }
+    mC68[0] = (s16)cM_rndFX(32768.0f);
+    mC68[1] = (s16)cM_rndFX(32768.0f);
+    mC68[2] = (s16)cM_rndFX(32768.0f);
+    mC68[3] = (s16)cM_rndFX(32768.0f);
+    mC68[4] = (s16)cM_rndFX(32768.0f);
+    mC68[5] = (s16)cM_rndFX(32768.0f);
+    mC68[6] = (s16)cM_rndFX(32768.0f);
+    mC68[7] = (s16)cM_rndFX(32768.0f);
+    mC68[8] = (s16)cM_rndFX(32768.0f);
+    mC68[9] = (s16)cM_rndFX(32768.0f);
+    mC68[10] = (s16)cM_rndFX(32768.0f);
+    mC68[11] = (s16)cM_rndFX(32768.0f);
     calc(i_actor);
 }
 
