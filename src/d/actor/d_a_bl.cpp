@@ -1367,11 +1367,11 @@ void action_kaze_move(bl_class* i_this) {
         i_this->mSph.ClrAtSet();
         i_this->speedF = 30.0f;
 
-        mDoMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(i_this, player) + 0x8000);
         cXyz dir(0.0f, 0.0f, 5000.0f);
+        mDoMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(i_this, player) + 0x8000);
         cXyz out;
         MtxPosition(&dir, &out);
-        i_this->m2F8[0] = -(s16)out.x;
+        i_this->m2F8[0] = (s16)-out.x;
         i_this->m2F8[1] = (s16)out.z;
         i_this->mStts.SetWeight(0x50);
         i_this->m306++;
