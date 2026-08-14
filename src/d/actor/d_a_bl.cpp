@@ -606,9 +606,148 @@ void action_sagarimasu(bl_class* i_this) {
     }
 }
 
-/* 00004128-000046BC       .text action_kaze_move__FP8bl_class */
-void action_kaze_move(bl_class*) {
+/* 00004128-00004798       .text action_kaze_move__FP8bl_class */
+void action_kaze_move(bl_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    switch (i_this->m306 - 0x1E) {
+    case 0:
+        for (int i = 0; i < 4; i++) {
+            i_this->m2F8[i] = 0;
+        }
+        i_this->attention_info.flags = 4;
+        i_this->mSph.SetTgSe(0);
+        i_this->mSph.SetTgHitMark(dCcG_TgHitMark_None_e);
+        i_this->mSph.OffTgShield();
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        i_this->speedF = 15.0f;
+        i_this->m310 = 7.0f;
+        i_this->m2F8[0] = (s16)(512.0f + cM_rndF(500.0f));
+        if (cM_rnd() < 0.5f) {
+            i_this->m2F8[0] = -i_this->m2F8[0];
+        }
+        if (i_this->m308 != 0x17) {
+            anm_init(i_this, 0x17, 1.0f, 0, 1.0f, -1);
+        }
+        i_this->m2F0 = 0;
+        fire_emitter_clr(i_this);
+        JAIZelBasic::zel_basic->seStart(0x588B, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo),
+                                        1.0f, 1.0f, -1.0f, -1.0f, 0);
+        fopAcM_monsSeStart(i_this, 0x4873, 0);
+        i_this->m306++;
+        break;
+    case 1:
+        i_this->shape_angle.z += i_this->m2F8[0];
+        cLib_addCalc2(&i_this->speed.y, i_this->m310, 0.8f, 2.0f);
+        cLib_addCalc0(&i_this->speedF, 0.8f, 3.0f);
+        if (i_this->speedF > 0.1f) {
+            break;
+        }
+        i_this->m306++;
+        break;
+    case 2:
+        i_this->m2D3 = 0;
+        i_this->speedF = 0.0f;
+        i_this->m306++;
+        break;
+    case 3:
+        cLib_addCalc2(&i_this->gravity, -3.0f, 0.8f, 0.1f);
+        cLib_addCalcAngleS2(&i_this->shape_angle.x, -0x7FFF, 1, 0x120);
+        if (i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) {
+            i_this->m306++;
+        }
+        break;
+    case 4:
+        i_this->speed.y = 15.0f;
+        i_this->gravity = -3.0f;
+        bound_sound_set(i_this);
+        i_this->m306++;
+        break;
+    case 5:
+        cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 1, 0x400);
+        cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x400);
+        if (abs(i_this->shape_angle.x) < 0x100 && abs(i_this->shape_angle.z) < 0x100) {
+            i_this->shape_angle.x = 0;
+            i_this->shape_angle.z = 0;
+            if (i_this->m2D0 & 0x80) {
+                i_this->m2D2 = 0xA;
+                i_this->m306 = 0x64;
+            } else {
+                i_this->m306 = 0x26;
+            }
+        }
+        break;
+    case 6:
+        for (int i = 0; i < 4; i++) {
+            i_this->m2F8[i] = 0;
+        }
+        i_this->speed.y = 15.0f;
+        i_this->gravity = -3.0f;
+        bound_sound_set(i_this);
+        if (!(i_this->m2D0 & 0x80)) {
+            i_this->attention_info.flags = 4;
+        }
+        i_this->mSph.ClrAtSet();
+        i_this->mSph.ClrAtSet();
+        i_this->speedF = 30.0f;
+
+        mDoMtx_YrotS(*calc_mtx, fopAcM_searchActorAngleY(i_this, player) + 0x8000);
+        cXyz dir(0.0f, 0.0f, 5000.0f);
+        cXyz out;
+        MtxPosition(&dir, &out);
+        i_this->m2F8[0] = -(s16)out.x;
+        i_this->m2F8[1] = (s16)out.z;
+        i_this->mStts.SetWeight(0x50);
+        i_this->m306++;
+        break;
+    case 7:
+        i_this->shape_angle.x += i_this->m2F8[0];
+        i_this->shape_angle.z += i_this->m2F8[1];
+        if (i_this->speedF < 5.0f) {
+            if (roll_check(i_this)) {
+                if (i_this->m2D0 & 0x80) {
+                    i_this->m2D2 = 0xA;
+                    i_this->m306 = 0x64;
+                } else {
+                    i_this->m306 = 0x26;
+                }
+            }
+        } else if (i_this->mAcch.m_flags & dBgS_Acch::GROUND_HIT) {
+            i_this->m2F8[2] = 1;
+            i_this->speed.y = 10.0f;
+            bound_sound_set(i_this);
+        }
+        if (i_this->m2F8[2] != 0) {
+            cLib_addCalc0(&i_this->speedF, 0.8f, 1.0f);
+        }
+        break;
+    case 8:
+        i_this->m2EE = (s16)(70.0f + cM_rndF(35.0f));
+        i_this->speedF = 0.0f;
+        i_this->m306++;
+        break;
+    case 9:
+        if (i_this->m2EE == 0) {
+            anm_init(i_this, 0x15, 1.0f, 0, 1.0f, -1);
+            i_this->speedF = 0.0f;
+            i_this->current.angle.y = i_this->shape_angle.y;
+            i_this->m2D2 = 0;
+            i_this->m306 = 1;
+        }
+        break;
+    }
+
+    i_this->mFollowCB1.end();
+    i_this->m31C = 1.0f;
+    if (i_this->m2D0 & 0x80) {
+        skull_atari_check(i_this);
+    } else if (i_this->m2D0 == 1) {
+        blue_body_atari_check(i_this);
+    } else {
+        red_body_atari_check(i_this);
+    }
 }
 
 /* 000046BC-00004B84       .text action_itaiyo_ne_san__FP8bl_class */
