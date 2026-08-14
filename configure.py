@@ -1585,7 +1585,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_shop_item"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_sie_flag"),
     ActorRel(NonMatching, "d_a_sitem"),
-    ActorRel(NonMatching, "d_a_ss"),
+    ActorRel(Equivalent, "d_a_ss"),  # core_move verified 0 one-sided (18==18 branches, SVINE fall-through restored) + 8 accept-class holdouts; markers 7==7; weak order
     ActorRel(NonMatching, "d_a_sss"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_syan"),
     ActorRel(Matching,    "d_a_tag_md_cb"),
