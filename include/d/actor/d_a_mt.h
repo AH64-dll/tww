@@ -139,7 +139,9 @@ public:
     /* 0xBF8 */ u8 mBF8[0xC00 - 0xBF8];
     /* 0xC00 */ u8 mC00;
     /* 0xC01 */ u8 mC01;
-    /* 0xC02 */ u8 mC02[0xC08 - 0xC02];
+    /* 0xC02 */ u8 mC02[0xC04 - 0xC02];
+    /* 0xC04 */ u8 mC04;
+    /* 0xC05 */ u8 mC05[0xC08 - 0xC05];
     /* 0xC08 */ dBgS_AcchCir mC08;
     /* 0xC48 */ dBgS_ObjAcch mAcch;
     /* 0xE0C */ dCcD_Stts mStts;
