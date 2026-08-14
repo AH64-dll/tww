@@ -28,7 +28,49 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
 BOOL daWfall_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0xB);
+    JUT_ASSERT(0xFD, modelData != 0);
+    mpModel1 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    if (mpModel1 == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, 0x12);
+    JUT_ASSERT(0x10D, btk != 0);
+    if (!mBtk1.init(mpModel1->getModelData(), btk, TRUE, 2, 1.0f, 0, -1, FALSE, 0)) {
+        return FALSE;
+    }
+    mBtk1.setPlaySpeed(1.0f);
+
+    J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0x7);
+    JUT_ASSERT(0x119, modelData2 != 0);
+    mpModel2 = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11000022);
+    if (mpModel2 == NULL) {
+        return FALSE;
+    }
+
+    if (m356 == 1) {
+        J3DModelData* modelData3 = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 0xA);
+        JUT_ASSERT(0x129, modelData3 != 0);
+        mpModel3 = mDoExt_J3DModel__create(modelData3, 0x80000, 0x11000222);
+        if (mpModel3 == NULL) {
+            return FALSE;
+        }
+
+        J3DAnmTextureSRTKey* btk2 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, 0x11);
+        JUT_ASSERT(0x138, btk2 != 0);
+        if (!mBtk2.init(mpModel3->getModelData(), btk2, TRUE, 2, 1.0f, 0, -1, FALSE, 0)) {
+            return FALSE;
+        }
+
+        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, 0xE);
+        JUT_ASSERT(0x143, brk != 0);
+        if (!mBrk.init(mpModel3->getModelData(), brk, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
+            return FALSE;
+        }
+        mBrk.setPlaySpeed(0.0f);
+    }
+    return TRUE;
 }
 
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
