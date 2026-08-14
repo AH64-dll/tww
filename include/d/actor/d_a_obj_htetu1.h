@@ -8,39 +8,40 @@
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class daObjHtetu1Splash_c : public dPa_followEcallBack {
+class daObjHtetu1Splash_c {
 public:
     void create_s(unsigned short, cXyz*, csXyz*, dKy_tevstr_c*);
     bool chk_stop() { return mStop != 0; }
     void delete_s() {
-        if (mpEmitter != NULL) {
-            remove();
+        if (mCb.getEmitter() != NULL) {
+            mCb.remove();
             mStop = 0;
         }
     }
     s16 get_timer() { return mTimer; }
     void set_pos_y(f32 y) { mPos.y = y; }
     void stop_particle() {
-        if (mpEmitter != NULL) {
-            mpEmitter->stopCreateParticle();
+        if (mCb.getEmitter() != NULL) {
+            mCb.getEmitter()->stopCreateParticle();
             mStop = 0;
         }
     }
     void play_particle() {
-        if (mpEmitter != NULL) {
-            mpEmitter->playCreateParticle();
+        if (mCb.getEmitter() != NULL) {
+            mCb.getEmitter()->playCreateParticle();
             mStop = 1;
         }
     }
     void sub_timer() { mTimer--; }
     void timer_play_particle(s16 timer) {
-        if (mpEmitter != NULL) {
-            mpEmitter->playCreateParticle();
+        if (mCb.getEmitter() != NULL) {
+            mCb.getEmitter()->playCreateParticle();
             mStop = 1;
             mTimer = timer;
         }
     }
 
+    /* 0x00 */ dPa_followEcallBack mCb;
     /* 0x14 */ cXyz mPos;
     /* 0x20 */ csXyz mAngle;
     /* 0x26 */ s16 mTimer;
@@ -53,7 +54,7 @@ class daObjHtetu1_c : public fopAc_ac_c {
 public:
     inline BOOL check_sw();
 
-    static u8 solidHeapCB(fopAc_ac_c*);
+    static int solidHeapCB(fopAc_ac_c*);
     int create_heap();
     cPhs_State _create();
     bool _delete();

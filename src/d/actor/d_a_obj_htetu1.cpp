@@ -18,23 +18,20 @@
 #include "JAZelAudio/JAIZelBasic.h"
 #include "SSystem/SComponent/c_lib.h"
 
-namespace {
-u16 l_daObjHtetu1_splash_id_table[2] = {0x82BA, 0x82BB};
-}  // namespace
+static const u16 l_daObjHtetu1_splash_id_table[2] = {0x82BA, 0x82BB};
 
 const char daObjHtetu1_c::M_arcname[] = "Htetu1";
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
 void daObjHtetu1Splash_c::create_s(u16 param, cXyz* pos, csXyz* angle, dKy_tevstr_c* tevStr) {
-    /* Nonmatching */
     mPos = *pos;
     mAngle = *angle;
-    mpEmitter = dComIfGp_particle_set(param, &mPos, &mAngle, NULL, 0xFF, this, -1, NULL, NULL, NULL);
-    if (mpEmitter != NULL) {
-        mpEmitter->setGlobalPrmColor(tevStr->mColorC0.r, tevStr->mColorC0.g, tevStr->mColorC0.b);
+    dComIfGp_particle_set(param, &mPos, &mAngle, NULL, 0xFF, &mCb, -1, NULL, NULL, NULL);
+    if (mCb.getEmitter() != NULL) {
+        mCb.getEmitter()->setGlobalPrmColor(tevStr->mColorC0.r, tevStr->mColorC0.g, tevStr->mColorC0.b);
     }
-    if (mpEmitter != NULL) {
-        mpEmitter->stopCreateParticle();
+    if (mCb.getEmitter() != NULL) {
+        mCb.getEmitter()->stopCreateParticle();
         mStop = 0;
     }
     mStop = 0;
@@ -42,8 +39,7 @@ void daObjHtetu1Splash_c::create_s(u16 param, cXyz* pos, csXyz* angle, dKy_tevst
 }
 
 /* 00000178-00000198       .text solidHeapCB__13daObjHtetu1_cFP10fopAc_ac_c */
-u8 daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
-    /* Nonmatching */
+int daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((daObjHtetu1_c*)i_this)->create_heap();
 }
 
@@ -53,8 +49,8 @@ int daObjHtetu1_c::create_heap() {
     int ret = TRUE;
     J3DModelData* mdl_data =
         (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
+    JUT_ASSERT(0x119, mdl_data != 0);
     if (mdl_data == NULL) {
-        JUT_ASSERT(0x119, mdl_data != 0);
         ret = FALSE;
     } else {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
@@ -69,7 +65,6 @@ int daObjHtetu1_c::create_heap() {
 
 /* 00000298-00000460       .text _create__13daObjHtetu1_cFv */
 cPhs_State daObjHtetu1_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daObjHtetu1_c);
 
     cPhs_State phs = dComIfG_resLoad(&mPhs, M_arcname);
@@ -172,12 +167,14 @@ void daObjHtetu1_c::splash_manager() {
             }
         } else {
             if (timer > 0 || timer == -1) {
-                if (1400.0f + current.pos.y <= waterH) {
+                if (1400.0f + current.pos.y > waterH) {
+                    if (!mSplash[i].chk_stop()) {
+                        mSplash[i].play_particle();
+                    }
+                } else {
                     if (mSplash[i].chk_stop()) {
                         mSplash[i].stop_particle();
                     }
-                } else if (!mSplash[i].chk_stop()) {
-                    mSplash[i].play_particle();
                 }
             }
             if (timer > 0) {
