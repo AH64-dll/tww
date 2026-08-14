@@ -820,8 +820,9 @@ void fuwafuwa_keisan(bl_class* i_this) {
     f32 f3 = 3.0f;
 
     if (i_this->m2D2 == 1) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
         i_this->m304 += 0x3E8;
-        i_this->m318 = 80.0f + dComIfGp_getPlayer(0)->current.pos.y;
+        i_this->m318 = 80.0f + player->current.pos.y;
         i_this->m318 += 10.0f * jmaSinTable[(u16)i_this->m304 >> jmaSinShift];
         f3 = 6.0f;
     } else {
