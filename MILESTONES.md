@@ -277,3 +277,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T07:58Z — M38: flip #58 d_a_obj_flame → Equivalent — 29 flips this session (#30-58). Ledger: 48 NonMatching / 52 Equivalent / 313 Matching + 7 MatchingFor. flame: 5-cycle structural loop 9→3→2→1→0 closed (create_mode_init guard, liftup in-place fmr 3==3, Draw tevStr, magmarock ternary). Gate 1d4ef003b 10:57:57. BLead-10 shift: 7 flips (#52-58).
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T08:30Z — M39: flip #59 d_a_obj_hsehi1 → Equivalent — 30 FLIPS THIS SESSION (#30-59). Ledger: 47 NonMatching / 53 Equivalent / 313 Matching + 7 MatchingFor. hsehi1: dispatch-table offAction blocker (RLead-14 .rela.data content catch) fixed 45bc2afda, 16/16 entries 1:1 by symbol+addend. Gate 8a3787141 11:29:38. BLead-10 shift: 6 flips (#52-59). The .rela.data CONTENT scan is now a codified gate step.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
