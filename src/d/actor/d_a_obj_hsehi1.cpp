@@ -468,13 +468,12 @@ BOOL daObj_hsh_c::checkCommandTalk() {
 BOOL daObj_hsh_c::chkAttention(cXyz i_pos, short i_angle) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 hio_range = l_HIO.m08;
-    s16 hio_angle = l_HIO.m14;
+    s32 hio_angle = l_HIO.m14;
 
     cXyz diff;
     diff.x = player->current.pos.x - i_pos.x;
     diff.z = player->current.pos.z - i_pos.z;
-    f32 distSq = diff.x * diff.x + diff.z * diff.z;
-    f32 dist = std::sqrtf(distSq);
+    f32 dist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
 
     s16 angle = cM_atan2s(diff.x, diff.z);
 
@@ -484,8 +483,8 @@ BOOL daObj_hsh_c::chkAttention(cXyz i_pos, short i_angle) {
         hio_angle += 0x71C;
     }
 
-    BOOL ret = 0;
     s16 angleDiff = angle - i_angle;
+    BOOL ret = 0;
     if (hio_angle > abs(angleDiff) && hio_range > dist) {
         ret = 1;
     }
