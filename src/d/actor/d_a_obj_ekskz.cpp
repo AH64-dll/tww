@@ -93,12 +93,10 @@ namespace daObjEkskz {
         mCyl.SetStts(&mStts);
         m480 = 0;
         dKy_tevstr_init(&mTevStr, home.roomNo, 0xFF);
-        s8 roomNo0 = current.roomNo;
         dComIfGp_particle_setToon(0xA2C2, &current.pos, &current.angle, NULL, 0xA0, &mSmokeCallback[0],
-                                  roomNo0);
-        s8 roomNo1 = current.roomNo;
+                                  current.roomNo);
         dComIfGp_particle_setToon(0xA2C3, &current.pos, &current.angle, NULL, 0xA0, &mSmokeCallback[1],
-                                  roomNo1);
+                                  current.roomNo);
 
         if (mSmokeCallback[0].getEmitter() != NULL) {
             mSmokeCallback[0].getEmitter()->setGlobalPrmColor(mTevStr.mColorK0.r, mTevStr.mColorK0.g,
