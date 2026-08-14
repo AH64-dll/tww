@@ -321,6 +321,10 @@ s32 skull_atari_check(bl_class* i_this) {
     case 0x200:
         i_this->mEnemyFire.mFireDuration = 0x3E8;
         break;
+    case 0x40000:
+    case 0x80000:
+    case 0x100000:
+        break;
     case 0x8000:
         flag = 1;
         i_this->m2D4 = 7;
