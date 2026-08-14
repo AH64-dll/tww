@@ -129,8 +129,10 @@ void daObjHtetu1_c::unlock() {
     /* Nonmatching */
     cXyz dir = cXyz::BaseY;
     mPos -= mDir;
-    f32 spd = (s16)(mSpeed * cM_ssin(mAngle * 0x859));
-    dir *= fabs(spd);
+    f32 spd = mSpeed;
+    spd = (s16)(spd * cM_ssin(mAngle * 0x859));
+    f32 scale = fabs(spd);
+    PSVECScale(&dir, &dir, scale);
     mPos += dir;
     mDir = dir;
     cLib_addCalc(&mSpeed, 0.0f, 0.13f, 50.0f, 1.0f);
