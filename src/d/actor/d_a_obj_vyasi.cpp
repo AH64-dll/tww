@@ -7,7 +7,10 @@
 #include "d/actor/d_a_obj_vyasi.h"
 #include "d/d_a_obj.h"
 #include "d/d_kankyo.h"
+#include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_lib.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "f_op/f_op_actor_mng.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -397,7 +400,49 @@ void daObjVyasi::Act_c::calc_dif_angle() {
 
 /* 000025A8-00002880       .text quaternion_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::quaternion_main() {
-    /* Nonmatching */
+    for (int i = 0; i < 14; i++) {
+        Quaternion quat;
+        quat.x = ZeroQuat.x;
+        quat.y = ZeroQuat.y;
+        quat.z = ZeroQuat.z;
+        quat.w = ZeroQuat.w;
+        if (mState == 4 && joint_kind_table[i] == 0) {
+            cXyz axis(0.0f, 1.0f, 0.0f);
+            mDoMtx_YrotS(*calc_mtx, -current.angle.y);
+            cXyz wind;
+            MtxPosition(dKyw_get_wind_vec(), &wind);
+            f32 windPow = dKyw_get_wind_pow();
+
+            cXyz cross = axis.outprod(wind);
+
+            s16 angle = (s16)(1400.0f * windPow * m19D4);
+            f32 sinA = JMASSin(angle);
+            Quaternion quat0;
+            quat0.x = sinA * cross.x;
+            quat0.y = sinA * cross.y;
+            quat0.z = sinA * cross.z;
+            quat0.w = JMASCos(angle);
+
+            s16 angle2 = cLib_maxLimit<s16>((s16)(2048.0f * windPow * m19D4), 0xDC);
+            cLib_addCalcAngleS2(&m02B0[i], angle2, 4, 0x20);
+
+            m0294[i] += (s16)(cM_rndFX(0.4f) + 256.0f * windPow * m19D4);
+
+            f32 sinX = JMASSin(m02B0[i]);
+            Quaternion quat1;
+            quat1.x = sinX * JMASSin(m0294[i]);
+            quat1.y = 0.0f;
+            quat1.z = sinX * JMASSin(m0294[i]);
+            quat1.w = JMASCos(m02B0[i]);
+
+            PSQUATMultiply(&quat0, &quat1, &quat);
+        }
+        if (mNormalCounter == 1) {
+            mJointQuat[i] = quat;
+        } else {
+            C_QUATSlerp(&mJointQuat[i], &quat, &mJointQuat[i], 0.4f);
+        }
+    }
 }
 
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
