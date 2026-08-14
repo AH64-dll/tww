@@ -942,13 +942,14 @@ cPhs_State daNpc_Kp1_c::_create() { /* Nonmatching */
     if (!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
     }
-    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl[mSpecificType])) {
+    if (fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl[mSpecificType])) {
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+        fopAcM_setCullSizeBox(this, -50.0f, -20.0f, -50.0f, 50.0f, 170.0f, 50.0f);
+    } else {
         return cPhs_ERROR_e;
     }
-    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -50.0f, -20.0f, -50.0f, 50.0f, 170.0f, 50.0f);
     if (createInit() == 0) {
-        return cPhs_ERROR_e;
+        state = cPhs_ERROR_e;
     }
     return state;
 }
