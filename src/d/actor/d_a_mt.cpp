@@ -15,6 +15,7 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/d_snap.h"
 #include "res/Object/Mt.h"
 #include "JAZelAudio/JAIZelBasic.h"
 
@@ -379,9 +380,64 @@ static void daMt_shadowDraw(mt_class* i_this) {
     }
 }
 
-/* 00003360-0000361C       .text daMt_Draw__FP8mt_class */
-static BOOL daMt_Draw(mt_class*) {
-    /* Nonmatching */
+/* 00003360-00003604       .text daMt_Draw__FP8mt_class */
+static BOOL daMt_Draw(mt_class* i_this) {
+    cXyz zero(0.0f, 0.0f, 0.0f);
+
+    if (i_this->m2BB != 0) {
+        return TRUE;
+    }
+
+    j_index = 0;
+    for (int i = 0; i < 8; i++) {
+        mDoExt_McaMorf* morf = i_this->mpMorf[i];
+        J3DModel* model = morf->getModel();
+
+        if (i_this->mEnemyIce.mLightShrinkTimer == 0) {
+            cXyz pos;
+            PSMTXMultVec(model->getBaseTRMtx(), &zero, &pos);
+            g_env_light.settingTevStruct(0, &pos, &i_this->tevStr);
+        } else {
+            f32 iceScale = i_this->mEnemyIce.mScaleXZ;
+            i_this->scale.z = iceScale;
+            i_this->scale.y = iceScale;
+            i_this->scale.x = iceScale;
+            model->setBaseScale(i_this->scale);
+        }
+
+        g_env_light.setLightTevColorType(model, &i_this->tevStr);
+        i_this->m2F0[i]->entry(model->getModelData());
+        i_this->m310[i]->entry(model->getModelData());
+
+        if (i_this->m2E4 == 0) {
+            s32 frame = i_this->m2E8 + i * l_HIO.m50;
+            while (frame < 0) {
+                frame += 0x29;
+            }
+            i_this->m310[i]->setFrame((f32)frame);
+
+            frame = i_this->m2EC + i * l_HIO.m50;
+            while (frame < 0) {
+                frame += 0x1F;
+            }
+            i_this->m2F0[i]->setFrame((f32)frame);
+        } else {
+            i_this->m310[i]->setFrame((f32)i_this->m2E8);
+            i_this->m2F0[i]->setFrame((f32)i_this->m2EC);
+        }
+
+        if (i == 0) {
+            model->getModelData()->setTexNoAnimator(i_this->m33C, i_this->m340);
+            i_this->m33C->setFrame((f32)i_this->m344);
+        }
+
+        i_this->mpMorf[i]->updateDL();
+    }
+
+    br_draw(i_this);
+    daMt_shadowDraw(i_this);
+    dSnap_RegistFig(DSNAP_TYPE_UNKAF, i_this, 1.0f, 1.0f, 1.0f);
+    return TRUE;
 }
 
 /* 0000361C-000037B0       .text bakuha__FP8mt_class */

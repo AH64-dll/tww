@@ -2,6 +2,7 @@
 #define D_A_MT_H
 
 #include "f_op/f_op_actor.h"
+#include "c/c_damagereaction.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
@@ -68,15 +69,10 @@ public:
     /* 0x2C4 */ mDoExt_McaMorf* mpMorf[8];
     /* 0x2E4 */ u8 m2E4;
     /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
-    /* 0x2E8 */ u32 m2E8;
-    /* 0x2EC */ u32 m2EC;
-    /* 0x2F0 */ u32 m2F0;
-    /* 0x2F4 */ u8 m2F4[0x310 - 0x2F4];
-    /* 0x310 */ u32 m310;
-    /* 0x314 */ u8 m314[0x31C - 0x314];
-    /* 0x31C */ u32 m31C;
-    /* 0x320 */ f64 m320;
-    /* 0x328 */ u8 m328[0x330 - 0x328];
+    /* 0x2E8 */ s32 m2E8;
+    /* 0x2EC */ s32 m2EC;
+    /* 0x2F0 */ mDoExt_btkAnm* m2F0[8];
+    /* 0x310 */ mDoExt_brkAnm* m310[8];
     /* 0x330 */ f64 m330;
     /* 0x338 */ f32 m338;
     /* 0x33C */ J3DAnmTexPattern* m33C;
@@ -142,12 +138,8 @@ public:
     /* 0x18FA */ u8 m18FA;
     /* 0x18FB */ u8 m18FB;
     /* 0x18FC */ s16 m18FC;
-    /* 0x18FE */ u8 m18FE[0x1930 - 0x18FE];
-    /* 0x1930 */ dCcD_Stts m1930;
-    /* 0x196C */ dCcD_Cyl m196C;
-    /* 0x1A9C */ u8 m1A9C[0x1AB4 - 0x1A9C];
-    /* 0x1AB4 */ dBgS_AcchCir m1AB4;
-    /* 0x1AF4 */ dBgS_ObjAcch m1AF4;
+    /* 0x18FE */ u8 m18FE[0x1900 - 0x18FE];
+    /* 0x1900 */ enemyice mEnemyIce;
     /* 0x1CB8 */ u32 m1CB8;
     /* 0x1CBC */ s8 m1CBC;
     /* 0x1CBD */ u8 m1CBD[0x1CC0 - 0x1CBD];
