@@ -5,6 +5,17 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
+#include "c/c_dylink.h"
+#include "d/d_kankyo.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JAZelAudio/JAIZelBasic.h"
+#include "SSystem/SComponent/c_math.h"
+
+f32 daFallRockTag_c::m_div_num = 6.0f;
+daFallRockTag_c::m_data_t daFallRockTag_c::m_data = {
+    250.0f, 0.3f, 0.8f, -70.0f, -7.0f, 90, 90, 3, 0,
+};
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
@@ -12,8 +23,43 @@ static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
+    u8 schSec = dStage_stagInfo_GetSchSec(dComIfGp_getStage().getStagInfo());
+    s32 cycle = (s32)((f32)schSec / daFallRockTag_c::m_div_num) * 30;
+
+    u8 schbit = dKy_get_schbit();
+    if (schbit & i_this->mSchbitFlag) {
+        if (cycle < dKy_get_schbit_timer()) {
+            s32 t = dKy_get_schbit_timer() - i_this->getData()->mField_0x16;
+            s32 d = 30 / i_this->getData()->mField_0x18;
+            if (t % d == 0) {
+                Vec scale;
+                Vec pos;
+                SVec rot;
+                f32 spread = i_this->scale.x * i_this->getData()->mField_0x00;
+                pos.x = cM_rndFX(spread);
+                pos.y = 0.0f;
+                pos.z = cM_rndFX(spread - std::fabsf(pos.x));
+
+                f32 min = i_this->getData()->mField_0x04;
+                f32 s = min + cM_rndF(i_this->getData()->mField_0x08 - min);
+                scale.z = s;
+                scale.y = s;
+                scale.x = s;
+
+                rot.x = (s16)cM_rndF(32767.0f);
+                rot.y = (s16)cM_rndF(32767.0f);
+                rot.z = (s16)cM_rndF(32767.0f);
+
+                i_this->createRock((cXyz*)&pos, (cXyz*)&scale, (csXyz*)&rot, i_this->current.roomNo, 0);
+                JAIZelBasic::zel_basic->seStart(JA_SE_ATM_RAKUBAN, &i_this->eyePos, 0,
+                                                dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            }
+        } else {
+            i_this->mTimer = 0;
+        }
+    }
+    return TRUE;
 }
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
@@ -22,23 +68,35 @@ static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Delete(daFallRockTag_c* i_this) {
+    i_this->~daFallRockTag_c();
+    return TRUE;
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daFallRockTag_Create(fopAc_ac_c* i_this) {
+    fopAcM_SetupActor(i_this, daFallRockTag_c);
+    cPhs_State res = cDyl_LinkASync(fpcNm_FallRock_e);
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+    ((daFallRockTag_c*)i_this)->mSchbitFlag = fopAcM_GetParam(i_this) & 0xFF;
+    fopDwTg_DrawQTo(&((daFallRockTag_c*)i_this)->draw_tag);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000360-000003D8       .text createRock__15daFallRockTag_cFP4cXyzP4cXyzP5csXyziUl */
-void daFallRockTag_c::createRock(cXyz*, cXyz*, csXyz*, int, unsigned long) {
-    /* Nonmatching */
+void daFallRockTag_c::createRock(cXyz* p_pos, cXyz* p_scale, csXyz* p_rot, int roomNo, u32 param) {
+    Vec newPos;
+    newPos.x = current.pos.x + p_pos->x;
+    newPos.y = current.pos.y + p_pos->y;
+    newPos.z = current.pos.z + p_pos->z;
+    fopAcM_create(fpcNm_FallRock_e, param, (cXyz*)&newPos, roomNo, p_rot, p_scale);
 }
 
 /* 000003D8-000003E4       .text getData__15daFallRockTag_cFv */
-void daFallRockTag_c::getData() {
-    /* Nonmatching */
+inline daFallRockTag_c::m_data_t* daFallRockTag_c::getData() {
+    return &m_data;
 }
 
 static actor_method_class l_daFallRockTag_Method = {
