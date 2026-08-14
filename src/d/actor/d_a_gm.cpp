@@ -17,17 +17,18 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         gm_class* i_this = (gm_class*)model->getUserArea();
-        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        s32 jntNo = ((J3DJoint*)node)->getJntNo();
         if (i_this && i_this->m2CD == 0) {
+            cXyz offset;
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             switch (jntNo) {
             case 3: {
-                cXyz offset(0.0f, 0.0f, 0.0f);
+                offset.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&offset, &i_this->m3FC);
                 break;
             }
             case 4: {
-                cXyz offset(0.0f, 0.0f, 0.0f);
+                offset.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&offset, &i_this->m3F0);
                 mDoMtx_YrotM(*calc_mtx, i_this->m43A);
                 mDoMtx_XrotM(*calc_mtx, i_this->m438);
@@ -35,7 +36,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 break;
             }
             case 5: {
-                cXyz offset(0.0f, 0.0f, 0.0f);
+                offset.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&offset, &i_this->m3E4);
                 offset.x = 70.0f;
                 MtxPosition(&offset, &i_this->m3A8);
@@ -45,7 +46,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             case 14:
             case 16:
             case 18: {
-                s32 idx = (jntNo - 0xC) / 2;
+                s32 idx = (jntNo - 0xC) >> 1;
                 mDoMtx_YrotM(*calc_mtx, i_this->m414[idx].y);
                 mDoMtx_XrotM(*calc_mtx, i_this->m414[idx].x);
                 mDoMtx_ZrotM(*calc_mtx, i_this->m414[idx].z);
@@ -65,8 +66,26 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 00000368-0000048C       .text draw_SUB__FP8gm_class */
-void draw_SUB(gm_class*) {
-    /* Nonmatching */
+void draw_SUB(gm_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    model->setBaseScale(i_this->scale);
+
+    mDoMtx_stack_c::transS(i_this->current.pos.x + i_this->m3B4.x, i_this->current.pos.y + i_this->m3B4.y,
+                           i_this->current.pos.z + i_this->m3B4.z);
+    mDoMtx_XrotM(mDoMtx_stack_c::get(), i_this->m43E);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->m442);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
+    mDoMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), i_this->m320);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    if (i_this->m2CD == 0) {
+        i_this->mpMorf->calc();
+        enemy_fire(&i_this->mEnemyFire);
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
 }
 
 /* 0000048C-00000908       .text daGM_Draw__FP8gm_class */
@@ -75,8 +94,22 @@ static BOOL daGM_Draw(gm_class*) {
 }
 
 /* 00000908-00000A34       .text anm_init__FP8gm_classifUcfi */
-void anm_init(gm_class*, int, float, unsigned char, float, int) {
+static void anm_init(gm_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
     /* Nonmatching */
+    i_this->m344 = bckFileIdx;
+    if (soundFileIdx >= 0) {
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("GM", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            dComIfG_getObjectRes("GM", soundFileIdx)
+        );
+    } else {
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("GM", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            NULL
+        );
+    }
 }
 
 /* 00000A34-00000D00       .text wing_cut_stat__FP8gm_class */
@@ -101,6 +134,7 @@ void Line_check(gm_class*, cXyz) {
 
 /* 00001FBC-0000212C       .text ks_set_rtn__FP8gm_class */
 s32 ks_set_rtn(gm_class* i_this) {
+    /* Nonmatching */
     s32 type = 4;
 
     if (i_this->m2CE == 1) {
