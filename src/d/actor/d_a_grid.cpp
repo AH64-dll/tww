@@ -567,19 +567,18 @@ void ho_move(daGrid_c* i_this) {
             f30_2 *= f0_2;
             f32 f0_4 = f23 < 0.0f ? f23 : 0.0f;
             f32 f1_5 = f0_4 * f0_4 * 0.25f;
-            f32 f0_3_2 = i_this->m2200;
-            f32 f3 = 1.0f - ((0.67f + 0.3f * f1_5) * f0_3_2);
+            f32 f3 = 1.0f - ((0.67f + 0.3f * f1_5) * i_this->m2200);
             f32 f3_2, f4, f5;
             if (l_HIO.m39 != 0) {
-                f3_2 = f3 * (f25 + (&l_HIO.m70)[r23] * f0_3_2);
+                f3_2 = f3 * (f25 + (&l_HIO.m70)[r23] * i_this->m2200);
                 f32 f6 = (&l_HIO.m3C)[r23];
-                f4 = 120.0f * (f6 * f0_3_2);
-                f5 = f0_3_2 * (5.0f * f6 * (f32)r24);
+                f4 = 120.0f * (f6 * i_this->m2200);
+                f5 = i_this->m2200 * (5.0f * f6 * (f32)r24);
             } else {
-                f3_2 = f3 * (f25 + f0_3_2 * z_rate_tbl2[r23]);
+                f3_2 = f3 * (f25 + i_this->m2200 * z_rate_tbl2[r23]);
                 f32 f7 = z_rate_tbl[r23];
-                f4 = 120.0f * (f0_3_2 * f7);
-                f5 = f0_3_2 * ((f32)r24 * (5.0f * f7));
+                f4 = 120.0f * (i_this->m2200 * f7);
+                f5 = i_this->m2200 * ((f32)r24 * (5.0f * f7));
             }
             l_pos_t* l4 = &l_pos[r22];
             nrm->x = l4->mX;
