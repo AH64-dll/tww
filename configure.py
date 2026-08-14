@@ -1569,7 +1569,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_bemos"),
     ActorRel(Matching,    "d_a_obj_canon"),
     ActorRel(Matching,    "d_a_obj_eff"),
-    ActorRel(NonMatching, "d_a_obj_magmarock"),
+    ActorRel(Equivalent, "d_a_obj_magmarock"),  # Draw 97.40 multiset-equal position-shift + 5 ARG-only accept; sections byte-identical; markers 6==6; weak order; 6 value-bug classes fixed en route
     ActorRel(Matching, "d_a_obj_majyuu_door"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_stair"),
     ActorRel(Equivalent,  "d_a_obj_swflat"), # regalloc (Execute r28/r29)
