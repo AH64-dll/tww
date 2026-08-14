@@ -278,9 +278,9 @@ void daNpc_So_c::cutEatesaFirstProc() {
         pos.z += 260.0f * cM_scos(angle);
     }
 
-    cXyz diff = current.pos - pos;
+    const cXyz& diff = current.pos - pos;
     f32 sq = PSVECSquareMag(&cXyz(diff.x, 0.0f, diff.z));
-    f32 dist = sq > 0.0f ? std::sqrtf(sq) : sq;
+    f32 dist = std::sqrtf(sq);
 
     if (dist < 700.0f + REG8_F(11)) {
         cLib_addCalc2(&mCirclePath.mRadius, 30.0f, 0.05f, 8.0f + REG8_F(10));
@@ -295,17 +295,22 @@ void daNpc_So_c::cutEatesaFirstProc() {
     cXyz target = mCirclePath.mPos;
     target.y -= 100.0f;
 
-    cXyz diff2 = current.pos - target;
+    const cXyz& diff2 = current.pos - target;
     f32 sq2 = PSVECSquareMag(&cXyz(diff2.x, 0.0f, diff2.z));
-    f32 dist2 = sq2 > 0.0f ? std::sqrtf(sq2) : sq2;
+    f32 dist2 = std::sqrtf(sq2);
 
-    mEventCut.setAttnPos(target);
+    const cXyz& diff3 = current.pos - pos;
+    f32 sq3 = PSVECSquareMag(&cXyz(diff3.x, 0.0f, diff3.z));
+    f32 dist3 = std::sqrtf(sq3);
+
     mEventCut.setAttnFlag(0);
+    mEventCut.setAttnPos(target);
     field_0xB44 = target;
 
-    f32 speed = 2.0f;
-    if (dist2 < 100.0f + REG12_F(7)) {
-        if (dist2 <= 50.0f) {
+    f32 speed;
+    if (dist3 < 100.0f + REG12_F(7)) {
+        speed = 2.0f;
+        if (dist3 <= 50.0f) {
             speed = 0.0f;
             fopAc_ac_c* esa = (fopAc_ac_c*)fopAcIt_Judge(searchEsa_CB, this);
             if (esa != NULL) {
