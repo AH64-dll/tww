@@ -1096,7 +1096,14 @@ void daNpc_So_c::modeEventTriForce() {
 /* 00002D80-00003110       .text modeProc__10daNpc_So_cFQ210daNpc_So_c6Proc_ei */
 void daNpc_So_c::modeProc(daNpc_So_c::Proc_e i_procType, int i_mode) {
     /* Nonmatching */
-    static void (daNpc_So_c::*mode_proc[][2])() = {
+    typedef void (daNpc_So_c::*mode_func_t)();
+    struct mode_proc_t {
+        /* 0x00 */ mode_func_t init;
+        /* 0x0C */ mode_func_t proc;
+        /* 0x18 */ const char* name;
+    }; // size = 0x1C
+
+    static mode_proc_t mode_proc[] = {
         {&daNpc_So_c::modeWaitInit, &daNpc_So_c::modeWait},
         {&daNpc_So_c::modeHideInit, &daNpc_So_c::modeHide},
         {&daNpc_So_c::modeJumpInit, &daNpc_So_c::modeJump},
@@ -1117,10 +1124,10 @@ void daNpc_So_c::modeProc(daNpc_So_c::Proc_e i_procType, int i_mode) {
 
     if (i_procType == 0) {
         field_0x6CC = i_mode;
-        (this->*mode_proc[field_0x6CC][0])();
+        (this->*mode_proc[field_0x6CC].init)();
     } else if (i_procType == 1) {
         field_0x6CC = i_mode;
-        (this->*mode_proc[field_0x6CC][1])();
+        (this->*mode_proc[field_0x6CC].proc)();
     }
 }
 
