@@ -31,8 +31,6 @@ static s32 l_hio_counter;
 static u32 l_msgId;
 static msg_class* l_msg;
 
-static const char* cut_name_tbl[8] = { "WAIT", "Disp", "MsgSet", "Talk", "Tact", "Judge", "Appear", "Delete" };
-
 static void (daObj_hsh_c::*event_init_tbl[8])(int) = {
     &daObj_hsh_c::initialDefault,
     &daObj_hsh_c::initialLinkDispEvent,
@@ -177,39 +175,43 @@ void daObj_hsh_c::setBaseMtx() {
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
 /* Nonmatching */
 BOOL daObj_hsh_c::createHeap() {
+    BOOL ret;
     if (argument == 0) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
         JUT_ASSERT(0x1F9, modelData != 0);
-        if (modelData != NULL) {
-            mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-            if (mpModel != NULL) {
-                m4D4 = new dBgW();
-                if (m4D4 != NULL) {
-                    if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            }
+        mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpModel == NULL) {
+            return 0;
         }
-        return 0;
+        m4D4 = new dBgW();
+        if (m4D4 != NULL) {
+            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7), cBgW::MOVE_BG_e, &m4A4)) {
+                ret = 0;
+            } else {
+                ret = 1;
+            }
+        } else {
+            return 0;
+        }
     } else {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
         JUT_ASSERT(0x20F, modelData != 0);
-        if (modelData != NULL) {
-            mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-            if (mpModel != NULL) {
-                m4D4 = new dBgW();
-                if (m4D4 != NULL) {
-                    if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4) == false) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            }
+        mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpModel == NULL) {
+            return 0;
         }
-        return 0;
+        m4D4 = new dBgW();
+        if (m4D4 != NULL) {
+            if (m4D4->Set((cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7), cBgW::MOVE_BG_e, &m4A4)) {
+                ret = 0;
+            } else {
+                ret = 1;
+            }
+        } else {
+            return 0;
+        }
     }
+    return ret;
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
@@ -512,6 +514,8 @@ BOOL daObj_hsh_c::eventProc() {
 
     dEvent_manager_c* evmgr = dComIfGp_getPEvtManager();
     int staffId = evmgr->getMyStaffId("Hsh", NULL, 0);
+
+    static const char* cut_name_tbl[8] = { "WAIT", "Disp", "MsgSet", "Talk", "Tact", "Judge", "Appear", "Delete" };
 
     if (g_dComIfG_gameInfo.play.getEvent()->runCheck() && !checkCommandTalk() && staffId != -1) {
         int actIdx = evmgr->getMyActIdx(staffId, cut_name_tbl, 8, 1, 0);
