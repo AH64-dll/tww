@@ -1498,7 +1498,7 @@ void daNpc_Ds1_c::RoomEffectSet() {
 /* 00003EE4-00003F20       .text RoomEffectDelete__11daNpc_Ds1_cFv */
 void daNpc_Ds1_c::RoomEffectDelete() {
     /* Nonmatching */
-    for (int i = 0; i < ARRAY_SIZE(field_0x76C) - 1; i++) {
+    for (int i = 1; i < 8; i++) {
         if(field_0x76C[1+i] != NULL){
             field_0x76C[1+i]->becomeInvalidEmitter();
         }
