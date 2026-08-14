@@ -618,8 +618,8 @@ void daObjBuoyflag::Packet_c::hasi_nrm_init() {
 /* 000001F8-00000744       .text draw_hata__Q213daObjBuoyflag8Packet_cFPQ213daObjBuoyflag5Act_c */
 void daObjBuoyflag::Packet_c::draw_hata(daObjBuoyflag::Act_c* i_actor) {
     /* Nonmatching */
-    DrawVtx_c* vtx = &mDrawVtx[mB8C];
     dKy_tevstr_c* tevStr = &i_actor->tevStr;
+    DrawVtx_c* vtx = &mDrawVtx[mB8C];
     const u8* texData = &Khata::l_k_hata01TEX[(u32)i_actor->prm_get_texture() * 0x800];
 
     j3dSys.reinitGX();
