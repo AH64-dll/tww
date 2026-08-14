@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kf1.h"
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
@@ -852,17 +853,16 @@ void daNpc_Kf1_c::cut_init_GET_OUT(int i_actIdx) { /* Nonmatching */
     if (timer != NULL) {
         mCutTimer = timer[0];
     }
-    dComIfGp_getPlayer(0)->current.angle.y = 0;
-    dComIfGp_getPlayer(0)->shape_angle.y = 3;
-    dComIfGp_getPlayer(0)->speedF = 0;
+    daPy_getPlayerActorClass()->mDemo.setMoveAngle(0);
+    daPy_getPlayerActorClass()->mDemo.setDemoType(daPy_demo_c::TYPE_ORIGINAL_e);
+    daPy_getPlayerActorClass()->mDemo.setParam0(0);
     if (mRupeeCnt >= mTsuboIdx * 10) {
         cXyz target(0.0f, 0.0f, 999.0f);
-        dComIfGp_getPlayer(0)->current.angle.y =
-            cLib_targetAngleY(&dComIfGp_getPlayer(0)->current.pos, &target);
-        dComIfGp_getPlayer(0)->speed.y = 3;
+        cLib_targetAngleY(&daPy_getPlayerActorClass()->current.pos, &target);
+        daPy_getPlayerActorClass()->mDemo.setDemoMode(daPy_demo_c::DEMO_N_DASH_e);
     } else {
-        dComIfGp_getPlayer(0)->speedF = 1;
-        dComIfGp_getPlayer(0)->speed.y = 9;
+        daPy_getPlayerActorClass()->mDemo.setParam0(1);
+        daPy_getPlayerActorClass()->mDemo.setDemoMode(daPy_demo_c::DEMO_LDAM_e);
     }
 }
 
@@ -947,26 +947,21 @@ BOOL daNpc_Kf1_c::cut_move_PLYER_MOV() {
 
 /* 0000228C-000023E8       .text cut_init_RUPEE_SET__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_RUPEE_SET(int i_actIdx) { /* Nonmatching */
-    static const cXyz a_pos[] = {
-        cXyz(-30.0f, 0.0f, 0.0f),
-    };
     if (mTsuboCnt != 8) {
         return;
     }
-    u8 set[2] = {0, 0};
+    u8 set[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     int i;
-    dEvt_control_c* evt = g_dComIfG_gameInfo.play.getEvent();
-    f32 rnd = 1.0f;
     for (i = 0; i < 3; i++) {
         s32 idx;
         do {
-            idx = (s32)(cM_rndF(32.0f) * rnd) % 2;
+            idx = (s32)(cM_rndF(32.0f) * 0.5f);
         } while (set[idx] != 0);
         fpc_ProcID procId = mTsuboProcId[idx];
         fopAc_ac_c* a_tsubo_actor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, &procId);
         JUT_ASSERT(0x5C3, 0 != a_tsubo_actor);
-        fopAcM_OnStatus(a_tsubo_actor, fopAcStts_UNK40_e);
-        evt->setPtI(a_tsubo_actor);
+        fopAcM_SetParam(a_tsubo_actor, (fopAcM_GetParam(a_tsubo_actor) & ~0x3F) | 0x4);
+        g_dComIfG_gameInfo.play.getEvent()->setPtI(a_tsubo_actor);
         mKutaniProcId[i] = mTsuboProcId[idx];
         set[idx] = 1;
     }
