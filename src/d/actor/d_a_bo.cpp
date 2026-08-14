@@ -384,8 +384,47 @@ static BOOL daBO_Delete(bo_class* i_this) {
 }
 
 /* 00004998-00004D08       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_this) {
+    bo_class* bo = (bo_class*)i_this;
+    int modelIdx = 9;
+    if (bo->mType == 2) {
+        modelIdx = 7;
+    }
+    bo->mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("BO", 0x1A), NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectRes("BO", modelIdx), 1, 0.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
+    if (bo->mpMorf == NULL || bo->mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+    J3DModel* model = bo->mpMorf->getModel();
+    bo->mpMorf->getModel()->setUserArea((u32)bo);
+    for (u16 i = 0; i < bo->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        bo->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_UP);
+    }
+    if (bo->mType == 2) {
+        bo->mpBaseAnm = new mDoExt_brkAnm();
+        if (bo->mpBaseAnm == NULL) {
+            return FALSE;
+        }
+        if (!bo->mpBaseAnm->init(model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("BO", 0x1D), 1, 0, 1.0f, 0, -1, 0, FALSE)) {
+            return FALSE;
+        }
+    } else {
+        bo->mpMorf2 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("BO", 0x19), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("BO", 8), 1, 0.0f, 0, -1, 1, NULL, 0x80000, 0x33221202);
+        if (bo->mpMorf2 == NULL || bo->mpMorf2->getModel() == NULL) {
+            return FALSE;
+        }
+        bo->mpMorf2->getModel()->setUserArea((u32)bo);
+        for (u16 i = 0; i < bo->mpMorf2->getModel()->getModelData()->getJointNum(); i++) {
+            bo->mpMorf2->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_DW);
+        }
+    }
+    if (bo->mType == 0) {
+        if (!bo->mInvisibleModel.create(bo->mpMorf->getModel())) {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 /* 00004D50-000050DC       .text daBO_Create__FP10fopAc_ac_c */
