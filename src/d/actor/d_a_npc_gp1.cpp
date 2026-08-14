@@ -824,7 +824,7 @@ bool daNpc_Gp1_c::create_rupee() {
     cXyz pos(mDoMtx_stack_c::get()[0][3], mDoMtx_stack_c::get()[1][3], mDoMtx_stack_c::get()[2][3]);
     int counter = g_Counter.mCounter0;
     int created = 0;
-    do {
+    while(created < m7F4) {
         f32 a_off_tbl[3] = {-30.0f, 0.0f, 30.0f};
         angle.y = current.angle.y + cM_deg2s((f32)(s16)((cM_rndF(30.0f) - 15.0f) + a_off_tbl[counter % 3]));
         s8 room_no = current.roomNo;
@@ -834,15 +834,13 @@ bool daNpc_Gp1_c::create_rupee() {
         if(item == NULL) {
             break;
         }
-        item->actor_status |= fopAcStts_NOCULLEXEC_e;
-        item->speedF = scale.x;
-        item->speed.y = scale.y;
-        item->speed.z = scale.z;
+        item->actor_status |= fopAcStts_UNK4000_e;
+        item->scale = scale;
         item->current.angle = angle;
         item->shape_angle = angle;
         counter++;
         created++;
-    } while(created < m7F4);
+    }
     return true;
 }
 
