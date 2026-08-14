@@ -1142,7 +1142,6 @@ void daObjBuoyflag::Act_c::mtx_init() {
 
 /* 0000234C-000024B0       .text mode_afl__Q213daObjBuoyflag5Act_cFv */
 int daObjBuoyflag::Act_c::mode_afl() {
-    /* Nonmatching */
     current.pos.x = m1090[0][3];
     current.pos.y = m1090[1][3];
     current.pos.z = m1090[2][3];
@@ -1152,9 +1151,9 @@ int daObjBuoyflag::Act_c::mode_afl() {
         f32 cylR = scale.x * M_cyl_src.mCylAttr.mCyl.mRadius;
         f32 cylH = scale.y * M_cyl_src.mCylAttr.mCyl.mHeight;
         cXyz center = M_cyl_src.mCylAttr.mCyl.mCenter;
-        center.x *= scale.x;
-        center.y *= scale.y;
-        center.z *= scale.z;
+        center.x *= *(volatile f32*)&scale.x;
+        center.y *= *(volatile f32*)&scale.y;
+        center.z *= *(volatile f32*)&scale.z;
         PSVECAdd(&center, &current.pos, &center);
         mCyl.SetC(center);
         mCyl.SetR(cylR);
