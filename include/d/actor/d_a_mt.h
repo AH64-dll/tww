@@ -65,12 +65,11 @@ public:
     /* 0x2BD */ u8 m2BD;
     /* 0x2BE */ u8 m2BE;
     /* 0x2C0 */ u32 m2C0;
-    /* 0x2C4 */ mDoExt_McaMorf* mpMorf;
-    /* 0x2C8 */ u32 m2C8;
-    /* 0x2CC */ u8 m2CC[0x2D8 - 0x2CC];
-    /* 0x2D8 */ f64 m2D8;
-    /* 0x2E0 */ f64 m2E0;
-    /* 0x2E8 */ f64 m2E8;
+    /* 0x2C4 */ mDoExt_McaMorf* mpMorf[8];
+    /* 0x2E4 */ u8 m2E4;
+    /* 0x2E5 */ u8 m2E5[0x2E8 - 0x2E5];
+    /* 0x2E8 */ u32 m2E8;
+    /* 0x2EC */ u32 m2EC;
     /* 0x2F0 */ u32 m2F0;
     /* 0x2F4 */ u8 m2F4[0x310 - 0x2F4];
     /* 0x310 */ u32 m310;
@@ -93,7 +92,7 @@ public:
     /* 0x34D */ u8 m34D[0x350 - 0x34D];
     /* 0x350 */ cXyz m350[8];
     /* 0x3B0 */ dPa_followEcallBack m3B0[8];
-    /* 0x450 */ u32 m450;
+    /* 0x450 */ JPABaseEmitter* m450;
     /* 0x454 */ u8 m454;
     /* 0x455 */ u8 m455;
     /* 0x456 */ s16 m456;
@@ -152,7 +151,7 @@ public:
     /* 0x1AB4 */ dBgS_AcchCir m1AB4;
     /* 0x1AF4 */ dBgS_ObjAcch m1AF4;
     /* 0x1CB8 */ u32 m1CB8;
-    /* 0x1CBC */ u8 m1CBC;
+    /* 0x1CBC */ s8 m1CBC;
     /* 0x1CBD */ u8 m1CBD[0x1CC0 - 0x1CBD];
 }; // size = 0x1CC0
 

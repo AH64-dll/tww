@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mt.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
@@ -60,7 +61,7 @@ daMt_HIO_c::daMt_HIO_c() {
 
 /* 00000230-000002D8       .text anm_init__FP8mt_classifUcfi */
 void anm_init(mt_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float playSpeed, int soundResIdx) {
-    i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Mt", anmResIdx), loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
+    i_this->mpMorf[0]->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Mt", anmResIdx), loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
 }
 
 /* 000002D8-00000350       .text mt_a_d_sub__FPvPv */
@@ -287,8 +288,29 @@ void br_draw(mt_class*) {
 }
 
 /* 00003210-00003360       .text daMt_shadowDraw__FP8mt_class */
-static void daMt_shadowDraw(mt_class*) {
-    /* Nonmatching */
+static void daMt_shadowDraw(mt_class* i_this) {
+    if (!(i_this->actor_status & 0x2000)) {
+        cXyz pos(i_this->current.pos.x, i_this->current.pos.y + 150.0f + REG0_F(18),
+                 i_this->current.pos.z);
+
+        i_this->m1CB8 = dComIfGd_setShadow(
+            i_this->m1CB8, 1, i_this->mpMorf[0]->getModel(), &pos,
+            REG0_F(19) + 800.0f, REG0_F(17) + 40.0f,
+            i_this->current.pos.y, i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd,
+            &i_this->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+
+        for (int i = 1; i < 8; i++) {
+            dComIfGd_addRealShadow(i_this->m1CB8, i_this->mpMorf[i]->getModel());
+        }
+    } else {
+        daPy_lk_c* player = (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+        u32 shadowId = player->mShadowId;
+        if (shadowId != 0) {
+            for (int i = 0; i < 8; i++) {
+                dComIfGd_addRealShadow(shadowId, i_this->mpMorf[i]->getModel());
+            }
+        }
+    }
 }
 
 /* 00003360-0000361C       .text daMt_Draw__FP8mt_class */
@@ -342,8 +364,33 @@ static BOOL daMt_IsDelete(mt_class*) {
 }
 
 /* 00007CCC-00007E18       .text daMt_Delete__FP8mt_class */
-static BOOL daMt_Delete(mt_class*) {
-    /* Nonmatching */
+static BOOL daMt_Delete(mt_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhase, "Mt");
+
+    if (i_this->m450 != NULL) {
+        i_this->m450->quitImmortalEmitter();
+        JPABaseEmitter* emitter = i_this->m450;
+        emitter->mMaxFrame = -1;
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        i_this->m450 = NULL;
+    }
+
+    for (int i = 0; i < 8; i++) {
+        i_this->m3B0[i].end();
+    }
+
+    if (i_this->m1CBC != 0 && i_this->m2B6 != 0 && i_this->m2BA != 0
+        && !dComIfGs_isSwitch(i_this->m2BA, fopAcM_GetRoomNo(i_this)))
+    {
+        fopAcM_prm_class* prm = fopAcM_CreateAppend();
+        prm->base.position = i_this->home.pos;
+        prm->base.angle = i_this->home.angle;
+        prm->base.parameters = fopAcM_GetParam(i_this);
+        prm->room_no = fopAcM_GetRoomNo(i_this);
+        fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_MT_e, NULL, NULL, prm);
+    }
+
+    return TRUE;
 }
 
 /* 00007E18-00008400       .text CallbackCreateHeap__FP10fopAc_ac_c */
