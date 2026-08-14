@@ -343,3 +343,9 @@ See .org/log.md + .org/lessons.md for details. (auto-pushed)
 ## 2026-08-14T19:10Z — M48: flip #68 d_a_npc_pm1 → Equivalent — 39 FLIPS THIS SESSION (#30-68). Ledger: 38 NonMatching / 60 Equivalent / 224 Matching / 94 MatchingFor. pm1: full 41-fn transcription, 7 accept-class holdouts (R1-9+R5-9 independent strip), .rodata 330==330 byte-identical, weak-order class. Gate 4776b8f2c 22:10:15 + mirror check.
 
 See .org/log.md + .org/lessons.md for details. (auto-pushed)
+
+---
+
+## 2026-08-14T20:15Z — M49: flip #69 d_a_obj_vyasi → Equivalent — 40 FLIPS THIS SESSION (#30-69). Ledger: 37 NonMatching / 61 Equivalent / 224 Matching / 94 MatchingFor. vyasi: 4 real value bugs caught at gate by value-decode (JNCB 0.0f, SPrm tables, 0.35 1-ULP, pool) + set_collision structural; sections byte-identical after fixes. Gate 0aaf84ef3 23:15:15 + mirror check.
+
+See .org/log.md + .org/lessons.md for details. (auto-pushed)
