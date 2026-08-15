@@ -1310,10 +1310,10 @@ void daGy_c::checkTgHit() {
             }
 
             if (health <= 0) {
-                Vec* eyeP = &eyePos;
+                Vec* eyeP;
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
-                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, eyeP, 0,
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, (eyeP = &eyePos), 0,
                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 health = 0;
                 s8 reverb = dComIfGp_getReverb(current.roomNo);
