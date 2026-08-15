@@ -28,7 +28,11 @@ static s32 l_check_wrk;
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 /* Nonmatching */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
-    static const u8 a_prm_tbl[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    static const u8 a_prm_tbl[12] = {
+        0x3F, 0xE0, 0x00, 0x00,  // 1.75f
+        0x40, 0x08, 0x00, 0x00,  // 2.5f
+        0x00, 0x00, 0x00, 0x00   // 0
+    };
     m08 = *(const f32*)&a_prm_tbl[0];
     m0C = *(const f32*)&a_prm_tbl[4];
     m10 = a_prm_tbl[8];
@@ -246,6 +250,8 @@ void daTag_Kf1_c::privateCut() {
         case 2:
             ret = event_bensyo();
             break;
+        case 3:
+        case 4:
         default:
             ret = 1;
             break;
