@@ -65,8 +65,9 @@ s32 daTag_Kf1_c::createInit() {
 /* Nonmatching */
 void daTag_Kf1_c::setStt(signed char param_0) {
     m768 = param_0;
-    s8 status = m768;
-    if (status == 3) {
+    signed char status = m768;
+    int status_int = status;
+    if (status_int == 3) {
         return;
     }
 }
