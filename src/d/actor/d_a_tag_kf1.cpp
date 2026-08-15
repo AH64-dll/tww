@@ -61,7 +61,8 @@ s32 daTag_Kf1_c::createInit() {
 /* Nonmatching */
 void daTag_Kf1_c::setStt(signed char param_0) {
     m768 = param_0;
-    if (m768 == 3) {
+    s8 status = m768;
+    if (status == 3) {
         return;
     }
 }
@@ -111,10 +112,7 @@ void daTag_Kf1_c::checkOrder() {
 /* Nonmatching */
 s32 daTag_Kf1_c::chkAttention(cXyz i_pos) {
     s32 ret = 0;
-    f32 dist = PSVECSquareDistance(&i_pos, &dComIfGp_getPlayer(0)->current.pos);
-    if (dist > 0.0f) {
-        dist = std::sqrtf(dist);
-    }
+    f32 dist = std::sqrtf(PSVECSquareDistance(&i_pos, &dComIfGp_getPlayer(0)->current.pos));
     f32 ydiff = dComIfGp_getPlayer(0)->current.pos.y - i_pos.y;
     if (dist < l_HIO.m08 && ydiff < l_HIO.m0C) {
         ret = 1;
@@ -213,9 +211,9 @@ void daTag_Kf1_c::event_cntTsubo() {
 /* Nonmatching */
 void daTag_Kf1_c::privateCut() {
     static const char* cut_name_tbl[] = { STR_MES_SET, STR_MES_END, STR_TSUBO_BENSYO, STR_GO_NEXT, STR_CNT_TSUBO };
-    dEvent_manager_c* evmng = dComIfGp_getPEvtManager();
-    int staffId = evmng->getMyStaffId(STR_TAGKF1, this, 0);
+    int staffId = dComIfGp_getPEvtManager()->getMyStaffId(STR_TAGKF1, NULL, 0);
     if (staffId != -1) {
+        dEvent_manager_c* evmng = dComIfGp_getPEvtManager();
         m766 = evmng->getMyActIdx(staffId, cut_name_tbl, 5, TRUE, 0);
         if (m766 == -1) {
             evmng->cutEnd(staffId);
@@ -237,7 +235,7 @@ void daTag_Kf1_c::privateCut() {
                 break;
             }
         }
-        s32 ret = 1;
+        int ret;
         switch (m766) {
         case 0:
             ret = event_mesSet();
@@ -248,8 +246,11 @@ void daTag_Kf1_c::privateCut() {
         case 2:
             ret = event_bensyo();
             break;
+        default:
+            ret = 1;
+            break;
         }
-        if (ret != 0) {
+        if ((u8)ret) {
             evmng->cutEnd(staffId);
         }
     }
