@@ -227,12 +227,15 @@ BOOL shock_damage_check(bl_class* i_this) {
     }
 
     cXyz swordPos = player->getSwordTopPos();
-    cXyz dist;
-    dist.x = swordPos.x - i_this->current.pos.x;
-    dist.z = swordPos.z - i_this->current.pos.z;
-    f32 distSq = dist.x * dist.x + dist.z * dist.z;
+    f32 dx = swordPos.x - i_this->current.pos.x;
+    f32 dz = swordPos.z - i_this->current.pos.z;
+    f32 distSq = dx * dx + dz * dz;
     if (distSq > 0.0f) {
-        distSq = std::sqrtf(distSq);
+        f32 g = __frsqrte(distSq);
+        g = 0.5f * g * (3.0f - distSq * g * g);
+        g = 0.5f * g * (3.0f - distSq * g * g);
+        g = 0.5f * g * (3.0f - distSq * g * g);
+        distSq = distSq * g;
     }
 
     if (distSq < 1000.0f) {
@@ -1148,7 +1151,7 @@ void action_kougeki(bl_class* i_this) {
         fopAcM_monsSeStart(i_this, 0x4870, 0);
         i_this->speedF = 0.0f;
         i_this->m306++;
-        break;
+        // fallthrough
     case 0xB:
         if (i_this->mpMorf->isStop()) {
             i_this->m306++;
@@ -1164,20 +1167,24 @@ void action_kougeki(bl_class* i_this) {
                          (i_this->current.pos.z - i_this->m2C4.z) * (i_this->current.pos.z - i_this->m2C4.z);
             f32 dist = distSq;
             if (dist > 0.0f) {
-                dist = std::sqrtf(distSq);
+                f32 g = __frsqrte(distSq);
+                g = 0.5f * g * (3.0f - distSq * g * g);
+                g = 0.5f * g * (3.0f - distSq * g * g);
+                g = 0.5f * g * (3.0f - distSq * g * g);
+                dist = distSq * g;
             }
             if (dist > 700.0f) {
                 anm_init(i_this, 0x11, 1.0f, 2, 1.0f, -1);
                 i_this->speedF = 4.0f + cM_rndF(2.0f);
                 i_this->m2D2 = 0;
                 i_this->m306 = 7;
-                break;
+                return;
             }
         } else if (fopAcM_searchActorDistance(i_this, player) > 700.0f) {
             i_this->speedF = 4.0f + cM_rndF(2.0f);
             i_this->m2D2 = 0;
             i_this->m306 = 5;
-            break;
+            return;
         }
         break;
     case 0xD:
@@ -1248,7 +1255,7 @@ void action_sagarimasu(bl_class* i_this) {
         if (i_this->m2D4 == 4 || i_this->m2D4 == 5) {
             i_this->speedF = 60.0f + REG8_F(11);
             if (i_this->m2D4 == 5) {
-                i_this->shape_angle.y = player->shape_angle.y - 0x4000;
+                i_this->current.angle.y = player->shape_angle.y - 0x4000;
             }
         }
         i_this->m306++;
@@ -1503,9 +1510,13 @@ void action_itaiyo_ne_san(bl_class* i_this) {
                     ppos.y += 25.0f + REG8_F(2);
                     dComIfGp_particle_set(0x3E8, &ppos, &i_this->current.angle, &i_this->scale, 0xFF, NULL,
                                           i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+                    JPABaseEmitter* emitter = i_this->mSmokeCB.getEmitter();
+                    if (emitter != NULL) {
+                        emitter->setAwayFromCenterSpeed(20.0f);
+                        emitter->setDirectionalSpeed(0.0f);
+                    }
                     *(cXyz*)i_this->m6BC = ppos;
                     smoke_set(i_this);
-                    i_this->mSph.ClrTgSet();
                     i_this->mSph.ClrCoSet();
                     i_this->mSph.ClrTgHit();
                     i_this->scale.x = 0.0f;
@@ -1648,9 +1659,13 @@ void action_normal_skull(bl_class* i_this) {
         pos.y += 25.0f + REG8_F(2);
         dComIfGp_particle_set(0x3E8, &pos, &i_this->current.angle, &i_this->scale, 0xFF, NULL,
                               i_this->current.roomNo, &i_this->tevStr.mColorK0, &i_this->tevStr.mColorK0);
+        JPABaseEmitter* emitter = i_this->mSmokeCB.getEmitter();
+        if (emitter != NULL) {
+            emitter->setAwayFromCenterSpeed(20.0f);
+            emitter->setDirectionalSpeed(0.0f);
+        }
         *(cXyz*)i_this->m6BC = pos;
         smoke_set(i_this);
-
         for (int i = 0; i < (s32)cM_rndF(1.99f); i++) {
             fopAcM_createItem(&i_this->current.pos, 0, -1, -1, 0, NULL, 4, NULL);
         }
@@ -1717,11 +1732,10 @@ static BOOL daBL_Execute(bl_class* i_this) {
         }
         return TRUE;
     }
-
-    s16* timers = &i_this->m2F0;
     for (int i = 0; i < 6; i++) {
-        if (timers[i] != 0) {
-            timers[i]--;
+        s16* timer = &i_this->m2EC + i;
+        if (*timer != 0) {
+            (*timer)--;
         }
     }
 
