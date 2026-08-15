@@ -275,7 +275,6 @@ static fpc_ProcID l_msgId;
 static const int l_btp_ix_tbl[] = { 0x0F, 0x0E };
 static const int l_bck_ix_tbl[] = { 0x13, 0x14, 0x16, 0x17, 0x15, 0x16, 0x17 };
 
-/* 00000C4C-00000D54       .text initTexPatternAnm__12daNpc_Bms1_cFb */
 /* Nonmatching */
 BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
     J3DModelData* modelData = mpModel->getModelData();
@@ -718,7 +717,7 @@ u16 daNpc_Bms1_c::talk() {
     }
 
 ret:
-    mShopCam.m54 = mShopItems.mSelectedItemIdx;
+    mShopCam.mSelectIdx = mShopItems.mSelectedItemIdx;
 
     return status;
 }
@@ -1474,7 +1473,6 @@ static BOOL daNpc_Bms1_IsDelete(daNpc_Bms1_c*) {
 // /* 00004820-00004900       .text getItemZoomPos__16ShopCam_action_cFf */
 // void ShopCam_action_c::getItemZoomPos(float) {
 //     /* Nonmatching */
-// }
 
 static actor_method_class l_daNpc_Bms1_Method = {
     (process_method_func)daNpc_Bms1_Create,
