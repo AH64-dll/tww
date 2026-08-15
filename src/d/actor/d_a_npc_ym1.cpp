@@ -169,12 +169,30 @@ void daNpc_Ym1_c::createInit() {
 
 /* 00000B98-00000C04       .text play_animation__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::play_animation() {
-    /* Nonmatching */
+    play_texPttrnAnm();
+    m898 = mpMorf->play(&eyePos, 0, 0);
+    if (mpMorf->getFrame() < m87C) {
+        m898 = 1;
+    }
+    m87C = mpMorf->getFrame();
 }
 
 /* 00000C04-00000D34       .text setMtx__11daNpc_Ym1_cFb */
-void daNpc_Ym1_c::setMtx(bool) {
-    /* Nonmatching */
+void daNpc_Ym1_c::setMtx(bool i_setMtx) {
+    mpMorf->getModel()->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(m846.x, m846.y, m846.z);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    MtxP anmMtx = mpMorf->getModel()->getAnmMtx(mHeadJointIdx);
+    PSMTXCopy(anmMtx, mpHeadModel->getBaseTRMtx());
+    mpHeadModel->calc();
+    if (m6D0 != NULL) {
+        MtxP anmMtx2 = mpMorf->getModel()->getAnmMtx(mHandRJointIndex);
+        PSMTXCopy(anmMtx2, m6D0->getBaseTRMtx());
+        m6D0->calc();
+    }
+    setAttention(i_setMtx);
 }
 
 /* 00000D34-00000D48       .text bckResID__11daNpc_Ym1_cFi */
@@ -211,13 +229,42 @@ int daNpc_Ym1_c::btpResID(int idx) {
 }
 
 /* 00000D98-00000E98       .text init_texPttrnAnm__11daNpc_Ym1_cFScb */
-int daNpc_Ym1_c::init_texPttrnAnm(signed char, bool) {
-    /* Nonmatching */
+int daNpc_Ym1_c::init_texPttrnAnm(signed char i_btpNo, bool i_set) {
+    J3DModelData* modelData = mpHeadModel->getModelData();
+    if (i_btpNo < 0) {
+        return 0;
+    }
+
+    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(mArcName, btpResID(i_btpNo));
+    JUT_ASSERT(0x270, a_btp != 0);
+    m8AA = i_btpNo;
+    m6F4 = 0;
+    m6F6 = 0;
+    return mBtpAnm.init(modelData, a_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_set, FALSE) != 0;
 }
 
 /* 00000E98-00000F28       .text play_texPttrnAnm__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::play_texPttrnAnm() {
-    /* Nonmatching */
+    bool var_r4 = true;
+    if (m8AA == 0) {
+        var_r4 = !cLib_calcTimer(&m6F6);
+    }
+    if (!var_r4) {
+        return;
+    }
+
+    if ((m6F4 += 1) < mBtpAnm.getBtpAnm()->getFrameMax()) {
+        return;
+    }
+
+    if (m8AA != 0) {
+        m6F4 = mBtpAnm.getBtpAnm()->getFrameMax();
+        return;
+    } else {
+        m6F4 = 0;
+        m6F6 = cLib_getRndValue(60, 90);
+    }
+    return;
 }
 
 /* 00000F28-00000FF4       .text setAnm_anm__11daNpc_Ym1_cFPQ211daNpc_Ym1_c9anm_prm_c */
@@ -571,7 +618,7 @@ BOOL daNpc_Ym1_c::CreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
-    mAcchCir.SetWall(1.5f, 30.0f);
+    mAcchCir.SetWall(30.0f, 60.0f);
     mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     return TRUE;
 }

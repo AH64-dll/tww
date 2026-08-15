@@ -101,7 +101,9 @@ public:
     /* 0x6D8 */ u8 m6D8[0x6DC - 0x6D8];
     /* 0x6DC */ J3DModel* mpHeadModel;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F4 */ u8 m6F4[0x6F8 - 0x6F4];
+    /* 0x6F4 */ u8 m6F4;
+    /* 0x6F5 */ u8 m6F5;
+    /* 0x6F6 */ s16 m6F6;
     /* 0x6F8 */ ProcFunc mProcFunc;
     /* 0x704 */ dCcD_Cyl mCyl;
     /* 0x834 */ u8 m834[0x842 - 0x834];
@@ -111,9 +113,12 @@ public:
     /* 0x84C */ cXyz mEyePos;
     /* 0x858 */ u8 m858[0x870 - 0x858];
     /* 0x870 */ cXyz mAttPos;
-    /* 0x87C */ u8 m87C[0x890 - 0x87C];
+    /* 0x87C */ f32 m87C;
+    /* 0x880 */ u8 m880[0x890 - 0x880];
     /* 0x890 */ s16 mKariTimer;
-    /* 0x892 */ u8 m892[0x89B - 0x892];
+    /* 0x892 */ u8 m892[0x898 - 0x892];
+    /* 0x898 */ u8 m898;
+    /* 0x899 */ u8 m899[0x89B - 0x899];
     /* 0x89B */ u8 mKariFlag;
     /* 0x89C */ u8 m89C;
     /* 0x89D */ u8 m89D;
