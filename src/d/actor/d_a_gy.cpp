@@ -1166,34 +1166,33 @@ void daGy_c::createWave() {
 /* Nonmatching */
 void daGy_c::setWave() {
     f32 var_f29 = l_HIO.m24;
-    u8 d15 = mD15;
-    f32 var_f30;
+    f32 var_f30 = l_HIO.m24;
     f32 var_f31;
+    u8 d15 = mD15;
     if ((s8)d15 == 5 || (s8)d15 == 8 || (s8)d15 == 9 || (s8)d15 == 6) {
-        var_f30 = 0.0f;
+        var_f29 = 0.0f;
         var_f31 = 0.0f;
     } else {
         f32 one = 1.0f;
-        var_f30 = l_HIO.m18 * one;
+        var_f29 = l_HIO.m18 * one;
         var_f31 = l_HIO.m10;
     }
     switch (m2B0) {
     case 1:
-        var_f29 = l_HIO.m24 * (0.6f + g_regHIO.mChild[12].mFloatRegs[13]);
-        var_f30 *= 0.7f + g_regHIO.mChild[12].mFloatRegs[13];
+        var_f30 = l_HIO.m24 * (0.6f + g_regHIO.mChild[12].mFloatRegs[13]);
+        var_f29 *= 0.7f + g_regHIO.mChild[12].mFloatRegs[13];
         break;
     case 0:
-        var_f30 = 0.0f;
+        var_f29 = 0.0f;
         var_f31 = 0.0f;
         break;
     case 8:
-        var_f30 = 0.0f;
+        var_f29 = 0.0f;
         var_f31 = 0.0f;
         break;
     }
-    if ((s8)d15 != 0xA) {
-    } else {
-        var_f30 = 0.0f;
+    if ((s8)d15 == 0xA) {
+        var_f29 = 0.0f;
         var_f31 = 0.0f;
     }
     mDFC.y = daSea_calcWave(mDFC.x, mDFC.z);
@@ -1311,13 +1310,14 @@ void daGy_c::checkTgHit() {
             }
 
             if (health <= 0) {
+                Vec* eyeP = &eyePos;
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
-                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, &eyePos, 0,
+                JAIZelBasic::zel_basic->seStart(JA_SE_LK_LAST_HIT, eyeP, 0,
                                                 dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 health = 0;
                 s8 reverb = dComIfGp_getReverb(current.roomNo);
-                JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DIE, &eyePos, fopAcM_GetID(this), 0, reverb);
+                JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_GY_DIE, eyeP, fopAcM_GetID(this), 0, reverb);
                 if (m920 == l_HIO.m14C) {
                     modeDeleteBombInit();
                 } else {
