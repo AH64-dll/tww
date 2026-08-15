@@ -218,7 +218,7 @@ void fire_kaiten_keisan(bl_class* i_this) {
 BOOL shock_damage_check(bl_class* i_this) {
     /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    if (!(i_this->m2D0 & 0x80) && i_this->m2D3 == 0) {
+    if (!(i_this->m2D0 & 0x80) && i_this->m2D3 != 0) {
         return FALSE;
     }
 
@@ -226,16 +226,16 @@ BOOL shock_damage_check(bl_class* i_this) {
         return FALSE;
     }
 
-    cXyz swordPos = player->getSwordTopPos();
-    f32 dx = swordPos.x - i_this->current.pos.x;
-    f32 dz = swordPos.z - i_this->current.pos.z;
-    f32 distSq = dx * dx + dz * dz;
+    cXyz dist = player->getSwordTopPos();
+    dist.x -= i_this->current.pos.x;
+    dist.z -= i_this->current.pos.z;
+    register f32 distSq = dist.x * dist.x + dist.z * dist.z;
     if (distSq > 0.0f) {
-        f32 g = __frsqrte(distSq);
-        g = 0.5f * g * (3.0f - distSq * g * g);
-        g = 0.5f * g * (3.0f - distSq * g * g);
-        g = 0.5f * g * (3.0f - distSq * g * g);
-        distSq = distSq * g;
+        double g = __frsqrte(distSq);
+        g = 0.5 * g * (3.0 - g * g * distSq);
+        g = 0.5 * g * (3.0 - g * g * distSq);
+        g = 0.5 * g * (3.0 - g * g * distSq);
+        distSq = (f32)(distSq * g);
     }
 
     if (distSq < 1000.0f) {
