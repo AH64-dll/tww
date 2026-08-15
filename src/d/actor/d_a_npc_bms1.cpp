@@ -169,26 +169,27 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         if (pBms->m2D4.isZero()) {
             pBms->m2D4 = v1;
         }
-        cXyz diff(v1 - pBms->m2D4);
-        cXyz scaled(diff * l_HIO.mChild[0].m40);
+        cXyz scaled((v1 - pBms->m2D4) * l_HIO.mChild[0].m40);
         PSVECAdd(&pBms->m2EC, &scaled, &pBms->m2EC);
         PSVECScale(&pBms->m2EC, &pBms->m2EC, l_HIO.mChild[0].m44);
         PSVECAdd(&pBms->m2D4, &pBms->m2EC, &pBms->m2D4);
 
         cXyz d1;
-        cXyz d2;
-        PSVECSubtract(&d1, &v1, &v2);
-        PSVECSubtract(&d2, &pBms->m2D4, &v2);
+        cXyz d2(pBms->m2D4);
+        PSVECSubtract(&v1, &v2, &d1);
+        PSVECSubtract(&d2, &v2, &d2);
         Quaternion rot;
         daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m304, &rot, &pBms->m304, l_HIO.mChild[0].m48);
         f32 dot = PSVECDotProduct(&d2, &pBms->m2EC);
         pBms->m2CC = 1.0f - l_HIO.mChild[0].m4C * dot;
-        if (pBms->m2CC < 0.5f) {
-            pBms->m2CC = 0.5f;
-        } else if (pBms->m2CC > 1.0f) {
-            pBms->m2CC = 1.0f;
+        f32 cc = pBms->m2CC;
+        if (cc < 0.5f) {
+            cc = 0.5f;
+        } else if (cc > 1.0f) {
+            cc = 1.0f;
         }
+        pBms->m2CC = cc;
     } else if (jntNo == pBms->getHairRJntNum()) {
         cXyz scale(pBms->m2C0);
         scale.y *= pBms->m2D0;
@@ -211,26 +212,27 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         if (pBms->m2E0.isZero()) {
             pBms->m2E0 = v1;
         }
-        cXyz diff(v1 - pBms->m2E0);
-        cXyz scaled(diff * l_HIO.mChild[0].m40);
+        cXyz scaled((v1 - pBms->m2E0) * l_HIO.mChild[0].m40);
         PSVECAdd(&pBms->m2F8, &scaled, &pBms->m2F8);
         PSVECScale(&pBms->m2F8, &pBms->m2F8, l_HIO.mChild[0].m44);
         PSVECAdd(&pBms->m2E0, &pBms->m2F8, &pBms->m2E0);
 
         cXyz d1;
-        cXyz d2;
-        PSVECSubtract(&d1, &v1, &v2);
-        PSVECSubtract(&d2, &pBms->m2E0, &v2);
+        cXyz d2(pBms->m2E0);
+        PSVECSubtract(&v1, &v2, &d1);
+        PSVECSubtract(&d2, &v2, &d2);
         Quaternion rot;
         daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m314, &rot, &pBms->m314, l_HIO.mChild[0].m48);
         f32 dot = PSVECDotProduct(&d2, &pBms->m2F8);
         pBms->m2D0 = 1.0f - l_HIO.mChild[0].m4C * dot;
-        if (pBms->m2D0 < 0.5f) {
-            pBms->m2D0 = 0.5f;
-        } else if (pBms->m2D0 > 1.0f) {
-            pBms->m2D0 = 1.0f;
+        f32 cc = pBms->m2D0;
+        if (cc < 0.5f) {
+            cc = 0.5f;
+        } else if (cc > 1.0f) {
+            cc = 1.0f;
         }
+        pBms->m2D0 = cc;
     }
     }
     }
