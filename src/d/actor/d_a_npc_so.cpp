@@ -1126,7 +1126,6 @@ void daNpc_So_c::modeProc(daNpc_So_c::Proc_e i_procType, int i_mode) {
         field_0x6CC = i_mode;
         (this->*mode_proc[field_0x6CC].init)();
     } else if (i_procType == 1) {
-        field_0x6CC = i_mode;
         (this->*mode_proc[field_0x6CC].proc)();
     }
 }
@@ -1340,7 +1339,7 @@ bool daNpc_So_c::_draw() {
         g_env_light.setLightTevColorType(model, &tevStr);
         mBtpAnm.entry(modelData, mBtpAnmFrame);
         mpMorf->entryDL();
-        modelData->removeTexNoAnimator(mBtpAnm.getBtpAnm());
+        modelData->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
     }
     if (field_0xA78 != 0 || l_HIO.field_0x2C[0] != 0) {
         hudeDraw();

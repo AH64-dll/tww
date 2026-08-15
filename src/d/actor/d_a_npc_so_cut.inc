@@ -701,8 +701,7 @@ void daNpc_So_c::cutMiniGameWarpProc() {
     player->mDemo.mDemoMode = 6;
     player->mDemo.mParam0 = 1;
 
-    s32 angle = ship->shape_angle.y + REG12_S(6);
-    angle -= 0x4000;
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
@@ -833,8 +832,7 @@ void daNpc_So_c::cutMiniGamePlTurnProc() {
     player->mDemo.mDemoMode = 6;
     player->mDemo.mParam0 = 1;
 
-    s32 angle = ship->shape_angle.y + REG12_S(6);
-    angle -= 0x4000;
+    s16 angle = ship->shape_angle.y + REG12_S(6) - 0x4000;
     current.pos = ship->current.pos;
     current.pos.x += 300.0f * cM_ssin(angle);
     current.pos.z += 300.0f * cM_scos(angle);
