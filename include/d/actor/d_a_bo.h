@@ -19,7 +19,7 @@ public:
 
     /* 0x00 */ /* dPa_smokePcallBack */
     /* 0x04 */ dBgS_ObjGndChk mGndChk;
-};
+};  /* Nonmatching */ /* __vt__ 90.0: vtable layout diff */
 
 class bo_class : public fopEn_enemy_c {
 public:

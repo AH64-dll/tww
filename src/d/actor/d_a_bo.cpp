@@ -1659,6 +1659,7 @@ static actor_method_class l_daBO_Method = {
     (process_method_func)daBO_Draw,
 };
 
+/* Nonmatching */ /* g_profile_BO 96.67: profile data layout diff */
 actor_process_profile_definition g_profile_BO = {
     fpcLy_CURRENT_e,
     7,
