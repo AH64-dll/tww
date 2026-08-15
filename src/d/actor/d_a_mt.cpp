@@ -242,8 +242,195 @@ static BOOL nodeCallBack_tail(J3DNode* node, int calcTiming) {
 }
 
 /* 00000B28-0000171C       .text body_control2__FP8mt_class */
-void body_control2(mt_class*) {
+void body_control2(mt_class* i_this) {
     /* Nonmatching */
+    dBgS_LinChk linChk;
+    cXyz sp1C(0.0f, 0.0f, 0.0f);
+    cXyz sp34;
+    cXyz sp40;
+    cXyz sp4C;
+    cXyz sp58;
+    cXyz sp28;
+    cXyz sp10;
+    f32 f29 = i_this->m18F4;
+    f32 f30;
+
+    i_this->m4A0[0] = i_this->current.pos;
+    i_this->m560[0] = i_this->shape_angle;
+
+    cXyz* p4A0 = &i_this->m4A0[0];
+    cXyz* p500 = &i_this->m500[0];
+    csXyz* p560 = &i_this->m560[0];
+    cXyz* p590 = &i_this->m590[0];
+
+    for (int i = 0; i < 8; i++, p4A0++, p500++, p560++, p590++) {
+        if (i > 0) {
+            u8 cross_cnt = 0;
+            sp28 = *p4A0;
+            sp28.y += 50.0f;
+            mDoMtx_YrotS(*calc_mtx, p560->y);
+            sp40.x = 20.0f;
+            sp40.y = -200.0f;
+            sp40.z = 0.0f;
+            MtxPosition(&sp40, &sp4C);
+            sp4C += *p4A0;
+            linChk.Set(&sp28, &sp4C, i_this);
+            if (dComIfG_Bgsp()->LineCross(&linChk)) {
+                sp4C = linChk.GetCross();
+                cross_cnt = 1;
+            }
+            sp40.x *= -1.0f;
+            MtxPosition(&sp40, &sp58);
+            sp58 += *p4A0;
+            linChk.Set(&sp28, &sp58, i_this);
+            if (dComIfG_Bgsp()->LineCross(&linChk)) {
+                sp58 = linChk.GetCross();
+                cross_cnt++;
+            }
+            s16 angle = 0;
+            if (cross_cnt == 2) {
+                f30 = p4A0->y - 100.0f;
+                f32 h = sp58.y + l_HIO.m18;
+                if (f30 < h) {
+                    f30 = h;
+                    sp10 = sp58 - sp4C;
+                    sp40 = sp10;
+                    f32 dist = sp10.x * sp10.x + sp10.z * sp10.z;
+                    if (dist > 0.0f) {
+                        dist = std::sqrtf(dist);
+                    }
+                    angle = cM_atan2s(sp10.y, dist);
+                }
+            }
+            cLib_addCalcAngleS2(&p560->z, angle, 2, 0x400);
+
+            f32 f31 = p590->y + (f30 - p4A0[-1].y);
+            if (i_this->m48E == 0) {
+                u32 sinIdx = (u16)(i_this->m46A * (g_regHIO.mChild[0].mShortRegs[71] + 0x5DC) + i * (g_regHIO.mChild[0].mShortRegs[72] + 0x1D4C));
+                sp40.x = 20.0f * jmaSinTable[sinIdx >> jmaSinShift];
+                sp40.y = 0.0f;
+                sp40.z = -50.0f + g_regHIO.mChild[0].mFloatRegs[6];
+                mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+                MtxPosition(&sp40, &sp1C);
+            }
+            f32 f28 = sp1C.x + (p590->x + (p4A0->x - p4A0[-1].x));
+            f32 f27 = sp1C.z + (p590->z + (p4A0->z - p4A0[-1].z));
+            s16 r20 = cM_atan2s(f28, f27);
+            f32 dist = f28 * f28 + f27 * f27;
+            if (dist > 0.0f) {
+                dist = std::sqrtf(dist);
+            }
+            s16 r17 = -cM_atan2s(f31, dist);
+            sp40.x = 0.0f;
+            sp40.y = 0.0f;
+            sp40.z = 35.0f + g_regHIO.mChild[0].mFloatRegs[10];
+            mDoMtx_YrotS(*calc_mtx, r20);
+            mDoMtx_XrotM(*calc_mtx, r17);
+            MtxPosition(&sp40, &sp34);
+            p560->y = (s16)(r20 + 0x8000);
+            p560->x = -r17;
+            *p500 = *p4A0;
+            p4A0->x = p4A0[-1].x + sp34.x;
+            p4A0->y = p4A0[-1].y + sp34.y;
+            p4A0->z = p4A0[-1].z + sp34.z;
+            p590->x = f29 * (p4A0->x - p500->x);
+            p590->y = f29 * (p4A0->y - p500->y);
+            p590->z = f29 * (p4A0->z - p500->z);
+        }
+
+        mDoExt_McaMorf* morf = i_this->mpMorf[i];
+        J3DModel* model = morf->getModel();
+        model->setBaseScale(i_this->scale);
+        PSMTXTrans(mDoMtx_stack_c::now, p4A0->x, p4A0->y, p4A0->z);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, p560->y);
+        mDoMtx_XrotM(mDoMtx_stack_c::now, p560->x);
+        mDoMtx_ZrotM(mDoMtx_stack_c::now, p560->z);
+        if (i == 0) {
+            mDoMtx_YrotM(mDoMtx_stack_c::now, i_this->m468);
+            mDoMtx_stack_c::scaleM(l_HIO.m1C, l_HIO.m1C, l_HIO.m1C);
+        } else {
+            mDoMtx_stack_c::scaleM(i_this->m600[i], i_this->m600[i] * i_this->m620[i], 1.0f);
+            if (i == 7) {
+                mDoMtx_stack_c::scaleM(i_this->m18F0, i_this->m18F0, i_this->m18F0);
+            }
+        }
+        mDoMtx_stack_c::transM(0.0f, 0.0f, i_this->m470);
+        PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+
+        if (i == 0) {
+            sp40.x = 0.0f;
+            sp40.y = 0.0f;
+            sp40.z = 30.0f + g_regHIO.mChild[0].mFloatRegs[12];
+            PSMTXMultVec(mDoMtx_stack_c::now, &sp40, &i_this->eyePos);
+            i_this->m17A8.SetC(i_this->eyePos);
+
+            sp40.x = 0.0f;
+            sp40.y = 0.0f;
+            sp40.z = 100.0f + g_regHIO.mChild[0].mFloatRegs[228];
+            PSMTXMultVec(mDoMtx_stack_c::now, &sp40, &sp34);
+            i_this->mE48[0].SetC(sp34);
+
+            i_this->mE48[0].OffAtSPrmBit(cCcD_AtSPrm_VsEnemy_e);
+            i_this->mE48[0].OnAtSPrmBit(cCcD_AtSPrm_VsOther_e);
+            if (i_this->mC04 == 1) {
+                i_this->mE48[0].OffAtSetBit();
+                i_this->mE48[0].OffCoSetBit();
+                i_this->mE48[0].OffTgSetBit();
+                i_this->m17A8.SetR(0.0f);
+            } else {
+                if (i_this->mC04 == 2) {
+                    i_this->mE48[0].OnAtSetBit();
+                } else {
+                    i_this->mE48[0].OffAtSetBit();
+                }
+                i_this->mE48[0].OnCoSetBit();
+                i_this->mE48[0].OnTgSetBit();
+                i_this->mE48[0].SetR(l_HIO.m40);
+                i_this->m17A8.SetR(l_HIO.m44);
+            }
+            dComIfG_Ccsp()->Set(&i_this->m17A8);
+        } else {
+            i_this->mE48[i].SetC(*p4A0);
+            if (i_this->m460 != 0) {
+                i_this->mE48[i].SetR(-200.0f);
+            } else {
+                i_this->mE48[i].SetR(l_HIO.m48);
+            }
+        }
+        dComIfG_Ccsp()->Set(&i_this->mE48[i]);
+
+        if (i_this->mC01 != 0 && i >= 1) {
+            u32 idx;
+            if (i_this->mC00 != 0) {
+                idx = move_ad2[i] & 0x3F;
+            } else {
+                idx = move_ad[i] & 0x3F;
+            }
+            for (int j = 0; j < 6; j++) {
+                u32 posIdx = (idx + j) & 0x3F;
+                f32 f2 = p4A0->x;
+                i_this->m6F4[posIdx].x = f2 + (f32)j * ((p4A0[-1].x - f2) / 6.0f);
+                i_this->m6F4[posIdx].y = p4A0->y + (f32)j * ((p4A0[-1].y - p4A0->y) / 6.0f);
+                i_this->m6F4[posIdx].z = p4A0->z + (f32)j * ((p4A0[-1].z - p4A0->z) / 6.0f);
+                i_this->m9F4[posIdx].x = p560->x;
+                i_this->m9F4[posIdx].y = p560->y;
+                i_this->m9F4[posIdx].z = p560->z;
+            }
+        }
+    }
+
+    if (i_this->mC01 != 0) {
+        i_this->mC01 = 0;
+        i_this->m454 = 0;
+        i_this->m455 = 0;
+        i_this->mBF4 = 0;
+        i_this->m458 = 100;
+        i_this->m48E = 0;
+        anm_init(i_this, 0xA, 20.0f, 2, 1.0f, 0);
+    }
+    cLib_addCalc0(&i_this->m18F4, 1.0f, 0.05f);
+    cLib_addCalc2(&i_this->m470, 20.0f, 1.0f, 1.0f);
+    cLib_addCalcAngleS2(&i_this->current.angle.z, (s16)((1000.0f + g_regHIO.mChild[0].mFloatRegs[8]) * jmaSinTable[(u16)(i_this->m46A * (g_regHIO.mChild[0].mShortRegs[74] + 0x258)) >> jmaSinShift]), 2, 0x400);
 }
 
 /* 00001B54-00001E44       .text wall_check_sub__FP8mt_classP4cXyzP4cXyz */
@@ -418,7 +605,11 @@ void body_control3(mt_class* i_this) {
             f32 f29 = sp18.z + (p4A0[0].z - p4A0[-1].z);
             s16 r20 = cM_atan2s(f30, f29);
             f32 f2 = f30 * f30 + f29 * f29;
-            f2 = std::sqrtf(f2);
+            f32 g = __frsqrte(f2);
+            g = 0.5f * g * (3.0f - f2 * g * g);
+            g = 0.5f * g * (3.0f - f2 * g * g);
+            g = 0.5f * g * (3.0f - f2 * g * g);
+            f2 = f2 * g;
             s16 r17 = -cM_atan2s(f31, f2);
 
             sp30.x = 0.0f;
@@ -940,15 +1131,471 @@ void mt_move(mt_class* i_this) {
 }
 
 /* 000042C4-00005088       .text mt_fight__FP8mt_class */
-void mt_fight(mt_class*) {
+void mt_fight(mt_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    s32 var_r25 = 0;
+    switch (i_this->m455) {
+    case 0: {
+        s16 sp1C = 0;
+        s16 sp1E = 0;
+        s16 sp20 = 0;
+        s16 sp22 = 0;
+        s16 sp24 = 0;
+        mt_check(i_this);
+        if (mt_fight_count <= 1) {
+            sp1C = 0;
+            sp1E = 0;
+            sp20 = 0;
+            sp22 = 0;
+            sp24 = 0;
+        } else {
+            switch (mt_fight_count) {
+            case 2:
+                sp1C = 0x2000;
+                sp1E = 0x2000;
+                sp20 = 0;
+                sp22 = 0;
+                sp24 = 0;
+                break;
+            case 3:
+                sp1C = 0;
+                sp1E = -0x3000;
+                sp20 = 0x3000;
+                sp22 = 0;
+                sp24 = 0;
+                break;
+            case 4:
+                sp1C = 0x2000;
+                sp1E = -0x2000;
+                sp20 = 0x5000;
+                sp22 = -0x5000;
+                sp24 = 0;
+                break;
+            default:
+                sp1C = 0;
+                sp1E = 0x3000;
+                sp20 = -0x3000;
+                sp22 = 0x6000;
+                sp24 = -0x6000;
+                break;
+            }
+        }
+        BOOL isLocked = TRUE;
+        dAttention_c& attn = g_dComIfG_gameInfo.play.getAttention();
+        if (!attn.LockonTruth() && !(attn.mFlags & 0x20000000)) {
+            isLocked = FALSE;
+        }
+        if (isLocked && i_this == attn.LockonTarget(0)) {
+            j_index = 0;
+        } else {
+            j_index++;
+        }
+        if (j_index >= 5) {
+            j_index -= 5;
+        }
+        cXyz diff = player->current.pos - i_this->current.pos;
+        cXyz sp28 = diff;
+        sp28.y += 30.0f + g_regHIO.mChild[0].mFloatRegs[12];
+        i_this->m496 = cM_atan2s(diff.x, diff.z);
+        f32 dist = diff.x * diff.x + diff.z * diff.z;
+        if (dist > 0.0f) {
+            dist = std::sqrtf(dist);
+        }
+        i_this->m494 = -cM_atan2s(sp28.y, dist);
+        s16 phase = i_this->m46A;
+        cXyz sp34;
+        sp34.x = (30.0f + g_regHIO.mChild[0].mFloatRegs[5]) * jmaSinTable[(u16)(phase * 500) >> jmaSinShift];
+        u16 sin1400 = (u16)(phase * 1400);
+        sp34.y = -10.0f + (20.0f + g_regHIO.mChild[0].mFloatRegs[6]) * jmaSinTable[sin1400 >> jmaSinShift];
+        sp34.z = l_HIO.m28 + (30.0f + g_regHIO.mChild[0].mFloatRegs[7]) * jmaSinTable[(u16)(phase * 600) >> jmaSinShift];
+        var_r25 = (s16)((-500.0f + g_regHIO.mChild[0].mFloatRegs[11]) * jmaSinTable[sin1400 >> jmaSinShift]);
+        s16 angles[5] = {sp1C, sp1E, sp20, sp22, sp24};
+        mDoMtx_YrotS(*calc_mtx, player->shape_angle.y + angles[j_index]);
+        cXyz targetPos;
+        MtxPosition(&sp34, &targetPos);
+        cLib_addCalc2(&i_this->current.pos.x, player->current.pos.x + targetPos.x, 0.1f, 15.0f + g_regHIO.mChild[0].mFloatRegs[5]);
+        cLib_addCalc2(&i_this->current.pos.z, player->current.pos.z + targetPos.z, 0.1f, 15.0f + g_regHIO.mChild[0].mFloatRegs[5]);
+        if ((fopAcM_searchActorDistance(i_this, player) > 100.0f + l_HIO.m24 || i_this->m18F9 != 0) && i_this->m466 == 0) {
+            cLib_addCalc2(&i_this->current.pos.y, 0.0f + i_this->mAcch.m_ground_h, 0.02f, 20.0f);
+            var_r25 = 0;
+            i_this->m494 = 0;
+            if (fabs(i_this->current.pos.y - (0.0f + i_this->mAcch.m_ground_h)) < 1.0f) {
+                i_this->mC01 = 1;
+            }
+        } else {
+            cLib_addCalc2(&i_this->current.pos.y, diff.y + (l_HIO.m18 + i_this->mAcch.m_ground_h), 0.1f, 6.0f);
+            if (i_this->m456 == 0) {
+                i_this->m456 = l_HIO.m10;
+                if (cM_rndF(1.0f) < l_HIO.m14 && i_this->m466 == 0) {
+                    i_this->m455 = 1;
+                    i_this->mC02 = 0;
+                    mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+                    cXyz off(0.0f, 30.0f, -100.0f);
+                    MtxPosition(&off, &i_this->m47C);
+                    i_this->m47C += i_this->current.pos;
+                    anm_init(i_this, 8, 6.0f, 2, 1.0f, 0);
+                    s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
+                    fpc_ProcID id = fopAcM_GetID(i_this);
+                    JAIZelBasic::zel_basic->monsSeStart(JA_SE_CV_MG_ATTACK, &i_this->eyePos, id, 0, reverb);
+                }
+            }
+        }
+        break;
+    }
+    case 1: {
+        daPy_py_c* py = (daPy_py_c*)player;
+        if (py->getCutType() == 0x10) {
+            dAttention_c& attn = g_dComIfG_gameInfo.play.getAttention();
+            BOOL isLocked = TRUE;
+            if (!attn.LockonTruth() && !(attn.mFlags & 0x20000000)) {
+                isLocked = FALSE;
+            }
+            if (isLocked && i_this == attn.LockonTarget(0)) {
+                i_this->m454 = 6;
+                i_this->m456 = 0;
+                anm_init(i_this, 7, 1.0f, 0, 1.0f, 0);
+                break;
+            }
+        }
+        i_this->mC02++;
+        if (i_this->mC02 >= l_HIO.m30 && i_this->mC02 <= l_HIO.m32) {
+        }
+        if (i_this->mC02 == l_HIO.m3C) {
+            anm_init(i_this, 9, 1.0f, 0, 1.0f, 0);
+        }
+        if (i_this->mC02 == l_HIO.m38) {
+            mDoMtx_YrotS(*calc_mtx, i_this->m496);
+            mDoMtx_XrotM(*calc_mtx, i_this->m494);
+            cXyz off(0.0f, -100.0f + g_regHIO.mChild[0].mFloatRegs[12], -120.0f + g_regHIO.mChild[0].mFloatRegs[13]);
+            MtxPosition(&off, &i_this->m47C);
+            i_this->m47C += i_this->current.pos;
+        }
+        f32 f30;
+        f32 f31;
+        if (i_this->mC02 >= l_HIO.m38) {
+            f31 = l_HIO.m2C;
+            f30 = 0.02f;
+            if (i_this->mC02 == l_HIO.m3E) {
+                anm_init(i_this, 7, 1.0f, 0, 1.0f, 0);
+            }
+        } else {
+            f31 = -20.0f + g_regHIO.mChild[0].mFloatRegs[14];
+            f30 = 0.1f;
+        }
+        if (i_this->mC02 == l_HIO.m3E + g_regHIO.mChild[0].mShortRegs[69]) {
+            s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
+            fpc_ProcID id = fopAcM_GetID(i_this);
+            JAIZelBasic::zel_basic->monsSeStart(JA_SE_CM_MAGTAIL_ATTACK, &i_this->eyePos, id, 0, reverb);
+        }
+        if (i_this->mC02 < g_regHIO.mChild[0].mShortRegs[249] + l_HIO.m3E + 3) {
+            i_this->mC04 = 1;
+        }
+        if (i_this->mC02 == l_HIO.m3E + 2) {
+            i_this->m18D4 = 1;
+        }
+        if (i_this->mC02 >= l_HIO.m3E + 2 && i_this->mC02 <= l_HIO.m3E + 15) {
+            i_this->mC04 = 2;
+        }
+        cLib_addCalc2(&i_this->current.pos.x, i_this->m47C.x, f30, f31);
+        cLib_addCalc2(&i_this->current.pos.y, 20.0f + i_this->m47C.y, f30, f31);
+        cLib_addCalc2(&i_this->current.pos.z, i_this->m47C.z, f30, f31);
+        i_this->speed.x = i_this->m47C.x - i_this->current.pos.x;
+        i_this->speed.y = -1.0f;
+        i_this->speed.z = i_this->m47C.z - i_this->current.pos.z;
+        if (py->checkPlayerGuard() && i_this->mE48[0].ChkAtHit()) {
+            i_this->m455 = 15;
+            mDoMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+            cXyz off(0.0f, 150.0f, 120.0f);
+            MtxPosition(&off, &i_this->m47C);
+            i_this->m47C += i_this->current.pos;
+            i_this->m462 = 10;
+            i_this->m456 = 10;
+            anm_init(i_this, 0xA, 1.0f, 2, 1.0f, 0);
+            i_this->m18D4 = 0;
+        }
+        if (i_this->mC02 == l_HIO.m3A) {
+            i_this->m455 = 0;
+            i_this->m456 = l_HIO.m10;
+            anm_init(i_this, 0xA, 6.0f, 2, 1.0f, 0);
+        }
+        break;
+    }
+    case 10: {
+        i_this->current.pos.y += i_this->speed.y;
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -100.0f) {
+            i_this->speed.y = -100.0f;
+        }
+        if (i_this->mAcch.ChkGroundHit()) {
+            i_this->m455 = 0;
+        }
+        break;
+    }
+    case 15: {
+        cLib_addCalc2(&i_this->current.pos.x, i_this->m47C.x, 0.02f, 20.0f);
+        cLib_addCalc2(&i_this->current.pos.y, 20.0f + i_this->m47C.y, 0.02f, 20.0f);
+        cLib_addCalc2(&i_this->current.pos.z, i_this->m47C.z, 0.02f, 20.0f);
+        i_this->speed.x = i_this->m47C.x - i_this->current.pos.x;
+        i_this->speed.y = -1.0f;
+        i_this->speed.z = i_this->m47C.z - i_this->current.pos.z;
+        if (i_this->m456 == 0) {
+            i_this->m455 = 0;
+            i_this->m456 = l_HIO.m10;
+            anm_init(i_this, 0xA, 6.0f, 2, 1.0f, 0);
+        }
+        break;
+    }
+    case 17: {
+        if (i_this->mAcch.ChkGroundHit()) {
+            i_this->m455 = 23;
+            i_this->m456 = (s16)(50.0f + cM_rndF(50.0f));
+            i_this->m48E = i_this->m456;
+        }
+        i_this->m460 = 5;
+        i_this->current.pos += i_this->speed;
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -100.0f) {
+            i_this->speed.y = -100.0f;
+        }
+        break;
+    }
+    case 20: {
+        i_this->current.angle.x -= 0x500;
+        cLib_addCalcAngleS2(&i_this->current.angle.y, (s16)(cM_atan2s(i_this->speed.x, i_this->speed.z) + 0x8000), 2, 0x400);
+        cLib_addCalc2(&i_this->m18F4, 2.0f, 1.0f, 0.1f);
+        if (i_this->speed.y <= 1.0f) {
+            if (i_this->m18F8 != 0) {
+                if (i_this->mAcch.ChkGroundHit()) {
+                    i_this->m18F8 = 2;
+                }
+            } else {
+                i_this->mE48[0].OffCoSPrmBit(dCcG_CoSPrm_AtLasso_e | dCcG_CoSPrm_TgLasso_e);
+                tex_anm_set(i_this, 1);
+                i_this->m454 = 2;
+                i_this->m466 = l_HIO.m54;
+                i_this->m478 = 0.0f;
+                i_this->m488[1] = 0;
+                i_this->m330 = 0.0f;
+                f32 xzDist = i_this->speed.z * i_this->speed.z + (i_this->speed.x * i_this->speed.x + i_this->speed.y * i_this->speed.y);
+                if (xzDist > 0.0f) {
+                    xzDist = std::sqrtf(xzDist);
+                }
+                i_this->speedF = -xzDist;
+                i_this->m455 = 0;
+                i_this->cull.box.min.x = -100.0f;
+                i_this->cull.box.min.y = -100.0f;
+                i_this->cull.box.min.z = -100.0f;
+                i_this->cull.box.max.x = 100.0f;
+                i_this->cull.box.max.y = 100.0f;
+                i_this->cull.box.max.z = 100.0f;
+            }
+        }
+        i_this->m460 = 5;
+        i_this->current.pos += i_this->speed;
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -100.0f) {
+            i_this->speed.y = -100.0f;
+        }
+        break;
+    }
+    case 23: {
+        i_this->speed.y = 0.0f;
+        cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 1, 0x400);
+        i_this->speed.x *= 0.8f;
+        i_this->speed.z *= 0.8f;
+        if (i_this->m456 == 0) {
+            i_this->m455 = 10;
+        }
+        i_this->m460 = 5;
+        i_this->current.pos += i_this->speed;
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -100.0f) {
+            i_this->speed.y = -100.0f;
+        }
+        break;
+    }
+    }
+
+    if (i_this->m454 < 2) {
+        if (i_this->m455 < 10) {
+            cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->m496, 2, 0x400);
+            f32 diffY = i_this->current.pos.y - i_this->mAcch.m_ground_h;
+            if (diffY > 40.0f) {
+                i_this->m455 = 10;
+            }
+            cLib_addCalcAngleS2(&i_this->current.angle.x, (s16)(i_this->m494 + var_r25), 4, 0x800);
+        }
+        cLib_addCalcAngleS2(&i_this->m468, 0, 1, 0x100);
+    }
 }
 
 /* 00005088-00005A04       .text mt_move_maru__FP8mt_class */
-void mt_move_maru(mt_class*) {
+void mt_move_maru(mt_class* i_this) {
     /* Nonmatching */
-}
+    u32 seParam = 0;
+    i_this->m464 = 3;
+    switch (i_this->m455) {
+    case 0: {
+        if (i_this->m456 == 0) {
+            i_this->mE48[0].OnCoSetBit();
+        }
+        i_this->shape_angle.x += (s16)(220.0f * i_this->speedF);
+        mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+        cXyz sp48(0.0f, 0.0f, i_this->speedF);
+        cXyz sp54;
+        MtxPosition(&sp48, &sp54);
+        i_this->speed.x = sp54.x;
+        i_this->speed.z = sp54.z;
+        i_this->current.pos += i_this->speed;
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -100.0f) {
+            i_this->speed.y = -100.0f;
+        }
+        f32 prevSpeedY = i_this->speed.y;
+        mt_bg_check(i_this);
+        if (i_this->mAcch.ChkGroundHit()) {
+            if (prevSpeedY < -40.0f + g_regHIO.mChild[0].mFloatRegs[15]) {
+                i_this->m18F8 = 2;
+            }
+            f32 targetSpeedF = 0.0f;
+            f32 scaleSpeed = 1.0f;
+            dBgS_GndChk gndChk;
+            cXyz pos = i_this->current.pos;
+            pos.y += 50.0f;
+            gndChk.SetPos(&pos);
+            f32 gndY1 = dComIfG_Bgsp()->GroundCross(&gndChk);
+            mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+            cXyz off(0.0f, 50.0f, 6.0f);
+            cXyz worldOff;
+            MtxPosition(&off, &worldOff);
+            cXyz checkPos = i_this->current.pos + worldOff;
+            gndChk.SetPos(&checkPos);
+            f32 gndY2 = dComIfG_Bgsp()->GroundCross(&gndChk);
+            if (gndY2 != -1e9f) {
+                if (gndY2 < gndY1 - 1.0f) {
+                    targetSpeedF = 6.0f;
+                    scaleSpeed = 0.1f;
+                } else if (gndY2 > gndY1 + 1.0f) {
+                    targetSpeedF = -50.0f;
+                    scaleSpeed = 0.1f;
+                }
+            }
+            cLib_addCalc2(&i_this->speedF, targetSpeedF, 1.0f, l_HIO.m5C * scaleSpeed);
+            if (prevSpeedY < -20.0f + g_regHIO.mChild[0].mFloatRegs[17]) {
+                i_this->speed.y = prevSpeedY * (-0.5f + g_regHIO.mChild[0].mFloatRegs[18]);
+                seParam = (u32)(i_this->speed.y * (10.0f + g_regHIO.mChild[0].mFloatRegs[8]));
+                if (seParam > 100) {
+                    seParam = 100;
+                }
+            } else {
+                i_this->speed.y = -50.0f;
+            }
+        }
+        if (i_this->mAcch.ChkWallHit()) {
+            if (fabs(i_this->speedF) > 20.0f) {
+                i_this->speedF *= -0.8f;
+                seParam = 50;
+            }
+        }
+        if (seParam != 0) {
+            s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
+            JAIZelBasic::zel_basic->seStart(JA_SE_CM_MAGTAIL_MOVE, &i_this->eyePos, seParam, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        i_this->attention_info.flags |= 0x10;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 9;
+        if (fopAcM_CheckStatus(i_this, 0x2000)) {
+            i_this->attention_info.flags &= ~0x10;
+            i_this->m455 = 1;
+        }
+        break;
+    }
+    case 1: {
+        i_this->mE48[0].OffCoSetBit();
+        i_this->current.angle.x = 0;
+        i_this->current.angle.y = i_this->shape_angle.y;
+        i_this->current.angle.z = i_this->shape_angle.z;
+        if (!fopAcM_CheckStatus(i_this, 0x2000)) {
+            if (i_this->speedF > 0.0f) {
+                i_this->m455 = 0;
+                i_this->speedF = 20.0f * l_HIO.m58;
+                i_this->speed.y = 20.0f * l_HIO.m58;
+                i_this->m456 = 20;
+            } else {
+                i_this->m455 = 0;
+                i_this->speedF = 0.0f;
+                i_this->speed.y = -20.0f + g_regHIO.mChild[0].mFloatRegs[14];
+                i_this->m456 = 20;
+            }
+        } else if (dComIfGp_event_runCheck()) {
+            i_this->m466++;
+        }
+        break;
+    }
+    }
 
+    cLib_addCalcAngleS2(&i_this->m468, 0, 1, 0x100);
+    if (i_this->m466 > 70) {
+        cLib_addCalc2(&i_this->m474, 1.0f, 1.0f, 0.04f);
+        s16 targetAngle = l_HIO.m52;
+        if (i_this->m466 < 110) {
+            if (i_this->m466 > 100 || i_this->m466 < 80) {
+                targetAngle -= 0x5DC;
+            }
+            cLib_addCalcAngleS2(&i_this->shape_angle.x, 0x7800, 4, 0x300);
+        }
+        cLib_addCalcAngleS2(&i_this->m488[1], targetAngle, 4, 0x1000);
+        cLib_addCalc2(&i_this->m478, 28.0f, 1.0f, 6.0f);
+        cLib_addCalc2(&i_this->m338, 0.1f, 1.0f, 0.05f);
+    } else {
+        if (i_this->m466 == 70) {
+            i_this->m330 = 80.0f + g_regHIO.mChild[0].mFloatRegs[6];
+            i_this->m338 = 0.02f;
+            if (i_this->m18FA == 0) {
+                i_this->speed.y = 30.0f + g_regHIO.mChild[0].mFloatRegs[14];
+            }
+        }
+        cLib_addCalc0(&i_this->m330, 1.0f, 0.5f);
+        cLib_addCalcAngleS2(&i_this->m468, (s16)(6.0f * (i_this->m330 * jmaSinTable[(u16)(i_this->m466 * (g_regHIO.mChild[0].mShortRegs[71] + 0x1388)) >> jmaSinShift])), 2, 0x1000);
+        cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 4, 0x1000);
+        cLib_addCalc2(&i_this->m474, -0.5f, 1.0f, 0.07f);
+        cLib_addCalcAngleS2(&i_this->m488[1], (s16)((200.0f + g_regHIO.mChild[0].mFloatRegs[17]) * (i_this->m330 * jmaSinTable[(u16)(i_this->m466 * (g_regHIO.mChild[0].mShortRegs[71] + 0x1388)) >> jmaSinShift])), 1, 0x1000);
+        i_this->current.angle.x = i_this->shape_angle.x;
+        i_this->shape_angle.y = i_this->current.angle.y + i_this->m468;
+        cLib_addCalc0(&i_this->speedF, 1.0f, 0.02f);
+    }
+
+    if (i_this->m466 == 100) {
+        i_this->m2E4 = 2;
+    }
+
+    if (i_this->m348 != 0) {
+        if (i_this->m348 == 1) {
+            i_this->m450 = dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGTAILSTEAM, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, NULL, dComIfGp_getReverb(i_this->current.roomNo));
+            if (i_this->m450 != NULL) {
+                i_this->m450->setStatus(JPAEmtrStts_StopDraw);
+            }
+        }
+        if (i_this->m450 != NULL) {
+            mDoMtx_stack_c::transS(i_this->current.pos);
+            mDoMtx_YrotM(mDoMtx_stack_c::now, i_this->shape_angle.y);
+            i_this->m450->setGlobalRTMatrix(mDoMtx_stack_c::now);
+            if (i_this->m34A == 0) {
+                i_this->m450->clearStatus(JPAEmtrStts_StopDraw);
+                i_this->m450->setRate(0.0f);
+                i_this->m450->setStatus(JPAEmtrStts_StopEmit);
+                i_this->m450 = NULL;
+                i_this->m348 = 0;
+                return;
+            }
+            u8 alpha = 0xB4;
+            if (i_this->m34A < 30) {
+                alpha = i_this->m34A * 6;
+            }
+            i_this->m450->setGlobalAlpha(alpha);
+        }
+    }
+}
 /* 00005B9C-00005C54       .text water_damage_se_set__FP8mt_class */
 void water_damage_se_set(mt_class* i_this) {
     s8 reverb = dComIfGp_getReverb(i_this->current.roomNo);
@@ -1740,10 +2387,8 @@ static cPhs_State daMt_Create(fopAc_ac_c* pActor) {
             }
             i_this->m2BC = i_this->m2B7 + 1;
             i_this->m2BE = 1;
-            dPnt* point = ((dPath*)i_this->m2C0)->m_points;
-            i_this->m47C = point->m_position.x;
-            i_this->m480 = point->m_position.y;
-            i_this->m484 = point->m_position.z;
+            dPnt* point = reinterpret_cast<dPath*>(i_this->m2C0)->m_points;
+            *((cXyz*)&i_this->m47C) = point->m_position;
         }
 
         if (i_this->m2B8 != 0xFF) {
