@@ -129,11 +129,11 @@ static dCcD_SrcCps l_cps_src = {
 
 static Vec atama_cyl_offset[] = {
     {0.0f, 0.0f, 0.0f},
-    {0.0f, 150.0f, 0.0f},
+    {150.0f, 0.0f, 0.0f},
 };
 static Vec ago_cyl_offset[] = {
     {0.0f, 0.0f, 0.0f},
-    {0.0f, 90.0f, 0.0f},
+    {90.0f, 0.0f, 0.0f},
 };
 static Vec body1_cyl_offset[] = {
     {-40.0f, -20.0f, 0.0f},
