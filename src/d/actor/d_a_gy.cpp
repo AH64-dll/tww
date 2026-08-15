@@ -742,14 +742,14 @@ void daGy_c::modeWithAttack() {
         modeCircleInit();
         return;
     }
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    s16 target_angle = cLib_targetAngleY(&current.pos, &player->current.pos);
-    f32 player_dist = fopAcM_searchActorDistance(this, player);
+    s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    f32 player_dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
     switch (m928) {
     case 0:
         m4E8 = l_HIO.mAC;
         m4EC = l_HIO.mC4;
-        cLib_addCalcAngleS2(&current.angle.y, target_angle, 8, 0x400);        m4F0 = l_HIO.m68;
+        cLib_addCalcAngleS2(&current.angle.y, target_angle, 8, 0x400);
+        m4F0 = l_HIO.m68;
         if (player_dist < l_HIO.m44) {
             m928++;
             m914 = l_HIO.m10E;
@@ -770,8 +770,8 @@ void daGy_c::modeWithAttack() {
             fopAc_ac_c* hit_ac = m50C.GetCoHitAc();
             if (fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
                 dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 Vec* eye = &eyePos;
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, eye, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 mDoAud_monsSeStart(JA_SE_CV_GY_ATTACK, eye, fopAcM_GetID(this), 0, dComIfGp_getReverb(current.roomNo));
                 modeAttackBackInit();
                 return;
