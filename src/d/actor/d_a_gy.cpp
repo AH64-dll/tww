@@ -742,8 +742,9 @@ void daGy_c::modeWithAttack() {
         modeCircleInit();
         return;
     }
-    s16 target_angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
-    f32 player_dist = fopAcM_searchActorDistance(this, dComIfGp_getPlayer(0));
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    s16 target_angle = cLib_targetAngleY(&current.pos, &player->current.pos);
+    f32 player_dist = fopAcM_searchActorDistance(this, player);
     switch (m928) {
     case 0:
         m4E8 = l_HIO.mAC;
@@ -769,8 +770,8 @@ void daGy_c::modeWithAttack() {
             fopAc_ac_c* hit_ac = m50C.GetCoHitAc();
             if (fopAcM_GetName(hit_ac) == fpcNm_SHIP_e) {
                 dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 Vec* eye = &eyePos;
-                JAIZelBasic::zel_basic->seStart(JA_SE_CM_GY_SHIP_CRASH, eye, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
                 mDoAud_monsSeStart(JA_SE_CV_GY_ATTACK, eye, fopAcM_GetID(this), 0, dComIfGp_getReverb(current.roomNo));
                 modeAttackBackInit();
                 return;
@@ -1204,7 +1205,7 @@ void daGy_c::setWave() {
     mD7C.setPitch(1.0f + l_HIO.m20);
     mD18.setPitch(1.0f - l_HIO.m20);
     mD7C.setAnchor(&cXyz(l_HIO.m28, l_HIO.m2C, l_HIO.m30),
-                   &cXyz(l_HIO.m34, l_HIO.m38, l_HIO.m3C));
+               &cXyz(l_HIO.m34, l_HIO.m38, l_HIO.m3C));
     f32 nx = (f32)((f64)l_HIO.m28) * -1.0f;
     f32 ny = (f32)((f64)l_HIO.m2C);
     f32 nz = (f32)((f64)l_HIO.m30);
