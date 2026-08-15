@@ -588,7 +588,6 @@ static void angle_initial(bo_class* i_this) {
 
 /* 00002080-00002170       .text wait_initial__FP8bo_class */
 static void wait_initial(bo_class* i_this) {
-    /* Nonmatching */
     if (cM_rnd() < 0.5f) {
         anm_init(i_this, 0x15, 5.0f, 2, 1.0f, -1, 0);
     } else {
@@ -603,10 +602,8 @@ static void wait_initial(bo_class* i_this) {
     i_this->mAction = 0;
     i_this->m2C5 = 2;
 }
-
 /* 00002170-000022F8       .text start_bakutsuki_event_camera__FP10fopAc_ac_c */
 static void start_bakutsuki_event_camera(fopAc_ac_c* i_this) {
-    /* Nonmatching */
     static cXyz cam_pos(40.0f, 10.0f, 280.0f);
     static cXyz ctr_pos(0.0f, 50.0f, 50.0f);
     static f32 cam_fovy = 75.0f;
