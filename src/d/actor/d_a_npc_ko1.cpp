@@ -286,7 +286,44 @@ BOOL daNpc_Ko1_c::createInit() { /* Nonmatching */
 }
 
 /* 00000F14-000011C4       .text setMtx__11daNpc_Ko1_cFb */
-void daNpc_Ko1_c::setMtx(bool) { /* Nonmatching */
+void daNpc_Ko1_c::setMtx(bool i_param_1) { /* Nonmatching */
+    if (m877 == 0) {
+        u32 sndId = 0;
+        plyTexPttrnAnm();
+        if (mObjAcch.m_flags & dBgS_Acch::GROUND_HIT) {
+            sndId = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+        }
+        m860 = mpMorf->play(&eyePos, sndId, dComIfGp_getReverb(current.roomNo));
+        if (mpMorf->getFrame() < m824) {
+            m860 = 1;
+        }
+        m824 = mpMorf->getFrame();
+        if (m89F == 4 && mpMorf->checkFrame(10.0f)) {
+            JAIZelBasic::zel_basic->seStart(0x5817, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+        mpHedMorf->play(&eyePos, 0, 0);
+        if (mpBlnMorf != NULL && m865 < 2) {
+            mpBlnMorf->setFrame((f32)(s16)mpMorf->getFrame());
+        }
+        m86C = (mObjAcch.m_flags >> 5) & 1;
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
+    }
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(m7D8);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    mpHedMorf->getModel()->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(mJntNo1));
+    mpHedMorf->calc();
+    if (mpBlnMorf != NULL) {
+        mpBlnMorf->calc();
+    }
+    if (mpItmModel != NULL) {
+        mpItmModel->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(m6CE));
+        mpItmModel->calc();
+    }
+    setAttention(i_param_1);
 }
 
 /* 000011C4-000011D8       .text anmNum_toResID__11daNpc_Ko1_cFi */

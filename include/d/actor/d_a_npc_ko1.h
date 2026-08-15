@@ -154,7 +154,7 @@ public:
     /* 0x6D1 */ s8 m6D1;
     /* 0x6D4 */ Mtx mMtx;
     /* 0x704 */ mDoExt_McaMorf* mpBlnMorf;
-    /* 0x708 */ mDoExt_McaMorf* mpItmMorf;
+    /* 0x708 */ J3DModel* mpItmModel;
     /* 0x70C */ u32 m70C;
     /* 0x710 */ mDoExt_McaMorf* mpHedMorf;
     /* 0x714 */ J3DAnmTexPattern* mpBtpAnm;
