@@ -828,6 +828,7 @@ void daNpc_So_c::modeEventFirstInit() {
 
 /* 00002314-000023C8       .text modeEventFirst__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirst() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
@@ -850,9 +851,9 @@ void daNpc_So_c::modeEventFirstEndInit() {
     speedF = 0.0f;
     m_jnt.offBackBoneLock();
 }
-
 /* 0000240C-000024C0       .text modeEventFirstEnd__10daNpc_So_cFv */
 void daNpc_So_c::modeEventFirstEnd() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
@@ -899,6 +900,7 @@ void daNpc_So_c::modeEventMapopenInit() {
 
 /* 000025B0-00002670       .text modeEventMapopen__10daNpc_So_cFv */
 void daNpc_So_c::modeEventMapopen() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
@@ -927,6 +929,7 @@ void daNpc_So_c::modeEventBowInit() {
 
 /* 000026B4-000027F8       .text modeEventBow__10daNpc_So_cFv */
 void daNpc_So_c::modeEventBow() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
@@ -1042,6 +1045,7 @@ void daNpc_So_c::modeGetRupeeInit() {
 
 /* 00002B68-00002C6C       .text modeGetRupee__10daNpc_So_cFv */
 void daNpc_So_c::modeGetRupee() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
@@ -1074,9 +1078,9 @@ void daNpc_So_c::modeEventTriForceInit() {
     offsetAppear();
     setAnm(1, 0);
 }
-
 /* 00002CC0-00002D80       .text modeEventTriForce__10daNpc_So_cFv */
 void daNpc_So_c::modeEventTriForce() {
+    /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
     /* Nonmatching */
