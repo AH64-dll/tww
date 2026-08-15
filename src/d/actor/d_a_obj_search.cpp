@@ -815,7 +815,6 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c* i_actor, cXyz* o_p
 
 /* 801002E0-8010035C       .text SetArgData__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::SetArgData() {
-    /* Nonmatching */
     u32 param = fopAcM_GetParam(this);
     m7E2 = param >> 24;
     m837 = (param >> 16) & 0xff;
