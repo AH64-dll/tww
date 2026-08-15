@@ -594,8 +594,8 @@ void daNpc_So_c::setAnm(s8 i_anmIdx, bool i_loopFlag) {
 
 /* 00001524-00001644       .text setAnmSwimSpeed__10daNpc_So_cFv */
 void daNpc_So_c::setAnmSwimSpeed() {
-    if (field_0x6D3 == 2) {
     /* Nonmatching */
+    if (field_0x6D3 == 2) {
         const cXyz& delta = current.pos - old.pos;
         f32 dist = std::sqrtf(PSVECSquareMag(&delta));
         dist = dist / 10.0f;
@@ -664,8 +664,8 @@ void daNpc_So_c::modeJumpInit() {
 
 /* 00001880-000019F0       .text modeJump__10daNpc_So_cFv */
 void daNpc_So_c::modeJump() {
-    if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
     /* Nonmatching */
+    if (current.pos.y < dLib_getWaterY(current.pos, mObjAcch)) {
         fopAcM_seStart(this, 0x5939, 0);
         fopKyM_createWpillar(&current.pos, 1.4f * scale.x, 1.4f, 0);
 
