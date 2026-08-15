@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_search.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_particle.h"
@@ -473,6 +474,85 @@ void daObj_Search::Act_c::modeFindInit() {
 /* 800FEF80-800FF44C       .text modeFind__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFind() {
     /* Nonmatching */
+    dComIfGp_evmng_getEventIdx("Search_Light_Find", 0xFF);
+    dComIfGp_evmng_getEventIdx("Search_Light_Find_With_Barrel", 0xFF);
+    dComIfGp_evmng_getEventIdx("Search_Light_Find_Wall", 0xFF);
+
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    player_check();
+
+    mLight.mColor.r = attr()->m5C;
+    mLight.mColor.g = attr()->m5C;
+    static cXyz pos = cXyz(0.0f, 100.0f, 0.0f);
+    cXyz sp18 = pos + player->current.pos;
+    cXyz spC = sp18 - m624[m830];
+
+    m7B0 = mAngle[0].y;
+    s16 yaw = cM_atan2s(spC.x, spC.z) - current.angle.y;
+    f32 dist = std::sqrtf(spC.x * spC.x + spC.z * spC.z);
+    s16 pitch = cM_atan2s(spC.y, dist);
+
+    if (m830 == 0) {
+        mAngle[1].y = yaw;
+    } else {
+        pitch = -pitch;
+        yaw += 0x8000;
+        mAngle[0].y = yaw;
+    }
+
+    cLib_addCalcAngleS2(&mAngle[m830].y, yaw, 10, 0x400);
+    cLib_addCalcAngleS2(&mAngle[m830].x, pitch, 10, 0x400);
+
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        int staffId = dComIfGp_evmng_getMyStaffId("Search", NULL, 0);
+
+        if (dComIfGp_evmng_endCheck("Search_Light_Find") ||
+            dComIfGp_evmng_endCheck("Search_Light_Find_With_Barrel") ||
+            dComIfGp_evmng_endCheck("Search_Light_Find_Wall"))
+        {
+            JAIZelBasic::zel_basic->seStop(0x834, 0x14);
+            if (attr()->m43 != 0) {
+                dComIfGp_event_reset();
+                modeProc(PROC_INIT_e, MODE_SEARCH_PATH_e);
+                return;
+            }
+            dComIfGp_setNextStage("majroom", 0, 0, -1, 0.0f, 0, 1, 0);
+            return;
+        }
+
+        if (!dComIfGp_checkPlayerStatus0(0, 1) && !dComIfGp_checkPlayerStatus0(0, 0x100)) {
+            player->mDemo.setDemoMode(3);
+            player->mDemo.setParam0(0);
+
+            s16 angle = mAngle[m830].y + current.angle.y;
+            if (m830 == 0) {
+                angle += 0x8000;
+            }
+
+            cLib_addCalcAngleS2(&m7E0, angle, 4, 0x400);
+            player->setPlayerPosAndAngle(&player->current.pos, m7E0);
+
+            if (cLib_distanceAngleS(angle, m7E0) < 0x500) {
+                player->mDemo.setDemoMode(2);
+                player->mDemo.setParam1(1);
+            }
+        }
+
+        dComIfGp_evmng_cutEnd(staffId);
+        return;
+    }
+
+    if (player->checkFrontRoll() == FALSE) {
+        if (player->field_0x2b0 < 0.0f) {
+            fopAcM_orderOtherEvent2(this, "Search_Light_Find_With_Barrel", 1, 0xFFFF);
+            return;
+        }
+        if (dComIfGp_checkPlayerStatus0(0, 1)) {
+            fopAcM_orderOtherEvent2(this, "Search_Light_Find_Wall", 1, 0xFFFF);
+            return;
+        }
+        fopAcM_orderOtherEvent2(this, "Search_Light_Find", 1, 0xFFFF);
+    }
 }
 
 /* 800FF44C-800FF49C       .text modeFind2ndInit__Q212daObj_Search5Act_cFv */
@@ -487,6 +567,56 @@ void daObj_Search::Act_c::modeFind2ndInit() {
 /* 800FF49C-800FF7A4       .text modeFind2nd__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFind2nd() {
     /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    player_check();
+
+    static cXyz pos = cXyz(0.0f, 100.0f, 0.0f);
+    cXyz sp24 = pos + player->current.pos;
+    cXyz sp18 = sp24 - m624[m830];
+
+    m7B0 = mAngle[0].y;
+    s16 yaw = cM_atan2s(sp18.x, sp18.z) - current.angle.y;
+    f32 dist = std::sqrtf(sp18.x * sp18.x + sp18.z * sp18.z);
+    s16 pitch = cM_atan2s(sp18.y, dist);
+
+    bool b = false;
+    s16 min_pitch = g_regHIO.mChild[12].mShortRegs[0] + 0x6590;
+    s16 max_pitch = g_regHIO.mChild[12].mShortRegs[1] - 0x2710;
+
+    if (pitch >= min_pitch) {
+        if (pitch < min_pitch) {
+            pitch = min_pitch;
+        }
+    }
+    if (pitch <= max_pitch) {
+        if (pitch > max_pitch) {
+            pitch = max_pitch;
+        }
+    }
+    if (pitch >= min_pitch || pitch <= max_pitch) {
+        b = true;
+    }
+
+    cXyz headPos = player->getHeadTopPos();
+    mObjLinChk.Set(&m624[m830], &headPos, this);
+    if (dComIfG_Bgsp()->LineCross(&mObjLinChk)) {
+        b = true;
+    }
+
+    if (b) {
+        modeProc(PROC_INIT_e, MODE_SEARCH_PATH_e);
+    }
+
+    if (m830 == 0) {
+        mAngle[1].y = yaw;
+    } else {
+        pitch = -pitch;
+        yaw += 0x8000;
+        mAngle[0].y = yaw;
+    }
+
+    cLib_addCalcAngleS2(&mAngle[m830].y, yaw, 10, 0x400);
+    cLib_addCalcAngleS2(&mAngle[m830].x, pitch, 10, 0x400);
 }
 
 /* 800FF7A4-800FF7A8       .text modeSearchBdkInit__Q212daObj_Search5Act_cFv */
@@ -496,8 +626,139 @@ void daObj_Search::Act_c::modeSearchBdkInit() {
 /* 800FF7A8-800FFE78       .text modeSearchBdk__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchBdk() {
     /* Nonmatching */
-}
+    fopAc_ac_c* bdk;
+    if (fopAcM_SearchByName(0xF0, &bdk) && bdk != NULL) {
+        f32 var_f31 = g_regHIO.mChild[12].mFloatRegs[0];
+        cXyz bdk_pos = bdk->current.pos;
+        bdk_pos.y += g_regHIO.mChild[12].mFloatRegs[2];
 
+        bool found = true;
+        m8D4.x = 3600.0f;
+        m8D4.y = 10000.0f;
+        m8D4.z = -3800.0f;
+
+        m8E8 = 4000.0f + g_regHIO.mChild[8].mFloatRegs[0];
+        m8E4 = 15000.0f + g_regHIO.mChild[8].mFloatRegs[5];
+        m8EC = g_regHIO.mChild[8].mShortRegs[0] + 0x3500;
+        m8E0 = g_regHIO.mChild[8].mShortRegs[1];
+
+        cXyz sp68 = bdk_pos - m8D4;
+
+        m8EE = dLib_checkActorInFan(m8D4, bdk, m8E0, m8EC, m8E4, 3000.0f);
+        if (dLib_checkActorInCircle(m8D4, bdk, m8E8, 10000.0f)) {
+            m8EE = 0;
+        }
+
+        s16 action = *(s16*)((u8*)bdk + 0x2C6);
+        if ((u16)action <= 0xF) {
+            switch (action) {
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 8:
+            case 9:
+                if (m8EE != 0) {
+                    var_f31 += 3000.0f;
+                    bdk_pos.y += 1000.0f;
+                } else {
+                    found = false;
+                }
+                break;
+            case 15:
+                found = false;
+                break;
+            case 0:
+            case 1:
+            case 7:
+                if (m8EE != 0) {
+                    var_f31 += 500.0f;
+                    bdk_pos.y += 100.0f;
+                } else {
+                    found = false;
+                }
+                break;
+            case 10:
+                s16 subAction = *(s16*)((u8*)bdk + 0x2C8);
+                if (subAction == 8) {
+                    if (cLib_calcTimer(&m904) == 0) {
+                        found = false;
+                    } else {
+                        bdk_pos = m8F4;
+                    }
+                } else if (subAction == 7) {
+                    m904 = (int)((f32)g_regHIO.mChild[8].mShortRegs[4] + (300.0f + cM_rndF(100.0f)));
+                    bdk_pos = m8F4;
+                } else if (subAction >= 6) {
+                    m8F4 = bdk_pos;
+                } else if (subAction >= 5) {
+                    var_f31 += 100.0f;
+                    bdk_pos.y += 100.0f;
+                } else {
+                    found = false;
+                }
+                break;
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                found = false;
+                break;
+            }
+        } else {
+            found = false;
+        }
+
+        int dir = (fopAcM_GetParam(this) & 1) ? -1 : 1;
+
+        if (found) {
+            cLib_addCalc2(&mCirclePath.mRadius, var_f31, 0.1f, 100.0f);
+            mCirclePath.mWobbleAmplitude = 200.0f + g_regHIO.mChild[12].mFloatRegs[1];
+            mCirclePath.mAngleSpeed = (g_regHIO.mChild[12].mShortRegs[0] + 0x150) * dir;
+            mCirclePath.mTranslation = bdk_pos;
+
+            dLib_setCirclePath(&mCirclePath);
+
+            static cXyz l_off1 = cXyz(0.0f, 100.0f, 0.0f);
+            cXyz sp38 = l_off1 + mCirclePath.mTranslation;
+            cXyz sp2C = sp38 - m624[0];
+
+            m7B0 = mAngle[0].y;
+            s16 yaw = cM_atan2s(sp2C.x, sp2C.z) - current.angle.y;
+            f32 dist = std::sqrtf(sp2C.x * sp2C.x + sp2C.z * sp2C.z);
+            s16 pitch = cM_atan2s(sp2C.y, dist);
+
+            cLib_addCalcAngleS2(&mAngle[0].y, yaw, 10, 0x100);
+            cLib_addCalcAngleS2(&mAngle[0].x, pitch, 10, 0x100);
+
+            mAngle[1].y = mAngle[0].y;
+            mAngle[1].x = -mAngle[0].x;
+            return;
+        }
+
+        static cXyz l_off2 = cXyz(0.0f, 100.0f, 0.0f);
+        s16 target_pitch;
+        if (m900 == 1) {
+            target_pitch = g_regHIO.mChild[8].mShortRegs[7] + 0x3400;
+        } else {
+            target_pitch = g_regHIO.mChild[8].mShortRegs[8] + 0x2600;
+        }
+
+        if (cLib_calcTimer(&m8F0) == 0) {
+            m8F0 = (int)((f32)(g_regHIO.mChild[8].mShortRegs[2] + 0x3C) + cM_rndF(60.0f + g_regHIO.mChild[8].mFloatRegs[5]));
+            if (m900 == 1) {
+                m900 = -1;
+            } else {
+                m900 = 1;
+            }
+        }
+
+        m7B0 = mAngle[0].y;
+        cLib_addCalcAngleS2(&mAngle[0].x, target_pitch, 0x14, 0x20);
+        mAngle[1].x = -mAngle[0].x;
+    }
+}
 /* 800FFE78-80100080       .text modeProc__Q212daObj_Search5Act_cFQ312daObj_Search5Act_c6Proc_ei */
 void daObj_Search::Act_c::modeProc(daObj_Search::Act_c::Proc_e i_proc, int i_mode) {
     /* Nonmatching */

@@ -185,7 +185,8 @@ namespace daObj_Search {
         /* 0x7B6 */ u8 m7B6;
         /* 0x7B7 */ u8 m7B7;
         /* 0x7B8 */ u8 m7B8;
-        /* 0x7B9 */ u8 m7B9[0x7E0 - 0x7B9];
+        /* 0x7B9 */ u8 m7B9[0x7BC - 0x7B9];
+        /* 0x7BC */ dLib_circle_path_c mCirclePath;
         /* 0x7E0 */ s16 m7E0;
         /* 0x7E2 */ u8 m7E2;
         /* 0x7E3 */ u8 m7E3[0x7F4 - 0x7E3];
@@ -216,12 +217,14 @@ namespace daObj_Search {
         /* 0x8E0 */ s16 m8E0;
         /* 0x8E2 */ u8 m8E2[0x8E4 - 0x8E2];
         /* 0x8E4 */ f32 m8E4;
-        /* 0x8E8 */ u8 m8E8[0x8EC - 0x8E8];
+        /* 0x8E8 */ f32 m8E8;
         /* 0x8EC */ s16 m8EC;
         /* 0x8EE */ u8 m8EE;
-        /* 0x8EF */ u8 m8EF[0x900 - 0x8EF];
-        /* 0x900 */ u32 m900;
-        /* 0x904 */ u32 m904;
+        /* 0x8EF */ u8 m8EF;
+        /* 0x8F0 */ int m8F0;
+        /* 0x8F4 */ cXyz m8F4;
+        /* 0x900 */ int m900;
+        /* 0x904 */ int m904;
     };  // Size: 0x908
 
     STATIC_ASSERT(sizeof(Act_c) == 0x908);
