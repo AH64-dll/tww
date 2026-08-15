@@ -9,6 +9,7 @@
 
 class daNpc_Ym1_c : public fopNpc_npc_c {
 public:
+    typedef int (daNpc_Ym1_c::*ProcFunc)(void*);
     struct anm_prm_c {
         
     };
@@ -16,13 +17,13 @@ public:
     void setKariFlg();
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
-    void init_YM1_0();
-    void init_YM1_1();
-    void init_YM2_0();
-    void init_YM2_1();
-    void init_YM2_2();
-    void init_YM2_3();
-    void init_YMx_error();
+    int init_YM1_0();
+    int init_YM1_1();
+    int init_YM2_0();
+    int init_YM2_1();
+    int init_YM2_2();
+    int init_YM2_3();
+    int init_YMx_error();
     void createInit();
     void play_animation();
     void setMtx(bool);
@@ -63,7 +64,7 @@ public:
     void endEvent();
     void isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Ym1_c::*)(void*), void*);
+    int set_action(ProcFunc, void*);
     void setStt(signed char);
     void chk_areaIN(float, cXyz);
     void kari_1();
@@ -73,11 +74,11 @@ public:
     void turn_1();
     void NBTwai();
     void SITwai();
-    void wait_action1(void*);
-    void wait_action2(void*);
-    void wait_action3(void*);
-    void wait_action4(void*);
-    void demo_action1(void*);
+    int wait_action1(void*);
+    int wait_action2(void*);
+    int wait_action3(void*);
+    int wait_action4(void*);
+    int demo_action1(void*);
     void demo();
     void shadowDraw();
     BOOL _draw();
@@ -100,13 +101,17 @@ public:
     /* 0x6D8 */ u8 m6D8[0x6DC - 0x6D8];
     /* 0x6DC */ J3DModel* mpHeadModel;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F4 */ u8 m6F4[0x704 - 0x6F4];
+    /* 0x6F4 */ u8 m6F4[0x6F8 - 0x6F4];
+    /* 0x6F8 */ ProcFunc mProcFunc;
     /* 0x704 */ dCcD_Cyl mCyl;
     /* 0x834 */ u8 m834[0x842 - 0x834];
     /* 0x842 */ s16 mRotYTarget;
     /* 0x844 */ u8 m844[0x846 - 0x844];
     /* 0x846 */ csXyz m846;
-    /* 0x84C */ u8 m84C[0x890 - 0x84C];
+    /* 0x84C */ cXyz mEyePos;
+    /* 0x858 */ u8 m858[0x870 - 0x858];
+    /* 0x870 */ cXyz mAttPos;
+    /* 0x87C */ u8 m87C[0x890 - 0x87C];
     /* 0x890 */ s16 mKariTimer;
     /* 0x892 */ u8 m892[0x89B - 0x892];
     /* 0x89B */ u8 mKariFlag;
