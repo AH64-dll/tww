@@ -230,6 +230,7 @@ int daNpc_Ym1_c::btpResID(int idx) {
 
 /* 00000D98-00000E98       .text init_texPttrnAnm__11daNpc_Ym1_cFScb */
 int daNpc_Ym1_c::init_texPttrnAnm(signed char i_btpNo, bool i_set) {
+    /* Nonmatching */
     J3DModelData* modelData = mpHeadModel->getModelData();
     if (i_btpNo < 0) {
         return 0;
@@ -245,17 +246,22 @@ int daNpc_Ym1_c::init_texPttrnAnm(signed char i_btpNo, bool i_set) {
 
 /* 00000E98-00000F28       .text play_texPttrnAnm__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::play_texPttrnAnm() {
-    if (m8AA != 0 || cLib_calcTimer(&m6F6) == 0) {
-        m6F4++;
-        if (m6F4 >= mBtpAnm.getBtpAnm()->getFrameMax()) {
-            if (m8AA != 0) {
-                m6F4 = mBtpAnm.getBtpAnm()->getFrameMax();
-            } else {
-                m6F6 = cLib_getRndValue(60, 90);
-                m6F4 = 0;
-            }
-        }
+    if (m8AA == 0 && cLib_calcTimer(&m6F6) != 0) {
+        return;
     }
+
+    if ((m6F4 += 1) < mBtpAnm.getBtpAnm()->getFrameMax()) {
+        return;
+    }
+
+    if (m8AA != 0) {
+        m6F4 = mBtpAnm.getBtpAnm()->getFrameMax();
+        return;
+    } else {
+        m6F6 = cLib_getRndValue(60, 90);
+        m6F4 = 0;
+    }
+    return;
 }
 
 /* 00000F28-00000FF4       .text setAnm_anm__11daNpc_Ym1_cFPQ211daNpc_Ym1_c9anm_prm_c */
