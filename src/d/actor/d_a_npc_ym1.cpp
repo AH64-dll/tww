@@ -245,26 +245,17 @@ int daNpc_Ym1_c::init_texPttrnAnm(signed char i_btpNo, bool i_set) {
 
 /* 00000E98-00000F28       .text play_texPttrnAnm__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::play_texPttrnAnm() {
-    bool var_r4 = true;
-    if (m8AA == 0) {
-        var_r4 = !cLib_calcTimer(&m6F6);
+    if (m8AA != 0 || cLib_calcTimer(&m6F6) == 0) {
+        m6F4++;
+        if (m6F4 >= mBtpAnm.getBtpAnm()->getFrameMax()) {
+            if (m8AA != 0) {
+                m6F4 = mBtpAnm.getBtpAnm()->getFrameMax();
+            } else {
+                m6F6 = cLib_getRndValue(60, 90);
+                m6F4 = 0;
+            }
+        }
     }
-    if (!var_r4) {
-        return;
-    }
-
-    if ((m6F4 += 1) < mBtpAnm.getBtpAnm()->getFrameMax()) {
-        return;
-    }
-
-    if (m8AA != 0) {
-        m6F4 = mBtpAnm.getBtpAnm()->getFrameMax();
-        return;
-    } else {
-        m6F4 = 0;
-        m6F6 = cLib_getRndValue(60, 90);
-    }
-    return;
 }
 
 /* 00000F28-00000FF4       .text setAnm_anm__11daNpc_Ym1_cFPQ211daNpc_Ym1_c9anm_prm_c */
