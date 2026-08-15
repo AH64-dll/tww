@@ -163,12 +163,10 @@ void smoke_set(bl_class* i_this) {
 
 /* 000003F8-000004AC       .text fire_move_set__FP8bl_class */
 void fire_move_set(bl_class* i_this) {
-    /* Nonmatching */
-    u16 particleId = i_this->m2D0 == 0 ? 0x8124 : 0x8123;
-
+    u16 particleId = i_this->m2D0 == 0 ? (u16)0x8124 : (u16)0x8123;
     if (i_this->mFollowCB2.getEmitter() == NULL) {
-        g_dComIfG_gameInfo.play.getParticle()->set(0, particleId, &i_this->current.pos, NULL, NULL, 0xFF,
-                                                   &i_this->mFollowCB2, i_this->current.roomNo, NULL, NULL, NULL);
+        dComIfGp_particle_set(particleId, &i_this->current.pos, NULL, NULL, 0xFF,
+                              &i_this->mFollowCB2, fopAcM_GetRoomNo(i_this), NULL, NULL, NULL);
         if (i_this->m2D0 == 1) {
             i_this->mSph.SetTgSe(5);
             i_this->mSph.SetTgHitMark(dCcg_TgHitMark_Purple_e);
@@ -211,7 +209,7 @@ void fire_kaiten_keisan(bl_class* i_this) {
             camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             PSMTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0), *calc_mtx);
             mDoMtx_YrotM(*calc_mtx, (s16)(fopCamM_GetAngleY(camera) - i_this->shape_angle.y));
-            JPASetRMtxTVecfromMtx(*calc_mtx, emitter->mGlobalRotation, emitter->mGlobalTranslation);
+            JPASetRMtxTVecfromMtx(*calc_mtx, i_this->mFollowCB2.getEmitter()->mGlobalRotation, i_this->mFollowCB2.getEmitter()->mGlobalTranslation);
         }
     }
 }
@@ -827,12 +825,12 @@ void fuwafuwa_keisan(bl_class* i_this) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         i_this->m304 += 0x3E8;
         i_this->m318 = 80.0f + player->current.pos.y;
-        i_this->m318 += 10.0f * jmaSinTable[(u16)i_this->m304 >> jmaSinShift];
+        i_this->m318 += 10.0f * cM_ssin(i_this->m304);
         f3 = 6.0f;
     } else {
         i_this->m304 += 0x1F4;
         i_this->m318 = 100.0f + i_this->m320;
-        i_this->m318 += 40.0f * jmaSinTable[(u16)i_this->m304 >> jmaSinShift];
+        i_this->m318 += 40.0f * cM_ssin(i_this->m304);
     }
 
     cLib_addCalc2(&i_this->current.pos.y, i_this->m318, 1.0f, f3);
@@ -847,9 +845,9 @@ void BG_check(bl_class* i_this) {
         i_this->mAcch.m_flags |= dBgS_Acch::LINE_CHECK;
 
         if (i_this->m2D1 == 0) {
-            f32 groundH = i_this->mAcch.GetGroundH();
-            if (groundH == -1000000000.0f) {
-                i_this->m320 = groundH;
+            f32 unk = -1000000000.0f;
+            if (unk == i_this->mAcch.GetGroundH()) {
+                i_this->m320 = unk;
             }
         }
     }
@@ -1584,13 +1582,14 @@ void action_hook_atari(bl_class* i_this) {
 
 /* 00004D3C-00004DBC       .text action_come_wait__FP8bl_class */
 void action_come_wait(bl_class* i_this) {
-    /* Nonmatching */
-    if (i_this->m306 == 0x46) {
+    switch (i_this->m306) {
+    case 0x46:
         if (i_this->m2D5 != 0xFF && dComIfGs_isSwitch(i_this->m2D5, dComIfGp_roomControl_getStayNo())) {
             i_this->actor_status |= 0x20;
             i_this->m2D2 = 3;
             i_this->m306 = 0x26;
         }
+        break;
     }
 }
 
