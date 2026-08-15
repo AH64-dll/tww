@@ -255,7 +255,7 @@ void daNpc_Bms1_c::set_mtx() {
         PSMTXCopy(mDoMtx_stack_c::now, mpModel3->getBaseTRMtx());
     } else if (dComIfGs_isEventBit(0xA02)) {
         mDoMtx_stack_c::copy(pModel->getAnmMtx(m_head_jnt_num));
-        PSMTXCopy(mDoMtx_stack_c::now, mpModel3->getBaseTRMtx());
+        PSMTXCopy(mDoMtx_stack_c::now, mpModel2->getBaseTRMtx());
     }
 
     if (mpModel4 != NULL) {
@@ -293,13 +293,13 @@ BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
 void daNpc_Bms1_c::playTexPatternAnm() {
     /* Nonmatching */
     if (cLib_calcTimer(&m34E) == 0) {
-        s16 frameCount = m_head_tex_pattern->getFrameMax();
-        if (mBtpFrame >= frameCount) {
-            mBtpFrame = mBtpFrame - frameCount;
+        s16 frameMax = mpMorf->getEndFrame();
+        if (mBtpFrame >= frameMax) {
+            mBtpFrame = mBtpFrame - frameMax;
             m34E = (s16)(cM_rndF(100.0f) + 30.0f);
-        } else {
-            mBtpFrame = mBtpFrame + 1;
+            return;
         }
+        mBtpFrame = mBtpFrame + 1;
     }
 }
 
