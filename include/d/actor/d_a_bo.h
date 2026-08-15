@@ -38,7 +38,8 @@ public:
     /* 0x2C6 */ u8 m2C6;
     /* 0x2C7 */ u8 m2C7;
     /* 0x2C8 */ u8 m2C8;
-    /* 0x2C9 */ u8 m2C9[0x2CB - 0x2C9];
+    /* 0x2C9 */ u8 m2C9;
+    /* 0x2CA */ u8 m2CA;
     /* 0x2CB */ u8 m2CB;
     /* 0x2CC */ u8 m2CC;
     /* 0x2CD */ u8 m2CD;

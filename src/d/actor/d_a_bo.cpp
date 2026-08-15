@@ -275,24 +275,307 @@ static BOOL shock_damage_check(bo_class* i_this) {
     return FALSE;
 }
 
+static s16 pl_cut_real_no_dt[32] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+};
+
+static u8 nokezoru_on_off_dt[32] = {
+    0, 0, 0, 0,
+    0, 1, 1, 1,
+    1, 1, 1, 0,
+    1, 1, 1, 1,
+    1, 1, 1, 1,
+    0, 1, 0, 1,
+    0, 1, 1, 1,
+    1, 1, 1, 1,
+};
+
 /* 00000E24-000013A4       .text head_atari_check__FP8bo_class */
-static void head_atari_check(bo_class*) {
+static BOOL head_atari_check(bo_class* i_this) {
     /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    i_this->mStts.Move();
+    if (i_this->m366[4] != 0) {
+        return FALSE;
+    }
+    if (shock_damage_check(i_this)) {
+        i_this->m2CA = 1;
+        return TRUE;
+    }
+    if (!i_this->mSph.ChkTgHit()) {
+        return FALSE;
+    }
+    cCcD_Obj* hit_obj = i_this->mSph.GetTgHitObj();
+    if (hit_obj == NULL) {
+        return FALSE;
+    }
+    i_this->m358 = *i_this->mSph.GetTgHitPosP();
+    i_this->m366[4] = (s16)(8.0f + g_regHIO.mChild[8].mFloatRegs[10]);
+    i_this->m370 = cM_atan2s(player->current.pos.x - i_this->m2E0.x, player->current.pos.z - i_this->m2E0.z);
+    i_this->m2CA = 0;
+    i_this->m364 = 0;
+    i_this->m2CA = 1;
+    mDoAud_onEnemyDamage();
+    u32 hit_type = hit_obj->GetAtType();
+    switch (hit_type) {
+    case AT_TYPE_GRAPPLING_HOOK:
+        if ((s8)i_this->stealItemLeft > 0) {
+            u8 old_health = i_this->health;
+            i_this->health = 10;
+            CcAtInfo atInfo;
+            atInfo.mpObj = i_this->mSph.GetTgHitObj();
+            atInfo.pParticlePos = NULL;
+            cc_at_check(i_this, &atInfo);
+            i_this->health = old_health;
+        }
+        g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, 0x27B, &i_this->attention_info.position, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        i_this->m2CA = 0;
+        mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2836, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return TRUE;
+    case AT_TYPE_SWORD: {
+        int i;
+        for (i = 0; i < 0x20; i++) {
+            if (pl_cut_real_no_dt[i] == player->getCutType()) {
+                break;
+            }
+        }
+        if (i >= 0x20) {
+            return FALSE;
+        }
+        i_this->m2CA = nokezoru_on_off_dt[i];
+        return TRUE;
+    }
+    case AT_TYPE_BOOMERANG: {
+        i_this->m2CA = 1;
+        i_this->m364 = (s16)(u8)(g_regHIO.mChild[8].mShortRegs[5] + 5);
+        i_this->mSph.ClrTgHit();
+        i_this->attention_info.flags &= ~4;
+        i_this->m398 = 1.0f;
+        dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+        particle->set(dPa_control_c::dPtclGroup_Normal_e, 0x10, &i_this->m358, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        cXyz scale(2.0f, 2.0f, 2.0f);
+        particle->set(dPa_control_c::dPtclGroup_Normal_e, 0xF, &i_this->m358, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return TRUE;
+    }
+    case AT_TYPE_FIRE_ARROW:
+    case AT_TYPE_FIRE:
+        i_this->mEnemyFire.mFireDuration = (s16)(34.0f + g_regHIO.mChild[8].mFloatRegs[12]);
+        i_this->m2D0 = 1;
+        i_this->attention_info.flags = 0;
+        return TRUE;
+    case AT_TYPE_ICE_ARROW:
+        i_this->mEnemyIce.mFreezeDuration = (s16)(80.0f + g_regHIO.mChild[8].mFloatRegs[13]);
+        i_this->m2D0 = 2;
+        i_this->mEnemyIce.m00C = 1;
+        i_this->attention_info.flags = 0;
+        i_this->health = 30;
+        return TRUE;
+    case AT_TYPE_LIGHT_ARROW:
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
+        i_this->mEnemyIce.mYOffset = 80.0f + g_regHIO.mChild[8].mFloatRegs[13];
+        i_this->attention_info.flags = 0;
+        i_this->m2D0 = 3;
+        fopAcM_create(0xD7, (i_this->m2C1 << 8) | 1, &i_this->current.pos, i_this->current.roomNo, &i_this->shape_angle, &i_this->scale, 0, NULL);
+        return TRUE;
+    case AT_TYPE_SKULL_HAMMER:
+        if (player->getCutType() != 0x11) {
+            i_this->m2CA = 2;
+        } else {
+            i_this->m2CA = 1;
+        }
+        return TRUE;
+    default:
+        i_this->m2CA = 1;
+        return TRUE;
+    }
 }
 
 /* 000013A4-0000170C       .text nokezori_damage_rtn__FP8bo_class */
-static void nokezori_damage_rtn(bo_class*) {
+static void nokezori_damage_rtn(bo_class* i_this) {
     /* Nonmatching */
+    s16 angle = i_this->m370 - i_this->m348;
+    anm_init(i_this, 7, 5.0f, 0, 1.0f, -1, 0);
+    mDoMtx_YrotS(*calc_mtx, angle);
+    cXyz sp14(0.0f, 0.0f, 6250.0f);
+    cXyz sp8;
+    MtxPosition(&sp14, &sp8);
+    i_this->m340.z = (s16)sp8.x;
+    i_this->m340.y = (s16)sp8.z;
+    i_this->m334.setall(0);
+    i_this->scale.y = 1.75f;
+    i_this->m37C = 1200;
+    cCcD_Obj* hit_obj = i_this->mSph.GetTgHitObj();
+    if (hit_obj != NULL) {
+        u32 hit_type = hit_obj->GetAtType();
+        if (hit_type & AT_TYPE_SWORD) {
+            mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JAIZelBasic::zel_basic->seStart(0x2806, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else if (hit_type & AT_TYPE_BOKO_STICK) {
+            mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JAIZelBasic::zel_basic->seStart(0x2835, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else if (hit_type & AT_TYPE_SKULL_HAMMER) {
+            mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JAIZelBasic::zel_basic->seStart(0x2855, &i_this->eyePos, 0x31, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else if (!(hit_type & AT_TYPE_BOOMERANG)) {
+            mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JAIZelBasic::zel_basic->seStart(0x2836, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+    }
+    i_this->m398 = 1.0f;
+    i_this->m372 = 0;
+    i_this->m376 = 0;
+    i_this->m366[2] = 3;
+    if (i_this->m2D0 == 0) {
+        i_this->mAction = 0;
+        i_this->m2C5 = 5;
+    } else {
+        i_this->mAction = 4;
+        i_this->m2C5 = 0x32;
+    }
 }
 
 /* 0000170C-00001BB8       .text body_atari_check__FP8bo_class */
-static void body_atari_check(bo_class*) {
+static BOOL body_atari_check(bo_class* i_this) {
     /* Nonmatching */
+    if (i_this->m366[2] != 0) {
+        return FALSE;
+    }
+    if (!i_this->mCyl.ChkTgHit()) {
+        return FALSE;
+    }
+    cCcD_Obj* hit_obj = i_this->mCyl.GetTgHitObj();
+    if (hit_obj == NULL) {
+        return FALSE;
+    }
+    u32 hit_type = hit_obj->GetAtType();
+    switch (hit_type) {
+    case AT_TYPE_FIRE_ARROW:
+    case AT_TYPE_FIRE:
+        i_this->mEnemyFire.mFireDuration = 0x50;
+        i_this->m2D0 = 1;
+        nokezori_damage_rtn(i_this);
+        i_this->m2C8 = 0;
+        i_this->m372 = 0;
+        i_this->m374 = 0;
+        g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, 0x8109, &i_this->m328, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        return TRUE;
+    case AT_TYPE_ICE_ARROW:
+        i_this->mEnemyIce.mFreezeDuration = (s16)(80.0f + g_regHIO.mChild[8].mFloatRegs[13]);
+        i_this->m2D0 = 2;
+        i_this->mEnemyIce.m00C = 1;
+        i_this->attention_info.flags = 0;
+        i_this->health = 30;
+        nokezori_damage_rtn(i_this);
+        i_this->m2C8 = 0;
+        i_this->m372 = 0;
+        i_this->m374 = 0;
+        g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, 0x8109, &i_this->m328, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        return TRUE;
+    case AT_TYPE_LIGHT_ARROW:
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
+        i_this->mEnemyIce.mYOffset = 80.0f + g_regHIO.mChild[8].mFloatRegs[13];
+        i_this->attention_info.flags = 0;
+        i_this->m2D0 = 3;
+        fopAcM_create(0xD7, (i_this->m2C1 << 8) | 1, &i_this->current.pos, i_this->current.roomNo, &i_this->shape_angle, &i_this->scale, 0, NULL);
+        nokezori_damage_rtn(i_this);
+        i_this->m2C8 = 0;
+        i_this->m372 = 0;
+        i_this->m374 = 0;
+        g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, 0x8109, &i_this->m328, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return TRUE;
+    default: {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        cXyz hit_pos = *i_this->mCyl.GetTgHitPosP();
+        i_this->mSph.ClrTgHit();
+        i_this->attention_info.flags &= ~4;
+        i_this->m398 = 1.0f;
+        dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+        particle->set(dPa_control_c::dPtclGroup_Normal_e, 0x10, &hit_pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        cXyz scale(2.0f, 2.0f, 2.0f);
+        particle->set(dPa_control_c::dPtclGroup_Normal_e, 0xF, &hit_pos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+        i_this->m364 = (s16)(u8)(g_regHIO.mChild[8].mShortRegs[5] + 5);
+        i_this->mAction = 2;
+        i_this->m2C5 = 0x14;
+        mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+        JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return TRUE;
+    }
+    }
 }
 
 /* 00001BB8-00002048       .text damage_check__FP8bo_class */
-static void damage_check(bo_class*) {
+static BOOL damage_check(bo_class* i_this) {
     /* Nonmatching */
+    if (head_atari_check(i_this)) {
+        s16 angle = i_this->m370 - i_this->m348;
+        if (i_this->m2CA == 2) {
+            fopAc_ac_c* player = dComIfGp_getPlayer(0);
+            cXyz hit_pos = *i_this->mSph.GetTgHitPosP();
+            dPa_control_c* particle = g_dComIfG_gameInfo.play.getParticle();
+            particle->set(dPa_control_c::dPtclGroup_Normal_e, 0x10, &hit_pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            cXyz scale(2.0f, 2.0f, 2.0f);
+            particle->set(dPa_control_c::dPtclGroup_Normal_e, 0xF, &hit_pos, &player->shape_angle, &scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+            i_this->mAction = 4;
+            i_this->m2C5 = 0x28;
+            mDoAud_monsSeStart(0x4850, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            JAIZelBasic::zel_basic->seStart(0x2828, &i_this->eyePos, 0x20, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            return TRUE;
+        }
+        i_this->mSph.ClrTgHit();
+        if (i_this->m2CA == 1) {
+            nokezori_damage_rtn(i_this);
+        } else {
+            if (g_regHIO.mChild[8].mFloatRegs[11] != 0.0f && i_this->m2C5 == 4) {
+                return FALSE;
+            }
+            mDoAud_monsSeStart(0x484F, &i_this->eyePos, fopAcM_GetID(i_this), 0, dComIfGp_getReverb(i_this->current.roomNo));
+            cXyz sp3C(0.0f, 0.0f, 2250.0f);
+            cXyz sp30;
+            mDoMtx_YrotS(*calc_mtx, angle);
+            MtxPosition(&sp3C, &sp30);
+            anm_init(i_this, 0x12, 2.0f, 0, 1.0f, -1, 0);
+            i_this->m352.z = (s16)sp30.x;
+            i_this->m352.y = (s16)sp30.z;
+            i_this->m388 = -10000.0f;
+            i_this->m37E = 0;
+            i_this->m380 = 0x1C52;
+            i_this->m382 = i_this->m370 - i_this->m348;
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+            if (player->getCutType() == 3) {
+                i_this->m382 -= 0x4000;
+            } else if (player->getCutType() == 4) {
+                i_this->m382 += 0x4000;
+            }
+            i_this->m37C = 0x800;
+            cCcD_Obj* hit_obj = i_this->mSph.GetTgHitObj();
+            if (hit_obj != NULL) {
+                u32 hit_type = hit_obj->GetAtType();
+                if (hit_type & AT_TYPE_SWORD) {
+                    JAIZelBasic::zel_basic->seStart(0x2803, &i_this->eyePos, 0x31, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                } else if (hit_type & AT_TYPE_BOKO_STICK) {
+                    JAIZelBasic::zel_basic->seStart(0x2833, &i_this->eyePos, 0x31, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                } else {
+                    JAIZelBasic::zel_basic->seStart(0x2834, &i_this->eyePos, 0x31, dComIfGp_getReverb(i_this->current.roomNo), 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                }
+            }
+            i_this->mAction = 0;
+            i_this->m2C5 = 4;
+        }
+        i_this->m2C8 = 0;
+        i_this->m372 = 0;
+        i_this->m374 = 0;
+        g_dComIfG_gameInfo.play.getParticle()->set(dPa_control_c::dPtclGroup_Normal_e, 0x8109, &i_this->m328, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00002048-00002080       .text angle_initial__FP8bo_class */
