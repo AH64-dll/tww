@@ -92,8 +92,8 @@ static BOOL nodeCallBack_UP(J3DNode* node, int calcTiming) {
                 isSet = TRUE;
             }
             if (jntNo == 8) {
-                mDoMtx_YrotM(*calc_mtx, i_this->m334.y + g_regHIO.mChild[0].mShortRegs[15]);
-                mDoMtx_XrotM(*calc_mtx, i_this->m334.z + g_regHIO.mChild[0].mShortRegs[19]);
+                mDoMtx_YrotM(*calc_mtx, i_this->m334.y + g_regHIO.mChild[12].mShortRegs[3]);
+                mDoMtx_XrotM(*calc_mtx, i_this->m334.z + g_regHIO.mChild[12].mShortRegs[5]);
                 cXyz zero(0.0f, 0.0f, 0.0f);
                 MtxPosition(&zero, &i_this->m31C);
                 isSet = TRUE;

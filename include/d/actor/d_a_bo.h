@@ -12,18 +12,18 @@
 class mDoExt_McaMorf;
 class JPABaseEmitter;
 
-class yodare_ato_PcallBack_c : public dPa_smokePcallBack {
+class yodare_ato_PcallBack_c : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
-    virtual ~yodare_ato_PcallBack_c() { /* Nonmatching */ /* __dt__ 95.49 */ }
+    virtual ~yodare_ato_PcallBack_c() {}
 
-    /* 0x00 */ /* dPa_smokePcallBack */
+    /* 0x00 */ /* JPACallBackBase2 */
     /* 0x04 */ dBgS_ObjGndChk mGndChk;
-};  /* Nonmatching */ /* __vt__ 90.0: vtable layout diff */
+};
 
 class bo_class : public fopEn_enemy_c {
 public:
-    bo_class() { /* Nonmatching */ /* __ct__ 98.31: retail orders yodare vtable stores (mYodare) ahead of dPa_smokePcallBack */ }
+    bo_class() {}
 
     /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ mDoExt_brkAnm* mpBaseAnm;
