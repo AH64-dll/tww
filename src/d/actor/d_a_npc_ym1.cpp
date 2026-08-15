@@ -9,12 +9,22 @@
 
 /* 000000EC-00000108       .text __ct__20daNpc_Ym1_childHIO_cFv */
 daNpc_Ym1_childHIO_c::daNpc_Ym1_childHIO_c() {
-    /* Nonmatching */
 }
 
 /* 00000150-0000020C       .text __ct__15daNpc_Ym1_HIO_cFv */
 daNpc_Ym1_HIO_c::daNpc_Ym1_HIO_c() {
     /* Nonmatching */
+    static const u32 a_prm_tbl[2][9] = {
+        { 0x20001F40, 0xE000E0C0, 0x00001C70, 0x0000E390, 0x064004B0, 0x433E0000, 0x00000000, 0x43C80000, 0x41600000 },
+        { 0x20001F40, 0xE000E0C0, 0x00001B58, 0x0000E4A8, 0x064004B0, 0x433E0000, 0x00000000, 0x00000000, 0x00000000 },
+    };
+
+    for (int i = 0; i < 2; i++) {
+        mChildHIO[i].mNo = i;
+        memcpy(&mChildHIO[i].mPrm, a_prm_tbl[i], 0x24);
+    }
+    m8 = -1;
+    field_0x8 = -1;
 }
 
 /* 00000268-00000290       .text area_check__FP10fopAc_ac_cP4cXyzUl */

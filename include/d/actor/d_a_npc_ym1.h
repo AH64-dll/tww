@@ -132,21 +132,25 @@ public:
     /* 0x8B1 */ s8 mStaff;
     /* 0x8B2 */ u8 m8B2[0x8B4 - 0x8B2];
 };
-
-class daNpc_Ym1_childHIO_c {
+class daNpc_Ym1_childHIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Ym1_childHIO_c();
+    virtual ~daNpc_Ym1_childHIO_c() {};
 
 public:
-    /* Place member variables here */
-};
+    /* 0x004 */ u8 mPrm[0x24];
+    /* 0x028 */ u32 mNo;
+};  // Size: 0x2C
 
-class daNpc_Ym1_HIO_c {
+class daNpc_Ym1_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Ym1_HIO_c();
+    virtual ~daNpc_Ym1_HIO_c() {};
 
 public:
-    /* Place member variables here */
-};
+    /* 0x004 */ s8 m8;
+    /* 0x008 */ int field_0x8;
+    /* 0x00C */ daNpc_Ym1_childHIO_c mChildHIO[2];
+};  // Size: 0x64
 
 #endif /* D_A_NPC_YM1_H */
