@@ -107,7 +107,7 @@ static BOOL nodeCallBack_Bms(J3DNode* node, int calcTiming) {
     if (calcTiming == 0) {
         J3DModel* pModel = j3dSys.getModel();
         daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
-        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        int jntNo = ((J3DJoint*)node)->getJntNo();
         if (pBms != NULL) {
             PSMTXCopy(pModel->getAnmMtx(jntNo), *calc_mtx);
 
@@ -140,15 +140,17 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
     if (calcTiming == 0) {
         J3DModel* pModel = j3dSys.getModel();
         daNpc_Bms1_c* pBms = (daNpc_Bms1_c*)pModel->getUserArea();
-        u16 jntNo = ((J3DJoint*)node)->getJntNo();
+        int jntNo = ((J3DJoint*)node)->getJntNo();
         if (pBms != NULL) {
-            static cXyz l_zero = cXyz::Zero;
-            static cXyz l_ten = cXyz(40.0f, 0.0f, 0.0f);
+            static cXyz l_zero(cXyz::Zero);
+            static cXyz l_ten(40.0f, 0.0f, 0.0f);
 
             PSMTXCopy(pModel->getAnmMtx(jntNo), mDoMtx_stack_c::now);
 
     if (jntNo == pBms->getHairLJntNum()) {
-        mDoMtx_stack_c::scaleM(pBms->m2B4.x * pBms->m2CC, pBms->m2B4.y, pBms->m2B4.z);
+        cXyz scale(pBms->m2B4);
+        scale.x *= pBms->m2CC;
+        mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
         Mtx local;
         PSMTXCopy(mDoMtx_stack_c::now, local);
         cXyz trans(local[0][3], local[1][3], local[2][3]);
@@ -167,14 +169,16 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         if (pBms->m2D4.isZero()) {
             pBms->m2D4 = v1;
         }
-        cXyz diff = v1 - pBms->m2D4;
-        cXyz scaled = diff * l_HIO.mChild[0].m40;
-        pBms->m2EC = pBms->m2EC + scaled;
-        pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
-        pBms->m2D4 = pBms->m2D4 + pBms->m2EC;
+        cXyz diff(v1 - pBms->m2D4);
+        cXyz scaled(diff * l_HIO.mChild[0].m40);
+        PSVECAdd(&pBms->m2EC, &scaled, &pBms->m2EC);
+        PSVECScale(&pBms->m2EC, &pBms->m2EC, l_HIO.mChild[0].m44);
+        PSVECAdd(&pBms->m2D4, &pBms->m2EC, &pBms->m2D4);
 
-        cXyz d1 = v1 - v2;
-        cXyz d2 = pBms->m2D4 - v2;
+        cXyz d1;
+        cXyz d2;
+        PSVECSubtract(&d1, &v1, &v2);
+        PSVECSubtract(&d2, &pBms->m2D4, &v2);
         Quaternion rot;
         daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m304, &rot, &pBms->m304, l_HIO.mChild[0].m48);
@@ -186,7 +190,9 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
             pBms->m2CC = 1.0f;
         }
     } else if (jntNo == pBms->getHairRJntNum()) {
-        mDoMtx_stack_c::scaleM(pBms->m2C0.x * pBms->m2D0, pBms->m2C0.y, pBms->m2C0.z);
+        cXyz scale(pBms->m2C0);
+        scale.y *= pBms->m2D0;
+        mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
         Mtx local;
         PSMTXCopy(mDoMtx_stack_c::now, local);
         cXyz trans(local[0][3], local[1][3], local[2][3]);
@@ -205,25 +211,27 @@ static BOOL nodeCallBack_BmsHead(J3DNode* node, int calcTiming) {
         if (pBms->m2E0.isZero()) {
             pBms->m2E0 = v1;
         }
-        cXyz diff = v1 - pBms->m2E0;
-        cXyz scaled = diff * l_HIO.mChild[0].m40;
-        pBms->m2EC = pBms->m2EC + scaled;
-        pBms->m2EC = pBms->m2EC * l_HIO.mChild[0].m44;
-        pBms->m2E0 = pBms->m2E0 + pBms->m2EC;
+        cXyz diff(v1 - pBms->m2E0);
+        cXyz scaled(diff * l_HIO.mChild[0].m40);
+        PSVECAdd(&pBms->m2F8, &scaled, &pBms->m2F8);
+        PSVECScale(&pBms->m2F8, &pBms->m2F8, l_HIO.mChild[0].m44);
+        PSVECAdd(&pBms->m2E0, &pBms->m2F8, &pBms->m2E0);
 
-        cXyz d1 = v1 - v2;
-        cXyz d2 = pBms->m2E0 - v2;
+        cXyz d1;
+        cXyz d2;
+        PSVECSubtract(&d1, &v1, &v2);
+        PSVECSubtract(&d2, &pBms->m2E0, &v2);
         Quaternion rot;
         daObj::quat_rotVec(&rot, d1, d2);
         C_QUATSlerp(&pBms->m314, &rot, &pBms->m314, l_HIO.mChild[0].m48);
-        f32 dot = PSVECDotProduct(&d2, &pBms->m2EC);
+        f32 dot = PSVECDotProduct(&d2, &pBms->m2F8);
         pBms->m2D0 = 1.0f - l_HIO.mChild[0].m4C * dot;
         if (pBms->m2D0 < 0.5f) {
             pBms->m2D0 = 0.5f;
         } else if (pBms->m2D0 > 1.0f) {
             pBms->m2D0 = 1.0f;
         }
-        }
+    }
     }
     }
 
@@ -293,7 +301,7 @@ BOOL daNpc_Bms1_c::initTexPatternAnm(bool i_0) {
 void daNpc_Bms1_c::playTexPatternAnm() {
     /* Nonmatching */
     if (cLib_calcTimer(&m34E) == 0) {
-        s16 frameMax = mpMorf->getEndFrame();
+        s16 frameMax = m_head_tex_pattern->getFrameMax();
         if (mBtpFrame >= frameMax) {
             mBtpFrame = mBtpFrame - frameMax;
             m34E = (s16)(cM_rndF(100.0f) + 30.0f);
@@ -487,7 +495,6 @@ u16 daNpc_Bms1_c::next_msgStatus(u32* pMsgNo) {
             g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
             g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
             *pMsgNo += 3;
-            msgStatus = 0xE;
         }
         break;
     case 0x2788:
@@ -499,12 +506,16 @@ u16 daNpc_Bms1_c::next_msgStatus(u32* pMsgNo) {
             g_dComIfG_gameInfo.play.mDoStatusForce = 0x17;
             g_dComIfG_gameInfo.play.mAStatusForce = 0x27;
             *pMsgNo += 3;
-            msgStatus = 0xE;
         }
         break;
     case 0x2778:
     case 0x2781:
         *pMsgNo = 0x2776;
+        break;
+    case 0x2786:
+    case 0x278E:
+    case 0x278F:
+        *pMsgNo = 0x2783;
         break;
     case 0x277D:
     case 0x277E:
@@ -513,6 +524,8 @@ u16 daNpc_Bms1_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = *pMsgNo - 3;
         } else if (l_msg->mSelectNum == 0) {
             *pMsgNo = 0x2780;
+        } else {
+            *pMsgNo -= 3;
         }
         break;
     case 0x278B:
@@ -535,25 +548,18 @@ u16 daNpc_Bms1_c::next_msgStatus(u32* pMsgNo) {
             mShopItems.hideSelectItem();
             m7E8 = mShopItems.getSelectItemNo();
             dComIfGp_setItemRupeeCount(-itemPrice);
-            u8 itemNo = mShopItems.getSelectItemNo();
-            if (!checkItemGet(itemNo, TRUE)) {
+            if (!checkItemGet(mShopItems.getSelectItemNo(), TRUE)) {
                 m89B = 3;
                 msgStatus = fopMsgStts_MSG_ENDS_e;
                 break;
             }
-            itemNo = mShopItems.getSelectItemNo();
-            execItemGet(itemNo);
+            execItemGet(mShopItems.getSelectItemNo());
             *pMsgNo = 0x2790;
         } else {
-            *pMsgNo = *pMsgNo - 3;
+            *pMsgNo -= 3;
         }
         break;
     case 0x2790:
-        *pMsgNo = 0x2783;
-        break;
-    case 0x2786:
-    case 0x278E:
-    case 0x278F:
         *pMsgNo = 0x2783;
         break;
     default:
