@@ -831,7 +831,6 @@ void daNpc_So_c::modeEventFirst() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_1ST_MEET")) {
@@ -856,7 +855,6 @@ void daNpc_So_c::modeEventFirstEnd() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_1ST_MEET_END")) {
@@ -903,7 +901,6 @@ void daNpc_So_c::modeEventMapopen() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_MAPOPEN")) {
@@ -932,7 +929,6 @@ void daNpc_So_c::modeEventBow() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_BOW")) {
@@ -1048,7 +1044,6 @@ void daNpc_So_c::modeGetRupee() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_GET_RUPEE")) {
@@ -1083,7 +1078,6 @@ void daNpc_So_c::modeEventTriForce() {
     /* Nonmatching */
     if (eventInfo.getCommand() == 2) {
         if (!mEventCut.cutProc()) {
-    /* Nonmatching */
             cutProc();
         }
         if (dComIfGp_evmng_endCheck("SO_TRIFORCE_CHECK")) {
